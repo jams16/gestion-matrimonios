@@ -1,0 +1,6 @@
+// use prisma-next
+model Proyecto {
+  idProyecto Uuid @id @default(uuid())
+
+  @@map("gp_proyecto")
+}
