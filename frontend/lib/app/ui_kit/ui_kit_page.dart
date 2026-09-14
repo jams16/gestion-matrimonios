@@ -623,7 +623,7 @@ class UiKitPage extends StatelessWidget {
               ),
 
 
-
+              
               // EJEMPLOS RESPONSIVE — PÁGINA 1
               A4Sheet(
                 child: Column(
@@ -637,7 +637,7 @@ class UiKitPage extends StatelessWidget {
                   ],
                 ),
               ),
-
+              
               // EJEMPLOS RESPONSIVE — PÁGINA 2
               A4Sheet(
                 child: Column(
@@ -666,6 +666,19 @@ class UiKitPage extends StatelessWidget {
                 ),
               ),
 
+              A4Sheet(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    UiKitPageHeader(
+                      subtitle: 'Ejemplos responsive reales',
+                    ),
+                    SizedBox(height: 24),
+                    ResponsiveExamplesPageFourSection(),
+                  ],
+                ),
+              ),
+              
 
             ],
           ),

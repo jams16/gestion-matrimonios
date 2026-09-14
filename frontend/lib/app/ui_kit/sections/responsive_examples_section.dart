@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../responsive/app_breakpoints.dart';
 import '../../responsive/app_layout.dart';
-import '../../responsive/responsive_layout.dart';
 
 import '../../../core/widgets/buttons/app_button.dart';
 import '../../../core/widgets/containers/app_card.dart';
@@ -16,8 +14,6 @@ import '../../../core/widgets/navigation/app_navigation_item.dart';
 import '../../../core/widgets/navigation/app_sidebar.dart';
 import '../../../core/widgets/overlays/app_bottom_sheet.dart';
 import '../../../core/widgets/overlays/app_dialog.dart';
-
-import '../../../core/widgets/navigation/app_navigation_rail.dart';
 
 
 class ResponsiveExamplesPageOneSection extends StatelessWidget {
@@ -40,15 +36,6 @@ class ResponsiveExamplesPageOneSection extends StatelessWidget {
               'Una sola columna, ancho completo y acciones adaptadas al espacio disponible.',
           child: _MobileFormPreview(),
         ),
-
-        SizedBox(height: 36),
-
-        _ResponsiveExample(
-          title: 'Formulario desktop',
-          description:
-              'Mantiene una sola columna, pero limita el ancho para mejorar legibilidad y recorrido visual.',
-          child: _DesktopFormPreview(),
-        ),
       ],
     );
   }
@@ -68,12 +55,13 @@ class _MobileFormPreview extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         border: Border.all(
-          color: Theme.of(context).colorScheme.outlineVariant,
+          color: Theme.of(context)
+              .colorScheme
+              .outlineVariant,
         ),
         borderRadius: BorderRadius.circular(12),
       ),
       child: AppFormLayout(
-        maxWidth: double.infinity,
         children: [
           const AppTextField(
             label: 'Nombre del proyecto',
@@ -90,19 +78,26 @@ class _MobileFormPreview extends StatelessWidget {
             hintText: 'Ej. Lima, Perú',
           ),
 
-          AppFormActions(
-            alignEnd: false,
-            secondaryAction: AppButton(
-              label: 'Cancelar',
-              variant: AppButtonVariant.secondary,
-              expanded: true,
-              onPressed: () {},
-            ),
-            primaryAction: AppButton(
-              label: 'Guardar',
-              expanded: true,
-              onPressed: () {},
-            ),
+          Column(
+            crossAxisAlignment:
+                CrossAxisAlignment.stretch,
+            children: [
+              AppButton(
+                label: 'Guardar',
+                expanded: true,
+                onPressed: () {},
+              ),
+
+              const SizedBox(height: 10),
+
+              AppButton(
+                label: 'Cancelar',
+                variant:
+                    AppButtonVariant.secondary,
+                expanded: true,
+                onPressed: () {},
+              ),
+            ],
           ),
         ],
       ),
@@ -176,24 +171,16 @@ class ResponsiveExamplesPageTwoSection extends StatelessWidget {
       children: [
         const _ResponsiveExamplesHeading(),
 
-        const SizedBox(height: 28),
-
-        const _ResponsiveExample(
-          title: 'Tabla desktop → cards mobile',
-          description:
-              'Los mismos datos cambian de representación cuando una tabla deja de ser cómoda en pantallas pequeñas.',
-          child: _DataResponsiveExample(),
-        ),
-
-        const SizedBox(height: 38),
+        SizedBox(height: 28),
 
         _ResponsiveExample(
-          title:
-              'Sidebar desktop → bottom navigation mobile',
+          title: 'Formulario desktop',
           description:
-              'Los destinos principales se mantienen; solo cambia la presentación según el breakpoint.',
-          child: _NavigationResponsiveExample(),
+              'Mantiene una sola columna, pero limita el ancho para mejorar legibilidad y recorrido visual.',
+          child: _DesktopFormPreview(),
         ),
+
+        
       ],
     );
   }
@@ -205,10 +192,32 @@ class _DataResponsiveExample extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ResponsiveLayout(
-      mobile: const _MobileCardsExample(),
-      tablet: const _MobileCardsExample(),
-      desktop: const _DesktopTableExample(),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _PreviewLabel(
+          label: 'DESKTOP',
+          width: '≥ 1024 px',
+        ),
+
+        const SizedBox(height: 8),
+
+        const _DesktopTableExample(),
+
+        const SizedBox(height: 24),
+
+        _PreviewLabel(
+          label: 'MOBILE',
+          width: '< 600 px',
+        ),
+
+        const SizedBox(height: 8),
+
+        const SizedBox(
+          width: 360,
+          child: _MobileCardsExample(),
+        ),
+      ],
     );
   }
 }
@@ -350,59 +359,67 @@ const _responsiveNavigationItems = [
 
 
 
-class _NavigationResponsiveExample extends StatefulWidget {
+class _NavigationResponsiveExample
+    extends StatefulWidget {
   const _NavigationResponsiveExample();
 
   @override
-  State<_NavigationResponsiveExample> createState() =>
-      _NavigationResponsiveExampleState();
+  State<_NavigationResponsiveExample>
+      createState() =>
+          _NavigationResponsiveExampleState();
 }
 
 class _NavigationResponsiveExampleState
     extends State<_NavigationResponsiveExample> {
   int _selectedIndex = 0;
 
+  void _select(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ResponsiveLayout(
-      mobile: SizedBox(
-        width: 380,
-        child: AppBottomNavigation(
-          items: _responsiveNavigationItems,
-          selectedIndex: _selectedIndex,
-          onDestinationSelected: (index) {
-            setState(() {
-              _selectedIndex = index;
-            });
-          },
+    return Column(
+      crossAxisAlignment:
+          CrossAxisAlignment.start,
+      children: [
+        _PreviewLabel(
+          label: 'DESKTOP',
+          width: '≥ 1024 px',
         ),
-      ),
 
-      tablet: SizedBox(
-        width: 380,
-        child: AppBottomNavigation(
-          items: _responsiveNavigationItems,
-          selectedIndex: _selectedIndex,
-          onDestinationSelected: (index) {
-            setState(() {
-              _selectedIndex = index;
-            });
-          },
-        ),
-      ),
+        const SizedBox(height: 8),
 
-      desktop: SizedBox(
-        height: 360,
-        child: AppSidebar(
-          items: _responsiveNavigationItems,
-          selectedIndex: _selectedIndex,
-          onDestinationSelected: (index) {
-            setState(() {
-              _selectedIndex = index;
-            });
-          },
+        SizedBox(
+          width: 260,
+          height: 300,
+          child: AppSidebar(
+            items: _responsiveNavigationItems,
+            selectedIndex: _selectedIndex,
+            onDestinationSelected: _select,
+          ),
         ),
-      ),
+
+        const SizedBox(height: 24),
+
+        _PreviewLabel(
+          label: 'MOBILE',
+          width: '< 600 px',
+        ),
+
+        const SizedBox(height: 8),
+
+        SizedBox(
+          width: 360,
+          child: AppBottomNavigation(
+            items: _responsiveNavigationItems,
+            selectedIndex: _selectedIndex,
+            onDestinationSelected: _select,
+          ),
+        ),
+      ],
     );
   }
 }
@@ -426,6 +443,46 @@ class ResponsiveExamplesPageThreeSection
 
         const SizedBox(height: 28),
 
+        const _ResponsiveExample(
+          title: 'Tabla desktop → cards mobile',
+          description:
+              'Los mismos datos cambian de representación cuando una tabla deja de ser cómoda en pantallas pequeñas.',
+          child: _DataResponsiveExample(),
+        ),
+
+        
+      ],
+    );
+  }
+}
+
+
+class ResponsiveExamplesPageFourSection
+    extends StatelessWidget {
+  const ResponsiveExamplesPageFourSection({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment:
+          CrossAxisAlignment.start,
+      children: [
+        const _ResponsiveExamplesHeading(),
+
+        const SizedBox(height: 28),
+
+        _ResponsiveExample(
+          title:
+              'Sidebar desktop → bottom navigation mobile',
+          description:
+              'Los destinos principales se mantienen; solo cambia la presentación según el breakpoint.',
+          child: _NavigationResponsiveExample(),
+        ),
+
+        const SizedBox(height: 36),
+
         _ResponsiveExample(
           title:
               'Dialog desktop → bottom sheet mobile',
@@ -445,62 +502,87 @@ class _ResponsiveOverlayExample
 
   @override
   Widget build(BuildContext context) {
-    return ResponsiveLayout(
-      mobile: AppButton(
-        label: 'Abrir filtros',
-        icon: Icons.filter_list,
-        onPressed: () {
-          AppBottomSheet.show(
-            context,
-            title: 'Filtros',
-            description:
-                'Selecciona los criterios de búsqueda.',
-            child: const _FilterContent(),
-          );
-        },
-      ),
-
-      tablet: AppButton(
-        label: 'Abrir filtros',
-        icon: Icons.filter_list,
-        onPressed: () {
-          AppBottomSheet.show(
-            context,
-            title: 'Filtros',
-            description:
-                'Selecciona los criterios de búsqueda.',
-            child: const _FilterContent(),
-          );
-        },
-      ),
-
-      desktop: AppButton(
-        label: 'Abrir filtros',
-        icon: Icons.filter_list,
-        onPressed: () {
-          AppDialog.show(
-            context,
-            title: 'Filtros',
-            description:
-                'Selecciona los criterios de búsqueda.',
-            content: const _FilterContent(),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('Cancelar'),
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment:
+                CrossAxisAlignment.start,
+            children: [
+              _PreviewLabel(
+                label: 'DESKTOP',
+                width: '≥ 1024 px',
               ),
-              FilledButton(
+
+              const SizedBox(height: 8),
+
+              AppButton(
+                label: 'Abrir dialog',
+                icon: Icons.open_in_new,
                 onPressed: () {
-                  Navigator.of(context).pop();
+                  AppDialog.show(
+                    context,
+                    title: 'Filtros',
+                    description:
+                        'Selecciona los criterios de búsqueda.',
+                    content:
+                        const _FilterContent(),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child:
+                            const Text('Cancelar'),
+                      ),
+                      FilledButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child:
+                            const Text('Aplicar'),
+                      ),
+                    ],
+                  );
                 },
-                child: const Text('Aplicar'),
               ),
             ],
-          );
-        },
-      ),
+          ),
+        ),
+
+        const SizedBox(width: 24),
+
+        Expanded(
+          child: Column(
+            crossAxisAlignment:
+                CrossAxisAlignment.start,
+            children: [
+              _PreviewLabel(
+                label: 'MOBILE',
+                width: '< 600 px',
+              ),
+
+              const SizedBox(height: 8),
+
+              AppButton(
+                label: 'Abrir bottom sheet',
+                icon: Icons.vertical_align_top,
+                onPressed: () {
+                  AppBottomSheet.show(
+                    context,
+                    title: 'Filtros',
+                    description:
+                        'Selecciona los criterios de búsqueda.',
+                    child:
+                        const _FilterContent(),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
@@ -613,6 +695,42 @@ class _ResponsiveExample extends StatelessWidget {
           child,
         ],
       ),
+    );
+  }
+}
+
+
+
+class _PreviewLabel extends StatelessWidget {
+  const _PreviewLabel({
+    required this.label,
+    required this.width,
+  });
+
+  final String label;
+  final String width;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          label,
+          style: Theme.of(context)
+              .textTheme
+              .labelMedium
+              ?.copyWith(
+                fontWeight: FontWeight.w700,
+              ),
+        ),
+        const SizedBox(width: 8),
+        Text(
+          width,
+          style:
+              Theme.of(context).textTheme.bodySmall,
+        ),
+      ],
     );
   }
 }

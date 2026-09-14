@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../responsive/app_breakpoints.dart';
 import '../../responsive/app_layout.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_radius.dart';
