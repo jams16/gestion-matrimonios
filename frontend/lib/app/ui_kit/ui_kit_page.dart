@@ -5,6 +5,9 @@ import 'sections/responsive_section.dart';
 import 'sections/global_states_section.dart';
 
 import 'sections/inputs_section.dart';
+import 'sections/selection_controls_section.dart';
+import 'sections/buttons_section.dart';
+
 import 'widgets/a4_sheet.dart';
 import 'widgets/ui_kit_page_header.dart';
 
@@ -158,6 +161,46 @@ class UiKitPage extends StatelessWidget {
                 ),
               ),
 
+              A4Sheet(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    UiKitPageHeader(
+                      subtitle: 'Controles de selección',
+                    ),
+                    SizedBox(height: 24),
+                    SelectionControlsSection(),
+                  ],
+                ),
+              ),
+
+              // BOTONES — PÁGINA 1
+              A4Sheet(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    UiKitPageHeader(
+                      subtitle: 'Botones',
+                    ),
+                    SizedBox(height: 24),
+                    ButtonsPageOneSection(),
+                  ],
+                ),
+              ),
+
+              // BOTONES — PÁGINA 2
+              A4Sheet(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    UiKitPageHeader(
+                      subtitle: 'Botones',
+                    ),
+                    SizedBox(height: 24),
+                    ButtonsPageTwoSection(),
+                  ],
+                ),
+              ),
 
             ],
           ),
