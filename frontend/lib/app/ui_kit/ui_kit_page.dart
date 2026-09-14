@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'sections/foundations_section.dart';
 import 'sections/responsive_section.dart';
+import 'sections/global_states_section.dart';
 
 import 'sections/inputs_section.dart';
 import 'widgets/a4_sheet.dart';
@@ -100,19 +101,64 @@ class UiKitPage extends StatelessWidget {
                 ),
               ),
 
-              // PÁGINA 10
+
               A4Sheet(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     UiKitPageHeader(
-                      subtitle: 'Componentes',
+                      subtitle: 'Estados globales',
                     ),
                     SizedBox(height: 24),
-                    InputsSection(),
+                    GlobalStatesSection(),
                   ],
                 ),
               ),
+
+              // INPUTS
+              // INPUTS — PÁGINA 1
+              A4Sheet(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    UiKitPageHeader(
+                      subtitle: 'Inputs',
+                    ),
+                    SizedBox(height: 24),
+                    InputsPageOneSection(),
+                  ],
+                ),
+              ),
+
+              // INPUTS — PÁGINA 2
+              A4Sheet(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    UiKitPageHeader(
+                      subtitle: 'Inputs',
+                    ),
+                    SizedBox(height: 24),
+                    InputsPageTwoSection(),
+                  ],
+                ),
+              ),
+
+              // INPUTS — PÁGINA 3
+              A4Sheet(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    UiKitPageHeader(
+                      subtitle: 'Inputs',
+                    ),
+                    SizedBox(height: 24),
+                    InputsPageThreeSection(),
+                  ],
+                ),
+              ),
+
+
             ],
           ),
         ),
