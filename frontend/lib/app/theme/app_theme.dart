@@ -30,6 +30,18 @@ abstract final class AppTheme {
 
       scaffoldBackgroundColor: AppColors.background,
 
+      focusColor: AppColors.primary.withValues(
+        alpha: 0.12,
+      ),
+
+      hoverColor: AppColors.primary.withValues(
+        alpha: 0.08,
+      ),
+
+      splashColor: AppColors.primary.withValues(
+        alpha: 0.12,
+      ),
+
       textTheme: const TextTheme(
         displaySmall: AppTypography.display,
         headlineMedium: AppTypography.heading,

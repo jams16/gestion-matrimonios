@@ -49,10 +49,14 @@ class AppProgressBar extends StatelessWidget {
         if (label != null || showPercentage)
           const SizedBox(height: 8),
 
-        LinearProgressIndicator(
-          value: normalizedValue,
-          minHeight: 8,
-          borderRadius: BorderRadius.circular(999),
+        Semantics(
+          label: label ?? 'Progreso',
+          value: '$percentage%',
+          child: LinearProgressIndicator(
+            value: normalizedValue,
+            minHeight: 8,
+            borderRadius: BorderRadius.circular(999),
+          ),
         ),
       ],
     );

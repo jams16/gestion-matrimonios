@@ -16,7 +16,7 @@ class A4Sheet extends StatelessWidget {
     return SizedBox(
       width: width,
       height: height,
-      child: ColoredBox(
+      child: Material(
         color: Colors.white,
         child: Padding(
           padding: const EdgeInsets.fromLTRB(

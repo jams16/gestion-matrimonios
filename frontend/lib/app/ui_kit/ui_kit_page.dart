@@ -16,6 +16,11 @@ import 'sections/indicators_section.dart';
 
 import 'sections/forms_section.dart';
 import 'sections/page_patterns_section.dart';
+import 'sections/page_states_section.dart';
+
+import 'sections/accessibility_section.dart';
+import 'sections/usage_rules_section.dart';
+import 'sections/responsive_examples_section.dart';
 
 import 'widgets/a4_sheet.dart';
 import 'widgets/ui_kit_page_header.dart';
@@ -498,6 +503,169 @@ class UiKitPage extends StatelessWidget {
                   ],
                 ),
               ),
+
+
+
+              // ESTADOS DE PÁGINA — PÁGINA 1
+              A4Sheet(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    UiKitPageHeader(
+                      subtitle: 'Estados de página',
+                    ),
+                    SizedBox(height: 24),
+                    PageStatesPageOneSection(),
+                  ],
+                ),
+              ),
+
+              // ESTADOS DE PÁGINA — PÁGINA 2
+              A4Sheet(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    UiKitPageHeader(
+                      subtitle: 'Estados de página',
+                    ),
+                    SizedBox(height: 24),
+                    PageStatesPageTwoSection(),
+                  ],
+                ),
+              ),
+
+              // ESTADOS DE PÁGINA — PÁGINA 2
+              A4Sheet(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    UiKitPageHeader(
+                      subtitle: 'Estados de página',
+                    ),
+                    SizedBox(height: 24),
+                    PageStatesPageThreeSection(),
+                  ],
+                ),
+              ),
+
+
+              // ACCESIBILIDAD — PÁGINA 1
+              A4Sheet(
+                child: Column(
+                  crossAxisAlignment:
+                      CrossAxisAlignment.start,
+                  children: [
+                    UiKitPageHeader(
+                      subtitle: 'Accesibilidad',
+                    ),
+                    SizedBox(height: 24),
+                    AccessibilityPageOneSection(),
+                  ],
+                ),
+              ),
+
+              // ACCESIBILIDAD — PÁGINA 2
+              A4Sheet(
+                child: Column(
+                  crossAxisAlignment:
+                      CrossAxisAlignment.start,
+                  children: [
+                    UiKitPageHeader(
+                      subtitle: 'Accesibilidad',
+                    ),
+                    SizedBox(height: 24),
+                    AccessibilityPageTwoSection(),
+                  ],
+                ),
+              ),
+
+
+              // REGLAS DE USO — PÁGINA 1
+              A4Sheet(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    UiKitPageHeader(
+                      subtitle: 'Reglas de uso',
+                    ),
+                    SizedBox(height: 24),
+                    UsageRulesPageOneSection(),
+                  ],
+                ),
+              ),
+
+              // REGLAS DE USO — PÁGINA 2
+              A4Sheet(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    UiKitPageHeader(
+                      subtitle: 'Reglas de uso',
+                    ),
+                    SizedBox(height: 24),
+                    UsageRulesPageTwoSection(),
+                  ],
+                ),
+              ),
+
+              // REGLAS DE USO — PÁGINA 2
+              A4Sheet(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    UiKitPageHeader(
+                      subtitle: 'Reglas de uso',
+                    ),
+                    SizedBox(height: 24),
+                    UsageRulesPageThreeSection(),
+                  ],
+                ),
+              ),
+
+
+
+              // EJEMPLOS RESPONSIVE — PÁGINA 1
+              A4Sheet(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    UiKitPageHeader(
+                      subtitle: 'Ejemplos responsive reales',
+                    ),
+                    SizedBox(height: 24),
+                    ResponsiveExamplesPageOneSection(),
+                  ],
+                ),
+              ),
+
+              // EJEMPLOS RESPONSIVE — PÁGINA 2
+              A4Sheet(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    UiKitPageHeader(
+                      subtitle: 'Ejemplos responsive reales',
+                    ),
+                    SizedBox(height: 24),
+                    ResponsiveExamplesPageTwoSection(),
+                  ],
+                ),
+              ),
+
+              // EJEMPLOS RESPONSIVE — PÁGINA 3
+              A4Sheet(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    UiKitPageHeader(
+                      subtitle: 'Ejemplos responsive reales',
+                    ),
+                    SizedBox(height: 24),
+                    ResponsiveExamplesPageThreeSection(),
+                  ],
+                ),
+              ),
+
 
             ],
           ),
