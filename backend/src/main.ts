@@ -26,6 +26,7 @@ async function bootstrap() {
     .setTitle('Gestión de Matrimonios API')
     .setDescription('API REST del sistema de gestión de matrimonios')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

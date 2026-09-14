@@ -29,14 +29,14 @@ export class ListarEntidadesDto {
   @IsInt()
   @Min(1)
   @IsOptional()
-  pagina = 1;
+  pagina: number = 1;
   @ApiPropertyOptional({ default: 20, minimum: 1, maximum: 100 })
   @Type(() => Number)
   @IsInt()
   @Min(1)
   @Max(100)
   @IsOptional()
-  limite = 20;
+  limite: number = 20;
   @ApiPropertyOptional({
     enum: [
       'idEntidad',
@@ -62,7 +62,7 @@ export class ListarEntidadesDto {
     'esActivo',
     'fechaCreacion',
   ])
-  ordenarPor = 'idEntidad';
+  ordenarPor: string = 'idEntidad';
   @ApiPropertyOptional({ enum: ['asc', 'desc'], default: 'asc' })
   @IsOptional()
   @IsIn(['asc', 'desc'])
@@ -75,7 +75,7 @@ export class ListarEntidadesDto {
   @Transform(booleano)
   @IsBoolean()
   @IsOptional()
-  mostrarTodos = false;
+  mostrarTodos: boolean = false;
   @ApiPropertyOptional()
   @Type(() => Number)
   @IsInt()

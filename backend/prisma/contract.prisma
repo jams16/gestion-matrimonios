@@ -39,6 +39,7 @@ model PersonaNatural {
   fechaModificacion temporal.updatedAt() @map("fecha_modificacion")
 
   ubigeo            Ubigeo?              @relation(fields:[codigoUbigeo], references:[idUbigeo], onDelete: Restrict)
+  usuarios          Usuario[]
 
   @@index([codigoUbigeo], map: "in_persona_natural_codigo_ubigeo_idx")
   @@map("in_persona_natural")
@@ -60,7 +61,70 @@ model Entidad {
   fechaModificacion temporal.updatedAt() @map("fecha_modificacion")
 
   ubigeo            Ubigeo?              @relation(fields:[codigoUbigeo], references:[idUbigeo], onDelete: Restrict)
+  usuarios          Usuario[]
 
   @@index([codigoUbigeo])
   @@map("in_entidad")
+}
+
+enum au_tipo_usuario {
+  PROJECT_MANAGER = "PROJECT_MANAGER"
+  OTROS = "OTROS"
+}
+
+enum au_tipo_token_cuenta {
+  VERIFICACION_CORREO = "VERIFICACION_CORREO"
+  RECUPERACION_CONTRASENA = "RECUPERACION_CONTRASENA"
+}
+
+model Usuario {
+  idUsuario         Int                  @id @default(autoincrement()) @map("id_usuario")
+  idPersonaNatural  Int                  @map("id_persona_natural")
+  idEntidad         Int?                 @map("id_entidad")
+  usuario           VarChar(150)         @unique
+  tipoUsuario       au_tipo_usuario      @map("tipo_usuario")
+  contrasenaHash    VarChar(255)         @map("contrasena_hash")
+  correoVerificado  Boolean              @default(false) @map("correo_verificado")
+  esActivo          Boolean              @default(true) @map("es_activo")
+  ultimoAcceso      DateTime             @map("ultimo_acceso")
+  fechaCreacion     DateTime             @default(now()) @map("fecha_creacion")
+  fechaModificacion temporal.updatedAt() @map("fecha_modificacion")
+
+  personaNatural    PersonaNatural       @relation(fields:[idPersonaNatural], references:[idPersonaNatural], onDelete: Restrict)
+  entidad           Entidad?             @relation(fields:[idEntidad], references:[idEntidad], onDelete: Restrict)
+  sesiones          Sesion[]
+  tokensCuenta      TokenCuenta[]
+
+  @@index([idPersonaNatural])
+  @@index([idEntidad])
+  @@map("au_usuario")
+}
+
+model Sesion {
+  idSesion         Int          @id @default(autoincrement()) @map("id_sesion")
+  idUsuario        Int          @map("id_usuario")
+  refreshTokenHash VarChar(255) @map("refresh_token_hash")
+  fechaCreacion    DateTime     @default(now()) @map("fecha_creacion")
+  fechaExpiracion  DateTime     @map("fecha_expiracion")
+  fechaRevocacion  DateTime?    @map("fecha_revocacion")
+
+  usuario          Usuario      @relation(fields:[idUsuario], references:[idUsuario], onDelete: Restrict)
+
+  @@index([idUsuario])
+  @@map("au_sesion")
+}
+
+model TokenCuenta {
+  idToken          Int                  @id @default(autoincrement()) @map("id_token")
+  idUsuario        Int                  @map("id_usuario")
+  tipoToken        au_tipo_token_cuenta @map("tipo_token")
+  tokenHash        VarChar(255)         @map("token_hash")
+  fechaCreacion    DateTime             @default(now()) @map("fecha_creacion")
+  fechaExpiracion  DateTime             @map("fecha_expiracion")
+  fechaUtilizacion DateTime?            @map("fecha_utilizacion")
+
+  usuario          Usuario              @relation(fields:[idUsuario], references:[idUsuario], onDelete: Restrict)
+
+  @@index([idUsuario, tipoToken])
+  @@map("au_token_cuenta")
 }

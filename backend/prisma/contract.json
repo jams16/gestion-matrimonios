@@ -4,6 +4,18 @@
   "target": "postgres",
   "profileHash": "3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2",
   "roots": {
+    "au_sesion": {
+      "model": "Sesion",
+      "namespace": "public"
+    },
+    "au_token_cuenta": {
+      "model": "TokenCuenta",
+      "namespace": "public"
+    },
+    "au_usuario": {
+      "model": "Usuario",
+      "namespace": "public"
+    },
     "gp_proyecto": {
       "model": "Proyecto",
       "namespace": "public"
@@ -25,6 +37,32 @@
     "namespaces": {
       "public": {
         "enum": {
+          "au_tipo_token_cuenta": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "VERIFICACION_CORREO",
+                "value": "VERIFICACION_CORREO"
+              },
+              {
+                "name": "RECUPERACION_CONTRASENA",
+                "value": "RECUPERACION_CONTRASENA"
+              }
+            ]
+          },
+          "au_tipo_usuario": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "PROJECT_MANAGER",
+                "value": "PROJECT_MANAGER"
+              },
+              {
+                "name": "OTROS",
+                "value": "OTROS"
+              }
+            ]
+          },
           "in_tipo_entidad": {
             "codecId": "pg/text@1",
             "members": [
@@ -186,6 +224,21 @@
                 },
                 "to": {
                   "model": "Ubigeo",
+                  "namespace": "public"
+                }
+              },
+              "usuarios": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idEntidad"
+                  ],
+                  "targetFields": [
+                    "idEntidad"
+                  ]
+                },
+                "to": {
+                  "model": "Usuario",
                   "namespace": "public"
                 }
               }
@@ -363,6 +416,21 @@
                   "model": "Ubigeo",
                   "namespace": "public"
                 }
+              },
+              "usuarios": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idPersonaNatural"
+                  ],
+                  "targetFields": [
+                    "idPersonaNatural"
+                  ]
+                },
+                "to": {
+                  "model": "Usuario",
+                  "namespace": "public"
+                }
               }
             },
             "storage": {
@@ -427,6 +495,204 @@
               },
               "namespaceId": "public",
               "table": "gp_proyecto"
+            }
+          },
+          "Sesion": {
+            "fields": {
+              "fechaCreacion": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "fechaExpiracion": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "fechaRevocacion": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "idSesion": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "idUsuario": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "refreshTokenHash": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 255
+                  }
+                }
+              }
+            },
+            "relations": {
+              "usuario": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idUsuario"
+                  ],
+                  "targetFields": [
+                    "idUsuario"
+                  ]
+                },
+                "to": {
+                  "model": "Usuario",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "fechaCreacion": {
+                  "column": "fecha_creacion"
+                },
+                "fechaExpiracion": {
+                  "column": "fecha_expiracion"
+                },
+                "fechaRevocacion": {
+                  "column": "fecha_revocacion"
+                },
+                "idSesion": {
+                  "column": "id_sesion"
+                },
+                "idUsuario": {
+                  "column": "id_usuario"
+                },
+                "refreshTokenHash": {
+                  "column": "refresh_token_hash"
+                }
+              },
+              "namespaceId": "public",
+              "table": "au_sesion"
+            }
+          },
+          "TokenCuenta": {
+            "fields": {
+              "fechaCreacion": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "fechaExpiracion": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "fechaUtilizacion": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "idToken": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "idUsuario": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "tipoToken": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "au_tipo_token_cuenta",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "tokenHash": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 255
+                  }
+                }
+              }
+            },
+            "relations": {
+              "usuario": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idUsuario"
+                  ],
+                  "targetFields": [
+                    "idUsuario"
+                  ]
+                },
+                "to": {
+                  "model": "Usuario",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "fechaCreacion": {
+                  "column": "fecha_creacion"
+                },
+                "fechaExpiracion": {
+                  "column": "fecha_expiracion"
+                },
+                "fechaUtilizacion": {
+                  "column": "fecha_utilizacion"
+                },
+                "idToken": {
+                  "column": "id_token"
+                },
+                "idUsuario": {
+                  "column": "id_usuario"
+                },
+                "tipoToken": {
+                  "column": "tipo_token"
+                },
+                "tokenHash": {
+                  "column": "token_hash"
+                }
+              },
+              "namespaceId": "public",
+              "table": "au_token_cuenta"
             }
           },
           "Ubigeo": {
@@ -522,6 +788,202 @@
               "namespaceId": "public",
               "table": "in_ubigeo"
             }
+          },
+          "Usuario": {
+            "fields": {
+              "contrasenaHash": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 255
+                  }
+                }
+              },
+              "correoVerificado": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "esActivo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "fechaCreacion": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "fechaModificacion": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "idEntidad": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "idPersonaNatural": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "idUsuario": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "tipoUsuario": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "au_tipo_usuario",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "ultimoAcceso": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "usuario": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 150
+                  }
+                }
+              }
+            },
+            "relations": {
+              "entidad": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idEntidad"
+                  ],
+                  "targetFields": [
+                    "idEntidad"
+                  ]
+                },
+                "to": {
+                  "model": "Entidad",
+                  "namespace": "public"
+                }
+              },
+              "personaNatural": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idPersonaNatural"
+                  ],
+                  "targetFields": [
+                    "idPersonaNatural"
+                  ]
+                },
+                "to": {
+                  "model": "PersonaNatural",
+                  "namespace": "public"
+                }
+              },
+              "sesiones": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idUsuario"
+                  ],
+                  "targetFields": [
+                    "idUsuario"
+                  ]
+                },
+                "to": {
+                  "model": "Sesion",
+                  "namespace": "public"
+                }
+              },
+              "tokensCuenta": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idUsuario"
+                  ],
+                  "targetFields": [
+                    "idUsuario"
+                  ]
+                },
+                "to": {
+                  "model": "TokenCuenta",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "contrasenaHash": {
+                  "column": "contrasena_hash"
+                },
+                "correoVerificado": {
+                  "column": "correo_verificado"
+                },
+                "esActivo": {
+                  "column": "es_activo"
+                },
+                "fechaCreacion": {
+                  "column": "fecha_creacion"
+                },
+                "fechaModificacion": {
+                  "column": "fecha_modificacion"
+                },
+                "idEntidad": {
+                  "column": "id_entidad"
+                },
+                "idPersonaNatural": {
+                  "column": "id_persona_natural"
+                },
+                "idUsuario": {
+                  "column": "id_usuario"
+                },
+                "tipoUsuario": {
+                  "column": "tipo_usuario"
+                },
+                "ultimoAcceso": {
+                  "column": "ultimo_acceso"
+                },
+                "usuario": {
+                  "column": "usuario"
+                }
+              },
+              "namespaceId": "public",
+              "table": "au_usuario"
+            }
           }
         }
       }
@@ -532,6 +994,353 @@
       "public": {
         "entries": {
           "table": {
+            "au_sesion": {
+              "columns": {
+                "fecha_creacion": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "fecha_expiracion": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "fecha_revocacion": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": true
+                },
+                "id_sesion": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "expression": "autoincrement()",
+                    "kind": "function"
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "id_usuario": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "refresh_token_hash": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 255
+                  }
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_usuario"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "au_sesion"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_usuario"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "au_usuario"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "id_usuario"
+                  ],
+                  "name": "au_sesion_id_usuario_idx_00d592a0",
+                  "prefix": "au_sesion_id_usuario_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_sesion"
+                ]
+              },
+              "uniques": []
+            },
+            "au_token_cuenta": {
+              "checks": [
+                {
+                  "expression": "\"tipo_token\" IN ('VERIFICACION_CORREO', 'RECUPERACION_CONTRASENA')",
+                  "name": "au_token_cuenta_tipo_token_check_00cff9e2",
+                  "prefix": "au_token_cuenta_tipo_token_check"
+                }
+              ],
+              "columns": {
+                "fecha_creacion": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "fecha_expiracion": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "fecha_utilizacion": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": true
+                },
+                "id_token": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "expression": "autoincrement()",
+                    "kind": "function"
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "id_usuario": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "tipo_token": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "au_tipo_token_cuenta",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "token_hash": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 255
+                  }
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_usuario"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "au_token_cuenta"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_usuario"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "au_usuario"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "id_usuario"
+                  ],
+                  "name": "au_token_cuenta_id_usuario_idx_00d592a0",
+                  "prefix": "au_token_cuenta_id_usuario_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_usuario",
+                    "tipo_token"
+                  ],
+                  "name": "au_token_cuenta_id_usuario_tipo_token_idx_b9e74dee",
+                  "prefix": "au_token_cuenta_id_usuario_tipo_token_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_token"
+                ]
+              },
+              "uniques": []
+            },
+            "au_usuario": {
+              "checks": [
+                {
+                  "expression": "\"tipo_usuario\" IN ('PROJECT_MANAGER', 'OTROS')",
+                  "name": "au_usuario_tipo_usuario_check_b015ba47",
+                  "prefix": "au_usuario_tipo_usuario_check"
+                }
+              ],
+              "columns": {
+                "contrasena_hash": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 255
+                  }
+                },
+                "correo_verificado": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": false
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "es_activo": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "fecha_creacion": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "fecha_modificacion": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "id_entidad": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "id_persona_natural": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "id_usuario": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "expression": "autoincrement()",
+                    "kind": "function"
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "tipo_usuario": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "au_tipo_usuario",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "ultimo_acceso": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "usuario": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 150
+                  }
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_persona_natural"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "au_usuario"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_persona_natural"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "in_persona_natural"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_entidad"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "au_usuario"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_entidad"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "in_entidad"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "id_entidad"
+                  ],
+                  "name": "au_usuario_id_entidad_idx_bb9cb049",
+                  "prefix": "au_usuario_id_entidad_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_persona_natural"
+                  ],
+                  "name": "au_usuario_id_persona_natural_idx_2ece1570",
+                  "prefix": "au_usuario_id_persona_natural_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_usuario"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "usuario"
+                  ]
+                }
+              ]
+            },
             "gp_proyecto": {
               "columns": {
                 "idProyecto": {
@@ -894,6 +1703,20 @@
             }
           },
           "valueSet": {
+            "au_tipo_token_cuenta": {
+              "kind": "valueSet",
+              "values": [
+                "VERIFICACION_CORREO",
+                "RECUPERACION_CONTRASENA"
+              ]
+            },
+            "au_tipo_usuario": {
+              "kind": "valueSet",
+              "values": [
+                "PROJECT_MANAGER",
+                "OTROS"
+              ]
+            },
             "in_tipo_entidad": {
               "kind": "valueSet",
               "values": [
@@ -909,12 +1732,27 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "1901f3c566c7c41e94ac93605244604a644ac7216af4d4636540865a662d21b0"
+    "storageHash": "4eadc66f0cd0f9855b471a2ebb6fc12c7a996288addae3c9edb399cbff2f02e3"
   },
   "execution": {
-    "executionHash": "c1e234d6290ecad6a04273617ab9734ea92e2728fa81e095fee92ac7137c9b25",
+    "executionHash": "60a2cb77f18a57139cf34d03d4cea2f6a9ff328d177f7c96fb82e079ffd242b9",
     "mutations": {
       "defaults": [
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "fecha_modificacion",
+            "namespace": "public",
+            "table": "au_usuario"
+          }
+        },
         {
           "onCreate": {
             "id": "uuidv4",

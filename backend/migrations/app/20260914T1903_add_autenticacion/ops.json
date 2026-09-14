@@ -1,0 +1,524 @@
+[
+  {
+    "id": "table.au_sesion",
+    "label": "Create table \"au_sesion\"",
+    "summary": "Creates table \"au_sesion\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "au_sesion"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"au_sesion\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"au_sesion\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"au_sesion\"",
+        "sql": "CREATE TABLE \"public\".\"au_sesion\" (\n  \"fecha_creacion\" timestamptz DEFAULT (now()) NOT NULL,\n  \"fecha_expiracion\" timestamptz NOT NULL,\n  \"fecha_revocacion\" timestamptz,\n  \"id_sesion\" SERIAL NOT NULL,\n  \"id_usuario\" int4 NOT NULL,\n  \"refresh_token_hash\" character varying(255) NOT NULL,\n  PRIMARY KEY (\"id_sesion\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"au_sesion\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"au_sesion\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.au_token_cuenta",
+    "label": "Create table \"au_token_cuenta\"",
+    "summary": "Creates table \"au_token_cuenta\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "au_token_cuenta"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"au_token_cuenta\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"au_token_cuenta\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"au_token_cuenta\"",
+        "sql": "CREATE TABLE \"public\".\"au_token_cuenta\" (\n  \"fecha_creacion\" timestamptz DEFAULT (now()) NOT NULL,\n  \"fecha_expiracion\" timestamptz NOT NULL,\n  \"fecha_utilizacion\" timestamptz,\n  \"id_token\" SERIAL NOT NULL,\n  \"id_usuario\" int4 NOT NULL,\n  \"tipo_token\" text NOT NULL,\n  \"token_hash\" character varying(255) NOT NULL,\n  PRIMARY KEY (\"id_token\"),\n  CONSTRAINT \"au_token_cuenta_tipo_token_check_00cff9e2\" CHECK (\"tipo_token\" IN ('VERIFICACION_CORREO', 'RECUPERACION_CONTRASENA'))\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"au_token_cuenta\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"au_token_cuenta\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.au_usuario",
+    "label": "Create table \"au_usuario\"",
+    "summary": "Creates table \"au_usuario\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "au_usuario"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"au_usuario\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"au_usuario\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"au_usuario\"",
+        "sql": "CREATE TABLE \"public\".\"au_usuario\" (\n  \"contrasena_hash\" character varying(255) NOT NULL,\n  \"correo_verificado\" bool DEFAULT false NOT NULL,\n  \"es_activo\" bool DEFAULT true NOT NULL,\n  \"fecha_creacion\" timestamptz DEFAULT (now()) NOT NULL,\n  \"fecha_modificacion\" timestamptz NOT NULL,\n  \"id_entidad\" int4,\n  \"id_persona_natural\" int4 NOT NULL,\n  \"id_usuario\" SERIAL NOT NULL,\n  \"tipo_usuario\" text NOT NULL,\n  \"ultimo_acceso\" timestamptz NOT NULL,\n  \"usuario\" character varying(150) NOT NULL,\n  PRIMARY KEY (\"id_usuario\"),\n  CONSTRAINT \"au_usuario_tipo_usuario_check_b015ba47\" CHECK (\"tipo_usuario\" IN ('PROJECT_MANAGER', 'OTROS'))\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"au_usuario\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"au_usuario\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.au_usuario.au_usuario_usuario_key",
+    "label": "Add unique constraint on \"au_usuario\" (usuario)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "au_usuario_usuario_key",
+        "table": "au_usuario"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"au_usuario_usuario_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "au_usuario_usuario_key",
+          "public",
+          "\"public\".\"au_usuario\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"au_usuario_usuario_key\"",
+        "sql": "ALTER TABLE \"public\".\"au_usuario\" ADD CONSTRAINT \"au_usuario_usuario_key\" UNIQUE (\"usuario\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"au_usuario_usuario_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "au_usuario_usuario_key",
+          "public",
+          "\"public\".\"au_usuario\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.au_sesion.au_sesion_id_usuario_idx_00d592a0",
+    "label": "Create index \"au_sesion_id_usuario_idx_00d592a0\" on \"au_sesion\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "au_sesion_id_usuario_idx_00d592a0",
+        "table": "au_sesion"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"au_sesion_id_usuario_idx_00d592a0\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"au_sesion_id_usuario_idx_00d592a0\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"au_sesion_id_usuario_idx_00d592a0\"",
+        "sql": "CREATE INDEX \"au_sesion_id_usuario_idx_00d592a0\" ON \"public\".\"au_sesion\" (\"id_usuario\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"au_sesion_id_usuario_idx_00d592a0\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"au_sesion_id_usuario_idx_00d592a0\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.au_token_cuenta.au_token_cuenta_id_usuario_idx_00d592a0",
+    "label": "Create index \"au_token_cuenta_id_usuario_idx_00d592a0\" on \"au_token_cuenta\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "au_token_cuenta_id_usuario_idx_00d592a0",
+        "table": "au_token_cuenta"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"au_token_cuenta_id_usuario_idx_00d592a0\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"au_token_cuenta_id_usuario_idx_00d592a0\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"au_token_cuenta_id_usuario_idx_00d592a0\"",
+        "sql": "CREATE INDEX \"au_token_cuenta_id_usuario_idx_00d592a0\" ON \"public\".\"au_token_cuenta\" (\"id_usuario\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"au_token_cuenta_id_usuario_idx_00d592a0\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"au_token_cuenta_id_usuario_idx_00d592a0\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.au_token_cuenta.au_token_cuenta_id_usuario_tipo_token_idx_b9e74dee",
+    "label": "Create index \"au_token_cuenta_id_usuario_tipo_token_idx_b9e74dee\" on \"au_token_cuenta\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "au_token_cuenta_id_usuario_tipo_token_idx_b9e74dee",
+        "table": "au_token_cuenta"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"au_token_cuenta_id_usuario_tipo_token_idx_b9e74dee\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"au_token_cuenta_id_usuario_tipo_token_idx_b9e74dee\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"au_token_cuenta_id_usuario_tipo_token_idx_b9e74dee\"",
+        "sql": "CREATE INDEX \"au_token_cuenta_id_usuario_tipo_token_idx_b9e74dee\" ON \"public\".\"au_token_cuenta\" (\"id_usuario\", \"tipo_token\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"au_token_cuenta_id_usuario_tipo_token_idx_b9e74dee\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"au_token_cuenta_id_usuario_tipo_token_idx_b9e74dee\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.au_usuario.au_usuario_id_entidad_idx_bb9cb049",
+    "label": "Create index \"au_usuario_id_entidad_idx_bb9cb049\" on \"au_usuario\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "au_usuario_id_entidad_idx_bb9cb049",
+        "table": "au_usuario"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"au_usuario_id_entidad_idx_bb9cb049\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"au_usuario_id_entidad_idx_bb9cb049\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"au_usuario_id_entidad_idx_bb9cb049\"",
+        "sql": "CREATE INDEX \"au_usuario_id_entidad_idx_bb9cb049\" ON \"public\".\"au_usuario\" (\"id_entidad\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"au_usuario_id_entidad_idx_bb9cb049\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"au_usuario_id_entidad_idx_bb9cb049\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.au_usuario.au_usuario_id_persona_natural_idx_2ece1570",
+    "label": "Create index \"au_usuario_id_persona_natural_idx_2ece1570\" on \"au_usuario\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "au_usuario_id_persona_natural_idx_2ece1570",
+        "table": "au_usuario"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"au_usuario_id_persona_natural_idx_2ece1570\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"au_usuario_id_persona_natural_idx_2ece1570\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"au_usuario_id_persona_natural_idx_2ece1570\"",
+        "sql": "CREATE INDEX \"au_usuario_id_persona_natural_idx_2ece1570\" ON \"public\".\"au_usuario\" (\"id_persona_natural\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"au_usuario_id_persona_natural_idx_2ece1570\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"au_usuario_id_persona_natural_idx_2ece1570\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.au_sesion.au_sesion_id_usuario_fkey",
+    "label": "Add foreign key \"au_sesion_id_usuario_fkey\" on \"au_sesion\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "au_sesion_id_usuario_fkey",
+        "table": "au_sesion"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"au_sesion_id_usuario_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "au_sesion_id_usuario_fkey",
+          "public",
+          "\"public\".\"au_sesion\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"au_sesion_id_usuario_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"au_sesion\"\nADD CONSTRAINT \"au_sesion_id_usuario_fkey\"\nFOREIGN KEY (\"id_usuario\")\nREFERENCES \"public\".\"au_usuario\" (\"id_usuario\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"au_sesion_id_usuario_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "au_sesion_id_usuario_fkey",
+          "public",
+          "\"public\".\"au_sesion\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.au_token_cuenta.au_token_cuenta_id_usuario_fkey",
+    "label": "Add foreign key \"au_token_cuenta_id_usuario_fkey\" on \"au_token_cuenta\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "au_token_cuenta_id_usuario_fkey",
+        "table": "au_token_cuenta"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"au_token_cuenta_id_usuario_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "au_token_cuenta_id_usuario_fkey",
+          "public",
+          "\"public\".\"au_token_cuenta\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"au_token_cuenta_id_usuario_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"au_token_cuenta\"\nADD CONSTRAINT \"au_token_cuenta_id_usuario_fkey\"\nFOREIGN KEY (\"id_usuario\")\nREFERENCES \"public\".\"au_usuario\" (\"id_usuario\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"au_token_cuenta_id_usuario_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "au_token_cuenta_id_usuario_fkey",
+          "public",
+          "\"public\".\"au_token_cuenta\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.au_usuario.au_usuario_id_persona_natural_fkey",
+    "label": "Add foreign key \"au_usuario_id_persona_natural_fkey\" on \"au_usuario\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "au_usuario_id_persona_natural_fkey",
+        "table": "au_usuario"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"au_usuario_id_persona_natural_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "au_usuario_id_persona_natural_fkey",
+          "public",
+          "\"public\".\"au_usuario\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"au_usuario_id_persona_natural_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"au_usuario\"\nADD CONSTRAINT \"au_usuario_id_persona_natural_fkey\"\nFOREIGN KEY (\"id_persona_natural\")\nREFERENCES \"public\".\"in_persona_natural\" (\"id_persona_natural\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"au_usuario_id_persona_natural_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "au_usuario_id_persona_natural_fkey",
+          "public",
+          "\"public\".\"au_usuario\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.au_usuario.au_usuario_id_entidad_fkey",
+    "label": "Add foreign key \"au_usuario_id_entidad_fkey\" on \"au_usuario\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "au_usuario_id_entidad_fkey",
+        "table": "au_usuario"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"au_usuario_id_entidad_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "au_usuario_id_entidad_fkey",
+          "public",
+          "\"public\".\"au_usuario\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"au_usuario_id_entidad_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"au_usuario\"\nADD CONSTRAINT \"au_usuario_id_entidad_fkey\"\nFOREIGN KEY (\"id_entidad\")\nREFERENCES \"public\".\"in_entidad\" (\"id_entidad\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"au_usuario_id_entidad_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "au_usuario_id_entidad_fkey",
+          "public",
+          "\"public\".\"au_usuario\""
+        ]
+      }
+    ]
+  }
+]

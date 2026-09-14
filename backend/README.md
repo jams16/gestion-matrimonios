@@ -2615,5 +2615,38 @@ importadas, errores y detalleErrores.
 ## Swagger
 
 La especificación OpenAPI está disponible en /api/docs. Los endpoints de
-Entidades documentan sus DTOs, enum tipoEntidad, parámetros de consulta,
-multipart de importación y respuestas HTTP principales.
+Entidades, Personas y Ubigeos documentan sus DTOs, parámetros de consulta,
+multipart de importación cuando aplica, y respuestas HTTP principales. Los
+listados describen búsqueda, filtros, orden, paginación y mostrarTodos para
+que los tres recursos mantengan el mismo contrato visible.
+
+---
+
+# 76. Autenticación y Usuarios
+
+La autenticación usa Argon2id para contraseñas y JWT separados de acceso y
+refresh. Los refresh tokens se guardan solo como hash en au_sesion, expiran,
+se rotan al refrescar y se revocan al cerrar sesión, restablecer la contraseña
+o desactivar el usuario.
+
+au_usuario, au_sesion y au_token_cuenta emplean IDs numéricos
+autoincrementales desde 1000. Los enums Prisma au_tipo_usuario y
+au_tipo_token_cuenta se almacenan mediante restricciones CHECK administradas
+por Prisma 8. Contraseñas, hashes y tokens nunca se devuelven por la API.
+
+POST /api/v1/auth/registrar crea la cuenta y envía un correo SMTP a la persona
+asociada. El correo contiene el botón “Sí, soy yo”, que abre FRONTEND_URL con
+el token; el cliente confirma con POST /api/v1/auth/verificar-correo/confirmar.
+Las solicitudes de verificación y recuperación no revelan si una cuenta existe.
+
+Los endpoints de auth son registrar, login, refresh, logout,
+verificar-correo/solicitar, verificar-correo/confirmar,
+recuperar-contrasena/solicitar y recuperar-contrasena/confirmar. Usuarios
+expone GET, PATCH y DELETE bajo /api/v1/usuarios, protegidos con Bearer JWT.
+Su listado admite pagina, limite, ordenarPor, orden, buscar, mostrarTodos,
+idUsuario, idPersonaNatural, idEntidad, tipoUsuario, correoVerificado y
+esActivo.
+
+Además de JWT, configurar SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASSWORD,
+SMTP_FROM, SMTP_SECURE y FRONTEND_URL. Swagger expone el esquema Bearer y los
+DTOs en /api/docs.
