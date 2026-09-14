@@ -29,8 +29,13 @@ export class ApiExceptionFilter implements ExceptionFilter {
         mensaje = Array.isArray(message) ? message.join('; ') : message;
       }
     } else {
+      const detalle =
+        exception instanceof Error
+          ? exception.stack ?? exception.message
+          : String(exception);
       this.logger.error(
         `Error no controlado en ${request.method} ${request.url}`,
+        detalle,
       );
     }
 

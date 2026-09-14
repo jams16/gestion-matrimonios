@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:dio/dio.dart';
 import '../../../../core/widgets/buttons/app_button.dart';
 import '../../../../core/widgets/inputs/app_password_field.dart';
 import '../../../../core/widgets/inputs/app_text_field.dart';
 import '../../../../core/widgets/page_patterns/app_login_page_pattern.dart';
 import '../widgets/auth_hero.dart';
+import '../../infrastructure/auth_api.dart';
 
 class IniciarSesionPage extends StatefulWidget { const IniciarSesionPage({super.key}); @override State<IniciarSesionPage> createState() => _IniciarSesionPageState(); }
 class _IniciarSesionPageState extends State<IniciarSesionPage> {
-  final _form = GlobalKey<FormState>(); final _usuario = TextEditingController(); final _clave = TextEditingController(); bool _recordarme = false;
+  final _form = GlobalKey<FormState>(); final _usuario = TextEditingController(); final _clave = TextEditingController(); bool _recordarme = false, _cargando = false;
   String? _required(String? value) => value == null || value.trim().isEmpty ? 'Este campo es obligatorio.' : null;
   @override void dispose() { _usuario.dispose(); _clave.dispose(); super.dispose(); }
   @override Widget build(BuildContext context) => Scaffold(
@@ -28,12 +30,37 @@ class _IniciarSesionPageState extends State<IniciarSesionPage> {
             TextButton(onPressed: () => context.go('/recuperar-contrasena'), child: const Text('¿Olvidaste tu contraseña?')),
           ]),
           const SizedBox(height: 16),
-          AppButton(label: 'Iniciar sesión', expanded: true, onPressed: () {
-            if (_form.currentState!.validate()) context.go('/', extra: _usuario.text.trim());
-          }),
+          AppButton(label: 'Iniciar sesión', expanded: true, loading: _cargando, onPressed: _iniciarSesion),
         ])),
         footer: Center(child: TextButton(onPressed: () => context.go('/registrarse'), child: const Text('Crear una nueva cuenta'))),
       ),
     ]),
   );
+
+  Future<void> _iniciarSesion() async {
+    if (!_form.currentState!.validate()) return;
+    setState(() => _cargando = true);
+    try {
+      final data = await AuthApi().iniciarSesion(
+        usuarioOCorreo: _usuario.text.trim(),
+        contrasena: _clave.text,
+      );
+      if (!mounted) return;
+      final usuario = Map<String, dynamic>.from(data['usuario'] as Map);
+      context.go('/', extra: usuario['usuario']);
+    } on DioException catch (error) {
+      if (!mounted) return;
+      final mensaje = error.response == null
+          ? 'No pudimos conectar con el servidor. Inténtalo nuevamente.'
+          : error.response!.statusCode == 401
+              ? 'No encontramos una cuenta registrada con esos datos o la contraseña no es correcta.'
+              : error.response?.data is Map
+                  ? (error.response!.data['mensaje']?.toString() ??
+                      'No pudimos iniciar sesión. Revisa tus datos.')
+                  : 'No pudimos iniciar sesión. Inténtalo nuevamente.';
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(mensaje)));
+    } finally {
+      if (mounted) setState(() => _cargando = false);
+    }
+  }
 }

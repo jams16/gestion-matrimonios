@@ -4,6 +4,10 @@
   "target": "postgres",
   "profileHash": "3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2",
   "roots": {
+    "au_registro_pendiente": {
+      "model": "RegistroPendiente",
+      "namespace": "public"
+    },
     "au_sesion": {
       "model": "Sesion",
       "namespace": "public"
@@ -495,6 +499,122 @@
               },
               "namespaceId": "public",
               "table": "gp_proyecto"
+            }
+          },
+          "RegistroPendiente": {
+            "fields": {
+              "apellidoMaterno": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 100
+                  }
+                }
+              },
+              "apellidoPaterno": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 100
+                  }
+                }
+              },
+              "correoElectronico": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 150
+                  }
+                }
+              },
+              "fechaCreacion": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "fechaExpiracion": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "fechaVerificacion": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "idRegistro": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "nombres": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 100
+                  }
+                }
+              },
+              "tokenHash": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 255
+                  }
+                }
+              }
+            },
+            "relations": {},
+            "storage": {
+              "fields": {
+                "apellidoMaterno": {
+                  "column": "apellido_materno"
+                },
+                "apellidoPaterno": {
+                  "column": "apellido_paterno"
+                },
+                "correoElectronico": {
+                  "column": "correo_electronico"
+                },
+                "fechaCreacion": {
+                  "column": "fecha_creacion"
+                },
+                "fechaExpiracion": {
+                  "column": "fecha_expiracion"
+                },
+                "fechaVerificacion": {
+                  "column": "fecha_verificacion"
+                },
+                "idRegistro": {
+                  "column": "id_registro"
+                },
+                "nombres": {
+                  "column": "nombres"
+                },
+                "tokenHash": {
+                  "column": "token_hash"
+                }
+              },
+              "namespaceId": "public",
+              "table": "au_registro_pendiente"
             }
           },
           "Sesion": {
@@ -994,6 +1114,95 @@
       "public": {
         "entries": {
           "table": {
+            "au_registro_pendiente": {
+              "columns": {
+                "apellido_materno": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 100
+                  }
+                },
+                "apellido_paterno": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 100
+                  }
+                },
+                "correo_electronico": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 150
+                  }
+                },
+                "fecha_creacion": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "fecha_expiracion": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "fecha_verificacion": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": true
+                },
+                "id_registro": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "expression": "autoincrement()",
+                    "kind": "function"
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "nombres": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 100
+                  }
+                },
+                "token_hash": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 255
+                  }
+                }
+              },
+              "foreignKeys": [],
+              "indexes": [
+                {
+                  "columns": [
+                    "correo_electronico"
+                  ],
+                  "name": "au_registro_pendiente_correo_electronico_idx_b3ece6ad",
+                  "prefix": "au_registro_pendiente_correo_electronico_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_registro"
+                ]
+              },
+              "uniques": []
+            },
             "au_sesion": {
               "columns": {
                 "fecha_creacion": {
@@ -1732,7 +1941,7 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "4eadc66f0cd0f9855b471a2ebb6fc12c7a996288addae3c9edb399cbff2f02e3"
+    "storageHash": "9dc9fc3869141b3c54143bf9d9d2d0f190e376f544ddd26200d34149baa1f32f"
   },
   "execution": {
     "executionHash": "60a2cb77f18a57139cf34d03d4cea2f6a9ff328d177f7c96fb82e079ffd242b9",

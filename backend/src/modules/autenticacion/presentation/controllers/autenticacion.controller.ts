@@ -13,6 +13,9 @@ import {
   ResetPasswordDto,
   SolicitarTokenDto,
   TokenCuentaDto,
+  SolicitarRegistroDto,
+  FinalizarRegistroDto,
+  ConfirmarRegistroPendienteDto,
 } from '../../application/dto/autenticacion.dto';
 import {
   CerrarSesionUseCase,
@@ -22,6 +25,7 @@ import {
   RefrescarSesionUseCase,
   RegistrarUsuarioUseCase,
   SolicitarVerificacionCorreoUseCase,
+  RegistroPendienteUseCase,
 } from '../../application/use-cases/autenticacion.use-cases';
 
 @ApiTags('Autenticación')
@@ -35,6 +39,7 @@ export class AutenticacionController {
     private readonly verificar: SolicitarVerificacionCorreoUseCase,
     private readonly confirmar: ConfirmarCorreoUseCase,
     private readonly recuperacion: RecuperarContrasenaUseCase,
+    private readonly registroPendiente: RegistroPendienteUseCase,
   ) {}
   @Post('registrar')
   @ApiOperation({
@@ -46,6 +51,39 @@ export class AutenticacionController {
       mensaje:
         'Usuario creado correctamente. Revisa tu correo para confirmar la cuenta.',
       data: await this.registrar.execute(dto),
+    };
+  }
+  @Post('registro/solicitar')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Enviar correo para iniciar el registro' })
+  @ApiOkResponse({ description: 'Correo de registro enviado correctamente.' })
+  async solicitarRegistro(
+    @Body() dto: SolicitarRegistroDto,
+  ) {
+    await this.registroPendiente.solicitar(dto);
+    return {
+      mensaje: 'Revisa tu correo para confirmar tu identidad.',
+      data: null,
+    };
+  }
+  @Post('registro/confirmar')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Confirmar el correo del registro pendiente' })
+  async confirmarRegistro(
+    @Body() dto: ConfirmarRegistroPendienteDto,
+  ) {
+    await this.registroPendiente.confirmar(dto.token);
+    return { mensaje: 'Correo confirmado correctamente.', data: null };
+  }
+  @Post('registro/finalizar')
+  @ApiCreatedResponse({ description: 'Cuenta Wedding Planner creada.' })
+  @ApiOperation({ summary: 'Finalizar registro de Wedding Planner' })
+  async finalizarRegistro(
+    @Body() dto: FinalizarRegistroDto,
+  ) {
+    return {
+      mensaje: 'Cuenta creada correctamente.',
+      data: await this.registroPendiente.finalizar(dto),
     };
   }
   @Post('login')

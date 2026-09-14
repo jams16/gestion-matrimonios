@@ -12,6 +12,7 @@ import {
   Usuario,
 } from '../../../domain/entities/usuario.entity';
 import { TipoTokenCuenta } from '../../../domain/enums/tipo-token-cuenta.enum';
+import { Temporal } from 'temporal-polyfill';
 
 @Injectable()
 export class PrismaAutenticacionRepository implements AutenticacionRepository {
@@ -47,10 +48,11 @@ export class PrismaAutenticacionRepository implements AutenticacionRepository {
     const personas =
       (await this.prisma.client.orm.public.PersonaNatural.all()) as Array<{
         idPersonaNatural: number;
-        correoElectronico: string;
+        correoElectronico: string | null;
       }>;
     const persona = personas.find(
-      (p) => p.correoElectronico.toLocaleLowerCase('es-PE') === clave,
+      (p) =>
+        p.correoElectronico?.toLocaleLowerCase('es-PE') === clave,
     );
     return persona
       ? (usuarios.find(
@@ -155,6 +157,17 @@ export class PrismaAutenticacionRepository implements AutenticacionRepository {
     } | null;
     return p;
   }
+  async correoPersonaExiste(correoElectronico: string): Promise<boolean> {
+    const personas =
+      (await this.prisma.client.orm.public.PersonaNatural.all()) as Array<{
+        correoElectronico: string | null;
+      }>;
+    const correo = correoElectronico.toLocaleLowerCase('es-PE');
+    return personas.some(
+      (persona) =>
+        persona.correoElectronico?.toLocaleLowerCase('es-PE') === correo,
+    );
+  }
   async entidadExiste(id: number): Promise<boolean> {
     return !!(await this.prisma.client.orm.public.Entidad.first({
       idEntidad: id,
@@ -172,12 +185,15 @@ export class PrismaAutenticacionRepository implements AutenticacionRepository {
       idSesion: id,
     }) as Promise<Sesion | null>;
   }
-  async revocarSesion(id: number, fecha: Date): Promise<void> {
+  async revocarSesion(id: number, fecha: Temporal.Instant): Promise<void> {
     await this.prisma.client.orm.public.Sesion.where({ idSesion: id }).update({
       fechaRevocacion: fecha,
     } as never);
   }
-  async revocarSesionesUsuario(idUsuario: number, fecha: Date): Promise<void> {
+  async revocarSesionesUsuario(
+    idUsuario: number,
+    fecha: Temporal.Instant,
+  ): Promise<void> {
     const sesiones = (await this.prisma.client.orm.public.Sesion.where({
       idUsuario,
     }).all()) as Sesion[];
@@ -207,9 +223,92 @@ export class PrismaAutenticacionRepository implements AutenticacionRepository {
       ) ?? null
     );
   }
-  async usarTokenCuenta(id: number, fecha: Date): Promise<void> {
+  async usarTokenCuenta(
+    id: number,
+    fecha: Temporal.Instant,
+  ): Promise<void> {
     await this.prisma.client.orm.public.TokenCuenta.where({
       idToken: id,
     }).update({ fechaUtilizacion: fecha } as never);
+  }
+  crearRegistroPendiente(data: {
+    nombres: string;
+    apellidoPaterno: string;
+    apellidoMaterno?: string | null;
+    correoElectronico: string;
+    tokenHash: string;
+    fechaExpiracion: Temporal.Instant;
+  }) {
+    return this.prisma.client.orm.public.RegistroPendiente.create(
+      data as never,
+    ) as Promise<{ idRegistro: number }>;
+  }
+  async obtenerRegistroPendiente(tokenHash: string) {
+    const registros =
+      (await this.prisma.client.orm.public.RegistroPendiente.all()) as Array<{
+        idRegistro: number;
+        nombres: string;
+        apellidoPaterno: string;
+        apellidoMaterno: string | null;
+        correoElectronico: string;
+        fechaExpiracion: Temporal.Instant;
+        fechaVerificacion: Temporal.Instant | null;
+        tokenHash: string;
+      }>;
+    return (
+      registros.find((registro) => registro.tokenHash === tokenHash) ?? null
+    );
+  }
+  async verificarRegistroPendiente(id: number): Promise<void> {
+    await this.prisma.client.orm.public.RegistroPendiente.where({
+      idRegistro: id,
+    }).update({ fechaVerificacion: Temporal.Now.instant() } as never);
+  }
+  async registroPendienteVerificado(
+    correoElectronico: string,
+  ): Promise<boolean> {
+    const registros =
+      (await this.prisma.client.orm.public.RegistroPendiente.all()) as Array<{
+        correoElectronico: string;
+        fechaExpiracion: Temporal.Instant;
+        fechaVerificacion: Temporal.Instant | null;
+      }>;
+    const correo = correoElectronico.toLocaleLowerCase('es-PE');
+    const ahora = Temporal.Now.instant();
+    return registros.some(
+      (registro) =>
+        registro.correoElectronico.toLocaleLowerCase('es-PE') === correo &&
+        !!registro.fechaVerificacion &&
+        Temporal.Instant.compare(registro.fechaExpiracion, ahora) > 0,
+    );
+  }
+  crearPersonaRegistro(data: {
+    nombres: string;
+    apellidoPaterno: string;
+    apellidoMaterno: string | null;
+    correoElectronico: string;
+  }) {
+    return this.prisma.client.orm.public.PersonaNatural.create({
+      ...data,
+      telefono: null,
+      dni: null,
+      direccion: null,
+      codigoUbigeo: null,
+    } as never) as Promise<{ idPersonaNatural: number }>;
+  }
+  crearEntidadRegistro(data: {
+    nombreComercial: string;
+    ruc?: string | null;
+    telefono?: string | null;
+    correoElectronico?: string | null;
+  }) {
+    return this.prisma.client.orm.public.Entidad.create({
+      ...data,
+      razonSocial: null,
+      redesSociales: null,
+      direccion: null,
+      codigoUbigeo: null,
+      tipoEntidad: 'PRIVADA',
+    } as never) as Promise<{ idEntidad: number }>;
   }
 }

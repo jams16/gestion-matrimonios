@@ -1,4 +1,5 @@
 import { TipoUsuario } from '../enums/tipo-usuario.enum';
+import { Temporal } from 'temporal-polyfill';
 
 export interface Usuario {
   idUsuario: number;
@@ -9,18 +10,18 @@ export interface Usuario {
   contrasenaHash: string;
   correoVerificado: boolean;
   esActivo: boolean;
-  ultimoAcceso: Date;
-  fechaCreacion: Date;
-  fechaModificacion: Date;
+  ultimoAcceso: Temporal.Instant;
+  fechaCreacion: Temporal.Instant;
+  fechaModificacion: Temporal.Instant;
 }
 
 export interface Sesion {
   idSesion: number;
   idUsuario: number;
   refreshTokenHash: string;
-  fechaCreacion: Date;
-  fechaExpiracion: Date;
-  fechaRevocacion: Date | null;
+  fechaCreacion: Temporal.Instant;
+  fechaExpiracion: Temporal.Instant;
+  fechaRevocacion: Temporal.Instant | null;
 }
 
 export interface TokenCuenta {
@@ -28,7 +29,7 @@ export interface TokenCuenta {
   idUsuario: number;
   tipoToken: string;
   tokenHash: string;
-  fechaCreacion: Date;
-  fechaExpiracion: Date;
-  fechaUtilizacion: Date | null;
+  fechaCreacion: Temporal.Instant;
+  fechaExpiracion: Temporal.Instant;
+  fechaUtilizacion: Temporal.Instant | null;
 }

@@ -1,10 +1,12 @@
 import { Transform, Type } from 'class-transformer';
 import {
   IsBoolean,
+  IsEmail,
   IsEnum,
   IsInt,
   IsOptional,
   IsString,
+  Matches,
   Max,
   MaxLength,
   Min,
@@ -16,6 +18,10 @@ import { TipoUsuario } from '../../domain/enums/tipo-usuario.enum';
 
 const trim = ({ value }: { value: unknown }) =>
   typeof value === 'string' ? value.trim() : value;
+const vacioComoIndefinido = ({ value }: { value: unknown }) => {
+  const texto = typeof value === 'string' ? value.trim() : value;
+  return texto === '' ? undefined : texto;
+};
 const booleano = ({ value }: { value: unknown }) =>
   value === true || value === 'true'
     ? true
@@ -58,6 +64,54 @@ export class RegisterDto {
   @MinLength(8)
   @MaxLength(128)
   contrasena: string;
+}
+
+export class SolicitarRegistroDto {
+  @ApiProperty()
+  @Transform(trim)
+  @IsString()
+  @MinLength(1)
+  @MaxLength(100)
+  nombres: string;
+  @ApiProperty()
+  @Transform(trim)
+  @IsString()
+  @MinLength(1)
+  @MaxLength(100)
+  apellidoPaterno: string;
+  @ApiPropertyOptional()
+  @Transform(trim)
+  @IsString()
+  @MaxLength(100)
+  @IsOptional()
+  apellidoMaterno?: string;
+  @ApiProperty({ format: 'email' })
+  @Transform(trim)
+  @IsString()
+  @IsEmail()
+  @MaxLength(150)
+  correoElectronico: string;
+}
+
+export class FinalizarRegistroDto {
+  @ApiProperty({ example: '482913', description: 'Código de seis dígitos recibido por correo.' })
+  @IsString() @Matches(/^\d{6}$/) token: string;
+  @IsString() @MinLength(3) @MaxLength(150) usuario: string;
+  @IsString() @MinLength(8) @MaxLength(128) contrasena: string;
+  @IsString() @MinLength(1) @MaxLength(200) nombreComercial: string;
+  @Transform(vacioComoIndefinido)
+  @IsString() @Matches(/^\d{11}$/) @IsOptional() ruc?: string;
+  @Transform(vacioComoIndefinido)
+  @IsString() @MaxLength(15) @IsOptional() telefono?: string;
+  @Transform(vacioComoIndefinido)
+  @IsString() @IsEmail() @MaxLength(150) @IsOptional() correoCorporativo?: string;
+}
+
+export class ConfirmarRegistroPendienteDto {
+  @ApiProperty({ example: '482913', description: 'Código de seis dígitos recibido por correo.' })
+  @IsString()
+  @Matches(/^\d{6}$/)
+  token: string;
 }
 
 export class LoginDto {

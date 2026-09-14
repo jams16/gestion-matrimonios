@@ -1,14 +1,16 @@
-import { createHash, randomBytes } from 'node:crypto';
+import { createHash, randomBytes, randomInt } from 'node:crypto';
 import * as argon2 from 'argon2';
 import {
   BadRequestException,
   ConflictException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { Temporal } from 'temporal-polyfill';
 
 import {
   LoginDto,
@@ -18,6 +20,10 @@ import {
   SolicitarTokenDto,
   UpdateUsuarioDto,
 } from '../dto/autenticacion.dto';
+import {
+  FinalizarRegistroDto,
+  SolicitarRegistroDto,
+} from '../dto/autenticacion.dto';
 import { CorreoCuentaPort } from '../ports/correo-cuenta.port';
 import { AutenticacionRepository } from '../../domain/repositories/autenticacion.repository';
 import { TipoTokenCuenta } from '../../domain/enums/tipo-token-cuenta.enum';
@@ -25,6 +31,12 @@ import { TipoTokenCuenta } from '../../domain/enums/tipo-token-cuenta.enum';
 const hashToken = (token: string) =>
   createHash('sha256').update(token).digest('hex');
 const tokenSeguro = () => randomBytes(32).toString('base64url');
+const codigoRegistroSeguro = () => randomInt(100000, 1000000).toString();
+const ahora = () => Temporal.Now.instant();
+const enMs = (milisegundos: number) =>
+  Temporal.Instant.fromEpochMilliseconds(Date.now() + milisegundos);
+const expiro = (fecha: Temporal.Instant) =>
+  Temporal.Instant.compare(fecha, ahora()) <= 0;
 const esContrasenaSegura = (valor: string) =>
   /[a-z]/.test(valor) &&
   /[A-Z]/.test(valor) &&
@@ -68,13 +80,93 @@ export class RegistrarUsuarioUseCase {
       contrasenaHash: await argon2.hash(dto.contrasena, {
         type: argon2.argon2id,
       }),
-      ultimoAcceso: new Date(),
+      ultimoAcceso: ahora(),
     });
     await new SolicitarVerificacionCorreoUseCase(
       this.repository,
       this.correo,
     ).enviar(usuario.idUsuario, persona);
     return publico(usuario);
+  }
+}
+
+@Injectable()
+export class RegistroPendienteUseCase {
+  constructor(
+    private readonly repository: AutenticacionRepository,
+    private readonly correo: CorreoCuentaPort,
+  ) {}
+  async solicitar(dto: SolicitarRegistroDto) {
+    if (await this.repository.correoPersonaExiste(dto.correoElectronico))
+      throw new ConflictException('El correo ya se encuentra registrado.');
+    const token = codigoRegistroSeguro();
+    await this.repository.crearRegistroPendiente({
+      ...dto,
+      apellidoMaterno: dto.apellidoMaterno ?? null,
+      tokenHash: hashToken(token),
+      fechaExpiracion: enMs(24 * 3600e3),
+    });
+    await this.correo.enviarRegistro(dto.correoElectronico, dto.nombres, token);
+  }
+  async confirmar(token: string) {
+    const registro = await this.repository.obtenerRegistroPendiente(
+      hashToken(token),
+    );
+    if (
+      !registro ||
+      registro.fechaVerificacion ||
+      expiro(registro.fechaExpiracion)
+    )
+      throw new BadRequestException(
+        'El enlace de registro es inválido o expiró.',
+      );
+    await this.repository.verificarRegistroPendiente(registro.idRegistro);
+  }
+  async finalizar(dto: FinalizarRegistroDto) {
+    const registro = await this.repository.obtenerRegistroPendiente(
+      hashToken(dto.token),
+    );
+    if (
+      !registro ||
+      !registro.fechaVerificacion ||
+      expiro(registro.fechaExpiracion)
+    )
+      throw new BadRequestException(
+        'Debes verificar tu correo antes de continuar.',
+      );
+    if (await this.repository.usuarioExiste(dto.usuario))
+      throw new ConflictException('El usuario ya está registrado.');
+    if (!esContrasenaSegura(dto.contrasena))
+      throw new BadRequestException(
+        'La contraseña debe incluir mayúscula, minúscula, número y símbolo.',
+      );
+    const persona = await this.repository.crearPersonaRegistro({
+      nombres: registro.nombres,
+      apellidoPaterno: registro.apellidoPaterno,
+      apellidoMaterno: registro.apellidoMaterno,
+      correoElectronico: registro.correoElectronico,
+    });
+    const entidad = await this.repository.crearEntidadRegistro({
+      nombreComercial: dto.nombreComercial,
+      ruc: dto.ruc ?? null,
+      telefono: dto.telefono ?? null,
+      correoElectronico: dto.correoCorporativo ?? null,
+    });
+    const usuario = await this.repository.crearUsuario({
+      idPersonaNatural: persona.idPersonaNatural,
+      idEntidad: entidad.idEntidad,
+      usuario: dto.usuario,
+      tipoUsuario: 'PROJECT_MANAGER' as never,
+      contrasenaHash: await argon2.hash(dto.contrasena, {
+        type: argon2.argon2id,
+      }),
+      ultimoAcceso: ahora(),
+    });
+    const usuarioVerificado = await this.repository.actualizarUsuario(
+      usuario.idUsuario,
+      { correoVerificado: true },
+    );
+    return publico(usuarioVerificado ?? usuario);
   }
 }
 
@@ -93,20 +185,39 @@ export class IniciarSesionUseCase {
       !(await argon2.verify(usuario.contrasenaHash, dto.contrasena))
     )
       throw new UnauthorizedException('Credenciales inválidas.');
+    if (!usuario.correoVerificado) {
+      const persona = await this.repository.personaExiste(
+        usuario.idPersonaNatural,
+      );
+      if (
+        persona &&
+        (await this.repository.registroPendienteVerificado(
+          persona.correoElectronico,
+        ))
+      ) {
+        await this.repository.actualizarUsuario(usuario.idUsuario, {
+          correoVerificado: true,
+        });
+        usuario.correoVerificado = true;
+      }
+    }
+    if (!usuario.correoVerificado)
+      throw new ForbiddenException(
+        'Debes verificar tu correo antes de acceder.',
+      );
     const refresh = tokenSeguro();
     const sesion = await this.repository.crearSesion({
       idUsuario: usuario.idUsuario,
       refreshTokenHash: await argon2.hash(refresh, { type: argon2.argon2id }),
-      fechaExpiracion: new Date(
-        Date.now() +
-          expiracionMs(
-            this.config.get<string>('JWT_REFRESH_EXPIRATION') ?? '7d',
-            7 * 864e5,
-          ),
+      fechaExpiracion: enMs(
+        expiracionMs(
+          this.config.get<string>('JWT_REFRESH_EXPIRATION') ?? '7d',
+          7 * 864e5,
+        ),
       ),
     });
     await this.repository.actualizarUsuario(usuario.idUsuario, {
-      ultimoAcceso: new Date(),
+      ultimoAcceso: ahora(),
     });
     const accessToken = await this.jwt.signAsync({
       sub: usuario.idUsuario,
@@ -145,11 +256,11 @@ export class RefrescarSesionUseCase {
       !sesion ||
       sesion.idUsuario !== payload.sub ||
       sesion.fechaRevocacion ||
-      sesion.fechaExpiracion <= new Date() ||
+      expiro(sesion.fechaExpiracion) ||
       !(await argon2.verify(sesion.refreshTokenHash, payload.token))
     )
       throw new UnauthorizedException('Refresh token inválido o expirado.');
-    await this.repository.revocarSesion(sesion.idSesion, new Date());
+    await this.repository.revocarSesion(sesion.idSesion, ahora());
     const usuario = await this.repository.obtenerUsuario(payload.sub);
     if (!usuario?.esActivo)
       throw new UnauthorizedException('Usuario no disponible.');
@@ -159,12 +270,11 @@ export class RefrescarSesionUseCase {
       refreshTokenHash: await argon2.hash(tokenAleatorio, {
         type: argon2.argon2id,
       }),
-      fechaExpiracion: new Date(
-        Date.now() +
-          expiracionMs(
-            this.config.get<string>('JWT_REFRESH_EXPIRATION') ?? '7d',
-            7 * 864e5,
-          ),
+      fechaExpiracion: enMs(
+        expiracionMs(
+          this.config.get<string>('JWT_REFRESH_EXPIRATION') ?? '7d',
+          7 * 864e5,
+        ),
       ),
     });
     return {
@@ -202,7 +312,7 @@ export class CerrarSesionUseCase {
         refreshToken,
         { secret: this.config.getOrThrow<string>('JWT_REFRESH_SECRET') },
       );
-      await this.repository.revocarSesion(payload.sid, new Date());
+      await this.repository.revocarSesion(payload.sid, ahora());
     } catch {
       throw new UnauthorizedException('Refresh token inválido.');
     }
@@ -235,7 +345,7 @@ export class SolicitarVerificacionCorreoUseCase {
       idUsuario,
       tipoToken: TipoTokenCuenta.VERIFICACION_CORREO,
       tokenHash: hashToken(token),
-      fechaExpiracion: new Date(Date.now() + 24 * 36e5),
+      fechaExpiracion: enMs(24 * 36e5),
     });
     await this.correo.enviarVerificacion(
       datos.correoElectronico,
@@ -257,14 +367,14 @@ export class ConfirmarCorreoUseCase {
       hashToken(token),
       TipoTokenCuenta.VERIFICACION_CORREO,
     );
-    if (!registro || registro.fechaExpiracion <= new Date())
+    if (!registro || expiro(registro.fechaExpiracion))
       throw new BadRequestException(
         'El enlace de verificación es inválido o expiró.',
       );
     await this.repository.actualizarUsuario(registro.idUsuario, {
       correoVerificado: true,
     });
-    await this.repository.usarTokenCuenta(registro.idToken, new Date());
+    await this.repository.usarTokenCuenta(registro.idToken, ahora());
   }
 }
 
@@ -286,7 +396,7 @@ export class RecuperarContrasenaUseCase {
       idUsuario: usuario.idUsuario,
       tipoToken: TipoTokenCuenta.RECUPERACION_CONTRASENA,
       tokenHash: hashToken(token),
-      fechaExpiracion: new Date(Date.now() + 3600e3),
+      fechaExpiracion: enMs(3600e3),
     });
     await this.correo.enviarRecuperacion(
       persona.correoElectronico,
@@ -303,7 +413,7 @@ export class RecuperarContrasenaUseCase {
       hashToken(dto.token),
       TipoTokenCuenta.RECUPERACION_CONTRASENA,
     );
-    if (!registro || registro.fechaExpiracion <= new Date())
+    if (!registro || expiro(registro.fechaExpiracion))
       throw new BadRequestException(
         'El enlace de recuperación es inválido o expiró.',
       );
@@ -312,10 +422,10 @@ export class RecuperarContrasenaUseCase {
         type: argon2.argon2id,
       }),
     });
-    await this.repository.usarTokenCuenta(registro.idToken, new Date());
+    await this.repository.usarTokenCuenta(registro.idToken, ahora());
     await this.repository.revocarSesionesUsuario(
       registro.idUsuario,
-      new Date(),
+      ahora(),
     );
   }
 }
@@ -346,7 +456,7 @@ export class GestionarUsuariosUseCase {
       esActivo: false,
     });
     if (!usuario) throw new NotFoundException('Usuario no encontrado.');
-    await this.repository.revocarSesionesUsuario(id, new Date());
+    await this.repository.revocarSesionesUsuario(id, ahora());
     return publico(usuario);
   }
 }

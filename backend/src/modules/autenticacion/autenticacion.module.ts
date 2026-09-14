@@ -11,6 +11,7 @@ import {
   RecuperarContrasenaUseCase,
   RefrescarSesionUseCase,
   RegistrarUsuarioUseCase,
+  RegistroPendienteUseCase,
   SolicitarVerificacionCorreoUseCase,
 } from './application/use-cases/autenticacion.use-cases';
 import { AutenticacionRepository } from './domain/repositories/autenticacion.repository';
@@ -41,6 +42,7 @@ import { JwtAccessGuard } from './presentation/guards/jwt-access.guard';
     },
     { provide: CorreoCuentaPort, useClass: SmtpCorreoCuentaService },
     RegistrarUsuarioUseCase,
+    RegistroPendienteUseCase,
     IniciarSesionUseCase,
     RefrescarSesionUseCase,
     CerrarSesionUseCase,

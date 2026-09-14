@@ -128,3 +128,18 @@ model TokenCuenta {
   @@index([idUsuario, tipoToken])
   @@map("au_token_cuenta")
 }
+
+model RegistroPendiente {
+  idRegistro        Int           @id @default(autoincrement()) @map("id_registro")
+  nombres           VarChar(100)
+  apellidoPaterno   VarChar(100)  @map("apellido_paterno")
+  apellidoMaterno   VarChar(100)? @map("apellido_materno")
+  correoElectronico VarChar(150)  @map("correo_electronico")
+  tokenHash         VarChar(255)  @map("token_hash")
+  fechaCreacion     DateTime      @default(now()) @map("fecha_creacion")
+  fechaExpiracion   DateTime      @map("fecha_expiracion")
+  fechaVerificacion DateTime?     @map("fecha_verificacion")
+
+  @@index([correoElectronico])
+  @@map("au_registro_pendiente")
+}

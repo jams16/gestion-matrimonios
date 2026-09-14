@@ -9,4 +9,9 @@ export abstract class CorreoCuentaPort {
     nombre: string,
     token: string,
   ): Promise<void>;
+  abstract enviarRegistro(
+    destinatario: string,
+    nombre: string,
+    token: string,
+  ): Promise<void>;
 }
