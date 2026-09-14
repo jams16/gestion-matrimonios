@@ -2,9 +2,12 @@ import { Injectable } from '@nestjs/common';
 
 import { PrismaService } from '../../../../../infrastructure/database/prisma/prisma.service';
 import { CrearPersonaDto } from '../../../application/dto/crear-persona.dto';
+import { CrearEntidadDto } from '../../../application/dto/crear-entidad.dto';
+import { ListarEntidadesDto } from '../../../application/dto/listar-entidades.dto';
 import { ListarPersonasDto } from '../../../application/dto/listar-personas.dto';
 import { ListarUbigeosDto } from '../../../application/dto/listar-ubigeos.dto';
 import { PersonaNatural } from '../../../domain/entities/persona-natural.entity';
+import { Entidad } from '../../../domain/entities/entidad.entity';
 import { Ubigeo } from '../../../domain/entities/ubigeo.entity';
 import {
   InvolucradosRepository,
@@ -14,6 +17,95 @@ import {
 @Injectable()
 export class PrismaInvolucradosRepository implements InvolucradosRepository {
   constructor(private readonly prisma: PrismaService) {}
+
+  async crearEntidad(data: CrearEntidadDto): Promise<Entidad> {
+    return this.prisma.client.orm.public.Entidad.create({
+      ...data,
+      ruc: data.ruc ?? null,
+      razonSocial: data.razonSocial ?? null,
+      telefono: data.telefono ?? null,
+      correoElectronico: data.correoElectronico ?? null,
+      redesSociales: data.redesSociales ?? null,
+      direccion: data.direccion ?? null,
+      codigoUbigeo: data.codigoUbigeo ?? null,
+    } as never) as Promise<Entidad>;
+  }
+
+  async actualizarEntidad(
+    id: number,
+    data: Partial<CrearEntidadDto> & { esActivo?: boolean },
+  ): Promise<Entidad | null> {
+    const actual = await this.obtenerEntidad(id);
+    if (!actual) return null;
+    return this.prisma.client.orm.public.Entidad.where({
+      idEntidad: id,
+    }).update(data as never) as Promise<Entidad>;
+  }
+
+  obtenerEntidad(id: number): Promise<Entidad | null> {
+    return this.prisma.client.orm.public.Entidad.first({
+      idEntidad: id,
+    }) as Promise<Entidad | null>;
+  }
+
+  async existeRuc(ruc: string, excluirId?: number): Promise<boolean> {
+    const entidades = (await this.prisma.client.orm.public.Entidad.where(
+      (entidad) => entidad.ruc.eq(ruc as never),
+    ).all()) as Entidad[];
+    return entidades.some((entidad) => entidad.idEntidad !== excluirId);
+  }
+
+  async listarEntidades(
+    query: ListarEntidadesDto,
+  ): Promise<ResultadoPaginado<Entidad>> {
+    let items =
+      (await this.prisma.client.orm.public.Entidad.all()) as Entidad[];
+    const texto = (value: unknown) =>
+      String(value ?? '').toLocaleLowerCase('es-PE');
+    const contiene = (value: unknown, filtro?: string) =>
+      !filtro || texto(value).includes(texto(filtro));
+    const estado = query.esActivo ?? true;
+
+    items = items.filter(
+      (entidad) =>
+        entidad.esActivo === estado &&
+        (!query.idEntidad || entidad.idEntidad === query.idEntidad) &&
+        contiene(entidad.ruc, query.ruc) &&
+        contiene(entidad.razonSocial, query.razonSocial) &&
+        contiene(entidad.nombreComercial, query.nombreComercial) &&
+        (!query.tipoEntidad || entidad.tipoEntidad === query.tipoEntidad) &&
+        contiene(entidad.correoElectronico, query.correoElectronico) &&
+        contiene(entidad.codigoUbigeo, query.codigoUbigeo) &&
+        (!query.buscar ||
+          [
+            entidad.ruc,
+            entidad.razonSocial,
+            entidad.nombreComercial,
+            entidad.correoElectronico,
+            entidad.telefono,
+            entidad.direccion,
+          ].some((valor) => contiene(valor, query.buscar))),
+    );
+
+    if (query.departamento || query.provincia || query.distrito) {
+      const permitidos = new Set(
+        (
+          await this.listarUbigeos({
+            ...new ListarUbigeosDto(),
+            mostrarTodos: true,
+            departamento: query.departamento,
+            provincia: query.provincia,
+            distrito: query.distrito,
+          })
+        ).items.map((ubigeo) => ubigeo.idUbigeo),
+      );
+      items = items.filter(
+        (entidad) =>
+          entidad.codigoUbigeo && permitidos.has(entidad.codigoUbigeo),
+      );
+    }
+    return this.paginarYOrdenar(items, query);
+  }
 
   async crearPersona(data: CrearPersonaDto): Promise<PersonaNatural> {
     return this.prisma.client.orm.public.PersonaNatural.create({

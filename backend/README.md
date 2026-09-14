@@ -2570,3 +2570,50 @@ detalleErrores.
 
 in_ubigeo es un catálogo preexistente y externo a esta funcionalidad: no se
 crea, elimina ni carga mediante seed o endpoints.
+
+---
+
+# 75. Entidades de Involucrados
+
+La tabla in_entidad almacena organizaciones relacionadas al proyecto. Su clave
+id_entidad es numérica, autoincremental y su secuencia inicia en 1000; no usa
+UUID. RUC es opcional, pero único cuando se registra.
+
+tipo_entidad se declara como el enum de dominio Prisma in_tipo_entidad, con los
+valores PUBLICA, PRIVADA, RELIGIOSA y OTROS. Prisma 8 lo persiste como texto
+restringido mediante una restricción CHECK administrada por el contrato, con
+los mismos valores permitidos.
+
+La tabla mantiene la relación opcional codigo_ubigeo con in_ubigeo.id_ubigeo,
+el estado es_activo y timestamps de creación y modificación. Una entidad se
+elimina lógicamente cambiando es_activo a false.
+
+## Endpoints de Entidad
+
+- POST /api/v1/entidades: crea una entidad; requiere nombreComercial y
+  tipoEntidad.
+- GET /api/v1/entidades/:id: obtiene una entidad.
+- PUT /api/v1/entidades/:id y PATCH /api/v1/entidades/:id: actualizan campos
+  permitidos, sin modificar ID ni fecha de creación.
+- DELETE /api/v1/entidades/:id: realiza eliminación lógica.
+- GET /api/v1/entidades: lista entidades.
+- POST /api/v1/entidades/importar: recibe multipart/form-data en el campo
+  archivo; acepta CSV o XLSX de hasta 10 MB.
+
+El listado admite pagina, limite, ordenarPor, orden, buscar, mostrarTodos,
+idEntidad, ruc, razonSocial, nombreComercial, tipoEntidad, correoElectronico,
+codigoUbigeo, esActivo, departamento, provincia y distrito. Por defecto solo
+retorna registros activos. buscar es parcial y case-insensitive sobre RUC,
+razón social, nombre comercial, correo, teléfono y dirección.
+
+La importación exige las columnas ruc, razon_social, nombre_comercial,
+tipo_entidad, telefono, correo_electronico, redes_sociales, direccion y
+codigo_ubigeo. nombre_comercial y tipo_entidad son obligatorios por fila. Cada
+fila se valida independientemente y la respuesta conserva totalFilas,
+importadas, errores y detalleErrores.
+
+## Swagger
+
+La especificación OpenAPI está disponible en /api/docs. Los endpoints de
+Entidades documentan sus DTOs, enum tipoEntidad, parámetros de consulta,
+multipart de importación y respuestas HTTP principales.

@@ -1,0 +1,164 @@
+[
+  {
+    "id": "table.in_entidad",
+    "label": "Create table \"in_entidad\"",
+    "summary": "Creates table \"in_entidad\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "in_entidad"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"in_entidad\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"in_entidad\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"in_entidad\"",
+        "sql": "CREATE TABLE \"public\".\"in_entidad\" (\n  \"codigo_ubigeo\" character varying(6),\n  \"correo_electronico\" character varying(150),\n  \"direccion\" character varying(250),\n  \"es_activo\" bool DEFAULT true NOT NULL,\n  \"fecha_creacion\" timestamptz DEFAULT (now()) NOT NULL,\n  \"fecha_modificacion\" timestamptz NOT NULL,\n  \"id_entidad\" SERIAL NOT NULL,\n  \"nombre_comercial\" character varying(200) NOT NULL,\n  \"razon_social\" character varying(200),\n  \"redes_sociales\" character varying(250),\n  \"ruc\" character varying(11),\n  \"telefono\" character varying(15),\n  \"tipo_entidad\" text NOT NULL,\n  PRIMARY KEY (\"id_entidad\"),\n  CONSTRAINT \"in_entidad_tipo_entidad_check_babc8d43\" CHECK (\"tipo_entidad\" IN ('PUBLICA', 'PRIVADA', 'RELIGIOSA', 'OTROS'))\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"in_entidad\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"in_entidad\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.in_entidad.in_entidad_ruc_key",
+    "label": "Add unique constraint on \"in_entidad\" (ruc)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "in_entidad_ruc_key",
+        "table": "in_entidad"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"in_entidad_ruc_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "in_entidad_ruc_key",
+          "public",
+          "\"public\".\"in_entidad\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"in_entidad_ruc_key\"",
+        "sql": "ALTER TABLE \"public\".\"in_entidad\" ADD CONSTRAINT \"in_entidad_ruc_key\" UNIQUE (\"ruc\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"in_entidad_ruc_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "in_entidad_ruc_key",
+          "public",
+          "\"public\".\"in_entidad\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.in_entidad.in_entidad_codigo_ubigeo_idx_1bf1466f",
+    "label": "Create index \"in_entidad_codigo_ubigeo_idx_1bf1466f\" on \"in_entidad\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "in_entidad_codigo_ubigeo_idx_1bf1466f",
+        "table": "in_entidad"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"in_entidad_codigo_ubigeo_idx_1bf1466f\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"in_entidad_codigo_ubigeo_idx_1bf1466f\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"in_entidad_codigo_ubigeo_idx_1bf1466f\"",
+        "sql": "CREATE INDEX \"in_entidad_codigo_ubigeo_idx_1bf1466f\" ON \"public\".\"in_entidad\" (\"codigo_ubigeo\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"in_entidad_codigo_ubigeo_idx_1bf1466f\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"in_entidad_codigo_ubigeo_idx_1bf1466f\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.in_entidad.in_entidad_codigo_ubigeo_fkey",
+    "label": "Add foreign key \"in_entidad_codigo_ubigeo_fkey\" on \"in_entidad\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "in_entidad_codigo_ubigeo_fkey",
+        "table": "in_entidad"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"in_entidad_codigo_ubigeo_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "in_entidad_codigo_ubigeo_fkey",
+          "public",
+          "\"public\".\"in_entidad\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"in_entidad_codigo_ubigeo_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"in_entidad\"\nADD CONSTRAINT \"in_entidad_codigo_ubigeo_fkey\"\nFOREIGN KEY (\"codigo_ubigeo\")\nREFERENCES \"public\".\"in_ubigeo\" (\"id_ubigeo\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"in_entidad_codigo_ubigeo_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "in_entidad_codigo_ubigeo_fkey",
+          "public",
+          "\"public\".\"in_entidad\""
+        ]
+      }
+    ]
+  }
+]

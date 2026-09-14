@@ -12,8 +12,16 @@ model Ubigeo {
   distrito     VarChar(100)
 
   personas     PersonaNatural[]
+  entidades    Entidad[]
 
   @@map("in_ubigeo")
+}
+
+enum in_tipo_entidad {
+  PUBLICA = "PUBLICA"
+  PRIVADA = "PRIVADA"
+  RELIGIOSA = "RELIGIOSA"
+  OTROS = "OTROS"
 }
 
 model PersonaNatural {
@@ -32,6 +40,27 @@ model PersonaNatural {
 
   ubigeo            Ubigeo?              @relation(fields:[codigoUbigeo], references:[idUbigeo], onDelete: Restrict)
 
-  @@index([codigoUbigeo])
+  @@index([codigoUbigeo], map: "in_persona_natural_codigo_ubigeo_idx")
   @@map("in_persona_natural")
+}
+
+model Entidad {
+  idEntidad         Int                  @id @default(autoincrement()) @map("id_entidad")
+  ruc               VarChar(11)?         @unique
+  razonSocial       VarChar(200)?        @map("razon_social")
+  nombreComercial   VarChar(200)         @map("nombre_comercial")
+  tipoEntidad       in_tipo_entidad      @map("tipo_entidad")
+  telefono          VarChar(15)?
+  correoElectronico VarChar(150)?        @map("correo_electronico")
+  redesSociales     VarChar(250)?        @map("redes_sociales")
+  direccion         VarChar(250)?
+  codigoUbigeo      VarChar(6)?          @map("codigo_ubigeo")
+  esActivo          Boolean              @default(true) @map("es_activo")
+  fechaCreacion     DateTime             @default(now()) @map("fecha_creacion")
+  fechaModificacion temporal.updatedAt() @map("fecha_modificacion")
+
+  ubigeo            Ubigeo?              @relation(fields:[codigoUbigeo], references:[idUbigeo], onDelete: Restrict)
+
+  @@index([codigoUbigeo])
+  @@map("in_entidad")
 }

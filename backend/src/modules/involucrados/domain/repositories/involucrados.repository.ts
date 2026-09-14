@@ -1,7 +1,10 @@
 import { CrearPersonaDto } from '../../application/dto/crear-persona.dto';
+import { CrearEntidadDto } from '../../application/dto/crear-entidad.dto';
+import { ListarEntidadesDto } from '../../application/dto/listar-entidades.dto';
 import { ListarPersonasDto } from '../../application/dto/listar-personas.dto';
 import { ListarUbigeosDto } from '../../application/dto/listar-ubigeos.dto';
 import { PersonaNatural } from '../entities/persona-natural.entity';
+import { Entidad } from '../entities/entidad.entity';
 import { Ubigeo } from '../entities/ubigeo.entity';
 
 export interface ResultadoPaginado<T> {
@@ -17,6 +20,16 @@ export interface ResultadoPaginado<T> {
 }
 
 export abstract class InvolucradosRepository {
+  abstract crearEntidad(data: CrearEntidadDto): Promise<Entidad>;
+  abstract actualizarEntidad(
+    id: number,
+    data: Partial<CrearEntidadDto> & { esActivo?: boolean },
+  ): Promise<Entidad | null>;
+  abstract obtenerEntidad(id: number): Promise<Entidad | null>;
+  abstract listarEntidades(
+    query: ListarEntidadesDto,
+  ): Promise<ResultadoPaginado<Entidad>>;
+  abstract existeRuc(ruc: string, excluirId?: number): Promise<boolean>;
   abstract crearPersona(data: CrearPersonaDto): Promise<PersonaNatural>;
   abstract actualizarPersona(
     id: number,
