@@ -7,6 +7,7 @@ import 'sections/global_states_section.dart';
 import 'sections/inputs_section.dart';
 import 'sections/selection_controls_section.dart';
 import 'sections/buttons_section.dart';
+import 'sections/feedback_section.dart';
 
 import 'widgets/a4_sheet.dart';
 import 'widgets/ui_kit_page_header.dart';
@@ -198,6 +199,34 @@ class UiKitPage extends StatelessWidget {
                     ),
                     SizedBox(height: 24),
                     ButtonsPageTwoSection(),
+                  ],
+                ),
+              ),
+
+              // FEEDBACK — PÁGINA 1
+              A4Sheet(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    UiKitPageHeader(
+                      subtitle: 'Feedback',
+                    ),
+                    SizedBox(height: 24),
+                    FeedbackPageOneSection(),
+                  ],
+                ),
+              ),
+
+              // FEEDBACK — PÁGINA 2
+              A4Sheet(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    UiKitPageHeader(
+                      subtitle: 'Feedback',
+                    ),
+                    SizedBox(height: 24),
+                    FeedbackPageTwoSection(),
                   ],
                 ),
               ),
