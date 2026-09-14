@@ -23,6 +23,7 @@ class AppTextField extends StatelessWidget {
     this.onChanged,
     this.onFieldSubmitted,
     this.validator,
+    this.required = false,
   });
 
   final String label;
@@ -52,16 +53,35 @@ class AppTextField extends StatelessWidget {
   final ValueChanged<String>? onFieldSubmitted;
   final FormFieldValidator<String>? validator;
 
+  final bool required;
+
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                fontWeight: FontWeight.w500,
+        Text.rich(
+          TextSpan(
+            children: [
+              TextSpan(
+                text: label,
+                style: Theme.of(context)
+                    .textTheme
+                    .labelMedium
+                    ?.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
               ),
+              if (required)
+                TextSpan(
+                  text: ' *',
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.error,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+            ],
+          ),
         ),
         const SizedBox(height: 7),
         TextFormField(

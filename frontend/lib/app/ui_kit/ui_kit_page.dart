@@ -9,6 +9,13 @@ import 'sections/selection_controls_section.dart';
 import 'sections/buttons_section.dart';
 import 'sections/feedback_section.dart';
 import 'sections/containers_section.dart';
+import 'sections/navigation_section.dart';
+import 'sections/overlays_section.dart';
+import 'sections/data_section.dart';
+import 'sections/indicators_section.dart';
+
+import 'sections/forms_section.dart';
+import 'sections/page_patterns_section.dart';
 
 import 'widgets/a4_sheet.dart';
 import 'widgets/ui_kit_page_header.dart';
@@ -257,6 +264,237 @@ class UiKitPage extends StatelessWidget {
                     ),
                     SizedBox(height: 24),
                     ContainersPageTwoSection(),
+                  ],
+                ),
+              ),
+
+
+              // NAVEGACIÓN — PÁGINA 1
+              A4Sheet(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    UiKitPageHeader(
+                      subtitle: 'Navegación',
+                    ),
+                    SizedBox(height: 24),
+                    NavigationPageOneSection(),
+                  ],
+                ),
+              ),
+
+              // NAVEGACIÓN — PÁGINA 2
+              A4Sheet(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    UiKitPageHeader(
+                      subtitle: 'Navegación',
+                    ),
+                    SizedBox(height: 24),
+                    NavigationPageTwoSection(),
+                  ],
+                ),
+              ),
+
+              // NAVEGACIÓN — PÁGINA 3
+              A4Sheet(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    UiKitPageHeader(
+                      subtitle: 'Navegación',
+                    ),
+                    SizedBox(height: 24),
+                    NavigationPageThreeSection(),
+                  ],
+                ),
+              ),
+
+
+              // OVERLAYS — PÁGINA 1
+              A4Sheet(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    UiKitPageHeader(
+                      subtitle: 'Overlays',
+                    ),
+                    SizedBox(height: 24),
+                    OverlaysPageOneSection(),
+                  ],
+                ),
+              ),
+
+              // OVERLAYS — PÁGINA 2
+              A4Sheet(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    UiKitPageHeader(
+                      subtitle: 'Overlays',
+                    ),
+                    SizedBox(height: 24),
+                    OverlaysPageTwoSection(),
+                  ],
+                ),
+              ),
+
+
+              // DATOS — PÁGINA 1
+              A4Sheet(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    UiKitPageHeader(
+                      subtitle: 'Datos',
+                    ),
+                    SizedBox(height: 24),
+                    DataPageOneSection(),
+                  ],
+                ),
+              ),
+
+              // DATOS — PÁGINA 2
+              A4Sheet(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    UiKitPageHeader(
+                      subtitle: 'Datos',
+                    ),
+                    SizedBox(height: 24),
+                    DataPageTwoSection(),
+                  ],
+                ),
+              ),
+
+              // DATOS — PÁGINA 3
+              A4Sheet(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    UiKitPageHeader(
+                      subtitle: 'Datos',
+                    ),
+                    SizedBox(height: 24),
+                    DataPageThreeSection(),
+                  ],
+                ),
+              ),
+
+
+              // INDICADORES Y ETIQUETAS
+              A4Sheet(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    UiKitPageHeader(
+                      subtitle: 'Indicadores y etiquetas',
+                    ),
+                    SizedBox(height: 24),
+                    IndicatorsSection(),
+                  ],
+                ),
+              ),
+
+
+
+              // FORMULARIOS — PÁGINA 1
+              A4Sheet(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    UiKitPageHeader(
+                      subtitle: 'Formularios completos',
+                    ),
+                    SizedBox(height: 24),
+                    FormsPageOneSection(),
+                  ],
+                ),
+              ),
+
+              // FORMULARIOS — PÁGINA 2
+              A4Sheet(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    UiKitPageHeader(
+                      subtitle: 'Formularios completos',
+                    ),
+                    SizedBox(height: 24),
+                    FormsPageTwoSection(),
+                  ],
+                ),
+              ),
+
+              // FORMULARIOS — PÁGINA 2
+              A4Sheet(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    UiKitPageHeader(
+                      subtitle: 'Formularios completos',
+                    ),
+                    SizedBox(height: 24),
+                    FormsPageThreeSection(),
+                  ],
+                ),
+              ),
+
+
+              // PATRONES DE PÁGINA — PÁGINA 1
+              A4Sheet(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    UiKitPageHeader(
+                      subtitle: 'Patrones de página',
+                    ),
+                    SizedBox(height: 24),
+                    PagePatternsPageOneSection(),
+                  ],
+                ),
+              ),
+
+              // PATRONES DE PÁGINA — PÁGINA 2
+              A4Sheet(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    UiKitPageHeader(
+                      subtitle: 'Patrones de página',
+                    ),
+                    SizedBox(height: 24),
+                    PagePatternsPageTwoSection(),
+                  ],
+                ),
+              ),
+
+              // PATRONES DE PÁGINA — PÁGINA 3
+              A4Sheet(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    UiKitPageHeader(
+                      subtitle: 'Patrones de página',
+                    ),
+                    SizedBox(height: 24),
+                    PagePatternsPageThreeSection(),
+                  ],
+                ),
+              ),
+
+              // PATRONES DE PÁGINA — PÁGINA 4
+              A4Sheet(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    UiKitPageHeader(
+                      subtitle: 'Patrones de página',
+                    ),
+                    SizedBox(height: 24),
+                    PagePatternsPageFourSection(),
                   ],
                 ),
               ),
