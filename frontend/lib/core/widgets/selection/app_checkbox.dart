@@ -27,9 +27,7 @@ class AppCheckbox extends StatelessWidget {
             }
           : null,
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-          vertical: 4,
-        ),
+        padding: const EdgeInsets.symmetric(vertical: 4),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -37,9 +35,7 @@ class AppCheckbox extends StatelessWidget {
               value: value,
               onChanged: enabled
                   ? (newValue) {
-                      onChanged?.call(
-                        newValue ?? false,
-                      );
+                      onChanged?.call(newValue ?? false);
                     }
                   : null,
             ),
@@ -48,16 +44,11 @@ class AppCheckbox extends StatelessWidget {
 
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.only(
-                  top: 10,
-                ),
+                padding: const EdgeInsets.only(top: 10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      label,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
+                    Text(label, style: Theme.of(context).textTheme.bodyMedium),
 
                     if (subtitle != null) ...[
                       const SizedBox(height: 2),

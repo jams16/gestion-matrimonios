@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum AppSnackbarType {
-  info,
-  success,
-  warning,
-  error,
-}
+enum AppSnackbarType { info, success, warning, error }
 
 abstract final class AppSnackbar {
   static void show(
@@ -46,17 +41,12 @@ abstract final class AppSnackbar {
           backgroundColor: backgroundColor,
           content: Row(
             children: [
-              Icon(
-                icon,
-                color: Colors.white,
-              ),
+              Icon(icon, color: Colors.white),
               const SizedBox(width: 12),
               Expanded(
                 child: Text(
                   message,
-                  style: const TextStyle(
-                    color: Colors.white,
-                  ),
+                  style: const TextStyle(color: Colors.white),
                 ),
               ),
             ],

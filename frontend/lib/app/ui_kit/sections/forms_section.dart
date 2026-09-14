@@ -27,10 +27,7 @@ class FormsPageOneSection extends StatelessWidget {
               'Los formularios simples utilizan una sola columna y un ancho máximo controlado.',
           child: AppFormLayout(
             children: [
-              AppTextField(
-                label: 'Nombre',
-                hintText: 'Ingresa tu nombre',
-              ),
+              AppTextField(label: 'Nombre', hintText: 'Ingresa tu nombre'),
               AppTextField(
                 label: 'Correo electrónico',
                 hintText: 'ejemplo@correo.com',
@@ -43,8 +40,7 @@ class FormsPageOneSection extends StatelessWidget {
 
         _FormExample(
           title: 'Label + input',
-          description:
-              'El label siempre se muestra sobre el campo.',
+          description: 'El label siempre se muestra sobre el campo.',
           child: AppTextField(
             label: 'Nombre del proyecto',
             hintText: 'Ej. Matrimonio José y Carlos',
@@ -68,8 +64,7 @@ class FormsPageOneSection extends StatelessWidget {
 
         _FormExample(
           title: 'Helper text',
-          description:
-              'Se utiliza únicamente cuando aporta orientación útil.',
+          description: 'Se utiliza únicamente cuando aporta orientación útil.',
           child: AppTextField(
             label: 'Nombre del proyecto',
             hintText: 'Ej. Matrimonio José y Carlos',
@@ -94,8 +89,6 @@ class FormsPageOneSection extends StatelessWidget {
     );
   }
 }
-
-
 
 class FormsPageTwoSection extends StatelessWidget {
   const FormsPageTwoSection({super.key});
@@ -125,14 +118,9 @@ class FormsPageTwoSection extends StatelessWidget {
                 hintText: 'Ej. Matrimonio José y Carlos',
               ),
 
-              AppDateField(
-                label: 'Fecha del matrimonio',
-              ),
+              AppDateField(label: 'Fecha del matrimonio'),
 
-              AppTextField(
-                label: 'Ubicación',
-                hintText: 'Ej. Lima, Perú',
-              ),
+              AppTextField(label: 'Ubicación', hintText: 'Ej. Lima, Perú'),
             ],
           ),
         ),
@@ -162,7 +150,6 @@ class FormsPageTwoSection extends StatelessWidget {
   }
 }
 
-
 class FormsPageThreeSection extends StatelessWidget {
   const FormsPageThreeSection({super.key});
 
@@ -189,13 +176,10 @@ class FormsPageThreeSection extends StatelessWidget {
                   AppTextField(
                     label: 'Nombre del proyecto',
                     required: true,
-                    hintText:
-                        'Ej. Matrimonio José y Carlos',
+                    hintText: 'Ej. Matrimonio José y Carlos',
                   ),
 
-                  AppDateField(
-                    label: 'Fecha del matrimonio',
-                  ),
+                  AppDateField(label: 'Fecha del matrimonio'),
 
                   AppSelectField<String>(
                     label: 'Estado',
@@ -204,21 +188,14 @@ class FormsPageThreeSection extends StatelessWidget {
                         value: 'planificacion',
                         label: 'Planificación',
                       ),
-                      AppSelectOption(
-                        value: 'ejecucion',
-                        label: 'Ejecución',
-                      ),
-                      AppSelectOption(
-                        value: 'finalizado',
-                        label: 'Finalizado',
-                      ),
+                      AppSelectOption(value: 'ejecucion', label: 'Ejecución'),
+                      AppSelectOption(value: 'finalizado', label: 'Finalizado'),
                     ],
                   ),
 
                   AppTextareaField(
                     label: 'Descripción',
-                    hintText:
-                        'Agrega información adicional del proyecto.',
+                    hintText: 'Agrega información adicional del proyecto.',
                   ),
                 ],
               ),
@@ -242,8 +219,6 @@ class FormsPageThreeSection extends StatelessWidget {
   }
 }
 
-
-
 class _FormsHeading extends StatelessWidget {
   const _FormsHeading();
 
@@ -254,12 +229,9 @@ class _FormsHeading extends StatelessWidget {
       children: [
         Text(
           'Formularios completos',
-          style: Theme.of(context)
-              .textTheme
-              .headlineSmall
-              ?.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
         ),
         const SizedBox(height: 6),
         Text(
@@ -287,26 +259,18 @@ class _FormExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints: BoxConstraints(
-        maxWidth: maxWidth,
-      ),
+      constraints: BoxConstraints(maxWidth: maxWidth),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
-            style: Theme.of(context)
-                .textTheme
-                .titleSmall
-                ?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 4),
-          Text(
-            description,
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
+          Text(description, style: Theme.of(context).textTheme.bodySmall),
           const SizedBox(height: 12),
           child,
         ],

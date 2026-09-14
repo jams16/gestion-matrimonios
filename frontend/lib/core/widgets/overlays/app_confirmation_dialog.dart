@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../app/theme/app_colors.dart';
 import 'app_dialog.dart';
 
-enum AppConfirmationType {
-  normal,
-  destructive,
-}
+enum AppConfirmationType { normal, destructive }
 
 abstract final class AppConfirmationDialog {
   static Future<bool> show(
@@ -17,16 +14,13 @@ abstract final class AppConfirmationDialog {
     String cancelLabel = 'Cancelar',
     AppConfirmationType type = AppConfirmationType.normal,
   }) async {
-    final destructive =
-        type == AppConfirmationType.destructive;
+    final destructive = type == AppConfirmationType.destructive;
 
     final result = await AppDialog.show<bool>(
       context,
       title: title,
       description: message,
-      icon: destructive
-          ? Icons.warning_amber_outlined
-          : Icons.help_outline,
+      icon: destructive ? Icons.warning_amber_outlined : Icons.help_outline,
       content: const SizedBox.shrink(),
       barrierDismissible: false,
       actions: [

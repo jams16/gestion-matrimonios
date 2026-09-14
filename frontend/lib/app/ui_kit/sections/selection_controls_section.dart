@@ -14,17 +14,14 @@ class SelectionControlsSection extends StatefulWidget {
       _SelectionControlsSectionState();
 }
 
-class _SelectionControlsSectionState
-    extends State<SelectionControlsSection> {
+class _SelectionControlsSectionState extends State<SelectionControlsSection> {
   bool _checkbox = true;
   bool _switchValue = true;
 
   String _radioValue = 'pareja';
   String _chipValue = 'pendiente';
 
-  Set<String> _segmentValue = {
-    'lista',
-  };
+  Set<String> _segmentValue = {'lista'};
 
   @override
   Widget build(BuildContext context) {
@@ -33,9 +30,9 @@ class _SelectionControlsSectionState
       children: [
         Text(
           'Controles de selección',
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
         ),
 
         const SizedBox(height: 6),
@@ -69,18 +66,12 @@ class _SelectionControlsSectionState
             label: 'Tipo de usuario',
             value: _radioValue,
             options: const [
-              AppRadioOption(
-                value: 'pareja',
-                label: 'Pareja',
-              ),
+              AppRadioOption(value: 'pareja', label: 'Pareja'),
               AppRadioOption(
                 value: 'wedding_planner',
                 label: 'Wedding Planner',
               ),
-              AppRadioOption(
-                value: 'colaborador',
-                label: 'Colaborador',
-              ),
+              AppRadioOption(value: 'colaborador', label: 'Colaborador'),
             ],
             onChanged: (value) {
               if (value == null) {
@@ -118,18 +109,9 @@ class _SelectionControlsSectionState
             label: 'Estado',
             value: _chipValue,
             options: const [
-              AppChipOption(
-                value: 'pendiente',
-                label: 'Pendiente',
-              ),
-              AppChipOption(
-                value: 'proceso',
-                label: 'En proceso',
-              ),
-              AppChipOption(
-                value: 'completada',
-                label: 'Completada',
-              ),
+              AppChipOption(value: 'pendiente', label: 'Pendiente'),
+              AppChipOption(value: 'proceso', label: 'En proceso'),
+              AppChipOption(value: 'completada', label: 'Completada'),
             ],
             onChanged: (value) {
               setState(() {
@@ -176,10 +158,7 @@ class _SelectionControlsSectionState
 }
 
 class _ControlExample extends StatelessWidget {
-  const _ControlExample({
-    required this.title,
-    required this.child,
-  });
+  const _ControlExample({required this.title, required this.child});
 
   final String title;
   final Widget child;
@@ -187,17 +166,15 @@ class _ControlExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints: const BoxConstraints(
-        maxWidth: 480,
-      ),
+      constraints: const BoxConstraints(maxWidth: 480),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600),
           ),
 
           const SizedBox(height: 12),

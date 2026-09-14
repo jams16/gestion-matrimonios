@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum AppPageStateType {
-  empty,
-  error,
-  noPermission,
-  offline,
-  success,
-}
+enum AppPageStateType { empty, error, noPermission, offline, success }
 
 class AppPageState extends StatelessWidget {
   const AppPageState({
@@ -51,17 +45,13 @@ class AppPageState extends StatelessWidget {
   Color _color(BuildContext context) {
     switch (type) {
       case AppPageStateType.empty:
-        return Theme.of(context)
-            .colorScheme
-            .onSurfaceVariant;
+        return Theme.of(context).colorScheme.onSurfaceVariant;
 
       case AppPageStateType.error:
         return Theme.of(context).colorScheme.error;
 
       case AppPageStateType.noPermission:
-        return Theme.of(context)
-            .colorScheme
-            .onSurfaceVariant;
+        return Theme.of(context).colorScheme.onSurfaceVariant;
 
       case AppPageStateType.offline:
         return Theme.of(context).colorScheme.primary;
@@ -77,34 +67,22 @@ class AppPageState extends StatelessWidget {
 
     return Center(
       child: ConstrainedBox(
-        constraints: const BoxConstraints(
-          maxWidth: 420,
-        ),
+        constraints: const BoxConstraints(maxWidth: 420),
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 24,
-            vertical: 40,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
-                icon ?? _defaultIcon(),
-                size: 56,
-                color: color,
-              ),
+              Icon(icon ?? _defaultIcon(), size: 56, color: color),
 
               const SizedBox(height: 20),
 
               Text(
                 title,
                 textAlign: TextAlign.center,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge
-                    ?.copyWith(
-                      fontWeight: FontWeight.w700,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
               ),
 
               const SizedBox(height: 8),
@@ -115,8 +93,7 @@ class AppPageState extends StatelessWidget {
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
 
-              if (primaryAction != null ||
-                  secondaryAction != null) ...[
+              if (primaryAction != null || secondaryAction != null) ...[
                 const SizedBox(height: 24),
 
                 Wrap(
@@ -124,10 +101,8 @@ class AppPageState extends StatelessWidget {
                   runSpacing: 12,
                   alignment: WrapAlignment.center,
                   children: [
-                    if (secondaryAction != null)
-                      secondaryAction!,
-                    if (primaryAction != null)
-                      primaryAction!,
+                    if (secondaryAction != null) secondaryAction!,
+                    if (primaryAction != null) primaryAction!,
                   ],
                 ),
               ],

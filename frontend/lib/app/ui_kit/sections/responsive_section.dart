@@ -79,7 +79,6 @@ class ResponsiveThreePageSection extends StatelessWidget {
   }
 }
 
-
 class _BreakpointsSection extends StatelessWidget {
   const _BreakpointsSection();
 
@@ -91,25 +90,13 @@ class _BreakpointsSection extends StatelessWidget {
         _SectionTitle('Breakpoints'),
         SizedBox(height: 16),
 
-        _BreakpointToken(
-          label: 'Mobile',
-          value: '< 600 px',
-          width: 120,
-        ),
+        _BreakpointToken(label: 'Mobile', value: '< 600 px', width: 120),
         SizedBox(height: 12),
 
-        _BreakpointToken(
-          label: 'Tablet',
-          value: '600 – 1023 px',
-          width: 220,
-        ),
+        _BreakpointToken(label: 'Tablet', value: '600 – 1023 px', width: 220),
         SizedBox(height: 12),
 
-        _BreakpointToken(
-          label: 'Desktop',
-          value: '1024 – 1439 px',
-          width: 320,
-        ),
+        _BreakpointToken(label: 'Desktop', value: '1024 – 1439 px', width: 320),
         SizedBox(height: 12),
 
         _BreakpointToken(
@@ -150,7 +137,6 @@ class _MaxWidthsSection extends StatelessWidget {
   }
 }
 
-
 class _PagePaddingSection extends StatelessWidget {
   const _PagePaddingSection();
 
@@ -178,7 +164,6 @@ class _PagePaddingSection extends StatelessWidget {
     );
   }
 }
-
 
 class _ResponsiveRulesSection extends StatelessWidget {
   const _ResponsiveRulesSection();
@@ -231,7 +216,6 @@ class _ResponsiveRulesSection extends StatelessWidget {
   }
 }
 
-
 class _GridSection extends StatelessWidget {
   const _GridSection();
 
@@ -266,12 +250,8 @@ class _GridSection extends StatelessWidget {
   }
 }
 
-
 class _SectionHeading extends StatelessWidget {
-  const _SectionHeading({
-    required this.title,
-    required this.description,
-  });
+  const _SectionHeading({required this.title, required this.description});
 
   final String title;
   final String description;
@@ -283,20 +263,16 @@ class _SectionHeading extends StatelessWidget {
       children: [
         Text(
           title,
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
         ),
         const SizedBox(height: 6),
-        Text(
-          description,
-          style: Theme.of(context).textTheme.bodyMedium,
-        ),
+        Text(description, style: Theme.of(context).textTheme.bodyMedium),
       ],
     );
   }
 }
-
 
 class _SectionTitle extends StatelessWidget {
   const _SectionTitle(this.text);
@@ -307,14 +283,12 @@ class _SectionTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.w700,
-          ),
+      style: Theme.of(
+        context,
+      ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
     );
   }
 }
-
-
 
 class _BreakpointToken extends StatelessWidget {
   const _BreakpointToken({
@@ -331,13 +305,7 @@ class _BreakpointToken extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        SizedBox(
-          width: 120,
-          child: Text(
-            label,
-            style: AppTypography.label,
-          ),
-        ),
+        SizedBox(width: 120, child: Text(label, style: AppTypography.label)),
         Container(
           width: width,
           height: 32,
@@ -346,27 +314,17 @@ class _BreakpointToken extends StatelessWidget {
           decoration: BoxDecoration(
             color: AppColors.primary.withValues(alpha: 0.08),
             borderRadius: BorderRadius.circular(AppRadius.md),
-            border: Border.all(
-              color: AppColors.primary,
-            ),
+            border: Border.all(color: AppColors.primary),
           ),
-          child: Text(
-            value,
-            style: AppTypography.caption,
-          ),
+          child: Text(value, style: AppTypography.caption),
         ),
       ],
     );
   }
 }
 
-
-
 class _ValueRow extends StatelessWidget {
-  const _ValueRow({
-    required this.label,
-    required this.value,
-  });
+  const _ValueRow({required this.label, required this.value});
 
   final String label;
   final String value;
@@ -377,30 +335,16 @@ class _ValueRow extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 10),
       child: Row(
         children: [
-          SizedBox(
-            width: 190,
-            child: Text(
-              label,
-              style: AppTypography.label,
-            ),
-          ),
-          Text(
-            value,
-            style: AppTypography.body,
-          ),
+          SizedBox(width: 190, child: Text(label, style: AppTypography.label)),
+          Text(value, style: AppTypography.body),
         ],
       ),
     );
   }
 }
 
-
-
 class _RuleCard extends StatelessWidget {
-  const _RuleCard({
-    required this.title,
-    required this.items,
-  });
+  const _RuleCard({required this.title, required this.items});
 
   final String title;
   final List<String> items;
@@ -411,28 +355,18 @@ class _RuleCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        border: Border.all(
-          color: AppColors.border,
-        ),
-        borderRadius: BorderRadius.circular(
-          AppRadius.lg,
-        ),
+        border: Border.all(color: AppColors.border),
+        borderRadius: BorderRadius.circular(AppRadius.lg),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title,
-            style: AppTypography.subheading,
-          ),
+          Text(title, style: AppTypography.subheading),
           const SizedBox(height: 8),
           for (final item in items)
             Padding(
               padding: const EdgeInsets.only(bottom: 4),
-              child: Text(
-                '• $item',
-                style: AppTypography.body,
-              ),
+              child: Text('• $item', style: AppTypography.body),
             ),
         ],
       ),
@@ -440,14 +374,8 @@ class _RuleCard extends StatelessWidget {
   }
 }
 
-
-
-
 class _GridPreview extends StatelessWidget {
-  const _GridPreview({
-    required this.label,
-    required this.columns,
-  });
+  const _GridPreview({required this.label, required this.columns});
 
   final String label;
   final int columns;
@@ -457,10 +385,7 @@ class _GridPreview extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: AppTypography.label,
-        ),
+        Text(label, style: AppTypography.label),
         const SizedBox(height: 8),
 
         Row(
@@ -470,20 +395,12 @@ class _GridPreview extends StatelessWidget {
               child: Container(
                 height: 44,
                 margin: EdgeInsets.only(
-                  right: index == columns - 1
-                      ? 0
-                      : AppLayout.gridGap / 2,
+                  right: index == columns - 1 ? 0 : AppLayout.gridGap / 2,
                 ),
                 decoration: BoxDecoration(
-                  color: AppColors.primary.withValues(
-                    alpha: 0.10,
-                  ),
-                  borderRadius: BorderRadius.circular(
-                    AppRadius.md,
-                  ),
-                  border: Border.all(
-                    color: AppColors.primary,
-                  ),
+                  color: AppColors.primary.withValues(alpha: 0.10),
+                  borderRadius: BorderRadius.circular(AppRadius.md),
+                  border: Border.all(color: AppColors.primary),
                 ),
               ),
             ),

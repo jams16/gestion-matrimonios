@@ -27,8 +27,7 @@ class OverlaysPageOneSection extends StatelessWidget {
               AppDialog.show(
                 context,
                 title: 'Editar proyecto',
-                description:
-                    'Modifica la información general del proyecto.',
+                description: 'Modifica la información general del proyecto.',
                 content: const Text(
                   'Aquí se colocará el formulario correspondiente.',
                 ),
@@ -48,9 +47,7 @@ class OverlaysPageOneSection extends StatelessWidget {
                 ],
               );
             },
-            child: const Text(
-              'Abrir dialog',
-            ),
+            child: const Text('Abrir dialog'),
           ),
         ),
 
@@ -65,15 +62,12 @@ class OverlaysPageOneSection extends StatelessWidget {
               await AppConfirmationDialog.show(
                 context,
                 title: 'Eliminar actividad',
-                message:
-                    'La actividad será eliminada permanentemente.',
+                message: 'La actividad será eliminada permanentemente.',
                 confirmLabel: 'Eliminar',
                 type: AppConfirmationType.destructive,
               );
             },
-            child: const Text(
-              'Mostrar confirmación',
-            ),
+            child: const Text('Mostrar confirmación'),
           ),
         ),
 
@@ -111,17 +105,13 @@ class OverlaysPageOneSection extends StatelessWidget {
                 ),
               );
             },
-            child: const Text(
-              'Abrir bottom sheet',
-            ),
+            child: const Text('Abrir bottom sheet'),
           ),
         ),
       ],
     );
   }
 }
-
-
 
 class OverlaysPageTwoSection extends StatelessWidget {
   const OverlaysPageTwoSection({super.key});
@@ -175,13 +165,8 @@ class OverlaysPageTwoSection extends StatelessWidget {
               'Muestra información contextual breve junto al elemento que la origina.',
           child: AppPopover(
             trigger: const Chip(
-              avatar: Icon(
-                Icons.info_outline,
-                size: 18,
-              ),
-              label: Text(
-                'Información',
-              ),
+              avatar: Icon(Icons.info_outline, size: 18),
+              label: Text('Información'),
             ),
             content: const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -189,9 +174,7 @@ class OverlaysPageTwoSection extends StatelessWidget {
               children: [
                 Text(
                   'Presupuesto vigente',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: TextStyle(fontWeight: FontWeight.w600),
                 ),
                 SizedBox(height: 6),
                 Text(
@@ -206,9 +189,6 @@ class OverlaysPageTwoSection extends StatelessWidget {
   }
 }
 
-
-
-
 class _OverlaysHeading extends StatelessWidget {
   const _OverlaysHeading();
 
@@ -219,9 +199,9 @@ class _OverlaysHeading extends StatelessWidget {
       children: [
         Text(
           'Overlays',
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
         ),
         const SizedBox(height: 6),
         Text(
@@ -247,23 +227,18 @@ class _OverlayExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints: const BoxConstraints(
-        maxWidth: 480,
-      ),
+      constraints: const BoxConstraints(maxWidth: 480),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 4),
-          Text(
-            description,
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
+          Text(description, style: Theme.of(context).textTheme.bodySmall),
           const SizedBox(height: 12),
           child,
         ],

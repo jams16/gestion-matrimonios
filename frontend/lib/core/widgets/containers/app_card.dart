@@ -25,15 +25,9 @@ class AppCard extends StatelessWidget {
       padding: padding,
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(
-          AppRadius.lg,
-        ),
-        border: Border.all(
-          color: AppColors.border,
-        ),
-        boxShadow: elevated
-            ? AppShadows.low
-            : AppShadows.none,
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+        border: Border.all(color: AppColors.border),
+        boxShadow: elevated ? AppShadows.low : AppShadows.none,
       ),
       child: child,
     );
@@ -43,9 +37,7 @@ class AppCard extends StatelessWidget {
     }
 
     return InkWell(
-      borderRadius: BorderRadius.circular(
-        AppRadius.lg,
-      ),
+      borderRadius: BorderRadius.circular(AppRadius.lg),
       onTap: onTap,
       child: content,
     );

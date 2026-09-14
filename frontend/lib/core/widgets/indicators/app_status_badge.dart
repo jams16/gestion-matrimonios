@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum AppStatusBadgeType {
-  neutral,
-  info,
-  success,
-  warning,
-  error,
-}
+enum AppStatusBadgeType { neutral, info, success, warning, error }
 
 class AppStatusBadge extends StatelessWidget {
   const AppStatusBadge({
@@ -23,9 +17,7 @@ class AppStatusBadge extends StatelessWidget {
   Color _color(BuildContext context) {
     switch (type) {
       case AppStatusBadgeType.neutral:
-        return Theme.of(context)
-            .colorScheme
-            .onSurfaceVariant;
+        return Theme.of(context).colorScheme.onSurfaceVariant;
 
       case AppStatusBadgeType.info:
         return Theme.of(context).colorScheme.primary;
@@ -46,10 +38,7 @@ class AppStatusBadge extends StatelessWidget {
     final color = _color(context);
 
     return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 10,
-        vertical: 5,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.10),
         borderRadius: BorderRadius.circular(999),
@@ -61,19 +50,16 @@ class AppStatusBadge extends StatelessWidget {
             Container(
               width: 7,
               height: 7,
-              decoration: BoxDecoration(
-                color: color,
-                shape: BoxShape.circle,
-              ),
+              decoration: BoxDecoration(color: color, shape: BoxShape.circle),
             ),
             const SizedBox(width: 6),
           ],
           Text(
             label,
             style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                  color: color,
-                  fontWeight: FontWeight.w600,
-                ),
+              color: color,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ],
       ),

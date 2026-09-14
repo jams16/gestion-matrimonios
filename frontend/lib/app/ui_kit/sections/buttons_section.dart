@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../../core/widgets/buttons/app_button.dart';
 import '../../../core/widgets/buttons/app_icon_button.dart';
 
-
 class ButtonsPageOneSection extends StatelessWidget {
   const ButtonsPageOneSection({super.key});
 
@@ -69,13 +68,8 @@ class ButtonsPageOneSection extends StatelessWidget {
 
         const _ButtonExample(
           title: 'Loading',
-          description:
-              'Bloquea temporalmente una acción mientras se procesa.',
-          child: AppButton(
-            label: 'Guardando',
-            loading: true,
-            onPressed: null,
-          ),
+          description: 'Bloquea temporalmente una acción mientras se procesa.',
+          child: AppButton(label: 'Guardando', loading: true, onPressed: null),
         ),
 
         const SizedBox(height: 28),
@@ -84,10 +78,7 @@ class ButtonsPageOneSection extends StatelessWidget {
           title: 'Disabled',
           description:
               'La acción permanece visible pero no se encuentra disponible.',
-          child: AppButton(
-            label: 'Continuar',
-            onPressed: null,
-          ),
+          child: AppButton(label: 'Continuar', onPressed: null),
         ),
       ],
     );
@@ -108,8 +99,7 @@ class ButtonsPageTwoSection extends StatelessWidget {
 
         _ButtonExample(
           title: 'Botón con icono',
-          description:
-              'El icono complementa el significado de la acción.',
+          description: 'El icono complementa el significado de la acción.',
           child: AppButton(
             label: 'Nuevo proyecto',
             icon: Icons.add,
@@ -200,8 +190,7 @@ class ButtonsPageTwoSection extends StatelessWidget {
 
         _ButtonExample(
           title: 'Ancho completo',
-          description:
-              'Útil especialmente en formularios y layouts móviles.',
+          description: 'Útil especialmente en formularios y layouts móviles.',
           child: AppButton(
             label: 'Crear proyecto',
             expanded: true,
@@ -213,7 +202,6 @@ class ButtonsPageTwoSection extends StatelessWidget {
   }
 }
 
-
 class _ButtonsHeading extends StatelessWidget {
   const _ButtonsHeading();
 
@@ -224,9 +212,9 @@ class _ButtonsHeading extends StatelessWidget {
       children: [
         Text(
           'Botones',
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
         ),
         const SizedBox(height: 6),
         Text(
@@ -252,25 +240,20 @@ class _ButtonExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints: const BoxConstraints(
-        maxWidth: 480,
-      ),
+      constraints: const BoxConstraints(maxWidth: 480),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600),
           ),
 
           const SizedBox(height: 4),
 
-          Text(
-            description,
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
+          Text(description, style: Theme.of(context).textTheme.bodySmall),
 
           const SizedBox(height: 12),
 
@@ -280,4 +263,3 @@ class _ButtonExample extends StatelessWidget {
     );
   }
 }
-

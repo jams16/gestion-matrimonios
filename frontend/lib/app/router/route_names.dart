@@ -1,3 +1,7 @@
 abstract final class RouteNames {
   static const uiKit = '/ui-kit';
+  static const bienvenida = '/bienvenida';
+  static const iniciarSesion = '/iniciar-sesion';
+  static const registrarse = '/registrarse';
+  static const recuperarContrasena = '/recuperar-contrasena';
 }

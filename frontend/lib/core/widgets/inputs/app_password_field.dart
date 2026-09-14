@@ -38,13 +38,9 @@ class _AppPasswordFieldState extends State<AppPasswordField> {
       helperText: widget.helperText,
       errorText: widget.errorText,
       obscureText: _obscureText,
-      prefixIcon: const Icon(
-        Icons.lock_outline,
-      ),
+      prefixIcon: const Icon(Icons.lock_outline),
       suffixIcon: IconButton(
-        tooltip: _obscureText
-            ? 'Mostrar contraseña'
-            : 'Ocultar contraseña',
+        tooltip: _obscureText ? 'Mostrar contraseña' : 'Ocultar contraseña',
         onPressed: () {
           setState(() {
             _obscureText = !_obscureText;

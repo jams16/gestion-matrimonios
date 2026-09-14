@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppPageLoading extends StatelessWidget {
-  const AppPageLoading({
-    super.key,
-    this.message = 'Cargando información...',
-  });
+  const AppPageLoading({super.key, this.message = 'Cargando información...'});
 
   final String message;
 
@@ -12,19 +9,14 @@ class AppPageLoading extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 24,
-          vertical: 48,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             const SizedBox(
               width: 36,
               height: 36,
-              child: CircularProgressIndicator(
-                strokeWidth: 3,
-              ),
+              child: CircularProgressIndicator(strokeWidth: 3),
             ),
 
             const SizedBox(height: 18),

@@ -20,31 +20,22 @@ class AppSettingsPagePattern extends StatelessWidget {
       children: [
         Text(
           title,
-          style: Theme.of(context)
-              .textTheme
-              .headlineSmall
-              ?.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
         ),
 
         if (description != null) ...[
           const SizedBox(height: 6),
-          Text(
-            description!,
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
+          Text(description!, style: Theme.of(context).textTheme.bodyMedium),
         ],
 
         const SizedBox(height: 28),
 
-        for (int index = 0;
-            index < sections.length;
-            index++) ...[
+        for (int index = 0; index < sections.length; index++) ...[
           sections[index],
 
-          if (index < sections.length - 1)
-            const SizedBox(height: 24),
+          if (index < sections.length - 1) const SizedBox(height: 24),
         ],
       ],
     );

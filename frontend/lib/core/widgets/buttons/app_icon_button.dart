@@ -2,12 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../app/theme/app_colors.dart';
 
-enum AppIconButtonVariant {
-  standard,
-  filled,
-  outlined,
-  destructive,
-}
+enum AppIconButtonVariant { standard, filled, outlined, destructive }
 
 class AppIconButton extends StatelessWidget {
   const AppIconButton({

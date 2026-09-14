@@ -28,14 +28,10 @@ class ContainersPageOneSection extends StatelessWidget {
               children: [
                 Text(
                   'Matrimonio José y Carlos',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: TextStyle(fontWeight: FontWeight.w600),
                 ),
                 SizedBox(height: 6),
-                Text(
-                  '15 de noviembre de 2026 · Lima',
-                ),
+                Text('15 de noviembre de 2026 · Lima'),
               ],
             ),
           ),
@@ -50,8 +46,7 @@ class ContainersPageOneSection extends StatelessWidget {
           maxWidth: double.infinity,
           child: AppPanel(
             title: 'Información general',
-            description:
-                'Datos principales del proyecto de matrimonio.',
+            description: 'Datos principales del proyecto de matrimonio.',
             child: Text(
               'Aquí se mostrarán los campos y contenido asociados a esta sección.',
             ),
@@ -67,8 +62,7 @@ class ContainersPageOneSection extends StatelessWidget {
           maxWidth: double.infinity,
           child: AppSection(
             title: 'Presupuesto',
-            description:
-                'Resumen financiero del proyecto.',
+            description: 'Resumen financiero del proyecto.',
             child: Text(
               'Contenido correspondiente a la sección de presupuesto.',
             ),
@@ -78,8 +72,6 @@ class ContainersPageOneSection extends StatelessWidget {
     );
   }
 }
-
-
 
 class ContainersPageTwoSection extends StatelessWidget {
   const ContainersPageTwoSection({super.key});
@@ -136,8 +128,7 @@ class ContainersPageTwoSection extends StatelessWidget {
 
               AppAccordion(
                 title: 'Configuración avanzada',
-                subtitle:
-                    'Opciones utilizadas con menor frecuencia.',
+                subtitle: 'Opciones utilizadas con menor frecuencia.',
                 child: Text(
                   'Preferencias y parámetros adicionales del proyecto.',
                 ),
@@ -150,8 +141,6 @@ class ContainersPageTwoSection extends StatelessWidget {
   }
 }
 
-
-
 class _ContainersHeading extends StatelessWidget {
   const _ContainersHeading();
 
@@ -162,9 +151,9 @@ class _ContainersHeading extends StatelessWidget {
       children: [
         Text(
           'Contenedores',
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
         ),
 
         const SizedBox(height: 6),
@@ -195,25 +184,20 @@ class _ContainerExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints: BoxConstraints(
-        maxWidth: maxWidth,
-      ),
+      constraints: BoxConstraints(maxWidth: maxWidth),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600),
           ),
 
           const SizedBox(height: 4),
 
-          Text(
-            description,
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
+          Text(description, style: Theme.of(context).textTheme.bodySmall),
 
           const SizedBox(height: 12),
 

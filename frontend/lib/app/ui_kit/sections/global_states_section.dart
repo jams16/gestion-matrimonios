@@ -15,9 +15,9 @@ class GlobalStatesSection extends StatelessWidget {
       children: [
         Text(
           'Estados globales',
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
         ),
 
         const SizedBox(height: 6),
@@ -55,7 +55,6 @@ class GlobalStatesSection extends StatelessWidget {
     );
   }
 }
-
 
 class _InteractionStates extends StatelessWidget {
   const _InteractionStates();
@@ -110,22 +109,14 @@ class _InteractionStates extends StatelessWidget {
         _InteractionStateRow(
           name: 'Disabled',
           description: 'Elemento visible pero no disponible.',
-          foregroundColor: AppStates.disabledContent(
-            AppColors.textPrimary,
-          ),
-          backgroundColor: AppStates.disabledContainer(
-            AppColors.textPrimary,
-          ),
-          borderColor: AppStates.disabledContent(
-            AppColors.border,
-          ),
+          foregroundColor: AppStates.disabledContent(AppColors.textPrimary),
+          backgroundColor: AppStates.disabledContainer(AppColors.textPrimary),
+          borderColor: AppStates.disabledContent(AppColors.border),
         ),
       ],
     );
   }
 }
-
-
 
 class _InteractionStateRow extends StatelessWidget {
   const _InteractionStateRow({
@@ -157,36 +148,22 @@ class _InteractionStateRow extends StatelessWidget {
           alignment: Alignment.center,
           decoration: BoxDecoration(
             color: backgroundColor,
-            borderRadius: BorderRadius.circular(
-              AppRadius.md,
-            ),
-            border: Border.all(
-              color: borderColor,
-              width: borderWidth,
-            ),
+            borderRadius: BorderRadius.circular(AppRadius.md),
+            border: Border.all(color: borderColor, width: borderWidth),
           ),
           child: Text(
             name,
-            style: AppTypography.label.copyWith(
-              color: foregroundColor,
-            ),
+            style: AppTypography.label.copyWith(color: foregroundColor),
           ),
         ),
 
         const SizedBox(width: 20),
 
-        Expanded(
-          child: Text(
-            description,
-            style: AppTypography.body,
-          ),
-        ),
+        Expanded(child: Text(description, style: AppTypography.body)),
       ],
     );
   }
 }
-
-
 
 class _SemanticStates extends StatelessWidget {
   const _SemanticStates();
@@ -225,8 +202,6 @@ class _SemanticStates extends StatelessWidget {
   }
 }
 
-
-
 class _SemanticStateRow extends StatelessWidget {
   const _SemanticStateRow({
     required this.name,
@@ -249,51 +224,30 @@ class _SemanticStateRow extends StatelessWidget {
         Container(
           width: 150,
           height: 48,
-          padding: const EdgeInsets.symmetric(
-            horizontal: 14,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 14),
           decoration: BoxDecoration(
             color: color.withValues(alpha: 0.08),
-            borderRadius: BorderRadius.circular(
-              AppRadius.md,
-            ),
-            border: Border.all(
-              color: color,
-            ),
+            borderRadius: BorderRadius.circular(AppRadius.md),
+            border: Border.all(color: color),
           ),
           child: Row(
             children: [
-              Icon(
-                icon,
-                size: 20,
-                color: color,
-              ),
+              Icon(icon, size: 20, color: color),
 
               const SizedBox(width: 8),
 
-              Text(
-                name,
-                style: AppTypography.label.copyWith(
-                  color: color,
-                ),
-              ),
+              Text(name, style: AppTypography.label.copyWith(color: color)),
             ],
           ),
         ),
 
         const SizedBox(width: 20),
 
-        Expanded(
-          child: Text(
-            description,
-            style: AppTypography.body,
-          ),
-        ),
+        Expanded(child: Text(description, style: AppTypography.body)),
       ],
     );
   }
 }
-
 
 class _LoadingState extends StatelessWidget {
   const _LoadingState();
@@ -308,19 +262,13 @@ class _LoadingState extends StatelessWidget {
           height: 48,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(
-              AppRadius.md,
-            ),
-            border: Border.all(
-              color: AppColors.border,
-            ),
+            borderRadius: BorderRadius.circular(AppRadius.md),
+            border: Border.all(color: AppColors.border),
           ),
           child: const SizedBox(
             width: 20,
             height: 20,
-            child: CircularProgressIndicator(
-              strokeWidth: 2,
-            ),
+            child: CircularProgressIndicator(strokeWidth: 2),
           ),
         ),
 
@@ -338,7 +286,6 @@ class _LoadingState extends StatelessWidget {
   }
 }
 
-
 class _SectionTitle extends StatelessWidget {
   const _SectionTitle(this.text);
 
@@ -348,9 +295,9 @@ class _SectionTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.w700,
-          ),
+      style: Theme.of(
+        context,
+      ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
     );
   }
 }

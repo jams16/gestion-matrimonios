@@ -29,32 +29,14 @@ class DataPageOneSection extends StatelessWidget {
           maxWidth: double.infinity,
           child: AppTable(
             columns: [
-              AppTableColumn(
-                label: 'Actividad',
-              ),
-              AppTableColumn(
-                label: 'Responsable',
-              ),
-              AppTableColumn(
-                label: 'Estado',
-              ),
+              AppTableColumn(label: 'Actividad'),
+              AppTableColumn(label: 'Responsable'),
+              AppTableColumn(label: 'Estado'),
             ],
             rows: [
-              [
-                'Reservar local',
-                'Wedding Planner',
-                'Completada',
-              ],
-              [
-                'Confirmar catering',
-                'Pareja',
-                'Pendiente',
-              ],
-              [
-                'Contratar fotografía',
-                'Wedding Planner',
-                'En proceso',
-              ],
+              ['Reservar local', 'Wedding Planner', 'Completada'],
+              ['Confirmar catering', 'Pareja', 'Pendiente'],
+              ['Contratar fotografía', 'Wedding Planner', 'En proceso'],
             ],
           ),
         ),
@@ -68,55 +50,30 @@ class DataPageOneSection extends StatelessWidget {
           maxWidth: double.infinity,
           child: AppDataTable(
             columns: const [
-              AppDataTableColumn(
-                label: 'Proveedor',
-              ),
-              AppDataTableColumn(
-                label: 'Categoría',
-              ),
-              AppDataTableColumn(
-                label: 'Monto',
-                numeric: true,
-              ),
+              AppDataTableColumn(label: 'Proveedor'),
+              AppDataTableColumn(label: 'Categoría'),
+              AppDataTableColumn(label: 'Monto', numeric: true),
             ],
             rows: const [
               DataRow(
                 cells: [
-                  DataCell(
-                    Text('Eventos Lima'),
-                  ),
-                  DataCell(
-                    Text('Local'),
-                  ),
-                  DataCell(
-                    Text('S/ 8,500'),
-                  ),
+                  DataCell(Text('Eventos Lima')),
+                  DataCell(Text('Local')),
+                  DataCell(Text('S/ 8,500')),
                 ],
               ),
               DataRow(
                 cells: [
-                  DataCell(
-                    Text('Catering del Valle'),
-                  ),
-                  DataCell(
-                    Text('Catering'),
-                  ),
-                  DataCell(
-                    Text('S/ 6,200'),
-                  ),
+                  DataCell(Text('Catering del Valle')),
+                  DataCell(Text('Catering')),
+                  DataCell(Text('S/ 6,200')),
                 ],
               ),
               DataRow(
                 cells: [
-                  DataCell(
-                    Text('Fotografía Aurora'),
-                  ),
-                  DataCell(
-                    Text('Fotografía'),
-                  ),
-                  DataCell(
-                    Text('S/ 2,800'),
-                  ),
+                  DataCell(Text('Fotografía Aurora')),
+                  DataCell(Text('Fotografía')),
+                  DataCell(Text('S/ 2,800')),
                 ],
               ),
             ],
@@ -126,8 +83,6 @@ class DataPageOneSection extends StatelessWidget {
     );
   }
 }
-
-
 
 class DataPageTwoSection extends StatelessWidget {
   const DataPageTwoSection({super.key});
@@ -149,30 +104,18 @@ class DataPageTwoSection extends StatelessWidget {
             children: [
               AppListItem(
                 title: 'Reservar local',
-                subtitle:
-                    'Fecha límite: 20/09/2026',
-                leading: const CircleAvatar(
-                  child: Icon(
-                    Icons.event_outlined,
-                  ),
-                ),
-                trailing: const Icon(
-                  Icons.chevron_right,
-                ),
+                subtitle: 'Fecha límite: 20/09/2026',
+                leading: const CircleAvatar(child: Icon(Icons.event_outlined)),
+                trailing: const Icon(Icons.chevron_right),
                 onTap: () {},
               ),
               AppListItem(
                 title: 'Confirmar catering',
-                subtitle:
-                    'Responsable: Pareja',
+                subtitle: 'Responsable: Pareja',
                 leading: const CircleAvatar(
-                  child: Icon(
-                    Icons.restaurant_outlined,
-                  ),
+                  child: Icon(Icons.restaurant_outlined),
                 ),
-                trailing: const Icon(
-                  Icons.chevron_right,
-                ),
+                trailing: const Icon(Icons.chevron_right),
                 onTap: () {},
               ),
             ],
@@ -183,17 +126,14 @@ class DataPageTwoSection extends StatelessWidget {
 
         _DataExample(
           title: 'Empty state',
-          description:
-              'Se muestra cuando no existen datos para presentar.',
+          description: 'Se muestra cuando no existen datos para presentar.',
           child: AppEmptyState(
             title: 'No hay proveedores',
             message:
                 'Agrega un proveedor para comenzar a gestionar contrataciones.',
             action: FilledButton(
               onPressed: null,
-              child: Text(
-                'Agregar proveedor',
-              ),
+              child: Text('Agregar proveedor'),
             ),
           ),
         ),
@@ -207,20 +147,11 @@ class DataPageTwoSection extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              AppSkeleton(
-                width: 320,
-                height: 20,
-              ),
+              AppSkeleton(width: 320, height: 20),
               SizedBox(height: 10),
-              AppSkeleton(
-                width: 440,
-                height: 14,
-              ),
+              AppSkeleton(width: 440, height: 14),
               SizedBox(height: 10),
-              AppSkeleton(
-                width: 380,
-                height: 14,
-              ),
+              AppSkeleton(width: 380, height: 14),
             ],
           ),
         ),
@@ -229,24 +160,19 @@ class DataPageTwoSection extends StatelessWidget {
   }
 }
 
-
-
 class DataPageThreeSection extends StatefulWidget {
   const DataPageThreeSection({super.key});
 
   @override
-  State<DataPageThreeSection> createState() =>
-      _DataPageThreeSectionState();
+  State<DataPageThreeSection> createState() => _DataPageThreeSectionState();
 }
 
-class _DataPageThreeSectionState
-    extends State<DataPageThreeSection> {
+class _DataPageThreeSectionState extends State<DataPageThreeSection> {
   int _currentPage = 3;
 
   String _sortValue = 'nombre';
 
-  AppSortDirection _direction =
-      AppSortDirection.ascending;
+  AppSortDirection _direction = AppSortDirection.ascending;
 
   @override
   Widget build(BuildContext context) {
@@ -284,23 +210,17 @@ class _DataPageThreeSectionState
             onClear: () {},
             children: const [
               FilterChip(
-                label: Text(
-                  'Pendientes',
-                ),
+                label: Text('Pendientes'),
                 selected: true,
                 onSelected: null,
               ),
               FilterChip(
-                label: Text(
-                  'En proceso',
-                ),
+                label: Text('En proceso'),
                 selected: false,
                 onSelected: null,
               ),
               FilterChip(
-                label: Text(
-                  'Completadas',
-                ),
+                label: Text('Completadas'),
                 selected: false,
                 onSelected: null,
               ),
@@ -318,18 +238,9 @@ class _DataPageThreeSectionState
             value: _sortValue,
             direction: _direction,
             options: const [
-              AppSortOption(
-                value: 'nombre',
-                label: 'Nombre',
-              ),
-              AppSortOption(
-                value: 'fecha',
-                label: 'Fecha',
-              ),
-              AppSortOption(
-                value: 'estado',
-                label: 'Estado',
-              ),
+              AppSortOption(value: 'nombre', label: 'Nombre'),
+              AppSortOption(value: 'fecha', label: 'Fecha'),
+              AppSortOption(value: 'estado', label: 'Estado'),
             ],
             onValueChanged: (value) {
               if (value == null) {
@@ -352,8 +263,6 @@ class _DataPageThreeSectionState
   }
 }
 
-
-
 class _DataHeading extends StatelessWidget {
   const _DataHeading();
 
@@ -364,20 +273,16 @@ class _DataHeading extends StatelessWidget {
       children: [
         Text(
           'Datos',
-          style: Theme.of(context)
-              .textTheme
-              .headlineSmall
-              ?.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
         ),
 
         const SizedBox(height: 6),
 
         Text(
           'Componentes utilizados para presentar, explorar y organizar conjuntos de información.',
-          style:
-              Theme.of(context).textTheme.bodyMedium,
+          style: Theme.of(context).textTheme.bodyMedium,
         ),
       ],
     );
@@ -402,30 +307,20 @@ class _DataExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints: BoxConstraints(
-        maxWidth: maxWidth,
-      ),
+      constraints: BoxConstraints(maxWidth: maxWidth),
       child: Column(
-        crossAxisAlignment:
-            CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
-            style: Theme.of(context)
-                .textTheme
-                .titleSmall
-                ?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600),
           ),
 
           const SizedBox(height: 4),
 
-          Text(
-            description,
-            style:
-                Theme.of(context).textTheme.bodySmall,
-          ),
+          Text(description, style: Theme.of(context).textTheme.bodySmall),
 
           const SizedBox(height: 12),
 

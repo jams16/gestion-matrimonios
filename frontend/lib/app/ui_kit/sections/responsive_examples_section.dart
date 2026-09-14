@@ -15,11 +15,8 @@ import '../../../core/widgets/navigation/app_sidebar.dart';
 import '../../../core/widgets/overlays/app_bottom_sheet.dart';
 import '../../../core/widgets/overlays/app_dialog.dart';
 
-
 class ResponsiveExamplesPageOneSection extends StatelessWidget {
-  const ResponsiveExamplesPageOneSection({
-    super.key,
-  });
+  const ResponsiveExamplesPageOneSection({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -41,8 +38,6 @@ class ResponsiveExamplesPageOneSection extends StatelessWidget {
   }
 }
 
-
-
 class _MobileFormPreview extends StatelessWidget {
   const _MobileFormPreview();
 
@@ -50,15 +45,9 @@ class _MobileFormPreview extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 360,
-      padding: const EdgeInsets.all(
-        AppLayout.mobilePagePadding,
-      ),
+      padding: const EdgeInsets.all(AppLayout.mobilePagePadding),
       decoration: BoxDecoration(
-        border: Border.all(
-          color: Theme.of(context)
-              .colorScheme
-              .outlineVariant,
-        ),
+        border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
         borderRadius: BorderRadius.circular(12),
       ),
       child: AppFormLayout(
@@ -69,31 +58,20 @@ class _MobileFormPreview extends StatelessWidget {
             hintText: 'Ej. Matrimonio José y Carlos',
           ),
 
-          const AppDateField(
-            label: 'Fecha del matrimonio',
-          ),
+          const AppDateField(label: 'Fecha del matrimonio'),
 
-          const AppTextField(
-            label: 'Ubicación',
-            hintText: 'Ej. Lima, Perú',
-          ),
+          const AppTextField(label: 'Ubicación', hintText: 'Ej. Lima, Perú'),
 
           Column(
-            crossAxisAlignment:
-                CrossAxisAlignment.stretch,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              AppButton(
-                label: 'Guardar',
-                expanded: true,
-                onPressed: () {},
-              ),
+              AppButton(label: 'Guardar', expanded: true, onPressed: () {}),
 
               const SizedBox(height: 10),
 
               AppButton(
                 label: 'Cancelar',
-                variant:
-                    AppButtonVariant.secondary,
+                variant: AppButtonVariant.secondary,
                 expanded: true,
                 onPressed: () {},
               ),
@@ -105,8 +83,6 @@ class _MobileFormPreview extends StatelessWidget {
   }
 }
 
-
-
 class _DesktopFormPreview extends StatelessWidget {
   const _DesktopFormPreview();
 
@@ -114,13 +90,9 @@ class _DesktopFormPreview extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 680,
-      padding: const EdgeInsets.all(
-        AppLayout.desktopPagePadding,
-      ),
+      padding: const EdgeInsets.all(AppLayout.desktopPagePadding),
       decoration: BoxDecoration(
-        border: Border.all(
-          color: Theme.of(context).colorScheme.outlineVariant,
-        ),
+        border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
         borderRadius: BorderRadius.circular(12),
       ),
       child: AppFormLayout(
@@ -131,14 +103,9 @@ class _DesktopFormPreview extends StatelessWidget {
             hintText: 'Ej. Matrimonio José y Carlos',
           ),
 
-          const AppDateField(
-            label: 'Fecha del matrimonio',
-          ),
+          const AppDateField(label: 'Fecha del matrimonio'),
 
-          const AppTextField(
-            label: 'Ubicación',
-            hintText: 'Ej. Lima, Perú',
-          ),
+          const AppTextField(label: 'Ubicación', hintText: 'Ej. Lima, Perú'),
 
           AppFormActions(
             secondaryAction: AppButton(
@@ -146,10 +113,7 @@ class _DesktopFormPreview extends StatelessWidget {
               variant: AppButtonVariant.secondary,
               onPressed: () {},
             ),
-            primaryAction: AppButton(
-              label: 'Guardar',
-              onPressed: () {},
-            ),
+            primaryAction: AppButton(label: 'Guardar', onPressed: () {}),
           ),
         ],
       ),
@@ -157,12 +121,8 @@ class _DesktopFormPreview extends StatelessWidget {
   }
 }
 
-
-
 class ResponsiveExamplesPageTwoSection extends StatelessWidget {
-  const ResponsiveExamplesPageTwoSection({
-    super.key,
-  });
+  const ResponsiveExamplesPageTwoSection({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -179,13 +139,10 @@ class ResponsiveExamplesPageTwoSection extends StatelessWidget {
               'Mantiene una sola columna, pero limita el ancho para mejorar legibilidad y recorrido visual.',
           child: _DesktopFormPreview(),
         ),
-
-        
       ],
     );
   }
 }
-
 
 class _DataResponsiveExample extends StatelessWidget {
   const _DataResponsiveExample();
@@ -195,10 +152,7 @@ class _DataResponsiveExample extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _PreviewLabel(
-          label: 'DESKTOP',
-          width: '≥ 1024 px',
-        ),
+        _PreviewLabel(label: 'DESKTOP', width: '≥ 1024 px'),
 
         const SizedBox(height: 8),
 
@@ -206,22 +160,15 @@ class _DataResponsiveExample extends StatelessWidget {
 
         const SizedBox(height: 24),
 
-        _PreviewLabel(
-          label: 'MOBILE',
-          width: '< 600 px',
-        ),
+        _PreviewLabel(label: 'MOBILE', width: '< 600 px'),
 
         const SizedBox(height: 8),
 
-        const SizedBox(
-          width: 360,
-          child: _MobileCardsExample(),
-        ),
+        const SizedBox(width: 360, child: _MobileCardsExample()),
       ],
     );
   }
 }
-
 
 class _DesktopTableExample extends StatelessWidget {
   const _DesktopTableExample();
@@ -230,58 +177,32 @@ class _DesktopTableExample extends StatelessWidget {
   Widget build(BuildContext context) {
     return const AppDataTable(
       columns: [
-        AppDataTableColumn(
-          label: 'Proveedor',
-        ),
-        AppDataTableColumn(
-          label: 'Categoría',
-        ),
-        AppDataTableColumn(
-          label: 'Estado',
-        ),
-        AppDataTableColumn(
-          label: 'Monto',
-          numeric: true,
-        ),
+        AppDataTableColumn(label: 'Proveedor'),
+        AppDataTableColumn(label: 'Categoría'),
+        AppDataTableColumn(label: 'Estado'),
+        AppDataTableColumn(label: 'Monto', numeric: true),
       ],
       rows: [
         DataRow(
           cells: [
-            DataCell(
-              Text('Eventos Lima'),
-            ),
-            DataCell(
-              Text('Local'),
-            ),
-            DataCell(
-              Text('Confirmado'),
-            ),
-            DataCell(
-              Text('S/ 8,500'),
-            ),
+            DataCell(Text('Eventos Lima')),
+            DataCell(Text('Local')),
+            DataCell(Text('Confirmado')),
+            DataCell(Text('S/ 8,500')),
           ],
         ),
         DataRow(
           cells: [
-            DataCell(
-              Text('Fotografía Aurora'),
-            ),
-            DataCell(
-              Text('Fotografía'),
-            ),
-            DataCell(
-              Text('Pendiente'),
-            ),
-            DataCell(
-              Text('S/ 2,800'),
-            ),
+            DataCell(Text('Fotografía Aurora')),
+            DataCell(Text('Fotografía')),
+            DataCell(Text('Pendiente')),
+            DataCell(Text('S/ 2,800')),
           ],
         ),
       ],
     );
   }
 }
-
 
 class _MobileCardsExample extends StatelessWidget {
   const _MobileCardsExample();
@@ -296,9 +217,7 @@ class _MobileCardsExample extends StatelessWidget {
             children: [
               Text(
                 'Eventos Lima',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                ),
+                style: TextStyle(fontWeight: FontWeight.w600),
               ),
               SizedBox(height: 8),
               Text('Categoría: Local'),
@@ -316,9 +235,7 @@ class _MobileCardsExample extends StatelessWidget {
             children: [
               Text(
                 'Fotografía Aurora',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                ),
+                style: TextStyle(fontWeight: FontWeight.w600),
               ),
               SizedBox(height: 8),
               Text('Categoría: Fotografía'),
@@ -331,8 +248,6 @@ class _MobileCardsExample extends StatelessWidget {
     );
   }
 }
-
-
 
 const _responsiveNavigationItems = [
   AppNavigationItem(
@@ -357,16 +272,12 @@ const _responsiveNavigationItems = [
   ),
 ];
 
-
-
-class _NavigationResponsiveExample
-    extends StatefulWidget {
+class _NavigationResponsiveExample extends StatefulWidget {
   const _NavigationResponsiveExample();
 
   @override
-  State<_NavigationResponsiveExample>
-      createState() =>
-          _NavigationResponsiveExampleState();
+  State<_NavigationResponsiveExample> createState() =>
+      _NavigationResponsiveExampleState();
 }
 
 class _NavigationResponsiveExampleState
@@ -382,13 +293,9 @@ class _NavigationResponsiveExampleState
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment:
-          CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _PreviewLabel(
-          label: 'DESKTOP',
-          width: '≥ 1024 px',
-        ),
+        _PreviewLabel(label: 'DESKTOP', width: '≥ 1024 px'),
 
         const SizedBox(height: 8),
 
@@ -404,10 +311,7 @@ class _NavigationResponsiveExampleState
 
         const SizedBox(height: 24),
 
-        _PreviewLabel(
-          label: 'MOBILE',
-          width: '< 600 px',
-        ),
+        _PreviewLabel(label: 'MOBILE', width: '< 600 px'),
 
         const SizedBox(height: 8),
 
@@ -424,20 +328,13 @@ class _NavigationResponsiveExampleState
   }
 }
 
-
-
-
-class ResponsiveExamplesPageThreeSection
-    extends StatelessWidget {
-  const ResponsiveExamplesPageThreeSection({
-    super.key,
-  });
+class ResponsiveExamplesPageThreeSection extends StatelessWidget {
+  const ResponsiveExamplesPageThreeSection({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment:
-          CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const _ResponsiveExamplesHeading(),
 
@@ -449,33 +346,25 @@ class ResponsiveExamplesPageThreeSection
               'Los mismos datos cambian de representación cuando una tabla deja de ser cómoda en pantallas pequeñas.',
           child: _DataResponsiveExample(),
         ),
-
-        
       ],
     );
   }
 }
 
-
-class ResponsiveExamplesPageFourSection
-    extends StatelessWidget {
-  const ResponsiveExamplesPageFourSection({
-    super.key,
-  });
+class ResponsiveExamplesPageFourSection extends StatelessWidget {
+  const ResponsiveExamplesPageFourSection({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment:
-          CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const _ResponsiveExamplesHeading(),
 
         const SizedBox(height: 28),
 
         _ResponsiveExample(
-          title:
-              'Sidebar desktop → bottom navigation mobile',
+          title: 'Sidebar desktop → bottom navigation mobile',
           description:
               'Los destinos principales se mantienen; solo cambia la presentación según el breakpoint.',
           child: _NavigationResponsiveExample(),
@@ -484,8 +373,7 @@ class ResponsiveExamplesPageFourSection
         const SizedBox(height: 36),
 
         _ResponsiveExample(
-          title:
-              'Dialog desktop → bottom sheet mobile',
+          title: 'Dialog desktop → bottom sheet mobile',
           description:
               'Una misma acción puede utilizar diferentes overlays según el espacio y contexto de interacción.',
           child: _ResponsiveOverlayExample(),
@@ -495,9 +383,7 @@ class ResponsiveExamplesPageFourSection
   }
 }
 
-
-class _ResponsiveOverlayExample
-    extends StatelessWidget {
+class _ResponsiveOverlayExample extends StatelessWidget {
   const _ResponsiveOverlayExample();
 
   @override
@@ -507,13 +393,9 @@ class _ResponsiveOverlayExample
       children: [
         Expanded(
           child: Column(
-            crossAxisAlignment:
-                CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _PreviewLabel(
-                label: 'DESKTOP',
-                width: '≥ 1024 px',
-              ),
+              _PreviewLabel(label: 'DESKTOP', width: '≥ 1024 px'),
 
               const SizedBox(height: 8),
 
@@ -524,24 +406,20 @@ class _ResponsiveOverlayExample
                   AppDialog.show(
                     context,
                     title: 'Filtros',
-                    description:
-                        'Selecciona los criterios de búsqueda.',
-                    content:
-                        const _FilterContent(),
+                    description: 'Selecciona los criterios de búsqueda.',
+                    content: const _FilterContent(),
                     actions: [
                       TextButton(
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
-                        child:
-                            const Text('Cancelar'),
+                        child: const Text('Cancelar'),
                       ),
                       FilledButton(
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
-                        child:
-                            const Text('Aplicar'),
+                        child: const Text('Aplicar'),
                       ),
                     ],
                   );
@@ -555,13 +433,9 @@ class _ResponsiveOverlayExample
 
         Expanded(
           child: Column(
-            crossAxisAlignment:
-                CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _PreviewLabel(
-                label: 'MOBILE',
-                width: '< 600 px',
-              ),
+              _PreviewLabel(label: 'MOBILE', width: '< 600 px'),
 
               const SizedBox(height: 8),
 
@@ -572,10 +446,8 @@ class _ResponsiveOverlayExample
                   AppBottomSheet.show(
                     context,
                     title: 'Filtros',
-                    description:
-                        'Selecciona los criterios de búsqueda.',
-                    child:
-                        const _FilterContent(),
+                    description: 'Selecciona los criterios de búsqueda.',
+                    child: const _FilterContent(),
                   );
                 },
               ),
@@ -587,7 +459,6 @@ class _ResponsiveOverlayExample
   }
 }
 
-
 class _FilterContent extends StatelessWidget {
   const _FilterContent();
 
@@ -595,54 +466,38 @@ class _FilterContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Column(
       mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment:
-          CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AppTextField(
-          label: 'Proveedor',
-          hintText: 'Buscar proveedor',
-        ),
+        AppTextField(label: 'Proveedor', hintText: 'Buscar proveedor'),
 
         SizedBox(height: 16),
 
-        AppTextField(
-          label: 'Categoría',
-          hintText: 'Ej. Fotografía',
-        ),
+        AppTextField(label: 'Categoría', hintText: 'Ej. Fotografía'),
       ],
     );
   }
 }
 
-
-
-class _ResponsiveExamplesHeading
-    extends StatelessWidget {
+class _ResponsiveExamplesHeading extends StatelessWidget {
   const _ResponsiveExamplesHeading();
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment:
-          CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           'Ejemplos responsive reales',
-          style: Theme.of(context)
-              .textTheme
-              .headlineSmall
-              ?.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
         ),
 
         const SizedBox(height: 6),
 
         Text(
           'Ejemplos de adaptación real de componentes y patrones según el espacio disponible.',
-          style: Theme.of(context)
-              .textTheme
-              .bodyMedium,
+          style: Theme.of(context).textTheme.bodyMedium,
         ),
       ],
     );
@@ -663,32 +518,20 @@ class _ResponsiveExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints: const BoxConstraints(
-        maxWidth: 680,
-      ),
+      constraints: const BoxConstraints(maxWidth: 680),
       child: Column(
-        crossAxisAlignment:
-            CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
-            style: Theme.of(context)
-                .textTheme
-                .titleSmall
-                ?.copyWith(
-                  fontWeight:
-                      FontWeight.w600,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600),
           ),
 
           const SizedBox(height: 4),
 
-          Text(
-            description,
-            style: Theme.of(context)
-                .textTheme
-                .bodySmall,
-          ),
+          Text(description, style: Theme.of(context).textTheme.bodySmall),
 
           const SizedBox(height: 14),
 
@@ -699,13 +542,8 @@ class _ResponsiveExample extends StatelessWidget {
   }
 }
 
-
-
 class _PreviewLabel extends StatelessWidget {
-  const _PreviewLabel({
-    required this.label,
-    required this.width,
-  });
+  const _PreviewLabel({required this.label, required this.width});
 
   final String label;
   final String width;
@@ -717,19 +555,12 @@ class _PreviewLabel extends StatelessWidget {
       children: [
         Text(
           label,
-          style: Theme.of(context)
-              .textTheme
-              .labelMedium
-              ?.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w700),
         ),
         const SizedBox(width: 8),
-        Text(
-          width,
-          style:
-              Theme.of(context).textTheme.bodySmall,
-        ),
+        Text(width, style: Theme.of(context).textTheme.bodySmall),
       ],
     );
   }

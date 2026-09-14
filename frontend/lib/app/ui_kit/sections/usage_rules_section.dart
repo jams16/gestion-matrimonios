@@ -25,10 +25,7 @@ class UsageRulesPageOneSection extends StatelessWidget {
           good: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              AppButton(
-                label: 'Guardar',
-                onPressed: () {},
-              ),
+              AppButton(label: 'Guardar', onPressed: () {}),
               const SizedBox(height: 8),
               AppButton(
                 label: 'Cancelar',
@@ -72,15 +69,10 @@ class UsageRulesPageOneSection extends StatelessWidget {
             'Si el usuario necesita consultar otra información mientras completa la tarea, preferir página.',
           ],
         ),
-
       ],
     );
   }
 }
-
-
-
-
 
 class UsageRulesPageTwoSection extends StatelessWidget {
   const UsageRulesPageTwoSection({super.key});
@@ -126,7 +118,6 @@ class UsageRulesPageTwoSection extends StatelessWidget {
     );
   }
 }
-
 
 class UsageRulesPageThreeSection extends StatelessWidget {
   const UsageRulesPageThreeSection({super.key});
@@ -177,10 +168,6 @@ class UsageRulesPageThreeSection extends StatelessWidget {
   }
 }
 
-
-
-
-
 class _UsageRulesHeading extends StatelessWidget {
   const _UsageRulesHeading();
 
@@ -191,9 +178,9 @@ class _UsageRulesHeading extends StatelessWidget {
       children: [
         Text(
           'Reglas de uso',
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
         ),
         const SizedBox(height: 6),
         Text(
@@ -221,23 +208,18 @@ class _UsageRule extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints: const BoxConstraints(
-        maxWidth: 620,
-      ),
+      constraints: const BoxConstraints(maxWidth: 620),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 4),
-          Text(
-            description,
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
+          Text(description, style: Theme.of(context).textTheme.bodySmall),
           const SizedBox(height: 14),
 
           good,
@@ -246,9 +228,7 @@ class _UsageRule extends StatelessWidget {
 
           for (final rule in rules)
             Padding(
-              padding: const EdgeInsets.only(
-                bottom: 6,
-              ),
+              padding: const EdgeInsets.only(bottom: 6),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -268,9 +248,6 @@ class _UsageRule extends StatelessWidget {
   }
 }
 
-
-
-
 class _DialogVsPageExample extends StatelessWidget {
   const _DialogVsPageExample();
 
@@ -284,20 +261,11 @@ class _DialogVsPageExample extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(
-                  Icons.open_in_new,
-                ),
+                Icon(Icons.open_in_new),
                 SizedBox(height: 8),
-                Text(
-                  'Dialog',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+                Text('Dialog', style: TextStyle(fontWeight: FontWeight.w600)),
                 SizedBox(height: 4),
-                Text(
-                  'Acción breve o puntual.',
-                ),
+                Text('Acción breve o puntual.'),
               ],
             ),
           ),
@@ -308,20 +276,11 @@ class _DialogVsPageExample extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(
-                  Icons.web_asset_outlined,
-                ),
+                Icon(Icons.web_asset_outlined),
                 SizedBox(height: 8),
-                Text(
-                  'Página',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+                Text('Página', style: TextStyle(fontWeight: FontWeight.w600)),
                 SizedBox(height: 4),
-                Text(
-                  'Proceso amplio o complejo.',
-                ),
+                Text('Proceso amplio o complejo.'),
               ],
             ),
           ),
@@ -330,9 +289,6 @@ class _DialogVsPageExample extends StatelessWidget {
     );
   }
 }
-
-
-
 
 class _TableVsCardsExample extends StatelessWidget {
   const _TableVsCardsExample();
@@ -344,22 +300,12 @@ class _TableVsCardsExample extends StatelessWidget {
       children: [
         const AppTable(
           columns: [
-            AppTableColumn(
-              label: 'Proveedor',
-            ),
-            AppTableColumn(
-              label: 'Estado',
-            ),
+            AppTableColumn(label: 'Proveedor'),
+            AppTableColumn(label: 'Estado'),
           ],
           rows: [
-            [
-              'Eventos Lima',
-              'Activo',
-            ],
-            [
-              'Fotografía Aurora',
-              'Pendiente',
-            ],
+            ['Eventos Lima', 'Activo'],
+            ['Fotografía Aurora', 'Pendiente'],
           ],
         ),
 
@@ -367,20 +313,10 @@ class _TableVsCardsExample extends StatelessWidget {
 
         Row(
           children: const [
-            Expanded(
-              child: AppCard(
-                child: Text(
-                  'Eventos Lima\nActivo',
-                ),
-              ),
-            ),
+            Expanded(child: AppCard(child: Text('Eventos Lima\nActivo'))),
             SizedBox(width: 12),
             Expanded(
-              child: AppCard(
-                child: Text(
-                  'Fotografía Aurora\nPendiente',
-                ),
-              ),
+              child: AppCard(child: Text('Fotografía Aurora\nPendiente')),
             ),
           ],
         ),
@@ -388,9 +324,6 @@ class _TableVsCardsExample extends StatelessWidget {
     );
   }
 }
-
-
-
 
 class _IconsUsageExample extends StatelessWidget {
   const _IconsUsageExample();
@@ -402,24 +335,16 @@ class _IconsUsageExample extends StatelessWidget {
         IconButton(
           tooltip: 'Editar',
           onPressed: () {},
-          icon: const Icon(
-            Icons.edit_outlined,
-          ),
+          icon: const Icon(Icons.edit_outlined),
         ),
 
         const SizedBox(width: 12),
 
-        AppButton(
-          label: 'Nuevo proyecto',
-          icon: Icons.add,
-          onPressed: () {},
-        ),
+        AppButton(label: 'Nuevo proyecto', icon: Icons.add, onPressed: () {}),
       ],
     );
   }
 }
-
-
 
 class _ConfirmationExample extends StatelessWidget {
   const _ConfirmationExample();

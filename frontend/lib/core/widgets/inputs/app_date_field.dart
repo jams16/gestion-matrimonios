@@ -39,9 +39,7 @@ class _AppDateFieldState extends State<AppDateField> {
     _selectedDate = widget.initialDate;
 
     _controller = TextEditingController(
-      text: _selectedDate == null
-          ? ''
-          : _formatDate(_selectedDate!),
+      text: _selectedDate == null ? '' : _formatDate(_selectedDate!),
     );
   }
 
@@ -58,10 +56,8 @@ class _AppDateFieldState extends State<AppDateField> {
     final date = await showDatePicker(
       context: context,
       initialDate: _selectedDate ?? now,
-      firstDate:
-          widget.firstDate ?? DateTime(now.year - 10),
-      lastDate:
-          widget.lastDate ?? DateTime(now.year + 20),
+      firstDate: widget.firstDate ?? DateTime(now.year - 10),
+      lastDate: widget.lastDate ?? DateTime(now.year + 20),
     );
 
     if (date == null) {
@@ -94,9 +90,7 @@ class _AppDateFieldState extends State<AppDateField> {
       suffixIcon: IconButton(
         tooltip: 'Seleccionar fecha',
         onPressed: _selectDate,
-        icon: const Icon(
-          Icons.calendar_today_outlined,
-        ),
+        icon: const Icon(Icons.calendar_today_outlined),
       ),
     );
   }

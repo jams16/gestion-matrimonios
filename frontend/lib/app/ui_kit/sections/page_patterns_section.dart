@@ -21,7 +21,6 @@ import '../../../core/widgets/page_patterns/app_login_page_pattern.dart';
 import '../../../core/widgets/page_patterns/app_settings_page_pattern.dart';
 import '../../../core/widgets/page_patterns/app_wizard_page_pattern.dart';
 
-
 class PagePatternsPageOneSection extends StatelessWidget {
   const PagePatternsPageOneSection({super.key});
 
@@ -42,17 +41,14 @@ class PagePatternsPageOneSection extends StatelessWidget {
             height: 330,
             child: AppLoginPagePattern(
               title: 'Iniciar sesión',
-              description:
-                  'Accede a tu cuenta para gestionar tus proyectos.',
+              description: 'Accede a tu cuenta para gestionar tus proyectos.',
               form: AppFormLayout(
                 children: [
                   AppTextField(
                     label: 'Correo electrónico',
                     hintText: 'ejemplo@correo.com',
                   ),
-                  AppPasswordField(
-                    label: 'Contraseña',
-                  ),
+                  AppPasswordField(label: 'Contraseña'),
                   AppButton(
                     label: 'Iniciar sesión',
                     expanded: true,
@@ -73,11 +69,8 @@ class PagePatternsPageOneSection extends StatelessWidget {
           maxWidth: double.infinity,
           child: AppListPagePattern(
             title: 'Proyectos',
-            description:
-                'Gestiona tus proyectos de matrimonio.',
-            search: const AppSearchField(
-              hintText: 'Buscar proyecto...',
-            ),
+            description: 'Gestiona tus proyectos de matrimonio.',
+            search: const AppSearchField(hintText: 'Buscar proyecto...'),
             primaryAction: AppButton(
               label: 'Nuevo proyecto',
               icon: Icons.add,
@@ -87,20 +80,14 @@ class PagePatternsPageOneSection extends StatelessWidget {
               children: [
                 AppListItem(
                   title: 'Matrimonio José y Carlos',
-                  subtitle:
-                      '15 de noviembre de 2026',
-                  trailing: const Icon(
-                    Icons.chevron_right,
-                  ),
+                  subtitle: '15 de noviembre de 2026',
+                  trailing: const Icon(Icons.chevron_right),
                   onTap: () {},
                 ),
                 AppListItem(
                   title: 'Matrimonio Ana y Luis',
-                  subtitle:
-                      '4 de diciembre de 2026',
-                  trailing: const Icon(
-                    Icons.chevron_right,
-                  ),
+                  subtitle: '4 de diciembre de 2026',
+                  trailing: const Icon(Icons.chevron_right),
                   onTap: () {},
                 ),
               ],
@@ -111,7 +98,6 @@ class PagePatternsPageOneSection extends StatelessWidget {
     );
   }
 }
-
 
 class PagePatternsPageTwoSection extends StatelessWidget {
   const PagePatternsPageTwoSection({super.key});
@@ -132,17 +118,11 @@ class PagePatternsPageTwoSection extends StatelessWidget {
           maxWidth: double.infinity,
           child: AppDetailPagePattern(
             title: 'Matrimonio José y Carlos',
-            description:
-                'Proyecto programado para el 15 de noviembre de 2026.',
+            description: 'Proyecto programado para el 15 de noviembre de 2026.',
             breadcrumbs: AppBreadcrumbs(
               items: [
-                AppBreadcrumbItem(
-                  label: 'Proyectos',
-                  onTap: () {},
-                ),
-                const AppBreadcrumbItem(
-                  label: 'Matrimonio José y Carlos',
-                ),
+                AppBreadcrumbItem(label: 'Proyectos', onTap: () {}),
+                const AppBreadcrumbItem(label: 'Matrimonio José y Carlos'),
               ],
             ),
             status: const AppStatusBadge(
@@ -175,25 +155,19 @@ class PagePatternsPageTwoSection extends StatelessWidget {
           maxWidth: double.infinity,
           child: AppFormPagePattern(
             title: 'Crear proyecto',
-            description:
-                'Completa la información inicial del matrimonio.',
+            description: 'Completa la información inicial del matrimonio.',
             form: AppFormLayout(
               children: [
                 AppTextField(
                   label: 'Nombre del proyecto',
                   required: true,
-                  hintText:
-                      'Ej. Matrimonio José y Carlos',
+                  hintText: 'Ej. Matrimonio José y Carlos',
                 ),
-                AppTextField(
-                  label: 'Ubicación',
-                  hintText: 'Ej. Lima, Perú',
-                ),
+                AppTextField(label: 'Ubicación', hintText: 'Ej. Lima, Perú'),
                 AppFormActions(
                   secondaryAction: AppButton(
                     label: 'Cancelar',
-                    variant:
-                        AppButtonVariant.secondary,
+                    variant: AppButtonVariant.secondary,
                     onPressed: null,
                   ),
                   primaryAction: AppButton(
@@ -209,8 +183,6 @@ class PagePatternsPageTwoSection extends StatelessWidget {
     );
   }
 }
-
-
 
 class PagePatternsPageThreeSection extends StatelessWidget {
   const PagePatternsPageThreeSection({super.key});
@@ -231,16 +203,14 @@ class PagePatternsPageThreeSection extends StatelessWidget {
           maxWidth: double.infinity,
           child: AppDashboardPagePattern(
             title: 'Resumen del proyecto',
-            description:
-                'Estado general del matrimonio.',
+            description: 'Estado general del matrimonio.',
             sections: [
               Row(
                 children: [
                   Expanded(
                     child: AppCard(
                       child: Column(
-                        crossAxisAlignment:
-                            CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text('Presupuesto'),
                           SizedBox(height: 8),
@@ -248,8 +218,7 @@ class PagePatternsPageThreeSection extends StatelessWidget {
                             'S/ 24,300',
                             style: TextStyle(
                               fontSize: 22,
-                              fontWeight:
-                                  FontWeight.w700,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
                         ],
@@ -260,8 +229,7 @@ class PagePatternsPageThreeSection extends StatelessWidget {
                   Expanded(
                     child: AppCard(
                       child: Column(
-                        crossAxisAlignment:
-                            CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text('Invitados'),
                           SizedBox(height: 8),
@@ -269,8 +237,7 @@ class PagePatternsPageThreeSection extends StatelessWidget {
                             '128',
                             style: TextStyle(
                               fontSize: 22,
-                              fontWeight:
-                                  FontWeight.w700,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
                         ],
@@ -303,15 +270,11 @@ class PagePatternsPageThreeSection extends StatelessWidget {
             sections: [
               AppPanel(
                 title: 'Notificaciones',
-                child: Text(
-                  'Preferencias de correo y notificaciones push.',
-                ),
+                child: Text('Preferencias de correo y notificaciones push.'),
               ),
               AppPanel(
                 title: 'Privacidad',
-                child: Text(
-                  'Configuración de acceso y permisos.',
-                ),
+                child: Text('Configuración de acceso y permisos.'),
               ),
             ],
           ),
@@ -320,8 +283,6 @@ class PagePatternsPageThreeSection extends StatelessWidget {
     );
   }
 }
-
-
 
 class PagePatternsPageFourSection extends StatefulWidget {
   const PagePatternsPageFourSection({super.key});
@@ -336,18 +297,9 @@ class _PagePatternsPageFourSectionState
   int _step = 0;
 
   static const _steps = [
-    AppWizardStep(
-      title: 'Información',
-      description: 'Datos generales.',
-    ),
-    AppWizardStep(
-      title: 'Fecha y ubicación',
-      description: 'Datos del evento.',
-    ),
-    AppWizardStep(
-      title: 'Confirmación',
-      description: 'Revisa la información.',
-    ),
+    AppWizardStep(title: 'Información', description: 'Datos generales.'),
+    AppWizardStep(title: 'Fecha y ubicación', description: 'Datos del evento.'),
+    AppWizardStep(title: 'Confirmación', description: 'Revisa la información.'),
   ];
 
   void _next() {
@@ -382,37 +334,32 @@ class _PagePatternsPageFourSectionState
           maxWidth: double.infinity,
           child: AppWizardPagePattern(
             title: 'Crear proyecto',
-            description:
-                'Completa los pasos para iniciar un nuevo matrimonio.',
+            description: 'Completa los pasos para iniciar un nuevo matrimonio.',
             steps: _steps,
             currentStep: _step,
             onPrevious: _previous,
             onNext: _next,
             content: switch (_step) {
               0 => const AppFormLayout(
-                  children: [
-                    AppTextField(
-                      label: 'Nombre del proyecto',
-                      required: true,
-                      hintText:
-                          'Ej. Matrimonio José y Carlos',
-                    ),
-                  ],
-                ),
-              1 => const AppFormLayout(
-                  children: [
-                    AppTextField(
-                      label: 'Ubicación',
-                      hintText: 'Ej. Lima, Perú',
-                    ),
-                  ],
-                ),
-              _ => const AppPanel(
-                  title: 'Confirmación',
-                  child: Text(
-                    'Revisa la información antes de crear el proyecto.',
+                children: [
+                  AppTextField(
+                    label: 'Nombre del proyecto',
+                    required: true,
+                    hintText: 'Ej. Matrimonio José y Carlos',
                   ),
+                ],
+              ),
+              1 => const AppFormLayout(
+                children: [
+                  AppTextField(label: 'Ubicación', hintText: 'Ej. Lima, Perú'),
+                ],
+              ),
+              _ => const AppPanel(
+                title: 'Confirmación',
+                child: Text(
+                  'Revisa la información antes de crear el proyecto.',
                 ),
+              ),
             },
           ),
         ),
@@ -420,9 +367,6 @@ class _PagePatternsPageFourSectionState
     );
   }
 }
-
-
-
 
 class _PatternsHeading extends StatelessWidget {
   const _PatternsHeading();
@@ -434,12 +378,9 @@ class _PatternsHeading extends StatelessWidget {
       children: [
         Text(
           'Patrones de página',
-          style: Theme.of(context)
-              .textTheme
-              .headlineSmall
-              ?.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
         ),
         const SizedBox(height: 6),
         Text(
@@ -467,26 +408,18 @@ class _PatternExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints: BoxConstraints(
-        maxWidth: maxWidth,
-      ),
+      constraints: BoxConstraints(maxWidth: maxWidth),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
-            style: Theme.of(context)
-                .textTheme
-                .titleSmall
-                ?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 4),
-          Text(
-            description,
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
+          Text(description, style: Theme.of(context).textTheme.bodySmall),
           const SizedBox(height: 12),
           child,
         ],

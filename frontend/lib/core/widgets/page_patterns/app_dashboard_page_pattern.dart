@@ -29,12 +29,9 @@ class AppDashboardPagePattern extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: Theme.of(context)
-                        .textTheme
-                        .headlineSmall
-                        ?.copyWith(
-                          fontWeight: FontWeight.w700,
-                        ),
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
 
                   if (description != null) ...[
@@ -49,23 +46,16 @@ class AppDashboardPagePattern extends StatelessWidget {
             ),
 
             if (actions.isNotEmpty)
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: actions,
-              ),
+              Wrap(spacing: 8, runSpacing: 8, children: actions),
           ],
         ),
 
         const SizedBox(height: 28),
 
-        for (int index = 0;
-            index < sections.length;
-            index++) ...[
+        for (int index = 0; index < sections.length; index++) ...[
           sections[index],
 
-          if (index < sections.length - 1)
-            const SizedBox(height: 24),
+          if (index < sections.length - 1) const SizedBox(height: 24),
         ],
       ],
     );

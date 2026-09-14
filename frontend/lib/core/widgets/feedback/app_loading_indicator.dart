@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum AppLoadingIndicatorSize {
-  small,
-  medium,
-  large,
-}
+enum AppLoadingIndicatorSize { small, medium, large }
 
 class AppLoadingIndicator extends StatelessWidget {
   const AppLoadingIndicator({
@@ -37,16 +33,9 @@ class AppLoadingIndicator extends StatelessWidget {
         SizedBox(
           width: _dimension,
           height: _dimension,
-          child: const CircularProgressIndicator(
-            strokeWidth: 2.5,
-          ),
+          child: const CircularProgressIndicator(strokeWidth: 2.5),
         ),
-        if (label != null) ...[
-          const SizedBox(width: 12),
-          Text(
-            label!,
-          ),
-        ],
+        if (label != null) ...[const SizedBox(width: 12), Text(label!)],
       ],
     );
   }

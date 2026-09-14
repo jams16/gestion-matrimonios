@@ -21,40 +21,29 @@ class AppFormFieldGroup extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        border: Border.all(
-          color: AppColors.border,
-        ),
-        borderRadius: BorderRadius.circular(
-          AppRadius.lg,
-        ),
+        border: Border.all(color: AppColors.border),
+        borderRadius: BorderRadius.circular(AppRadius.lg),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
-            style: Theme.of(context)
-                .textTheme
-                .titleMedium
-                ?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
           ),
 
           if (description != null) ...[
             const SizedBox(height: 4),
-            Text(
-              description!,
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
+            Text(description!, style: Theme.of(context).textTheme.bodySmall),
           ],
 
           const SizedBox(height: 20),
 
           for (int index = 0; index < children.length; index++) ...[
             children[index],
-            if (index < children.length - 1)
-              const SizedBox(height: 18),
+            if (index < children.length - 1) const SizedBox(height: 18),
           ],
         ],
       ),

@@ -28,11 +28,7 @@ class _AppPopoverState extends State<AppPopover> {
   Widget build(BuildContext context) {
     return MenuAnchor(
       controller: _controller,
-      builder: (
-        context,
-        controller,
-        child,
-      ) {
+      builder: (context, controller, child) {
         return InkWell(
           onTap: () {
             if (controller.isOpen) {
@@ -50,12 +46,8 @@ class _AppPopoverState extends State<AppPopover> {
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: AppColors.surface,
-            borderRadius: BorderRadius.circular(
-              AppRadius.lg,
-            ),
-            border: Border.all(
-              color: AppColors.border,
-            ),
+            borderRadius: BorderRadius.circular(AppRadius.lg),
+            border: Border.all(color: AppColors.border),
             boxShadow: AppShadows.medium,
           ),
           child: widget.content,

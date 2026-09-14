@@ -18,17 +18,12 @@ class AppPagination extends StatelessWidget {
 
   List<int> _visiblePages() {
     if (totalPages <= maxVisiblePages) {
-      return List.generate(
-        totalPages,
-        (index) => index + 1,
-      );
+      return List.generate(totalPages, (index) => index + 1);
     }
 
-    var start =
-        currentPage - (maxVisiblePages ~/ 2);
+    var start = currentPage - (maxVisiblePages ~/ 2);
 
-    var end =
-        start + maxVisiblePages - 1;
+    var end = start + maxVisiblePages - 1;
 
     if (start < 1) {
       start = 1;
@@ -40,10 +35,7 @@ class AppPagination extends StatelessWidget {
       start = totalPages - maxVisiblePages + 1;
     }
 
-    return List.generate(
-      end - start + 1,
-      (index) => start + index,
-    );
+    return List.generate(end - start + 1, (index) => start + index);
   }
 
   @override
@@ -63,14 +55,10 @@ class AppPagination extends StatelessWidget {
           tooltip: 'Página anterior',
           onPressed: currentPage > 1
               ? () {
-                  onPageChanged(
-                    currentPage - 1,
-                  );
+                  onPageChanged(currentPage - 1);
                 }
               : null,
-          icon: const Icon(
-            Icons.chevron_left,
-          ),
+          icon: const Icon(Icons.chevron_left),
         ),
 
         for (final page in pages)
@@ -86,14 +74,10 @@ class AppPagination extends StatelessWidget {
           tooltip: 'Página siguiente',
           onPressed: currentPage < totalPages
               ? () {
-                  onPageChanged(
-                    currentPage + 1,
-                  );
+                  onPageChanged(currentPage + 1);
                 }
               : null,
-          icon: const Icon(
-            Icons.chevron_right,
-          ),
+          icon: const Icon(Icons.chevron_right),
         ),
       ],
     );
@@ -117,18 +101,14 @@ class _PageButton extends StatelessWidget {
       return IconButton.filled(
         tooltip: 'Página $page',
         onPressed: onPressed,
-        icon: Text(
-          '$page',
-        ),
+        icon: Text('$page'),
       );
     }
 
     return IconButton.outlined(
       tooltip: 'Página $page',
       onPressed: onPressed,
-      icon: Text(
-        '$page',
-      ),
+      icon: Text('$page'),
     );
   }
 }

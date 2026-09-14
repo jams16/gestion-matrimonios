@@ -21,9 +21,7 @@ class PageStatesPageOneSection extends StatelessWidget {
           description:
               'Se muestra mientras se obtiene la información necesaria para construir la página.',
           child: ConstrainedBox(
-            constraints: BoxConstraints(
-              minHeight: 190,
-            ),
+            constraints: BoxConstraints(minHeight: 190),
             child: AppPageLoading(),
           ),
         ),
@@ -35,14 +33,11 @@ class PageStatesPageOneSection extends StatelessWidget {
           description:
               'Se utiliza cuando la operación fue correcta, pero no existen datos para mostrar.',
           child: ConstrainedBox(
-            constraints: const BoxConstraints(
-              minHeight: 260,
-            ),
+            constraints: const BoxConstraints(minHeight: 260),
             child: AppPageState(
               type: AppPageStateType.empty,
               title: 'No hay actividades',
-              message:
-                  'Aún no se han registrado actividades en el cronograma.',
+              message: 'Aún no se han registrado actividades en el cronograma.',
               primaryAction: AppButton(
                 label: 'Crear actividad',
                 icon: Icons.add,
@@ -55,8 +50,6 @@ class PageStatesPageOneSection extends StatelessWidget {
     );
   }
 }
-
-
 
 class PageStatesPageTwoSection extends StatelessWidget {
   const PageStatesPageTwoSection({super.key});
@@ -75,14 +68,11 @@ class PageStatesPageTwoSection extends StatelessWidget {
           description:
               'Indica que ocurrió un problema al cargar o procesar la información.',
           child: ConstrainedBox(
-            constraints: const BoxConstraints(
-              minHeight: 260,
-            ),
+            constraints: const BoxConstraints(minHeight: 260),
             child: AppPageState(
               type: AppPageStateType.error,
               title: 'No pudimos cargar la información',
-              message:
-                  'Ocurrió un problema inesperado. Intenta nuevamente.',
+              message: 'Ocurrió un problema inesperado. Intenta nuevamente.',
               primaryAction: AppButton(
                 label: 'Reintentar',
                 icon: Icons.refresh,
@@ -99,14 +89,11 @@ class PageStatesPageTwoSection extends StatelessWidget {
           description:
               'Se muestra cuando el usuario puede acceder a la aplicación, pero no a este recurso.',
           child: ConstrainedBox(
-            constraints: const BoxConstraints(
-              minHeight: 260,
-            ),
+            constraints: const BoxConstraints(minHeight: 260),
             child: AppPageState(
               type: AppPageStateType.noPermission,
               title: 'No tienes permisos',
-              message:
-                  'Tu rol actual no tiene acceso a esta información.',
+              message: 'Tu rol actual no tiene acceso a esta información.',
               secondaryAction: AppButton(
                 label: 'Volver',
                 variant: AppButtonVariant.secondary,
@@ -119,9 +106,6 @@ class PageStatesPageTwoSection extends StatelessWidget {
     );
   }
 }
-
-
-
 
 class PageStatesPageThreeSection extends StatelessWidget {
   const PageStatesPageThreeSection({super.key});
@@ -140,14 +124,11 @@ class PageStatesPageThreeSection extends StatelessWidget {
           description:
               'Se utiliza cuando la aplicación no puede comunicarse con el servidor.',
           child: ConstrainedBox(
-            constraints: const BoxConstraints(
-              minHeight: 260,
-            ),
+            constraints: const BoxConstraints(minHeight: 260),
             child: AppPageState(
               type: AppPageStateType.offline,
               title: 'Sin conexión',
-              message:
-                  'Verifica tu conexión a internet e intenta nuevamente.',
+              message: 'Verifica tu conexión a internet e intenta nuevamente.',
               primaryAction: AppButton(
                 label: 'Reintentar',
                 icon: Icons.refresh,
@@ -164,18 +145,12 @@ class PageStatesPageThreeSection extends StatelessWidget {
           description:
               'Confirma la finalización satisfactoria de un proceso de página completa.',
           child: ConstrainedBox(
-            constraints: const BoxConstraints(
-              minHeight: 260,
-            ),
+            constraints: const BoxConstraints(minHeight: 260),
             child: AppPageState(
               type: AppPageStateType.success,
               title: 'Proyecto creado',
-              message:
-                  'El proyecto de matrimonio fue creado correctamente.',
-              primaryAction: AppButton(
-                label: 'Ver proyecto',
-                onPressed: () {},
-              ),
+              message: 'El proyecto de matrimonio fue creado correctamente.',
+              primaryAction: AppButton(label: 'Ver proyecto', onPressed: () {}),
             ),
           ),
         ),
@@ -183,9 +158,6 @@ class PageStatesPageThreeSection extends StatelessWidget {
     );
   }
 }
-
-
-
 
 class _PageStatesHeading extends StatelessWidget {
   const _PageStatesHeading();
@@ -197,12 +169,9 @@ class _PageStatesHeading extends StatelessWidget {
       children: [
         Text(
           'Estados de página',
-          style: Theme.of(context)
-              .textTheme
-              .headlineSmall
-              ?.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
         ),
 
         const SizedBox(height: 6),
@@ -230,37 +199,27 @@ class _PageStateExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints: const BoxConstraints(
-        maxWidth: 620,
-      ),
+      constraints: const BoxConstraints(maxWidth: 620),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
-            style: Theme.of(context)
-                .textTheme
-                .titleSmall
-                ?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600),
           ),
 
           const SizedBox(height: 4),
 
-          Text(
-            description,
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
+          Text(description, style: Theme.of(context).textTheme.bodySmall),
 
           const SizedBox(height: 12),
 
           DecoratedBox(
             decoration: BoxDecoration(
               border: Border.all(
-                color: Theme.of(context)
-                    .colorScheme
-                    .outlineVariant,
+                color: Theme.of(context).colorScheme.outlineVariant,
               ),
               borderRadius: BorderRadius.circular(12),
             ),

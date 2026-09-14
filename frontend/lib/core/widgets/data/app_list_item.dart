@@ -21,26 +21,16 @@ class AppListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      contentPadding: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 4,
-      ),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       leading: leading,
       trailing: trailing,
       title: Text(
         title,
-        style: Theme.of(context)
-            .textTheme
-            .bodyLarge
-            ?.copyWith(
-              fontWeight: FontWeight.w500,
-            ),
+        style: Theme.of(
+          context,
+        ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
       ),
-      subtitle: subtitle == null
-          ? null
-          : Text(
-              subtitle!,
-            ),
+      subtitle: subtitle == null ? null : Text(subtitle!),
       onTap: onTap,
     );
   }

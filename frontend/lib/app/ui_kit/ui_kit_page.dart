@@ -55,9 +55,7 @@ class UiKitPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UiKitPageHeader(
-                      subtitle: 'Fundamentos visuales',
-                    ),
+                    UiKitPageHeader(subtitle: 'Fundamentos visuales'),
                     SizedBox(height: 24),
                     FoundationsPageTwoSection(),
                   ],
@@ -69,9 +67,7 @@ class UiKitPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UiKitPageHeader(
-                      subtitle: 'Fundamentos visuales',
-                    ),
+                    UiKitPageHeader(subtitle: 'Fundamentos visuales'),
                     SizedBox(height: 24),
                     FoundationsPageThreeSection(),
                   ],
@@ -83,9 +79,7 @@ class UiKitPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UiKitPageHeader(
-                      subtitle: 'Responsive',
-                    ),
+                    UiKitPageHeader(subtitle: 'Responsive'),
                     SizedBox(height: 24),
                     ResponsiveOnePageSection(),
                   ],
@@ -96,9 +90,7 @@ class UiKitPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UiKitPageHeader(
-                      subtitle: 'Responsive',
-                    ),
+                    UiKitPageHeader(subtitle: 'Responsive'),
                     SizedBox(height: 24),
                     ResponsiveTwoPageSection(),
                   ],
@@ -109,23 +101,18 @@ class UiKitPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UiKitPageHeader(
-                      subtitle: 'Responsive',
-                    ),
+                    UiKitPageHeader(subtitle: 'Responsive'),
                     SizedBox(height: 24),
                     ResponsiveThreePageSection(),
                   ],
                 ),
               ),
 
-
               A4Sheet(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UiKitPageHeader(
-                      subtitle: 'Estados globales',
-                    ),
+                    UiKitPageHeader(subtitle: 'Estados globales'),
                     SizedBox(height: 24),
                     GlobalStatesSection(),
                   ],
@@ -138,9 +125,7 @@ class UiKitPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UiKitPageHeader(
-                      subtitle: 'Inputs',
-                    ),
+                    UiKitPageHeader(subtitle: 'Inputs'),
                     SizedBox(height: 24),
                     InputsPageOneSection(),
                   ],
@@ -152,9 +137,7 @@ class UiKitPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UiKitPageHeader(
-                      subtitle: 'Inputs',
-                    ),
+                    UiKitPageHeader(subtitle: 'Inputs'),
                     SizedBox(height: 24),
                     InputsPageTwoSection(),
                   ],
@@ -166,9 +149,7 @@ class UiKitPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UiKitPageHeader(
-                      subtitle: 'Inputs',
-                    ),
+                    UiKitPageHeader(subtitle: 'Inputs'),
                     SizedBox(height: 24),
                     InputsPageThreeSection(),
                   ],
@@ -179,9 +160,7 @@ class UiKitPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UiKitPageHeader(
-                      subtitle: 'Controles de selección',
-                    ),
+                    UiKitPageHeader(subtitle: 'Controles de selección'),
                     SizedBox(height: 24),
                     SelectionControlsSection(),
                   ],
@@ -193,9 +172,7 @@ class UiKitPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UiKitPageHeader(
-                      subtitle: 'Botones',
-                    ),
+                    UiKitPageHeader(subtitle: 'Botones'),
                     SizedBox(height: 24),
                     ButtonsPageOneSection(),
                   ],
@@ -207,9 +184,7 @@ class UiKitPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UiKitPageHeader(
-                      subtitle: 'Botones',
-                    ),
+                    UiKitPageHeader(subtitle: 'Botones'),
                     SizedBox(height: 24),
                     ButtonsPageTwoSection(),
                   ],
@@ -221,9 +196,7 @@ class UiKitPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UiKitPageHeader(
-                      subtitle: 'Feedback',
-                    ),
+                    UiKitPageHeader(subtitle: 'Feedback'),
                     SizedBox(height: 24),
                     FeedbackPageOneSection(),
                   ],
@@ -235,24 +208,19 @@ class UiKitPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UiKitPageHeader(
-                      subtitle: 'Feedback',
-                    ),
+                    UiKitPageHeader(subtitle: 'Feedback'),
                     SizedBox(height: 24),
                     FeedbackPageTwoSection(),
                   ],
                 ),
               ),
 
-
               // CONTENEDORES — PÁGINA 1
               A4Sheet(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UiKitPageHeader(
-                      subtitle: 'Contenedores',
-                    ),
+                    UiKitPageHeader(subtitle: 'Contenedores'),
                     SizedBox(height: 24),
                     ContainersPageOneSection(),
                   ],
@@ -264,24 +232,19 @@ class UiKitPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UiKitPageHeader(
-                      subtitle: 'Contenedores',
-                    ),
+                    UiKitPageHeader(subtitle: 'Contenedores'),
                     SizedBox(height: 24),
                     ContainersPageTwoSection(),
                   ],
                 ),
               ),
 
-
               // NAVEGACIÓN — PÁGINA 1
               A4Sheet(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UiKitPageHeader(
-                      subtitle: 'Navegación',
-                    ),
+                    UiKitPageHeader(subtitle: 'Navegación'),
                     SizedBox(height: 24),
                     NavigationPageOneSection(),
                   ],
@@ -293,9 +256,7 @@ class UiKitPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UiKitPageHeader(
-                      subtitle: 'Navegación',
-                    ),
+                    UiKitPageHeader(subtitle: 'Navegación'),
                     SizedBox(height: 24),
                     NavigationPageTwoSection(),
                   ],
@@ -307,24 +268,19 @@ class UiKitPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UiKitPageHeader(
-                      subtitle: 'Navegación',
-                    ),
+                    UiKitPageHeader(subtitle: 'Navegación'),
                     SizedBox(height: 24),
                     NavigationPageThreeSection(),
                   ],
                 ),
               ),
 
-
               // OVERLAYS — PÁGINA 1
               A4Sheet(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UiKitPageHeader(
-                      subtitle: 'Overlays',
-                    ),
+                    UiKitPageHeader(subtitle: 'Overlays'),
                     SizedBox(height: 24),
                     OverlaysPageOneSection(),
                   ],
@@ -336,24 +292,19 @@ class UiKitPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UiKitPageHeader(
-                      subtitle: 'Overlays',
-                    ),
+                    UiKitPageHeader(subtitle: 'Overlays'),
                     SizedBox(height: 24),
                     OverlaysPageTwoSection(),
                   ],
                 ),
               ),
 
-
               // DATOS — PÁGINA 1
               A4Sheet(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UiKitPageHeader(
-                      subtitle: 'Datos',
-                    ),
+                    UiKitPageHeader(subtitle: 'Datos'),
                     SizedBox(height: 24),
                     DataPageOneSection(),
                   ],
@@ -365,9 +316,7 @@ class UiKitPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UiKitPageHeader(
-                      subtitle: 'Datos',
-                    ),
+                    UiKitPageHeader(subtitle: 'Datos'),
                     SizedBox(height: 24),
                     DataPageTwoSection(),
                   ],
@@ -379,40 +328,31 @@ class UiKitPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UiKitPageHeader(
-                      subtitle: 'Datos',
-                    ),
+                    UiKitPageHeader(subtitle: 'Datos'),
                     SizedBox(height: 24),
                     DataPageThreeSection(),
                   ],
                 ),
               ),
 
-
               // INDICADORES Y ETIQUETAS
               A4Sheet(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UiKitPageHeader(
-                      subtitle: 'Indicadores y etiquetas',
-                    ),
+                    UiKitPageHeader(subtitle: 'Indicadores y etiquetas'),
                     SizedBox(height: 24),
                     IndicatorsSection(),
                   ],
                 ),
               ),
 
-
-
               // FORMULARIOS — PÁGINA 1
               A4Sheet(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UiKitPageHeader(
-                      subtitle: 'Formularios completos',
-                    ),
+                    UiKitPageHeader(subtitle: 'Formularios completos'),
                     SizedBox(height: 24),
                     FormsPageOneSection(),
                   ],
@@ -424,9 +364,7 @@ class UiKitPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UiKitPageHeader(
-                      subtitle: 'Formularios completos',
-                    ),
+                    UiKitPageHeader(subtitle: 'Formularios completos'),
                     SizedBox(height: 24),
                     FormsPageTwoSection(),
                   ],
@@ -438,24 +376,19 @@ class UiKitPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UiKitPageHeader(
-                      subtitle: 'Formularios completos',
-                    ),
+                    UiKitPageHeader(subtitle: 'Formularios completos'),
                     SizedBox(height: 24),
                     FormsPageThreeSection(),
                   ],
                 ),
               ),
 
-
               // PATRONES DE PÁGINA — PÁGINA 1
               A4Sheet(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UiKitPageHeader(
-                      subtitle: 'Patrones de página',
-                    ),
+                    UiKitPageHeader(subtitle: 'Patrones de página'),
                     SizedBox(height: 24),
                     PagePatternsPageOneSection(),
                   ],
@@ -467,9 +400,7 @@ class UiKitPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UiKitPageHeader(
-                      subtitle: 'Patrones de página',
-                    ),
+                    UiKitPageHeader(subtitle: 'Patrones de página'),
                     SizedBox(height: 24),
                     PagePatternsPageTwoSection(),
                   ],
@@ -481,9 +412,7 @@ class UiKitPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UiKitPageHeader(
-                      subtitle: 'Patrones de página',
-                    ),
+                    UiKitPageHeader(subtitle: 'Patrones de página'),
                     SizedBox(height: 24),
                     PagePatternsPageThreeSection(),
                   ],
@@ -495,25 +424,19 @@ class UiKitPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UiKitPageHeader(
-                      subtitle: 'Patrones de página',
-                    ),
+                    UiKitPageHeader(subtitle: 'Patrones de página'),
                     SizedBox(height: 24),
                     PagePatternsPageFourSection(),
                   ],
                 ),
               ),
 
-
-
               // ESTADOS DE PÁGINA — PÁGINA 1
               A4Sheet(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UiKitPageHeader(
-                      subtitle: 'Estados de página',
-                    ),
+                    UiKitPageHeader(subtitle: 'Estados de página'),
                     SizedBox(height: 24),
                     PageStatesPageOneSection(),
                   ],
@@ -525,9 +448,7 @@ class UiKitPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UiKitPageHeader(
-                      subtitle: 'Estados de página',
-                    ),
+                    UiKitPageHeader(subtitle: 'Estados de página'),
                     SizedBox(height: 24),
                     PageStatesPageTwoSection(),
                   ],
@@ -539,25 +460,19 @@ class UiKitPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UiKitPageHeader(
-                      subtitle: 'Estados de página',
-                    ),
+                    UiKitPageHeader(subtitle: 'Estados de página'),
                     SizedBox(height: 24),
                     PageStatesPageThreeSection(),
                   ],
                 ),
               ),
 
-
               // ACCESIBILIDAD — PÁGINA 1
               A4Sheet(
                 child: Column(
-                  crossAxisAlignment:
-                      CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UiKitPageHeader(
-                      subtitle: 'Accesibilidad',
-                    ),
+                    UiKitPageHeader(subtitle: 'Accesibilidad'),
                     SizedBox(height: 24),
                     AccessibilityPageOneSection(),
                   ],
@@ -567,27 +482,21 @@ class UiKitPage extends StatelessWidget {
               // ACCESIBILIDAD — PÁGINA 2
               A4Sheet(
                 child: Column(
-                  crossAxisAlignment:
-                      CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UiKitPageHeader(
-                      subtitle: 'Accesibilidad',
-                    ),
+                    UiKitPageHeader(subtitle: 'Accesibilidad'),
                     SizedBox(height: 24),
                     AccessibilityPageTwoSection(),
                   ],
                 ),
               ),
 
-
               // REGLAS DE USO — PÁGINA 1
               A4Sheet(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UiKitPageHeader(
-                      subtitle: 'Reglas de uso',
-                    ),
+                    UiKitPageHeader(subtitle: 'Reglas de uso'),
                     SizedBox(height: 24),
                     UsageRulesPageOneSection(),
                   ],
@@ -599,9 +508,7 @@ class UiKitPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UiKitPageHeader(
-                      subtitle: 'Reglas de uso',
-                    ),
+                    UiKitPageHeader(subtitle: 'Reglas de uso'),
                     SizedBox(height: 24),
                     UsageRulesPageTwoSection(),
                   ],
@@ -613,39 +520,31 @@ class UiKitPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UiKitPageHeader(
-                      subtitle: 'Reglas de uso',
-                    ),
+                    UiKitPageHeader(subtitle: 'Reglas de uso'),
                     SizedBox(height: 24),
                     UsageRulesPageThreeSection(),
                   ],
                 ),
               ),
 
-
-              
               // EJEMPLOS RESPONSIVE — PÁGINA 1
               A4Sheet(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UiKitPageHeader(
-                      subtitle: 'Ejemplos responsive reales',
-                    ),
+                    UiKitPageHeader(subtitle: 'Ejemplos responsive reales'),
                     SizedBox(height: 24),
                     ResponsiveExamplesPageOneSection(),
                   ],
                 ),
               ),
-              
+
               // EJEMPLOS RESPONSIVE — PÁGINA 2
               A4Sheet(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UiKitPageHeader(
-                      subtitle: 'Ejemplos responsive reales',
-                    ),
+                    UiKitPageHeader(subtitle: 'Ejemplos responsive reales'),
                     SizedBox(height: 24),
                     ResponsiveExamplesPageTwoSection(),
                   ],
@@ -657,9 +556,7 @@ class UiKitPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UiKitPageHeader(
-                      subtitle: 'Ejemplos responsive reales',
-                    ),
+                    UiKitPageHeader(subtitle: 'Ejemplos responsive reales'),
                     SizedBox(height: 24),
                     ResponsiveExamplesPageThreeSection(),
                   ],
@@ -670,16 +567,12 @@ class UiKitPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UiKitPageHeader(
-                      subtitle: 'Ejemplos responsive reales',
-                    ),
+                    UiKitPageHeader(subtitle: 'Ejemplos responsive reales'),
                     SizedBox(height: 24),
                     ResponsiveExamplesPageFourSection(),
                   ],
                 ),
               ),
-              
-
             ],
           ),
         ),

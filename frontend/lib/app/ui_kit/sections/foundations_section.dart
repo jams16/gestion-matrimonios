@@ -10,10 +10,7 @@ import '../../theme/app_spacing.dart';
 import '../../theme/app_typography.dart';
 
 class _SectionHeading extends StatelessWidget {
-  const _SectionHeading({
-    required this.title,
-    required this.description,
-  });
+  const _SectionHeading({required this.title, required this.description});
 
   final String title;
   final String description;
@@ -25,15 +22,12 @@ class _SectionHeading extends StatelessWidget {
       children: [
         Text(
           title,
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
         ),
         const SizedBox(height: 6),
-        Text(
-          description,
-          style: Theme.of(context).textTheme.bodyMedium,
-        ),
+        Text(description, style: Theme.of(context).textTheme.bodyMedium),
       ],
     );
   }
@@ -49,8 +43,7 @@ class FoundationsPageOneSection extends StatelessWidget {
       children: [
         _SectionHeading(
           title: 'Fundamentos visuales',
-          description:
-              'Reglas visuales base utilizadas en toda la aplicación.',
+          description: 'Reglas visuales base utilizadas en toda la aplicación.',
         ),
 
         SizedBox(height: 28),
@@ -145,50 +138,17 @@ class _ColorsSection extends StatelessWidget {
           spacing: 16,
           runSpacing: 16,
           children: const [
-            _ColorToken(
-              name: 'Primary',
-              color: AppColors.primary,
-            ),
-            _ColorToken(
-              name: 'Secondary',
-              color: AppColors.secondary,
-            ),
-            _ColorToken(
-              name: 'Surface',
-              color: AppColors.surface,
-            ),
-            _ColorToken(
-              name: 'Text primary',
-              color: AppColors.textPrimary,
-            ),
-            _ColorToken(
-              name: 'Text secondary',
-              color: AppColors.textSecondary,
-            ),
-            _ColorToken(
-              name: 'Border',
-              color: AppColors.border,
-            ),
-            _ColorToken(
-              name: 'Success',
-              color: AppColors.success,
-            ),
-            _ColorToken(
-              name: 'Warning',
-              color: AppColors.warning,
-            ),
-            _ColorToken(
-              name: 'Error',
-              color: AppColors.error,
-            ),
-            _ColorToken(
-              name: 'Info',
-              color: AppColors.info,
-            ),
-            _ColorToken(
-              name: 'Disabled',
-              color: AppColors.disabled,
-            ),
+            _ColorToken(name: 'Primary', color: AppColors.primary),
+            _ColorToken(name: 'Secondary', color: AppColors.secondary),
+            _ColorToken(name: 'Surface', color: AppColors.surface),
+            _ColorToken(name: 'Text primary', color: AppColors.textPrimary),
+            _ColorToken(name: 'Text secondary', color: AppColors.textSecondary),
+            _ColorToken(name: 'Border', color: AppColors.border),
+            _ColorToken(name: 'Success', color: AppColors.success),
+            _ColorToken(name: 'Warning', color: AppColors.warning),
+            _ColorToken(name: 'Error', color: AppColors.error),
+            _ColorToken(name: 'Info', color: AppColors.info),
+            _ColorToken(name: 'Disabled', color: AppColors.disabled),
           ],
         ),
       ],
@@ -215,10 +175,7 @@ class _TypographySection extends StatelessWidget {
 
         SizedBox(height: 16),
 
-        Text(
-          'Heading — Gestión de proyectos',
-          style: AppTypography.heading,
-        ),
+        Text('Heading — Gestión de proyectos', style: AppTypography.heading),
 
         SizedBox(height: 16),
 
@@ -236,17 +193,11 @@ class _TypographySection extends StatelessWidget {
 
         SizedBox(height: 16),
 
-        Text(
-          'Label — Correo electrónico',
-          style: AppTypography.label,
-        ),
+        Text('Label — Correo electrónico', style: AppTypography.label),
 
         SizedBox(height: 16),
 
-        Text(
-          'Caption — Máximo 100 caracteres.',
-          style: AppTypography.caption,
-        ),
+        Text('Caption — Máximo 100 caracteres.', style: AppTypography.caption),
       ],
     );
   }
@@ -315,31 +266,19 @@ class _BordersSection extends StatelessWidget {
 
         SizedBox(height: 16),
 
-        _BorderToken(
-          name: 'Normal',
-          border: AppBorders.normal,
-        ),
+        _BorderToken(name: 'Normal', border: AppBorders.normal),
 
         SizedBox(height: 12),
 
-        _BorderToken(
-          name: 'Focus',
-          border: AppBorders.focused,
-        ),
+        _BorderToken(name: 'Focus', border: AppBorders.focused),
 
         SizedBox(height: 12),
 
-        _BorderToken(
-          name: 'Error',
-          border: AppBorders.error,
-        ),
+        _BorderToken(name: 'Error', border: AppBorders.error),
 
         SizedBox(height: 12),
 
-        _BorderToken(
-          name: 'Disabled',
-          border: AppBorders.disabled,
-        ),
+        _BorderToken(name: 'Disabled', border: AppBorders.disabled),
       ],
     );
   }
@@ -361,22 +300,10 @@ class _ShadowsSection extends StatelessWidget {
           spacing: 16,
           runSpacing: 16,
           children: [
-            _ShadowToken(
-              name: 'None',
-              shadow: AppShadows.none,
-            ),
-            _ShadowToken(
-              name: 'Low',
-              shadow: AppShadows.low,
-            ),
-            _ShadowToken(
-              name: 'Medium',
-              shadow: AppShadows.medium,
-            ),
-            _ShadowToken(
-              name: 'High',
-              shadow: AppShadows.high,
-            ),
+            _ShadowToken(name: 'None', shadow: AppShadows.none),
+            _ShadowToken(name: 'Low', shadow: AppShadows.low),
+            _ShadowToken(name: 'Medium', shadow: AppShadows.medium),
+            _ShadowToken(name: 'High', shadow: AppShadows.high),
           ],
         ),
       ],
@@ -398,40 +325,25 @@ class _IconsSection extends StatelessWidget {
 
         Row(
           children: [
-            Icon(
-              Icons.mail_outline,
-              size: AppIcons.small,
-            ),
+            Icon(Icons.mail_outline, size: AppIcons.small),
 
             SizedBox(width: 24),
 
-            Icon(
-              Icons.mail_outline,
-              size: AppIcons.medium,
-            ),
+            Icon(Icons.mail_outline, size: AppIcons.medium),
 
             SizedBox(width: 24),
 
-            Icon(
-              Icons.mail_outline,
-              size: AppIcons.large,
-            ),
+            Icon(Icons.mail_outline, size: AppIcons.large),
 
             SizedBox(width: 24),
 
-            Icon(
-              Icons.mail_outline,
-              size: AppIcons.extraLarge,
-            ),
+            Icon(Icons.mail_outline, size: AppIcons.extraLarge),
           ],
         ),
 
         SizedBox(height: 12),
 
-        Text(
-          '16 / 20 / 24 / 32 px',
-          style: AppTypography.caption,
-        ),
+        Text('16 / 20 / 24 / 32 px', style: AppTypography.caption),
       ],
     );
   }
@@ -445,16 +357,11 @@ class _InteractionSection extends StatelessWidget {
     return const Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _SectionTitle(
-          'Tamaños mínimos de interacción',
-        ),
+        _SectionTitle('Tamaños mínimos de interacción'),
 
         SizedBox(height: 16),
 
-        _SizeToken(
-          label: 'Mínimo',
-          size: AppSizes.minInteraction,
-        ),
+        _SizeToken(label: 'Mínimo', size: AppSizes.minInteraction),
 
         SizedBox(height: 16),
 
@@ -465,10 +372,7 @@ class _InteractionSection extends StatelessWidget {
 
         SizedBox(height: 16),
 
-        Text(
-          'Inputs: 48 px de altura recomendada.',
-          style: AppTypography.body,
-        ),
+        Text('Inputs: 48 px de altura recomendada.', style: AppTypography.body),
       ],
     );
   }
@@ -483,18 +387,15 @@ class _SectionTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.w700,
-          ),
+      style: Theme.of(
+        context,
+      ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
     );
   }
 }
 
 class _ColorToken extends StatelessWidget {
-  const _ColorToken({
-    required this.name,
-    required this.color,
-  });
+  const _ColorToken({required this.name, required this.color});
 
   final String name;
   final Color color;
@@ -510,28 +411,18 @@ class _ColorToken extends StatelessWidget {
             height: 52,
             decoration: BoxDecoration(
               color: color,
-              borderRadius: BorderRadius.circular(
-                AppRadius.md,
-              ),
-              border: Border.all(
-                color: AppColors.border,
-              ),
+              borderRadius: BorderRadius.circular(AppRadius.md),
+              border: Border.all(color: AppColors.border),
             ),
           ),
 
           const SizedBox(height: 8),
 
-          Text(
-            name,
-            style: AppTypography.label,
-          ),
+          Text(name, style: AppTypography.label),
 
           const SizedBox(height: 2),
 
-          Text(
-            _hex(color),
-            style: AppTypography.caption,
-          ),
+          Text(_hex(color), style: AppTypography.caption),
         ],
       ),
     );
@@ -543,10 +434,7 @@ class _ColorToken extends StatelessWidget {
 }
 
 class _SpacingToken extends StatelessWidget {
-  const _SpacingToken(
-    this.name,
-    this.value,
-  );
+  const _SpacingToken(this.name, this.value);
 
   final String name;
   final double value;
@@ -554,31 +442,16 @@ class _SpacingToken extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(
-        bottom: 10,
-      ),
+      padding: const EdgeInsets.only(bottom: 10),
       child: Row(
         children: [
-          SizedBox(
-            width: 48,
-            child: Text(
-              name,
-              style: AppTypography.label,
-            ),
-          ),
+          SizedBox(width: 48, child: Text(name, style: AppTypography.label)),
 
-          Container(
-            width: value,
-            height: 12,
-            color: AppColors.primary,
-          ),
+          Container(width: value, height: 12, color: AppColors.primary),
 
           const SizedBox(width: 12),
 
-          Text(
-            '${value.toInt()} px',
-            style: AppTypography.caption,
-          ),
+          Text('${value.toInt()} px', style: AppTypography.caption),
         ],
       ),
     );
@@ -586,10 +459,7 @@ class _SpacingToken extends StatelessWidget {
 }
 
 class _RadiusToken extends StatelessWidget {
-  const _RadiusToken(
-    this.name,
-    this.value,
-  );
+  const _RadiusToken(this.name, this.value);
 
   final String name;
   final double value;
@@ -604,21 +474,14 @@ class _RadiusToken extends StatelessWidget {
             width: 64,
             height: 48,
             decoration: BoxDecoration(
-              border: Border.all(
-                color: AppColors.primary,
-              ),
-              borderRadius: BorderRadius.circular(
-                value,
-              ),
+              border: Border.all(color: AppColors.primary),
+              borderRadius: BorderRadius.circular(value),
             ),
           ),
 
           const SizedBox(height: 8),
 
-          Text(
-            '$name · ${value.toInt()}',
-            style: AppTypography.caption,
-          ),
+          Text('$name · ${value.toInt()}', style: AppTypography.caption),
         ],
       ),
     );
@@ -626,10 +489,7 @@ class _RadiusToken extends StatelessWidget {
 }
 
 class _BorderToken extends StatelessWidget {
-  const _BorderToken({
-    required this.name,
-    required this.border,
-  });
+  const _BorderToken({required this.name, required this.border});
 
   final String name;
   final BorderSide border;
@@ -638,24 +498,14 @@ class _BorderToken extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        SizedBox(
-          width: 80,
-          child: Text(
-            name,
-            style: AppTypography.label,
-          ),
-        ),
+        SizedBox(width: 80, child: Text(name, style: AppTypography.label)),
 
         Container(
           width: 180,
           height: 44,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(
-              AppRadius.md,
-            ),
-            border: Border.fromBorderSide(
-              border,
-            ),
+            borderRadius: BorderRadius.circular(AppRadius.md),
+            border: Border.fromBorderSide(border),
           ),
         ),
       ],
@@ -664,10 +514,7 @@ class _BorderToken extends StatelessWidget {
 }
 
 class _ShadowToken extends StatelessWidget {
-  const _ShadowToken({
-    required this.name,
-    required this.shadow,
-  });
+  const _ShadowToken({required this.name, required this.shadow});
 
   final String name;
   final List<BoxShadow> shadow;
@@ -683,22 +530,15 @@ class _ShadowToken extends StatelessWidget {
             height: 64,
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(
-                AppRadius.lg,
-              ),
+              borderRadius: BorderRadius.circular(AppRadius.lg),
               boxShadow: shadow,
-              border: Border.all(
-                color: AppColors.border,
-              ),
+              border: Border.all(color: AppColors.border),
             ),
           ),
 
           const SizedBox(height: 10),
 
-          Text(
-            name,
-            style: AppTypography.caption,
-          ),
+          Text(name, style: AppTypography.caption),
         ],
       ),
     );
@@ -706,10 +546,7 @@ class _ShadowToken extends StatelessWidget {
 }
 
 class _SizeToken extends StatelessWidget {
-  const _SizeToken({
-    required this.label,
-    required this.size,
-  });
+  const _SizeToken({required this.label, required this.size});
 
   final String label;
   final double size;
@@ -723,17 +560,10 @@ class _SizeToken extends StatelessWidget {
           height: size,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            border: Border.all(
-              color: AppColors.primary,
-            ),
-            borderRadius: BorderRadius.circular(
-              AppRadius.md,
-            ),
+            border: Border.all(color: AppColors.primary),
+            borderRadius: BorderRadius.circular(AppRadius.md),
           ),
-          child: Text(
-            '${size.toInt()}',
-            style: AppTypography.caption,
-          ),
+          child: Text('${size.toInt()}', style: AppTypography.caption),
         ),
 
         const SizedBox(width: 16),

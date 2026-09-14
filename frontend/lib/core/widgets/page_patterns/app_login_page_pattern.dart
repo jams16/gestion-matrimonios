@@ -26,29 +26,21 @@ class AppLoginPagePattern extends StatelessWidget {
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: ConstrainedBox(
-          constraints: const BoxConstraints(
-            maxWidth: AppLayout.maxFormWidth,
-          ),
+          constraints: const BoxConstraints(maxWidth: AppLayout.maxFormWidth),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               if (logo != null) ...[
-                Align(
-                  alignment: Alignment.center,
-                  child: logo,
-                ),
+                Align(alignment: Alignment.center, child: logo),
                 const SizedBox(height: 24),
               ],
 
               Text(
                 title,
                 textAlign: TextAlign.center,
-                style: Theme.of(context)
-                    .textTheme
-                    .headlineSmall
-                    ?.copyWith(
-                      fontWeight: FontWeight.w700,
-                    ),
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.w700,
+                ),
               ),
 
               if (description != null) ...[
@@ -64,10 +56,7 @@ class AppLoginPagePattern extends StatelessWidget {
 
               form,
 
-              if (footer != null) ...[
-                const SizedBox(height: 24),
-                footer!,
-              ],
+              if (footer != null) ...[const SizedBox(height: 24), footer!],
             ],
           ),
         ),

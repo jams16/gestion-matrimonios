@@ -16,14 +16,9 @@ class AppProgressBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final normalizedValue = value.clamp(
-      0.0,
-      1.0,
-    );
+    final normalizedValue = value.clamp(0.0, 1.0);
 
-    final percentage = (
-      normalizedValue * 100
-    ).round();
+    final percentage = (normalizedValue * 100).round();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,8 +41,7 @@ class AppProgressBar extends StatelessWidget {
             ],
           ),
 
-        if (label != null || showPercentage)
-          const SizedBox(height: 8),
+        if (label != null || showPercentage) const SizedBox(height: 8),
 
         Semantics(
           label: label ?? 'Progreso',

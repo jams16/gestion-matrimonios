@@ -37,15 +37,9 @@ class AppNavigationRail extends StatelessWidget {
       destinations: items
           .map(
             (item) => NavigationRailDestination(
-              icon: Icon(
-                item.icon,
-              ),
-              selectedIcon: Icon(
-                item.selectedIcon ?? item.icon,
-              ),
-              label: Text(
-                item.label,
-              ),
+              icon: Icon(item.icon),
+              selectedIcon: Icon(item.selectedIcon ?? item.icon),
+              label: Text(item.label),
             ),
           )
           .toList(),

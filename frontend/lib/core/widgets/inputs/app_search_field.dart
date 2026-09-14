@@ -59,9 +59,7 @@ class _AppSearchFieldState extends State<AppSearchField> {
       controller: _controller,
       hintText: widget.hintText,
       textInputAction: TextInputAction.search,
-      prefixIcon: const Icon(
-        Icons.search,
-      ),
+      prefixIcon: const Icon(Icons.search),
       suffixIcon: _controller.text.isEmpty
           ? null
           : IconButton(
@@ -70,9 +68,7 @@ class _AppSearchFieldState extends State<AppSearchField> {
                 _controller.clear();
                 widget.onChanged?.call('');
               },
-              icon: const Icon(
-                Icons.close,
-              ),
+              icon: const Icon(Icons.close),
             ),
       onChanged: widget.onChanged,
       onFieldSubmitted: widget.onSubmitted,

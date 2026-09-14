@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum AppBannerType {
-  info,
-  warning,
-  error,
-}
+enum AppBannerType { info, warning, error }
 
 class AppBanner extends StatelessWidget {
   const AppBanner({
@@ -55,42 +51,23 @@ class AppBanner extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 12,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.08),
-        border: Border(
-          bottom: BorderSide(
-            color: color,
-          ),
-        ),
+        border: Border(bottom: BorderSide(color: color)),
       ),
       child: Row(
         children: [
-          Icon(
-            _icon,
-            color: color,
-          ),
+          Icon(_icon, color: color),
           const SizedBox(width: 12),
-          Expanded(
-            child: Text(
-              message,
-            ),
-          ),
+          Expanded(child: Text(message)),
           if (actionLabel != null)
-            TextButton(
-              onPressed: onAction,
-              child: Text(actionLabel!),
-            ),
+            TextButton(onPressed: onAction, child: Text(actionLabel!)),
           if (onClose != null)
             IconButton(
               tooltip: 'Cerrar',
               onPressed: onClose,
-              icon: const Icon(
-                Icons.close,
-              ),
+              icon: const Icon(Icons.close),
             ),
         ],
       ),

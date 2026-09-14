@@ -29,12 +29,8 @@ class AppPanel extends StatelessWidget {
       padding: padding,
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(
-          AppRadius.lg,
-        ),
-        border: Border.all(
-          color: AppColors.border,
-        ),
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,34 +46,24 @@ class AppPanel extends StatelessWidget {
                       children: [
                         Text(
                           title!,
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium
-                              ?.copyWith(
-                                fontWeight: FontWeight.w600,
-                              ),
+                          style: Theme.of(context).textTheme.titleMedium
+                              ?.copyWith(fontWeight: FontWeight.w600),
                         ),
                         if (description != null) ...[
                           const SizedBox(height: 4),
                           Text(
                             description!,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodySmall,
+                            style: Theme.of(context).textTheme.bodySmall,
                           ),
                         ],
                       ],
                     ),
                   ),
-                if (trailing != null) ...[
-                  const SizedBox(width: 16),
-                  trailing!,
-                ],
+                if (trailing != null) ...[const SizedBox(width: 16), trailing!],
               ],
             ),
 
-          if (title != null || trailing != null)
-            const SizedBox(height: 20),
+          if (title != null || trailing != null) const SizedBox(height: 20),
 
           child,
         ],

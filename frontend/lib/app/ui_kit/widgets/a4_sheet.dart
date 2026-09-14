@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 
 class A4Sheet extends StatelessWidget {
-  const A4Sheet({
-    super.key,
-    required this.child,
-  });
+  const A4Sheet({super.key, required this.child});
 
   final Widget child;
 
@@ -19,12 +16,7 @@ class A4Sheet extends StatelessWidget {
       child: Material(
         color: Colors.white,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(
-            48,
-            40,
-            48,
-            40,
-          ),
+          padding: const EdgeInsets.fromLTRB(48, 40, 48, 40),
           child: child,
         ),
       ),

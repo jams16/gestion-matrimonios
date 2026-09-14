@@ -22,14 +22,8 @@ class AppSwitch extends StatelessWidget {
     return SwitchListTile(
       value: value,
       onChanged: enabled ? onChanged : null,
-      title: Text(
-        label,
-      ),
-      subtitle: subtitle == null
-          ? null
-          : Text(
-              subtitle!,
-            ),
+      title: Text(label),
+      subtitle: subtitle == null ? null : Text(subtitle!),
       contentPadding: EdgeInsets.zero,
     );
   }

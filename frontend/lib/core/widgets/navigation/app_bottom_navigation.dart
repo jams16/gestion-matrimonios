@@ -23,12 +23,8 @@ class AppBottomNavigation extends StatelessWidget {
       destinations: items
           .map(
             (item) => NavigationDestination(
-              icon: Icon(
-                item.icon,
-              ),
-              selectedIcon: Icon(
-                item.selectedIcon ?? item.icon,
-              ),
+              icon: Icon(item.icon),
+              selectedIcon: Icon(item.selectedIcon ?? item.icon),
               label: item.label,
             ),
           )

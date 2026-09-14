@@ -40,18 +40,16 @@ class _AppTimeFieldState extends State<AppTimeField> {
     super.didChangeDependencies();
 
     if (_selectedTime != null) {
-      _controller.text =
-          MaterialLocalizations.of(context).formatTimeOfDay(
-        _selectedTime!,
-      );
+      _controller.text = MaterialLocalizations.of(
+        context,
+      ).formatTimeOfDay(_selectedTime!);
     }
   }
 
   Future<void> _selectTime() async {
     final time = await showTimePicker(
       context: context,
-      initialTime:
-          _selectedTime ?? TimeOfDay.now(),
+      initialTime: _selectedTime ?? TimeOfDay.now(),
     );
 
     if (time == null) {
@@ -61,10 +59,9 @@ class _AppTimeFieldState extends State<AppTimeField> {
     setState(() {
       _selectedTime = time;
 
-      _controller.text =
-          MaterialLocalizations.of(context).formatTimeOfDay(
-        time,
-      );
+      _controller.text = MaterialLocalizations.of(
+        context,
+      ).formatTimeOfDay(time);
     });
 
     widget.onChanged?.call(time);
@@ -88,9 +85,7 @@ class _AppTimeFieldState extends State<AppTimeField> {
       suffixIcon: IconButton(
         tooltip: 'Seleccionar hora',
         onPressed: _selectTime,
-        icon: const Icon(
-          Icons.access_time_outlined,
-        ),
+        icon: const Icon(Icons.access_time_outlined),
       ),
     );
   }

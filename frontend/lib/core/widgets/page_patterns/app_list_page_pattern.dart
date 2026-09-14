@@ -36,12 +36,9 @@ class AppListPagePattern extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: Theme.of(context)
-                        .textTheme
-                        .headlineSmall
-                        ?.copyWith(
-                          fontWeight: FontWeight.w700,
-                        ),
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
 
                   if (description != null) ...[
@@ -70,13 +67,8 @@ class AppListPagePattern extends StatelessWidget {
             runSpacing: 12,
             crossAxisAlignment: WrapCrossAlignment.center,
             children: [
-              if (search != null)
-                SizedBox(
-                  width: 320,
-                  child: search,
-                ),
-              if (filters != null)
-                filters!,
+              if (search != null) SizedBox(width: 320, child: search),
+              if (filters != null) filters!,
             ],
           ),
         ],
@@ -87,10 +79,7 @@ class AppListPagePattern extends StatelessWidget {
 
         if (pagination != null) ...[
           const SizedBox(height: 24),
-          Align(
-            alignment: Alignment.centerRight,
-            child: pagination,
-          ),
+          Align(alignment: Alignment.centerRight, child: pagination),
         ],
       ],
     );

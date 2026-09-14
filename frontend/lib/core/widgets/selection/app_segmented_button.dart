@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppSegment<T> {
-  const AppSegment({
-    required this.value,
-    required this.label,
-    this.icon,
-  });
+  const AppSegment({required this.value, required this.label, this.icon});
 
   final T value;
   final String label;
@@ -36,9 +32,9 @@ class AppSegmentedButton<T> extends StatelessWidget {
       children: [
         Text(
           label,
-          style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                fontWeight: FontWeight.w500,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w500),
         ),
 
         const SizedBox(height: 10),
@@ -48,14 +44,8 @@ class AppSegmentedButton<T> extends StatelessWidget {
               .map(
                 (segment) => ButtonSegment<T>(
                   value: segment.value,
-                  label: Text(
-                    segment.label,
-                  ),
-                  icon: segment.icon == null
-                      ? null
-                      : Icon(
-                          segment.icon,
-                        ),
+                  label: Text(segment.label),
+                  icon: segment.icon == null ? null : Icon(segment.icon),
                 ),
               )
               .toList(),

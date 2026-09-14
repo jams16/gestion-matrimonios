@@ -32,8 +32,6 @@ const _navigationItems = [
   ),
 ];
 
-
-
 class NavigationPageOneSection extends StatefulWidget {
   const NavigationPageOneSection({super.key});
 
@@ -42,8 +40,7 @@ class NavigationPageOneSection extends StatefulWidget {
       _NavigationPageOneSectionState();
 }
 
-class _NavigationPageOneSectionState
-    extends State<NavigationPageOneSection> {
+class _NavigationPageOneSectionState extends State<NavigationPageOneSection> {
   int _selectedSidebar = 0;
 
   @override
@@ -69,16 +66,12 @@ class _NavigationPageOneSectionState
                 IconButton(
                   tooltip: 'Notificaciones',
                   onPressed: null,
-                  icon: Icon(
-                    Icons.notifications_outlined,
-                  ),
+                  icon: Icon(Icons.notifications_outlined),
                 ),
                 IconButton(
                   tooltip: 'Perfil',
                   onPressed: null,
-                  icon: Icon(
-                    Icons.account_circle_outlined,
-                  ),
+                  icon: Icon(Icons.account_circle_outlined),
                 ),
               ],
             ),
@@ -89,8 +82,7 @@ class _NavigationPageOneSectionState
 
         _NavigationExample(
           title: 'Sidebar',
-          description:
-              'Navegación principal recomendada para escritorio.',
+          description: 'Navegación principal recomendada para escritorio.',
           maxWidth: double.infinity,
           child: SizedBox(
             height: 470,
@@ -102,9 +94,7 @@ class _NavigationPageOneSectionState
                 items: _navigationItems,
                 header: const Text(
                   'Gestión de Matrimonios',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                  ),
+                  style: TextStyle(fontWeight: FontWeight.w700),
                 ),
                 onDestinationSelected: (index) {
                   setState(() {
@@ -120,8 +110,6 @@ class _NavigationPageOneSectionState
   }
 }
 
-
-
 class NavigationPageTwoSection extends StatefulWidget {
   const NavigationPageTwoSection({super.key});
 
@@ -130,8 +118,7 @@ class NavigationPageTwoSection extends StatefulWidget {
       _NavigationPageTwoSectionState();
 }
 
-class _NavigationPageTwoSectionState
-    extends State<NavigationPageTwoSection> {
+class _NavigationPageTwoSectionState extends State<NavigationPageTwoSection> {
   int _railIndex = 0;
   int _bottomIndex = 0;
 
@@ -146,8 +133,7 @@ class _NavigationPageTwoSectionState
 
         _NavigationExample(
           title: 'NavigationRail',
-          description:
-              'Navegación lateral compacta recomendada para tablet.',
+          description: 'Navegación lateral compacta recomendada para tablet.',
           child: SizedBox(
             height: 300,
             child: AppNavigationRail(
@@ -166,8 +152,7 @@ class _NavigationPageTwoSectionState
 
         _NavigationExample(
           title: 'Bottom navigation',
-          description:
-              'Navegación principal en dispositivos móviles.',
+          description: 'Navegación principal en dispositivos móviles.',
           maxWidth: 480,
           child: AppBottomNavigation(
             selectedIndex: _bottomIndex,
@@ -191,15 +176,9 @@ class _NavigationPageTwoSectionState
             length: 3,
             child: AppTabs(
               tabs: [
-                AppTabItem(
-                  label: 'Información',
-                ),
-                AppTabItem(
-                  label: 'Miembros',
-                ),
-                AppTabItem(
-                  label: 'Archivos',
-                ),
+                AppTabItem(label: 'Información'),
+                AppTabItem(label: 'Miembros'),
+                AppTabItem(label: 'Archivos'),
               ],
             ),
           ),
@@ -208,9 +187,6 @@ class _NavigationPageTwoSectionState
     );
   }
 }
-
-
-
 
 class NavigationPageThreeSection extends StatefulWidget {
   const NavigationPageThreeSection({super.key});
@@ -235,22 +211,16 @@ class _NavigationPageThreeSectionState
 
         _NavigationExample(
           title: 'Breadcrumbs',
-          description:
-              'Muestran la ubicación actual dentro de una jerarquía.',
+          description: 'Muestran la ubicación actual dentro de una jerarquía.',
           maxWidth: double.infinity,
           child: AppBreadcrumbs(
             items: [
-              AppBreadcrumbItem(
-                label: 'Proyectos',
-                onTap: () {},
-              ),
+              AppBreadcrumbItem(label: 'Proyectos', onTap: () {}),
               AppBreadcrumbItem(
                 label: 'Matrimonio José y Carlos',
                 onTap: () {},
               ),
-              const AppBreadcrumbItem(
-                label: 'Cronograma',
-              ),
+              const AppBreadcrumbItem(label: 'Cronograma'),
             ],
           ),
         ),
@@ -277,8 +247,6 @@ class _NavigationPageThreeSectionState
   }
 }
 
-
-
 class _NavigationHeading extends StatelessWidget {
   const _NavigationHeading();
 
@@ -289,9 +257,9 @@ class _NavigationHeading extends StatelessWidget {
       children: [
         Text(
           'Navegación',
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
         ),
         const SizedBox(height: 6),
         Text(
@@ -320,23 +288,18 @@ class _NavigationExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints: BoxConstraints(
-        maxWidth: maxWidth,
-      ),
+      constraints: BoxConstraints(maxWidth: maxWidth),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 4),
-          Text(
-            description,
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
+          Text(description, style: Theme.of(context).textTheme.bodySmall),
           const SizedBox(height: 12),
           child,
         ],

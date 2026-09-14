@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum AppMessageType {
-  info,
-  success,
-  warning,
-  error,
-}
+enum AppMessageType { info, success, warning, error }
 
 class AppMessage extends StatelessWidget {
   const AppMessage({
@@ -56,18 +51,14 @@ class AppMessage extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(
-          _icon,
-          size: 18,
-          color: color,
-        ),
+        Icon(_icon, size: 18, color: color),
         const SizedBox(width: 8),
         Expanded(
           child: Text(
             message,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: color,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(color: color),
           ),
         ),
       ],

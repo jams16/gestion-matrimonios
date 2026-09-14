@@ -15,8 +15,7 @@ class AppSkeleton extends StatefulWidget {
   final double radius;
 
   @override
-  State<AppSkeleton> createState() =>
-      _AppSkeletonState();
+  State<AppSkeleton> createState() => _AppSkeletonState();
 }
 
 class _AppSkeletonState extends State<AppSkeleton>
@@ -30,22 +29,13 @@ class _AppSkeletonState extends State<AppSkeleton>
 
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(
-        milliseconds: 1100,
-      ),
-    )..repeat(
-        reverse: true,
-      );
+      duration: const Duration(milliseconds: 1100),
+    )..repeat(reverse: true);
 
     _animation = Tween<double>(
       begin: 0.35,
       end: 0.75,
-    ).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: Curves.easeInOut,
-      ),
-    );
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
   }
 
   @override
@@ -56,9 +46,7 @@ class _AppSkeletonState extends State<AppSkeleton>
 
   @override
   Widget build(BuildContext context) {
-    final baseColor = Theme.of(context)
-        .colorScheme
-        .surfaceContainerHighest;
+    final baseColor = Theme.of(context).colorScheme.surfaceContainerHighest;
 
     return FadeTransition(
       opacity: _animation,
@@ -67,9 +55,7 @@ class _AppSkeletonState extends State<AppSkeleton>
         height: widget.height,
         decoration: BoxDecoration(
           color: baseColor,
-          borderRadius: BorderRadius.circular(
-            widget.radius,
-          ),
+          borderRadius: BorderRadius.circular(widget.radius),
         ),
       ),
     );

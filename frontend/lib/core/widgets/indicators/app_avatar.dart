@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum AppAvatarSize {
-  small,
-  medium,
-  large,
-}
+enum AppAvatarSize { small, medium, large }
 
 class AppAvatar extends StatelessWidget {
   const AppAvatar({
@@ -60,35 +56,28 @@ class AppAvatar extends StatelessWidget {
         .toList();
 
     if (parts.length == 1) {
-      return parts.first
-          .substring(0, 1)
-          .toUpperCase();
+      return parts.first.substring(0, 1).toUpperCase();
     }
 
-    return '${parts.first[0]}${parts.last[0]}'
-        .toUpperCase();
+    return '${parts.first[0]}${parts.last[0]}'.toUpperCase();
   }
 
   @override
   Widget build(BuildContext context) {
     return CircleAvatar(
       radius: _diameter / 2,
-      backgroundImage:
-          imageUrl == null ? null : NetworkImage(imageUrl!),
+      backgroundImage: imageUrl == null ? null : NetworkImage(imageUrl!),
       child: imageUrl != null
           ? null
           : _initials != null
-              ? Text(
-                  _initials!,
-                  style: TextStyle(
-                    fontSize: _fontSize,
-                    fontWeight: FontWeight.w600,
-                  ),
-                )
-              : Icon(
-                  icon ?? Icons.person_outline,
-                  size: _diameter * 0.5,
-                ),
+          ? Text(
+              _initials!,
+              style: TextStyle(
+                fontSize: _fontSize,
+                fontWeight: FontWeight.w600,
+              ),
+            )
+          : Icon(icon ?? Icons.person_outline, size: _diameter * 0.5),
     );
   }
 }

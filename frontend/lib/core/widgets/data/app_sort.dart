@@ -1,15 +1,9 @@
 import 'package:flutter/material.dart';
 
-enum AppSortDirection {
-  ascending,
-  descending,
-}
+enum AppSortDirection { ascending, descending }
 
 class AppSortOption<T> {
-  const AppSortOption({
-    required this.value,
-    required this.label,
-  });
+  const AppSortOption({required this.value, required this.label});
 
   final T value;
   final String label;
@@ -32,8 +26,7 @@ class AppSort<T> extends StatelessWidget {
   final AppSortDirection direction;
 
   final ValueChanged<T?> onValueChanged;
-  final ValueChanged<AppSortDirection>
-      onDirectionChanged;
+  final ValueChanged<AppSortDirection> onDirectionChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -48,9 +41,7 @@ class AppSort<T> extends StatelessWidget {
               .map(
                 (option) => DropdownMenuItem<T>(
                   value: option.value,
-                  child: Text(
-                    option.label,
-                  ),
+                  child: Text(option.label),
                 ),
               )
               .toList(),
@@ -58,21 +49,18 @@ class AppSort<T> extends StatelessWidget {
         ),
 
         IconButton.outlined(
-          tooltip: direction ==
-                  AppSortDirection.ascending
+          tooltip: direction == AppSortDirection.ascending
               ? 'Orden ascendente'
               : 'Orden descendente',
           onPressed: () {
             onDirectionChanged(
-              direction ==
-                      AppSortDirection.ascending
+              direction == AppSortDirection.ascending
                   ? AppSortDirection.descending
                   : AppSortDirection.ascending,
             );
           },
           icon: Icon(
-            direction ==
-                    AppSortDirection.ascending
+            direction == AppSortDirection.ascending
                 ? Icons.arrow_upward
                 : Icons.arrow_downward,
           ),

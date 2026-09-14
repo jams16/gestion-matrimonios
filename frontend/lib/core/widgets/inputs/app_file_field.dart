@@ -26,9 +26,7 @@ class _AppFileFieldState extends State<AppFileField> {
 
   Future<void> _pickFile() async {
     final file = await FilePicker.pickFile(
-      type: widget.allowedExtensions == null
-          ? FileType.any
-          : FileType.custom,
+      type: widget.allowedExtensions == null ? FileType.any : FileType.custom,
       allowedExtensions: widget.allowedExtensions,
     );
 
@@ -58,9 +56,9 @@ class _AppFileFieldState extends State<AppFileField> {
       children: [
         Text(
           widget.label,
-          style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                fontWeight: FontWeight.w500,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w500),
         ),
 
         const SizedBox(height: 7),
@@ -71,19 +69,13 @@ class _AppFileFieldState extends State<AppFileField> {
           child: InputDecorator(
             decoration: InputDecoration(
               helperText: widget.helperText,
-              prefixIcon: const Icon(
-                Icons.attach_file,
-              ),
+              prefixIcon: const Icon(Icons.attach_file),
               suffixIcon: _file == null
-                  ? const Icon(
-                      Icons.upload_file_outlined,
-                    )
+                  ? const Icon(Icons.upload_file_outlined)
                   : IconButton(
                       tooltip: 'Eliminar archivo',
                       onPressed: _removeFile,
-                      icon: const Icon(
-                        Icons.close,
-                      ),
+                      icon: const Icon(Icons.close),
                     ),
             ),
             child: Text(

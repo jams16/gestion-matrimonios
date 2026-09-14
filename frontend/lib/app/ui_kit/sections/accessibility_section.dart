@@ -7,17 +7,13 @@ import '../../../core/widgets/buttons/app_button.dart';
 import '../../../core/widgets/indicators/app_status_badge.dart';
 import '../../../core/widgets/inputs/app_text_field.dart';
 
-class AccessibilityPageOneSection
-    extends StatelessWidget {
-  const AccessibilityPageOneSection({
-    super.key,
-  });
+class AccessibilityPageOneSection extends StatelessWidget {
+  const AccessibilityPageOneSection({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment:
-          CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const _AccessibilityHeading(),
 
@@ -41,10 +37,7 @@ class AccessibilityPageOneSection
             onActivate: () {},
             child: const Padding(
               padding: EdgeInsets.all(4),
-              child: AppButton(
-                label: 'Elemento enfocado',
-                onPressed: null,
-              ),
+              child: AppButton(label: 'Elemento enfocado', onPressed: null),
             ),
           ),
         ),
@@ -71,20 +64,13 @@ class AccessibilityPageOneSection
   }
 }
 
-
-
-
-class AccessibilityPageTwoSection
-    extends StatelessWidget {
-  const AccessibilityPageTwoSection({
-    super.key,
-  });
+class AccessibilityPageTwoSection extends StatelessWidget {
+  const AccessibilityPageTwoSection({super.key});
 
   @override
   Widget build(BuildContext context) {
     return const Column(
-      crossAxisAlignment:
-          CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _AccessibilityHeading(),
 
@@ -123,16 +109,13 @@ class AccessibilityPageTwoSection
   }
 }
 
-
-
 class _ContrastExample extends StatelessWidget {
   const _ContrastExample();
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment:
-          CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
           width: 300,
@@ -140,10 +123,7 @@ class _ContrastExample extends StatelessWidget {
           color: AppColors.primary,
           child: const Text(
             'Texto sobre color primario',
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w600,
-            ),
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
           ),
         ),
 
@@ -155,17 +135,13 @@ class _ContrastExample extends StatelessWidget {
           color: AppColors.surface,
           child: const Text(
             'Texto sobre superficie',
-            style: TextStyle(
-              color: AppColors.textPrimary,
-            ),
+            style: TextStyle(color: AppColors.textPrimary),
           ),
         ),
       ],
     );
   }
 }
-
-
 
 class _KeyboardExample extends StatelessWidget {
   const _KeyboardExample();
@@ -180,8 +156,7 @@ class _KeyboardExample extends StatelessWidget {
             order: const NumericFocusOrder(1),
             child: AppButton(
               label: 'Anterior',
-              variant:
-                  AppButtonVariant.secondary,
+              variant: AppButtonVariant.secondary,
               onPressed: () {},
             ),
           ),
@@ -190,10 +165,7 @@ class _KeyboardExample extends StatelessWidget {
 
           FocusTraversalOrder(
             order: const NumericFocusOrder(2),
-            child: AppButton(
-              label: 'Siguiente',
-              onPressed: () {},
-            ),
+            child: AppButton(label: 'Siguiente', onPressed: () {}),
           ),
         ],
       ),
@@ -201,10 +173,7 @@ class _KeyboardExample extends StatelessWidget {
   }
 }
 
-
-
-class _TouchTargetExample
-    extends StatelessWidget {
+class _TouchTargetExample extends StatelessWidget {
   const _TouchTargetExample();
 
   @override
@@ -212,41 +181,27 @@ class _TouchTargetExample
     return Row(
       children: [
         Container(
-          width:
-              AppAccessibility.minTouchTarget,
-          height:
-              AppAccessibility.minTouchTarget,
+          width: AppAccessibility.minTouchTarget,
+          height: AppAccessibility.minTouchTarget,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            border: Border.all(
-              color: AppColors.primary,
-            ),
-            borderRadius:
-                BorderRadius.circular(8),
+            border: Border.all(color: AppColors.primary),
+            borderRadius: BorderRadius.circular(8),
           ),
-          child: const Text(
-            '44',
-          ),
+          child: const Text('44'),
         ),
 
         const SizedBox(width: 24),
 
         Container(
-          width: AppAccessibility
-              .recommendedTouchTarget,
-          height: AppAccessibility
-              .recommendedTouchTarget,
+          width: AppAccessibility.recommendedTouchTarget,
+          height: AppAccessibility.recommendedTouchTarget,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            border: Border.all(
-              color: AppColors.primary,
-            ),
-            borderRadius:
-                BorderRadius.circular(8),
+            border: Border.all(color: AppColors.primary),
+            borderRadius: BorderRadius.circular(8),
           ),
-          child: const Text(
-            '48',
-          ),
+          child: const Text('48'),
         ),
 
         const SizedBox(width: 16),
@@ -255,10 +210,7 @@ class _TouchTargetExample
           child: Text(
             '44 px mínimo · '
             '48 px recomendado en móvil',
-            style:
-                Theme.of(context)
-                    .textTheme
-                    .bodySmall,
+            style: Theme.of(context).textTheme.bodySmall,
           ),
         ),
       ],
@@ -266,11 +218,7 @@ class _TouchTargetExample
   }
 }
 
-
-
-
-class _SemanticsExample
-    extends StatelessWidget {
+class _SemanticsExample extends StatelessWidget {
   const _SemanticsExample();
 
   @override
@@ -279,41 +227,27 @@ class _SemanticsExample
       label: 'Progreso del proyecto',
       value: '68 por ciento completado',
       child: Column(
-        crossAxisAlignment:
-            CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             'Progreso del proyecto',
-            style: Theme.of(context)
-                .textTheme
-                .labelMedium,
+            style: Theme.of(context).textTheme.labelMedium,
           ),
 
           const SizedBox(height: 8),
 
-          const LinearProgressIndicator(
-            value: 0.68,
-          ),
+          const LinearProgressIndicator(value: 0.68),
 
           const SizedBox(height: 6),
 
-          Text(
-            '68 %',
-            style:
-                Theme.of(context)
-                    .textTheme
-                    .bodySmall,
-          ),
+          Text('68 %', style: Theme.of(context).textTheme.bodySmall),
         ],
       ),
     );
   }
 }
 
-
-
-class _ColorIndependenceExample
-    extends StatelessWidget {
+class _ColorIndependenceExample extends StatelessWidget {
   const _ColorIndependenceExample();
 
   @override
@@ -322,71 +256,45 @@ class _ColorIndependenceExample
       spacing: 12,
       runSpacing: 12,
       children: [
-        AppStatusBadge(
-          label: 'En proceso',
-          type:
-              AppStatusBadgeType.info,
-        ),
+        AppStatusBadge(label: 'En proceso', type: AppStatusBadgeType.info),
 
-        AppStatusBadge(
-          label: 'Completada',
-          type:
-              AppStatusBadgeType.success,
-        ),
+        AppStatusBadge(label: 'Completada', type: AppStatusBadgeType.success),
 
-        AppStatusBadge(
-          label: 'Pendiente',
-          type:
-              AppStatusBadgeType.warning,
-        ),
+        AppStatusBadge(label: 'Pendiente', type: AppStatusBadgeType.warning),
 
-        AppStatusBadge(
-          label: 'Cancelada',
-          type:
-              AppStatusBadgeType.error,
-        ),
+        AppStatusBadge(label: 'Cancelada', type: AppStatusBadgeType.error),
       ],
     );
   }
 }
 
-
-
-class _AccessibilityHeading
-    extends StatelessWidget {
+class _AccessibilityHeading extends StatelessWidget {
   const _AccessibilityHeading();
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment:
-          CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           'Accesibilidad',
-          style: Theme.of(context)
-              .textTheme
-              .headlineSmall
-              ?.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
         ),
 
         const SizedBox(height: 6),
 
         Text(
           'Reglas para mantener la interfaz perceptible, operable y comprensible para diferentes usuarios.',
-          style: Theme.of(context)
-              .textTheme
-              .bodyMedium,
+          style: Theme.of(context).textTheme.bodyMedium,
         ),
       ],
     );
   }
 }
 
-class _AccessibilityExample
-    extends StatelessWidget {
+class _AccessibilityExample extends StatelessWidget {
   const _AccessibilityExample({
     required this.title,
     required this.description,
@@ -400,33 +308,20 @@ class _AccessibilityExample
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints:
-          const BoxConstraints(
-        maxWidth: 620,
-      ),
+      constraints: const BoxConstraints(maxWidth: 620),
       child: Column(
-        crossAxisAlignment:
-            CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
-            style: Theme.of(context)
-                .textTheme
-                .titleSmall
-                ?.copyWith(
-                  fontWeight:
-                      FontWeight.w600,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600),
           ),
 
           const SizedBox(height: 4),
 
-          Text(
-            description,
-            style: Theme.of(context)
-                .textTheme
-                .bodySmall,
-          ),
+          Text(description, style: Theme.of(context).textTheme.bodySmall),
 
           const SizedBox(height: 12),
 

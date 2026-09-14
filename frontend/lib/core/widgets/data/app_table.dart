@@ -13,11 +13,7 @@ class AppTableColumn {
 }
 
 class AppTable extends StatelessWidget {
-  const AppTable({
-    super.key,
-    required this.columns,
-    required this.rows,
-  });
+  const AppTable({super.key, required this.columns, required this.rows});
 
   final List<AppTableColumn> columns;
   final List<List<String>> rows;
@@ -28,13 +24,9 @@ class AppTable extends StatelessWidget {
       scrollDirection: Axis.horizontal,
       child: DataTable(
         headingRowColor: WidgetStatePropertyAll(
-          Theme.of(context)
-              .colorScheme
-              .surfaceContainerHighest,
+          Theme.of(context).colorScheme.surfaceContainerHighest,
         ),
-        border: TableBorder.all(
-          color: AppColors.border,
-        ),
+        border: TableBorder.all(color: AppColors.border),
         columns: columns
             .map(
               (column) => DataColumn(
@@ -42,9 +34,7 @@ class AppTable extends StatelessWidget {
                   alignment: column.alignment,
                   child: Text(
                     column.label,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: const TextStyle(fontWeight: FontWeight.w600),
                   ),
                 ),
               ),
@@ -57,13 +47,8 @@ class AppTable extends StatelessWidget {
                   columns.length,
                   (index) => DataCell(
                     Align(
-                      alignment:
-                          columns[index].alignment,
-                      child: Text(
-                        index < row.length
-                            ? row[index]
-                            : '',
-                      ),
+                      alignment: columns[index].alignment,
+                      child: Text(index < row.length ? row[index] : ''),
                     ),
                   ),
                 ),

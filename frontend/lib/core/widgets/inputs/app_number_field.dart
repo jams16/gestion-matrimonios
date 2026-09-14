@@ -39,9 +39,7 @@ class _AppNumberFieldState extends State<AppNumberField> {
 
     _value = widget.initialValue;
 
-    _controller = TextEditingController(
-      text: _format(_value),
-    );
+    _controller = TextEditingController(text: _format(_value));
   }
 
   String _format(num value) {
@@ -79,9 +77,7 @@ class _AppNumberFieldState extends State<AppNumberField> {
   }
 
   void _onTextChanged(String value) {
-    final parsed = num.tryParse(
-      value.replaceAll(',', '.'),
-    );
+    final parsed = num.tryParse(value.replaceAll(',', '.'));
 
     if (parsed == null) {
       return;
@@ -99,20 +95,18 @@ class _AppNumberFieldState extends State<AppNumberField> {
 
   @override
   Widget build(BuildContext context) {
-    final canDecrease =
-        widget.min == null || _value > widget.min!;
+    final canDecrease = widget.min == null || _value > widget.min!;
 
-    final canIncrease =
-        widget.max == null || _value < widget.max!;
+    final canIncrease = widget.max == null || _value < widget.max!;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           widget.label,
-          style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                fontWeight: FontWeight.w500,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w500),
         ),
 
         const SizedBox(height: 7),
@@ -122,9 +116,7 @@ class _AppNumberFieldState extends State<AppNumberField> {
             IconButton.outlined(
               tooltip: 'Disminuir',
               onPressed: canDecrease ? _decrease : null,
-              icon: const Icon(
-                Icons.remove,
-              ),
+              icon: const Icon(Icons.remove),
             ),
 
             const SizedBox(width: 8),
@@ -151,9 +143,7 @@ class _AppNumberFieldState extends State<AppNumberField> {
             IconButton.filled(
               tooltip: 'Aumentar',
               onPressed: canIncrease ? _increase : null,
-              icon: const Icon(
-                Icons.add,
-              ),
+              icon: const Icon(Icons.add),
             ),
           ],
         ),

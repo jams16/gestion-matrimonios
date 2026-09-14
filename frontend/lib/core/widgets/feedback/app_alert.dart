@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum AppAlertType {
-  info,
-  success,
-  warning,
-  error,
-}
+enum AppAlertType { info, success, warning, error }
 
 class AppAlert extends StatelessWidget {
   const AppAlert({
@@ -63,17 +58,12 @@ class AppAlert extends StatelessWidget {
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color: color,
-        ),
+        border: Border.all(color: color),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(
-            _icon,
-            color: color,
-          ),
+          Icon(_icon, color: color),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -82,9 +72,9 @@ class AppAlert extends StatelessWidget {
                 Text(
                   title,
                   style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: color,
-                      ),
+                    fontWeight: FontWeight.w600,
+                    color: color,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 Text(message),
@@ -95,9 +85,7 @@ class AppAlert extends StatelessWidget {
             IconButton(
               tooltip: 'Cerrar',
               onPressed: onClose,
-              icon: const Icon(
-                Icons.close,
-              ),
+              icon: const Icon(Icons.close),
             ),
         ],
       ),

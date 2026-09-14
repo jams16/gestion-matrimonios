@@ -17,12 +17,9 @@ class AppRequiredLabel extends StatelessWidget {
         children: [
           TextSpan(
             text: label,
-            style: Theme.of(context)
-                .textTheme
-                .labelMedium
-                ?.copyWith(
-                  fontWeight: FontWeight.w500,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w500),
           ),
           if (required)
             TextSpan(

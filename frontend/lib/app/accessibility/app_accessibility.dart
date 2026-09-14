@@ -12,9 +12,7 @@ abstract final class AppAccessibility {
   static const double focusRingGap = 2;
 
   // Duración recomendada para tooltips.
-  static const Duration tooltipWaitDuration =
-      Duration(milliseconds: 400);
+  static const Duration tooltipWaitDuration = Duration(milliseconds: 400);
 
-  static const Duration tooltipShowDuration =
-      Duration(seconds: 3);
+  static const Duration tooltipShowDuration = Duration(seconds: 3);
 }

@@ -36,9 +36,7 @@ class FeedbackPageOneSection extends StatelessWidget {
                     type: AppSnackbarType.success,
                   );
                 },
-                child: const Text(
-                  'Mostrar snackbar',
-                ),
+                child: const Text('Mostrar snackbar'),
               ),
             ],
           ),
@@ -52,8 +50,7 @@ class FeedbackPageOneSection extends StatelessWidget {
               'Mensaje relevante que permanece visible dentro del contenido.',
           child: AppAlert(
             title: 'Revisa la información',
-            message:
-                'Existen campos pendientes antes de completar el proceso.',
+            message: 'Existen campos pendientes antes de completar el proceso.',
             type: AppAlertType.warning,
           ),
         ),
@@ -66,8 +63,7 @@ class FeedbackPageOneSection extends StatelessWidget {
               'Aviso persistente asociado al estado general de una pantalla.',
           maxWidth: double.infinity,
           child: AppBanner(
-            message:
-                'Hay cambios sin guardar en este proyecto.',
+            message: 'Hay cambios sin guardar en este proyecto.',
             type: AppBannerType.info,
             actionLabel: 'Guardar',
           ),
@@ -81,19 +77,13 @@ class FeedbackPageOneSection extends StatelessWidget {
               'Explica acciones representadas mediante iconos o elementos poco evidentes.',
           child: AppTooltip(
             message: 'Editar proyecto',
-            child: IconButton(
-              onPressed: null,
-              icon: Icon(
-                Icons.edit_outlined,
-              ),
-            ),
+            child: IconButton(onPressed: null, icon: Icon(Icons.edit_outlined)),
           ),
         ),
       ],
     );
   }
 }
-
 
 class FeedbackPageTwoSection extends StatelessWidget {
   const FeedbackPageTwoSection({super.key});
@@ -122,11 +112,9 @@ class FeedbackPageTwoSection extends StatelessWidget {
 
         _FeedbackExample(
           title: 'Success message',
-          description:
-              'Confirma que una operación se completó correctamente.',
+          description: 'Confirma que una operación se completó correctamente.',
           child: AppMessage(
-            message:
-                'El proyecto fue creado correctamente.',
+            message: 'El proyecto fue creado correctamente.',
             type: AppMessageType.success,
           ),
         ),
@@ -135,11 +123,8 @@ class FeedbackPageTwoSection extends StatelessWidget {
 
         _FeedbackExample(
           title: 'Loading indicator',
-          description:
-              'Indica una operación de duración indeterminada.',
-          child: AppLoadingIndicator(
-            label: 'Cargando información...',
-          ),
+          description: 'Indica una operación de duración indeterminada.',
+          child: AppLoadingIndicator(label: 'Cargando información...'),
         ),
 
         SizedBox(height: 30),
@@ -148,16 +133,12 @@ class FeedbackPageTwoSection extends StatelessWidget {
           title: 'Progress bar',
           description:
               'Representa el avance de una operación cuyo progreso puede medirse.',
-          child: AppProgressBar(
-            label: 'Carga de archivos',
-            value: 0.68,
-          ),
+          child: AppProgressBar(label: 'Carga de archivos', value: 0.68),
         ),
       ],
     );
   }
 }
-
 
 class _FeedbackHeading extends StatelessWidget {
   const _FeedbackHeading();
@@ -169,9 +150,9 @@ class _FeedbackHeading extends StatelessWidget {
       children: [
         Text(
           'Feedback',
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
         ),
         const SizedBox(height: 6),
         Text(
@@ -199,25 +180,20 @@ class _FeedbackExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints: BoxConstraints(
-        maxWidth: maxWidth,
-      ),
+      constraints: BoxConstraints(maxWidth: maxWidth),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600),
           ),
 
           const SizedBox(height: 4),
 
-          Text(
-            description,
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
+          Text(description, style: Theme.of(context).textTheme.bodySmall),
 
           const SizedBox(height: 12),
 
@@ -227,6 +203,3 @@ class _FeedbackExample extends StatelessWidget {
     );
   }
 }
-
-
-

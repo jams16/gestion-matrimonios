@@ -26,10 +26,7 @@ class AppDetailPagePattern extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (breadcrumbs != null) ...[
-          breadcrumbs!,
-          const SizedBox(height: 16),
-        ],
+        if (breadcrumbs != null) ...[breadcrumbs!, const SizedBox(height: 16)],
 
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,16 +42,11 @@ class AppDetailPagePattern extends StatelessWidget {
                     children: [
                       Text(
                         title,
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineSmall
-                            ?.copyWith(
-                              fontWeight: FontWeight.w700,
-                            ),
+                        style: Theme.of(context).textTheme.headlineSmall
+                            ?.copyWith(fontWeight: FontWeight.w700),
                       ),
 
-                      if (status != null)
-                        status!,
+                      if (status != null) status!,
                     ],
                   ),
 
@@ -72,11 +64,7 @@ class AppDetailPagePattern extends StatelessWidget {
             if (actions.isNotEmpty) ...[
               const SizedBox(width: 16),
 
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: actions,
-              ),
+              Wrap(spacing: 8, runSpacing: 8, children: actions),
             ],
           ],
         ),

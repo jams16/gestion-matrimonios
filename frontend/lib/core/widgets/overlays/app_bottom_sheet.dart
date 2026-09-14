@@ -42,8 +42,7 @@ class AppBottomSheet extends StatelessWidget {
     return Container(
       width: double.infinity,
       constraints: BoxConstraints(
-        maxHeight:
-            MediaQuery.sizeOf(context).height * 0.85,
+        maxHeight: MediaQuery.sizeOf(context).height * 0.85,
       ),
       padding: EdgeInsets.fromLTRB(
         24,
@@ -52,11 +51,7 @@ class AppBottomSheet extends StatelessWidget {
         24 + MediaQuery.viewInsetsOf(context).bottom,
       ),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(
-            AppRadius.xl,
-          ),
-        ),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.xl)),
       ),
       child: SingleChildScrollView(
         child: Column(
@@ -65,12 +60,9 @@ class AppBottomSheet extends StatelessWidget {
             if (title != null) ...[
               Text(
                 title!,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge
-                    ?.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600),
               ),
               if (description != null) ...[
                 const SizedBox(height: 4),

@@ -22,12 +22,8 @@ class AppFilters extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(
-          AppRadius.lg,
-        ),
-        border: Border.all(
-          color: AppColors.border,
-        ),
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,33 +32,21 @@ class AppFilters extends StatelessWidget {
             children: [
               Text(
                 'Filtros',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleSmall
-                    ?.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600),
               ),
 
               const Spacer(),
 
               if (onClear != null)
-                TextButton(
-                  onPressed: onClear,
-                  child: Text(
-                    clearLabel,
-                  ),
-                ),
+                TextButton(onPressed: onClear, child: Text(clearLabel)),
             ],
           ),
 
           const SizedBox(height: 12),
 
-          Wrap(
-            spacing: 12,
-            runSpacing: 12,
-            children: children,
-          ),
+          Wrap(spacing: 12, runSpacing: 12, children: children),
         ],
       ),
     );

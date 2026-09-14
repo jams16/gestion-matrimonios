@@ -39,9 +39,9 @@ class AppRadioGroup<T> extends StatelessWidget {
       children: [
         Text(
           label,
-          style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                fontWeight: FontWeight.w500,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w500),
         ),
 
         const SizedBox(height: 8),
@@ -51,14 +51,8 @@ class AppRadioGroup<T> extends StatelessWidget {
             value: option.value,
             groupValue: value,
             onChanged: enabled ? onChanged : null,
-            title: Text(
-              option.label,
-            ),
-            subtitle: option.subtitle == null
-                ? null
-                : Text(
-                    option.subtitle!,
-                  ),
+            title: Text(option.label),
+            subtitle: option.subtitle == null ? null : Text(option.subtitle!),
             contentPadding: EdgeInsets.zero,
             dense: true,
           ),

@@ -17,12 +17,8 @@ class AppTooltip extends StatelessWidget {
     return Tooltip(
       message: message,
       preferBelow: preferBelow,
-      waitDuration: const Duration(
-        milliseconds: 400,
-      ),
-      showDuration: const Duration(
-        seconds: 3,
-      ),
+      waitDuration: const Duration(milliseconds: 400),
+      showDuration: const Duration(seconds: 3),
       child: child,
     );
   }

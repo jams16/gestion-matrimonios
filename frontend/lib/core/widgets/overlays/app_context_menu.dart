@@ -33,11 +33,7 @@ class AppContextMenu<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MenuAnchor(
-      builder: (
-        context,
-        controller,
-        child,
-      ) {
+      builder: (context, controller, child) {
         return IconButton(
           tooltip: tooltip,
           onPressed: () {
@@ -50,31 +46,19 @@ class AppContextMenu<T> extends StatelessWidget {
           icon: Icon(icon),
         );
       },
-      menuChildren: items.map(
-        (item) {
-          final color = item.destructive
-              ? Theme.of(context).colorScheme.error
-              : null;
+      menuChildren: items.map((item) {
+        final color = item.destructive
+            ? Theme.of(context).colorScheme.error
+            : null;
 
-          return MenuItemButton(
-            leadingIcon: item.icon == null
-                ? null
-                : Icon(
-                    item.icon,
-                    color: color,
-                  ),
-            onPressed: () {
-              onSelected(item.value);
-            },
-            child: Text(
-              item.label,
-              style: TextStyle(
-                color: color,
-              ),
-            ),
-          );
-        },
-      ).toList(),
+        return MenuItemButton(
+          leadingIcon: item.icon == null ? null : Icon(item.icon, color: color),
+          onPressed: () {
+            onSelected(item.value);
+          },
+          child: Text(item.label, style: TextStyle(color: color)),
+        );
+      }).toList(),
     );
   }
 }

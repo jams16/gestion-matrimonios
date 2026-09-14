@@ -3,18 +3,9 @@ import 'package:flutter/material.dart';
 import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_radius.dart';
 
-enum AppButtonVariant {
-  primary,
-  secondary,
-  tertiary,
-  destructive,
-}
+enum AppButtonVariant { primary, secondary, tertiary, destructive }
 
-enum AppButtonSize {
-  small,
-  medium,
-  large,
-}
+enum AppButtonSize { small, medium, large }
 
 class AppButton extends StatelessWidget {
   const AppButton({
@@ -56,19 +47,13 @@ class AppButton extends StatelessWidget {
   EdgeInsetsGeometry get _padding {
     switch (size) {
       case AppButtonSize.small:
-        return const EdgeInsets.symmetric(
-          horizontal: 14,
-        );
+        return const EdgeInsets.symmetric(horizontal: 14);
 
       case AppButtonSize.medium:
-        return const EdgeInsets.symmetric(
-          horizontal: 18,
-        );
+        return const EdgeInsets.symmetric(horizontal: 18);
 
       case AppButtonSize.large:
-        return const EdgeInsets.symmetric(
-          horizontal: 22,
-        );
+        return const EdgeInsets.symmetric(horizontal: 22);
     }
   }
 
@@ -81,79 +66,51 @@ class AppButton extends StatelessWidget {
         return Theme.of(context).textTheme.labelLarge;
 
       case AppButtonSize.large:
-        return Theme.of(context).textTheme.titleSmall?.copyWith(
-              fontWeight: FontWeight.w600,
-            );
+        return Theme.of(
+          context,
+        ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600);
     }
   }
 
   ButtonStyle _style(BuildContext context) {
     final radius = RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(
-        AppRadius.md,
-      ),
+      borderRadius: BorderRadius.circular(AppRadius.md),
     );
 
     final base = ButtonStyle(
-      minimumSize: WidgetStatePropertyAll(
-        Size(0, _height),
-      ),
-      padding: WidgetStatePropertyAll(
-        _padding,
-      ),
-      shape: WidgetStatePropertyAll(
-        radius,
-      ),
-      textStyle: WidgetStatePropertyAll(
-        _textStyle(context),
-      ),
+      minimumSize: WidgetStatePropertyAll(Size(0, _height)),
+      padding: WidgetStatePropertyAll(_padding),
+      shape: WidgetStatePropertyAll(radius),
+      textStyle: WidgetStatePropertyAll(_textStyle(context)),
     );
 
     switch (variant) {
       case AppButtonVariant.primary:
         return base.copyWith(
-          backgroundColor: const WidgetStatePropertyAll(
-            AppColors.primary,
-          ),
-          foregroundColor: const WidgetStatePropertyAll(
-            Colors.white,
-          ),
+          backgroundColor: const WidgetStatePropertyAll(AppColors.primary),
+          foregroundColor: const WidgetStatePropertyAll(Colors.white),
         );
 
       case AppButtonVariant.secondary:
         return base.copyWith(
-          backgroundColor: const WidgetStatePropertyAll(
-            Colors.transparent,
-          ),
-          foregroundColor: const WidgetStatePropertyAll(
-            AppColors.primary,
-          ),
+          backgroundColor: const WidgetStatePropertyAll(Colors.transparent),
+          foregroundColor: const WidgetStatePropertyAll(AppColors.primary),
           side: const WidgetStatePropertyAll(
-            BorderSide(
-              color: AppColors.primary,
-            ),
+            BorderSide(color: AppColors.primary),
           ),
         );
 
       case AppButtonVariant.tertiary:
         return base.copyWith(
-          backgroundColor: const WidgetStatePropertyAll(
-            Colors.transparent,
-          ),
-          foregroundColor: const WidgetStatePropertyAll(
-            AppColors.primary,
-          ),
+          backgroundColor: const WidgetStatePropertyAll(Colors.transparent),
+          foregroundColor: const WidgetStatePropertyAll(AppColors.primary),
           elevation: const WidgetStatePropertyAll(0),
         );
 
       case AppButtonVariant.destructive:
         return base.copyWith(
-          backgroundColor: const WidgetStatePropertyAll(
-            AppColors.error,
-          ),
-          foregroundColor: const WidgetStatePropertyAll(
-            Colors.white,
-          ),
+          backgroundColor: const WidgetStatePropertyAll(AppColors.error),
+          foregroundColor: const WidgetStatePropertyAll(Colors.white),
         );
     }
   }
@@ -165,7 +122,8 @@ class AppButton extends StatelessWidget {
         height: 20,
         child: CircularProgressIndicator(
           strokeWidth: 2,
-          color: variant == AppButtonVariant.secondary ||
+          color:
+              variant == AppButtonVariant.secondary ||
                   variant == AppButtonVariant.tertiary
               ? AppColors.primary
               : Colors.white,
@@ -179,14 +137,7 @@ class AppButton extends StatelessWidget {
 
     return Row(
       mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(
-          icon,
-          size: 18,
-        ),
-        const SizedBox(width: 8),
-        Text(label),
-      ],
+      children: [Icon(icon, size: 18), const SizedBox(width: 8), Text(label)],
     );
   }
 
@@ -227,9 +178,6 @@ class AppButton extends StatelessWidget {
       return button;
     }
 
-    return SizedBox(
-      width: double.infinity,
-      child: button,
-    );
+    return SizedBox(width: double.infinity, child: button);
   }
 }

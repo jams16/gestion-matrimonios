@@ -25,36 +25,18 @@ class AppChip extends StatelessWidget {
         label: Text(label),
         selected: selected,
         onSelected: onSelected,
-        avatar: icon == null
-            ? null
-            : Icon(
-                icon,
-                size: 18,
-              ),
+        avatar: icon == null ? null : Icon(icon, size: 18),
         deleteIcon: onDeleted == null
             ? null
-            : const Icon(
-                Icons.close,
-                size: 18,
-              ),
+            : const Icon(Icons.close, size: 18),
         onDeleted: onDeleted,
       );
     }
 
     return Chip(
       label: Text(label),
-      avatar: icon == null
-          ? null
-          : Icon(
-              icon,
-              size: 18,
-            ),
-      deleteIcon: onDeleted == null
-          ? null
-          : const Icon(
-              Icons.close,
-              size: 18,
-            ),
+      avatar: icon == null ? null : Icon(icon, size: 18),
+      deleteIcon: onDeleted == null ? null : const Icon(Icons.close, size: 18),
       onDeleted: onDeleted,
     );
   }

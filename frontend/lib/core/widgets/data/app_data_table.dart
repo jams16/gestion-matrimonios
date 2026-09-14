@@ -34,9 +34,7 @@ class AppDataTable extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        border: Border.all(
-          color: AppColors.border,
-        ),
+        border: Border.all(color: AppColors.border),
         borderRadius: BorderRadius.circular(12),
       ),
       child: ClipRRect(
@@ -47,16 +45,12 @@ class AppDataTable extends StatelessWidget {
             sortColumnIndex: sortColumnIndex,
             sortAscending: sortAscending,
             headingRowColor: WidgetStatePropertyAll(
-              Theme.of(context)
-                  .colorScheme
-                  .surfaceContainerHighest,
+              Theme.of(context).colorScheme.surfaceContainerHighest,
             ),
             columns: columns
                 .map(
                   (column) => DataColumn(
-                    label: Text(
-                      column.label,
-                    ),
+                    label: Text(column.label),
                     numeric: column.numeric,
                     onSort: column.onSort,
                   ),

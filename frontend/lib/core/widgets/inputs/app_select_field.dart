@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppSelectOption<T> {
-  const AppSelectOption({
-    required this.value,
-    required this.label,
-  });
+  const AppSelectOption({required this.value, required this.label});
 
   final T value;
   final String label;
@@ -43,9 +40,9 @@ class AppSelectField<T> extends StatelessWidget {
       children: [
         Text(
           label,
-          style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                fontWeight: FontWeight.w500,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w500),
         ),
 
         const SizedBox(height: 7),
@@ -64,11 +61,7 @@ class AppSelectField<T> extends StatelessWidget {
               enableSearch: searchable,
               requestFocusOnTap: searchable,
 
-              leadingIcon: searchable
-                  ? const Icon(
-                      Icons.search,
-                    )
-                  : null,
+              leadingIcon: searchable ? const Icon(Icons.search) : null,
 
               dropdownMenuEntries: options
                   .map(

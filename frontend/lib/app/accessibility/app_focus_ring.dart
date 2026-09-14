@@ -20,8 +20,7 @@ class AppFocusRing extends StatefulWidget {
   final VoidCallback? onActivate;
 
   @override
-  State<AppFocusRing> createState() =>
-      _AppFocusRingState();
+  State<AppFocusRing> createState() => _AppFocusRingState();
 }
 
 class _AppFocusRingState extends State<AppFocusRing> {
@@ -46,25 +45,16 @@ class _AppFocusRingState extends State<AppFocusRing> {
           ),
       },
       child: AnimatedContainer(
-        duration: const Duration(
-          milliseconds: 120,
-        ),
-        padding: EdgeInsets.all(
-          _focused
-              ? AppAccessibility.focusRingGap
-              : 0,
-        ),
+        duration: const Duration(milliseconds: 120),
+        padding: EdgeInsets.all(_focused ? AppAccessibility.focusRingGap : 0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(
-            widget.borderRadius +
-                AppAccessibility.focusRingGap,
+            widget.borderRadius + AppAccessibility.focusRingGap,
           ),
           border: _focused
               ? Border.all(
-                  color:
-                      Theme.of(context).colorScheme.primary,
-                  width:
-                      AppAccessibility.focusBorderWidth,
+                  color: Theme.of(context).colorScheme.primary,
+                  width: AppAccessibility.focusBorderWidth,
                 )
               : null,
         ),

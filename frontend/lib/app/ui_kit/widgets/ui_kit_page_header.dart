@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 class UiKitPageHeader extends StatelessWidget {
   const UiKitPageHeader({
     super.key,
-    this.subtitle = 'Sistema visual y componentes reutilizables de la aplicación.',
+    this.subtitle =
+        'Sistema visual y componentes reutilizables de la aplicación.',
   });
 
   final String subtitle;
@@ -15,15 +16,12 @@ class UiKitPageHeader extends StatelessWidget {
       children: [
         Text(
           'Diseño UI/UX Kit',
-          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.w700),
         ),
         const SizedBox(height: 6),
-        Text(
-          subtitle,
-          style: Theme.of(context).textTheme.bodyMedium,
-        ),
+        Text(subtitle, style: Theme.of(context).textTheme.bodyMedium),
         const SizedBox(height: 18),
         const Divider(),
       ],

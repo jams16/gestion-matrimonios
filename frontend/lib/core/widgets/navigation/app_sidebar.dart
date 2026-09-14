@@ -33,35 +33,21 @@ class AppSidebar extends StatelessWidget {
         children: [
           if (header != null)
             Padding(
-              padding: const EdgeInsets.fromLTRB(
-                20,
-                20,
-                20,
-                12,
-              ),
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 12),
               child: header,
             ),
 
           ...items.map(
             (item) => NavigationDrawerDestination(
-              icon: Icon(
-                item.icon,
-              ),
-              selectedIcon: Icon(
-                item.selectedIcon ?? item.icon,
-              ),
-              label: Text(
-                item.label,
-              ),
+              icon: Icon(item.icon),
+              selectedIcon: Icon(item.selectedIcon ?? item.icon),
+              label: Text(item.label),
             ),
           ),
 
           if (footer != null) ...[
             const Divider(),
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: footer,
-            ),
+            Padding(padding: const EdgeInsets.all(16), child: footer),
           ],
         ],
       ),

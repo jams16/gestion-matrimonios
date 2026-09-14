@@ -13,10 +13,7 @@ abstract final class AppBorders {
     width: 1.5,
   );
 
-  static const BorderSide error = BorderSide(
-    color: AppColors.error,
-    width: 1,
-  );
+  static const BorderSide error = BorderSide(color: AppColors.error, width: 1);
 
   static const BorderSide disabled = BorderSide(
     color: AppColors.disabled,

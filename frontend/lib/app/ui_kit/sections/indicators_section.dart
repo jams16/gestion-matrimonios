@@ -10,12 +10,10 @@ class IndicatorsSection extends StatefulWidget {
   const IndicatorsSection({super.key});
 
   @override
-  State<IndicatorsSection> createState() =>
-      _IndicatorsSectionState();
+  State<IndicatorsSection> createState() => _IndicatorsSectionState();
 }
 
-class _IndicatorsSectionState
-    extends State<IndicatorsSection> {
+class _IndicatorsSectionState extends State<IndicatorsSection> {
   bool _selectedChip = true;
 
   @override
@@ -35,15 +33,9 @@ class _IndicatorsSectionState
             spacing: 8,
             runSpacing: 8,
             children: [
-              AppBadge(
-                label: '12',
-              ),
-              AppBadge(
-                label: '3 nuevos',
-              ),
-              AppBadge(
-                label: 'Pro',
-              ),
+              AppBadge(label: '12'),
+              AppBadge(label: '3 nuevos'),
+              AppBadge(label: 'Pro'),
             ],
           ),
         ),
@@ -52,8 +44,7 @@ class _IndicatorsSectionState
 
         const _IndicatorExample(
           title: 'Status badge',
-          description:
-              'Representa de forma compacta el estado de un elemento.',
+          description: 'Representa de forma compacta el estado de un elemento.',
           child: Wrap(
             spacing: 8,
             runSpacing: 8,
@@ -92,10 +83,7 @@ class _IndicatorsSectionState
             spacing: 8,
             runSpacing: 8,
             children: [
-              const AppChip(
-                label: 'Catering',
-                icon: Icons.restaurant_outlined,
-              ),
+              const AppChip(label: 'Catering', icon: Icons.restaurant_outlined),
               AppChip(
                 label: 'Pendiente',
                 selected: _selectedChip,
@@ -105,10 +93,7 @@ class _IndicatorsSectionState
                   });
                 },
               ),
-              AppChip(
-                label: 'Fotografía',
-                onDeleted: () {},
-              ),
+              AppChip(label: 'Fotografía', onDeleted: () {}),
             ],
           ),
         ),
@@ -123,17 +108,9 @@ class _IndicatorsSectionState
             spacing: 8,
             runSpacing: 8,
             children: [
-              AppTag(
-                label: 'Alta prioridad',
-                icon: Icons.priority_high,
-              ),
-              AppTag(
-                label: 'VIP',
-                icon: Icons.star_outline,
-              ),
-              AppTag(
-                label: 'Iglesia',
-              ),
+              AppTag(label: 'Alta prioridad', icon: Icons.priority_high),
+              AppTag(label: 'VIP', icon: Icons.star_outline),
+              AppTag(label: 'Iglesia'),
             ],
           ),
         ),
@@ -148,22 +125,10 @@ class _IndicatorsSectionState
             spacing: 16,
             crossAxisAlignment: WrapCrossAlignment.center,
             children: [
-              AppAvatar(
-                name: 'José Moncada',
-                size: AppAvatarSize.small,
-              ),
-              AppAvatar(
-                name: 'Carlos Silva',
-                size: AppAvatarSize.medium,
-              ),
-              AppAvatar(
-                name: 'Wedding Planner',
-                size: AppAvatarSize.large,
-              ),
-              AppAvatar(
-                icon: Icons.person_outline,
-                size: AppAvatarSize.medium,
-              ),
+              AppAvatar(name: 'José Moncada', size: AppAvatarSize.small),
+              AppAvatar(name: 'Carlos Silva', size: AppAvatarSize.medium),
+              AppAvatar(name: 'Wedding Planner', size: AppAvatarSize.large),
+              AppAvatar(icon: Icons.person_outline, size: AppAvatarSize.medium),
             ],
           ),
         ),
@@ -171,9 +136,6 @@ class _IndicatorsSectionState
     );
   }
 }
-
-
-
 
 class _IndicatorsHeading extends StatelessWidget {
   const _IndicatorsHeading();
@@ -185,12 +147,9 @@ class _IndicatorsHeading extends StatelessWidget {
       children: [
         Text(
           'Indicadores y etiquetas',
-          style: Theme.of(context)
-              .textTheme
-              .headlineSmall
-              ?.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
         ),
         const SizedBox(height: 6),
         Text(
@@ -216,26 +175,18 @@ class _IndicatorExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints: const BoxConstraints(
-        maxWidth: 480,
-      ),
+      constraints: const BoxConstraints(maxWidth: 480),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
-            style: Theme.of(context)
-                .textTheme
-                .titleSmall
-                ?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 4),
-          Text(
-            description,
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
+          Text(description, style: Theme.of(context).textTheme.bodySmall),
           const SizedBox(height: 12),
           child,
         ],
