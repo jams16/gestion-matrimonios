@@ -7,12 +7,192 @@
     "gp_proyecto": {
       "model": "Proyecto",
       "namespace": "public"
+    },
+    "in_persona_natural": {
+      "model": "PersonaNatural",
+      "namespace": "public"
+    },
+    "in_ubigeo": {
+      "model": "Ubigeo",
+      "namespace": "public"
     }
   },
   "domain": {
     "namespaces": {
       "public": {
         "models": {
+          "PersonaNatural": {
+            "fields": {
+              "apellidoMaterno": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 100
+                  }
+                }
+              },
+              "apellidoPaterno": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 100
+                  }
+                }
+              },
+              "codigoUbigeo": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 6
+                  }
+                }
+              },
+              "correoElectronico": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 150
+                  }
+                }
+              },
+              "direccion": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 250
+                  }
+                }
+              },
+              "dni": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 8
+                  }
+                }
+              },
+              "esActivo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "fechaCreacion": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "fechaModificacion": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "idPersonaNatural": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "nombres": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 100
+                  }
+                }
+              },
+              "telefono": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 15
+                  }
+                }
+              }
+            },
+            "relations": {
+              "ubigeo": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "codigoUbigeo"
+                  ],
+                  "targetFields": [
+                    "idUbigeo"
+                  ]
+                },
+                "to": {
+                  "model": "Ubigeo",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "apellidoMaterno": {
+                  "column": "apellido_materno"
+                },
+                "apellidoPaterno": {
+                  "column": "apellido_paterno"
+                },
+                "codigoUbigeo": {
+                  "column": "codigo_ubigeo"
+                },
+                "correoElectronico": {
+                  "column": "correo_electronico"
+                },
+                "direccion": {
+                  "column": "direccion"
+                },
+                "dni": {
+                  "column": "dni"
+                },
+                "esActivo": {
+                  "column": "es_activo"
+                },
+                "fechaCreacion": {
+                  "column": "fecha_creacion"
+                },
+                "fechaModificacion": {
+                  "column": "fecha_modificacion"
+                },
+                "idPersonaNatural": {
+                  "column": "id_persona_natural"
+                },
+                "nombres": {
+                  "column": "nombres"
+                },
+                "telefono": {
+                  "column": "telefono"
+                }
+              },
+              "namespaceId": "public",
+              "table": "in_persona_natural"
+            }
+          },
           "Proyecto": {
             "fields": {
               "idProyecto": {
@@ -32,6 +212,85 @@
               },
               "namespaceId": "public",
               "table": "gp_proyecto"
+            }
+          },
+          "Ubigeo": {
+            "fields": {
+              "departamento": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 100
+                  }
+                }
+              },
+              "distrito": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 100
+                  }
+                }
+              },
+              "idUbigeo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 6
+                  }
+                }
+              },
+              "provincia": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 100
+                  }
+                }
+              }
+            },
+            "relations": {
+              "personas": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idUbigeo"
+                  ],
+                  "targetFields": [
+                    "codigoUbigeo"
+                  ]
+                },
+                "to": {
+                  "model": "PersonaNatural",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "departamento": {
+                  "column": "departamento"
+                },
+                "distrito": {
+                  "column": "distrito"
+                },
+                "idUbigeo": {
+                  "column": "id_ubigeo"
+                },
+                "provincia": {
+                  "column": "provincia"
+                }
+              },
+              "namespaceId": "public",
+              "table": "in_ubigeo"
             }
           }
         }
@@ -59,6 +318,191 @@
                 ]
               },
               "uniques": []
+            },
+            "in_persona_natural": {
+              "columns": {
+                "apellido_materno": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 100
+                  }
+                },
+                "apellido_paterno": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 100
+                  }
+                },
+                "codigo_ubigeo": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 6
+                  }
+                },
+                "correo_electronico": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 150
+                  }
+                },
+                "direccion": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 250
+                  }
+                },
+                "dni": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 8
+                  }
+                },
+                "es_activo": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "fecha_creacion": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "fecha_modificacion": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "id_persona_natural": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "expression": "autoincrement()",
+                    "kind": "function"
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "nombres": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 100
+                  }
+                },
+                "telefono": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 15
+                  }
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "codigo_ubigeo"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "in_persona_natural"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_ubigeo"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "in_ubigeo"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "codigo_ubigeo"
+                  ],
+                  "name": "in_persona_natural_codigo_ubigeo_idx_1bf1466f",
+                  "prefix": "in_persona_natural_codigo_ubigeo_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_persona_natural"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "dni"
+                  ]
+                }
+              ]
+            },
+            "in_ubigeo": {
+              "columns": {
+                "departamento": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 100
+                  }
+                },
+                "distrito": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 100
+                  }
+                },
+                "id_ubigeo": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 6
+                  }
+                },
+                "provincia": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 100
+                  }
+                }
+              },
+              "foreignKeys": [],
+              "indexes": [],
+              "primaryKey": {
+                "columns": [
+                  "id_ubigeo"
+                ]
+              },
+              "uniques": []
             }
           }
         },
@@ -66,10 +510,10 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "5dc8eba0327a0d53287bd1649382dcba066b078c1396ac64018c42f3603ec3a4"
+    "storageHash": "299789639c870ac626dbc0d142b45268bc6018fdbfd87f84366bf3317222bf7e"
   },
   "execution": {
-    "executionHash": "e5be3e4360498dfa35fe67128e78083e7d0f24d196b23ca568273171b2c5c28c",
+    "executionHash": "6acdf53da8b832bb4cb20418c871b67c303a2d2345a62aab7ac8487ee33266f7",
     "mutations": {
       "defaults": [
         {
@@ -81,6 +525,21 @@
             "column": "idProyecto",
             "namespace": "public",
             "table": "gp_proyecto"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "fecha_modificacion",
+            "namespace": "public",
+            "table": "in_persona_natural"
           }
         }
       ]

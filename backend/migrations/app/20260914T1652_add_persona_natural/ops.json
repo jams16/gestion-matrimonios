@@ -1,0 +1,203 @@
+[
+  {
+    "id": "table.in_persona_natural",
+    "label": "Create table \"in_persona_natural\"",
+    "summary": "Creates table \"in_persona_natural\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "in_persona_natural"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"in_persona_natural\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"in_persona_natural\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"in_persona_natural\"",
+        "sql": "CREATE TABLE \"public\".\"in_persona_natural\" (\n  \"apellido_materno\" character varying(100),\n  \"apellido_paterno\" character varying(100) NOT NULL,\n  \"codigo_ubigeo\" character varying(6),\n  \"correo_electronico\" character varying(150) NOT NULL,\n  \"direccion\" character varying(250),\n  \"dni\" character varying(8),\n  \"es_activo\" bool DEFAULT true NOT NULL,\n  \"fecha_creacion\" timestamptz DEFAULT (now()) NOT NULL,\n  \"fecha_modificacion\" timestamptz NOT NULL,\n  \"id_persona_natural\" SERIAL NOT NULL,\n  \"nombres\" character varying(100) NOT NULL,\n  \"telefono\" character varying(15),\n  CONSTRAINT \"in_persona_natural_pkey\" PRIMARY KEY (\"id_persona_natural\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"in_persona_natural\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"in_persona_natural\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.in_ubigeo",
+    "label": "Create table \"in_ubigeo\"",
+    "summary": "Creates table \"in_ubigeo\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "in_ubigeo"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"in_ubigeo\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"in_ubigeo\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"in_ubigeo\"",
+        "sql": "CREATE TABLE \"public\".\"in_ubigeo\" (\n  \"departamento\" character varying(100) NOT NULL,\n  \"distrito\" character varying(100) NOT NULL,\n  \"id_ubigeo\" character varying(6) NOT NULL,\n  \"provincia\" character varying(100) NOT NULL,\n  CONSTRAINT \"in_ubigeo_pkey\" PRIMARY KEY (\"id_ubigeo\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"in_ubigeo\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"in_ubigeo\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.in_persona_natural.in_persona_natural_dni_key",
+    "label": "Add unique constraint on \"in_persona_natural\" (dni)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "in_persona_natural_dni_key",
+        "table": "in_persona_natural"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"in_persona_natural_dni_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "in_persona_natural_dni_key",
+          "public",
+          "\"public\".\"in_persona_natural\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"in_persona_natural_dni_key\"",
+        "sql": "ALTER TABLE \"public\".\"in_persona_natural\" ADD CONSTRAINT \"in_persona_natural_dni_key\" UNIQUE (\"dni\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"in_persona_natural_dni_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "in_persona_natural_dni_key",
+          "public",
+          "\"public\".\"in_persona_natural\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.in_persona_natural.in_persona_natural_codigo_ubigeo_idx",
+    "label": "Create index \"in_persona_natural_codigo_ubigeo_idx\" on \"in_persona_natural\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "in_persona_natural_codigo_ubigeo_idx",
+        "table": "in_persona_natural"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"in_persona_natural_codigo_ubigeo_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"in_persona_natural_codigo_ubigeo_idx\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"in_persona_natural_codigo_ubigeo_idx\"",
+        "sql": "CREATE INDEX \"in_persona_natural_codigo_ubigeo_idx\" ON \"public\".\"in_persona_natural\" (\"codigo_ubigeo\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"in_persona_natural_codigo_ubigeo_idx\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"in_persona_natural_codigo_ubigeo_idx\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.in_persona_natural.in_persona_natural_codigo_ubigeo_fkey",
+    "label": "Add foreign key \"in_persona_natural_codigo_ubigeo_fkey\" on \"in_persona_natural\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "in_persona_natural_codigo_ubigeo_fkey",
+        "table": "in_persona_natural"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"in_persona_natural_codigo_ubigeo_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "in_persona_natural_codigo_ubigeo_fkey",
+          "public",
+          "\"public\".\"in_persona_natural\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"in_persona_natural_codigo_ubigeo_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"in_persona_natural\"\nADD CONSTRAINT \"in_persona_natural_codigo_ubigeo_fkey\"\nFOREIGN KEY (\"codigo_ubigeo\")\nREFERENCES \"public\".\"in_ubigeo\" (\"id_ubigeo\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"in_persona_natural_codigo_ubigeo_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "in_persona_natural_codigo_ubigeo_fkey",
+          "public",
+          "\"public\".\"in_persona_natural\""
+        ]
+      }
+    ]
+  }
+]

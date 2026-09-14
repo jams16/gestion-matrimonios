@@ -34,7 +34,7 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'299789639c870ac626dbc0d142b45268bc6018fdbfd87f84366bf3317222bf7e'>;
+  StorageHashBase<'eeb03939a028ef1681a7e9fa00f9898259be814ecd0a0fee7c946253566fb638'>;
 export type ExecutionHash =
   ExecutionHashBase<'6acdf53da8b832bb4cb20418c871b67c303a2d2345a62aab7ac8487ee33266f7'>;
 export type ProfileHash =
@@ -491,12 +491,16 @@ type ContractBase = Omit<
                   readonly nullable: false;
                 };
               };
-              primaryKey: { readonly columns: readonly ['id_persona_natural'] };
-              uniques: readonly [{ readonly columns: readonly ['dni'] }];
+              primaryKey: {
+                readonly columns: readonly ['id_persona_natural'];
+                readonly name: 'in_persona_natural_pkey';
+              };
+              uniques: readonly [
+                { readonly columns: readonly ['dni']; readonly name: 'in_persona_natural_dni_key' },
+              ];
               indexes: readonly [
                 {
-                  readonly name: 'in_persona_natural_codigo_ubigeo_idx_1bf1466f';
-                  readonly prefix: 'in_persona_natural_codigo_ubigeo_idx';
+                  readonly name: 'in_persona_natural_codigo_ubigeo_idx';
                   readonly columns: readonly ['codigo_ubigeo'];
                   readonly unique: false;
                 },
@@ -543,7 +547,10 @@ type ContractBase = Omit<
                   readonly typeParams: { readonly length: 100 };
                 };
               };
-              primaryKey: { readonly columns: readonly ['id_ubigeo'] };
+              primaryKey: {
+                readonly columns: readonly ['id_ubigeo'];
+                readonly name: 'in_ubigeo_pkey';
+              };
               uniques: readonly [];
               indexes: readonly [];
               foreignKeys: readonly [];

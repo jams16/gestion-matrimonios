@@ -2520,3 +2520,53 @@ Si aparece una necesidad que aparentemente requiere romper una de estas reglas, 
 3. el cambio beneficia a toda la arquitectura y no solamente a un caso particular.
 
 Las decisiones arquitectónicas importantes deben mantenerse documentadas para evitar que distintas partes del sistema evolucionen con criterios incompatibles.
+
+---
+
+# 74. Convenciones API e IDs para Involucrados
+
+Las reglas funcionales de esta sección tienen prioridad sobre ejemplos generales
+anteriores cuando se trabaje con Persona Natural y Ubigeo.
+
+- Los IDs internos numéricos nuevos son autoincrementales desde 1000.
+- in_persona_natural.id_persona_natural es numérico; no usa UUID.
+- in_ubigeo.id_ubigeo es la excepción: conserva su clave natural VARCHAR(6).
+- Toda respuesta exitosa o fallida usa la forma { "mensaje": "...", "data": ... }.
+- En errores, data siempre es null y se usa el estado HTTP correspondiente.
+- Persona Natural se elimina lógicamente mediante es_activo=false.
+
+## Paginación, búsqueda y filtros
+
+Los listados aceptan pagina, limite, ordenarPor, orden, buscar y mostrarTodos.
+Cuando mostrarTodos=true, se ignoran página y límite, pero se mantienen la
+búsqueda, los filtros y el orden. La respuesta contiene items y paginacion con
+pagina, limite, total, totalPaginas, tieneAnterior y tieneSiguiente.
+
+La búsqueda es parcial y no distingue mayúsculas/minúsculas. Persona permite
+buscar por nombres, apellidos, correo, DNI y teléfono; filtra además por ID,
+ubigeo, estado, departamento, provincia y distrito. Por defecto devuelve solo
+personas activas. Ubigeo busca y filtra por código, departamento, provincia y
+distrito.
+
+## Endpoints de Persona Natural
+
+- POST /api/v1/personas: crea una persona. Requiere nombres, apellidoPaterno y correoElectronico.
+- GET /api/v1/personas/:id: obtiene una persona.
+- PUT /api/v1/personas/:id y PATCH /api/v1/personas/:id: actualizan.
+- DELETE /api/v1/personas/:id: realiza eliminación lógica.
+- GET /api/v1/personas: lista, busca, filtra, ordena y pagina.
+- POST /api/v1/personas/importar: recibe multipart/form-data, campo archivo,
+  máximo 10 MB, extensión XLSX o CSV.
+
+La importación espera las columnas nombres, apellido_paterno, apellido_materno,
+telefono, correo_electronico, dni, direccion y codigo_ubigeo. Valida cada fila
+de manera independiente y devuelve totalFilas, importadas, errores y
+detalleErrores.
+
+## Endpoints de Ubigeo
+
+- GET /api/v1/ubigeos/:id: obtiene un ubigeo.
+- GET /api/v1/ubigeos: lista, busca, filtra, ordena y pagina.
+
+in_ubigeo es un catálogo preexistente y externo a esta funcionalidad: no se
+crea, elimina ni carga mediante seed o endpoints.

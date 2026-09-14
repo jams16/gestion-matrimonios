@@ -4,3 +4,34 @@ model Proyecto {
 
   @@map("gp_proyecto")
 }
+
+model Ubigeo {
+  idUbigeo     VarChar(6)       @id @map("id_ubigeo")
+  departamento VarChar(100)
+  provincia    VarChar(100)
+  distrito     VarChar(100)
+
+  personas     PersonaNatural[]
+
+  @@map("in_ubigeo")
+}
+
+model PersonaNatural {
+  idPersonaNatural  Int                  @id @default(autoincrement()) @map("id_persona_natural")
+  nombres           VarChar(100)
+  apellidoPaterno   VarChar(100)         @map("apellido_paterno")
+  apellidoMaterno   VarChar(100)?        @map("apellido_materno")
+  telefono          VarChar(15)?
+  correoElectronico VarChar(150)         @map("correo_electronico")
+  dni               VarChar(8)?          @unique
+  direccion         VarChar(250)?
+  codigoUbigeo      VarChar(6)?          @map("codigo_ubigeo")
+  esActivo          Boolean              @default(true) @map("es_activo")
+  fechaCreacion     DateTime             @default(now()) @map("fecha_creacion")
+  fechaModificacion temporal.updatedAt() @map("fecha_modificacion")
+
+  ubigeo            Ubigeo?              @relation(fields:[codigoUbigeo], references:[idUbigeo], onDelete: Restrict)
+
+  @@index([codigoUbigeo])
+  @@map("in_persona_natural")
+}
