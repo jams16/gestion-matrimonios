@@ -50,6 +50,7 @@ import { JwtAccessGuard } from './presentation/guards/jwt-access.guard';
     GestionarUsuariosUseCase,
     JwtAccessGuard,
   ],
-  exports: [GestionarUsuariosUseCase, JwtAccessGuard],
+  // UsuariosModule reutiliza el guard; debe recibir también su JwtService configurado.
+  exports: [JwtModule, GestionarUsuariosUseCase, JwtAccessGuard],
 })
 export class AutenticacionModule {}
