@@ -8,6 +8,7 @@ import 'sections/inputs_section.dart';
 import 'sections/selection_controls_section.dart';
 import 'sections/buttons_section.dart';
 import 'sections/feedback_section.dart';
+import 'sections/containers_section.dart';
 
 import 'widgets/a4_sheet.dart';
 import 'widgets/ui_kit_page_header.dart';
@@ -227,6 +228,35 @@ class UiKitPage extends StatelessWidget {
                     ),
                     SizedBox(height: 24),
                     FeedbackPageTwoSection(),
+                  ],
+                ),
+              ),
+
+
+              // CONTENEDORES — PÁGINA 1
+              A4Sheet(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    UiKitPageHeader(
+                      subtitle: 'Contenedores',
+                    ),
+                    SizedBox(height: 24),
+                    ContainersPageOneSection(),
+                  ],
+                ),
+              ),
+
+              // CONTENEDORES — PÁGINA 2
+              A4Sheet(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    UiKitPageHeader(
+                      subtitle: 'Contenedores',
+                    ),
+                    SizedBox(height: 24),
+                    ContainersPageTwoSection(),
                   ],
                 ),
               ),
