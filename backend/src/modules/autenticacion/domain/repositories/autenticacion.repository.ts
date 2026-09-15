@@ -40,6 +40,7 @@ export abstract class AutenticacionRepository {
     correoElectronico: string;
     nombres: string;
     apellidoPaterno: string;
+    apellidoMaterno?: string | null;
   } | null>;
   abstract correoPersonaExiste(correoElectronico: string): Promise<boolean>;
   abstract entidadExiste(id: number): Promise<boolean>;

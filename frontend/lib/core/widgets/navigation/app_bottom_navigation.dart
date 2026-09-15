@@ -20,6 +20,7 @@ class AppBottomNavigation extends StatelessWidget {
     return NavigationBar(
       selectedIndex: selectedIndex,
       onDestinationSelected: onDestinationSelected,
+      labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
       destinations: items
           .map(
             (item) => NavigationDestination(

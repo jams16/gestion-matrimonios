@@ -231,7 +231,23 @@ export class IniciarSesionUseCase {
           '7d') as never,
       },
     );
-    return { accessToken, refreshToken, usuario: publico(usuario) };
+    const persona = await this.repository.personaExiste(
+      usuario.idPersonaNatural,
+    );
+    const nombreCompleto = persona
+      ? [
+          persona.nombres,
+          persona.apellidoPaterno,
+          persona.apellidoMaterno,
+        ]
+          .filter(Boolean)
+          .join(' ')
+      : usuario.usuario;
+    return {
+      accessToken,
+      refreshToken,
+      usuario: { ...publico(usuario), nombreCompleto },
+    };
   }
 }
 

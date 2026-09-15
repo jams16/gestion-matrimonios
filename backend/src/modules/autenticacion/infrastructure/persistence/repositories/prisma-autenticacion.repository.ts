@@ -154,6 +154,7 @@ export class PrismaAutenticacionRepository implements AutenticacionRepository {
       correoElectronico: string;
       nombres: string;
       apellidoPaterno: string;
+      apellidoMaterno: string | null;
     } | null;
     return p;
   }
