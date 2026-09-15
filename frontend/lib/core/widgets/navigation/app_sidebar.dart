@@ -11,6 +11,9 @@ class AppSidebar extends StatelessWidget {
     this.header,
     this.footer,
     this.width = 260,
+    this.backgroundColor,
+    this.indicatorColor,
+    this.selectedForegroundColor,
   });
 
   final List<AppNavigationItem> items;
@@ -22,12 +25,17 @@ class AppSidebar extends StatelessWidget {
   final Widget? footer;
 
   final double width;
+  final Color? backgroundColor;
+  final Color? indicatorColor;
+  final Color? selectedForegroundColor;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: width,
       child: NavigationDrawer(
+        backgroundColor: backgroundColor,
+        indicatorColor: indicatorColor,
         selectedIndex: selectedIndex,
         onDestinationSelected: onDestinationSelected,
         children: [
@@ -37,13 +45,16 @@ class AppSidebar extends StatelessWidget {
               child: header,
             ),
 
-          ...items.map(
-            (item) => NavigationDrawerDestination(
-              icon: Icon(item.icon),
-              selectedIcon: Icon(item.selectedIcon ?? item.icon),
-              label: Text(item.label),
-            ),
-          ),
+          ...items.asMap().entries.map((entry) {
+            final item = entry.value;
+            final isSelected = entry.key == selectedIndex;
+            final color = isSelected ? selectedForegroundColor : null;
+            return NavigationDrawerDestination(
+              icon: Icon(item.icon, color: color),
+              selectedIcon: Icon(item.selectedIcon ?? item.icon, color: color),
+              label: Text(item.label, style: TextStyle(color: color)),
+            );
+          }),
 
           if (footer != null) ...[
             const Divider(),

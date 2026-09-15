@@ -11,9 +11,22 @@ import 'route_names.dart';
 final appRouter = GoRouter(
   initialLocation: RouteNames.bienvenida,
   routes: [
+    GoRoute(path: '/', redirect: (context, state) => '/home'),
     GoRoute(
-      path: '/',
-      builder: (context, state) => InicioPage(nombre: state.extra),
+      path: '/home',
+      builder: (context, state) => InicioPage(nombre: state.extra, seccion: 0),
+    ),
+    GoRoute(
+      path: '/plan',
+      builder: (context, state) => InicioPage(nombre: state.extra, seccion: 1),
+    ),
+    GoRoute(
+      path: '/gestion',
+      builder: (context, state) => InicioPage(nombre: state.extra, seccion: 2),
+    ),
+    GoRoute(
+      path: '/proveedores',
+      builder: (context, state) => InicioPage(nombre: state.extra, seccion: 3),
     ),
     GoRoute(
       path: RouteNames.bienvenida,

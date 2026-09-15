@@ -8,6 +8,9 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
     this.leading,
     this.actions = const [],
     this.centerTitle = false,
+    this.backgroundColor,
+    this.foregroundColor,
+    this.horizontalPadding = 32,
   });
 
   final String title;
@@ -17,6 +20,9 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget> actions;
 
   final bool centerTitle;
+  final Color? backgroundColor;
+  final Color? foregroundColor;
+  final double horizontalPadding;
 
   @override
   Size get preferredSize => Size.fromHeight(subtitle == null ? 64 : 76);
@@ -27,6 +33,9 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
       toolbarHeight: preferredSize.height,
       centerTitle: centerTitle,
       leading: leading,
+      backgroundColor: backgroundColor,
+      foregroundColor: foregroundColor,
+      titleSpacing: horizontalPadding,
       title: Column(
         crossAxisAlignment: centerTitle
             ? CrossAxisAlignment.center
@@ -34,17 +43,28 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
         children: [
           Text(
             title,
-            style: Theme.of(
-              context,
-            ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600),
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.w600,
+              color: foregroundColor,
+            ),
           ),
           if (subtitle != null) ...[
             const SizedBox(height: 2),
-            Text(subtitle!, style: Theme.of(context).textTheme.bodySmall),
+            Text(
+              subtitle!,
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(color: foregroundColor),
+            ),
           ],
         ],
       ),
-      actions: actions,
+      actions: [
+        Padding(
+          padding: EdgeInsets.only(right: horizontalPadding - 8),
+          child: Row(mainAxisSize: MainAxisSize.min, children: actions),
+        ),
+      ],
     );
   }
 }
