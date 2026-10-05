@@ -5,4 +5,5 @@ abstract final class RouteNames {
   static const registrarse = '/registrarse';
   static const recuperarContrasena = '/recuperar-contrasena';
   static const matrimonios = '/matrimonios';
+  static const matrimonio = '/matrimonio';
 }

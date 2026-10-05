@@ -22,7 +22,7 @@ class SeleccionarMatrimonioPage extends ConsumerWidget {
     final matrimonios = ref.watch(matrimoniosResumenProvider);
 
     return Scaffold(
-      backgroundColor: AppColors.surface,
+      backgroundColor: const Color(0xFFFDFBFF),
       body: SafeArea(
         child: ResponsiveLayout(
           mobile: _Layout(
@@ -119,11 +119,11 @@ class _Layout extends StatelessWidget {
             ),
             const SizedBox(height: AppSpacing.lg),
             AppButton(
-              label: 'Añadir matrimonio',
+              label: 'Agregar matrimonio',
               icon: Icons.add,
               expanded: true,
               size: AppButtonSize.large,
-              onPressed: () {},
+              onPressed: () => context.go('/matrimonio'),
             ),
           ],
         ),

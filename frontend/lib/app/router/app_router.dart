@@ -7,6 +7,7 @@ import '../../features/autenticacion/presentation/pages/inicio_page.dart';
 import '../../features/autenticacion/presentation/pages/recuperar_contrasena_page.dart';
 import '../../features/autenticacion/presentation/pages/registrarse_page.dart';
 import '../../features/proyectos/presentation/pages/seleccionar_matrimonio_page.dart';
+import '../../features/proyectos/presentation/pages/crear_matrimonio_page.dart';
 import 'route_names.dart';
 
 final appRouter = GoRouter(
@@ -49,6 +50,10 @@ final appRouter = GoRouter(
       path: RouteNames.matrimonios,
       builder: (context, state) =>
           SeleccionarMatrimonioPage(nombre: state.extra),
+    ),
+    GoRoute(
+      path: RouteNames.matrimonio,
+      builder: (context, state) => const CrearMatrimonioPage(),
     ),
     GoRoute(
       path: RouteNames.uiKit,
