@@ -9,6 +9,7 @@ import { CrearProyectoDto } from '../../../application/dto/crear-proyecto.dto';
 import { ListarMatrimoniosDto } from '../../../application/dto/listar-matrimonios.dto';
 import { ListarProyectosDto } from '../../../application/dto/listar-proyectos.dto';
 import { Matrimonio } from '../../../domain/entities/matrimonio.entity';
+import { MatrimonioResumen } from '../../../domain/entities/matrimonio-resumen.entity';
 import { Proyecto } from '../../../domain/entities/proyecto.entity';
 import {
   ProyectosRepository,
@@ -130,6 +131,49 @@ export class PrismaProyectosRepository implements ProyectosRepository {
     return this.paginarYOrdenar(items, query);
   }
 
+  async listarResumenMatrimonios(): Promise<MatrimonioResumen[]> {
+    const matrimonios =
+      (await this.prisma.client.orm.public.Matrimonio.all()) as Matrimonio[];
+    const proyectos =
+      (await this.prisma.client.orm.public.Proyecto.all()) as Proyecto[];
+    const ubigeos = (await this.prisma.client.orm.public.Ubigeo.all()) as Array<{
+      idUbigeo: string;
+      departamento: string | null;
+      provincia: string | null;
+      distrito: string | null;
+    }>;
+
+    const proyectosPorId = new Map(
+      proyectos.map((proyecto) => [proyecto.idProyecto, proyecto]),
+    );
+    const ubigeosPorId = new Map(
+      ubigeos.map((ubigeo) => [ubigeo.idUbigeo, ubigeo]),
+    );
+
+    return matrimonios
+      .filter((matrimonio) => matrimonio.estado !== false)
+      .map((matrimonio) => {
+        const proyecto = proyectosPorId.get(matrimonio.idProyecto);
+        const ubigeo = matrimonio.ciudadUbicacion
+          ? ubigeosPorId.get(matrimonio.ciudadUbicacion)
+          : null;
+
+        return {
+          idMatrimonio: matrimonio.idMatrimonio,
+          idProyecto: matrimonio.idProyecto,
+          nombreProyecto: proyecto?.nombre ?? null,
+          fechaMatrimonio: matrimonio.fechaMatrimonio,
+          ciudadUbicacion: this.descripcionUbigeo(
+            ubigeo,
+            matrimonio.ciudadUbicacion,
+          ),
+        };
+      })
+      .sort((a, b) =>
+        this.compararFechas(a.fechaMatrimonio, b.fechaMatrimonio),
+      );
+  }
+
   async usuarioExiste(id: number): Promise<boolean> {
     return !!(await this.prisma.client.orm.public.Usuario.first({
       idUsuario: id,
@@ -201,6 +245,37 @@ export class PrismaProyectosRepository implements ProyectosRepository {
 
   private contiene = (value: unknown, filtro?: string) =>
     !filtro || this.texto(value).includes(this.texto(filtro));
+
+  private descripcionUbigeo(
+    ubigeo:
+      | {
+          departamento: string | null;
+          provincia: string | null;
+          distrito: string | null;
+        }
+      | null
+      | undefined,
+    codigo: string | null,
+  ) {
+    const descripcion = [
+      ubigeo?.distrito,
+      ubigeo?.provincia,
+      ubigeo?.departamento,
+    ]
+      .filter((valor): valor is string => !!valor?.trim())
+      .join(', ');
+    return descripcion || codigo || null;
+  }
+
+  private compararFechas(
+    left: Temporal.Instant | null,
+    right: Temporal.Instant | null,
+  ) {
+    if (!left && !right) return 0;
+    if (!left) return 1;
+    if (!right) return -1;
+    return Temporal.Instant.compare(left, right);
+  }
 
   private paginarYOrdenar<T extends object>(
     items: T[],

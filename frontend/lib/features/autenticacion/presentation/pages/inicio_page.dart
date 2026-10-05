@@ -12,6 +12,7 @@ import '../../../../core/widgets/navigation/app_navigation_item.dart';
 import '../../../../core/widgets/navigation/app_navigation_rail.dart';
 import '../../../../core/widgets/navigation/app_sidebar.dart';
 import '../../../../core/widgets/navigation/app_top_bar.dart';
+import '../../../../app/router/route_names.dart';
 import '../../infrastructure/auth_api.dart';
 import '../../infrastructure/auth_session.dart';
 
@@ -148,7 +149,7 @@ class _InicioPageState extends State<InicioPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Hola, ' + _nombreCompleto,
+                      'Hola, $_nombreCompleto',
                       style: Theme.of(context).textTheme.headlineSmall
                           ?.copyWith(fontWeight: FontWeight.w700),
                     ),
@@ -201,6 +202,9 @@ class _InicioPageState extends State<InicioPage> {
       ),
       onSelected: (opcion) {
         if (opcion == _OpcionPerfil.cerrarSesion) _cerrarSesion();
+        if (opcion == _OpcionPerfil.misBodas) {
+          context.go(RouteNames.matrimonios, extra: _nombreCompleto);
+        }
       },
       itemBuilder: (context) => [
         PopupMenuItem<_OpcionPerfil>(

@@ -29,6 +29,7 @@ import {
   CrearMatrimonioUseCase,
   EliminarMatrimonioUseCase,
   ListarMatrimoniosUseCase,
+  ListarResumenMatrimoniosUseCase,
   ObtenerMatrimonioUseCase,
 } from '../../application/use-cases/matrimonios.use-cases';
 
@@ -39,6 +40,7 @@ export class MatrimoniosController {
     private readonly crear: CrearMatrimonioUseCase,
     private readonly obtener: ObtenerMatrimonioUseCase,
     private readonly listar: ListarMatrimoniosUseCase,
+    private readonly listarResumen: ListarResumenMatrimoniosUseCase,
     private readonly actualizar: ActualizarMatrimonioUseCase,
     private readonly eliminar: EliminarMatrimonioUseCase,
   ) {}
@@ -60,6 +62,22 @@ export class MatrimoniosController {
     return {
       mensaje: 'Matrimonios obtenidos correctamente.',
       data: await this.listar.execute(query),
+    };
+  }
+
+  @Get('resumen')
+  @ApiOperation({
+    summary: 'Listar matrimonios para seleccion',
+    description:
+      'Devuelve solo los datos necesarios para seleccionar un matrimonio, ordenados por fecha de matrimonio ascendente.',
+  })
+  @ApiOkResponse({
+    description: 'Resumenes de matrimonios obtenidos correctamente.',
+  })
+  async listarResumenMatrimonios() {
+    return {
+      mensaje: 'Resumenes de matrimonios obtenidos correctamente.',
+      data: await this.listarResumen.execute(),
     };
   }
 

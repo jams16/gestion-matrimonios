@@ -84,6 +84,15 @@ export class ListarMatrimoniosUseCase {
 }
 
 @Injectable()
+export class ListarResumenMatrimoniosUseCase {
+  constructor(private readonly repository: ProyectosRepository) {}
+
+  execute() {
+    return this.repository.listarResumenMatrimonios();
+  }
+}
+
+@Injectable()
 export class ActualizarMatrimonioUseCase {
   constructor(
     private readonly repository: ProyectosRepository,

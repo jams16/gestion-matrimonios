@@ -6,6 +6,7 @@ import '../../features/autenticacion/presentation/pages/iniciar_sesion_page.dart
 import '../../features/autenticacion/presentation/pages/inicio_page.dart';
 import '../../features/autenticacion/presentation/pages/recuperar_contrasena_page.dart';
 import '../../features/autenticacion/presentation/pages/registrarse_page.dart';
+import '../../features/proyectos/presentation/pages/seleccionar_matrimonio_page.dart';
 import 'route_names.dart';
 
 final appRouter = GoRouter(
@@ -43,6 +44,11 @@ final appRouter = GoRouter(
     GoRoute(
       path: RouteNames.recuperarContrasena,
       builder: (context, state) => const RecuperarContrasenaPage(),
+    ),
+    GoRoute(
+      path: RouteNames.matrimonios,
+      builder: (context, state) =>
+          SeleccionarMatrimonioPage(nombre: state.extra),
     ),
     GoRoute(
       path: RouteNames.uiKit,

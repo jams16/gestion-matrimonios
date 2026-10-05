@@ -5,6 +5,7 @@ import {
   CrearMatrimonioUseCase,
   EliminarMatrimonioUseCase,
   ListarMatrimoniosUseCase,
+  ListarResumenMatrimoniosUseCase,
   ObtenerMatrimonioUseCase,
 } from './application/use-cases/matrimonios.use-cases';
 import {
@@ -30,6 +31,7 @@ import { ProyectosController } from './presentation/controllers/proyectos.contro
     CrearMatrimonioUseCase,
     ObtenerMatrimonioUseCase,
     ListarMatrimoniosUseCase,
+    ListarResumenMatrimoniosUseCase,
     ActualizarMatrimonioUseCase,
     EliminarMatrimonioUseCase,
     { provide: ProyectosRepository, useClass: PrismaProyectosRepository },

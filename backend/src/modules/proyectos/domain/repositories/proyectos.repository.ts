@@ -5,6 +5,7 @@ import { CrearProyectoDto } from '../../application/dto/crear-proyecto.dto';
 import { ListarMatrimoniosDto } from '../../application/dto/listar-matrimonios.dto';
 import { ListarProyectosDto } from '../../application/dto/listar-proyectos.dto';
 import { Matrimonio } from '../entities/matrimonio.entity';
+import { MatrimonioResumen } from '../entities/matrimonio-resumen.entity';
 import { Proyecto } from '../entities/proyecto.entity';
 
 export interface Paginacion {
@@ -44,6 +45,7 @@ export abstract class ProyectosRepository {
   abstract listarMatrimonios(
     query: ListarMatrimoniosDto,
   ): Promise<ResultadoPaginado<Matrimonio>>;
+  abstract listarResumenMatrimonios(): Promise<MatrimonioResumen[]>;
 
   abstract usuarioExiste(id: number): Promise<boolean>;
   abstract ubigeoExiste(id: string): Promise<boolean>;
