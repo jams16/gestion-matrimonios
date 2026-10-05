@@ -212,7 +212,7 @@ class _InicioPageState extends State<InicioPage> {
       onSelected: (opcion) {
         if (opcion == _OpcionPerfil.cerrarSesion) _cerrarSesion();
         if (opcion == _OpcionPerfil.misBodas) {
-          context.go(RouteNames.matrimonios, extra: _nombreCompleto);
+          context.go(RouteNames.matrimonios, extra: true);
         }
       },
       itemBuilder: (context) => [

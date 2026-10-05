@@ -121,7 +121,7 @@ class _IniciarSesionPageState extends State<IniciarSesionPage> {
         nombreCompleto: nombreCompleto,
         persistir: _recordarme,
       );
-      if (mounted) context.go('/home', extra: nombreCompleto);
+      if (mounted) context.go('/matrimonios');
     } on DioException catch (error) {
       if (!mounted) return;
       final mensaje = error.response == null

@@ -49,7 +49,7 @@ final appRouter = GoRouter(
     GoRoute(
       path: RouteNames.matrimonios,
       builder: (context, state) =>
-          SeleccionarMatrimonioPage(nombre: state.extra),
+          SeleccionarMatrimonioPage(desdeHome: state.extra == true),
     ),
     GoRoute(
       path: RouteNames.matrimonio,
