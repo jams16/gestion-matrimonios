@@ -47,7 +47,7 @@ class _IniciarSesionPageState extends State<IniciarSesionPage> {
           logo: const AuthHero(),
           title: 'Inicio de sesión',
           description:
-              'Ingresa tus credenciales para continuar con la planificación.',
+              '¡Qué bueno verte de nuevo! Inicia sesión para seguir planificando',
           form: Form(
             key: _form,
             child: Column(
