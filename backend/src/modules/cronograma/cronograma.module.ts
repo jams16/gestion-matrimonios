@@ -1,4 +1,8 @@
-﻿import { Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
+import { CronogramaDateService } from './application/services/cronograma-date.service';
 
-@Module({})
+@Module({
+  providers: [CronogramaDateService],
+  exports: [CronogramaDateService],
+})
 export class CronogramaModule {}

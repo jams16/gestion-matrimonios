@@ -6,6 +6,7 @@ import { InvolucradosModule } from './modules/involucrados/involucrados.module';
 import { AutenticacionModule } from './modules/autenticacion/autenticacion.module';
 import { UsuariosModule } from './modules/usuarios/usuarios.module';
 import { ProyectosModule } from './modules/proyectos/proyectos.module';
+import { CronogramaModule } from './modules/cronograma/cronograma.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { ProyectosModule } from './modules/proyectos/proyectos.module';
     AutenticacionModule,
     UsuariosModule,
     ProyectosModule,
+    CronogramaModule,
   ],
 })
 export class AppModule {}
