@@ -29,6 +29,7 @@ class InicioPage extends StatefulWidget {
 class _InicioPageState extends State<InicioPage> {
   static bool _sidebarContraido = false;
   int _seccionActual = 0;
+  String? _nombreSesion;
 
   static const _items = [
     AppNavigationItem(
@@ -59,10 +60,18 @@ class _InicioPageState extends State<InicioPage> {
   void initState() {
     super.initState();
     _seccionActual = widget.seccion;
+    _cargarNombreSesion();
+  }
+
+  Future<void> _cargarNombreSesion() async {
+    final nombre = await AuthSession.obtenerNombreCompleto();
+    if (mounted && nombre != null && nombre.trim().isNotEmpty) {
+      setState(() => _nombreSesion = nombre.trim());
+    }
   }
 
   String get _nombreCompleto {
-    final nombre = widget.nombre?.toString().trim();
+    final nombre = widget.nombre?.toString().trim() ?? _nombreSesion;
     return nombre == null || nombre.isEmpty ? 'Wedding Planner' : nombre;
   }
 

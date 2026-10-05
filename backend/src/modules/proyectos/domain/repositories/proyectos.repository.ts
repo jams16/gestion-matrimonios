@@ -6,6 +6,7 @@ import { ListarMatrimoniosDto } from '../../application/dto/listar-matrimonios.d
 import { ListarProyectosDto } from '../../application/dto/listar-proyectos.dto';
 import { Matrimonio } from '../entities/matrimonio.entity';
 import { MatrimonioResumen } from '../entities/matrimonio-resumen.entity';
+import { GuardarOnboardingMatrimonioDto } from '../../application/dto/guardar-onboarding-matrimonio.dto';
 import { Proyecto } from '../entities/proyecto.entity';
 
 export interface Paginacion {
@@ -49,4 +50,13 @@ export abstract class ProyectosRepository {
 
   abstract usuarioExiste(id: number): Promise<boolean>;
   abstract ubigeoExiste(id: string): Promise<boolean>;
+  abstract guardarOnboardingMatrimonio(
+    data: GuardarOnboardingMatrimonioDto,
+    idPm: number,
+    iniciar: boolean,
+  ): Promise<{ proyecto: Proyecto; matrimonio: Matrimonio }>;
+  abstract obtenerOnboardingMatrimonio(
+    idProyecto: string,
+    idPm: number,
+  ): Promise<Record<string, unknown> | null>;
 }

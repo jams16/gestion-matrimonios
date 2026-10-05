@@ -117,6 +117,7 @@ class _IniciarSesionPageState extends State<IniciarSesionPage> {
           usuario['usuario'].toString();
       await AuthSession.guardar(
         refreshToken: data['refreshToken'].toString(),
+        accessToken: data['accessToken'].toString(),
         nombreCompleto: nombreCompleto,
         persistir: _recordarme,
       );

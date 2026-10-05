@@ -7,6 +7,7 @@ class MatrimonioResumenModel extends MatrimonioResumen {
     required super.nombreProyecto,
     required super.fechaMatrimonio,
     required super.ciudadUbicacion,
+    required super.estadoProyecto,
   });
 
   factory MatrimonioResumenModel.fromMap(Map<String, dynamic> data) {
@@ -21,6 +22,9 @@ class MatrimonioResumenModel extends MatrimonioResumen {
       nombreProyecto: nombreProyecto,
       fechaMatrimonio: DateTime.tryParse(_texto(data['fechaMatrimonio'])),
       ciudadUbicacion: ciudad.isEmpty ? 'Ciudad pendiente' : ciudad,
+      estadoProyecto: _texto(data['estadoProyecto']).isEmpty
+          ? 'SIN ESTADO'
+          : _texto(data['estadoProyecto']),
     );
   }
 

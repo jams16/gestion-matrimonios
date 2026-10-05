@@ -6,4 +6,5 @@ export interface MatrimonioResumen {
   nombreProyecto: string | null;
   fechaMatrimonio: Temporal.Instant | null;
   ciudadUbicacion: string | null;
+  estadoProyecto: string | null;
 }

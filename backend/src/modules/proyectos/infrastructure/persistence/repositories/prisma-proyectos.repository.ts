@@ -8,6 +8,7 @@ import { CrearMatrimonioDto } from '../../../application/dto/crear-matrimonio.dt
 import { CrearProyectoDto } from '../../../application/dto/crear-proyecto.dto';
 import { ListarMatrimoniosDto } from '../../../application/dto/listar-matrimonios.dto';
 import { ListarProyectosDto } from '../../../application/dto/listar-proyectos.dto';
+import { GuardarOnboardingMatrimonioDto } from '../../../application/dto/guardar-onboarding-matrimonio.dto';
 import { Matrimonio } from '../../../domain/entities/matrimonio.entity';
 import { MatrimonioResumen } from '../../../domain/entities/matrimonio-resumen.entity';
 import { Proyecto } from '../../../domain/entities/proyecto.entity';
@@ -167,6 +168,7 @@ export class PrismaProyectosRepository implements ProyectosRepository {
             ubigeo,
             matrimonio.ciudadUbicacion,
           ),
+          estadoProyecto: proyecto?.estado ?? null,
         };
       })
       .sort((a, b) =>
@@ -184,6 +186,113 @@ export class PrismaProyectosRepository implements ProyectosRepository {
     return !!(await this.prisma.client.orm.public.Ubigeo.first({
       idUbigeo: id as never,
     }));
+  }
+
+  async guardarOnboardingMatrimonio(
+    data: GuardarOnboardingMatrimonioDto,
+    idPm: number,
+    iniciar: boolean,
+  ): Promise<{ proyecto: Proyecto; matrimonio: Matrimonio }> {
+    const ahora = Temporal.Now.instant();
+    if (iniciar && !data.idProyecto) {
+      const personas =
+        (await this.prisma.client.orm.public.PersonaNatural.all()) as Array<{
+          idPersonaNatural: number;
+          dni: string | null;
+        }>;
+      const persona1 = personas.find((persona) => persona.dni === data.pareja1.dni);
+      const persona2 = personas.find((persona) => persona.dni === data.pareja2.dni);
+      if (persona1 && persona2) {
+        const usuarios =
+          (await this.prisma.client.orm.public.Usuario.all()) as Array<{
+            idUsuario: number;
+            idPersonaNatural: number;
+          }>;
+        const usuario1 = usuarios.find((usuario) => usuario.idPersonaNatural === persona1.idPersonaNatural);
+        const usuario2 = usuarios.find((usuario) => usuario.idPersonaNatural === persona2.idPersonaNatural);
+        const matrimonios =
+          (await this.prisma.client.orm.public.Matrimonio.all()) as Matrimonio[];
+        const matrimonio = matrimonios.find(
+          (item) =>
+            item.idNovio1 === usuario1?.idUsuario &&
+            item.idNovio2 === usuario2?.idUsuario,
+        );
+        if (matrimonio) {
+          const proyecto = await this.obtenerProyecto(matrimonio.idProyecto);
+          if (proyecto?.idPm === idPm) {
+            const actualizado = await this.actualizarProyecto(
+              matrimonio.idProyecto,
+              { estado: 'INICIO' as never },
+            );
+            return { proyecto: actualizado!, matrimonio };
+          }
+        }
+      }
+    }
+    const crearPersonaUsuario = async (
+      pareja: GuardarOnboardingMatrimonioDto['pareja1'],
+    ) => {
+      const persona = await this.prisma.client.orm.public.PersonaNatural.create({
+        nombres: pareja.nombres,
+        apellidoPaterno: pareja.apellidoPaterno,
+        correoElectronico: `pareja-${pareja.dni}@matrimonio.local`,
+        dni: pareja.dni,
+      } as never);
+      return this.prisma.client.orm.public.Usuario.create({
+        idPersonaNatural: (persona as { idPersonaNatural: number }).idPersonaNatural,
+        usuario: pareja.usuario,
+        tipoUsuario: 'OTROS',
+        contrasenaHash: await require('argon2').hash(pareja.contrasena),
+        correoVerificado: true,
+        ultimoAcceso: ahora,
+      } as never) as Promise<{ idUsuario: number }>;
+    };
+    const novio1 = await crearPersonaUsuario(data.pareja1);
+    const novio2 = await crearPersonaUsuario(data.pareja2);
+    const proyecto = await this.prisma.client.orm.public.Proyecto.create({
+      nombre: `Matrimonio de ${data.pareja1.nombres} & ${data.pareja2.nombres}`,
+      idPm,
+      presupuesto: data.presupuesto,
+      objetivos: data.objetivos ?? null,
+      necesidades: data.necesidades ?? null,
+      supuestos: data.supuestos ?? null,
+      restricciones: data.restricciones ?? null,
+      estado: iniciar ? 'INICIO' : 'BORRADOR',
+    } as never) as Proyecto;
+    const matrimonio = await this.prisma.client.orm.public.Matrimonio.create({
+      idProyecto: proyecto.idProyecto as never,
+      idNovio1: novio1.idUsuario,
+      idNovio2: novio2.idUsuario,
+      fechaMatrimonio: Temporal.Instant.from(`${data.fechaMatrimonio}T00:00:00Z`),
+      cantidadInvitados: data.cantidadInvitados,
+      tipoCeremonia: data.tipoCeremonia,
+      ciudadUbicacion: data.ciudadUbicacion ?? null,
+      ideasMoonboard: data.ideasMoonboard ?? null,
+      estado: true,
+    } as never) as Matrimonio;
+    return { proyecto, matrimonio };
+  }
+
+  async obtenerOnboardingMatrimonio(
+    idProyecto: string,
+    idPm: number,
+  ): Promise<Record<string, unknown> | null> {
+    const proyecto = (await this.prisma.client.orm.public.Proyecto.first({
+      idProyecto: idProyecto as never,
+    })) as Proyecto | null;
+    if (!proyecto || proyecto.idPm !== idPm) return null;
+    const matrimonio = await this.obtenerMatrimonioPorProyecto(idProyecto);
+    if (!matrimonio) return null;
+    const usuario1 = await this.prisma.client.orm.public.Usuario.first({ idUsuario: matrimonio.idNovio1 ?? -1 }) as { usuario: string; idPersonaNatural: number } | null;
+    const usuario2 = await this.prisma.client.orm.public.Usuario.first({ idUsuario: matrimonio.idNovio2 ?? -1 }) as { usuario: string; idPersonaNatural: number } | null;
+    const persona1 = usuario1 ? await this.prisma.client.orm.public.PersonaNatural.first({ idPersonaNatural: usuario1.idPersonaNatural }) as { nombres: string; apellidoPaterno: string; dni: string | null } | null : null;
+    const persona2 = usuario2 ? await this.prisma.client.orm.public.PersonaNatural.first({ idPersonaNatural: usuario2.idPersonaNatural }) as { nombres: string; apellidoPaterno: string; dni: string | null } | null : null;
+    return {
+      proyecto,
+      matrimonio,
+      pareja1: persona1 && usuario1 ? { ...persona1, usuario: usuario1.usuario } : null,
+      pareja2: persona2 && usuario2 ? { ...persona2, usuario: usuario2.usuario } : null,
+    };
   }
 
   private normalizarProyecto(

@@ -53,7 +53,9 @@ final appRouter = GoRouter(
     ),
     GoRoute(
       path: RouteNames.matrimonio,
-      builder: (context, state) => const CrearMatrimonioPage(),
+      builder: (context, state) => CrearMatrimonioPage(
+        idProyectoBorrador: state.extra as String?,
+      ),
     ),
     GoRoute(
       path: RouteNames.uiKit,

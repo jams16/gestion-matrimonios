@@ -107,12 +107,20 @@ class _Layout extends StatelessWidget {
                         itemCount: items.length,
                         separatorBuilder: (context, index) =>
                             const SizedBox(height: AppSpacing.md),
-                        itemBuilder: (context, index) => Align(
-                          alignment: Alignment.centerLeft,
-                          child: MatrimonioCard(
-                            matrimonio: items[index],
-                            onTap: () {},
-                          ),
+                        itemBuilder: (context, index) => MatrimonioCard(
+                          matrimonio: items[index],
+                          onTap: () {
+                            final esBorrador =
+                                items[index].estadoProyecto
+                                    .trim()
+                                    .toUpperCase() ==
+                                'BORRADOR';
+                            if (esBorrador) {
+                              context.go('/matrimonio', extra: items[index].idProyecto);
+                            } else {
+                              context.go('/home');
+                            }
+                          },
                         ),
                       ),
               ),

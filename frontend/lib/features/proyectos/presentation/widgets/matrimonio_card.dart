@@ -18,7 +18,9 @@ class MatrimonioCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tema = Theme.of(context);
-    return Card(
+    return SizedBox(
+      width: double.infinity,
+      child: Card(
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onTap,
@@ -39,11 +41,9 @@ class MatrimonioCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: AppSpacing.md),
-                Flexible(
-                  fit: FlexFit.loose,
+                Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
                         matrimonio.nombreProyecto,
@@ -63,9 +63,12 @@ class MatrimonioCard extends StatelessWidget {
                         icon: Icons.location_on_outlined,
                         label: matrimonio.ciudadUbicacion,
                       ),
+                      const SizedBox(height: AppSpacing.sm),
+                      _EstadoChip(estado: matrimonio.estadoProyecto),
                     ],
                   ),
                 ),
+                const Spacer(),
                 const SizedBox(width: AppSpacing.md),
                 const Center(
                   child: Icon(
@@ -79,6 +82,7 @@ class MatrimonioCard extends StatelessWidget {
           ),
         ),
       ),
+      ),
     );
   }
 
@@ -87,6 +91,31 @@ class MatrimonioCard extends StatelessWidget {
     final dia = fecha.day.toString().padLeft(2, '0');
     final mes = fecha.month.toString().padLeft(2, '0');
     return '$dia/$mes/${fecha.year}';
+  }
+}
+
+class _EstadoChip extends StatelessWidget {
+  const _EstadoChip({required this.estado});
+  final String estado;
+
+  @override
+  Widget build(BuildContext context) {
+    final borrador = estado == 'BORRADOR';
+    return Chip(
+      visualDensity: VisualDensity.compact,
+      side: BorderSide.none,
+      shape: const StadiumBorder(),
+      backgroundColor: borrador
+          ? AppColors.primary.withValues(alpha: 0.12)
+          : AppColors.success.withValues(alpha: 0.12),
+      label: Text(
+        borrador ? 'Borrador' : estado,
+        style: TextStyle(
+          color: borrador ? AppColors.primary : AppColors.success,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+    );
   }
 }
 

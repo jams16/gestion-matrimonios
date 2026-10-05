@@ -5,6 +5,7 @@ class MatrimonioResumen {
     required this.nombreProyecto,
     required this.fechaMatrimonio,
     required this.ciudadUbicacion,
+    required this.estadoProyecto,
   });
 
   final String idMatrimonio;
@@ -12,4 +13,5 @@ class MatrimonioResumen {
   final String nombreProyecto;
   final DateTime? fechaMatrimonio;
   final String ciudadUbicacion;
+  final String estadoProyecto;
 }

@@ -11,6 +11,8 @@ import {
   Post,
   Put,
   Query,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiCreatedResponse,
@@ -32,6 +34,9 @@ import {
   ListarResumenMatrimoniosUseCase,
   ObtenerMatrimonioUseCase,
 } from '../../application/use-cases/matrimonios.use-cases';
+import { GuardarOnboardingMatrimonioUseCase, ObtenerOnboardingMatrimonioUseCase } from '../../application/use-cases/onboarding-matrimonio.use-case';
+import { GuardarOnboardingMatrimonioDto } from '../../application/dto/guardar-onboarding-matrimonio.dto';
+import { JwtAccessGuard } from '../../../autenticacion/presentation/guards/jwt-access.guard';
 
 @ApiTags('Matrimonios')
 @Controller('matrimonios')
@@ -43,7 +48,39 @@ export class MatrimoniosController {
     private readonly listarResumen: ListarResumenMatrimoniosUseCase,
     private readonly actualizar: ActualizarMatrimonioUseCase,
     private readonly eliminar: EliminarMatrimonioUseCase,
+    private readonly guardarOnboarding: GuardarOnboardingMatrimonioUseCase,
+    private readonly obtenerOnboarding: ObtenerOnboardingMatrimonioUseCase,
   ) {}
+
+  @Get('onboarding/proyecto/:id')
+  @UseGuards(JwtAccessGuard)
+  @ApiOperation({ summary: 'Obtener el detalle de un borrador de matrimonio' })
+  async obtenerBorrador(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Req() request: { usuarioAutenticado: { sub: number } },
+  ) {
+    return { mensaje: 'Borrador obtenido correctamente.', data: await this.obtenerOnboarding.execute(id, request.usuarioAutenticado.sub) };
+  }
+
+  @Post('onboarding/borrador')
+  @UseGuards(JwtAccessGuard)
+  @ApiOperation({ summary: 'Crear el borrador completo de un matrimonio' })
+  async guardarBorrador(
+    @Body() dto: GuardarOnboardingMatrimonioDto,
+    @Req() request: { usuarioAutenticado: { sub: number } },
+  ) {
+    return { mensaje: 'Borrador guardado correctamente.', data: await this.guardarOnboarding.execute(dto, request.usuarioAutenticado.sub) };
+  }
+
+  @Post('onboarding/comenzar')
+  @UseGuards(JwtAccessGuard)
+  @ApiOperation({ summary: 'Crear el matrimonio e iniciar su proyecto' })
+  async comenzar(
+    @Body() dto: GuardarOnboardingMatrimonioDto,
+    @Req() request: { usuarioAutenticado: { sub: number } },
+  ) {
+    return { mensaje: 'Matrimonio creado correctamente.', data: await this.guardarOnboarding.execute(dto, request.usuarioAutenticado.sub, true) };
+  }
 
   @Post()
   @ApiOperation({ summary: 'Crear un matrimonio' })
