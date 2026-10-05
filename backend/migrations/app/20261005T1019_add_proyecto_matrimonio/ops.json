@@ -1,0 +1,1037 @@
+[
+  {
+    "id": "table.gp_matrimonio",
+    "label": "Create table \"gp_matrimonio\"",
+    "summary": "Creates table \"gp_matrimonio\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "gp_matrimonio"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"gp_matrimonio\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"gp_matrimonio\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"gp_matrimonio\"",
+        "sql": "CREATE TABLE \"public\".\"gp_matrimonio\" (\n  \"cantidad_invitados\" int4,\n  \"ciudad_ubicacion\" character varying(6),\n  \"estado\" bool,\n  \"fecha_creacion\" timestamptz DEFAULT (now()) NOT NULL,\n  \"fecha_matrimonio\" timestamptz,\n  \"fecha_modificacion\" timestamptz,\n  \"id_matrimonio\" uuid NOT NULL,\n  \"id_novio1\" int4,\n  \"id_novio2\" int4,\n  \"id_proyecto\" uuid NOT NULL,\n  \"ideas_moonboard\" character varying(1000),\n  \"tipo_ceremonia\" text,\n  PRIMARY KEY (\"id_matrimonio\"),\n  CONSTRAINT \"gp_matrimonio_tipo_ceremonia_check_8c419e2d\" CHECK (\"tipo_ceremonia\" IN ('RELIGIOSO', 'CIVIL', 'RELIGIOSO_Y_CIVIL', 'SIMBOLICO'))\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"gp_matrimonio\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"gp_matrimonio\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.gp_proyecto.alcance",
+    "label": "Add column \"alcance\" to \"gp_proyecto\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "alcance",
+        "table": "gp_proyecto"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"alcance\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "gp_proyecto",
+          "alcance"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"alcance\"",
+        "sql": "ALTER TABLE \"public\".\"gp_proyecto\" ADD COLUMN \"alcance\" character varying(1000)"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"alcance\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "gp_proyecto",
+          "alcance"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.gp_proyecto.estado",
+    "label": "Add column \"estado\" to \"gp_proyecto\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "estado",
+        "table": "gp_proyecto"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"estado\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "gp_proyecto",
+          "estado"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"estado\"",
+        "sql": "ALTER TABLE \"public\".\"gp_proyecto\" ADD COLUMN \"estado\" text"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"estado\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "gp_proyecto",
+          "estado"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.gp_proyecto.fecha_creacion",
+    "label": "Add column \"fecha_creacion\" to \"gp_proyecto\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "fecha_creacion",
+        "table": "gp_proyecto"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"fecha_creacion\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "gp_proyecto",
+          "fecha_creacion"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"fecha_creacion\"",
+        "sql": "ALTER TABLE \"public\".\"gp_proyecto\" ADD COLUMN \"fecha_creacion\" timestamptz DEFAULT (now()) NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"fecha_creacion\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "gp_proyecto",
+          "fecha_creacion"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.gp_proyecto.fecha_fin",
+    "label": "Add column \"fecha_fin\" to \"gp_proyecto\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "fecha_fin",
+        "table": "gp_proyecto"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"fecha_fin\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "gp_proyecto",
+          "fecha_fin"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"fecha_fin\"",
+        "sql": "ALTER TABLE \"public\".\"gp_proyecto\" ADD COLUMN \"fecha_fin\" timestamptz"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"fecha_fin\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "gp_proyecto",
+          "fecha_fin"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.gp_proyecto.fecha_inicio",
+    "label": "Add column \"fecha_inicio\" to \"gp_proyecto\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "fecha_inicio",
+        "table": "gp_proyecto"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"fecha_inicio\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "gp_proyecto",
+          "fecha_inicio"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"fecha_inicio\"",
+        "sql": "ALTER TABLE \"public\".\"gp_proyecto\" ADD COLUMN \"fecha_inicio\" timestamptz"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"fecha_inicio\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "gp_proyecto",
+          "fecha_inicio"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.gp_proyecto.fecha_modificacion",
+    "label": "Add column \"fecha_modificacion\" to \"gp_proyecto\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "fecha_modificacion",
+        "table": "gp_proyecto"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"fecha_modificacion\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "gp_proyecto",
+          "fecha_modificacion"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"fecha_modificacion\"",
+        "sql": "ALTER TABLE \"public\".\"gp_proyecto\" ADD COLUMN \"fecha_modificacion\" timestamptz"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"fecha_modificacion\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "gp_proyecto",
+          "fecha_modificacion"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.gp_proyecto.id_pm",
+    "label": "Add column \"id_pm\" to \"gp_proyecto\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "id_pm",
+        "table": "gp_proyecto"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"id_pm\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "gp_proyecto",
+          "id_pm"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"id_pm\"",
+        "sql": "ALTER TABLE \"public\".\"gp_proyecto\" ADD COLUMN \"id_pm\" int4"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"id_pm\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "gp_proyecto",
+          "id_pm"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.gp_proyecto.necesidades",
+    "label": "Add column \"necesidades\" to \"gp_proyecto\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "necesidades",
+        "table": "gp_proyecto"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"necesidades\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "gp_proyecto",
+          "necesidades"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"necesidades\"",
+        "sql": "ALTER TABLE \"public\".\"gp_proyecto\" ADD COLUMN \"necesidades\" character varying(1000)"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"necesidades\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "gp_proyecto",
+          "necesidades"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.gp_proyecto.nombre",
+    "label": "Add column \"nombre\" to \"gp_proyecto\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "nombre",
+        "table": "gp_proyecto"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"nombre\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "gp_proyecto",
+          "nombre"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"nombre\"",
+        "sql": "ALTER TABLE \"public\".\"gp_proyecto\" ADD COLUMN \"nombre\" character varying(150)"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"nombre\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "gp_proyecto",
+          "nombre"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.gp_proyecto.objetivos",
+    "label": "Add column \"objetivos\" to \"gp_proyecto\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "objetivos",
+        "table": "gp_proyecto"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"objetivos\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "gp_proyecto",
+          "objetivos"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"objetivos\"",
+        "sql": "ALTER TABLE \"public\".\"gp_proyecto\" ADD COLUMN \"objetivos\" character varying(1000)"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"objetivos\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "gp_proyecto",
+          "objetivos"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.gp_proyecto.presupuesto",
+    "label": "Add column \"presupuesto\" to \"gp_proyecto\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "presupuesto",
+        "table": "gp_proyecto"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"presupuesto\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "gp_proyecto",
+          "presupuesto"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"presupuesto\"",
+        "sql": "ALTER TABLE \"public\".\"gp_proyecto\" ADD COLUMN \"presupuesto\" numeric(12,2)"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"presupuesto\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "gp_proyecto",
+          "presupuesto"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.gp_proyecto.restricciones",
+    "label": "Add column \"restricciones\" to \"gp_proyecto\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "restricciones",
+        "table": "gp_proyecto"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"restricciones\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "gp_proyecto",
+          "restricciones"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"restricciones\"",
+        "sql": "ALTER TABLE \"public\".\"gp_proyecto\" ADD COLUMN \"restricciones\" character varying(1000)"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"restricciones\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "gp_proyecto",
+          "restricciones"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.gp_proyecto.supuestos",
+    "label": "Add column \"supuestos\" to \"gp_proyecto\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "supuestos",
+        "table": "gp_proyecto"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"supuestos\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "gp_proyecto",
+          "supuestos"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"supuestos\"",
+        "sql": "ALTER TABLE \"public\".\"gp_proyecto\" ADD COLUMN \"supuestos\" character varying(1000)"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"supuestos\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "gp_proyecto",
+          "supuestos"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.gp_matrimonio.gp_matrimonio_id_proyecto_key",
+    "label": "Add unique constraint on \"gp_matrimonio\" (id_proyecto)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "gp_matrimonio_id_proyecto_key",
+        "table": "gp_matrimonio"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"gp_matrimonio_id_proyecto_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "gp_matrimonio_id_proyecto_key",
+          "public",
+          "\"public\".\"gp_matrimonio\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"gp_matrimonio_id_proyecto_key\"",
+        "sql": "ALTER TABLE \"public\".\"gp_matrimonio\" ADD CONSTRAINT \"gp_matrimonio_id_proyecto_key\" UNIQUE (\"id_proyecto\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"gp_matrimonio_id_proyecto_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "gp_matrimonio_id_proyecto_key",
+          "public",
+          "\"public\".\"gp_matrimonio\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "checkConstraint.gp_proyecto.gp_proyecto_estado_check_8f4f8f4a",
+    "label": "Add check constraint \"gp_proyecto_estado_check_8f4f8f4a\" on \"gp_proyecto\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "checkConstraint",
+        "name": "gp_proyecto_estado_check_8f4f8f4a",
+        "table": "gp_proyecto"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"gp_proyecto_estado_check_8f4f8f4a\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "gp_proyecto_estado_check_8f4f8f4a",
+          "public",
+          "\"public\".\"gp_proyecto\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add check constraint \"gp_proyecto_estado_check_8f4f8f4a\"",
+        "sql": "ALTER TABLE \"public\".\"gp_proyecto\" ADD CONSTRAINT \"gp_proyecto_estado_check_8f4f8f4a\" CHECK (\"estado\" IN ('BORRADOR', 'INICIO', 'PLANIFICACION', 'EJECUCION', 'CIERRE'))"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"gp_proyecto_estado_check_8f4f8f4a\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "gp_proyecto_estado_check_8f4f8f4a",
+          "public",
+          "\"public\".\"gp_proyecto\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.gp_matrimonio.gp_matrimonio_ciudad_ubicacion_idx_b934bf8c",
+    "label": "Create index \"gp_matrimonio_ciudad_ubicacion_idx_b934bf8c\" on \"gp_matrimonio\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "gp_matrimonio_ciudad_ubicacion_idx_b934bf8c",
+        "table": "gp_matrimonio"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"gp_matrimonio_ciudad_ubicacion_idx_b934bf8c\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"gp_matrimonio_ciudad_ubicacion_idx_b934bf8c\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"gp_matrimonio_ciudad_ubicacion_idx_b934bf8c\"",
+        "sql": "CREATE INDEX \"gp_matrimonio_ciudad_ubicacion_idx_b934bf8c\" ON \"public\".\"gp_matrimonio\" (\"ciudad_ubicacion\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"gp_matrimonio_ciudad_ubicacion_idx_b934bf8c\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"gp_matrimonio_ciudad_ubicacion_idx_b934bf8c\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.gp_matrimonio.gp_matrimonio_id_novio1_idx_83924686",
+    "label": "Create index \"gp_matrimonio_id_novio1_idx_83924686\" on \"gp_matrimonio\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "gp_matrimonio_id_novio1_idx_83924686",
+        "table": "gp_matrimonio"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"gp_matrimonio_id_novio1_idx_83924686\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"gp_matrimonio_id_novio1_idx_83924686\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"gp_matrimonio_id_novio1_idx_83924686\"",
+        "sql": "CREATE INDEX \"gp_matrimonio_id_novio1_idx_83924686\" ON \"public\".\"gp_matrimonio\" (\"id_novio1\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"gp_matrimonio_id_novio1_idx_83924686\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"gp_matrimonio_id_novio1_idx_83924686\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.gp_matrimonio.gp_matrimonio_id_novio2_idx_8e50726e",
+    "label": "Create index \"gp_matrimonio_id_novio2_idx_8e50726e\" on \"gp_matrimonio\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "gp_matrimonio_id_novio2_idx_8e50726e",
+        "table": "gp_matrimonio"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"gp_matrimonio_id_novio2_idx_8e50726e\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"gp_matrimonio_id_novio2_idx_8e50726e\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"gp_matrimonio_id_novio2_idx_8e50726e\"",
+        "sql": "CREATE INDEX \"gp_matrimonio_id_novio2_idx_8e50726e\" ON \"public\".\"gp_matrimonio\" (\"id_novio2\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"gp_matrimonio_id_novio2_idx_8e50726e\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"gp_matrimonio_id_novio2_idx_8e50726e\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.gp_proyecto.gp_proyecto_id_pm_idx_fbea8e1d",
+    "label": "Create index \"gp_proyecto_id_pm_idx_fbea8e1d\" on \"gp_proyecto\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "gp_proyecto_id_pm_idx_fbea8e1d",
+        "table": "gp_proyecto"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"gp_proyecto_id_pm_idx_fbea8e1d\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"gp_proyecto_id_pm_idx_fbea8e1d\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"gp_proyecto_id_pm_idx_fbea8e1d\"",
+        "sql": "CREATE INDEX \"gp_proyecto_id_pm_idx_fbea8e1d\" ON \"public\".\"gp_proyecto\" (\"id_pm\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"gp_proyecto_id_pm_idx_fbea8e1d\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"gp_proyecto_id_pm_idx_fbea8e1d\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.gp_matrimonio.gp_matrimonio_id_proyecto_fkey",
+    "label": "Add foreign key \"gp_matrimonio_id_proyecto_fkey\" on \"gp_matrimonio\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "gp_matrimonio_id_proyecto_fkey",
+        "table": "gp_matrimonio"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"gp_matrimonio_id_proyecto_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "gp_matrimonio_id_proyecto_fkey",
+          "public",
+          "\"public\".\"gp_matrimonio\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"gp_matrimonio_id_proyecto_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"gp_matrimonio\"\nADD CONSTRAINT \"gp_matrimonio_id_proyecto_fkey\"\nFOREIGN KEY (\"id_proyecto\")\nREFERENCES \"public\".\"gp_proyecto\" (\"idProyecto\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"gp_matrimonio_id_proyecto_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "gp_matrimonio_id_proyecto_fkey",
+          "public",
+          "\"public\".\"gp_matrimonio\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.gp_matrimonio.gp_matrimonio_id_novio1_fkey",
+    "label": "Add foreign key \"gp_matrimonio_id_novio1_fkey\" on \"gp_matrimonio\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "gp_matrimonio_id_novio1_fkey",
+        "table": "gp_matrimonio"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"gp_matrimonio_id_novio1_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "gp_matrimonio_id_novio1_fkey",
+          "public",
+          "\"public\".\"gp_matrimonio\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"gp_matrimonio_id_novio1_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"gp_matrimonio\"\nADD CONSTRAINT \"gp_matrimonio_id_novio1_fkey\"\nFOREIGN KEY (\"id_novio1\")\nREFERENCES \"public\".\"au_usuario\" (\"id_usuario\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"gp_matrimonio_id_novio1_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "gp_matrimonio_id_novio1_fkey",
+          "public",
+          "\"public\".\"gp_matrimonio\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.gp_matrimonio.gp_matrimonio_id_novio2_fkey",
+    "label": "Add foreign key \"gp_matrimonio_id_novio2_fkey\" on \"gp_matrimonio\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "gp_matrimonio_id_novio2_fkey",
+        "table": "gp_matrimonio"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"gp_matrimonio_id_novio2_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "gp_matrimonio_id_novio2_fkey",
+          "public",
+          "\"public\".\"gp_matrimonio\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"gp_matrimonio_id_novio2_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"gp_matrimonio\"\nADD CONSTRAINT \"gp_matrimonio_id_novio2_fkey\"\nFOREIGN KEY (\"id_novio2\")\nREFERENCES \"public\".\"au_usuario\" (\"id_usuario\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"gp_matrimonio_id_novio2_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "gp_matrimonio_id_novio2_fkey",
+          "public",
+          "\"public\".\"gp_matrimonio\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.gp_matrimonio.gp_matrimonio_ciudad_ubicacion_fkey",
+    "label": "Add foreign key \"gp_matrimonio_ciudad_ubicacion_fkey\" on \"gp_matrimonio\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "gp_matrimonio_ciudad_ubicacion_fkey",
+        "table": "gp_matrimonio"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"gp_matrimonio_ciudad_ubicacion_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "gp_matrimonio_ciudad_ubicacion_fkey",
+          "public",
+          "\"public\".\"gp_matrimonio\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"gp_matrimonio_ciudad_ubicacion_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"gp_matrimonio\"\nADD CONSTRAINT \"gp_matrimonio_ciudad_ubicacion_fkey\"\nFOREIGN KEY (\"ciudad_ubicacion\")\nREFERENCES \"public\".\"in_ubigeo\" (\"id_ubigeo\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"gp_matrimonio_ciudad_ubicacion_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "gp_matrimonio_ciudad_ubicacion_fkey",
+          "public",
+          "\"public\".\"gp_matrimonio\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.gp_proyecto.gp_proyecto_id_pm_fkey",
+    "label": "Add foreign key \"gp_proyecto_id_pm_fkey\" on \"gp_proyecto\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "gp_proyecto_id_pm_fkey",
+        "table": "gp_proyecto"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"gp_proyecto_id_pm_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "gp_proyecto_id_pm_fkey",
+          "public",
+          "\"public\".\"gp_proyecto\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"gp_proyecto_id_pm_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"gp_proyecto\"\nADD CONSTRAINT \"gp_proyecto_id_pm_fkey\"\nFOREIGN KEY (\"id_pm\")\nREFERENCES \"public\".\"au_usuario\" (\"id_usuario\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"gp_proyecto_id_pm_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "gp_proyecto_id_pm_fkey",
+          "public",
+          "\"public\".\"gp_proyecto\""
+        ]
+      }
+    ]
+  }
+]

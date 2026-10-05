@@ -20,6 +20,10 @@
       "model": "Usuario",
       "namespace": "public"
     },
+    "gp_matrimonio": {
+      "model": "Matrimonio",
+      "namespace": "public"
+    },
     "gp_proyecto": {
       "model": "Proyecto",
       "namespace": "public"
@@ -64,6 +68,52 @@
               {
                 "name": "OTROS",
                 "value": "OTROS"
+              }
+            ]
+          },
+          "gp_estado_proyecto": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "BORRADOR",
+                "value": "BORRADOR"
+              },
+              {
+                "name": "INICIO",
+                "value": "INICIO"
+              },
+              {
+                "name": "PLANIFICACION",
+                "value": "PLANIFICACION"
+              },
+              {
+                "name": "EJECUCION",
+                "value": "EJECUCION"
+              },
+              {
+                "name": "CIERRE",
+                "value": "CIERRE"
+              }
+            ]
+          },
+          "gp_tipo_ceremonia": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "RELIGIOSO",
+                "value": "RELIGIOSO"
+              },
+              {
+                "name": "CIVIL",
+                "value": "CIVIL"
+              },
+              {
+                "name": "RELIGIOSO_Y_CIVIL",
+                "value": "RELIGIOSO_Y_CIVIL"
+              },
+              {
+                "name": "SIMBOLICO",
+                "value": "SIMBOLICO"
               }
             ]
           },
@@ -293,6 +343,214 @@
               "table": "in_entidad"
             }
           },
+          "Matrimonio": {
+            "fields": {
+              "cantidadInvitados": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "ciudadUbicacion": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 6
+                  }
+                }
+              },
+              "estado": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "fechaCreacion": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "fechaMatrimonio": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "fechaModificacion": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "idMatrimonio": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idNovio1": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "idNovio2": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "idProyecto": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "ideasMoonboard": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 1000
+                  }
+                }
+              },
+              "tipoCeremonia": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "gp_tipo_ceremonia",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              }
+            },
+            "relations": {
+              "novio1": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idNovio1"
+                  ],
+                  "targetFields": [
+                    "idUsuario"
+                  ]
+                },
+                "to": {
+                  "model": "Usuario",
+                  "namespace": "public"
+                }
+              },
+              "novio2": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idNovio2"
+                  ],
+                  "targetFields": [
+                    "idUsuario"
+                  ]
+                },
+                "to": {
+                  "model": "Usuario",
+                  "namespace": "public"
+                }
+              },
+              "proyecto": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idProyecto"
+                  ],
+                  "targetFields": [
+                    "idProyecto"
+                  ]
+                },
+                "to": {
+                  "model": "Proyecto",
+                  "namespace": "public"
+                }
+              },
+              "ubigeo": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "ciudadUbicacion"
+                  ],
+                  "targetFields": [
+                    "idUbigeo"
+                  ]
+                },
+                "to": {
+                  "model": "Ubigeo",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "cantidadInvitados": {
+                  "column": "cantidad_invitados"
+                },
+                "ciudadUbicacion": {
+                  "column": "ciudad_ubicacion"
+                },
+                "estado": {
+                  "column": "estado"
+                },
+                "fechaCreacion": {
+                  "column": "fecha_creacion"
+                },
+                "fechaMatrimonio": {
+                  "column": "fecha_matrimonio"
+                },
+                "fechaModificacion": {
+                  "column": "fecha_modificacion"
+                },
+                "idMatrimonio": {
+                  "column": "id_matrimonio"
+                },
+                "idNovio1": {
+                  "column": "id_novio1"
+                },
+                "idNovio2": {
+                  "column": "id_novio2"
+                },
+                "idProyecto": {
+                  "column": "id_proyecto"
+                },
+                "ideasMoonboard": {
+                  "column": "ideas_moonboard"
+                },
+                "tipoCeremonia": {
+                  "column": "tipo_ceremonia"
+                }
+              },
+              "namespaceId": "public",
+              "table": "gp_matrimonio"
+            }
+          },
           "PersonaNatural": {
             "fields": {
               "apellidoMaterno": {
@@ -482,19 +740,210 @@
           },
           "Proyecto": {
             "fields": {
+              "alcance": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 1000
+                  }
+                }
+              },
+              "estado": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "gp_estado_proyecto",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "fechaCreacion": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "fechaFin": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "fechaInicio": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "fechaModificacion": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "idPm": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
               "idProyecto": {
                 "nullable": false,
                 "type": {
                   "codecId": "pg/uuid@1",
                   "kind": "scalar"
                 }
+              },
+              "necesidades": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 1000
+                  }
+                }
+              },
+              "nombre": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 150
+                  }
+                }
+              },
+              "objetivos": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 1000
+                  }
+                }
+              },
+              "presupuesto": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/numeric@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 12,
+                    "scale": 2
+                  }
+                }
+              },
+              "restricciones": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 1000
+                  }
+                }
+              },
+              "supuestos": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 1000
+                  }
+                }
               }
             },
-            "relations": {},
+            "relations": {
+              "matrimonio": {
+                "cardinality": "1:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idProyecto"
+                  ],
+                  "targetFields": [
+                    "idProyecto"
+                  ]
+                },
+                "to": {
+                  "model": "Matrimonio",
+                  "namespace": "public"
+                }
+              },
+              "projectManager": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idPm"
+                  ],
+                  "targetFields": [
+                    "idUsuario"
+                  ]
+                },
+                "to": {
+                  "model": "Usuario",
+                  "namespace": "public"
+                }
+              }
+            },
             "storage": {
               "fields": {
+                "alcance": {
+                  "column": "alcance"
+                },
+                "estado": {
+                  "column": "estado"
+                },
+                "fechaCreacion": {
+                  "column": "fecha_creacion"
+                },
+                "fechaFin": {
+                  "column": "fecha_fin"
+                },
+                "fechaInicio": {
+                  "column": "fecha_inicio"
+                },
+                "fechaModificacion": {
+                  "column": "fecha_modificacion"
+                },
+                "idPm": {
+                  "column": "id_pm"
+                },
                 "idProyecto": {
                   "column": "idProyecto"
+                },
+                "necesidades": {
+                  "column": "necesidades"
+                },
+                "nombre": {
+                  "column": "nombre"
+                },
+                "objetivos": {
+                  "column": "objetivos"
+                },
+                "presupuesto": {
+                  "column": "presupuesto"
+                },
+                "restricciones": {
+                  "column": "restricciones"
+                },
+                "supuestos": {
+                  "column": "supuestos"
                 }
               },
               "namespaceId": "public",
@@ -874,6 +1323,21 @@
                   "namespace": "public"
                 }
               },
+              "matrimonios": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idUbigeo"
+                  ],
+                  "targetFields": [
+                    "ciudadUbicacion"
+                  ]
+                },
+                "to": {
+                  "model": "Matrimonio",
+                  "namespace": "public"
+                }
+              },
               "personas": {
                 "cardinality": "1:N",
                 "on": {
@@ -1018,6 +1482,36 @@
                   "namespace": "public"
                 }
               },
+              "matrimoniosNovio1": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idUsuario"
+                  ],
+                  "targetFields": [
+                    "idNovio1"
+                  ]
+                },
+                "to": {
+                  "model": "Matrimonio",
+                  "namespace": "public"
+                }
+              },
+              "matrimoniosNovio2": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idUsuario"
+                  ],
+                  "targetFields": [
+                    "idNovio2"
+                  ]
+                },
+                "to": {
+                  "model": "Matrimonio",
+                  "namespace": "public"
+                }
+              },
               "personaNatural": {
                 "cardinality": "N:1",
                 "nullable": false,
@@ -1031,6 +1525,21 @@
                 },
                 "to": {
                   "model": "PersonaNatural",
+                  "namespace": "public"
+                }
+              },
+              "proyectosPm": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idUsuario"
+                  ],
+                  "targetFields": [
+                    "idPm"
+                  ]
+                },
+                "to": {
+                  "model": "Proyecto",
                   "namespace": "public"
                 }
               },
@@ -1550,16 +2059,342 @@
                 }
               ]
             },
-            "gp_proyecto": {
+            "gp_matrimonio": {
+              "checks": [
+                {
+                  "expression": "\"tipo_ceremonia\" IN ('RELIGIOSO', 'CIVIL', 'RELIGIOSO_Y_CIVIL', 'SIMBOLICO')",
+                  "name": "gp_matrimonio_tipo_ceremonia_check_8c419e2d",
+                  "prefix": "gp_matrimonio_tipo_ceremonia_check"
+                }
+              ],
               "columns": {
+                "cantidad_invitados": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "ciudad_ubicacion": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 6
+                  }
+                },
+                "estado": {
+                  "codecId": "pg/bool@1",
+                  "nativeType": "bool",
+                  "nullable": true
+                },
+                "fecha_creacion": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "fecha_matrimonio": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": true
+                },
+                "fecha_modificacion": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": true
+                },
+                "id_matrimonio": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_novio1": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "id_novio2": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "id_proyecto": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "ideas_moonboard": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 1000
+                  }
+                },
+                "tipo_ceremonia": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "gp_tipo_ceremonia",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_proyecto"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_matrimonio"
+                  },
+                  "target": {
+                    "columns": [
+                      "idProyecto"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_proyecto"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_novio1"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_matrimonio"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_usuario"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "au_usuario"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_novio2"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_matrimonio"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_usuario"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "au_usuario"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "ciudad_ubicacion"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_matrimonio"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_ubigeo"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "in_ubigeo"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "ciudad_ubicacion"
+                  ],
+                  "name": "gp_matrimonio_ciudad_ubicacion_idx_b934bf8c",
+                  "prefix": "gp_matrimonio_ciudad_ubicacion_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_novio1"
+                  ],
+                  "name": "gp_matrimonio_id_novio1_idx_83924686",
+                  "prefix": "gp_matrimonio_id_novio1_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_novio2"
+                  ],
+                  "name": "gp_matrimonio_id_novio2_idx_8e50726e",
+                  "prefix": "gp_matrimonio_id_novio2_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_matrimonio"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "id_proyecto"
+                  ]
+                }
+              ]
+            },
+            "gp_proyecto": {
+              "checks": [
+                {
+                  "expression": "\"estado\" IN ('BORRADOR', 'INICIO', 'PLANIFICACION', 'EJECUCION', 'CIERRE')",
+                  "name": "gp_proyecto_estado_check_8f4f8f4a",
+                  "prefix": "gp_proyecto_estado_check"
+                }
+              ],
+              "columns": {
+                "alcance": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 1000
+                  }
+                },
+                "estado": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "gp_estado_proyecto",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "fecha_creacion": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "fecha_fin": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": true
+                },
+                "fecha_inicio": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": true
+                },
+                "fecha_modificacion": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": true
+                },
                 "idProyecto": {
                   "codecId": "pg/uuid@1",
                   "nativeType": "uuid",
                   "nullable": false
+                },
+                "id_pm": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "necesidades": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 1000
+                  }
+                },
+                "nombre": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 150
+                  }
+                },
+                "objetivos": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 1000
+                  }
+                },
+                "presupuesto": {
+                  "codecId": "pg/numeric@1",
+                  "nativeType": "numeric",
+                  "nullable": true,
+                  "typeParams": {
+                    "precision": 12,
+                    "scale": 2
+                  }
+                },
+                "restricciones": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 1000
+                  }
+                },
+                "supuestos": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 1000
+                  }
                 }
               },
-              "foreignKeys": [],
-              "indexes": [],
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_pm"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_proyecto"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_usuario"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "au_usuario"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "id_pm"
+                  ],
+                  "name": "gp_proyecto_id_pm_idx_fbea8e1d",
+                  "prefix": "gp_proyecto_id_pm_idx",
+                  "unique": false
+                }
+              ],
               "primaryKey": {
                 "columns": [
                   "idProyecto"
@@ -1926,6 +2761,25 @@
                 "OTROS"
               ]
             },
+            "gp_estado_proyecto": {
+              "kind": "valueSet",
+              "values": [
+                "BORRADOR",
+                "INICIO",
+                "PLANIFICACION",
+                "EJECUCION",
+                "CIERRE"
+              ]
+            },
+            "gp_tipo_ceremonia": {
+              "kind": "valueSet",
+              "values": [
+                "RELIGIOSO",
+                "CIVIL",
+                "RELIGIOSO_Y_CIVIL",
+                "SIMBOLICO"
+              ]
+            },
             "in_tipo_entidad": {
               "kind": "valueSet",
               "values": [
@@ -1941,10 +2795,10 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "9dc9fc3869141b3c54143bf9d9d2d0f190e376f544ddd26200d34149baa1f32f"
+    "storageHash": "1ff57f93f03da3985a78b7eef6739d2c5ce6aa1270f687f755a496a38289dde1"
   },
   "execution": {
-    "executionHash": "60a2cb77f18a57139cf34d03d4cea2f6a9ff328d177f7c96fb82e079ffd242b9",
+    "executionHash": "7eca2a8eb79a516990143de38e072f93d393e19155870251d88f21cc63165d8b",
     "mutations": {
       "defaults": [
         {
@@ -1960,6 +2814,17 @@
             "column": "fecha_modificacion",
             "namespace": "public",
             "table": "au_usuario"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id_matrimonio",
+            "namespace": "public",
+            "table": "gp_matrimonio"
           }
         },
         {

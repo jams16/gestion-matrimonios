@@ -1,8 +1,66 @@
 // use prisma-next
 model Proyecto {
-  idProyecto Uuid @id @default(uuid())
+  idProyecto        Uuid                @id @default(uuid())
+  nombre            VarChar(150)?
+  idPm              Int?                @map("id_pm")
+  fechaInicio       DateTime?           @map("fecha_inicio")
+  fechaFin          DateTime?           @map("fecha_fin")
+  presupuesto       Numeric(12, 2)?
+  objetivos         VarChar(1000)?
+  necesidades       VarChar(1000)?
+  supuestos         VarChar(1000)?
+  restricciones     VarChar(1000)?
+  alcance           VarChar(1000)?
+  estado            gp_estado_proyecto?
+  fechaCreacion     DateTime            @default(now()) @map("fecha_creacion")
+  fechaModificacion DateTime?           @map("fecha_modificacion")
+
+  projectManager    Usuario?            @relation("proyectos_pm", fields:[idPm], references:[idUsuario], onDelete: Restrict)
+  matrimonio        Matrimonio?
+
+  @@index([idPm])
 
   @@map("gp_proyecto")
+}
+
+enum gp_estado_proyecto {
+  BORRADOR = "BORRADOR"
+  INICIO = "INICIO"
+  PLANIFICACION = "PLANIFICACION"
+  EJECUCION = "EJECUCION"
+  CIERRE = "CIERRE"
+}
+
+enum gp_tipo_ceremonia {
+  RELIGIOSO = "RELIGIOSO"
+  CIVIL = "CIVIL"
+  RELIGIOSO_Y_CIVIL = "RELIGIOSO_Y_CIVIL"
+  SIMBOLICO = "SIMBOLICO"
+}
+
+model Matrimonio {
+  idMatrimonio      Uuid               @id @default(uuid()) @map("id_matrimonio")
+  idProyecto        Uuid               @unique @map("id_proyecto")
+  idNovio1          Int?               @map("id_novio1")
+  idNovio2          Int?               @map("id_novio2")
+  fechaMatrimonio   DateTime?          @map("fecha_matrimonio")
+  cantidadInvitados Int?               @map("cantidad_invitados")
+  tipoCeremonia     gp_tipo_ceremonia? @map("tipo_ceremonia")
+  ciudadUbicacion   VarChar(6)?        @map("ciudad_ubicacion")
+  ideasMoonboard    VarChar(1000)?     @map("ideas_moonboard")
+  estado            Boolean?
+  fechaCreacion     DateTime           @default(now()) @map("fecha_creacion")
+  fechaModificacion DateTime?          @map("fecha_modificacion")
+
+  proyecto          Proyecto           @relation(fields:[idProyecto], references:[idProyecto], onDelete: Restrict)
+  novio1            Usuario?           @relation("matrimonios_novio1", fields:[idNovio1], references:[idUsuario], onDelete: Restrict)
+  novio2            Usuario?           @relation("matrimonios_novio2", fields:[idNovio2], references:[idUsuario], onDelete: Restrict)
+  ubigeo            Ubigeo?            @relation(fields:[ciudadUbicacion], references:[idUbigeo], onDelete: Restrict)
+
+  @@index([idNovio1])
+  @@index([idNovio2])
+  @@index([ciudadUbicacion])
+  @@map("gp_matrimonio")
 }
 
 model Ubigeo {
@@ -13,6 +71,7 @@ model Ubigeo {
 
   personas     PersonaNatural[]
   entidades    Entidad[]
+  matrimonios  Matrimonio[]
 
   @@map("in_ubigeo")
 }
@@ -94,6 +153,9 @@ model Usuario {
   entidad           Entidad?             @relation(fields:[idEntidad], references:[idEntidad], onDelete: Restrict)
   sesiones          Sesion[]
   tokensCuenta      TokenCuenta[]
+  proyectosPm       Proyecto[]           @relation("proyectos_pm")
+  matrimoniosNovio1 Matrimonio[]         @relation("matrimonios_novio1")
+  matrimoniosNovio2 Matrimonio[]         @relation("matrimonios_novio2")
 
   @@index([idPersonaNatural])
   @@index([idEntidad])
