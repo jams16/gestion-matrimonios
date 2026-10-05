@@ -78,6 +78,7 @@ Instala y verifica:
     pnpm install --frozen-lockfile
     pnpm exec prisma migration status
     pnpm exec prisma migration apply
+    //o mejor pnpm.cmd exec prisma db migrate
     pnpm build
     pnpm test -- --runInBand
     pnpm start:dev
