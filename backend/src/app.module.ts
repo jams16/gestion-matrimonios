@@ -5,6 +5,7 @@ import { PrismaModule } from './infrastructure/database/prisma/prisma.module';
 import { InvolucradosModule } from './modules/involucrados/involucrados.module';
 import { AutenticacionModule } from './modules/autenticacion/autenticacion.module';
 import { UsuariosModule } from './modules/usuarios/usuarios.module';
+import { ProyectosModule } from './modules/proyectos/proyectos.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { UsuariosModule } from './modules/usuarios/usuarios.module';
     InvolucradosModule,
     AutenticacionModule,
     UsuariosModule,
+    ProyectosModule,
   ],
 })
 export class AppModule {}

@@ -1,0 +1,7 @@
+export enum EstadoProyecto {
+  BORRADOR = 'BORRADOR',
+  INICIO = 'INICIO',
+  PLANIFICACION = 'PLANIFICACION',
+  EJECUCION = 'EJECUCION',
+  CIERRE = 'CIERRE',
+}

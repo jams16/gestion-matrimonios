@@ -1,0 +1,6 @@
+export enum TipoCeremonia {
+  RELIGIOSO = 'RELIGIOSO',
+  CIVIL = 'CIVIL',
+  RELIGIOSO_Y_CIVIL = 'RELIGIOSO_Y_CIVIL',
+  SIMBOLICO = 'SIMBOLICO',
+}
