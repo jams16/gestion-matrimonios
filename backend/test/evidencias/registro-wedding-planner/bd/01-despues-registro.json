@@ -1,0 +1,12 @@
+{
+  "registroPendiente": {
+    "idRegistro": 1,
+    "correoElectronico": "wp-prueba-1792439385948@example.test",
+    "fechaExpiracion": "2026-10-20T19:49:46.004Z",
+    "fechaVerificacion": null,
+    "tokenHash": "oculto"
+  },
+  "personasCreadas": 0,
+  "entidadesCreadas": 0,
+  "usuariosCreados": 0
+}

@@ -18,39 +18,278 @@ import '../../infrastructure/data_sources/matrimonios_remote_data_source.dart';
 class CrearMatrimonioPage extends StatefulWidget {
   const CrearMatrimonioPage({super.key, this.idProyectoBorrador});
   final String? idProyectoBorrador;
-  @override State<CrearMatrimonioPage> createState() => _CrearMatrimonioPageState();
+  @override
+  State<CrearMatrimonioPage> createState() => _CrearMatrimonioPageState();
 }
 
 class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
   final _form = GlobalKey<FormState>();
-  final _nombres1 = TextEditingController(), _apellido1 = TextEditingController(), _dni1 = TextEditingController(), _usuario1 = TextEditingController(), _contrasena1 = TextEditingController();
-  final _nombres2 = TextEditingController(), _apellido2 = TextEditingController(), _dni2 = TextEditingController(), _usuario2 = TextEditingController(), _contrasena2 = TextEditingController();
-  final _fecha = TextEditingController(), _presupuesto = TextEditingController(), _objetivos = TextEditingController(), _necesidades = TextEditingController(), _supuestos = TextEditingController(), _restricciones = TextEditingController(), _moonboard = TextEditingController();
+  final _nombres1 = TextEditingController(),
+      _apellido1 = TextEditingController(),
+      _dni1 = TextEditingController(),
+      _usuario1 = TextEditingController(),
+      _contrasena1 = TextEditingController();
+  final _nombres2 = TextEditingController(),
+      _apellido2 = TextEditingController(),
+      _dni2 = TextEditingController(),
+      _usuario2 = TextEditingController(),
+      _contrasena2 = TextEditingController();
+  final _fecha = TextEditingController(),
+      _presupuesto = TextEditingController(),
+      _objetivos = TextEditingController(),
+      _necesidades = TextEditingController(),
+      _supuestos = TextEditingController(),
+      _restricciones = TextEditingController(),
+      _moonboard = TextEditingController();
   Timer? _introTimer;
   bool _mostrandoIntro = true, _usarDni = false;
   int _segundosRestantes = 5;
   int _paso = 1, _invitados = 1;
-  String? _ubigeo, _tipoCeremonia;
+  String? _ubigeo;
+  int? _idTipoCeremonia;
+  final List<_TipoCeremoniaOpcion> _tiposCeremonia = [];
   String? _idProyecto;
   bool _guardando = false;
   late final Future<List<Map<String, dynamic>>> _ubigeos;
-  @override void initState() { super.initState(); _idProyecto = widget.idProyectoBorrador; _ubigeos = MatrimoniosRemoteDataSource().listarUbigeos(); if (widget.idProyectoBorrador != null) _cargarBorrador(); _introTimer = Timer.periodic(const Duration(seconds: 1), (timer) { if (!mounted) return; if (_segundosRestantes <= 1) { timer.cancel(); setState(() => _mostrandoIntro = false); } else { setState(() => _segundosRestantes--); } }); }
-  Future<void> _cargarBorrador() async { try { final data = await MatrimoniosRemoteDataSource().obtenerBorrador(widget.idProyectoBorrador!); final p1 = Map<String, dynamic>.from(data['pareja1'] as Map); final p2 = Map<String, dynamic>.from(data['pareja2'] as Map); final proyecto = Map<String, dynamic>.from(data['proyecto'] as Map); final matrimonio = Map<String, dynamic>.from(data['matrimonio'] as Map); if (!mounted) return; setState(() { _nombres1.text = p1['nombres']?.toString() ?? ''; _apellido1.text = p1['apellidoPaterno']?.toString() ?? ''; _dni1.text = p1['dni']?.toString() ?? ''; _usuario1.text = p1['usuario']?.toString() ?? ''; _nombres2.text = p2['nombres']?.toString() ?? ''; _apellido2.text = p2['apellidoPaterno']?.toString() ?? ''; _dni2.text = p2['dni']?.toString() ?? ''; _usuario2.text = p2['usuario']?.toString() ?? ''; _fecha.text = matrimonio['fechaMatrimonio']?.toString().split('T').first ?? ''; _presupuesto.text = proyecto['presupuesto']?.toString() ?? ''; _invitados = int.tryParse(matrimonio['cantidadInvitados']?.toString() ?? '') ?? 1; _ubigeo = matrimonio['ciudadUbicacion']?.toString(); _tipoCeremonia = matrimonio['tipoCeremonia']?.toString(); _objetivos.text = proyecto['objetivos']?.toString() ?? ''; _necesidades.text = proyecto['necesidades']?.toString() ?? ''; _supuestos.text = proyecto['supuestos']?.toString() ?? ''; _restricciones.text = proyecto['restricciones']?.toString() ?? ''; _moonboard.text = matrimonio['ideasMoonboard']?.toString() ?? ''; }); } catch (_) { if (mounted) AppSnackbar.show(context, message: 'No se pudo cargar el borrador.', type: AppSnackbarType.error); } }
-  @override void dispose() { _introTimer?.cancel(); for (final c in [_nombres1,_apellido1,_dni1,_usuario1,_contrasena1,_nombres2,_apellido2,_dni2,_usuario2,_contrasena2,_fecha,_presupuesto,_objetivos,_necesidades,_supuestos,_restricciones,_moonboard]) { c.dispose(); } super.dispose(); }
-  String? _obligatorio(String? v) => v == null || v.trim().isEmpty ? 'Este campo es obligatorio.' : null;
-  String? _dni(String? v) => _obligatorio(v) ?? (RegExp(r'^\d{8}$').hasMatch(v!.trim()) ? null : 'Ingresa un DNI de 8 dígitos.');
-  void _copiarDni(bool value) => setState(() { _usarDni = value; if (value) { _usuario1.text = _dni1.text; _contrasena1.text = _dni1.text; _usuario2.text = _dni2.text; _contrasena2.text = _dni2.text; } });
+  @override
+  void initState() {
+    super.initState();
+    _idProyecto = widget.idProyectoBorrador;
+    _ubigeos = MatrimoniosRemoteDataSource().listarUbigeos();
+    if (widget.idProyectoBorrador != null) _cargarBorrador();
+    _introTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!mounted) return;
+      if (_segundosRestantes <= 1) {
+        timer.cancel();
+        setState(() => _mostrandoIntro = false);
+      } else {
+        setState(() => _segundosRestantes--);
+      }
+    });
+  }
+
+  Future<void> _cargarBorrador() async {
+    try {
+      final data = await MatrimoniosRemoteDataSource().obtenerBorrador(
+        widget.idProyectoBorrador!,
+      );
+      final p1 = Map<String, dynamic>.from(data['pareja1'] as Map);
+      final p2 = Map<String, dynamic>.from(data['pareja2'] as Map);
+      final proyecto = Map<String, dynamic>.from(data['proyecto'] as Map);
+      final matrimonio = Map<String, dynamic>.from(data['matrimonio'] as Map);
+      final tipo = _mapa(
+        matrimonio['tipoCeremonia'] ?? matrimonio['tipo_ceremonia'],
+      );
+      final idTipo = _entero(
+        matrimonio['idTipoCeremonia'] ??
+            matrimonio['id_tipo_ceremonia'] ??
+            tipo['idTipoCeremonia'] ??
+            tipo['id_tipo_ceremonia'],
+      );
+      final nombreTipo = (tipo['nombre'] ?? tipo['codigo'])?.toString().trim();
+      if (!mounted) return;
+      setState(() {
+        _nombres1.text = p1['nombres']?.toString() ?? '';
+        _apellido1.text = p1['apellidoPaterno']?.toString() ?? '';
+        _dni1.text = p1['dni']?.toString() ?? '';
+        _usuario1.text = p1['usuario']?.toString() ?? '';
+        _nombres2.text = p2['nombres']?.toString() ?? '';
+        _apellido2.text = p2['apellidoPaterno']?.toString() ?? '';
+        _dni2.text = p2['dni']?.toString() ?? '';
+        _usuario2.text = p2['usuario']?.toString() ?? '';
+        _fecha.text =
+            matrimonio['fechaMatrimonio']?.toString().split('T').first ?? '';
+        _presupuesto.text = proyecto['presupuesto']?.toString() ?? '';
+        _invitados =
+            int.tryParse(matrimonio['cantidadInvitados']?.toString() ?? '') ??
+            1;
+        _ubigeo = matrimonio['ciudadUbicacion']?.toString();
+        _idTipoCeremonia = idTipo;
+        if (idTipo != null && nombreTipo != null && nombreTipo.isNotEmpty)
+          _tiposCeremonia.add(
+            _TipoCeremoniaOpcion(id: idTipo, nombre: nombreTipo),
+          );
+        _objetivos.text = proyecto['objetivos']?.toString() ?? '';
+        _necesidades.text = proyecto['necesidades']?.toString() ?? '';
+        _supuestos.text = proyecto['supuestos']?.toString() ?? '';
+        _restricciones.text = proyecto['restricciones']?.toString() ?? '';
+        _moonboard.text = matrimonio['ideasMoonboard']?.toString() ?? '';
+      });
+    } catch (_) {
+      if (mounted)
+        AppSnackbar.show(
+          context,
+          message: 'No se pudo cargar el borrador.',
+          type: AppSnackbarType.error,
+        );
+    }
+  }
+
+  @override
+  void dispose() {
+    _introTimer?.cancel();
+    for (final c in [
+      _nombres1,
+      _apellido1,
+      _dni1,
+      _usuario1,
+      _contrasena1,
+      _nombres2,
+      _apellido2,
+      _dni2,
+      _usuario2,
+      _contrasena2,
+      _fecha,
+      _presupuesto,
+      _objetivos,
+      _necesidades,
+      _supuestos,
+      _restricciones,
+      _moonboard,
+    ]) {
+      c.dispose();
+    }
+    super.dispose();
+  }
+
+  String? _obligatorio(String? v) =>
+      v == null || v.trim().isEmpty ? 'Este campo es obligatorio.' : null;
+  String? _dni(String? v) =>
+      _obligatorio(v) ??
+      (RegExp(r'^\d{8}$').hasMatch(v!.trim())
+          ? null
+          : 'Ingresa un DNI de 8 dígitos.');
+  void _copiarDni(bool value) => setState(() {
+    _usarDni = value;
+    if (value) {
+      _usuario1.text = _dni1.text;
+      _contrasena1.text = _dni1.text;
+      _usuario2.text = _dni2.text;
+      _contrasena2.text = _dni2.text;
+    }
+  });
   void _dniCambiado() {
     if (_dni1.text.length == 8 && _dni1.text == _dni2.text) {
-      AppSnackbar.show(context, message: 'El DNI de la pareja 1 no puede ser el mismo de la pareja 2.', type: AppSnackbarType.warning);
+      AppSnackbar.show(
+        context,
+        message: 'El DNI de la pareja 1 no puede ser el mismo de la pareja 2.',
+        type: AppSnackbarType.warning,
+      );
     }
     if (_usarDni) _copiarDni(true);
   }
-  void _volver() { if (_paso == 1) context.go('/matrimonios'); else setState(() => _paso--); }
-  void _siguiente() { if (_paso < 4 && !_form.currentState!.validate()) return; if (_paso == 2 && (_tipoCeremonia == null || _fecha.text.isEmpty || _presupuesto.text.isEmpty || _invitados < 1)) { AppSnackbar.show(context, message: 'Completa los datos obligatorios del matrimonio.', type: AppSnackbarType.warning); return; } if (_paso == 4) { _guardar(true); return; } setState(() => _paso++); }
-  Map<String, dynamic> _payload() => {'pareja1': {'nombres': _nombres1.text.trim(), 'apellidoPaterno': _apellido1.text.trim(), 'dni': _dni1.text.trim(), 'usuario': _usuario1.text.trim(), 'contrasena': _contrasena1.text}, 'pareja2': {'nombres': _nombres2.text.trim(), 'apellidoPaterno': _apellido2.text.trim(), 'dni': _dni2.text.trim(), 'usuario': _usuario2.text.trim(), 'contrasena': _contrasena2.text}, 'fechaMatrimonio': _fecha.text.trim(), 'presupuesto': num.tryParse(_presupuesto.text.replaceAll(',', '.')) ?? 0, 'cantidadInvitados': _invitados, 'tipoCeremonia': _tipoCeremonia, 'ciudadUbicacion': _ubigeo, 'objetivos': _objetivos.text.trim(), 'necesidades': _necesidades.text.trim(), 'supuestos': _supuestos.text.trim(), 'restricciones': _restricciones.text.trim(), 'ideasMoonboard': _moonboard.text.trim()};
-  Future<void> _guardar(bool iniciar) async { if (_guardando) return; setState(() => _guardando = true); try { final datos = _payload(); if (_idProyecto != null) datos['idProyecto'] = _idProyecto; await MatrimoniosRemoteDataSource().guardarOnboarding(datos, iniciar: iniciar); if (!mounted) return; AppSnackbar.show(context, message: iniciar ? 'Matrimonio creado correctamente.' : 'Borrador guardado correctamente.', type: AppSnackbarType.success); context.go(iniciar ? '/home' : '/matrimonios'); } on DioException catch (error) { final data = error.response?.data; final mensaje = data is Map ? data['mensaje']?.toString() : null; if (mounted) AppSnackbar.show(context, message: mensaje ?? (error.response == null ? 'No se pudo conectar con el servidor.' : 'No se pudo guardar el matrimonio.'), type: AppSnackbarType.error); } on StateError catch (error) { if (mounted) AppSnackbar.show(context, message: error.message.toString(), type: AppSnackbarType.warning); } catch (error) { if (mounted) AppSnackbar.show(context, message: error.toString(), type: AppSnackbarType.error); } finally { if (mounted) setState(() => _guardando = false); } }
-  String get _tituloPaso => ['Datos de la pareja', 'Datos base', 'Objetivos y necesidades', 'Resumen'][_paso - 1];
+
+  void _volver() {
+    if (_paso == 1)
+      context.go('/matrimonios');
+    else
+      setState(() => _paso--);
+  }
+
+  void _siguiente() {
+    if (_paso < 4 && !_form.currentState!.validate()) return;
+    if (_paso == 2 &&
+        (_idTipoCeremonia == null ||
+            _fecha.text.isEmpty ||
+            _presupuesto.text.isEmpty ||
+            _invitados < 1)) {
+      AppSnackbar.show(
+        context,
+        message: 'Completa los datos obligatorios del matrimonio.',
+        type: AppSnackbarType.warning,
+      );
+      return;
+    }
+    if (_paso == 4) {
+      _guardar(true);
+      return;
+    }
+    setState(() => _paso++);
+  }
+
+  Map<String, dynamic> _payload() => {
+    'pareja1': {
+      'nombres': _nombres1.text.trim(),
+      'apellidoPaterno': _apellido1.text.trim(),
+      'dni': _dni1.text.trim(),
+      'usuario': _usuario1.text.trim(),
+      'contrasena': _contrasena1.text,
+    },
+    'pareja2': {
+      'nombres': _nombres2.text.trim(),
+      'apellidoPaterno': _apellido2.text.trim(),
+      'dni': _dni2.text.trim(),
+      'usuario': _usuario2.text.trim(),
+      'contrasena': _contrasena2.text,
+    },
+    'fechaMatrimonio': _fecha.text.trim(),
+    'presupuesto': num.tryParse(_presupuesto.text.replaceAll(',', '.')) ?? 0,
+    'cantidadInvitados': _invitados,
+    'idTipoCeremonia': _idTipoCeremonia,
+    'ciudadUbicacion': _ubigeo,
+    'objetivos': _objetivos.text.trim(),
+    'necesidades': _necesidades.text.trim(),
+    'supuestos': _supuestos.text.trim(),
+    'restricciones': _restricciones.text.trim(),
+    'ideasMoonboard': _moonboard.text.trim(),
+  };
+  Future<void> _guardar(bool iniciar) async {
+    if (_guardando) return;
+    setState(() => _guardando = true);
+    try {
+      final datos = _payload();
+      if (_idProyecto != null) datos['idProyecto'] = _idProyecto;
+      await MatrimoniosRemoteDataSource().guardarOnboarding(
+        datos,
+        iniciar: iniciar,
+      );
+      if (!mounted) return;
+      AppSnackbar.show(
+        context,
+        message: iniciar
+            ? 'Matrimonio creado correctamente.'
+            : 'Borrador guardado correctamente.',
+        type: AppSnackbarType.success,
+      );
+      context.go(iniciar ? '/home' : '/matrimonios');
+    } on DioException catch (error) {
+      final data = error.response?.data;
+      final mensaje = data is Map ? data['mensaje']?.toString() : null;
+      if (mounted)
+        AppSnackbar.show(
+          context,
+          message:
+              mensaje ??
+              (error.response == null
+                  ? 'No se pudo conectar con el servidor.'
+                  : 'No se pudo guardar el matrimonio.'),
+          type: AppSnackbarType.error,
+        );
+    } on StateError catch (error) {
+      if (mounted)
+        AppSnackbar.show(
+          context,
+          message: error.message.toString(),
+          type: AppSnackbarType.warning,
+        );
+    } catch (error) {
+      if (mounted)
+        AppSnackbar.show(
+          context,
+          message: error.toString(),
+          type: AppSnackbarType.error,
+        );
+    } finally {
+      if (mounted) setState(() => _guardando = false);
+    }
+  }
+
+  String get _tituloPaso => [
+    'Datos de la pareja',
+    'Datos base',
+    'Objetivos y necesidades',
+    'Resumen',
+  ][_paso - 1];
   TextEditingController get nombres1 => _nombres1;
   TextEditingController get apellido1 => _apellido1;
   TextEditingController get dni1 => _dni1;
@@ -65,27 +304,467 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
   TextEditingController get supuestos => _supuestos;
   TextEditingController get moonboard => _moonboard;
   String? get ubigeo => _ubigeo;
-  @override Widget build(BuildContext context) {
-    if (_mostrandoIntro) return Stack(children: [const _InicioProyecto(), Positioned(bottom: 72, left: 0, right: 0, child: Text('Continuamos en $_segundosRestantes s', textAlign: TextAlign.center, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary))), Positioned(right: 16, bottom: 12, child: TextButton(onPressed: () { _introTimer?.cancel(); setState(() => _mostrandoIntro = false); }, child: const Text('SKIP')))]);
-    return Scaffold(backgroundColor: const Color(0xFFFDFBFF), body: SafeArea(child: Align(alignment: Alignment.topCenter, child: ConstrainedBox(constraints: const BoxConstraints(maxWidth: 620), child: Form(key: _form, child: SingleChildScrollView(padding: const EdgeInsets.fromLTRB(24, 12, 24, 36), child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-      Align(alignment: Alignment.centerLeft, child: AppButton(label: 'Volver', variant: AppButtonVariant.tertiary, icon: Icons.arrow_back, onPressed: _volver)), const SizedBox(height: AppSpacing.md),
-      Text('Crear matrimonio', textAlign: TextAlign.center, style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800)), const SizedBox(height: AppSpacing.xs),
-      Text('Paso $_paso de 4: $_tituloPaso', textAlign: TextAlign.center, style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: AppColors.textSecondary)),
-      const SizedBox(height: AppSpacing.lg), _IndicadorPasos(actual: _paso), const SizedBox(height: AppSpacing.lg), const _Informacion(), const SizedBox(height: AppSpacing.lg), _contenidoPaso(), const SizedBox(height: AppSpacing.xl),
-      Row(children: [if (_paso > 1) AppButton(label: 'Guardar borrador', variant: AppButtonVariant.tertiary, loading: _guardando, onPressed: () => _guardar(false)), const Spacer(), AppButton(label: _paso == 4 ? 'Comenzar' : 'Siguiente', icon: Icons.arrow_forward, loading: _guardando, onPressed: _siguiente)]),
-    ])))))));
+  @override
+  Widget build(BuildContext context) {
+    if (_mostrandoIntro)
+      return Stack(
+        children: [
+          const _InicioProyecto(),
+          Positioned(
+            bottom: 72,
+            left: 0,
+            right: 0,
+            child: Text(
+              'Continuamos en $_segundosRestantes s',
+              textAlign: TextAlign.center,
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary),
+            ),
+          ),
+          Positioned(
+            right: 16,
+            bottom: 12,
+            child: TextButton(
+              onPressed: () {
+                _introTimer?.cancel();
+                setState(() => _mostrandoIntro = false);
+              },
+              child: const Text('SKIP'),
+            ),
+          ),
+        ],
+      );
+    return Scaffold(
+      backgroundColor: const Color(0xFFFDFBFF),
+      body: SafeArea(
+        child: Align(
+          alignment: Alignment.topCenter,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 620),
+            child: Form(
+              key: _form,
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(24, 12, 24, 36),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: AppButton(
+                        label: 'Volver',
+                        variant: AppButtonVariant.tertiary,
+                        icon: Icons.arrow_back,
+                        onPressed: _volver,
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.md),
+                    Text(
+                      'Crear matrimonio',
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.headlineSmall
+                          ?.copyWith(fontWeight: FontWeight.w800),
+                    ),
+                    const SizedBox(height: AppSpacing.xs),
+                    Text(
+                      'Paso $_paso de 4: $_tituloPaso',
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.lg),
+                    _IndicadorPasos(actual: _paso),
+                    const SizedBox(height: AppSpacing.lg),
+                    const _Informacion(),
+                    const SizedBox(height: AppSpacing.lg),
+                    _contenidoPaso(),
+                    const SizedBox(height: AppSpacing.xl),
+                    Row(
+                      children: [
+                        if (_paso > 1)
+                          AppButton(
+                            label: 'Guardar borrador',
+                            variant: AppButtonVariant.tertiary,
+                            loading: _guardando,
+                            onPressed: () => _guardar(false),
+                          ),
+                        const Spacer(),
+                        AppButton(
+                          label: _paso == 4 ? 'Comenzar' : 'Siguiente',
+                          icon: Icons.arrow_forward,
+                          loading: _guardando,
+                          onPressed: _siguiente,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
-  Widget _contenidoPaso() { if (_paso == 1) return _pareja(); if (_paso == 2) return _datosBase(); if (_paso == 3) return _objetivosNecesidades(); return _resumen(); }
-  Widget _pareja() => Column(crossAxisAlignment: CrossAxisAlignment.start, children: [const Text('Información de la pareja 1', style: TextStyle(fontWeight: FontWeight.w700)), const SizedBox(height: 12), _campo('Nombre(s) de la pareja 1', _nombres1), _campo('Apellido paterno de la pareja 1', _apellido1), _campo('DNI de la pareja 1', _dni1, dni: true), _campo('Usuario de la pareja 1', _usuario1, enabled: !_usarDni), _campo('Contraseña de la pareja 1', _contrasena1, enabled: !_usarDni, password: true), const SizedBox(height: 8), const Text('Información de la pareja 2', style: TextStyle(fontWeight: FontWeight.w700)), const SizedBox(height: 12), _campo('Nombre(s) de la pareja 2', _nombres2), _campo('Apellido paterno de la pareja 2', _apellido2), _campo('DNI de la pareja 2', _dni2, dni: true), _campo('Usuario de la pareja 2', _usuario2, enabled: !_usarDni), _campo('Contraseña de la pareja 2', _contrasena2, enabled: !_usarDni, password: true), AppCheckbox(label: 'Usar DNI como usuario y contraseña', value: _usarDni, onChanged: _copiarDni)]);
-  Widget _campo(String label, TextEditingController c, {bool dni=false, bool enabled=true, bool password=false}) => Padding(padding: const EdgeInsets.only(bottom: 16), child: AppTextField(label: label, controller: c, required: true, enabled: enabled, obscureText: password, prefixIcon: Icon(password ? Icons.lock_outline : dni ? Icons.badge_outlined : label.startsWith('Usuario') ? Icons.person_outline : Icons.person_outline), keyboardType: dni ? TextInputType.number : null, inputFormatters: dni ? [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(8)] : null, onChanged: dni ? (_) => _dniCambiado() : null, validator: dni ? _dni : _obligatorio));
-  Future<void> _seleccionarFecha() async { final hoy = DateTime.now(); final fecha = await showDatePicker(context: context, firstDate: DateTime(hoy.year, hoy.month, hoy.day + 1), lastDate: DateTime(hoy.year + 20), initialDate: DateTime(hoy.year, hoy.month, hoy.day + 1)); if (fecha != null) setState(() => _fecha.text = '${fecha.year}-${fecha.month.toString().padLeft(2, '0')}-${fecha.day.toString().padLeft(2, '0')}'); }
-  Widget _selectorUbigeo() => FutureBuilder<List<Map<String, dynamic>>>(future: _ubigeos, builder: (context, snapshot) { if (snapshot.hasError) return const Text('No se pudieron cargar las ubicaciones.'); final items = snapshot.data ?? const []; return AppSelectField<String>(label: 'Ciudad / Ubicación', hintText: snapshot.hasData ? 'Busca distrito, provincia o departamento' : 'Cargando ubicaciones...', initialValue: _ubigeo, options: items.map((item) => AppSelectOption(value: item['idUbigeo'].toString(), label: '${item['distrito']}, ${item['provincia']}, ${item['departamento']}')).toList(), onChanged: snapshot.hasData ? (value) => setState(() => _ubigeo = value) : null); });
-  Widget _datosBase() => Column(children: [AppTextField(label: 'Fecha del matrimonio', controller: _fecha, required: true, readOnly: true, prefixIcon: const Icon(Icons.calendar_today_outlined), suffixIcon: const Icon(Icons.arrow_drop_down), onTap: _seleccionarFecha, validator: _obligatorio), const SizedBox(height: 16), _campo('Presupuesto estimado (S/.)', _presupuesto), AppNumberField(label: 'Cantidad estimada de invitados', min: 1, initialValue: _invitados, onChanged: (v) => _invitados = v.toInt()), const SizedBox(height: 16), _selectorUbigeo(), const SizedBox(height: 16), AppSelectField(label: 'Tipo de ceremonia', initialValue: _tipoCeremonia, options: const [AppSelectOption(value: 'RELIGIOSO', label: 'Religiosa'), AppSelectOption(value: 'CIVIL', label: 'Civil'), AppSelectOption(value: 'RELIGIOSO_Y_CIVIL', label: 'Religiosa y civil'), AppSelectOption(value: 'SIMBOLICO', label: 'Simbólica')], onChanged: (v) => setState(() => _tipoCeremonia = v))]);
-  Widget _area(String label, TextEditingController c) => Padding(padding: const EdgeInsets.only(bottom: 16), child: AppTextField(label: label, controller: c, maxLines: 4));
-  Widget _objetivosNecesidades() => Column(children: [_area('Objetivos', _objetivos), _area('Necesidades', _necesidades), _area('Supuestos', _supuestos), _area('Restricciones', _restricciones), _area('Ideas para el moonboard', _moonboard)]);
-  Widget _resumen() => Column(children: [_ResumenCard(icon: Icons.people_outline, title: 'Datos de la pareja', texto: '${nombres1.text} ${apellido1.text} · DNI ${dni1.text}\n${nombres2.text} ${apellido2.text} · DNI ${dni2.text}', onEdit: () => setState(() => _paso = 1)), const SizedBox(height: 12), _ResumenCard(icon: Icons.favorite_outline, title: 'Datos del matrimonio', texto: 'Fecha: ${fecha.text}\nPresupuesto: S/. ${presupuesto.text}\nInvitados: $_invitados\nLugar: ${ubigeo ?? 'Sin definir'}', onEdit: () => setState(() => _paso = 2)), const SizedBox(height: 12), _ResumenCard(icon: Icons.lightbulb_outline, title: 'Objetivos y necesidades', texto: 'Objetivo\n${objetivos.text}\n\nNecesidades\n${necesidades.text}\n\nRestricciones\n${restricciones.text}\n\nSupuestos\n${supuestos.text}\n\nIdeas para el moonboard\n${moonboard.text}', onEdit: () => setState(() => _paso = 3))]);
+
+  Widget _contenidoPaso() {
+    if (_paso == 1) return _pareja();
+    if (_paso == 2) return _datosBase();
+    if (_paso == 3) return _objetivosNecesidades();
+    return _resumen();
+  }
+
+  Widget _pareja() => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      const Text(
+        'Información de la pareja 1',
+        style: TextStyle(fontWeight: FontWeight.w700),
+      ),
+      const SizedBox(height: 12),
+      _campo('Nombre(s) de la pareja 1', _nombres1),
+      _campo('Apellido paterno de la pareja 1', _apellido1),
+      _campo('DNI de la pareja 1', _dni1, dni: true),
+      _campo('Usuario de la pareja 1', _usuario1, enabled: !_usarDni),
+      _campo(
+        'Contraseña de la pareja 1',
+        _contrasena1,
+        enabled: !_usarDni,
+        password: true,
+      ),
+      const SizedBox(height: 8),
+      const Text(
+        'Información de la pareja 2',
+        style: TextStyle(fontWeight: FontWeight.w700),
+      ),
+      const SizedBox(height: 12),
+      _campo('Nombre(s) de la pareja 2', _nombres2),
+      _campo('Apellido paterno de la pareja 2', _apellido2),
+      _campo('DNI de la pareja 2', _dni2, dni: true),
+      _campo('Usuario de la pareja 2', _usuario2, enabled: !_usarDni),
+      _campo(
+        'Contraseña de la pareja 2',
+        _contrasena2,
+        enabled: !_usarDni,
+        password: true,
+      ),
+      AppCheckbox(
+        label: 'Usar DNI como usuario y contraseña',
+        value: _usarDni,
+        onChanged: _copiarDni,
+      ),
+    ],
+  );
+  Widget _campo(
+    String label,
+    TextEditingController c, {
+    bool dni = false,
+    bool enabled = true,
+    bool password = false,
+  }) => Padding(
+    padding: const EdgeInsets.only(bottom: 16),
+    child: AppTextField(
+      label: label,
+      controller: c,
+      required: true,
+      enabled: enabled,
+      obscureText: password,
+      prefixIcon: Icon(
+        password
+            ? Icons.lock_outline
+            : dni
+            ? Icons.badge_outlined
+            : label.startsWith('Usuario')
+            ? Icons.person_outline
+            : Icons.person_outline,
+      ),
+      keyboardType: dni ? TextInputType.number : null,
+      inputFormatters: dni
+          ? [
+              FilteringTextInputFormatter.digitsOnly,
+              LengthLimitingTextInputFormatter(8),
+            ]
+          : null,
+      onChanged: dni ? (_) => _dniCambiado() : null,
+      validator: dni ? _dni : _obligatorio,
+    ),
+  );
+  Future<void> _seleccionarFecha() async {
+    final hoy = DateTime.now();
+    final fecha = await showDatePicker(
+      context: context,
+      firstDate: DateTime(hoy.year, hoy.month, hoy.day + 1),
+      lastDate: DateTime(hoy.year + 20),
+      initialDate: DateTime(hoy.year, hoy.month, hoy.day + 1),
+    );
+    if (fecha != null)
+      setState(
+        () => _fecha.text =
+            '${fecha.year}-${fecha.month.toString().padLeft(2, '0')}-${fecha.day.toString().padLeft(2, '0')}',
+      );
+  }
+
+  Widget _selectorUbigeo() => FutureBuilder<List<Map<String, dynamic>>>(
+    future: _ubigeos,
+    builder: (context, snapshot) {
+      if (snapshot.hasError)
+        return const Text('No se pudieron cargar las ubicaciones.');
+      final items = snapshot.data ?? const [];
+      return AppSelectField<String>(
+        label: 'Ciudad / Ubicación',
+        hintText: snapshot.hasData
+            ? 'Busca distrito, provincia o departamento'
+            : 'Cargando ubicaciones...',
+        initialValue: _ubigeo,
+        options: items
+            .map(
+              (item) => AppSelectOption(
+                value: item['idUbigeo'].toString(),
+                label:
+                    '${item['distrito']}, ${item['provincia']}, ${item['departamento']}',
+              ),
+            )
+            .toList(),
+        onChanged: snapshot.hasData
+            ? (value) => setState(() => _ubigeo = value)
+            : null,
+      );
+    },
+  );
+  Widget _datosBase() => Column(
+    children: [
+      AppTextField(
+        label: 'Fecha del matrimonio',
+        controller: _fecha,
+        required: true,
+        readOnly: true,
+        prefixIcon: const Icon(Icons.calendar_today_outlined),
+        suffixIcon: const Icon(Icons.arrow_drop_down),
+        onTap: _seleccionarFecha,
+        validator: _obligatorio,
+      ),
+      const SizedBox(height: 16),
+      _campo('Presupuesto estimado (S/.)', _presupuesto),
+      AppNumberField(
+        label: 'Cantidad estimada de invitados',
+        min: 1,
+        initialValue: _invitados,
+        onChanged: (v) => _invitados = v.toInt(),
+      ),
+      const SizedBox(height: 16),
+      _selectorUbigeo(),
+      const SizedBox(height: 16),
+      _selectorTipoCeremonia(),
+    ],
+  );
+
+  Widget _selectorTipoCeremonia() {
+    if (_tiposCeremonia.isEmpty) {
+      return const Text(
+        'El catálogo de tipos de ceremonia aún no está disponible en el servidor.',
+      );
+    }
+    return AppSelectField<int>(
+      label: 'Tipo de ceremonia',
+      initialValue: _idTipoCeremonia,
+      options: _tiposCeremonia
+          .map((tipo) => AppSelectOption(value: tipo.id, label: tipo.nombre))
+          .toList(),
+      onChanged: (value) => setState(() => _idTipoCeremonia = value),
+    );
+  }
+
+  static Map<String, dynamic> _mapa(Object? value) => value is Map
+      ? Map<String, dynamic>.from(value)
+      : const <String, dynamic>{};
+  static int? _entero(Object? value) => value is int
+      ? value
+      : value is num
+      ? value.toInt()
+      : int.tryParse(value?.toString() ?? '');
+  Widget _area(String label, TextEditingController c) => Padding(
+    padding: const EdgeInsets.only(bottom: 16),
+    child: AppTextField(label: label, controller: c, maxLines: 4),
+  );
+  Widget _objetivosNecesidades() => Column(
+    children: [
+      _area('Objetivos', _objetivos),
+      _area('Necesidades', _necesidades),
+      _area('Supuestos', _supuestos),
+      _area('Restricciones', _restricciones),
+      _area('Ideas para el moonboard', _moonboard),
+    ],
+  );
+  Widget _resumen() => Column(
+    children: [
+      _ResumenCard(
+        icon: Icons.people_outline,
+        title: 'Datos de la pareja',
+        texto:
+            '${nombres1.text} ${apellido1.text} · DNI ${dni1.text}\n${nombres2.text} ${apellido2.text} · DNI ${dni2.text}',
+        onEdit: () => setState(() => _paso = 1),
+      ),
+      const SizedBox(height: 12),
+      _ResumenCard(
+        icon: Icons.favorite_outline,
+        title: 'Datos del matrimonio',
+        texto:
+            'Fecha: ${fecha.text}\nPresupuesto: S/. ${presupuesto.text}\nInvitados: $_invitados\nLugar: ${ubigeo ?? 'Sin definir'}',
+        onEdit: () => setState(() => _paso = 2),
+      ),
+      const SizedBox(height: 12),
+      _ResumenCard(
+        icon: Icons.lightbulb_outline,
+        title: 'Objetivos y necesidades',
+        texto:
+            'Objetivo\n${objetivos.text}\n\nNecesidades\n${necesidades.text}\n\nRestricciones\n${restricciones.text}\n\nSupuestos\n${supuestos.text}\n\nIdeas para el moonboard\n${moonboard.text}',
+        onEdit: () => setState(() => _paso = 3),
+      ),
+    ],
+  );
 }
-class _InicioProyecto extends StatelessWidget { const _InicioProyecto(); @override Widget build(BuildContext context) => Scaffold(backgroundColor: const Color(0xFFFDFBFF), body: SafeArea(child: Center(child: Padding(padding: const EdgeInsets.all(32), child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [const Text('Inicio de proyecto', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800)), const SizedBox(height: 28), Image.asset('assets/images/logoWP.webp', height: 112, fit: BoxFit.contain), const SizedBox(height: 28), const Text('Comienza la planificación', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)), const SizedBox(height: 12), const Text('En esta fase se registran los datos básicos del matrimonio para iniciar la planificación del proyecto', textAlign: TextAlign.center)]))))); }
-class _IndicadorPasos extends StatelessWidget { const _IndicadorPasos({required this.actual}); final int actual; @override Widget build(BuildContext context) => Row(children: List.generate(4, (i) { final n=i+1, activo=n<=actual; return Expanded(child: Row(children: [CircleAvatar(radius: 15, backgroundColor: activo ? AppColors.primary : AppColors.disabledBackground, foregroundColor: activo ? Colors.white : AppColors.textSecondary, child: Text('$n')), if(n<4) Expanded(child: Container(height: 2, color: n<actual ? AppColors.primary : AppColors.border))])); })); }
-class _Informacion extends StatelessWidget { const _Informacion(); @override Widget build(BuildContext context) => Container(padding: const EdgeInsets.all(16), decoration: BoxDecoration(color: const Color(0xFFF4F0FB), borderRadius: BorderRadius.circular(12)), child: const Row(children: [Icon(Icons.info_outline, color: AppColors.primary), SizedBox(width: 12), Text('Información')])); }
-class _ResumenCard extends StatelessWidget { const _ResumenCard({required this.icon, required this.title, required this.texto, required this.onEdit}); final IconData icon; final String title, texto; final VoidCallback onEdit; @override Widget build(BuildContext context) => Card(child: Padding(padding: const EdgeInsets.all(16), child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [CircleAvatar(backgroundColor: const Color(0xFFE9E2F7), foregroundColor: AppColors.primary, child: Icon(icon)), const SizedBox(width: 12), Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(title, style: const TextStyle(fontWeight: FontWeight.w800)), const SizedBox(height: 8), Text(texto)])), IconButton(onPressed: onEdit, icon: const Icon(Icons.edit_outlined), tooltip: 'Editar')]))); }
+
+class _InicioProyecto extends StatelessWidget {
+  const _InicioProyecto();
+  @override
+  Widget build(BuildContext context) => Scaffold(
+    backgroundColor: const Color(0xFFFDFBFF),
+    body: SafeArea(
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(32),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                'Inicio de proyecto',
+                style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800),
+              ),
+              const SizedBox(height: 28),
+              Image.asset(
+                'assets/images/logoWP.webp',
+                height: 112,
+                fit: BoxFit.contain,
+              ),
+              const SizedBox(height: 28),
+              const Text(
+                'Comienza la planificación',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+              ),
+              const SizedBox(height: 12),
+              const Text(
+                'En esta fase se registran los datos básicos del matrimonio para iniciar la planificación del proyecto',
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
+class _IndicadorPasos extends StatelessWidget {
+  const _IndicadorPasos({required this.actual});
+  final int actual;
+  @override
+  Widget build(BuildContext context) => Row(
+    children: List.generate(4, (i) {
+      final n = i + 1, activo = n <= actual;
+      return Expanded(
+        child: Row(
+          children: [
+            CircleAvatar(
+              radius: 15,
+              backgroundColor: activo
+                  ? AppColors.primary
+                  : AppColors.disabledBackground,
+              foregroundColor: activo ? Colors.white : AppColors.textSecondary,
+              child: Text('$n'),
+            ),
+            if (n < 4)
+              Expanded(
+                child: Container(
+                  height: 2,
+                  color: n < actual ? AppColors.primary : AppColors.border,
+                ),
+              ),
+          ],
+        ),
+      );
+    }),
+  );
+}
+
+class _Informacion extends StatelessWidget {
+  const _Informacion();
+  @override
+  Widget build(BuildContext context) => Container(
+    padding: const EdgeInsets.all(16),
+    decoration: BoxDecoration(
+      color: const Color(0xFFF4F0FB),
+      borderRadius: BorderRadius.circular(12),
+    ),
+    child: const Row(
+      children: [
+        Icon(Icons.info_outline, color: AppColors.primary),
+        SizedBox(width: 12),
+        Text('Información'),
+      ],
+    ),
+  );
+}
+
+class _TipoCeremoniaOpcion {
+  const _TipoCeremoniaOpcion({required this.id, required this.nombre});
+  final int id;
+  final String nombre;
+}
+
+class _ResumenCard extends StatelessWidget {
+  const _ResumenCard({
+    required this.icon,
+    required this.title,
+    required this.texto,
+    required this.onEdit,
+  });
+  final IconData icon;
+  final String title, texto;
+  final VoidCallback onEdit;
+  @override
+  Widget build(BuildContext context) => Card(
+    child: Padding(
+      padding: const EdgeInsets.all(16),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CircleAvatar(
+            backgroundColor: const Color(0xFFE9E2F7),
+            foregroundColor: AppColors.primary,
+            child: Icon(icon),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(fontWeight: FontWeight.w800),
+                ),
+                const SizedBox(height: 8),
+                Text(texto),
+              ],
+            ),
+          ),
+          IconButton(
+            onPressed: onEdit,
+            icon: const Icon(Icons.edit_outlined),
+            tooltip: 'Editar',
+          ),
+        ],
+      ),
+    ),
+  );
+}

@@ -129,13 +129,12 @@ class _Layout extends StatelessWidget {
                         itemBuilder: (context, index) => MatrimonioCard(
                           matrimonio: items[index],
                           onTap: () {
-                            final esBorrador =
-                                items[index].estadoProyecto
-                                    .trim()
-                                    .toUpperCase() ==
-                                'BORRADOR';
+                            final esBorrador = items[index].esBorrador;
                             if (esBorrador) {
-                              context.go('/matrimonio', extra: items[index].idProyecto);
+                              context.go(
+                                '/matrimonio',
+                                extra: items[index].idProyecto,
+                              );
                             } else {
                               context.go('/home');
                             }

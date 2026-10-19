@@ -1,0 +1,15 @@
+{
+  "mensaje": "Cuenta creada correctamente.",
+  "data": {
+    "idPersonaNatural": 1000,
+    "idEntidad": 1000,
+    "usuario": "wp-prueba-1792439385948",
+    "tipoUsuario": "PROJECT_MANAGER",
+    "ultimoAcceso": "2026-10-19T19:49:46.118Z",
+    "idUsuario": 1000,
+    "correoVerificado": true,
+    "esActivo": true,
+    "fechaCreacion": "2026-10-19T19:49:46.118Z",
+    "fechaModificacion": "2026-10-19T19:49:46.118Z"
+  }
+}
