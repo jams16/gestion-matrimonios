@@ -1,1 +1,41 @@
-{}
+{
+  "crearMatrimonio": {
+    "proyecto": {
+      "alcance": null,
+      "estado": true,
+      "fechaCreacion": "2026-10-19T21:54:04.190Z",
+      "fechaFin": null,
+      "fechaInicio": "2026-10-19T21:54:03.832Z",
+      "fechaModificacion": null,
+      "idProyecto": "8328f1bb-bb33-402e-8016-ee6fd2c5236b",
+      "idFaseProyecto": 2,
+      "idPm": 1,
+      "necesidades": "Cronograma generado desde plantillas activas.",
+      "nombre": "Matrimonio de Pareja RELIGIOSO_CIVIL Uno & Pareja RELIGIOSO_CIVIL Dos",
+      "objetivos": "Validar creación manual reproducible.",
+      "presupuesto": "25000.00",
+      "restricciones": null,
+      "supuestos": null
+    },
+    "matrimonio": {
+      "cantidadInvitados": 120,
+      "ciudadUbicacion": null,
+      "estado": true,
+      "fechaCreacion": "2026-10-19T21:54:04.192Z",
+      "fechaMatrimonio": "2027-01-20T00:00:00.000Z",
+      "fechaModificacion": null,
+      "idMatrimonio": "354ff3cf-88fa-4ff0-a98f-40024ba875c7",
+      "idNovio1": 2,
+      "idNovio2": 3,
+      "idProyecto": "8328f1bb-bb33-402e-8016-ee6fd2c5236b",
+      "idTipoCeremonia": 4,
+      "ideasMoonboard": null
+    },
+    "cronograma": {
+      "hitos_creados": 12,
+      "actividades_creadas": 15,
+      "dependencias_creadas": 27,
+      "elementos_timing_creados": 19
+    }
+  }
+}

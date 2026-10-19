@@ -1,0 +1,17 @@
+[
+  {
+    "nombre": "Duplicado WP + fecha",
+    "estado": "PASS",
+    "detalle": "Ya tienes un matrimonio activo para la misma fecha."
+  },
+  {
+    "nombre": "DNI en matrimonio no cerrado",
+    "estado": "PASS",
+    "detalle": "El proyecto ya tiene un cronograma generado."
+  },
+  {
+    "nombre": "Fecha insuficiente",
+    "estado": "PASS",
+    "detalle": "La fecha del matrimonio debe estar al menos a 30 días de hoy."
+  }
+]
