@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Optional } from '@nestjs/common';
 import { Temporal } from 'temporal-polyfill';
 
 import { PrismaService } from '../../../../../infrastructure/database/prisma/prisma.service';
@@ -24,11 +24,16 @@ export class PrismaCronogramaRepository
   extends CronogramaRepository
   implements CronogramaCrudRepository
 {
+  private readonly db: ClienteCronograma;
+
   constructor(
     private readonly prisma: PrismaService,
-    private readonly db: ClienteCronograma = prisma.client,
+    @Optional() db?: ClienteCronograma,
   ) {
     super();
+    // El segundo argumento se usa únicamente para el cliente transaccional
+    // construido manualmente en ejecutarEnTransaccion; no es un provider Nest.
+    this.db = db ?? prisma.client;
   }
 
   ejecutarEnTransaccion<T>(

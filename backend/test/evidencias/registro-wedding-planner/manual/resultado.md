@@ -1,20 +1,40 @@
-# Resultado del runner manual: registro Wedding Planner
+# Resultado de ejecución
 
-- ID de ejecución: `manual-registro-wedding-planner`
-- Fecha/hora: 2026-10-19T20:21:54.393Z
-- Escenario: ESCENARIO B: intento de registro duplicado correctamente rechazado
-- Objetivo: registrar, verificar y persistir una cuenta Wedding Planner en la BD configurada.
-- Comando: `pnpm.cmd test:manual:registro-wedding-planner`
-- Reportes JSON: datos-prueba.json, requests.json, responses.json, registros-creados.json, correo-verificacion.json
+## 1. Identificación de la prueba
+- Nombre: registro manual Wedding Planner.
+- ID de ejecución: `manual-registro-wedding-planner`.
+- Fecha/hora: 2026-10-19T21:15:14.532Z.
+- Tipo: funcional.
+- Entorno: configuración normal del backend y BD configurada.
+- Objetivo: registrar, verificar y persistir una cuenta Wedding Planner.
 
-| Paso | Método/servicio | Esperado | Obtenido | HTTP | BD | Estado |
-| --- | --- | --- | --- | --- | --- | --- |
-| Estado inicial | Endpoint real / servicio de correo capturado | Correcto | Existe una cuenta previa con los datos fijos de prueba. | — | Ver registros-creados.json | PASS |
-| ESCENARIO B: intento de registro duplicado correctamente rechazado | Endpoint real / servicio de correo capturado | Correcto | El backend rechazó el correo fijo ya registrado y no generó correo. | 409 | Ver registros-creados.json | PASS |
+## 2. Precondiciones
+- Configuración normal de autenticación y cuenta de datos fijos disponible.
 
-## Resultado global: PASS
+## 3. Datos de entrada
+- Ver `datos-prueba.json` y `casos-prueba.json`.
 
-## Errores/warnings
+## 4. Ejecución paso a paso
+
+| Acción | Método/servicio | Esperado | Obtenido | HTTP | Comprobación BD | Evidencia | Estado |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Estado inicial | Endpoint real / correo capturado | Según escenario | No existe aún una cuenta con los datos fijos de prueba. | — | registros-creados.json | requests/responses JSON | PASS |
+| Registro de Wedding Planner | Endpoint real / correo capturado | Según escenario | Se creó au_registro_pendiente en la BD. | 200 | registros-creados.json | requests/responses JSON | PASS |
+| Correo de verificación generado | Endpoint real / correo capturado | Según escenario | Se capturó un único correo con código de seis dígitos. | — | registros-creados.json | requests/responses JSON | PASS |
+| Verificación de cuenta | Endpoint real / correo capturado | Según escenario | El registro pendiente quedó confirmado en la BD. | 200 | registros-creados.json | requests/responses JSON | PASS |
+| ESCENARIO A: creación nueva y verificación | Endpoint real / correo capturado | Según escenario | Se crearon Persona 1, Entidad 1 y Usuario 1 PROJECT_MANAGER verificado. | 201 | registros-creados.json | requests/responses JSON | PASS |
+
+## 5. Registros creados/modificados
+| Modelo/tabla | ID | Acción | Campos relevantes | Evidencia |
+| --- | --- | --- | --- | --- |
+| au_registro_pendiente / in_persona_natural / in_entidad / au_usuario | Ver JSON | Crear/verificar o rechazar duplicado | correo y perfil | registros-creados.json |
+
+## 6. Validaciones realizadas
+- Registro, correo, verificación y perfil.
+
+## 7. Incidencias o warnings
 - Ninguno.
 
-Los registros creados se conservan deliberadamente para su inspección; el runner no ejecuta limpieza ni rollback.
+## 8. Reproducción
+- Comando: `pnpm.cmd test:manual:registro-wedding-planner`.
+- La carpeta manual se sobrescribe; el runner no elimina registros de la BD.

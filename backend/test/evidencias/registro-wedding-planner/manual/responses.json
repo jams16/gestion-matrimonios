@@ -1,9 +1,34 @@
 {
   "solicitarRegistro": {
-    "status": 409,
+    "status": 200,
     "body": {
-      "mensaje": "El correo ya se encuentra registrado.",
+      "mensaje": "Revisa tu correo para confirmar tu identidad.",
       "data": null
+    }
+  },
+  "confirmarRegistro": {
+    "status": 200,
+    "body": {
+      "mensaje": "Correo confirmado correctamente.",
+      "data": null
+    }
+  },
+  "finalizarRegistro": {
+    "status": 201,
+    "body": {
+      "mensaje": "Cuenta creada correctamente.",
+      "data": {
+        "correoVerificado": true,
+        "esActivo": true,
+        "fechaCreacion": "2026-10-19T21:15:15.121967Z",
+        "fechaModificacion": "2026-10-19T21:15:15.129Z",
+        "idEntidad": 1,
+        "idPersonaNatural": 1,
+        "idUsuario": 1,
+        "tipoUsuario": "PROJECT_MANAGER",
+        "ultimoAcceso": "2026-10-19T21:15:15.119Z",
+        "usuario": "weddingplanner.prueba"
+      }
     }
   }
 }

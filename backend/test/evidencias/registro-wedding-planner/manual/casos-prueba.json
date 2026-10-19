@@ -1,11 +1,9 @@
 [
   {
     "id": "CP-MAN-01",
-    "nombre": "Registro o rechazo duplicado de Wedding Planner",
+    "nombre": "Registro y verificación reproducible",
     "tipo": "FUNCIONAL",
-    "objetivo": "Ejecutar el flujo reproducible con correo fijo.",
-    "resultado_esperado": "Crear/verificar la cuenta o rechazar correctamente el duplicado.",
-    "resultado_obtenido": "ESCENARIO B: duplicado rechazado con HTTP 409.",
-    "estado": "PASS"
+    "objetivo": "Crear/verificar la cuenta fija o rechazar correctamente el duplicado.",
+    "resultado_esperado": "Escenario A o B válido."
   }
 ]

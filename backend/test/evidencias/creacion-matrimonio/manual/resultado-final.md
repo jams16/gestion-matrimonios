@@ -13,18 +13,7 @@
 
 | ID | Caso | Tipo | Resultado esperado | Resultado obtenido | Estado |
 |---|---|---|---|---|---|
-| CP-MAN-01 | Ejecución | FUNCIONAL | Según regla | Nest can't resolve dependencies of the PrismaCronogramaRepository (PrismaService, ?). Please make sure that the argument at index [1] is available in the current module.
-
-Potential solutions:
-- The dependency at index [1] appears to be undefined at runtime
-- This commonly occurs when using 'import type' instead of 'import' for injectable classes
-- Check your imports and change:
-  ❌ import type { SomeService } from './some.service';
-  ✅ import { SomeService } from './some.service';
-- Ensure the imported class is decorated with @Injectable() or is a valid provider
-- If using dynamic imports, ensure the class is available at runtime, not just for type checking
-
-For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors | FAIL |
+| CP-MAN-01 | Ejecución | FUNCIONAL | Según regla | No existe el catálogo activo RELIGIOSO_CIVIL. | FAIL |
 
 ## Evidencias principales
 
@@ -42,7 +31,7 @@ El runner ejecutó el flujo real sin limpieza de datos.
 Las cantidades dependen de las plantillas activas en la BD.
 
 ## Reproducción
-`pnpm.cmd test:manual:creacion-matrimonio -- --tipo=SIMBOLICO`
+`pnpm.cmd test:manual:creacion-matrimonio -- --tipo=RELIGIOSO_CIVIL`
 
 ## Conclusión
 Resultado FAIL conforme a las evidencias listadas.
