@@ -25,6 +25,7 @@
     "test:manual:creacion-matrimonio": "node -r ts-node/register scripts/ejecutar-creacion-matrimonio-manual.ts",
     "test:gestion-cronograma": "node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand src/modules/cronograma/application/use-cases/gestionar-cronograma.use-cases.spec.ts src/modules/cronograma/application/use-cases/reprogramar-actividad.use-case.spec.ts",
     "test:invitados": "node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand src/modules/invitados/application/invitados.service.spec.ts",
+    "test:proveedores": "node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand src/modules/proveedores/application/use-cases/proveedores.use-cases.spec.ts",
     "test:manual:gestion-cronograma": "node -r ts-node/register scripts/ejecutar-gestion-cronograma-manual.ts",
     "datos-base:restaurar": "node -r ts-node/register scripts/restaurar-datos-base.ts",
     "postinstall": "prisma skills sync || exit 0"

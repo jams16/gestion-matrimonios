@@ -31,26 +31,27 @@ model Proyecto {
 }
 
 model Matrimonio {
-  idMatrimonio      Uuid           @id @default(uuid()) @map("id_matrimonio")
-  idProyecto        Uuid           @unique @map("id_proyecto")
-  idNovio1          Int?           @map("id_novio1")
-  idNovio2          Int?           @map("id_novio2")
-  fechaMatrimonio   DateTime?      @map("fecha_matrimonio")
-  cantidadInvitados Int?           @map("cantidad_invitados")
-  idTipoCeremonia   Int?           @map("id_tipo_ceremonia")
-  ciudadUbicacion   VarChar(6)?    @map("ciudad_ubicacion")
-  ideasMoonboard    VarChar(1000)? @map("ideas_moonboard")
+  idMatrimonio      Uuid                  @id @default(uuid()) @map("id_matrimonio")
+  idProyecto        Uuid                  @unique @map("id_proyecto")
+  idNovio1          Int?                  @map("id_novio1")
+  idNovio2          Int?                  @map("id_novio2")
+  fechaMatrimonio   DateTime?             @map("fecha_matrimonio")
+  cantidadInvitados Int?                  @map("cantidad_invitados")
+  idTipoCeremonia   Int?                  @map("id_tipo_ceremonia")
+  ciudadUbicacion   VarChar(6)?           @map("ciudad_ubicacion")
+  ideasMoonboard    VarChar(1000)?        @map("ideas_moonboard")
   estado            Boolean?
-  fechaCreacion     DateTime       @default(now()) @map("fecha_creacion")
-  fechaModificacion DateTime?      @map("fecha_modificacion")
+  fechaCreacion     DateTime              @default(now()) @map("fecha_creacion")
+  fechaModificacion DateTime?             @map("fecha_modificacion")
 
-  proyecto          Proyecto       @relation(fields:[idProyecto], references:[idProyecto], onDelete: Restrict)
-  novio1            Usuario?       @relation("matrimonios_novio1", fields:[idNovio1], references:[idUsuario], onDelete: Restrict)
-  novio2            Usuario?       @relation("matrimonios_novio2", fields:[idNovio2], references:[idUsuario], onDelete: Restrict)
-  ubigeo            Ubigeo?        @relation(fields:[ciudadUbicacion], references:[idUbigeo], onDelete: Restrict)
-  tipoCeremonia     TipoCeremonia? @relation(fields:[idTipoCeremonia], references:[idTipoCeremonia], onDelete: Restrict)
+  proyecto          Proyecto              @relation(fields:[idProyecto], references:[idProyecto], onDelete: Restrict)
+  novio1            Usuario?              @relation("matrimonios_novio1", fields:[idNovio1], references:[idUsuario], onDelete: Restrict)
+  novio2            Usuario?              @relation("matrimonios_novio2", fields:[idNovio2], references:[idUsuario], onDelete: Restrict)
+  ubigeo            Ubigeo?               @relation(fields:[ciudadUbicacion], references:[idUbigeo], onDelete: Restrict)
+  tipoCeremonia     TipoCeremonia?        @relation(fields:[idTipoCeremonia], references:[idTipoCeremonia], onDelete: Restrict)
   invitados         Invitado[]
   mesas             Mesa[]
+  proveedores       MatrimonioProveedor[]
 
   @@index([idNovio1])
   @@index([idNovio2])
@@ -108,6 +109,28 @@ enum iv_canal_rsvp {
   MANUAL
   DIGITAL
   SISTEMA
+}
+
+enum pv_tipo_proveedor {
+  PERSONA_NATURAL
+  EMPRESA
+}
+
+enum pv_moneda {
+  PEN
+  USD
+}
+
+enum pv_estado_seleccion {
+  CONSIDERADO
+  SELECCIONADO
+  DESCARTADO
+}
+
+enum pv_prioridad {
+  ALTA
+  MEDIA
+  BAJA
 }
 
 model CategoriaRelacion {
@@ -554,6 +577,113 @@ model NotificacionCronograma {
   @@map("nt_notificacion_cronograma")
 }
 
+model Proveedor {
+  idProveedor      Uuid                      @id @default(uuid()) @map("id_proveedor")
+  tipoProveedor    pv_tipo_proveedor         @map("tipo_proveedor")
+  idPersonaNatural Int?                      @unique @map("id_persona_natural")
+  idEntidad        Int?                      @unique @map("id_entidad")
+  nombreComercial  VarChar(200)              @map("nombre_comercial")
+  descripcion      VarChar(1000)?
+  telefonoContacto VarChar(15)?              @map("telefono_contacto")
+  whatsapp         VarChar(15)?
+  correoContacto   VarChar(150)?             @map("correo_contacto")
+  sitioWeb         VarChar(250)?             @map("sitio_web")
+  instagram        VarChar(150)?
+  direccion        VarChar(250)?
+  observaciones    VarChar(1000)?
+  activo           Boolean                   @default(true)
+  createdAt        DateTime                  @default(now()) @map("created_at")
+  updatedAt        temporal.updatedAt()      @map("updated_at")
+  personaNatural   PersonaNatural?           @relation(fields:[idPersonaNatural], references:[idPersonaNatural], onDelete: Restrict)
+  entidad          Entidad?                  @relation(fields:[idEntidad], references:[idEntidad], onDelete: Restrict)
+  servicios        ProveedorServicio[]
+  matrimonios      MatrimonioProveedor[]
+  disponibilidades DisponibilidadProveedor[]
+
+  @@index([activo])
+  @@index([nombreComercial])
+  @@map("pv_proveedor")
+}
+
+model CategoriaServicio {
+  idCategoriaServicio Int                  @id @default(autoincrement()) @map("id_categoria_servicio")
+  codigo              VarChar(50)          @unique
+  nombre              VarChar(100)
+  descripcion         VarChar(500)?
+  orden               Int
+  activo              Boolean              @default(true)
+  createdAt           DateTime             @default(now()) @map("created_at")
+  updatedAt           temporal.updatedAt() @map("updated_at")
+  servicios           ProveedorServicio[]
+
+  @@index([activo])
+  @@map("pv_categoria_servicio")
+}
+
+model ProveedorServicio {
+  idProveedorServicio Int                       @id @default(autoincrement()) @map("id_proveedor_servicio")
+  idProveedor         Uuid                      @map("id_proveedor")
+  idCategoriaServicio Int                       @map("id_categoria_servicio")
+  nombre              VarChar(200)
+  descripcion         VarChar(1000)?
+  costoReferencial    Numeric(12, 2)            @map("costo_referencial")
+  moneda              pv_moneda                 @default(PEN)
+  unidadPrecio        VarChar(50)?              @map("unidad_precio")
+  activo              Boolean                   @default(true)
+  createdAt           DateTime                  @default(now()) @map("created_at")
+  updatedAt           temporal.updatedAt()      @map("updated_at")
+  proveedor           Proveedor                 @relation(fields:[idProveedor], references:[idProveedor], onDelete: Restrict)
+  categoriaServicio   CategoriaServicio         @relation(fields:[idCategoriaServicio], references:[idCategoriaServicio], onDelete: Restrict)
+  disponibilidades    DisponibilidadProveedor[]
+
+  @@unique([idProveedor, idCategoriaServicio, nombre])
+  @@index([idProveedor])
+  @@index([idCategoriaServicio])
+  @@map("pv_proveedor_servicio")
+}
+
+model MatrimonioProveedor {
+  idMatrimonioProveedor Uuid                 @id @default(uuid()) @map("id_matrimonio_proveedor")
+  idMatrimonio          Uuid                 @map("id_matrimonio")
+  idProveedor           Uuid                 @map("id_proveedor")
+  favorito              Boolean              @default(false)
+  estadoSeleccion       pv_estado_seleccion  @default(CONSIDERADO) @map("estado_seleccion")
+  prioridad             pv_prioridad?
+  observaciones         VarChar(1000)?
+  activo                Boolean              @default(true)
+  createdAt             DateTime             @default(now()) @map("created_at")
+  updatedAt             temporal.updatedAt() @map("updated_at")
+  matrimonio            Matrimonio           @relation(fields:[idMatrimonio], references:[idMatrimonio], onDelete: Restrict)
+  proveedor             Proveedor            @relation(fields:[idProveedor], references:[idProveedor], onDelete: Restrict)
+
+  @@unique([idMatrimonio, idProveedor])
+  @@index([idMatrimonio])
+  @@index([idProveedor])
+  @@index([favorito])
+  @@index([estadoSeleccion])
+  @@map("pv_matrimonio_proveedor")
+}
+
+model DisponibilidadProveedor {
+  idDisponibilidadProveedor Uuid                 @id @default(uuid()) @map("id_disponibilidad_proveedor")
+  idProveedor               Uuid                 @map("id_proveedor")
+  idProveedorServicio       Int?                 @map("id_proveedor_servicio")
+  fecha                     DateTime
+  disponible                Boolean              @default(true)
+  horaInicio                Time?                @map("hora_inicio")
+  horaFin                   Time?                @map("hora_fin")
+  observacion               VarChar(1000)?
+  activo                    Boolean              @default(true)
+  createdAt                 DateTime             @default(now()) @map("created_at")
+  updatedAt                 temporal.updatedAt() @map("updated_at")
+  proveedor                 Proveedor            @relation(fields:[idProveedor], references:[idProveedor], onDelete: Restrict)
+  proveedorServicio         ProveedorServicio?   @relation(fields:[idProveedorServicio], references:[idProveedorServicio], onDelete: Restrict)
+
+  @@index([idProveedor, fecha])
+  @@index([idProveedorServicio, fecha], map: "pv_disp_serv_fecha_idx")
+  @@map("pv_disponibilidad_proveedor")
+}
+
 model Ubigeo {
   idUbigeo     VarChar(6)       @id @map("id_ubigeo")
   departamento VarChar(100)
@@ -591,6 +721,7 @@ model PersonaNatural {
   ubigeo            Ubigeo?              @relation(fields:[codigoUbigeo], references:[idUbigeo], onDelete: Restrict)
   usuarios          Usuario[]
   invitados         Invitado[]
+  proveedores       Proveedor[]
 
   @@index([codigoUbigeo], map: "in_persona_natural_codigo_ubigeo_idx")
   @@map("in_persona_natural")
@@ -613,6 +744,7 @@ model Entidad {
 
   ubigeo            Ubigeo?              @relation(fields:[codigoUbigeo], references:[idUbigeo], onDelete: Restrict)
   usuarios          Usuario[]
+  proveedores       Proveedor[]
 
   @@index([codigoUbigeo])
   @@map("in_entidad")

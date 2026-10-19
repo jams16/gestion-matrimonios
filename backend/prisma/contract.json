@@ -127,6 +127,26 @@
     "nt_notificacion_cronograma": {
       "model": "NotificacionCronograma",
       "namespace": "public"
+    },
+    "pv_categoria_servicio": {
+      "model": "CategoriaServicio",
+      "namespace": "public"
+    },
+    "pv_disponibilidad_proveedor": {
+      "model": "DisponibilidadProveedor",
+      "namespace": "public"
+    },
+    "pv_matrimonio_proveedor": {
+      "model": "MatrimonioProveedor",
+      "namespace": "public"
+    },
+    "pv_proveedor": {
+      "model": "Proveedor",
+      "namespace": "public"
+    },
+    "pv_proveedor_servicio": {
+      "model": "ProveedorServicio",
+      "namespace": "public"
     }
   },
   "domain": {
@@ -358,6 +378,66 @@
               {
                 "name": "HITO_VENCIDO",
                 "value": "HITO_VENCIDO"
+              }
+            ]
+          },
+          "pv_estado_seleccion": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "CONSIDERADO",
+                "value": "CONSIDERADO"
+              },
+              {
+                "name": "SELECCIONADO",
+                "value": "SELECCIONADO"
+              },
+              {
+                "name": "DESCARTADO",
+                "value": "DESCARTADO"
+              }
+            ]
+          },
+          "pv_moneda": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "PEN",
+                "value": "PEN"
+              },
+              {
+                "name": "USD",
+                "value": "USD"
+              }
+            ]
+          },
+          "pv_prioridad": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "ALTA",
+                "value": "ALTA"
+              },
+              {
+                "name": "MEDIA",
+                "value": "MEDIA"
+              },
+              {
+                "name": "BAJA",
+                "value": "BAJA"
+              }
+            ]
+          },
+          "pv_tipo_proveedor": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "PERSONA_NATURAL",
+                "value": "PERSONA_NATURAL"
+              },
+              {
+                "name": "EMPRESA",
+                "value": "EMPRESA"
               }
             ]
           }
@@ -814,6 +894,122 @@
               "table": "iv_categoria_relacion"
             }
           },
+          "CategoriaServicio": {
+            "fields": {
+              "activo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "codigo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 50
+                  }
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "descripcion": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 500
+                  }
+                }
+              },
+              "idCategoriaServicio": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "nombre": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 100
+                  }
+                }
+              },
+              "orden": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "servicios": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idCategoriaServicio"
+                  ],
+                  "targetFields": [
+                    "idCategoriaServicio"
+                  ]
+                },
+                "to": {
+                  "model": "ProveedorServicio",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "activo": {
+                  "column": "activo"
+                },
+                "codigo": {
+                  "column": "codigo"
+                },
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "descripcion": {
+                  "column": "descripcion"
+                },
+                "idCategoriaServicio": {
+                  "column": "id_categoria_servicio"
+                },
+                "nombre": {
+                  "column": "nombre"
+                },
+                "orden": {
+                  "column": "orden"
+                },
+                "updatedAt": {
+                  "column": "updated_at"
+                }
+              },
+              "namespaceId": "public",
+              "table": "pv_categoria_servicio"
+            }
+          },
           "Dependencia": {
             "fields": {
               "diasDesfase": {
@@ -912,6 +1108,163 @@
               },
               "namespaceId": "public",
               "table": "cr_dependencia"
+            }
+          },
+          "DisponibilidadProveedor": {
+            "fields": {
+              "activo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "disponible": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "fecha": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "horaFin": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/time-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "horaInicio": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/time-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "idDisponibilidadProveedor": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idProveedor": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idProveedorServicio": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "observacion": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 1000
+                  }
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "proveedor": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idProveedor"
+                  ],
+                  "targetFields": [
+                    "idProveedor"
+                  ]
+                },
+                "to": {
+                  "model": "Proveedor",
+                  "namespace": "public"
+                }
+              },
+              "proveedorServicio": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idProveedorServicio"
+                  ],
+                  "targetFields": [
+                    "idProveedorServicio"
+                  ]
+                },
+                "to": {
+                  "model": "ProveedorServicio",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "activo": {
+                  "column": "activo"
+                },
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "disponible": {
+                  "column": "disponible"
+                },
+                "fecha": {
+                  "column": "fecha"
+                },
+                "horaFin": {
+                  "column": "hora_fin"
+                },
+                "horaInicio": {
+                  "column": "hora_inicio"
+                },
+                "idDisponibilidadProveedor": {
+                  "column": "id_disponibilidad_proveedor"
+                },
+                "idProveedor": {
+                  "column": "id_proveedor"
+                },
+                "idProveedorServicio": {
+                  "column": "id_proveedor_servicio"
+                },
+                "observacion": {
+                  "column": "observacion"
+                },
+                "updatedAt": {
+                  "column": "updated_at"
+                }
+              },
+              "namespaceId": "public",
+              "table": "pv_disponibilidad_proveedor"
             }
           },
           "Entidad": {
@@ -1039,6 +1392,21 @@
               }
             },
             "relations": {
+              "proveedores": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idEntidad"
+                  ],
+                  "targetFields": [
+                    "idEntidad"
+                  ]
+                },
+                "to": {
+                  "model": "Proveedor",
+                  "namespace": "public"
+                }
+              },
               "ubigeo": {
                 "cardinality": "N:1",
                 "nullable": true,
@@ -1973,6 +2341,21 @@
                   "namespace": "public"
                 }
               },
+              "proveedores": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idMatrimonio"
+                  ],
+                  "targetFields": [
+                    "idMatrimonio"
+                  ]
+                },
+                "to": {
+                  "model": "MatrimonioProveedor",
+                  "namespace": "public"
+                }
+              },
               "proyecto": {
                 "cardinality": "N:1",
                 "nullable": false,
@@ -2063,6 +2446,165 @@
               },
               "namespaceId": "public",
               "table": "gp_matrimonio"
+            }
+          },
+          "MatrimonioProveedor": {
+            "fields": {
+              "activo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "estadoSeleccion": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "pv_estado_seleccion",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "favorito": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "idMatrimonio": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idMatrimonioProveedor": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idProveedor": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "observaciones": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 1000
+                  }
+                }
+              },
+              "prioridad": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "pv_prioridad",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "matrimonio": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idMatrimonio"
+                  ],
+                  "targetFields": [
+                    "idMatrimonio"
+                  ]
+                },
+                "to": {
+                  "model": "Matrimonio",
+                  "namespace": "public"
+                }
+              },
+              "proveedor": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idProveedor"
+                  ],
+                  "targetFields": [
+                    "idProveedor"
+                  ]
+                },
+                "to": {
+                  "model": "Proveedor",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "activo": {
+                  "column": "activo"
+                },
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "estadoSeleccion": {
+                  "column": "estado_seleccion"
+                },
+                "favorito": {
+                  "column": "favorito"
+                },
+                "idMatrimonio": {
+                  "column": "id_matrimonio"
+                },
+                "idMatrimonioProveedor": {
+                  "column": "id_matrimonio_proveedor"
+                },
+                "idProveedor": {
+                  "column": "id_proveedor"
+                },
+                "observaciones": {
+                  "column": "observaciones"
+                },
+                "prioridad": {
+                  "column": "prioridad"
+                },
+                "updatedAt": {
+                  "column": "updated_at"
+                }
+              },
+              "namespaceId": "public",
+              "table": "pv_matrimonio_proveedor"
             }
           },
           "Mesa": {
@@ -2783,6 +3325,21 @@
                 },
                 "to": {
                   "model": "Invitado",
+                  "namespace": "public"
+                }
+              },
+              "proveedores": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idPersonaNatural"
+                  ],
+                  "targetFields": [
+                    "idPersonaNatural"
+                  ]
+                },
+                "to": {
+                  "model": "Proveedor",
                   "namespace": "public"
                 }
               },
@@ -3733,6 +4290,476 @@
               },
               "namespaceId": "public",
               "table": "cr_plantilla_timing_tipo_ceremonia"
+            }
+          },
+          "Proveedor": {
+            "fields": {
+              "activo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "correoContacto": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 150
+                  }
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "descripcion": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 1000
+                  }
+                }
+              },
+              "direccion": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 250
+                  }
+                }
+              },
+              "idEntidad": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "idPersonaNatural": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "idProveedor": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "instagram": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 150
+                  }
+                }
+              },
+              "nombreComercial": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 200
+                  }
+                }
+              },
+              "observaciones": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 1000
+                  }
+                }
+              },
+              "sitioWeb": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 250
+                  }
+                }
+              },
+              "telefonoContacto": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 15
+                  }
+                }
+              },
+              "tipoProveedor": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "pv_tipo_proveedor",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "whatsapp": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 15
+                  }
+                }
+              }
+            },
+            "relations": {
+              "disponibilidades": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idProveedor"
+                  ],
+                  "targetFields": [
+                    "idProveedor"
+                  ]
+                },
+                "to": {
+                  "model": "DisponibilidadProveedor",
+                  "namespace": "public"
+                }
+              },
+              "entidad": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idEntidad"
+                  ],
+                  "targetFields": [
+                    "idEntidad"
+                  ]
+                },
+                "to": {
+                  "model": "Entidad",
+                  "namespace": "public"
+                }
+              },
+              "matrimonios": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idProveedor"
+                  ],
+                  "targetFields": [
+                    "idProveedor"
+                  ]
+                },
+                "to": {
+                  "model": "MatrimonioProveedor",
+                  "namespace": "public"
+                }
+              },
+              "personaNatural": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idPersonaNatural"
+                  ],
+                  "targetFields": [
+                    "idPersonaNatural"
+                  ]
+                },
+                "to": {
+                  "model": "PersonaNatural",
+                  "namespace": "public"
+                }
+              },
+              "servicios": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idProveedor"
+                  ],
+                  "targetFields": [
+                    "idProveedor"
+                  ]
+                },
+                "to": {
+                  "model": "ProveedorServicio",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "activo": {
+                  "column": "activo"
+                },
+                "correoContacto": {
+                  "column": "correo_contacto"
+                },
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "descripcion": {
+                  "column": "descripcion"
+                },
+                "direccion": {
+                  "column": "direccion"
+                },
+                "idEntidad": {
+                  "column": "id_entidad"
+                },
+                "idPersonaNatural": {
+                  "column": "id_persona_natural"
+                },
+                "idProveedor": {
+                  "column": "id_proveedor"
+                },
+                "instagram": {
+                  "column": "instagram"
+                },
+                "nombreComercial": {
+                  "column": "nombre_comercial"
+                },
+                "observaciones": {
+                  "column": "observaciones"
+                },
+                "sitioWeb": {
+                  "column": "sitio_web"
+                },
+                "telefonoContacto": {
+                  "column": "telefono_contacto"
+                },
+                "tipoProveedor": {
+                  "column": "tipo_proveedor"
+                },
+                "updatedAt": {
+                  "column": "updated_at"
+                },
+                "whatsapp": {
+                  "column": "whatsapp"
+                }
+              },
+              "namespaceId": "public",
+              "table": "pv_proveedor"
+            }
+          },
+          "ProveedorServicio": {
+            "fields": {
+              "activo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "costoReferencial": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/numeric@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 12,
+                    "scale": 2
+                  }
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "descripcion": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 1000
+                  }
+                }
+              },
+              "idCategoriaServicio": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "idProveedor": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idProveedorServicio": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "moneda": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "pv_moneda",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "nombre": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 200
+                  }
+                }
+              },
+              "unidadPrecio": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 50
+                  }
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "categoriaServicio": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idCategoriaServicio"
+                  ],
+                  "targetFields": [
+                    "idCategoriaServicio"
+                  ]
+                },
+                "to": {
+                  "model": "CategoriaServicio",
+                  "namespace": "public"
+                }
+              },
+              "disponibilidades": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idProveedorServicio"
+                  ],
+                  "targetFields": [
+                    "idProveedorServicio"
+                  ]
+                },
+                "to": {
+                  "model": "DisponibilidadProveedor",
+                  "namespace": "public"
+                }
+              },
+              "proveedor": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idProveedor"
+                  ],
+                  "targetFields": [
+                    "idProveedor"
+                  ]
+                },
+                "to": {
+                  "model": "Proveedor",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "activo": {
+                  "column": "activo"
+                },
+                "costoReferencial": {
+                  "column": "costo_referencial"
+                },
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "descripcion": {
+                  "column": "descripcion"
+                },
+                "idCategoriaServicio": {
+                  "column": "id_categoria_servicio"
+                },
+                "idProveedor": {
+                  "column": "id_proveedor"
+                },
+                "idProveedorServicio": {
+                  "column": "id_proveedor_servicio"
+                },
+                "moneda": {
+                  "column": "moneda"
+                },
+                "nombre": {
+                  "column": "nombre"
+                },
+                "unidadPrecio": {
+                  "column": "unidad_precio"
+                },
+                "updatedAt": {
+                  "column": "updated_at"
+                }
+              },
+              "namespaceId": "public",
+              "table": "pv_proveedor_servicio"
             }
           },
           "Proyecto": {
@@ -9769,6 +10796,797 @@
                 ]
               },
               "uniques": []
+            },
+            "pv_categoria_servicio": {
+              "columns": {
+                "activo": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "codigo": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 50
+                  }
+                },
+                "created_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "descripcion": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 500
+                  }
+                },
+                "id_categoria_servicio": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "expression": "autoincrement()",
+                    "kind": "function"
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "nombre": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 100
+                  }
+                },
+                "orden": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "updated_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [],
+              "indexes": [
+                {
+                  "columns": [
+                    "activo"
+                  ],
+                  "name": "pv_categoria_servicio_activo_idx_4c0f2ecc",
+                  "prefix": "pv_categoria_servicio_activo_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_categoria_servicio"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "codigo"
+                  ]
+                }
+              ]
+            },
+            "pv_disponibilidad_proveedor": {
+              "columns": {
+                "activo": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "created_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "disponible": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "fecha": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "hora_fin": {
+                  "codecId": "pg/time-temporal@1",
+                  "nativeType": "time",
+                  "nullable": true
+                },
+                "hora_inicio": {
+                  "codecId": "pg/time-temporal@1",
+                  "nativeType": "time",
+                  "nullable": true
+                },
+                "id_disponibilidad_proveedor": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_proveedor": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_proveedor_servicio": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "observacion": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 1000
+                  }
+                },
+                "updated_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_proveedor"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pv_disponibilidad_proveedor"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_proveedor"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pv_proveedor"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_proveedor_servicio"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pv_disponibilidad_proveedor"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_proveedor_servicio"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pv_proveedor_servicio"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "id_proveedor_servicio",
+                    "fecha"
+                  ],
+                  "name": "pv_disp_serv_fecha_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_proveedor",
+                    "fecha"
+                  ],
+                  "name": "pv_disponibilidad_proveedor_id_proveedor_fecha_idx_2e6fc2d1",
+                  "prefix": "pv_disponibilidad_proveedor_id_proveedor_fecha_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_proveedor"
+                  ],
+                  "name": "pv_disponibilidad_proveedor_id_proveedor_idx_4edef4d1",
+                  "prefix": "pv_disponibilidad_proveedor_id_proveedor_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_proveedor_servicio"
+                  ],
+                  "name": "pv_disponibilidad_proveedor_id_proveedor_servicio_idx_00ef1a5c",
+                  "prefix": "pv_disponibilidad_proveedor_id_proveedor_servicio_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_disponibilidad_proveedor"
+                ]
+              },
+              "uniques": []
+            },
+            "pv_matrimonio_proveedor": {
+              "checks": [
+                {
+                  "expression": "\"estado_seleccion\" IN ('CONSIDERADO', 'SELECCIONADO', 'DESCARTADO')",
+                  "name": "pv_matrimonio_proveedor_estado_seleccion_check_4a0eb630",
+                  "prefix": "pv_matrimonio_proveedor_estado_seleccion_check"
+                },
+                {
+                  "expression": "\"prioridad\" IN ('ALTA', 'MEDIA', 'BAJA')",
+                  "name": "pv_matrimonio_proveedor_prioridad_check_7fdb94e2",
+                  "prefix": "pv_matrimonio_proveedor_prioridad_check"
+                }
+              ],
+              "columns": {
+                "activo": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "created_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "estado_seleccion": {
+                  "codecId": "pg/text@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": "CONSIDERADO"
+                  },
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "pv_estado_seleccion",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "favorito": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": false
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "id_matrimonio": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_matrimonio_proveedor": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_proveedor": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "observaciones": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 1000
+                  }
+                },
+                "prioridad": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "pv_prioridad",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "updated_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_matrimonio"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pv_matrimonio_proveedor"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_matrimonio"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_matrimonio"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_proveedor"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pv_matrimonio_proveedor"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_proveedor"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pv_proveedor"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "estado_seleccion"
+                  ],
+                  "name": "pv_matrimonio_proveedor_estado_seleccion_idx_2e2e8d0f",
+                  "prefix": "pv_matrimonio_proveedor_estado_seleccion_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "favorito"
+                  ],
+                  "name": "pv_matrimonio_proveedor_favorito_idx_84883da0",
+                  "prefix": "pv_matrimonio_proveedor_favorito_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_matrimonio"
+                  ],
+                  "name": "pv_matrimonio_proveedor_id_matrimonio_idx_97ab526e",
+                  "prefix": "pv_matrimonio_proveedor_id_matrimonio_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_proveedor"
+                  ],
+                  "name": "pv_matrimonio_proveedor_id_proveedor_idx_4edef4d1",
+                  "prefix": "pv_matrimonio_proveedor_id_proveedor_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_matrimonio_proveedor"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "id_matrimonio",
+                    "id_proveedor"
+                  ]
+                }
+              ]
+            },
+            "pv_proveedor": {
+              "checks": [
+                {
+                  "expression": "\"tipo_proveedor\" IN ('PERSONA_NATURAL', 'EMPRESA')",
+                  "name": "pv_proveedor_tipo_proveedor_check_f441b683",
+                  "prefix": "pv_proveedor_tipo_proveedor_check"
+                }
+              ],
+              "columns": {
+                "activo": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "correo_contacto": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 150
+                  }
+                },
+                "created_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "descripcion": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 1000
+                  }
+                },
+                "direccion": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 250
+                  }
+                },
+                "id_entidad": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "id_persona_natural": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "id_proveedor": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "instagram": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 150
+                  }
+                },
+                "nombre_comercial": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 200
+                  }
+                },
+                "observaciones": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 1000
+                  }
+                },
+                "sitio_web": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 250
+                  }
+                },
+                "telefono_contacto": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 15
+                  }
+                },
+                "tipo_proveedor": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "pv_tipo_proveedor",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "updated_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "whatsapp": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 15
+                  }
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_persona_natural"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pv_proveedor"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_persona_natural"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "in_persona_natural"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_entidad"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pv_proveedor"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_entidad"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "in_entidad"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "activo"
+                  ],
+                  "name": "pv_proveedor_activo_idx_4c0f2ecc",
+                  "prefix": "pv_proveedor_activo_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "nombre_comercial"
+                  ],
+                  "name": "pv_proveedor_nombre_comercial_idx_2a60b865",
+                  "prefix": "pv_proveedor_nombre_comercial_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_proveedor"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "id_persona_natural"
+                  ]
+                },
+                {
+                  "columns": [
+                    "id_entidad"
+                  ]
+                }
+              ]
+            },
+            "pv_proveedor_servicio": {
+              "checks": [
+                {
+                  "expression": "\"moneda\" IN ('PEN', 'USD')",
+                  "name": "pv_proveedor_servicio_moneda_check_5b6558d3",
+                  "prefix": "pv_proveedor_servicio_moneda_check"
+                }
+              ],
+              "columns": {
+                "activo": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "costo_referencial": {
+                  "codecId": "pg/numeric@1",
+                  "nativeType": "numeric",
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 12,
+                    "scale": 2
+                  }
+                },
+                "created_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "descripcion": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 1000
+                  }
+                },
+                "id_categoria_servicio": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "id_proveedor": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_proveedor_servicio": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "expression": "autoincrement()",
+                    "kind": "function"
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "moneda": {
+                  "codecId": "pg/text@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": "PEN"
+                  },
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "pv_moneda",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "nombre": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 200
+                  }
+                },
+                "unidad_precio": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 50
+                  }
+                },
+                "updated_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_proveedor"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pv_proveedor_servicio"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_proveedor"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pv_proveedor"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_categoria_servicio"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pv_proveedor_servicio"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_categoria_servicio"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pv_categoria_servicio"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "id_categoria_servicio"
+                  ],
+                  "name": "pv_proveedor_servicio_id_categoria_servicio_idx_1a4a76bb",
+                  "prefix": "pv_proveedor_servicio_id_categoria_servicio_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_proveedor"
+                  ],
+                  "name": "pv_proveedor_servicio_id_proveedor_idx_4edef4d1",
+                  "prefix": "pv_proveedor_servicio_id_proveedor_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_proveedor_servicio"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "id_proveedor",
+                    "id_categoria_servicio",
+                    "nombre"
+                  ]
+                }
+              ]
             }
           },
           "valueSet": {
@@ -9873,6 +11691,36 @@
                 "HITO_PROXIMO",
                 "HITO_VENCIDO"
               ]
+            },
+            "pv_estado_seleccion": {
+              "kind": "valueSet",
+              "values": [
+                "CONSIDERADO",
+                "SELECCIONADO",
+                "DESCARTADO"
+              ]
+            },
+            "pv_moneda": {
+              "kind": "valueSet",
+              "values": [
+                "PEN",
+                "USD"
+              ]
+            },
+            "pv_prioridad": {
+              "kind": "valueSet",
+              "values": [
+                "ALTA",
+                "MEDIA",
+                "BAJA"
+              ]
+            },
+            "pv_tipo_proveedor": {
+              "kind": "valueSet",
+              "values": [
+                "PERSONA_NATURAL",
+                "EMPRESA"
+              ]
             }
           }
         },
@@ -9880,10 +11728,10 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "672c4927d44b7df966c870f87dca0504cb0659c67d5e16d79b08f159d568798e"
+    "storageHash": "a6db803d40d8f5a34f99afa2d2b798d41ee3c71637d6df3e0af554e898b906c2"
   },
   "execution": {
-    "executionHash": "c1e5f021c2c37ce252a87b59c324137033b8eb55b9609ccd0fc6ef356b4348d5",
+    "executionHash": "01dfbaa6e4d06285dd24cf5beb33c4998e9b8820cd1d8bcde41d3860fa89beb1",
     "mutations": {
       "defaults": [
         {
@@ -10282,6 +12130,114 @@
             "column": "updated_at",
             "namespace": "public",
             "table": "nt_notificacion"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updated_at",
+            "namespace": "public",
+            "table": "pv_categoria_servicio"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id_disponibilidad_proveedor",
+            "namespace": "public",
+            "table": "pv_disponibilidad_proveedor"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updated_at",
+            "namespace": "public",
+            "table": "pv_disponibilidad_proveedor"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id_matrimonio_proveedor",
+            "namespace": "public",
+            "table": "pv_matrimonio_proveedor"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updated_at",
+            "namespace": "public",
+            "table": "pv_matrimonio_proveedor"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id_proveedor",
+            "namespace": "public",
+            "table": "pv_proveedor"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updated_at",
+            "namespace": "public",
+            "table": "pv_proveedor"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updated_at",
+            "namespace": "public",
+            "table": "pv_proveedor_servicio"
           }
         }
       ]

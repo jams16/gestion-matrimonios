@@ -22,6 +22,7 @@ type ConstructorClienteSql = new (opciones: {
 const { Client } = require('pg') as { Client: ConstructorClienteSql };
 
 const datos = datosBase as Datos;
+const categoriasProveedorBase = ['LOCAL', 'CATERING', 'FOTOGRAFIA', 'VIDEO', 'MUSICA', 'DJ', 'ORQUESTA', 'DECORACION', 'FLORES', 'MAQUILLAJE', 'PEINADO', 'VESTIDO', 'TRAJE', 'TRANSPORTE', 'AUTO_NUPCIAL', 'HOTEL', 'INVITACIONES', 'TORTA', 'POSTRES', 'BAR', 'SEGURIDAD', 'LIMPIEZA', 'PHOTOBOOTH', 'ENTRETENIMIENTO', 'CORO', 'CEREMONIA', 'MOBILIARIO', 'ILUMINACION', 'SONIDO', 'RECUERDOS', 'OTROS'];
 const vacio = (): Resumen => ({ existentes: 0, restaurados: 0, errores: [] });
 const errorTexto = (error: unknown) => error instanceof Error ? error.message : String(error);
 
@@ -48,6 +49,17 @@ async function ubigeos(c: ClienteSql, r: Resumen) {
       await c.query('INSERT INTO public.in_ubigeo (id_ubigeo, departamento, provincia, distrito) VALUES ($1, $2, $3, $4)', [x.idUbigeo, x.departamento, x.provincia, x.distrito]);
       r.restaurados += 1;
     } catch (error) { r.errores.push(`${x.idUbigeo}: ${errorTexto(error)}`); }
+  }
+}
+
+async function categoriasProveedor(c: ClienteSql, r: Resumen) {
+  r.existentes = await contar(c, 'pv_categoria_servicio');
+  const existentes = new Set((await c.query('SELECT codigo FROM public.pv_categoria_servicio')).rows.map((x) => String(x.codigo)));
+  for (const [indice, codigo] of categoriasProveedorBase.entries()) {
+    if (existentes.has(codigo)) continue;
+    const nombre = codigo.toLowerCase().replaceAll('_', ' ').replace(/\b\w/g, (letra) => letra.toUpperCase());
+    try { await c.query('INSERT INTO public.pv_categoria_servicio (codigo, nombre, orden, activo, updated_at) VALUES ($1, $2, $3, true, now()) ON CONFLICT (codigo) DO NOTHING', [codigo, nombre, indice + 1]); r.restaurados += 1; }
+    catch (error) { r.errores.push(`${codigo}: ${errorTexto(error)}`); }
   }
 }
 
@@ -169,13 +181,13 @@ async function secuencias(c: ClienteSql) {
 
 async function ejecutar() {
   const c = new Client({ connectionString: process.env.DATABASE_URL });
-  const r = { ubigeos: vacio(), tipos: vacio(), fases: vacio(), hitos: vacio(), actividades: vacio(), dependencias: vacio(), timing: vacio(), actividadTipo: vacio(), timingTipo: vacio() };
+  const r = { ubigeos: vacio(), categoriasProveedor: vacio(), tipos: vacio(), fases: vacio(), hitos: vacio(), actividades: vacio(), dependencias: vacio(), timing: vacio(), actividadTipo: vacio(), timingTipo: vacio() };
   await c.connect();
   try {
-    await ubigeos(c, r.ubigeos); const tipos = await catalogo(c, r.tipos, 'gp_tipo_ceremonia', datos.gp_tipo_ceremonia); const fases = await catalogo(c, r.fases, 'gp_fase_proyecto', datos.gp_fase_proyecto); const hitosReales = await hitos(c, r.hitos); const actividadesReales = await actividades(c, r.actividades, hitosReales, fases); await dependencias(c, r.dependencias, actividadesReales); const timingsReales = await timings(c, r.timing); await relaciones(c, r.actividadTipo, 'cr_plantilla_actividad_tipo_ceremonia', datos.cr_plantilla_actividad_tipo_ceremonia, actividadesReales, tipos); await relaciones(c, r.timingTipo, 'cr_plantilla_timing_tipo_ceremonia', datos.cr_plantilla_timing_tipo_ceremonia, timingsReales, tipos); await secuencias(c);
+    await ubigeos(c, r.ubigeos); await categoriasProveedor(c, r.categoriasProveedor); const tipos = await catalogo(c, r.tipos, 'gp_tipo_ceremonia', datos.gp_tipo_ceremonia); const fases = await catalogo(c, r.fases, 'gp_fase_proyecto', datos.gp_fase_proyecto); const hitosReales = await hitos(c, r.hitos); const actividadesReales = await actividades(c, r.actividades, hitosReales, fases); await dependencias(c, r.dependencias, actividadesReales); const timingsReales = await timings(c, r.timing); await relaciones(c, r.actividadTipo, 'cr_plantilla_actividad_tipo_ceremonia', datos.cr_plantilla_actividad_tipo_ceremonia, actividadesReales, tipos); await relaciones(c, r.timingTipo, 'cr_plantilla_timing_tipo_ceremonia', datos.cr_plantilla_timing_tipo_ceremonia, timingsReales, tipos); await secuencias(c);
   } finally { await c.end(); }
   console.log('Restauración de datos base');
-  const etiquetas: Array<[string, Resumen]> = [['Ubigeos', r.ubigeos], ['Tipos de ceremonia', r.tipos], ['Fases de proyecto', r.fases], ['Hitos de plantilla', r.hitos], ['Actividades de plantilla', r.actividades], ['Dependencias de plantilla', r.dependencias], ['Timing de plantilla', r.timing], ['Relaciones actividad/tipo de ceremonia', r.actividadTipo], ['Relaciones timing/tipo de ceremonia', r.timingTipo]];
+  const etiquetas: Array<[string, Resumen]> = [['Ubigeos', r.ubigeos], ['Categorías de proveedor', r.categoriasProveedor], ['Tipos de ceremonia', r.tipos], ['Fases de proyecto', r.fases], ['Hitos de plantilla', r.hitos], ['Actividades de plantilla', r.actividades], ['Dependencias de plantilla', r.dependencias], ['Timing de plantilla', r.timing], ['Relaciones actividad/tipo de ceremonia', r.actividadTipo], ['Relaciones timing/tipo de ceremonia', r.timingTipo]];
   etiquetas.forEach(([nombre, resumen]) => console.log(`${nombre}: ${resumen.restaurados} restaurados | ${resumen.existentes} ya existentes | ${resumen.errores.length} errores`));
   const tablas = etiquetas.map(([, resumen]) => resumen); const totalNuevos = tablas.reduce((n, x) => n + x.restaurados, 0); const totalExistentes = tablas.reduce((n, x) => n + x.existentes, 0); const errores = tablas.flatMap((x) => x.errores);
   console.log(`Total: ${totalNuevos} restaurados | ${totalExistentes} ya existentes | ${errores.length} errores`);
