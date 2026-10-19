@@ -1,24 +1,27 @@
 // use prisma-next
 model Proyecto {
-  idProyecto        Uuid                @id @default(uuid())
+  idProyecto        Uuid            @id @default(uuid())
   nombre            VarChar(150)?
-  idPm              Int?                @map("id_pm")
-  fechaInicio       DateTime?           @map("fecha_inicio")
-  fechaFin          DateTime?           @map("fecha_fin")
+  idPm              Int?            @map("id_pm")
+  fechaInicio       DateTime?       @map("fecha_inicio")
+  fechaFin          DateTime?       @map("fecha_fin")
   presupuesto       Numeric(12, 2)?
   objetivos         VarChar(1000)?
   necesidades       VarChar(1000)?
   supuestos         VarChar(1000)?
   restricciones     VarChar(1000)?
   alcance           VarChar(1000)?
-  idFaseProyecto    Int?                @map("id_fase_proyecto")
-  estado            Boolean              @default(true)
-  fechaCreacion     DateTime            @default(now()) @map("fecha_creacion")
-  fechaModificacion DateTime?           @map("fecha_modificacion")
+  idFaseProyecto    Int?            @map("id_fase_proyecto")
+  estado            Boolean         @default(true)
+  fechaCreacion     DateTime        @default(now()) @map("fecha_creacion")
+  fechaModificacion DateTime?       @map("fecha_modificacion")
 
-  projectManager    Usuario?            @relation("proyectos_pm", fields:[idPm], references:[idUsuario], onDelete: Restrict)
+  projectManager    Usuario?        @relation("proyectos_pm", fields:[idPm], references:[idUsuario], onDelete: Restrict)
   matrimonio        Matrimonio?
-  faseProyecto      FaseProyecto?       @relation(fields:[idFaseProyecto], references:[idFaseProyecto], onDelete: Restrict)
+  faseProyecto      FaseProyecto?   @relation(fields:[idFaseProyecto], references:[idFaseProyecto], onDelete: Restrict)
+  hitos             Hito[]
+  actividades       Actividad[]
+  timings           Timing[]
 
   @@index([idPm])
   @@index([idFaseProyecto])
@@ -27,24 +30,24 @@ model Proyecto {
 }
 
 model Matrimonio {
-  idMatrimonio      Uuid               @id @default(uuid()) @map("id_matrimonio")
-  idProyecto        Uuid               @unique @map("id_proyecto")
-  idNovio1          Int?               @map("id_novio1")
-  idNovio2          Int?               @map("id_novio2")
-  fechaMatrimonio   DateTime?          @map("fecha_matrimonio")
-  cantidadInvitados Int?               @map("cantidad_invitados")
-  idTipoCeremonia   Int?               @map("id_tipo_ceremonia")
-  ciudadUbicacion   VarChar(6)?        @map("ciudad_ubicacion")
-  ideasMoonboard    VarChar(1000)?     @map("ideas_moonboard")
+  idMatrimonio      Uuid           @id @default(uuid()) @map("id_matrimonio")
+  idProyecto        Uuid           @unique @map("id_proyecto")
+  idNovio1          Int?           @map("id_novio1")
+  idNovio2          Int?           @map("id_novio2")
+  fechaMatrimonio   DateTime?      @map("fecha_matrimonio")
+  cantidadInvitados Int?           @map("cantidad_invitados")
+  idTipoCeremonia   Int?           @map("id_tipo_ceremonia")
+  ciudadUbicacion   VarChar(6)?    @map("ciudad_ubicacion")
+  ideasMoonboard    VarChar(1000)? @map("ideas_moonboard")
   estado            Boolean?
-  fechaCreacion     DateTime           @default(now()) @map("fecha_creacion")
-  fechaModificacion DateTime?          @map("fecha_modificacion")
+  fechaCreacion     DateTime       @default(now()) @map("fecha_creacion")
+  fechaModificacion DateTime?      @map("fecha_modificacion")
 
-  proyecto          Proyecto           @relation(fields:[idProyecto], references:[idProyecto], onDelete: Restrict)
-  novio1            Usuario?           @relation("matrimonios_novio1", fields:[idNovio1], references:[idUsuario], onDelete: Restrict)
-  novio2            Usuario?           @relation("matrimonios_novio2", fields:[idNovio2], references:[idUsuario], onDelete: Restrict)
-  ubigeo            Ubigeo?            @relation(fields:[ciudadUbicacion], references:[idUbigeo], onDelete: Restrict)
-  tipoCeremonia     TipoCeremonia?     @relation(fields:[idTipoCeremonia], references:[idTipoCeremonia], onDelete: Restrict)
+  proyecto          Proyecto       @relation(fields:[idProyecto], references:[idProyecto], onDelete: Restrict)
+  novio1            Usuario?       @relation("matrimonios_novio1", fields:[idNovio1], references:[idUsuario], onDelete: Restrict)
+  novio2            Usuario?       @relation("matrimonios_novio2", fields:[idNovio2], references:[idUsuario], onDelete: Restrict)
+  ubigeo            Ubigeo?        @relation(fields:[ciudadUbicacion], references:[idUbigeo], onDelete: Restrict)
+  tipoCeremonia     TipoCeremonia? @relation(fields:[idTipoCeremonia], references:[idTipoCeremonia], onDelete: Restrict)
 
   @@index([idNovio1])
   @@index([idNovio2])
@@ -54,116 +57,272 @@ model Matrimonio {
 }
 
 model TipoCeremonia {
-  idTipoCeremonia Int @id @default(autoincrement()) @map("id_tipo_ceremonia")
-  codigo VarChar(50) @unique
-  nombre VarChar(100)
-  descripcion VarChar(500)?
-  activo Boolean @default(true)
-  matrimonios Matrimonio[]
+  idTipoCeremonia Int           @id @default(autoincrement()) @map("id_tipo_ceremonia")
+  codigo          VarChar(50)   @unique
+  nombre          VarChar(100)
+  descripcion     VarChar(500)?
+  activo          Boolean       @default(true)
+  matrimonios     Matrimonio[]
+
   @@map("gp_tipo_ceremonia")
 }
 
 model FaseProyecto {
-  idFaseProyecto Int @id @default(autoincrement()) @map("id_fase_proyecto")
-  codigo VarChar(50) @unique
-  nombre VarChar(100)
-  descripcion VarChar(500)?
-  orden Int
-  activo Boolean @default(true)
-  proyectos Proyecto[]
+  idFaseProyecto       Int                  @id @default(autoincrement()) @map("id_fase_proyecto")
+  codigo               VarChar(50)          @unique
+  nombre               VarChar(100)
+  descripcion          VarChar(500)?
+  orden                Int
+  activo               Boolean              @default(true)
+  proyectos            Proyecto[]
   actividadesPlantilla PlantillaActividad[]
+
   @@map("gp_fase_proyecto")
 }
 
-enum gp_tipo_temporal { INICIO ESCALABLE FIJO_EVENTO DIA_EVENTO POST_EVENTO }
-enum gp_prioridad_actividad { BAJA MEDIA ALTA CRITICA }
-enum gp_tipo_dependencia { FINISH_TO_START }
+enum cr_tipo_temporal {
+  INICIO
+  ESCALABLE
+  FIJO_EVENTO
+  DIA_EVENTO
+  POST_EVENTO
+}
+
+enum cr_prioridad_actividad {
+  BAJA
+  MEDIA
+  ALTA
+  CRITICA
+}
+
+enum cr_tipo_dependencia {
+  FINISH_TO_START
+}
+
+enum cr_estado_hito {
+  PENDIENTE
+  EN_PROGRESO
+  COMPLETADO
+  NO_APLICA
+}
+
+enum cr_estado_actividad {
+  PENDIENTE
+  EN_PROCESO
+  COMPLETADA
+  CANCELADA
+  NO_APLICA
+}
 
 model PlantillaHito {
-  idPlantillaHito Int @id @default(autoincrement()) @map("id_plantilla_hito")
-  codigo VarChar(50) @unique
-  nombre VarChar(200)
-  criterioAceptacion VarChar(1000) @map("criterio_aceptacion")
-  tipoTemporal gp_tipo_temporal @map("tipo_temporal")
-  diasAntesBase Int? @map("dias_antes_base")
-  diasAntesMinimo Int? @map("dias_antes_minimo")
-  orden Int
-  activo Boolean @default(true)
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt temporal.updatedAt() @map("updated_at")
-  actividades PlantillaActividad[]
-  @@map("gp_plantilla_hito")
+  idPlantillaHito    Int                  @id @default(autoincrement()) @map("id_plantilla_hito")
+  codigo             VarChar(50)          @unique
+  nombre             VarChar(200)
+  criterioAceptacion VarChar(1000)        @map("criterio_aceptacion")
+  tipoTemporal       cr_tipo_temporal     @map("tipo_temporal")
+  diasAntesBase      Int?                 @map("dias_antes_base")
+  diasAntesMinimo    Int?                 @map("dias_antes_minimo")
+  orden              Int
+  activo             Boolean              @default(true)
+  createdAt          DateTime             @default(now()) @map("created_at")
+  updatedAt          temporal.updatedAt() @map("updated_at")
+  actividades        PlantillaActividad[]
+  hitosOrigen        Hito[]
+
+  @@map("cr_plantilla_hito")
 }
+
 model PlantillaActividad {
-  idPlantillaActividad Int @id @default(autoincrement()) @map("id_plantilla_actividad")
-  idPlantillaHito Int? @map("id_plantilla_hito")
-  idFaseProyecto Int @map("id_fase_proyecto")
-  codigo VarChar(50) @unique
-  nombre VarChar(200)
-  listaVerificacion Json? @map("lista_verificacion")
-  responsableSugerido VarChar(150)? @map("responsable_sugerido")
-  entregable VarChar(500)?
-  tipoTemporal gp_tipo_temporal @map("tipo_temporal")
-  diasAntesBase Int? @map("dias_antes_base")
-  diasAntesMinimo Int? @map("dias_antes_minimo")
-  duracionEstimadaDias Int? @map("duracion_estimada_dias")
-  prioridad gp_prioridad_actividad?
-  orden Int
-  activo Boolean @default(true)
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt temporal.updatedAt() @map("updated_at")
-  hito PlantillaHito? @relation(fields:[idPlantillaHito], references:[idPlantillaHito], onDelete: Restrict)
-  faseProyecto FaseProyecto @relation(fields:[idFaseProyecto], references:[idFaseProyecto], onDelete: Restrict)
-  tiposCeremonia PlantillaActividadTipoCeremonia[]
-  dependenciasPredecesora PlantillaDependencia[] @relation("plantilla_pre")
-  dependenciasSucesora PlantillaDependencia[] @relation("plantilla_suc")
+  idPlantillaActividad    Int                               @id @default(autoincrement()) @map("id_plantilla_actividad")
+  idPlantillaHito         Int?                              @map("id_plantilla_hito")
+  idFaseProyecto          Int                               @map("id_fase_proyecto")
+  codigo                  VarChar(50)                       @unique
+  nombre                  VarChar(200)
+  listaVerificacion       Json?                             @map("lista_verificacion")
+  responsableSugerido     VarChar(150)?                     @map("responsable_sugerido")
+  entregable              VarChar(500)?
+  tipoTemporal            cr_tipo_temporal                  @map("tipo_temporal")
+  diasAntesBase           Int?                              @map("dias_antes_base")
+  diasAntesMinimo         Int?                              @map("dias_antes_minimo")
+  duracionEstimadaDias    Int?                              @map("duracion_estimada_dias")
+  prioridad               cr_prioridad_actividad?
+  orden                   Int
+  activo                  Boolean                           @default(true)
+  createdAt               DateTime                          @default(now()) @map("created_at")
+  updatedAt               temporal.updatedAt()              @map("updated_at")
+  hito                    PlantillaHito?                    @relation(fields:[idPlantillaHito], references:[idPlantillaHito], onDelete: Restrict)
+  faseProyecto            FaseProyecto                      @relation(fields:[idFaseProyecto], references:[idFaseProyecto], onDelete: Restrict)
+  tiposCeremonia          PlantillaActividadTipoCeremonia[]
+  dependenciasPredecesora PlantillaDependencia[]            @relation("plantilla_pre")
+  dependenciasSucesora    PlantillaDependencia[]            @relation("plantilla_suc")
+
   @@index([idPlantillaHito])
   @@index([idFaseProyecto])
-  @@map("gp_plantilla_actividad")
+  actividadesOrigen       Actividad[]
+
+  @@map("cr_plantilla_actividad")
 }
+
 model PlantillaActividadTipoCeremonia {
-  idPlantillaActividadTipoCeremonia Int @id @default(autoincrement()) @map("id_plantilla_actividad_tipo_ceremonia")
-  idPlantillaActividad Int @map("id_plantilla_actividad")
-  idTipoCeremonia Int @map("id_tipo_ceremonia")
-  actividad PlantillaActividad @relation(fields:[idPlantillaActividad], references:[idPlantillaActividad], onDelete: Restrict)
-  tipoCeremonia TipoCeremonia @relation(fields:[idTipoCeremonia], references:[idTipoCeremonia], onDelete: Restrict)
-  @@unique([idPlantillaActividad,idTipoCeremonia])
-  @@map("gp_plantilla_actividad_tipo_ceremonia")
+  idPlantillaActividadTipoCeremonia Int                @id @default(autoincrement()) @map("id_plantilla_actividad_tipo_ceremonia")
+  idPlantillaActividad              Int                @map("id_plantilla_actividad")
+  idTipoCeremonia                   Int                @map("id_tipo_ceremonia")
+  actividad                         PlantillaActividad @relation(fields:[idPlantillaActividad], references:[idPlantillaActividad], onDelete: Restrict)
+  tipoCeremonia                     TipoCeremonia      @relation(fields:[idTipoCeremonia], references:[idTipoCeremonia], onDelete: Restrict)
+
+  @@unique([idPlantillaActividad, idTipoCeremonia])
+  @@map("cr_plantilla_actividad_tipo_ceremonia")
 }
+
 model PlantillaDependencia {
-  idPlantillaDependencia Int @id @default(autoincrement()) @map("id_plantilla_dependencia")
-  idActividadPredecesora Int @map("id_actividad_predecesora")
-  idActividadSucesora Int @map("id_actividad_sucesora")
-  tipoDependencia gp_tipo_dependencia @default(FINISH_TO_START) @map("tipo_dependencia")
-  diasDesfase Int @default(0) @map("dias_desfase")
-  predecesora PlantillaActividad @relation("plantilla_pre", fields:[idActividadPredecesora], references:[idPlantillaActividad], onDelete: Restrict)
-  sucesora PlantillaActividad @relation("plantilla_suc", fields:[idActividadSucesora], references:[idPlantillaActividad], onDelete: Restrict)
-  @@unique([idActividadPredecesora,idActividadSucesora])
-  @@map("gp_plantilla_dependencia")
+  idPlantillaDependencia Int                 @id @default(autoincrement()) @map("id_plantilla_dependencia")
+  idActividadPredecesora Int                 @map("id_actividad_predecesora")
+  idActividadSucesora    Int                 @map("id_actividad_sucesora")
+  tipoDependencia        cr_tipo_dependencia @default(FINISH_TO_START) @map("tipo_dependencia")
+  diasDesfase            Int                 @default(0) @map("dias_desfase")
+  predecesora            PlantillaActividad  @relation("plantilla_pre", fields:[idActividadPredecesora], references:[idPlantillaActividad], onDelete: Restrict)
+  sucesora               PlantillaActividad  @relation("plantilla_suc", fields:[idActividadSucesora], references:[idPlantillaActividad], onDelete: Restrict)
+
+  @@unique([idActividadPredecesora, idActividadSucesora])
+  @@map("cr_plantilla_dependencia")
 }
+
 model PlantillaTiming {
-  idPlantillaTiming Int @id @default(autoincrement()) @map("id_plantilla_timing")
-  codigo VarChar(50) @unique
-  horaInicio Time @map("hora_inicio")
-  duracionMinutos Int @map("duracion_minutos")
-  actividad VarChar(200)
-  responsableSugerido VarChar(150)? @map("responsable_sugerido")
-  listaVerificacion Json? @map("lista_verificacion")
-  orden Int
-  activo Boolean @default(true)
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt temporal.updatedAt() @map("updated_at")
-  tiposCeremonia PlantillaTimingTipoCeremonia[]
-  @@map("gp_plantilla_timing")
+  idPlantillaTiming   Int                            @id @default(autoincrement()) @map("id_plantilla_timing")
+  codigo              VarChar(50)                    @unique
+  horaInicio          Time                           @map("hora_inicio")
+  duracionMinutos     Int                            @map("duracion_minutos")
+  actividad           VarChar(200)
+  responsableSugerido VarChar(150)?                  @map("responsable_sugerido")
+  listaVerificacion   Json?                          @map("lista_verificacion")
+  orden               Int
+  activo              Boolean                        @default(true)
+  createdAt           DateTime                       @default(now()) @map("created_at")
+  updatedAt           temporal.updatedAt()           @map("updated_at")
+  tiposCeremonia      PlantillaTimingTipoCeremonia[]
+  timingsOrigen       Timing[]
+
+  @@map("cr_plantilla_timing")
 }
+
 model PlantillaTimingTipoCeremonia {
-  idPlantillaTimingTipoCeremonia Int @id @default(autoincrement()) @map("id_plantilla_timing_tipo_ceremonia")
-  idPlantillaTiming Int @map("id_plantilla_timing")
-  idTipoCeremonia Int @map("id_tipo_ceremonia")
-  timing PlantillaTiming @relation(fields:[idPlantillaTiming], references:[idPlantillaTiming], onDelete: Restrict)
-  tipoCeremonia TipoCeremonia @relation(fields:[idTipoCeremonia], references:[idTipoCeremonia], onDelete: Restrict)
-  @@unique([idPlantillaTiming,idTipoCeremonia])
-  @@map("gp_plantilla_timing_tipo_ceremonia")
+  idPlantillaTimingTipoCeremonia Int             @id @default(autoincrement()) @map("id_plantilla_timing_tipo_ceremonia")
+  idPlantillaTiming              Int             @map("id_plantilla_timing")
+  idTipoCeremonia                Int             @map("id_tipo_ceremonia")
+  timing                         PlantillaTiming @relation(fields:[idPlantillaTiming], references:[idPlantillaTiming], onDelete: Restrict)
+  tipoCeremonia                  TipoCeremonia   @relation(fields:[idTipoCeremonia], references:[idTipoCeremonia], onDelete: Restrict)
+
+  @@unique([idPlantillaTiming, idTipoCeremonia])
+  @@map("cr_plantilla_timing_tipo_ceremonia")
+}
+
+model Hito {
+  idHito                Uuid                 @id @default(uuid()) @map("id_hito")
+  idProyecto            Uuid                 @map("id_proyecto")
+  idPlantillaHito       Int?                 @map("id_plantilla_hito")
+  nombre                VarChar(200)
+  criterioAceptacion    VarChar(1000)?       @map("criterio_aceptacion")
+  fechaObjetivo         DateTime             @map("fecha_objetivo")
+  estado                cr_estado_hito       @default(PENDIENTE)
+  orden                 Int
+  modificadoManualmente Boolean              @default(false) @map("modificado_manualmente")
+  activo                Boolean              @default(true)
+  createdAt             DateTime             @default(now()) @map("created_at")
+  updatedAt             temporal.updatedAt() @map("updated_at")
+
+  proyecto              Proyecto             @relation(fields:[idProyecto], references:[idProyecto], onDelete: Restrict)
+  plantillaHito         PlantillaHito?       @relation(fields:[idPlantillaHito], references:[idPlantillaHito], onDelete: Restrict)
+  actividades           Actividad[]
+
+  @@index([idProyecto])
+  @@index([idPlantillaHito])
+  @@index([estado])
+  @@map("cr_hito")
+}
+
+model Actividad {
+  idActividad             Uuid                    @id @default(uuid()) @map("id_actividad")
+  idProyecto              Uuid                    @map("id_proyecto")
+  idHito                  Uuid?                   @map("id_hito")
+  idPlantillaActividad    Int?                    @map("id_plantilla_actividad")
+  nombre                  VarChar(200)
+  descripcion             VarChar(1000)?
+  listaVerificacion       Json?                   @map("lista_verificacion")
+  entregable              VarChar(500)?
+  fechaInicio             DateTime?               @map("fecha_inicio")
+  fechaFin                DateTime                @map("fecha_fin")
+  prioridad               cr_prioridad_actividad?
+  estado                  cr_estado_actividad     @default(PENDIENTE)
+  idUsuarioResponsable    Int?                    @map("id_usuario_responsable")
+  responsableTexto        VarChar(150)?           @map("responsable_texto")
+  orden                   Int
+  modificadoManualmente   Boolean                 @default(false) @map("modificado_manualmente")
+  activo                  Boolean                 @default(true)
+  createdAt               DateTime                @default(now()) @map("created_at")
+  updatedAt               temporal.updatedAt()    @map("updated_at")
+
+  proyecto                Proyecto                @relation(fields:[idProyecto], references:[idProyecto], onDelete: Restrict)
+  hito                    Hito?                   @relation(fields:[idHito], references:[idHito], onDelete: Restrict)
+  plantillaActividad      PlantillaActividad?     @relation(fields:[idPlantillaActividad], references:[idPlantillaActividad], onDelete: Restrict)
+  responsable             Usuario?                @relation("actividades_responsable", fields:[idUsuarioResponsable], references:[idUsuario], onDelete: Restrict)
+  dependenciasPredecesora Dependencia[]           @relation("actividades_predecesora")
+  dependenciasSucesora    Dependencia[]           @relation("actividades_sucesora")
+
+  @@index([idProyecto])
+  @@index([idHito])
+  @@index([idPlantillaActividad])
+  @@index([idUsuarioResponsable])
+  @@index([estado])
+  @@index([fechaInicio])
+  @@index([fechaFin])
+  @@map("cr_actividad")
+}
+
+model Dependencia {
+  idDependencia          Uuid                @id @default(uuid()) @map("id_dependencia")
+  idActividadPredecesora Uuid                @map("id_actividad_predecesora")
+  idActividadSucesora    Uuid                @map("id_actividad_sucesora")
+  tipoDependencia        cr_tipo_dependencia @default(FINISH_TO_START) @map("tipo_dependencia")
+  diasDesfase            Int                 @default(0) @map("dias_desfase")
+
+  predecesora            Actividad           @relation("actividades_predecesora", fields:[idActividadPredecesora], references:[idActividad], onDelete: Restrict)
+  sucesora               Actividad           @relation("actividades_sucesora", fields:[idActividadSucesora], references:[idActividad], onDelete: Restrict)
+
+  @@unique([idActividadPredecesora, idActividadSucesora])
+  @@index([idActividadPredecesora])
+  @@index([idActividadSucesora])
+  @@map("cr_dependencia")
+}
+
+model Timing {
+  idTiming              Uuid                 @id @default(uuid()) @map("id_timing")
+  idProyecto            Uuid                 @map("id_proyecto")
+  idPlantillaTiming     Int?                 @map("id_plantilla_timing")
+  actividad             VarChar(200)
+  fechaHoraInicio       DateTime             @map("fecha_hora_inicio")
+  fechaHoraFin          DateTime             @map("fecha_hora_fin")
+  duracionMinutos       Int                  @map("duracion_minutos")
+  idUsuarioResponsable  Int?                 @map("id_usuario_responsable")
+  responsableTexto      VarChar(150)?        @map("responsable_texto")
+  listaVerificacion     Json?                @map("lista_verificacion")
+  estado                cr_estado_actividad  @default(PENDIENTE)
+  orden                 Int
+  modificadoManualmente Boolean              @default(false) @map("modificado_manualmente")
+  activo                Boolean              @default(true)
+  createdAt             DateTime             @default(now()) @map("created_at")
+  updatedAt             temporal.updatedAt() @map("updated_at")
+
+  proyecto              Proyecto             @relation(fields:[idProyecto], references:[idProyecto], onDelete: Restrict)
+  plantillaTiming       PlantillaTiming?     @relation(fields:[idPlantillaTiming], references:[idPlantillaTiming], onDelete: Restrict)
+  responsable           Usuario?             @relation("timings_responsable", fields:[idUsuarioResponsable], references:[idUsuario], onDelete: Restrict)
+
+  @@index([idProyecto])
+  @@index([idPlantillaTiming])
+  @@index([idUsuarioResponsable])
+  @@index([estado])
+  @@index([fechaHoraInicio])
+  @@index([fechaHoraFin])
+  @@map("cr_timing")
 }
 
 model Ubigeo {
@@ -240,25 +399,27 @@ enum au_tipo_token_cuenta {
 }
 
 model Usuario {
-  idUsuario         Int                  @id @default(autoincrement()) @map("id_usuario")
-  idPersonaNatural  Int                  @map("id_persona_natural")
-  idEntidad         Int?                 @map("id_entidad")
-  usuario           VarChar(150)         @unique
-  tipoUsuario       au_tipo_usuario      @map("tipo_usuario")
-  contrasenaHash    VarChar(255)         @map("contrasena_hash")
-  correoVerificado  Boolean              @default(false) @map("correo_verificado")
-  esActivo          Boolean              @default(true) @map("es_activo")
-  ultimoAcceso      DateTime             @map("ultimo_acceso")
-  fechaCreacion     DateTime             @default(now()) @map("fecha_creacion")
-  fechaModificacion temporal.updatedAt() @map("fecha_modificacion")
+  idUsuario              Int                  @id @default(autoincrement()) @map("id_usuario")
+  idPersonaNatural       Int                  @map("id_persona_natural")
+  idEntidad              Int?                 @map("id_entidad")
+  usuario                VarChar(150)         @unique
+  tipoUsuario            au_tipo_usuario      @map("tipo_usuario")
+  contrasenaHash         VarChar(255)         @map("contrasena_hash")
+  correoVerificado       Boolean              @default(false) @map("correo_verificado")
+  esActivo               Boolean              @default(true) @map("es_activo")
+  ultimoAcceso           DateTime             @map("ultimo_acceso")
+  fechaCreacion          DateTime             @default(now()) @map("fecha_creacion")
+  fechaModificacion      temporal.updatedAt() @map("fecha_modificacion")
 
-  personaNatural    PersonaNatural       @relation(fields:[idPersonaNatural], references:[idPersonaNatural], onDelete: Restrict)
-  entidad           Entidad?             @relation(fields:[idEntidad], references:[idEntidad], onDelete: Restrict)
-  sesiones          Sesion[]
-  tokensCuenta      TokenCuenta[]
-  proyectosPm       Proyecto[]           @relation("proyectos_pm")
-  matrimoniosNovio1 Matrimonio[]         @relation("matrimonios_novio1")
-  matrimoniosNovio2 Matrimonio[]         @relation("matrimonios_novio2")
+  personaNatural         PersonaNatural       @relation(fields:[idPersonaNatural], references:[idPersonaNatural], onDelete: Restrict)
+  entidad                Entidad?             @relation(fields:[idEntidad], references:[idEntidad], onDelete: Restrict)
+  sesiones               Sesion[]
+  tokensCuenta           TokenCuenta[]
+  proyectosPm            Proyecto[]           @relation("proyectos_pm")
+  matrimoniosNovio1      Matrimonio[]         @relation("matrimonios_novio1")
+  matrimoniosNovio2      Matrimonio[]         @relation("matrimonios_novio2")
+  actividadesResponsable Actividad[]          @relation("actividades_responsable")
+  timingsResponsable     Timing[]             @relation("timings_responsable")
 
   @@index([idPersonaNatural])
   @@index([idEntidad])

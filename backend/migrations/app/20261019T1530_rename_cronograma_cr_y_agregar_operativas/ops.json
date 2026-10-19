@@ -1,0 +1,1564 @@
+[
+  {
+    "id": "raw.rename-cronograma-y-operativas.1",
+    "label": "Execute cronograma migration statement 1",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 1",
+        "sql": "-- El cronograma conserva los catálogos gp_* y migra solo sus tablas al prefijo cr_*.\n-- No se eliminan ni se recrean las plantillas: ALTER TABLE RENAME preserva sus datos.\n\nALTER TABLE \"public\".\"gp_plantilla_hito\" RENAME TO \"cr_plantilla_hito\";",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.2",
+    "label": "Execute cronograma migration statement 2",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 2",
+        "sql": "ALTER TABLE \"public\".\"gp_plantilla_actividad\" RENAME TO \"cr_plantilla_actividad\";",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.3",
+    "label": "Execute cronograma migration statement 3",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 3",
+        "sql": "ALTER TABLE \"public\".\"gp_plantilla_actividad_tipo_ceremonia\" RENAME TO \"cr_plantilla_actividad_tipo_ceremonia\";",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.4",
+    "label": "Execute cronograma migration statement 4",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 4",
+        "sql": "ALTER TABLE \"public\".\"gp_plantilla_dependencia\" RENAME TO \"cr_plantilla_dependencia\";",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.5",
+    "label": "Execute cronograma migration statement 5",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 5",
+        "sql": "ALTER TABLE \"public\".\"gp_plantilla_timing\" RENAME TO \"cr_plantilla_timing\";",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.6",
+    "label": "Execute cronograma migration statement 6",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 6",
+        "sql": "ALTER TABLE \"public\".\"gp_plantilla_timing_tipo_ceremonia\" RENAME TO \"cr_plantilla_timing_tipo_ceremonia\";",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.7",
+    "label": "Execute cronograma migration statement 7",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 7",
+        "sql": "ALTER TABLE \"public\".\"cr_plantilla_hito\" RENAME CONSTRAINT \"gp_plantilla_hito_pkey\" TO \"cr_plantilla_hito_pkey\";",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.8",
+    "label": "Execute cronograma migration statement 8",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 8",
+        "sql": "ALTER TABLE \"public\".\"cr_plantilla_hito\" RENAME CONSTRAINT \"gp_plantilla_hito_codigo_key\" TO \"cr_plantilla_hito_codigo_key\";",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.9",
+    "label": "Execute cronograma migration statement 9",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 9",
+        "sql": "ALTER TABLE \"public\".\"cr_plantilla_hito\" RENAME CONSTRAINT \"gp_plantilla_hito_tipo_temporal_check_77c07874\" TO \"cr_plantilla_hito_tipo_temporal_check_77c07874\";",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.10",
+    "label": "Execute cronograma migration statement 10",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 10",
+        "sql": "ALTER TABLE \"public\".\"cr_plantilla_actividad\" RENAME CONSTRAINT \"gp_plantilla_actividad_pkey\" TO \"cr_plantilla_actividad_pkey\";",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.11",
+    "label": "Execute cronograma migration statement 11",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 11",
+        "sql": "ALTER TABLE \"public\".\"cr_plantilla_actividad\" RENAME CONSTRAINT \"gp_plantilla_actividad_codigo_key\" TO \"cr_plantilla_actividad_codigo_key\";",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.12",
+    "label": "Execute cronograma migration statement 12",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 12",
+        "sql": "ALTER TABLE \"public\".\"cr_plantilla_actividad\" RENAME CONSTRAINT \"gp_plantilla_actividad_tipo_temporal_check_77c07874\" TO \"cr_plantilla_actividad_tipo_temporal_check_77c07874\";",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.13",
+    "label": "Execute cronograma migration statement 13",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 13",
+        "sql": "ALTER TABLE \"public\".\"cr_plantilla_actividad\" RENAME CONSTRAINT \"gp_plantilla_actividad_prioridad_check_a1f6ee2f\" TO \"cr_plantilla_actividad_prioridad_check_a1f6ee2f\";",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.14",
+    "label": "Execute cronograma migration statement 14",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 14",
+        "sql": "ALTER TABLE \"public\".\"cr_plantilla_actividad\" RENAME CONSTRAINT \"gp_plantilla_actividad_id_plantilla_hito_fkey\" TO \"cr_plantilla_actividad_id_plantilla_hito_fkey\";",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.15",
+    "label": "Execute cronograma migration statement 15",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 15",
+        "sql": "ALTER TABLE \"public\".\"cr_plantilla_actividad\" RENAME CONSTRAINT \"gp_plantilla_actividad_id_fase_proyecto_fkey\" TO \"cr_plantilla_actividad_id_fase_proyecto_fkey\";",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.16",
+    "label": "Execute cronograma migration statement 16",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 16",
+        "sql": "ALTER TABLE \"public\".\"cr_plantilla_actividad_tipo_ceremonia\" RENAME CONSTRAINT \"gp_plantilla_actividad_tipo_ceremonia_pkey\" TO \"cr_plantilla_actividad_tipo_ceremonia_pkey\";",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.17",
+    "label": "Execute cronograma migration statement 17",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 17",
+        "sql": "ALTER TABLE \"public\".\"cr_plantilla_actividad_tipo_ceremonia\" RENAME CONSTRAINT \"gp_plantilla_actividad_tipo_ceremonia_id_plantilla_actividad_id_tipo_ceremonia_key\" TO \"cr_plantilla_actividad_tipo_ceremonia_id_plantilla_actividad_id_tipo_ceremonia_key\";",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.18",
+    "label": "Execute cronograma migration statement 18",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 18",
+        "sql": "ALTER TABLE \"public\".\"cr_plantilla_actividad_tipo_ceremonia\" RENAME CONSTRAINT \"gp_plantilla_actividad_tipo_ceremonia_id_plantilla_actividad_fkey\" TO \"cr_plantilla_actividad_tipo_ceremonia_id_plantilla_actividad_fkey\";",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.19",
+    "label": "Execute cronograma migration statement 19",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 19",
+        "sql": "ALTER TABLE \"public\".\"cr_plantilla_actividad_tipo_ceremonia\" RENAME CONSTRAINT \"gp_plantilla_actividad_tipo_ceremonia_id_tipo_ceremonia_fkey\" TO \"cr_plantilla_actividad_tipo_ceremonia_id_tipo_ceremonia_fkey\";",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.20",
+    "label": "Execute cronograma migration statement 20",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 20",
+        "sql": "ALTER TABLE \"public\".\"cr_plantilla_dependencia\" RENAME CONSTRAINT \"gp_plantilla_dependencia_pkey\" TO \"cr_plantilla_dependencia_pkey\";",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.21",
+    "label": "Execute cronograma migration statement 21",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 21",
+        "sql": "ALTER TABLE \"public\".\"cr_plantilla_dependencia\" RENAME CONSTRAINT \"gp_plantilla_dependencia_id_actividad_predecesora_id_actividad_sucesora_key\" TO \"cr_plantilla_dependencia_id_actividad_predecesora_id_actividad_sucesora_key\";",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.22",
+    "label": "Execute cronograma migration statement 22",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 22",
+        "sql": "ALTER TABLE \"public\".\"cr_plantilla_dependencia\" RENAME CONSTRAINT \"gp_plantilla_dependencia_tipo_dependencia_check_d4c2b17a\" TO \"cr_plantilla_dependencia_tipo_dependencia_check_d4c2b17a\";",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.23",
+    "label": "Execute cronograma migration statement 23",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 23",
+        "sql": "ALTER TABLE \"public\".\"cr_plantilla_dependencia\" RENAME CONSTRAINT \"gp_plantilla_dependencia_predecesora_fkey\" TO \"cr_plantilla_dependencia_id_actividad_predecesora_fkey\";",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.24",
+    "label": "Execute cronograma migration statement 24",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 24",
+        "sql": "ALTER TABLE \"public\".\"cr_plantilla_dependencia\" RENAME CONSTRAINT \"gp_plantilla_dependencia_sucesora_fkey\" TO \"cr_plantilla_dependencia_id_actividad_sucesora_fkey\";",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.25",
+    "label": "Execute cronograma migration statement 25",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 25",
+        "sql": "ALTER TABLE \"public\".\"cr_plantilla_timing\" RENAME CONSTRAINT \"gp_plantilla_timing_pkey\" TO \"cr_plantilla_timing_pkey\";",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.26",
+    "label": "Execute cronograma migration statement 26",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 26",
+        "sql": "ALTER TABLE \"public\".\"cr_plantilla_timing\" RENAME CONSTRAINT \"gp_plantilla_timing_codigo_key\" TO \"cr_plantilla_timing_codigo_key\";",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.27",
+    "label": "Execute cronograma migration statement 27",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 27",
+        "sql": "ALTER TABLE \"public\".\"cr_plantilla_timing_tipo_ceremonia\" RENAME CONSTRAINT \"gp_plantilla_timing_tipo_ceremonia_pkey\" TO \"cr_plantilla_timing_tipo_ceremonia_pkey\";",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.28",
+    "label": "Execute cronograma migration statement 28",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 28",
+        "sql": "ALTER TABLE \"public\".\"cr_plantilla_timing_tipo_ceremonia\" RENAME CONSTRAINT \"gp_plantilla_timing_tipo_ceremonia_id_plantilla_timing_id_tipo_ceremonia_key\" TO \"cr_plantilla_timing_tipo_ceremonia_id_plantilla_timing_id_tipo_ceremonia_key\";",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.29",
+    "label": "Execute cronograma migration statement 29",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 29",
+        "sql": "ALTER TABLE \"public\".\"cr_plantilla_timing_tipo_ceremonia\" RENAME CONSTRAINT \"gp_plantilla_timing_tipo_ceremonia_id_plantilla_timing_fkey\" TO \"cr_plantilla_timing_tipo_ceremonia_id_plantilla_timing_fkey\";",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.30",
+    "label": "Execute cronograma migration statement 30",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 30",
+        "sql": "ALTER TABLE \"public\".\"cr_plantilla_timing_tipo_ceremonia\" RENAME CONSTRAINT \"gp_plantilla_timing_tipo_ceremonia_id_tipo_ceremonia_fkey\" TO \"cr_plantilla_timing_tipo_ceremonia_id_tipo_ceremonia_fkey\";",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.31",
+    "label": "Execute cronograma migration statement 31",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 31",
+        "sql": "ALTER INDEX \"public\".\"gp_plantilla_actividad_id_plantilla_hito_idx_99ae877f\" RENAME TO \"cr_plantilla_actividad_id_plantilla_hito_idx_99ae877f\";",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.32",
+    "label": "Execute cronograma migration statement 32",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 32",
+        "sql": "ALTER INDEX \"public\".\"gp_plantilla_actividad_id_fase_proyecto_idx_0ca9d564\" RENAME TO \"cr_plantilla_actividad_id_fase_proyecto_idx_0ca9d564\";",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.33",
+    "label": "Execute cronograma migration statement 33",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 33",
+        "sql": "ALTER INDEX \"public\".\"gp_plantilla_actividad_tipo_ceremonia_id_plantilla_act_396101d8\" RENAME TO \"cr_plantilla_actividad_tipo_ceremonia_id_plantilla_act_396101d8\";",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.34",
+    "label": "Execute cronograma migration statement 34",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 34",
+        "sql": "ALTER INDEX \"public\".\"gp_plantilla_actividad_tipo_ceremonia_id_tipo_ceremoni_c038373a\" RENAME TO \"cr_plantilla_actividad_tipo_ceremonia_id_tipo_ceremoni_c038373a\";",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.35",
+    "label": "Execute cronograma migration statement 35",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 35",
+        "sql": "ALTER INDEX \"public\".\"gp_plantilla_dependencia_id_actividad_predecesora_idx_26ea0d79\" RENAME TO \"cr_plantilla_dependencia_id_actividad_predecesora_idx_26ea0d79\";",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.36",
+    "label": "Execute cronograma migration statement 36",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 36",
+        "sql": "ALTER INDEX \"public\".\"gp_plantilla_dependencia_id_actividad_sucesora_idx_9be5e6fb\" RENAME TO \"cr_plantilla_dependencia_id_actividad_sucesora_idx_9be5e6fb\";",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.37",
+    "label": "Execute cronograma migration statement 37",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 37",
+        "sql": "ALTER INDEX \"public\".\"gp_plantilla_timing_tipo_ceremonia_id_plantilla_timing_a11bed11\" RENAME TO \"cr_plantilla_timing_tipo_ceremonia_id_plantilla_timing_a11bed11\";",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.38",
+    "label": "Execute cronograma migration statement 38",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 38",
+        "sql": "ALTER INDEX \"public\".\"gp_plantilla_timing_tipo_ceremonia_id_tipo_ceremonia_i_c038373a\" RENAME TO \"cr_plantilla_timing_tipo_ceremonia_id_tipo_ceremonia_i_c038373a\";",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.39",
+    "label": "Execute cronograma migration statement 39",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 39",
+        "sql": "CREATE TABLE \"public\".\"cr_hito\" (\n  \"id_hito\" uuid NOT NULL,\n  \"id_proyecto\" uuid NOT NULL,\n  \"id_plantilla_hito\" integer,\n  \"nombre\" character varying(200) NOT NULL,\n  \"criterio_aceptacion\" character varying(1000),\n  \"fecha_objetivo\" timestamptz NOT NULL,\n  \"estado\" text NOT NULL DEFAULT 'PENDIENTE',\n  \"orden\" integer NOT NULL,\n  \"modificado_manualmente\" boolean NOT NULL DEFAULT false,\n  \"activo\" boolean NOT NULL DEFAULT true,\n  \"created_at\" timestamptz NOT NULL DEFAULT now(),\n  \"updated_at\" timestamptz NOT NULL,\n  CONSTRAINT \"cr_hito_pkey\" PRIMARY KEY (\"id_hito\"),\n  CONSTRAINT \"cr_hito_estado_check_3a2187cf\" CHECK (\"estado\" IN ('PENDIENTE', 'EN_PROGRESO', 'COMPLETADO', 'NO_APLICA'))\n);",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.40",
+    "label": "Execute cronograma migration statement 40",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 40",
+        "sql": "CREATE TABLE \"public\".\"cr_actividad\" (\n  \"id_actividad\" uuid NOT NULL,\n  \"id_proyecto\" uuid NOT NULL,\n  \"id_hito\" uuid,\n  \"id_plantilla_actividad\" integer,\n  \"nombre\" character varying(200) NOT NULL,\n  \"descripcion\" character varying(1000),\n  \"lista_verificacion\" json,\n  \"entregable\" character varying(500),\n  \"fecha_inicio\" timestamptz,\n  \"fecha_fin\" timestamptz NOT NULL,\n  \"prioridad\" text,\n  \"estado\" text NOT NULL DEFAULT 'PENDIENTE',\n  \"id_usuario_responsable\" integer,\n  \"responsable_texto\" character varying(150),\n  \"orden\" integer NOT NULL,\n  \"modificado_manualmente\" boolean NOT NULL DEFAULT false,\n  \"activo\" boolean NOT NULL DEFAULT true,\n  \"created_at\" timestamptz NOT NULL DEFAULT now(),\n  \"updated_at\" timestamptz NOT NULL,\n  CONSTRAINT \"cr_actividad_pkey\" PRIMARY KEY (\"id_actividad\"),\n  CONSTRAINT \"cr_actividad_prioridad_check_a1f6ee2f\" CHECK (\"prioridad\" IN ('BAJA', 'MEDIA', 'ALTA', 'CRITICA')),\n  CONSTRAINT \"cr_actividad_estado_check_15ec3bb7\" CHECK (\"estado\" IN ('PENDIENTE', 'EN_PROCESO', 'COMPLETADA', 'CANCELADA', 'NO_APLICA'))\n);",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.41",
+    "label": "Execute cronograma migration statement 41",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 41",
+        "sql": "CREATE TABLE \"public\".\"cr_dependencia\" (\n  \"id_dependencia\" uuid NOT NULL,\n  \"id_actividad_predecesora\" uuid NOT NULL,\n  \"id_actividad_sucesora\" uuid NOT NULL,\n  \"tipo_dependencia\" text NOT NULL DEFAULT 'FINISH_TO_START',\n  \"dias_desfase\" integer NOT NULL DEFAULT 0,\n  CONSTRAINT \"cr_dependencia_pkey\" PRIMARY KEY (\"id_dependencia\"),\n  CONSTRAINT \"cr_dependencia_tipo_dependencia_check_d4c2b17a\" CHECK (\"tipo_dependencia\" IN ('FINISH_TO_START')),\n  CONSTRAINT \"cr_dependencia_id_actividad_predecesora_id_actividad_sucesora_key\" UNIQUE (\"id_actividad_predecesora\", \"id_actividad_sucesora\")\n);",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.42",
+    "label": "Execute cronograma migration statement 42",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 42",
+        "sql": "CREATE TABLE \"public\".\"cr_timing\" (\n  \"id_timing\" uuid NOT NULL,\n  \"id_proyecto\" uuid NOT NULL,\n  \"id_plantilla_timing\" integer,\n  \"actividad\" character varying(200) NOT NULL,\n  \"fecha_hora_inicio\" timestamptz NOT NULL,\n  \"fecha_hora_fin\" timestamptz NOT NULL,\n  \"duracion_minutos\" integer NOT NULL,\n  \"id_usuario_responsable\" integer,\n  \"responsable_texto\" character varying(150),\n  \"lista_verificacion\" json,\n  \"estado\" text NOT NULL DEFAULT 'PENDIENTE',\n  \"orden\" integer NOT NULL,\n  \"modificado_manualmente\" boolean NOT NULL DEFAULT false,\n  \"activo\" boolean NOT NULL DEFAULT true,\n  \"created_at\" timestamptz NOT NULL DEFAULT now(),\n  \"updated_at\" timestamptz NOT NULL,\n  CONSTRAINT \"cr_timing_pkey\" PRIMARY KEY (\"id_timing\"),\n  CONSTRAINT \"cr_timing_estado_check_15ec3bb7\" CHECK (\"estado\" IN ('PENDIENTE', 'EN_PROCESO', 'COMPLETADA', 'CANCELADA', 'NO_APLICA'))\n);",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.43",
+    "label": "Execute cronograma migration statement 43",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 43",
+        "sql": "ALTER TABLE \"public\".\"cr_hito\" ADD CONSTRAINT \"cr_hito_id_proyecto_fkey\" FOREIGN KEY (\"id_proyecto\") REFERENCES \"public\".\"gp_proyecto\" (\"idProyecto\") ON DELETE RESTRICT;",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.44",
+    "label": "Execute cronograma migration statement 44",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 44",
+        "sql": "ALTER TABLE \"public\".\"cr_hito\" ADD CONSTRAINT \"cr_hito_id_plantilla_hito_fkey\" FOREIGN KEY (\"id_plantilla_hito\") REFERENCES \"public\".\"cr_plantilla_hito\" (\"id_plantilla_hito\") ON DELETE RESTRICT;",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.45",
+    "label": "Execute cronograma migration statement 45",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 45",
+        "sql": "ALTER TABLE \"public\".\"cr_actividad\" ADD CONSTRAINT \"cr_actividad_id_proyecto_fkey\" FOREIGN KEY (\"id_proyecto\") REFERENCES \"public\".\"gp_proyecto\" (\"idProyecto\") ON DELETE RESTRICT;",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.46",
+    "label": "Execute cronograma migration statement 46",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 46",
+        "sql": "ALTER TABLE \"public\".\"cr_actividad\" ADD CONSTRAINT \"cr_actividad_id_hito_fkey\" FOREIGN KEY (\"id_hito\") REFERENCES \"public\".\"cr_hito\" (\"id_hito\") ON DELETE RESTRICT;",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.47",
+    "label": "Execute cronograma migration statement 47",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 47",
+        "sql": "ALTER TABLE \"public\".\"cr_actividad\" ADD CONSTRAINT \"cr_actividad_id_plantilla_actividad_fkey\" FOREIGN KEY (\"id_plantilla_actividad\") REFERENCES \"public\".\"cr_plantilla_actividad\" (\"id_plantilla_actividad\") ON DELETE RESTRICT;",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.48",
+    "label": "Execute cronograma migration statement 48",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 48",
+        "sql": "ALTER TABLE \"public\".\"cr_actividad\" ADD CONSTRAINT \"cr_actividad_id_usuario_responsable_fkey\" FOREIGN KEY (\"id_usuario_responsable\") REFERENCES \"public\".\"au_usuario\" (\"id_usuario\") ON DELETE RESTRICT;",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.49",
+    "label": "Execute cronograma migration statement 49",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 49",
+        "sql": "ALTER TABLE \"public\".\"cr_dependencia\" ADD CONSTRAINT \"cr_dependencia_id_actividad_predecesora_fkey\" FOREIGN KEY (\"id_actividad_predecesora\") REFERENCES \"public\".\"cr_actividad\" (\"id_actividad\") ON DELETE RESTRICT;",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.50",
+    "label": "Execute cronograma migration statement 50",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 50",
+        "sql": "ALTER TABLE \"public\".\"cr_dependencia\" ADD CONSTRAINT \"cr_dependencia_id_actividad_sucesora_fkey\" FOREIGN KEY (\"id_actividad_sucesora\") REFERENCES \"public\".\"cr_actividad\" (\"id_actividad\") ON DELETE RESTRICT;",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.51",
+    "label": "Execute cronograma migration statement 51",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 51",
+        "sql": "ALTER TABLE \"public\".\"cr_timing\" ADD CONSTRAINT \"cr_timing_id_proyecto_fkey\" FOREIGN KEY (\"id_proyecto\") REFERENCES \"public\".\"gp_proyecto\" (\"idProyecto\") ON DELETE RESTRICT;",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.52",
+    "label": "Execute cronograma migration statement 52",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 52",
+        "sql": "ALTER TABLE \"public\".\"cr_timing\" ADD CONSTRAINT \"cr_timing_id_plantilla_timing_fkey\" FOREIGN KEY (\"id_plantilla_timing\") REFERENCES \"public\".\"cr_plantilla_timing\" (\"id_plantilla_timing\") ON DELETE RESTRICT;",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.53",
+    "label": "Execute cronograma migration statement 53",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 53",
+        "sql": "ALTER TABLE \"public\".\"cr_timing\" ADD CONSTRAINT \"cr_timing_id_usuario_responsable_fkey\" FOREIGN KEY (\"id_usuario_responsable\") REFERENCES \"public\".\"au_usuario\" (\"id_usuario\") ON DELETE RESTRICT;",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.54",
+    "label": "Execute cronograma migration statement 54",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 54",
+        "sql": "CREATE INDEX \"cr_hito_id_proyecto_idx_4279b0d1\" ON \"public\".\"cr_hito\" (\"id_proyecto\");",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.55",
+    "label": "Execute cronograma migration statement 55",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 55",
+        "sql": "CREATE INDEX \"cr_hito_id_plantilla_hito_idx_99ae877f\" ON \"public\".\"cr_hito\" (\"id_plantilla_hito\");",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.56",
+    "label": "Execute cronograma migration statement 56",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 56",
+        "sql": "CREATE INDEX \"cr_hito_estado_idx_c74e5888\" ON \"public\".\"cr_hito\" (\"estado\");",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.57",
+    "label": "Execute cronograma migration statement 57",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 57",
+        "sql": "CREATE INDEX \"cr_actividad_id_proyecto_idx_4279b0d1\" ON \"public\".\"cr_actividad\" (\"id_proyecto\");",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.58",
+    "label": "Execute cronograma migration statement 58",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 58",
+        "sql": "CREATE INDEX \"cr_actividad_id_hito_idx_0a1cccf3\" ON \"public\".\"cr_actividad\" (\"id_hito\");",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.59",
+    "label": "Execute cronograma migration statement 59",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 59",
+        "sql": "CREATE INDEX \"cr_actividad_id_plantilla_actividad_idx_396101d8\" ON \"public\".\"cr_actividad\" (\"id_plantilla_actividad\");",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.60",
+    "label": "Execute cronograma migration statement 60",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 60",
+        "sql": "CREATE INDEX \"cr_actividad_id_usuario_responsable_idx_de19d98e\" ON \"public\".\"cr_actividad\" (\"id_usuario_responsable\");",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.61",
+    "label": "Execute cronograma migration statement 61",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 61",
+        "sql": "CREATE INDEX \"cr_actividad_estado_idx_c74e5888\" ON \"public\".\"cr_actividad\" (\"estado\");",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.62",
+    "label": "Execute cronograma migration statement 62",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 62",
+        "sql": "CREATE INDEX \"cr_actividad_fecha_inicio_idx_e66684fd\" ON \"public\".\"cr_actividad\" (\"fecha_inicio\");",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.63",
+    "label": "Execute cronograma migration statement 63",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 63",
+        "sql": "CREATE INDEX \"cr_actividad_fecha_fin_idx_c0d5b891\" ON \"public\".\"cr_actividad\" (\"fecha_fin\");",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.64",
+    "label": "Execute cronograma migration statement 64",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 64",
+        "sql": "CREATE INDEX \"cr_dependencia_id_actividad_predecesora_idx_26ea0d79\" ON \"public\".\"cr_dependencia\" (\"id_actividad_predecesora\");",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.65",
+    "label": "Execute cronograma migration statement 65",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 65",
+        "sql": "CREATE INDEX \"cr_dependencia_id_actividad_sucesora_idx_9be5e6fb\" ON \"public\".\"cr_dependencia\" (\"id_actividad_sucesora\");",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.66",
+    "label": "Execute cronograma migration statement 66",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 66",
+        "sql": "CREATE INDEX \"cr_timing_id_proyecto_idx_4279b0d1\" ON \"public\".\"cr_timing\" (\"id_proyecto\");",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.67",
+    "label": "Execute cronograma migration statement 67",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 67",
+        "sql": "CREATE INDEX \"cr_timing_id_plantilla_timing_idx_a11bed11\" ON \"public\".\"cr_timing\" (\"id_plantilla_timing\");",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.68",
+    "label": "Execute cronograma migration statement 68",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 68",
+        "sql": "CREATE INDEX \"cr_timing_id_usuario_responsable_idx_de19d98e\" ON \"public\".\"cr_timing\" (\"id_usuario_responsable\");",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.69",
+    "label": "Execute cronograma migration statement 69",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 69",
+        "sql": "CREATE INDEX \"cr_timing_estado_idx_c74e5888\" ON \"public\".\"cr_timing\" (\"estado\");",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.70",
+    "label": "Execute cronograma migration statement 70",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 70",
+        "sql": "CREATE INDEX \"cr_timing_fecha_hora_inicio_idx_f5d1f8b0\" ON \"public\".\"cr_timing\" (\"fecha_hora_inicio\");",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "raw.rename-cronograma-y-operativas.71",
+    "label": "Execute cronograma migration statement 71",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "migration",
+        "name": "rename_cronograma_cr_y_agregar_operativas"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "execute statement 71",
+        "sql": "CREATE INDEX \"cr_timing_fecha_hora_fin_idx_d419ee2f\" ON \"public\".\"cr_timing\" (\"fecha_hora_fin\");",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  }
+]
