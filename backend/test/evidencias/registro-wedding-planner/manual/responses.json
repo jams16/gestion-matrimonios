@@ -1,0 +1,9 @@
+{
+  "solicitarRegistro": {
+    "status": 409,
+    "body": {
+      "mensaje": "El correo ya se encuentra registrado.",
+      "data": null
+    }
+  }
+}

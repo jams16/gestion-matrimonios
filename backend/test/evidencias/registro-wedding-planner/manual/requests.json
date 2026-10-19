@@ -1,20 +1,20 @@
 {
+  "escenario": "B",
   "solicitarRegistro": {
     "nombres": "Wedding Planner Prueba",
     "apellidoPaterno": "Manual",
     "apellidoMaterno": "Reproducible",
-    "correoElectronico": "manual-wp-1792440195590@example.test"
+    "correoElectronico": "weddingplanner.prueba@example.test"
   },
-  "confirmarRegistro": {
-    "token": "84****05"
-  },
+  "confirmarRegistro": null,
   "finalizarRegistro": {
-    "usuario": "manual-wp-1792440195590",
+    "ejecutada": false,
+    "usuario": "weddingplanner.prueba",
     "contrasena": "********",
     "nombreComercial": "Wedding Planner Prueba Manual SAC",
     "ruc": "",
     "telefono": "",
     "correoCorporativo": "",
-    "token": "84****05"
+    "token": null
   }
 }

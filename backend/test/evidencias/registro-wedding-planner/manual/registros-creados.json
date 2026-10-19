@@ -1,0 +1,49 @@
+{
+  "estadoInicial": {
+    "personasCoincidentes": [
+      {
+        "apellidoMaterno": "Reproducible",
+        "apellidoPaterno": "Manual",
+        "codigoUbigeo": null,
+        "correoElectronico": "weddingplanner.prueba@example.test",
+        "direccion": null,
+        "dni": null,
+        "esActivo": true,
+        "fechaCreacion": "2026-10-19T20:20:22.581349Z",
+        "fechaModificacion": "2026-10-19T20:20:22.576Z",
+        "idPersonaNatural": 1,
+        "nombres": "Wedding Planner Prueba",
+        "telefono": null
+      }
+    ],
+    "usuariosCoincidentes": [
+      {
+        "contrasenaHash": "oculto",
+        "correoVerificado": true,
+        "esActivo": true,
+        "fechaCreacion": "2026-10-19T20:20:22.678502Z",
+        "fechaModificacion": "2026-10-19T20:20:22.68Z",
+        "idEntidad": 1,
+        "idPersonaNatural": 1,
+        "idUsuario": 1,
+        "tipoUsuario": "PROJECT_MANAGER",
+        "ultimoAcceso": "2026-10-19T20:20:22.673Z",
+        "usuario": "weddingplanner.prueba"
+      }
+    ],
+    "registrosPendientesCoincidentes": [
+      {
+        "apellidoMaterno": "Reproducible",
+        "apellidoPaterno": "Manual",
+        "correoElectronico": "weddingplanner.prueba@example.test",
+        "fechaCreacion": "2026-10-19T20:20:22.536871Z",
+        "fechaExpiracion": "2026-10-20T20:20:22.528Z",
+        "fechaVerificacion": "2026-10-19T20:20:22.557Z",
+        "idRegistro": 1,
+        "nombres": "Wedding Planner Prueba",
+        "tokenHash": "5a40d009c7dadf01b583f048d0ac18292c9f99120f00b086f1660b34dbf3f722"
+      }
+    ]
+  },
+  "escenario": "B"
+}

@@ -4,7 +4,7 @@
     "nombres": "Wedding Planner Prueba",
     "apellidoPaterno": "Automatizada",
     "apellidoMaterno": "Integracion",
-    "correoElectronico": "wp-prueba-1792439385948@example.test"
+    "correoElectronico": "wp-prueba-1792441049531@example.test"
   },
   "entidad": {
     "idEntidad": 1000,
@@ -18,7 +18,7 @@
     "idUsuario": 1000,
     "idPersonaNatural": 1000,
     "idEntidad": 1000,
-    "usuario": "wp-prueba-1792439385948",
+    "usuario": "wp-prueba-1792441049531",
     "tipoUsuario": "PROJECT_MANAGER",
     "correoVerificado": true,
     "esActivo": true,
@@ -26,7 +26,7 @@
   },
   "registroPendiente": {
     "idRegistro": 1,
-    "fechaVerificacion": "2026-10-19T19:49:46.026Z",
+    "fechaVerificacion": "2026-10-19T20:17:29.608Z",
     "tokenHash": "oculto"
   }
 }

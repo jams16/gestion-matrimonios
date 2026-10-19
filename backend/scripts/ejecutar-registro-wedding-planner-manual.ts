@@ -76,18 +76,17 @@ const agregarPaso = (
 
 async function ejecutar() {
   const fecha = new Date();
-  const idEjecucion = `manual-wp-${fecha.getTime()}`;
+  const idEjecucion = 'manual-registro-wedding-planner';
   const carpetaEjecucion = join(
     process.cwd(),
     'test',
     'evidencias',
     'registro-wedding-planner',
     'manual',
-    fecha.toISOString().replace(/[:.]/g, '-'),
   );
   const pasos: Paso[] = [];
   const errores: string[] = [];
-  const correoPrueba = `${idEjecucion}@example.test`;
+  const correoPrueba = 'weddingplanner.prueba@example.test';
   const solicitud = {
     nombres: 'Wedding Planner Prueba',
     apellidoPaterno: 'Manual',
@@ -95,7 +94,7 @@ async function ejecutar() {
     correoElectronico: correoPrueba,
   };
   const finalizacion = {
-    usuario: idEjecucion,
+    usuario: 'weddingplanner.prueba',
     contrasena: 'PruebaManualSegura1!',
     nombreComercial: 'Wedding Planner Prueba Manual SAC',
     ruc: '',
@@ -115,6 +114,7 @@ async function ejecutar() {
   let correo: CorreoCapturadorManual | undefined;
   let respuestas: Record<string, unknown> = {};
   let registros: Record<string, unknown> = {};
+  let escenario: 'A' | 'B' | 'NO_DETERMINADO' = 'NO_DETERMINADO';
 
   try {
     correo = new CorreoCapturadorManual();
@@ -157,16 +157,29 @@ async function ejecutar() {
         String(registro.correoElectronico).toLowerCase() ===
         correoPrueba.toLowerCase(),
     );
+    const usuariosIniciales = (
+      (await orm.Usuario.all()) as Array<Record<string, unknown>>
+    ).filter(
+      (usuario) =>
+        String(usuario.usuario).toLowerCase() ===
+        finalizacion.usuario.toLowerCase(),
+    );
+    const existeCuenta =
+      personasIniciales.length > 0 || usuariosIniciales.length > 0;
     registros.estadoInicial = {
       personasCoincidentes: personasIniciales,
+      usuariosCoincidentes: usuariosIniciales.map((usuario) => ({
+        ...usuario,
+        contrasenaHash: 'oculto',
+      })),
       registrosPendientesCoincidentes: pendientesIniciales,
     };
-    if (personasIniciales.length || pendientesIniciales.length)
-      throw new Error('Los datos únicos de la ejecución ya existen en la BD.');
     agregarPaso(
       pasos,
       'Estado inicial',
-      'No existen registros con el correo de prueba.',
+      existeCuenta
+        ? 'Existe una cuenta previa con los datos fijos de prueba.'
+        : 'No existe aún una cuenta con los datos fijos de prueba.',
     );
 
     const respuestaSolicitud = await request(app.getHttpServer())
@@ -176,148 +189,181 @@ async function ejecutar() {
       status: respuestaSolicitud.status,
       body: respuestaSolicitud.body,
     };
-    if (respuestaSolicitud.status !== 200)
-      throw new Error(
-        `Solicitud de registro respondió HTTP ${respuestaSolicitud.status}.`,
+    if (existeCuenta) {
+      escenario = 'B';
+      const mensajeDuplicado = String(
+        respuestaSolicitud.body?.mensaje ?? '',
+      ).toLowerCase();
+      if (
+        respuestaSolicitud.status !== 409 ||
+        !mensajeDuplicado.includes('correo') ||
+        correo.mensajes.length !== 0
+      )
+        throw new Error(
+          'El registro duplicado no fue rechazado como se esperaba.',
+        );
+      agregarPaso(
+        pasos,
+        'ESCENARIO B: intento de registro duplicado correctamente rechazado',
+        'El backend rechazó el correo fijo ya registrado y no generó correo.',
+        respuestaSolicitud.status,
+      );
+    } else {
+      escenario = 'A';
+      if (respuestaSolicitud.status !== 200)
+        throw new Error(
+          `Solicitud de registro respondió HTTP ${respuestaSolicitud.status}.`,
+        );
+
+      const pendientesDespuesSolicitud = (
+        (await orm.RegistroPendiente.all()) as Array<Record<string, unknown>>
+      ).filter(
+        (registro) =>
+          String(registro.correoElectronico).toLowerCase() ===
+          correoPrueba.toLowerCase(),
+      );
+      registros.au_registro_pendiente = pendientesDespuesSolicitud.map(
+        (registro) => ({ ...registro, tokenHash: 'oculto' }),
+      );
+      if (pendientesDespuesSolicitud.length !== pendientesIniciales.length + 1)
+        throw new Error('No se creó un nuevo registro pendiente en la BD.');
+      const registroNuevo = pendientesDespuesSolicitud.at(-1);
+      if (!registroNuevo)
+        throw new Error('No se pudo identificar el registro pendiente creado.');
+      agregarPaso(
+        pasos,
+        'Registro de Wedding Planner',
+        'Se creó au_registro_pendiente en la BD.',
+        respuestaSolicitud.status,
       );
 
-    const pendientesDespuesSolicitud = (
-      (await orm.RegistroPendiente.all()) as Array<Record<string, unknown>>
-    ).filter(
-      (registro) =>
-        String(registro.correoElectronico).toLowerCase() ===
-        correoPrueba.toLowerCase(),
-    );
-    registros.au_registro_pendiente = pendientesDespuesSolicitud.map(
-      (registro) => ({ ...registro, tokenHash: 'oculto' }),
-    );
-    if (pendientesDespuesSolicitud.length !== 1)
-      throw new Error('No se creó exactamente un registro pendiente en la BD.');
-    agregarPaso(
-      pasos,
-      'Registro de Wedding Planner',
-      'Se creó au_registro_pendiente en la BD.',
-      respuestaSolicitud.status,
-    );
-
-    const mensaje = correo.mensajes[0];
-    if (!mensaje || mensaje.destinatario !== correoPrueba)
-      throw new Error('No se capturó el correo de verificación esperado.');
-    if (!/^\d{6}$/.test(mensaje.codigo))
-      throw new Error('El código capturado no tiene seis dígitos.');
-    await guardarJson(carpetaEjecucion, 'correo-verificacion.json', {
-      destinatario: mensaje.destinatario,
-      asunto: mensaje.asunto,
-      contieneCodigo: mensaje.contenido.includes(mensaje.codigo),
-      codigoEnmascarado: ocultar(mensaje.codigo),
-    });
-    agregarPaso(
-      pasos,
-      'Correo de verificación generado',
-      'Se capturó un único correo con código de seis dígitos.',
-    );
-
-    const respuestaConfirmacion = await request(app.getHttpServer())
-      .post('/api/v1/auth/registro/confirmar')
-      .send({ token: mensaje.codigo });
-    respuestas.confirmarRegistro = {
-      status: respuestaConfirmacion.status,
-      body: respuestaConfirmacion.body,
-    };
-    if (respuestaConfirmacion.status !== 200)
-      throw new Error(
-        `Confirmación de registro respondió HTTP ${respuestaConfirmacion.status}.`,
-      );
-    const pendienteVerificado = (
-      (await orm.RegistroPendiente.all()) as Array<Record<string, unknown>>
-    ).find(
-      (registro) =>
-        String(registro.correoElectronico).toLowerCase() ===
-        correoPrueba.toLowerCase(),
-    );
-    if (!pendienteVerificado?.fechaVerificacion)
-      throw new Error(
-        'La BD no registra fecha_verificacion para el código usado.',
-      );
-    registros.au_registro_pendiente_verificado = {
-      ...pendienteVerificado,
-      tokenHash: 'oculto',
-    };
-    agregarPaso(
-      pasos,
-      'Verificación de cuenta',
-      'El registro pendiente quedó confirmado en la BD.',
-      respuestaConfirmacion.status,
-    );
-
-    const respuestaFinalizar = await request(app.getHttpServer())
-      .post('/api/v1/auth/registro/finalizar')
-      .send({ ...finalizacion, token: mensaje.codigo });
-    respuestas.finalizarRegistro = {
-      status: respuestaFinalizar.status,
-      body: respuestaFinalizar.body,
-    };
-    if (respuestaFinalizar.status !== 201)
-      throw new Error(
-        `Finalización de registro respondió HTTP ${respuestaFinalizar.status}.`,
+      const mensaje = correo.mensajes[0];
+      if (!mensaje || mensaje.destinatario !== correoPrueba)
+        throw new Error('No se capturó el correo de verificación esperado.');
+      if (!/^\d{6}$/.test(mensaje.codigo))
+        throw new Error('El código capturado no tiene seis dígitos.');
+      await guardarJson(carpetaEjecucion, 'correo-verificacion.json', {
+        destinatario: mensaje.destinatario,
+        asunto: mensaje.asunto,
+        contieneCodigo: mensaje.contenido.includes(mensaje.codigo),
+        codigoEnmascarado: ocultar(mensaje.codigo),
+      });
+      agregarPaso(
+        pasos,
+        'Correo de verificación generado',
+        'Se capturó un único correo con código de seis dígitos.',
       );
 
-    const resultado = respuestaFinalizar.body?.data as {
-      idPersonaNatural?: number;
-      idEntidad?: number;
-      idUsuario?: number;
-    };
-    if (
-      !resultado?.idPersonaNatural ||
-      !resultado.idEntidad ||
-      !resultado.idUsuario
-    )
-      throw new Error(
-        'La respuesta de finalización no contiene los IDs creados.',
+      const respuestaConfirmacion = await request(app.getHttpServer())
+        .post('/api/v1/auth/registro/confirmar')
+        .send({ token: mensaje.codigo });
+      respuestas.confirmarRegistro = {
+        status: respuestaConfirmacion.status,
+        body: respuestaConfirmacion.body,
+      };
+      if (respuestaConfirmacion.status !== 200)
+        throw new Error(
+          `Confirmación de registro respondió HTTP ${respuestaConfirmacion.status}.`,
+        );
+      const pendienteVerificado = (
+        (await orm.RegistroPendiente.all()) as Array<Record<string, unknown>>
+      ).find((registro) => registro.idRegistro === registroNuevo.idRegistro);
+      if (!pendienteVerificado?.fechaVerificacion)
+        throw new Error(
+          'La BD no registra fecha_verificacion para el código usado.',
+        );
+      registros.au_registro_pendiente_verificado = {
+        ...pendienteVerificado,
+        tokenHash: 'oculto',
+      };
+      agregarPaso(
+        pasos,
+        'Verificación de cuenta',
+        'El registro pendiente quedó confirmado en la BD.',
+        respuestaConfirmacion.status,
       );
-    const [persona, entidad, usuario] = await Promise.all([
-      orm.PersonaNatural.first({
-        idPersonaNatural: resultado.idPersonaNatural,
-      }),
-      orm.Entidad.first({ idEntidad: resultado.idEntidad }),
-      orm.Usuario.first({ idUsuario: resultado.idUsuario }),
-    ]);
-    registros.in_persona_natural = persona;
-    registros.in_entidad = entidad;
-    registros.au_usuario = usuario
-      ? { ...usuario, contrasenaHash: 'oculto' }
-      : null;
-    if (
-      !persona ||
-      !entidad ||
-      !usuario ||
-      usuario.tipoUsuario !== 'PROJECT_MANAGER' ||
-      !usuario.correoVerificado ||
-      !usuario.esActivo ||
-      entidad.tipoEntidad !== 'PRIVADA' ||
-      usuario.idPersonaNatural !== resultado.idPersonaNatural ||
-      usuario.idEntidad !== resultado.idEntidad
-    )
-      throw new Error(
-        'Los registros finales no cumplen el perfil Wedding Planner esperado.',
+
+      const respuestaFinalizar = await request(app.getHttpServer())
+        .post('/api/v1/auth/registro/finalizar')
+        .send({ ...finalizacion, token: mensaje.codigo });
+      respuestas.finalizarRegistro = {
+        status: respuestaFinalizar.status,
+        body: respuestaFinalizar.body,
+      };
+      if (respuestaFinalizar.status !== 201)
+        throw new Error(
+          `Finalización de registro respondió HTTP ${respuestaFinalizar.status}.`,
+        );
+
+      const resultado = respuestaFinalizar.body?.data as {
+        idPersonaNatural?: number;
+        idEntidad?: number;
+        idUsuario?: number;
+      };
+      if (
+        !resultado?.idPersonaNatural ||
+        !resultado.idEntidad ||
+        !resultado.idUsuario
+      )
+        throw new Error(
+          'La respuesta de finalización no contiene los IDs creados.',
+        );
+      const [persona, entidad, usuario] = await Promise.all([
+        orm.PersonaNatural.first({
+          idPersonaNatural: resultado.idPersonaNatural,
+        }),
+        orm.Entidad.first({ idEntidad: resultado.idEntidad }),
+        orm.Usuario.first({ idUsuario: resultado.idUsuario }),
+      ]);
+      registros.in_persona_natural = persona;
+      registros.in_entidad = entidad;
+      registros.au_usuario = usuario
+        ? { ...usuario, contrasenaHash: 'oculto' }
+        : null;
+      if (
+        !persona ||
+        !entidad ||
+        !usuario ||
+        usuario.tipoUsuario !== 'PROJECT_MANAGER' ||
+        !usuario.correoVerificado ||
+        !usuario.esActivo ||
+        entidad.tipoEntidad !== 'PRIVADA' ||
+        usuario.idPersonaNatural !== resultado.idPersonaNatural ||
+        usuario.idEntidad !== resultado.idEntidad
+      )
+        throw new Error(
+          'Los registros finales no cumplen el perfil Wedding Planner esperado.',
+        );
+      agregarPaso(
+        pasos,
+        'ESCENARIO A: creación nueva y verificación',
+        `Se crearon Persona ${resultado.idPersonaNatural}, Entidad ${resultado.idEntidad} y Usuario ${resultado.idUsuario} PROJECT_MANAGER verificado.`,
+        respuestaFinalizar.status,
       );
-    agregarPaso(
-      pasos,
-      'Persistencia y estado final',
-      `Se crearon Persona ${resultado.idPersonaNatural}, Entidad ${resultado.idEntidad} y Usuario ${resultado.idUsuario} PROJECT_MANAGER verificado.`,
-      respuestaFinalizar.status,
-    );
+    }
   } catch (error) {
     const detalle = error instanceof Error ? error.message : String(error);
     errores.push(detalle);
     pasos.push({ nombre: 'Ejecución', estado: 'FAIL', detalle });
   } finally {
+    registros.escenario = escenario;
+    if (!correo?.mensajes[0]) {
+      await guardarJson(carpetaEjecucion, 'correo-verificacion.json', {
+        generado: false,
+        motivo:
+          escenario === 'B'
+            ? 'El correo fijo ya estaba registrado; el backend rechazó el duplicado antes de enviar correo.'
+            : 'No se alcanzó la etapa de generación de correo.',
+      });
+    }
     await guardarJson(carpetaEjecucion, 'requests.json', {
+      escenario,
       solicitarRegistro: solicitud,
       confirmarRegistro: correo?.mensajes[0]
         ? { token: ocultar(correo.mensajes[0].codigo) }
         : null,
       finalizarRegistro: {
+        ejecutada: escenario === 'A',
         ...finalizacion,
         contrasena: '********',
         token: correo?.mensajes[0] ? ocultar(correo.mensajes[0].codigo) : null,
@@ -332,6 +378,7 @@ async function ejecutar() {
       '',
       `- ID de ejecución: \`${idEjecucion}\``,
       `- Fecha/hora: ${fecha.toISOString()}`,
+      `- Escenario: ${escenario === 'A' ? 'ESCENARIO A: creación nueva y verificación' : escenario === 'B' ? 'ESCENARIO B: intento de registro duplicado correctamente rechazado' : 'NO DETERMINADO'}`,
       '- Objetivo: registrar, verificar y persistir una cuenta Wedding Planner en la BD configurada.',
       '- Comando: `pnpm.cmd test:manual:registro-wedding-planner`',
       `- Reportes JSON: datos-prueba.json, requests.json, responses.json, registros-creados.json, correo-verificacion.json`,

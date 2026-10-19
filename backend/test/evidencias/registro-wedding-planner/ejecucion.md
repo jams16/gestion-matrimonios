@@ -4,7 +4,7 @@
 - Tipo: integración funcional HTTP con repositorio y correo de prueba aislados.
 - Entorno: Nest TestingModule, `NODE_ENV=test`, sin conexión SMTP ni escritura en la base de desarrollo.
 - Comando: `pnpm.cmd test:registro-wedding-planner`.
-- Identificador: `wp-prueba-1792439385948`.
+- Identificador: `wp-prueba-1792441049531`.
 
 | Paso | Endpoint | Input | Status | Comprobación | Resultado |
 | --- | --- | --- | --- | --- | --- |
