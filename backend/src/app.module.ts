@@ -8,6 +8,7 @@ import { UsuariosModule } from './modules/usuarios/usuarios.module';
 import { ProyectosModule } from './modules/proyectos/proyectos.module';
 import { CronogramaModule } from './modules/cronograma/cronograma.module';
 import { NotificacionesModule } from './modules/notificaciones/notificaciones.module';
+import { InvitadosModule } from './modules/invitados/invitados.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { NotificacionesModule } from './modules/notificaciones/notificaciones.mo
     ProyectosModule,
     CronogramaModule,
     NotificacionesModule,
+    InvitadosModule,
   ],
 })
 export class AppModule {}
