@@ -18,6 +18,22 @@ import {
 } from '../../../domain/repositories/cronograma-crud.repository';
 
 type ClienteCronograma = typeof PrismaService.prototype.client;
+type FilaSql = Record<string, unknown>;
+type ClientePlantillasSql = {
+  connect(): Promise<void>;
+  end(): Promise<void>;
+  query(sql: string): Promise<{ rows: FilaSql[] }>;
+};
+type ConstructorClientePlantillasSql = new (opciones: {
+  connectionString: string | undefined;
+}) => ClientePlantillasSql;
+
+// `pg` ya forma parte de las dependencias del backend. Se usa solo para leer
+// plantillas con JSON escalar legado, que el codec JSON de Prisma 8 no decodifica.
+const pg = require('pg') as {
+  Client: ConstructorClientePlantillasSql;
+  types: { setTypeParser(oid: number, parser: (valor: string) => string): void };
+};
 
 @Injectable()
 export class PrismaCronogramaRepository
@@ -105,75 +121,72 @@ export class PrismaCronogramaRepository
   }
 
   async obtenerPlantillasActivas(): Promise<PlantillasCronograma> {
-    const [
+    const {
       hitos,
       actividades,
       dependencias,
       timings,
       actividadTipos,
       timingTipos,
-    ] = await Promise.all([
-      this.db.orm.public.PlantillaHito.all(),
-      this.db.orm.public.PlantillaActividad.all(),
-      this.db.orm.public.PlantillaDependencia.all(),
-      this.db.orm.public.PlantillaTiming.all(),
-      this.db.orm.public.PlantillaActividadTipoCeremonia.all(),
-      this.db.orm.public.PlantillaTimingTipoCeremonia.all(),
-    ]);
+    } = await this.leerPlantillasCompatibles();
 
     return {
-      hitos: (hitos as Array<Record<string, unknown>>)
+      hitos: hitos
         .filter((item) => item.activo !== false)
         .map((item) => ({
-          idPlantillaHito: Number(item.idPlantillaHito),
+          idPlantillaHito: Number(item.id_plantilla_hito),
           nombre: String(item.nombre),
-          criterioAceptacion: String(item.criterioAceptacion),
-          tipoTemporal: item.tipoTemporal as TipoTemporalCronograma,
-          diasAntesBase: this.aNumeroONulo(item.diasAntesBase),
-          diasAntesMinimo: this.aNumeroONulo(item.diasAntesMinimo),
+          criterioAceptacion: String(item.criterio_aceptacion),
+          tipoTemporal: item.tipo_temporal as TipoTemporalCronograma,
+          diasAntesBase: this.aNumeroONulo(item.dias_antes_base),
+          diasAntesMinimo: this.aNumeroONulo(item.dias_antes_minimo),
           orden: Number(item.orden),
         })),
-      actividades: (actividades as Array<Record<string, unknown>>)
+      actividades: actividades
         .filter((item) => item.activo !== false)
         .map((item) => ({
-          idPlantillaActividad: Number(item.idPlantillaActividad),
-          idPlantillaHito: this.aNumeroONulo(item.idPlantillaHito),
+          idPlantillaActividad: Number(item.id_plantilla_actividad),
+          idPlantillaHito: this.aNumeroONulo(item.id_plantilla_hito),
           nombre: String(item.nombre),
-          listaVerificacion: item.listaVerificacion ?? null,
-          responsableSugerido: this.aTextoONulo(item.responsableSugerido),
+          listaVerificacion: this.aJsonONulo(item.lista_verificacion),
+          responsableSugerido: this.aTextoONulo(item.responsable_sugerido),
           entregable: this.aTextoONulo(item.entregable),
-          tipoTemporal: item.tipoTemporal as TipoTemporalCronograma,
-          diasAntesBase: this.aNumeroONulo(item.diasAntesBase),
-          diasAntesMinimo: this.aNumeroONulo(item.diasAntesMinimo),
-          duracionEstimadaDias: this.aNumeroONulo(item.duracionEstimadaDias),
+          tipoTemporal: item.tipo_temporal as TipoTemporalCronograma,
+          diasAntesBase: this.aNumeroONulo(item.dias_antes_base),
+          diasAntesMinimo: this.aNumeroONulo(item.dias_antes_minimo),
+          duracionEstimadaDias: this.aNumeroONulo(item.duracion_estimada_dias),
           prioridad: this.aTextoONulo(item.prioridad),
           orden: Number(item.orden),
         })),
-      dependencias: (dependencias as Array<Record<string, unknown>>).map(
-        (item) => ({
-          idActividadPredecesora: Number(item.idActividadPredecesora),
-          idActividadSucesora: Number(item.idActividadSucesora),
+      dependencias: dependencias.map((item) => ({
+          idActividadPredecesora: Number(item.id_actividad_predecesora),
+          idActividadSucesora: Number(item.id_actividad_sucesora),
           tipoDependencia: 'FINISH_TO_START',
-          diasDesfase: Number(item.diasDesfase ?? 0),
-        }),
-      ),
-      timings: (timings as Array<Record<string, unknown>>)
+          diasDesfase: Number(item.dias_desfase ?? 0),
+        })),
+      timings: timings
         .filter((item) => item.activo !== false)
         .map((item) => ({
-          idPlantillaTiming: Number(item.idPlantillaTiming),
-          horaInicio: String(item.horaInicio),
-          duracionMinutos: Number(item.duracionMinutos),
+          idPlantillaTiming: Number(item.id_plantilla_timing),
+          horaInicio: String(item.hora_inicio),
+          duracionMinutos: Number(item.duracion_minutos),
           actividad: String(item.actividad),
-          responsableSugerido: this.aTextoONulo(item.responsableSugerido),
-          listaVerificacion: item.listaVerificacion ?? null,
+          responsableSugerido: this.aTextoONulo(item.responsable_sugerido),
+          listaVerificacion: this.aJsonONulo(item.lista_verificacion),
           orden: Number(item.orden),
         })),
       actividadesPorTipoCeremonia: this.agruparTiposCeremonia(
-        actividadTipos as Array<Record<string, unknown>>,
+        actividadTipos.map((item) => ({
+          idPlantillaActividad: item.id_plantilla_actividad,
+          idTipoCeremonia: item.id_tipo_ceremonia,
+        })),
         'idPlantillaActividad',
       ),
       timingsPorTipoCeremonia: this.agruparTiposCeremonia(
-        timingTipos as Array<Record<string, unknown>>,
+        timingTipos.map((item) => ({
+          idPlantillaTiming: item.id_plantilla_timing,
+          idTipoCeremonia: item.id_tipo_ceremonia,
+        })),
         'idPlantillaTiming',
       ),
     };
@@ -430,6 +443,48 @@ export class PrismaCronogramaRepository
     }, new Map<number, number[]>());
   }
 
+  private async leerPlantillasCompatibles(): Promise<{
+    hitos: FilaSql[];
+    actividades: FilaSql[];
+    dependencias: FilaSql[];
+    timings: FilaSql[];
+    actividadTipos: FilaSql[];
+    timingTipos: FilaSql[];
+  }> {
+    pg.types.setTypeParser(114, (valor) => valor);
+    pg.types.setTypeParser(3802, (valor) => valor);
+    const cliente = new pg.Client({ connectionString: process.env.DATABASE_URL });
+    await cliente.connect();
+    try {
+      // Un cliente pg procesa una consulta por vez; ejecutar en secuencia evita
+      // advertencias y mantiene esta lectura compatible con pg 9.
+      const hitos = await cliente.query('SELECT * FROM public.cr_plantilla_hito');
+      const actividades = await cliente.query(
+        'SELECT * FROM public.cr_plantilla_actividad',
+      );
+      const dependencias = await cliente.query(
+        'SELECT * FROM public.cr_plantilla_dependencia',
+      );
+      const timings = await cliente.query('SELECT * FROM public.cr_plantilla_timing');
+      const actividadTipos = await cliente.query(
+        'SELECT * FROM public.cr_plantilla_actividad_tipo_ceremonia',
+      );
+      const timingTipos = await cliente.query(
+        'SELECT * FROM public.cr_plantilla_timing_tipo_ceremonia',
+      );
+      return {
+        hitos: hitos.rows,
+        actividades: actividades.rows,
+        dependencias: dependencias.rows,
+        timings: timings.rows,
+        actividadTipos: actividadTipos.rows,
+        timingTipos: timingTipos.rows,
+      };
+    } finally {
+      await cliente.end();
+    }
+  }
+
   private aFecha(valor: unknown): Date | null {
     if (!valor) return null;
     if (valor instanceof Date) return new Date(valor);
@@ -450,6 +505,16 @@ export class PrismaCronogramaRepository
 
   private aTextoONulo(valor: unknown): string | null {
     return valor === null || valor === undefined ? null : String(valor);
+  }
+
+  private aJsonONulo(valor: unknown): unknown {
+    if (valor === null || valor === undefined) return null;
+    if (typeof valor !== 'string') return valor;
+    try {
+      return JSON.parse(valor);
+    } catch {
+      return valor;
+    }
   }
 
   private perteneceYCoincide(

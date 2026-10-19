@@ -3,7 +3,7 @@
 ## 1. Identificación de la prueba
 - Nombre: generación automática de cronograma desde plantillas.
 - ID de ejecución: `automatico-generar-cronograma`.
-- Fecha/hora: 2026-10-19T21:16:31.368Z.
+- Fecha/hora: 2026-10-19T21:45:26.638Z.
 - Tipo: unitaria/integración.
 - Entorno: repositorio en memoria aislado.
 - Objetivo: validar cálculo, filtrado y consistencia de generación.

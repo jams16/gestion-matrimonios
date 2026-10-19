@@ -1,24 +1,36 @@
 import 'dotenv/config';
 
-import { Client } from 'pg';
-
 import datosBase from './datos-base/catalogos-y-plantillas-base.json';
 import ubigeosBase from './datos-base/ubigeos-base.json';
 
 type Fila = Record<string, unknown>;
 type Resumen = { existentes: number; restaurados: number; errores: string[] };
 type Datos = Record<string, Fila[]>;
+type ResultadoSql = { rows: Fila[]; rowCount: number | null };
+type ClienteSql = {
+  connect(): Promise<void>;
+  end(): Promise<void>;
+  query(sql: string, valores?: unknown[]): Promise<ResultadoSql>;
+};
+type ConstructorClienteSql = new (opciones: {
+  connectionString: string | undefined;
+}) => ClienteSql;
+
+// `pg` es una dependencia de ejecución del backend, pero no expone tipos en
+// este repositorio. Esta interfaz evita añadir una dependencia solo para este
+// script y mantiene las consultas parametrizadas.
+const { Client } = require('pg') as { Client: ConstructorClienteSql };
 
 const datos = datosBase as Datos;
 const vacio = (): Resumen => ({ existentes: 0, restaurados: 0, errores: [] });
 const errorTexto = (error: unknown) => error instanceof Error ? error.message : String(error);
 
-async function contar(c: Client, tabla: string) {
+async function contar(c: ClienteSql, tabla: string) {
   return Number((await c.query(`SELECT count(*)::int AS total FROM public.${tabla}`)).rows[0].total);
 }
 
 async function insertarConId(
-  c: Client, conId: string, sinId: string, valoresConId: unknown[], valoresSinId: unknown[],
+  c: ClienteSql, conId: string, sinId: string, valoresConId: unknown[], valoresSinId: unknown[],
 ) {
   try { await c.query(conId, valoresConId); }
   catch (error) {
@@ -27,7 +39,7 @@ async function insertarConId(
   }
 }
 
-async function ubigeos(c: Client, r: Resumen) {
+async function ubigeos(c: ClienteSql, r: Resumen) {
   r.existentes = await contar(c, 'in_ubigeo');
   const ids = new Set((await c.query('SELECT id_ubigeo FROM public.in_ubigeo')).rows.map((x) => x.id_ubigeo));
   for (const x of ubigeosBase) {
@@ -40,11 +52,11 @@ async function ubigeos(c: Client, r: Resumen) {
 }
 
 async function catalogo(
-  c: Client, r: Resumen, tabla: 'gp_tipo_ceremonia' | 'gp_fase_proyecto', filas: Fila[],
+  c: ClienteSql, r: Resumen, tabla: 'gp_tipo_ceremonia' | 'gp_fase_proyecto', filas: Fila[],
 ) {
   const columna = tabla === 'gp_tipo_ceremonia' ? 'id_tipo_ceremonia' : 'id_fase_proyecto';
   r.existentes = await contar(c, tabla);
-  const actuales = new Map<string, number>((await c.query(`SELECT ${columna}, codigo FROM public.${tabla}`)).rows.map((x) => [x.codigo, Number(x[columna])]));
+  const actuales = new Map<string, number>((await c.query(`SELECT ${columna}, codigo FROM public.${tabla}`)).rows.map((x) => [String(x.codigo), Number(x[columna])]));
   const mapeo = new Map<number, number>();
   for (const x of filas) {
     const codigo = String(x.codigo); let id = actuales.get(codigo);
@@ -65,9 +77,9 @@ async function catalogo(
   return mapeo;
 }
 
-async function hitos(c: Client, r: Resumen) {
+async function hitos(c: ClienteSql, r: Resumen) {
   r.existentes = await contar(c, 'cr_plantilla_hito');
-  const actuales = new Map<string, number>((await c.query('SELECT id_plantilla_hito, codigo FROM public.cr_plantilla_hito')).rows.map((x) => [x.codigo, Number(x.id_plantilla_hito)]));
+  const actuales = new Map<string, number>((await c.query('SELECT id_plantilla_hito, codigo FROM public.cr_plantilla_hito')).rows.map((x) => [String(x.codigo), Number(x.id_plantilla_hito)]));
   const mapeo = new Map<number, number>();
   for (const x of datos.cr_plantilla_hito) {
     const codigo = String(x.codigo); let id = actuales.get(codigo);
@@ -84,9 +96,9 @@ async function hitos(c: Client, r: Resumen) {
   return mapeo;
 }
 
-async function actividades(c: Client, r: Resumen, hitosReales: Map<number, number>, fasesReales: Map<number, number>) {
+async function actividades(c: ClienteSql, r: Resumen, hitosReales: Map<number, number>, fasesReales: Map<number, number>) {
   r.existentes = await contar(c, 'cr_plantilla_actividad');
-  const actuales = new Map<string, number>((await c.query('SELECT id_plantilla_actividad, codigo FROM public.cr_plantilla_actividad')).rows.map((x) => [x.codigo, Number(x.id_plantilla_actividad)]));
+  const actuales = new Map<string, number>((await c.query('SELECT id_plantilla_actividad, codigo FROM public.cr_plantilla_actividad')).rows.map((x) => [String(x.codigo), Number(x.id_plantilla_actividad)]));
   const mapeo = new Map<number, number>();
   for (const x of datos.cr_plantilla_actividad) {
     const codigo = String(x.codigo); let id = actuales.get(codigo);
@@ -103,9 +115,9 @@ async function actividades(c: Client, r: Resumen, hitosReales: Map<number, numbe
   return mapeo;
 }
 
-async function timings(c: Client, r: Resumen) {
+async function timings(c: ClienteSql, r: Resumen) {
   r.existentes = await contar(c, 'cr_plantilla_timing');
-  const actuales = new Map<string, number>((await c.query('SELECT id_plantilla_timing, codigo FROM public.cr_plantilla_timing')).rows.map((x) => [x.codigo, Number(x.id_plantilla_timing)]));
+  const actuales = new Map<string, number>((await c.query('SELECT id_plantilla_timing, codigo FROM public.cr_plantilla_timing')).rows.map((x) => [String(x.codigo), Number(x.id_plantilla_timing)]));
   const mapeo = new Map<number, number>();
   for (const x of datos.cr_plantilla_timing) {
     const codigo = String(x.codigo); let id = actuales.get(codigo);
@@ -122,7 +134,7 @@ async function timings(c: Client, r: Resumen) {
   return mapeo;
 }
 
-async function relaciones(c: Client, r: Resumen, tabla: 'cr_plantilla_actividad_tipo_ceremonia' | 'cr_plantilla_timing_tipo_ceremonia', filas: Fila[], principal: Map<number, number>, tipos: Map<number, number>) {
+async function relaciones(c: ClienteSql, r: Resumen, tabla: 'cr_plantilla_actividad_tipo_ceremonia' | 'cr_plantilla_timing_tipo_ceremonia', filas: Fila[], principal: Map<number, number>, tipos: Map<number, number>) {
   const col = tabla.includes('actividad') ? 'id_plantilla_actividad' : 'id_plantilla_timing';
   const id = tabla.includes('actividad') ? 'id_plantilla_actividad_tipo_ceremonia' : 'id_plantilla_timing_tipo_ceremonia';
   r.existentes = await contar(c, tabla);
@@ -137,7 +149,7 @@ async function relaciones(c: Client, r: Resumen, tabla: 'cr_plantilla_actividad_
   }
 }
 
-async function dependencias(c: Client, r: Resumen, actividadesReales: Map<number, number>) {
+async function dependencias(c: ClienteSql, r: Resumen, actividadesReales: Map<number, number>) {
   r.existentes = await contar(c, 'cr_plantilla_dependencia');
   for (const x of datos.cr_plantilla_dependencia) {
     const pre = actividadesReales.get(Number(x.id_actividad_predecesora)); const suc = actividadesReales.get(Number(x.id_actividad_sucesora));
@@ -150,7 +162,7 @@ async function dependencias(c: Client, r: Resumen, actividadesReales: Map<number
   }
 }
 
-async function secuencias(c: Client) {
+async function secuencias(c: ClienteSql) {
   const pares = [['gp_tipo_ceremonia', 'id_tipo_ceremonia'], ['gp_fase_proyecto', 'id_fase_proyecto'], ['cr_plantilla_hito', 'id_plantilla_hito'], ['cr_plantilla_actividad', 'id_plantilla_actividad'], ['cr_plantilla_actividad_tipo_ceremonia', 'id_plantilla_actividad_tipo_ceremonia'], ['cr_plantilla_dependencia', 'id_plantilla_dependencia'], ['cr_plantilla_timing', 'id_plantilla_timing'], ['cr_plantilla_timing_tipo_ceremonia', 'id_plantilla_timing_tipo_ceremonia']];
   for (const [tabla, columna] of pares) await c.query(`SELECT setval(pg_get_serial_sequence('public.${tabla}', '${columna}'), COALESCE((SELECT MAX(${columna}) FROM public.${tabla}), 1), true)`);
 }

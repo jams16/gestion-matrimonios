@@ -1,4 +1,28 @@
 {
-  "estado": "PENDIENTE",
-  "nota": "Se sobrescribirá por pnpm.cmd test:manual:creacion-matrimonio -- --tipo=<TIPO>."
+  "idEjecucion": "manual-creacion-matrimonio-RELIGIOSO_CIVIL",
+  "fechaHora": "2026-10-19T21:46:07.186Z",
+  "idWeddingPlanner": 1,
+  "tipoCeremonia": "RELIGIOSO_CIVIL",
+  "datos": {
+    "pareja1": {
+      "nombres": "Pareja RELIGIOSO_CIVIL Uno",
+      "apellidoPaterno": "Manual",
+      "dni": "99030001",
+      "usuario": "pareja.religioso_civil.uno",
+      "contrasena": "********"
+    },
+    "pareja2": {
+      "nombres": "Pareja RELIGIOSO_CIVIL Dos",
+      "apellidoPaterno": "Manual",
+      "dni": "99030002",
+      "usuario": "pareja.religioso_civil.dos",
+      "contrasena": "********"
+    },
+    "fechaMatrimonio": "2027-01-20",
+    "cantidadInvitados": 120,
+    "presupuesto": 25000,
+    "idTipoCeremonia": 4,
+    "objetivos": "Validar creación manual reproducible.",
+    "necesidades": "Cronograma generado desde plantillas activas."
+  }
 }

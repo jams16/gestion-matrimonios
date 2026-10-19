@@ -13,7 +13,7 @@
 
 | ID | Caso | Tipo | Resultado esperado | Resultado obtenido | Estado |
 |---|---|---|---|---|---|
-| CP-MAN-01 | Ejecución | FUNCIONAL | Según regla | No existe el catálogo activo RELIGIOSO_CIVIL. | FAIL |
+| CP-MAN-01 | Ejecución | FUNCIONAL | Según regla | Failed to decode column cr_plantilla_actividad.lista_verificacion with codec 'pg/json@1': Unexpected token 'F', "Fecha defi"... is not valid JSON | FAIL |
 
 ## Evidencias principales
 

@@ -1,6 +1,6 @@
 {
   "estado_inicial": {
-    "correo": "wp-prueba-1792444295667@example.test",
+    "correo": "wp-prueba-1792446243939@example.test",
     "personas": 0,
     "usuarios": 0,
     "pendientes": 0
@@ -9,13 +9,13 @@
     "nombres": "Wedding Planner Prueba",
     "apellidoPaterno": "Automatizada",
     "apellidoMaterno": "Integracion",
-    "correoElectronico": "wp-prueba-1792444295667@example.test"
+    "correoElectronico": "wp-prueba-1792446243939@example.test"
   },
   "confirmar": {
     "token": "enmascarado"
   },
   "finalizar": {
-    "usuario": "wp-prueba-1792444295667",
+    "usuario": "wp-prueba-1792446243939",
     "contrasena": "********"
   }
 }

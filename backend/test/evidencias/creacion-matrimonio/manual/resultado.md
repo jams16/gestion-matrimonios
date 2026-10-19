@@ -3,7 +3,7 @@
 ## 1. Identificación de la prueba
 - Nombre: creación manual de matrimonio (RELIGIOSO_CIVIL).
 - ID de ejecución: `manual-creacion-matrimonio-RELIGIOSO_CIVIL`.
-- Fecha/hora: 2026-10-19T21:18:33.105Z.
+- Fecha/hora: 2026-10-19T21:46:07.439Z.
 - Tipo: funcional.
 - Entorno: configuración normal del backend y base de datos configurada.
 - Objetivo: crear y verificar un matrimonio mediante el caso de uso real.
@@ -18,7 +18,7 @@
 
 | Acción | Método/servicio | Esperado | Obtenido | HTTP | Comprobación BD | Evidencia | Estado |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| Ejecución | GuardarOnboardingMatrimonioUseCase | Según regla | No existe el catálogo activo RELIGIOSO_CIVIL. | N/A | registros-creados.json | JSON de ejecución | FAIL |
+| Ejecución | GuardarOnboardingMatrimonioUseCase | Según regla | Failed to decode column cr_plantilla_actividad.lista_verificacion with codec 'pg/json@1': Unexpected token 'F', "Fecha defi"... is not valid JSON | N/A | registros-creados.json | JSON de ejecución | FAIL |
 
 ## 5. Registros creados/modificados
 | Modelo/tabla | ID | Acción | Campos relevantes | Evidencia |
@@ -29,7 +29,7 @@
 - Fase INICIO, estado activo, ceremonia, dependencias, DNI, fecha mínima y Wedding Planner+fecha.
 
 ## 7. Incidencias o warnings
-- No existe el catálogo activo RELIGIOSO_CIVIL.
+- Failed to decode column cr_plantilla_actividad.lista_verificacion with codec 'pg/json@1': Unexpected token 'F', "Fecha defi"... is not valid JSON
 
 ## 8. Reproducción
 - Comando: `pnpm.cmd test:manual:creacion-matrimonio -- --tipo=RELIGIOSO_CIVIL`.

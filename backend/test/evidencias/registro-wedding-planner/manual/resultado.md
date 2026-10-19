@@ -3,7 +3,7 @@
 ## 1. Identificación de la prueba
 - Nombre: registro manual Wedding Planner.
 - ID de ejecución: `manual-registro-wedding-planner`.
-- Fecha/hora: 2026-10-19T21:15:14.532Z.
+- Fecha/hora: 2026-10-19T21:44:31.651Z.
 - Tipo: funcional.
 - Entorno: configuración normal del backend y BD configurada.
 - Objetivo: registrar, verificar y persistir una cuenta Wedding Planner.

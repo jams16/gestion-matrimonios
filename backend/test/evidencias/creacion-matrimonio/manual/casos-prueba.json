@@ -1,11 +1,16 @@
 [
   {
-    "id": "CP-MAN-HIST-01",
-    "nombre": "Runner manual pendiente de ejecución normalizada",
+    "id": "CP-MAN-01",
+    "nombre": "Crear matrimonio válido",
     "tipo": "FUNCIONAL",
-    "objetivo": "Crear un matrimonio y comprobar sus relaciones reales.",
-    "resultado_esperado": "Evidencia generada por el runner manual.",
-    "resultado_obtenido": "No ejecutado durante la estandarización.",
-    "estado": "PENDIENTE"
+    "objetivo": "Crear o reutilizar de forma controlada un matrimonio del tipo seleccionado.",
+    "resultado_esperado": "Proyecto activo en fase INICIO y cronograma consistente."
+  },
+  {
+    "id": "CP-MAN-02",
+    "nombre": "Validaciones de negocio",
+    "tipo": "FUNCIONAL",
+    "objetivo": "Comprobar fecha mínima, DNI y carga del Wedding Planner.",
+    "resultado_esperado": "Los intentos inválidos son rechazados."
   }
 ]

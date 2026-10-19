@@ -2,8 +2,8 @@
 
 ## 1. Identificación de la prueba
 - Nombre: registro Wedding Planner automático.
-- ID de ejecución: `wp-prueba-1792444295667`.
-- Fecha/hora: 2026-10-19T21:11:35.666Z.
+- ID de ejecución: `wp-prueba-1792446243939`.
+- Fecha/hora: 2026-10-19T21:44:03.939Z.
 - Tipo: integración funcional.
 - Entorno: Nest TestingModule aislado.
 - Objetivo: registro, verificación y creación de perfil.

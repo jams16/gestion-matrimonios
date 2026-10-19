@@ -1,14 +1,14 @@
 {
-  "identificadorEjecucion": "wp-prueba-1792444295667",
-  "fechaHora": "2026-10-19T21:11:35.666Z",
+  "identificadorEjecucion": "wp-prueba-1792446243939",
+  "fechaHora": "2026-10-19T21:44:03.939Z",
   "solicitud": {
     "nombres": "Wedding Planner Prueba",
     "apellidoPaterno": "Automatizada",
     "apellidoMaterno": "Integracion",
-    "correoElectronico": "wp-prueba-1792444295667@example.test"
+    "correoElectronico": "wp-prueba-1792446243939@example.test"
   },
   "finalizacion": {
-    "usuario": "wp-prueba-1792444295667",
+    "usuario": "wp-prueba-1792446243939",
     "contrasena": "********",
     "nombreComercial": "Wedding Planner Prueba SAC",
     "ruc": "",
