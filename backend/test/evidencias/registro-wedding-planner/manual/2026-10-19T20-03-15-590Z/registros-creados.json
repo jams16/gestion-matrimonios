@@ -1,0 +1,72 @@
+{
+  "estadoInicial": {
+    "personasCoincidentes": [],
+    "registrosPendientesCoincidentes": []
+  },
+  "au_registro_pendiente": [
+    {
+      "apellidoMaterno": "Reproducible",
+      "apellidoPaterno": "Manual",
+      "correoElectronico": "manual-wp-1792440195590@example.test",
+      "fechaCreacion": "2026-10-19T20:03:16.053942Z",
+      "fechaExpiracion": "2026-10-20T20:03:16.048Z",
+      "fechaVerificacion": null,
+      "idRegistro": 1,
+      "nombres": "Wedding Planner Prueba",
+      "tokenHash": "oculto"
+    }
+  ],
+  "au_registro_pendiente_verificado": {
+    "apellidoMaterno": "Reproducible",
+    "apellidoPaterno": "Manual",
+    "correoElectronico": "manual-wp-1792440195590@example.test",
+    "fechaCreacion": "2026-10-19T20:03:16.053942Z",
+    "fechaExpiracion": "2026-10-20T20:03:16.048Z",
+    "fechaVerificacion": "2026-10-19T20:03:16.085Z",
+    "idRegistro": 1,
+    "nombres": "Wedding Planner Prueba",
+    "tokenHash": "oculto"
+  },
+  "in_persona_natural": {
+    "apellidoMaterno": "Reproducible",
+    "apellidoPaterno": "Manual",
+    "codigoUbigeo": null,
+    "correoElectronico": "manual-wp-1792440195590@example.test",
+    "direccion": null,
+    "dni": null,
+    "esActivo": true,
+    "fechaCreacion": "2026-10-19T20:03:16.112535Z",
+    "fechaModificacion": "2026-10-19T20:03:16.111Z",
+    "idPersonaNatural": 1,
+    "nombres": "Wedding Planner Prueba",
+    "telefono": null
+  },
+  "in_entidad": {
+    "codigoUbigeo": null,
+    "correoElectronico": null,
+    "direccion": null,
+    "esActivo": true,
+    "fechaCreacion": "2026-10-19T20:03:16.11669Z",
+    "fechaModificacion": "2026-10-19T20:03:16.115Z",
+    "idEntidad": 1,
+    "nombreComercial": "Wedding Planner Prueba Manual SAC",
+    "razonSocial": null,
+    "redesSociales": null,
+    "ruc": null,
+    "telefono": null,
+    "tipoEntidad": "PRIVADA"
+  },
+  "au_usuario": {
+    "contrasenaHash": "oculto",
+    "correoVerificado": true,
+    "esActivo": true,
+    "fechaCreacion": "2026-10-19T20:03:16.215969Z",
+    "fechaModificacion": "2026-10-19T20:03:16.224Z",
+    "idEntidad": 1,
+    "idPersonaNatural": 1,
+    "idUsuario": 1,
+    "tipoUsuario": "PROJECT_MANAGER",
+    "ultimoAcceso": "2026-10-19T20:03:16.214Z",
+    "usuario": "manual-wp-1792440195590"
+  }
+}

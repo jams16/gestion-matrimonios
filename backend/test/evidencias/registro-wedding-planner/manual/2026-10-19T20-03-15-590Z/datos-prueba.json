@@ -1,0 +1,18 @@
+{
+  "idEjecucion": "manual-wp-1792440195590",
+  "fechaHora": "2026-10-19T20:03:15.590Z",
+  "solicitud": {
+    "nombres": "Wedding Planner Prueba",
+    "apellidoPaterno": "Manual",
+    "apellidoMaterno": "Reproducible",
+    "correoElectronico": "manual-wp-1792440195590@example.test"
+  },
+  "finalizacion": {
+    "usuario": "manual-wp-1792440195590",
+    "contrasena": "********",
+    "nombreComercial": "Wedding Planner Prueba Manual SAC",
+    "ruc": "",
+    "telefono": "",
+    "correoCorporativo": ""
+  }
+}
