@@ -1,0 +1,1778 @@
+[
+  {
+    "id": "table.iv_categoria_relacion",
+    "label": "Create table \"iv_categoria_relacion\"",
+    "summary": "Creates table \"iv_categoria_relacion\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "iv_categoria_relacion"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"iv_categoria_relacion\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_categoria_relacion\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"iv_categoria_relacion\"",
+        "sql": "CREATE TABLE \"public\".\"iv_categoria_relacion\" (\n  \"activo\" bool DEFAULT true NOT NULL,\n  \"codigo\" character varying(50) NOT NULL,\n  \"created_at\" timestamptz DEFAULT (now()) NOT NULL,\n  \"descripcion\" character varying(500),\n  \"id_categoria_relacion\" SERIAL NOT NULL,\n  \"nombre\" character varying(100) NOT NULL,\n  \"orden\" int4 NOT NULL,\n  \"updated_at\" timestamptz NOT NULL,\n  PRIMARY KEY (\"id_categoria_relacion\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"iv_categoria_relacion\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_categoria_relacion\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.iv_invitado",
+    "label": "Create table \"iv_invitado\"",
+    "summary": "Creates table \"iv_invitado\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "iv_invitado"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"iv_invitado\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_invitado\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"iv_invitado\"",
+        "sql": "CREATE TABLE \"public\".\"iv_invitado\" (\n  \"activo\" bool DEFAULT true NOT NULL,\n  \"cantidad_pases\" int4 DEFAULT 1 NOT NULL,\n  \"created_at\" timestamptz DEFAULT (now()) NOT NULL,\n  \"es_titular\" bool DEFAULT true NOT NULL,\n  \"id_categoria_relacion\" int4,\n  \"id_invitado\" uuid NOT NULL,\n  \"id_invitado_titular\" uuid,\n  \"id_matrimonio\" uuid NOT NULL,\n  \"id_persona_natural\" int4 NOT NULL,\n  \"lado_relacion\" text DEFAULT 'AMBOS' NOT NULL,\n  \"observaciones\" character varying(1000),\n  \"updated_at\" timestamptz NOT NULL,\n  PRIMARY KEY (\"id_invitado\"),\n  CONSTRAINT \"iv_invitado_lado_relacion_check_97f471a8\" CHECK (\"lado_relacion\" IN ('NOVIA', 'NOVIO', 'AMBOS', 'OTRO'))\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"iv_invitado\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_invitado\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.iv_invitado_requerimiento_alimentario",
+    "label": "Create table \"iv_invitado_requerimiento_alimentario\"",
+    "summary": "Creates table \"iv_invitado_requerimiento_alimentario\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "iv_invitado_requerimiento_alimentario"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"iv_invitado_requerimiento_alimentario\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_invitado_requerimiento_alimentario\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"iv_invitado_requerimiento_alimentario\"",
+        "sql": "CREATE TABLE \"public\".\"iv_invitado_requerimiento_alimentario\" (\n  \"activo\" bool DEFAULT true NOT NULL,\n  \"created_at\" timestamptz DEFAULT (now()) NOT NULL,\n  \"detalle\" character varying(500),\n  \"id_invitado\" uuid NOT NULL,\n  \"id_invitado_requerimiento_alimentario\" uuid NOT NULL,\n  \"id_requerimiento_alimentario\" int4 NOT NULL,\n  \"updated_at\" timestamptz NOT NULL,\n  PRIMARY KEY (\"id_invitado_requerimiento_alimentario\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"iv_invitado_requerimiento_alimentario\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_invitado_requerimiento_alimentario\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.iv_mesa",
+    "label": "Create table \"iv_mesa\"",
+    "summary": "Creates table \"iv_mesa\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "iv_mesa"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"iv_mesa\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_mesa\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"iv_mesa\"",
+        "sql": "CREATE TABLE \"public\".\"iv_mesa\" (\n  \"activo\" bool DEFAULT true NOT NULL,\n  \"capacidad\" int4 NOT NULL,\n  \"created_at\" timestamptz DEFAULT (now()) NOT NULL,\n  \"id_matrimonio\" uuid NOT NULL,\n  \"id_mesa\" uuid NOT NULL,\n  \"nombre\" character varying(100) NOT NULL,\n  \"numero\" int4,\n  \"observaciones\" character varying(1000),\n  \"ubicacion\" character varying(250),\n  \"updated_at\" timestamptz NOT NULL,\n  PRIMARY KEY (\"id_mesa\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"iv_mesa\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_mesa\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.iv_mesa_invitado",
+    "label": "Create table \"iv_mesa_invitado\"",
+    "summary": "Creates table \"iv_mesa_invitado\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "iv_mesa_invitado"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"iv_mesa_invitado\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_mesa_invitado\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"iv_mesa_invitado\"",
+        "sql": "CREATE TABLE \"public\".\"iv_mesa_invitado\" (\n  \"activo\" bool DEFAULT true NOT NULL,\n  \"created_at\" timestamptz DEFAULT (now()) NOT NULL,\n  \"id_invitado\" uuid NOT NULL,\n  \"id_mesa\" uuid NOT NULL,\n  \"id_mesa_invitado\" uuid NOT NULL,\n  \"numero_asiento\" int4,\n  \"observacion\" character varying(500),\n  \"updated_at\" timestamptz NOT NULL,\n  PRIMARY KEY (\"id_mesa_invitado\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"iv_mesa_invitado\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_mesa_invitado\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.iv_requerimiento_alimentario",
+    "label": "Create table \"iv_requerimiento_alimentario\"",
+    "summary": "Creates table \"iv_requerimiento_alimentario\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "iv_requerimiento_alimentario"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"iv_requerimiento_alimentario\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_requerimiento_alimentario\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"iv_requerimiento_alimentario\"",
+        "sql": "CREATE TABLE \"public\".\"iv_requerimiento_alimentario\" (\n  \"activo\" bool DEFAULT true NOT NULL,\n  \"codigo\" character varying(50) NOT NULL,\n  \"created_at\" timestamptz DEFAULT (now()) NOT NULL,\n  \"descripcion\" character varying(500),\n  \"id_requerimiento_alimentario\" SERIAL NOT NULL,\n  \"nombre\" character varying(100) NOT NULL,\n  \"updated_at\" timestamptz NOT NULL,\n  PRIMARY KEY (\"id_requerimiento_alimentario\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"iv_requerimiento_alimentario\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_requerimiento_alimentario\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.iv_rsvp",
+    "label": "Create table \"iv_rsvp\"",
+    "summary": "Creates table \"iv_rsvp\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "iv_rsvp"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"iv_rsvp\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_rsvp\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"iv_rsvp\"",
+        "sql": "CREATE TABLE \"public\".\"iv_rsvp\" (\n  \"cantidad_asistentes_confirmados\" int4,\n  \"confirmacion_digital\" bool DEFAULT false NOT NULL,\n  \"created_at\" timestamptz DEFAULT (now()) NOT NULL,\n  \"estado_rsvp\" text DEFAULT 'PENDIENTE' NOT NULL,\n  \"fecha_confirmacion_digital\" timestamptz,\n  \"fecha_respuesta\" timestamptz,\n  \"fecha_verificacion_manual_1\" timestamptz,\n  \"fecha_verificacion_manual_2\" timestamptz,\n  \"id_invitado\" uuid NOT NULL,\n  \"id_rsvp\" uuid NOT NULL,\n  \"id_usuario_verificacion_manual_1\" int4,\n  \"id_usuario_verificacion_manual_2\" int4,\n  \"updated_at\" timestamptz NOT NULL,\n  \"verificacion_manual_1\" bool DEFAULT false NOT NULL,\n  \"verificacion_manual_2\" bool DEFAULT false NOT NULL,\n  PRIMARY KEY (\"id_rsvp\"),\n  CONSTRAINT \"iv_rsvp_estado_rsvp_check_7c306183\" CHECK (\"estado_rsvp\" IN ('PENDIENTE', 'CONFIRMADO', 'NO_ASISTE'))\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"iv_rsvp\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_rsvp\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.iv_rsvp_historial",
+    "label": "Create table \"iv_rsvp_historial\"",
+    "summary": "Creates table \"iv_rsvp_historial\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "iv_rsvp_historial"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"iv_rsvp_historial\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_rsvp_historial\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"iv_rsvp_historial\"",
+        "sql": "CREATE TABLE \"public\".\"iv_rsvp_historial\" (\n  \"canal\" text NOT NULL,\n  \"created_at\" timestamptz DEFAULT (now()) NOT NULL,\n  \"estado_anterior\" text,\n  \"estado_nuevo\" text NOT NULL,\n  \"fecha_cambio\" timestamptz DEFAULT (now()) NOT NULL,\n  \"id_rsvp\" uuid NOT NULL,\n  \"id_rsvp_historial\" uuid NOT NULL,\n  \"id_usuario\" int4,\n  \"observacion\" character varying(1000),\n  PRIMARY KEY (\"id_rsvp_historial\"),\n  CONSTRAINT \"iv_rsvp_historial_canal_check_d6e88a8a\" CHECK (\"canal\" IN ('MANUAL', 'DIGITAL', 'SISTEMA')),\n  CONSTRAINT \"iv_rsvp_historial_estado_anterior_check_87ee2fda\" CHECK (\"estado_anterior\" IN ('PENDIENTE', 'CONFIRMADO', 'NO_ASISTE')),\n  CONSTRAINT \"iv_rsvp_historial_estado_nuevo_check_37200580\" CHECK (\"estado_nuevo\" IN ('PENDIENTE', 'CONFIRMADO', 'NO_ASISTE'))\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"iv_rsvp_historial\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_rsvp_historial\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.iv_categoria_relacion.iv_categoria_relacion_codigo_key",
+    "label": "Add unique constraint on \"iv_categoria_relacion\" (codigo)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "iv_categoria_relacion_codigo_key",
+        "table": "iv_categoria_relacion"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"iv_categoria_relacion_codigo_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "iv_categoria_relacion_codigo_key",
+          "public",
+          "\"public\".\"iv_categoria_relacion\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"iv_categoria_relacion_codigo_key\"",
+        "sql": "ALTER TABLE \"public\".\"iv_categoria_relacion\" ADD CONSTRAINT \"iv_categoria_relacion_codigo_key\" UNIQUE (\"codigo\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"iv_categoria_relacion_codigo_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "iv_categoria_relacion_codigo_key",
+          "public",
+          "\"public\".\"iv_categoria_relacion\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.iv_invitado.iv_invitado_id_matrimonio_id_persona_natural_key",
+    "label": "Add unique constraint on \"iv_invitado\" (id_matrimonio, id_persona_natural)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "iv_invitado_id_matrimonio_id_persona_natural_key",
+        "table": "iv_invitado"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"iv_invitado_id_matrimonio_id_persona_natural_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "iv_invitado_id_matrimonio_id_persona_natural_key",
+          "public",
+          "\"public\".\"iv_invitado\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"iv_invitado_id_matrimonio_id_persona_natural_key\"",
+        "sql": "ALTER TABLE \"public\".\"iv_invitado\" ADD CONSTRAINT \"iv_invitado_id_matrimonio_id_persona_natural_key\" UNIQUE (\"id_matrimonio\", \"id_persona_natural\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"iv_invitado_id_matrimonio_id_persona_natural_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "iv_invitado_id_matrimonio_id_persona_natural_key",
+          "public",
+          "\"public\".\"iv_invitado\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.iv_invitado_requerimiento_alimentario.iv_invitado_requerimiento_alimentario_id_invitado_id_requerimiento_alimentario_key",
+    "label": "Add unique constraint on \"iv_invitado_requerimiento_alimentario\" (id_invitado, id_requerimiento_alimentario)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "iv_invitado_requerimiento_alimentario_id_invitado_id_requerimiento_alimentario_key",
+        "table": "iv_invitado_requerimiento_alimentario"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"iv_invitado_requerimiento_alimentario_id_invitado_id_requerimiento_alimentario_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "iv_invitado_requerimiento_alimentario_id_invitado_id_requerimiento_alimentario_key",
+          "public",
+          "\"public\".\"iv_invitado_requerimiento_alimentario\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"iv_invitado_requerimiento_alimentario_id_invitado_id_requerimiento_alimentario_key\"",
+        "sql": "ALTER TABLE \"public\".\"iv_invitado_requerimiento_alimentario\" ADD CONSTRAINT \"iv_invitado_requerimiento_alimentario_id_invitado_id_requerimiento_alimentario_key\" UNIQUE (\"id_invitado\", \"id_requerimiento_alimentario\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"iv_invitado_requerimiento_alimentario_id_invitado_id_requerimiento_alimentario_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "iv_invitado_requerimiento_alimentario_id_invitado_id_requerimiento_alimentario_key",
+          "public",
+          "\"public\".\"iv_invitado_requerimiento_alimentario\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.iv_mesa_invitado.iv_mesa_invitado_id_mesa_id_invitado_key",
+    "label": "Add unique constraint on \"iv_mesa_invitado\" (id_mesa, id_invitado)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "iv_mesa_invitado_id_mesa_id_invitado_key",
+        "table": "iv_mesa_invitado"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"iv_mesa_invitado_id_mesa_id_invitado_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "iv_mesa_invitado_id_mesa_id_invitado_key",
+          "public",
+          "\"public\".\"iv_mesa_invitado\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"iv_mesa_invitado_id_mesa_id_invitado_key\"",
+        "sql": "ALTER TABLE \"public\".\"iv_mesa_invitado\" ADD CONSTRAINT \"iv_mesa_invitado_id_mesa_id_invitado_key\" UNIQUE (\"id_mesa\", \"id_invitado\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"iv_mesa_invitado_id_mesa_id_invitado_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "iv_mesa_invitado_id_mesa_id_invitado_key",
+          "public",
+          "\"public\".\"iv_mesa_invitado\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.iv_requerimiento_alimentario.iv_requerimiento_alimentario_codigo_key",
+    "label": "Add unique constraint on \"iv_requerimiento_alimentario\" (codigo)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "iv_requerimiento_alimentario_codigo_key",
+        "table": "iv_requerimiento_alimentario"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"iv_requerimiento_alimentario_codigo_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "iv_requerimiento_alimentario_codigo_key",
+          "public",
+          "\"public\".\"iv_requerimiento_alimentario\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"iv_requerimiento_alimentario_codigo_key\"",
+        "sql": "ALTER TABLE \"public\".\"iv_requerimiento_alimentario\" ADD CONSTRAINT \"iv_requerimiento_alimentario_codigo_key\" UNIQUE (\"codigo\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"iv_requerimiento_alimentario_codigo_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "iv_requerimiento_alimentario_codigo_key",
+          "public",
+          "\"public\".\"iv_requerimiento_alimentario\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.iv_rsvp.iv_rsvp_id_invitado_key",
+    "label": "Add unique constraint on \"iv_rsvp\" (id_invitado)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "iv_rsvp_id_invitado_key",
+        "table": "iv_rsvp"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"iv_rsvp_id_invitado_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "iv_rsvp_id_invitado_key",
+          "public",
+          "\"public\".\"iv_rsvp\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"iv_rsvp_id_invitado_key\"",
+        "sql": "ALTER TABLE \"public\".\"iv_rsvp\" ADD CONSTRAINT \"iv_rsvp_id_invitado_key\" UNIQUE (\"id_invitado\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"iv_rsvp_id_invitado_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "iv_rsvp_id_invitado_key",
+          "public",
+          "\"public\".\"iv_rsvp\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.iv_invitado.iv_invitado_activo_idx_4c0f2ecc",
+    "label": "Create index \"iv_invitado_activo_idx_4c0f2ecc\" on \"iv_invitado\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "iv_invitado_activo_idx_4c0f2ecc",
+        "table": "iv_invitado"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"iv_invitado_activo_idx_4c0f2ecc\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_invitado_activo_idx_4c0f2ecc\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"iv_invitado_activo_idx_4c0f2ecc\"",
+        "sql": "CREATE INDEX \"iv_invitado_activo_idx_4c0f2ecc\" ON \"public\".\"iv_invitado\" (\"activo\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"iv_invitado_activo_idx_4c0f2ecc\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_invitado_activo_idx_4c0f2ecc\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.iv_invitado.iv_invitado_id_categoria_relacion_idx_8ba92f0d",
+    "label": "Create index \"iv_invitado_id_categoria_relacion_idx_8ba92f0d\" on \"iv_invitado\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "iv_invitado_id_categoria_relacion_idx_8ba92f0d",
+        "table": "iv_invitado"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"iv_invitado_id_categoria_relacion_idx_8ba92f0d\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_invitado_id_categoria_relacion_idx_8ba92f0d\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"iv_invitado_id_categoria_relacion_idx_8ba92f0d\"",
+        "sql": "CREATE INDEX \"iv_invitado_id_categoria_relacion_idx_8ba92f0d\" ON \"public\".\"iv_invitado\" (\"id_categoria_relacion\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"iv_invitado_id_categoria_relacion_idx_8ba92f0d\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_invitado_id_categoria_relacion_idx_8ba92f0d\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.iv_invitado.iv_invitado_id_invitado_titular_idx_55b89b45",
+    "label": "Create index \"iv_invitado_id_invitado_titular_idx_55b89b45\" on \"iv_invitado\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "iv_invitado_id_invitado_titular_idx_55b89b45",
+        "table": "iv_invitado"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"iv_invitado_id_invitado_titular_idx_55b89b45\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_invitado_id_invitado_titular_idx_55b89b45\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"iv_invitado_id_invitado_titular_idx_55b89b45\"",
+        "sql": "CREATE INDEX \"iv_invitado_id_invitado_titular_idx_55b89b45\" ON \"public\".\"iv_invitado\" (\"id_invitado_titular\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"iv_invitado_id_invitado_titular_idx_55b89b45\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_invitado_id_invitado_titular_idx_55b89b45\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.iv_invitado.iv_invitado_id_matrimonio_idx_97ab526e",
+    "label": "Create index \"iv_invitado_id_matrimonio_idx_97ab526e\" on \"iv_invitado\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "iv_invitado_id_matrimonio_idx_97ab526e",
+        "table": "iv_invitado"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"iv_invitado_id_matrimonio_idx_97ab526e\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_invitado_id_matrimonio_idx_97ab526e\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"iv_invitado_id_matrimonio_idx_97ab526e\"",
+        "sql": "CREATE INDEX \"iv_invitado_id_matrimonio_idx_97ab526e\" ON \"public\".\"iv_invitado\" (\"id_matrimonio\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"iv_invitado_id_matrimonio_idx_97ab526e\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_invitado_id_matrimonio_idx_97ab526e\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.iv_invitado.iv_invitado_id_persona_natural_idx_2ece1570",
+    "label": "Create index \"iv_invitado_id_persona_natural_idx_2ece1570\" on \"iv_invitado\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "iv_invitado_id_persona_natural_idx_2ece1570",
+        "table": "iv_invitado"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"iv_invitado_id_persona_natural_idx_2ece1570\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_invitado_id_persona_natural_idx_2ece1570\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"iv_invitado_id_persona_natural_idx_2ece1570\"",
+        "sql": "CREATE INDEX \"iv_invitado_id_persona_natural_idx_2ece1570\" ON \"public\".\"iv_invitado\" (\"id_persona_natural\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"iv_invitado_id_persona_natural_idx_2ece1570\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_invitado_id_persona_natural_idx_2ece1570\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.iv_invitado_requerimiento_alimentario.iv_inv_req_alim_inv_idx",
+    "label": "Create index \"iv_inv_req_alim_inv_idx\" on \"iv_invitado_requerimiento_alimentario\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "iv_inv_req_alim_inv_idx",
+        "table": "iv_invitado_requerimiento_alimentario"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"iv_inv_req_alim_inv_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_inv_req_alim_inv_idx\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"iv_inv_req_alim_inv_idx\"",
+        "sql": "CREATE INDEX \"iv_inv_req_alim_inv_idx\" ON \"public\".\"iv_invitado_requerimiento_alimentario\" (\"id_invitado\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"iv_inv_req_alim_inv_idx\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_inv_req_alim_inv_idx\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.iv_invitado_requerimiento_alimentario.iv_inv_req_alim_req_idx",
+    "label": "Create index \"iv_inv_req_alim_req_idx\" on \"iv_invitado_requerimiento_alimentario\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "iv_inv_req_alim_req_idx",
+        "table": "iv_invitado_requerimiento_alimentario"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"iv_inv_req_alim_req_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_inv_req_alim_req_idx\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"iv_inv_req_alim_req_idx\"",
+        "sql": "CREATE INDEX \"iv_inv_req_alim_req_idx\" ON \"public\".\"iv_invitado_requerimiento_alimentario\" (\"id_requerimiento_alimentario\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"iv_inv_req_alim_req_idx\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_inv_req_alim_req_idx\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.iv_mesa.iv_mesa_id_matrimonio_idx_97ab526e",
+    "label": "Create index \"iv_mesa_id_matrimonio_idx_97ab526e\" on \"iv_mesa\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "iv_mesa_id_matrimonio_idx_97ab526e",
+        "table": "iv_mesa"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"iv_mesa_id_matrimonio_idx_97ab526e\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_mesa_id_matrimonio_idx_97ab526e\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"iv_mesa_id_matrimonio_idx_97ab526e\"",
+        "sql": "CREATE INDEX \"iv_mesa_id_matrimonio_idx_97ab526e\" ON \"public\".\"iv_mesa\" (\"id_matrimonio\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"iv_mesa_id_matrimonio_idx_97ab526e\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_mesa_id_matrimonio_idx_97ab526e\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.iv_mesa_invitado.iv_mesa_invitado_id_invitado_idx_da2f6d21",
+    "label": "Create index \"iv_mesa_invitado_id_invitado_idx_da2f6d21\" on \"iv_mesa_invitado\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "iv_mesa_invitado_id_invitado_idx_da2f6d21",
+        "table": "iv_mesa_invitado"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"iv_mesa_invitado_id_invitado_idx_da2f6d21\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_mesa_invitado_id_invitado_idx_da2f6d21\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"iv_mesa_invitado_id_invitado_idx_da2f6d21\"",
+        "sql": "CREATE INDEX \"iv_mesa_invitado_id_invitado_idx_da2f6d21\" ON \"public\".\"iv_mesa_invitado\" (\"id_invitado\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"iv_mesa_invitado_id_invitado_idx_da2f6d21\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_mesa_invitado_id_invitado_idx_da2f6d21\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.iv_mesa_invitado.iv_mesa_invitado_id_mesa_idx_6d74982c",
+    "label": "Create index \"iv_mesa_invitado_id_mesa_idx_6d74982c\" on \"iv_mesa_invitado\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "iv_mesa_invitado_id_mesa_idx_6d74982c",
+        "table": "iv_mesa_invitado"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"iv_mesa_invitado_id_mesa_idx_6d74982c\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_mesa_invitado_id_mesa_idx_6d74982c\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"iv_mesa_invitado_id_mesa_idx_6d74982c\"",
+        "sql": "CREATE INDEX \"iv_mesa_invitado_id_mesa_idx_6d74982c\" ON \"public\".\"iv_mesa_invitado\" (\"id_mesa\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"iv_mesa_invitado_id_mesa_idx_6d74982c\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_mesa_invitado_id_mesa_idx_6d74982c\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.iv_rsvp.iv_rsvp_estado_rsvp_idx_7f4af6a0",
+    "label": "Create index \"iv_rsvp_estado_rsvp_idx_7f4af6a0\" on \"iv_rsvp\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "iv_rsvp_estado_rsvp_idx_7f4af6a0",
+        "table": "iv_rsvp"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"iv_rsvp_estado_rsvp_idx_7f4af6a0\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_rsvp_estado_rsvp_idx_7f4af6a0\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"iv_rsvp_estado_rsvp_idx_7f4af6a0\"",
+        "sql": "CREATE INDEX \"iv_rsvp_estado_rsvp_idx_7f4af6a0\" ON \"public\".\"iv_rsvp\" (\"estado_rsvp\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"iv_rsvp_estado_rsvp_idx_7f4af6a0\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_rsvp_estado_rsvp_idx_7f4af6a0\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.iv_rsvp.iv_rsvp_id_usuario_verificacion_manual_1_idx_c73f53d9",
+    "label": "Create index \"iv_rsvp_id_usuario_verificacion_manual_1_idx_c73f53d9\" on \"iv_rsvp\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "iv_rsvp_id_usuario_verificacion_manual_1_idx_c73f53d9",
+        "table": "iv_rsvp"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"iv_rsvp_id_usuario_verificacion_manual_1_idx_c73f53d9\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_rsvp_id_usuario_verificacion_manual_1_idx_c73f53d9\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"iv_rsvp_id_usuario_verificacion_manual_1_idx_c73f53d9\"",
+        "sql": "CREATE INDEX \"iv_rsvp_id_usuario_verificacion_manual_1_idx_c73f53d9\" ON \"public\".\"iv_rsvp\" (\"id_usuario_verificacion_manual_1\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"iv_rsvp_id_usuario_verificacion_manual_1_idx_c73f53d9\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_rsvp_id_usuario_verificacion_manual_1_idx_c73f53d9\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.iv_rsvp.iv_rsvp_id_usuario_verificacion_manual_2_idx_f4c986df",
+    "label": "Create index \"iv_rsvp_id_usuario_verificacion_manual_2_idx_f4c986df\" on \"iv_rsvp\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "iv_rsvp_id_usuario_verificacion_manual_2_idx_f4c986df",
+        "table": "iv_rsvp"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"iv_rsvp_id_usuario_verificacion_manual_2_idx_f4c986df\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_rsvp_id_usuario_verificacion_manual_2_idx_f4c986df\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"iv_rsvp_id_usuario_verificacion_manual_2_idx_f4c986df\"",
+        "sql": "CREATE INDEX \"iv_rsvp_id_usuario_verificacion_manual_2_idx_f4c986df\" ON \"public\".\"iv_rsvp\" (\"id_usuario_verificacion_manual_2\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"iv_rsvp_id_usuario_verificacion_manual_2_idx_f4c986df\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_rsvp_id_usuario_verificacion_manual_2_idx_f4c986df\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.iv_rsvp_historial.iv_rsvp_historial_fecha_cambio_idx_0c50a538",
+    "label": "Create index \"iv_rsvp_historial_fecha_cambio_idx_0c50a538\" on \"iv_rsvp_historial\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "iv_rsvp_historial_fecha_cambio_idx_0c50a538",
+        "table": "iv_rsvp_historial"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"iv_rsvp_historial_fecha_cambio_idx_0c50a538\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_rsvp_historial_fecha_cambio_idx_0c50a538\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"iv_rsvp_historial_fecha_cambio_idx_0c50a538\"",
+        "sql": "CREATE INDEX \"iv_rsvp_historial_fecha_cambio_idx_0c50a538\" ON \"public\".\"iv_rsvp_historial\" (\"fecha_cambio\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"iv_rsvp_historial_fecha_cambio_idx_0c50a538\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_rsvp_historial_fecha_cambio_idx_0c50a538\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.iv_rsvp_historial.iv_rsvp_historial_id_rsvp_idx_edb653fc",
+    "label": "Create index \"iv_rsvp_historial_id_rsvp_idx_edb653fc\" on \"iv_rsvp_historial\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "iv_rsvp_historial_id_rsvp_idx_edb653fc",
+        "table": "iv_rsvp_historial"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"iv_rsvp_historial_id_rsvp_idx_edb653fc\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_rsvp_historial_id_rsvp_idx_edb653fc\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"iv_rsvp_historial_id_rsvp_idx_edb653fc\"",
+        "sql": "CREATE INDEX \"iv_rsvp_historial_id_rsvp_idx_edb653fc\" ON \"public\".\"iv_rsvp_historial\" (\"id_rsvp\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"iv_rsvp_historial_id_rsvp_idx_edb653fc\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_rsvp_historial_id_rsvp_idx_edb653fc\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.iv_rsvp_historial.iv_rsvp_historial_id_usuario_idx_00d592a0",
+    "label": "Create index \"iv_rsvp_historial_id_usuario_idx_00d592a0\" on \"iv_rsvp_historial\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "iv_rsvp_historial_id_usuario_idx_00d592a0",
+        "table": "iv_rsvp_historial"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"iv_rsvp_historial_id_usuario_idx_00d592a0\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_rsvp_historial_id_usuario_idx_00d592a0\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"iv_rsvp_historial_id_usuario_idx_00d592a0\"",
+        "sql": "CREATE INDEX \"iv_rsvp_historial_id_usuario_idx_00d592a0\" ON \"public\".\"iv_rsvp_historial\" (\"id_usuario\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"iv_rsvp_historial_id_usuario_idx_00d592a0\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"iv_rsvp_historial_id_usuario_idx_00d592a0\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.iv_invitado.iv_invitado_id_matrimonio_fkey",
+    "label": "Add foreign key \"iv_invitado_id_matrimonio_fkey\" on \"iv_invitado\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "iv_invitado_id_matrimonio_fkey",
+        "table": "iv_invitado"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"iv_invitado_id_matrimonio_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "iv_invitado_id_matrimonio_fkey",
+          "public",
+          "\"public\".\"iv_invitado\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"iv_invitado_id_matrimonio_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"iv_invitado\"\nADD CONSTRAINT \"iv_invitado_id_matrimonio_fkey\"\nFOREIGN KEY (\"id_matrimonio\")\nREFERENCES \"public\".\"gp_matrimonio\" (\"id_matrimonio\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"iv_invitado_id_matrimonio_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "iv_invitado_id_matrimonio_fkey",
+          "public",
+          "\"public\".\"iv_invitado\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.iv_invitado.iv_invitado_id_persona_natural_fkey",
+    "label": "Add foreign key \"iv_invitado_id_persona_natural_fkey\" on \"iv_invitado\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "iv_invitado_id_persona_natural_fkey",
+        "table": "iv_invitado"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"iv_invitado_id_persona_natural_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "iv_invitado_id_persona_natural_fkey",
+          "public",
+          "\"public\".\"iv_invitado\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"iv_invitado_id_persona_natural_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"iv_invitado\"\nADD CONSTRAINT \"iv_invitado_id_persona_natural_fkey\"\nFOREIGN KEY (\"id_persona_natural\")\nREFERENCES \"public\".\"in_persona_natural\" (\"id_persona_natural\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"iv_invitado_id_persona_natural_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "iv_invitado_id_persona_natural_fkey",
+          "public",
+          "\"public\".\"iv_invitado\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.iv_invitado.iv_invitado_id_categoria_relacion_fkey",
+    "label": "Add foreign key \"iv_invitado_id_categoria_relacion_fkey\" on \"iv_invitado\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "iv_invitado_id_categoria_relacion_fkey",
+        "table": "iv_invitado"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"iv_invitado_id_categoria_relacion_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "iv_invitado_id_categoria_relacion_fkey",
+          "public",
+          "\"public\".\"iv_invitado\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"iv_invitado_id_categoria_relacion_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"iv_invitado\"\nADD CONSTRAINT \"iv_invitado_id_categoria_relacion_fkey\"\nFOREIGN KEY (\"id_categoria_relacion\")\nREFERENCES \"public\".\"iv_categoria_relacion\" (\"id_categoria_relacion\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"iv_invitado_id_categoria_relacion_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "iv_invitado_id_categoria_relacion_fkey",
+          "public",
+          "\"public\".\"iv_invitado\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.iv_invitado.iv_invitado_id_invitado_titular_fkey",
+    "label": "Add foreign key \"iv_invitado_id_invitado_titular_fkey\" on \"iv_invitado\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "iv_invitado_id_invitado_titular_fkey",
+        "table": "iv_invitado"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"iv_invitado_id_invitado_titular_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "iv_invitado_id_invitado_titular_fkey",
+          "public",
+          "\"public\".\"iv_invitado\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"iv_invitado_id_invitado_titular_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"iv_invitado\"\nADD CONSTRAINT \"iv_invitado_id_invitado_titular_fkey\"\nFOREIGN KEY (\"id_invitado_titular\")\nREFERENCES \"public\".\"iv_invitado\" (\"id_invitado\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"iv_invitado_id_invitado_titular_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "iv_invitado_id_invitado_titular_fkey",
+          "public",
+          "\"public\".\"iv_invitado\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.iv_invitado_requerimiento_alimentario.iv_invitado_requerimiento_alimentario_id_invitado_fkey",
+    "label": "Add foreign key \"iv_invitado_requerimiento_alimentario_id_invitado_fkey\" on \"iv_invitado_requerimiento_alimentario\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "iv_invitado_requerimiento_alimentario_id_invitado_fkey",
+        "table": "iv_invitado_requerimiento_alimentario"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"iv_invitado_requerimiento_alimentario_id_invitado_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "iv_invitado_requerimiento_alimentario_id_invitado_fkey",
+          "public",
+          "\"public\".\"iv_invitado_requerimiento_alimentario\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"iv_invitado_requerimiento_alimentario_id_invitado_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"iv_invitado_requerimiento_alimentario\"\nADD CONSTRAINT \"iv_invitado_requerimiento_alimentario_id_invitado_fkey\"\nFOREIGN KEY (\"id_invitado\")\nREFERENCES \"public\".\"iv_invitado\" (\"id_invitado\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"iv_invitado_requerimiento_alimentario_id_invitado_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "iv_invitado_requerimiento_alimentario_id_invitado_fkey",
+          "public",
+          "\"public\".\"iv_invitado_requerimiento_alimentario\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.iv_invitado_requerimiento_alimentario.iv_invitado_requerimiento_alimentario_id_requerimiento_alimentario_fkey",
+    "label": "Add foreign key \"iv_invitado_requerimiento_alimentario_id_requerimiento_alimentario_fkey\" on \"iv_invitado_requerimiento_alimentario\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "iv_invitado_requerimiento_alimentario_id_requerimiento_alimentario_fkey",
+        "table": "iv_invitado_requerimiento_alimentario"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"iv_invitado_requerimiento_alimentario_id_requerimiento_alimentario_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "iv_invitado_requerimiento_alimentario_id_requerimiento_alimentario_fkey",
+          "public",
+          "\"public\".\"iv_invitado_requerimiento_alimentario\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"iv_invitado_requerimiento_alimentario_id_requerimiento_alimentario_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"iv_invitado_requerimiento_alimentario\"\nADD CONSTRAINT \"iv_invitado_requerimiento_alimentario_id_requerimiento_alimentario_fkey\"\nFOREIGN KEY (\"id_requerimiento_alimentario\")\nREFERENCES \"public\".\"iv_requerimiento_alimentario\" (\"id_requerimiento_alimentario\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"iv_invitado_requerimiento_alimentario_id_requerimiento_alimentario_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "iv_invitado_requerimiento_alimentario_id_requerimiento_alimentario_fkey",
+          "public",
+          "\"public\".\"iv_invitado_requerimiento_alimentario\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.iv_mesa.iv_mesa_id_matrimonio_fkey",
+    "label": "Add foreign key \"iv_mesa_id_matrimonio_fkey\" on \"iv_mesa\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "iv_mesa_id_matrimonio_fkey",
+        "table": "iv_mesa"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"iv_mesa_id_matrimonio_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "iv_mesa_id_matrimonio_fkey",
+          "public",
+          "\"public\".\"iv_mesa\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"iv_mesa_id_matrimonio_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"iv_mesa\"\nADD CONSTRAINT \"iv_mesa_id_matrimonio_fkey\"\nFOREIGN KEY (\"id_matrimonio\")\nREFERENCES \"public\".\"gp_matrimonio\" (\"id_matrimonio\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"iv_mesa_id_matrimonio_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "iv_mesa_id_matrimonio_fkey",
+          "public",
+          "\"public\".\"iv_mesa\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.iv_mesa_invitado.iv_mesa_invitado_id_mesa_fkey",
+    "label": "Add foreign key \"iv_mesa_invitado_id_mesa_fkey\" on \"iv_mesa_invitado\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "iv_mesa_invitado_id_mesa_fkey",
+        "table": "iv_mesa_invitado"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"iv_mesa_invitado_id_mesa_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "iv_mesa_invitado_id_mesa_fkey",
+          "public",
+          "\"public\".\"iv_mesa_invitado\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"iv_mesa_invitado_id_mesa_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"iv_mesa_invitado\"\nADD CONSTRAINT \"iv_mesa_invitado_id_mesa_fkey\"\nFOREIGN KEY (\"id_mesa\")\nREFERENCES \"public\".\"iv_mesa\" (\"id_mesa\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"iv_mesa_invitado_id_mesa_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "iv_mesa_invitado_id_mesa_fkey",
+          "public",
+          "\"public\".\"iv_mesa_invitado\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.iv_mesa_invitado.iv_mesa_invitado_id_invitado_fkey",
+    "label": "Add foreign key \"iv_mesa_invitado_id_invitado_fkey\" on \"iv_mesa_invitado\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "iv_mesa_invitado_id_invitado_fkey",
+        "table": "iv_mesa_invitado"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"iv_mesa_invitado_id_invitado_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "iv_mesa_invitado_id_invitado_fkey",
+          "public",
+          "\"public\".\"iv_mesa_invitado\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"iv_mesa_invitado_id_invitado_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"iv_mesa_invitado\"\nADD CONSTRAINT \"iv_mesa_invitado_id_invitado_fkey\"\nFOREIGN KEY (\"id_invitado\")\nREFERENCES \"public\".\"iv_invitado\" (\"id_invitado\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"iv_mesa_invitado_id_invitado_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "iv_mesa_invitado_id_invitado_fkey",
+          "public",
+          "\"public\".\"iv_mesa_invitado\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.iv_rsvp.iv_rsvp_id_invitado_fkey",
+    "label": "Add foreign key \"iv_rsvp_id_invitado_fkey\" on \"iv_rsvp\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "iv_rsvp_id_invitado_fkey",
+        "table": "iv_rsvp"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"iv_rsvp_id_invitado_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "iv_rsvp_id_invitado_fkey",
+          "public",
+          "\"public\".\"iv_rsvp\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"iv_rsvp_id_invitado_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"iv_rsvp\"\nADD CONSTRAINT \"iv_rsvp_id_invitado_fkey\"\nFOREIGN KEY (\"id_invitado\")\nREFERENCES \"public\".\"iv_invitado\" (\"id_invitado\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"iv_rsvp_id_invitado_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "iv_rsvp_id_invitado_fkey",
+          "public",
+          "\"public\".\"iv_rsvp\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.iv_rsvp.iv_rsvp_id_usuario_verificacion_manual_1_fkey",
+    "label": "Add foreign key \"iv_rsvp_id_usuario_verificacion_manual_1_fkey\" on \"iv_rsvp\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "iv_rsvp_id_usuario_verificacion_manual_1_fkey",
+        "table": "iv_rsvp"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"iv_rsvp_id_usuario_verificacion_manual_1_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "iv_rsvp_id_usuario_verificacion_manual_1_fkey",
+          "public",
+          "\"public\".\"iv_rsvp\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"iv_rsvp_id_usuario_verificacion_manual_1_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"iv_rsvp\"\nADD CONSTRAINT \"iv_rsvp_id_usuario_verificacion_manual_1_fkey\"\nFOREIGN KEY (\"id_usuario_verificacion_manual_1\")\nREFERENCES \"public\".\"au_usuario\" (\"id_usuario\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"iv_rsvp_id_usuario_verificacion_manual_1_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "iv_rsvp_id_usuario_verificacion_manual_1_fkey",
+          "public",
+          "\"public\".\"iv_rsvp\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.iv_rsvp.iv_rsvp_id_usuario_verificacion_manual_2_fkey",
+    "label": "Add foreign key \"iv_rsvp_id_usuario_verificacion_manual_2_fkey\" on \"iv_rsvp\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "iv_rsvp_id_usuario_verificacion_manual_2_fkey",
+        "table": "iv_rsvp"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"iv_rsvp_id_usuario_verificacion_manual_2_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "iv_rsvp_id_usuario_verificacion_manual_2_fkey",
+          "public",
+          "\"public\".\"iv_rsvp\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"iv_rsvp_id_usuario_verificacion_manual_2_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"iv_rsvp\"\nADD CONSTRAINT \"iv_rsvp_id_usuario_verificacion_manual_2_fkey\"\nFOREIGN KEY (\"id_usuario_verificacion_manual_2\")\nREFERENCES \"public\".\"au_usuario\" (\"id_usuario\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"iv_rsvp_id_usuario_verificacion_manual_2_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "iv_rsvp_id_usuario_verificacion_manual_2_fkey",
+          "public",
+          "\"public\".\"iv_rsvp\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.iv_rsvp_historial.iv_rsvp_historial_id_rsvp_fkey",
+    "label": "Add foreign key \"iv_rsvp_historial_id_rsvp_fkey\" on \"iv_rsvp_historial\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "iv_rsvp_historial_id_rsvp_fkey",
+        "table": "iv_rsvp_historial"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"iv_rsvp_historial_id_rsvp_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "iv_rsvp_historial_id_rsvp_fkey",
+          "public",
+          "\"public\".\"iv_rsvp_historial\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"iv_rsvp_historial_id_rsvp_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"iv_rsvp_historial\"\nADD CONSTRAINT \"iv_rsvp_historial_id_rsvp_fkey\"\nFOREIGN KEY (\"id_rsvp\")\nREFERENCES \"public\".\"iv_rsvp\" (\"id_rsvp\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"iv_rsvp_historial_id_rsvp_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "iv_rsvp_historial_id_rsvp_fkey",
+          "public",
+          "\"public\".\"iv_rsvp_historial\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.iv_rsvp_historial.iv_rsvp_historial_id_usuario_fkey",
+    "label": "Add foreign key \"iv_rsvp_historial_id_usuario_fkey\" on \"iv_rsvp_historial\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "iv_rsvp_historial_id_usuario_fkey",
+        "table": "iv_rsvp_historial"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"iv_rsvp_historial_id_usuario_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "iv_rsvp_historial_id_usuario_fkey",
+          "public",
+          "\"public\".\"iv_rsvp_historial\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"iv_rsvp_historial_id_usuario_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"iv_rsvp_historial\"\nADD CONSTRAINT \"iv_rsvp_historial_id_usuario_fkey\"\nFOREIGN KEY (\"id_usuario\")\nREFERENCES \"public\".\"au_usuario\" (\"id_usuario\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"iv_rsvp_historial_id_usuario_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "iv_rsvp_historial_id_usuario_fkey",
+          "public",
+          "\"public\".\"iv_rsvp_historial\""
+        ]
+      }
+    ]
+  }
+]

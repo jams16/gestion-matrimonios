@@ -88,6 +88,38 @@
       "model": "Ubigeo",
       "namespace": "public"
     },
+    "iv_categoria_relacion": {
+      "model": "CategoriaRelacion",
+      "namespace": "public"
+    },
+    "iv_invitado": {
+      "model": "Invitado",
+      "namespace": "public"
+    },
+    "iv_invitado_requerimiento_alimentario": {
+      "model": "InvitadoRequerimientoAlimentario",
+      "namespace": "public"
+    },
+    "iv_mesa": {
+      "model": "Mesa",
+      "namespace": "public"
+    },
+    "iv_mesa_invitado": {
+      "model": "MesaInvitado",
+      "namespace": "public"
+    },
+    "iv_requerimiento_alimentario": {
+      "model": "RequerimientoAlimentario",
+      "namespace": "public"
+    },
+    "iv_rsvp": {
+      "model": "Rsvp",
+      "namespace": "public"
+    },
+    "iv_rsvp_historial": {
+      "model": "RsvpHistorial",
+      "namespace": "public"
+    },
     "nt_notificacion": {
       "model": "Notificacion",
       "namespace": "public"
@@ -246,6 +278,61 @@
               {
                 "name": "OTROS",
                 "value": "OTROS"
+              }
+            ]
+          },
+          "iv_canal_rsvp": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "MANUAL",
+                "value": "MANUAL"
+              },
+              {
+                "name": "DIGITAL",
+                "value": "DIGITAL"
+              },
+              {
+                "name": "SISTEMA",
+                "value": "SISTEMA"
+              }
+            ]
+          },
+          "iv_estado_rsvp": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "PENDIENTE",
+                "value": "PENDIENTE"
+              },
+              {
+                "name": "CONFIRMADO",
+                "value": "CONFIRMADO"
+              },
+              {
+                "name": "NO_ASISTE",
+                "value": "NO_ASISTE"
+              }
+            ]
+          },
+          "iv_lado_relacion": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "NOVIA",
+                "value": "NOVIA"
+              },
+              {
+                "name": "NOVIO",
+                "value": "NOVIO"
+              },
+              {
+                "name": "AMBOS",
+                "value": "AMBOS"
+              },
+              {
+                "name": "OTRO",
+                "value": "OTRO"
               }
             ]
           },
@@ -609,6 +696,122 @@
               },
               "namespaceId": "public",
               "table": "cr_actividad"
+            }
+          },
+          "CategoriaRelacion": {
+            "fields": {
+              "activo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "codigo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 50
+                  }
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "descripcion": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 500
+                  }
+                }
+              },
+              "idCategoriaRelacion": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "nombre": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 100
+                  }
+                }
+              },
+              "orden": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "invitados": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idCategoriaRelacion"
+                  ],
+                  "targetFields": [
+                    "idCategoriaRelacion"
+                  ]
+                },
+                "to": {
+                  "model": "Invitado",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "activo": {
+                  "column": "activo"
+                },
+                "codigo": {
+                  "column": "codigo"
+                },
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "descripcion": {
+                  "column": "descripcion"
+                },
+                "idCategoriaRelacion": {
+                  "column": "id_categoria_relacion"
+                },
+                "nombre": {
+                  "column": "nombre"
+                },
+                "orden": {
+                  "column": "orden"
+                },
+                "updatedAt": {
+                  "column": "updated_at"
+                }
+              },
+              "namespaceId": "public",
+              "table": "iv_categoria_relacion"
             }
           },
           "Dependencia": {
@@ -1231,6 +1434,389 @@
               "table": "cr_hito"
             }
           },
+          "Invitado": {
+            "fields": {
+              "activo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "cantidadPases": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "esTitular": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "idCategoriaRelacion": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "idInvitado": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idInvitadoTitular": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idMatrimonio": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idPersonaNatural": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "ladoRelacion": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "iv_lado_relacion",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "observaciones": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 1000
+                  }
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "acompanantes": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idInvitado"
+                  ],
+                  "targetFields": [
+                    "idInvitadoTitular"
+                  ]
+                },
+                "to": {
+                  "model": "Invitado",
+                  "namespace": "public"
+                }
+              },
+              "asignacionesMesa": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idInvitado"
+                  ],
+                  "targetFields": [
+                    "idInvitado"
+                  ]
+                },
+                "to": {
+                  "model": "MesaInvitado",
+                  "namespace": "public"
+                }
+              },
+              "categoriaRelacion": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idCategoriaRelacion"
+                  ],
+                  "targetFields": [
+                    "idCategoriaRelacion"
+                  ]
+                },
+                "to": {
+                  "model": "CategoriaRelacion",
+                  "namespace": "public"
+                }
+              },
+              "matrimonio": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idMatrimonio"
+                  ],
+                  "targetFields": [
+                    "idMatrimonio"
+                  ]
+                },
+                "to": {
+                  "model": "Matrimonio",
+                  "namespace": "public"
+                }
+              },
+              "personaNatural": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idPersonaNatural"
+                  ],
+                  "targetFields": [
+                    "idPersonaNatural"
+                  ]
+                },
+                "to": {
+                  "model": "PersonaNatural",
+                  "namespace": "public"
+                }
+              },
+              "requerimientos": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idInvitado"
+                  ],
+                  "targetFields": [
+                    "idInvitado"
+                  ]
+                },
+                "to": {
+                  "model": "InvitadoRequerimientoAlimentario",
+                  "namespace": "public"
+                }
+              },
+              "rsvp": {
+                "cardinality": "1:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idInvitado"
+                  ],
+                  "targetFields": [
+                    "idInvitado"
+                  ]
+                },
+                "to": {
+                  "model": "Rsvp",
+                  "namespace": "public"
+                }
+              },
+              "titular": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idInvitadoTitular"
+                  ],
+                  "targetFields": [
+                    "idInvitado"
+                  ]
+                },
+                "to": {
+                  "model": "Invitado",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "activo": {
+                  "column": "activo"
+                },
+                "cantidadPases": {
+                  "column": "cantidad_pases"
+                },
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "esTitular": {
+                  "column": "es_titular"
+                },
+                "idCategoriaRelacion": {
+                  "column": "id_categoria_relacion"
+                },
+                "idInvitado": {
+                  "column": "id_invitado"
+                },
+                "idInvitadoTitular": {
+                  "column": "id_invitado_titular"
+                },
+                "idMatrimonio": {
+                  "column": "id_matrimonio"
+                },
+                "idPersonaNatural": {
+                  "column": "id_persona_natural"
+                },
+                "ladoRelacion": {
+                  "column": "lado_relacion"
+                },
+                "observaciones": {
+                  "column": "observaciones"
+                },
+                "updatedAt": {
+                  "column": "updated_at"
+                }
+              },
+              "namespaceId": "public",
+              "table": "iv_invitado"
+            }
+          },
+          "InvitadoRequerimientoAlimentario": {
+            "fields": {
+              "activo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "detalle": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 500
+                  }
+                }
+              },
+              "idInvitado": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idInvitadoRequerimientoAlimentario": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idRequerimientoAlimentario": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "invitado": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idInvitado"
+                  ],
+                  "targetFields": [
+                    "idInvitado"
+                  ]
+                },
+                "to": {
+                  "model": "Invitado",
+                  "namespace": "public"
+                }
+              },
+              "requerimiento": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idRequerimientoAlimentario"
+                  ],
+                  "targetFields": [
+                    "idRequerimientoAlimentario"
+                  ]
+                },
+                "to": {
+                  "model": "RequerimientoAlimentario",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "activo": {
+                  "column": "activo"
+                },
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "detalle": {
+                  "column": "detalle"
+                },
+                "idInvitado": {
+                  "column": "id_invitado"
+                },
+                "idInvitadoRequerimientoAlimentario": {
+                  "column": "id_invitado_requerimiento_alimentario"
+                },
+                "idRequerimientoAlimentario": {
+                  "column": "id_requerimiento_alimentario"
+                },
+                "updatedAt": {
+                  "column": "updated_at"
+                }
+              },
+              "namespaceId": "public",
+              "table": "iv_invitado_requerimiento_alimentario"
+            }
+          },
           "Matrimonio": {
             "fields": {
               "cantidadInvitados": {
@@ -1325,6 +1911,36 @@
               }
             },
             "relations": {
+              "invitados": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idMatrimonio"
+                  ],
+                  "targetFields": [
+                    "idMatrimonio"
+                  ]
+                },
+                "to": {
+                  "model": "Invitado",
+                  "namespace": "public"
+                }
+              },
+              "mesas": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idMatrimonio"
+                  ],
+                  "targetFields": [
+                    "idMatrimonio"
+                  ]
+                },
+                "to": {
+                  "model": "Mesa",
+                  "namespace": "public"
+                }
+              },
               "novio1": {
                 "cardinality": "N:1",
                 "nullable": true,
@@ -1447,6 +2063,285 @@
               },
               "namespaceId": "public",
               "table": "gp_matrimonio"
+            }
+          },
+          "Mesa": {
+            "fields": {
+              "activo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "capacidad": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "idMatrimonio": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idMesa": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "nombre": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 100
+                  }
+                }
+              },
+              "numero": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "observaciones": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 1000
+                  }
+                }
+              },
+              "ubicacion": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 250
+                  }
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "asignaciones": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idMesa"
+                  ],
+                  "targetFields": [
+                    "idMesa"
+                  ]
+                },
+                "to": {
+                  "model": "MesaInvitado",
+                  "namespace": "public"
+                }
+              },
+              "matrimonio": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idMatrimonio"
+                  ],
+                  "targetFields": [
+                    "idMatrimonio"
+                  ]
+                },
+                "to": {
+                  "model": "Matrimonio",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "activo": {
+                  "column": "activo"
+                },
+                "capacidad": {
+                  "column": "capacidad"
+                },
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "idMatrimonio": {
+                  "column": "id_matrimonio"
+                },
+                "idMesa": {
+                  "column": "id_mesa"
+                },
+                "nombre": {
+                  "column": "nombre"
+                },
+                "numero": {
+                  "column": "numero"
+                },
+                "observaciones": {
+                  "column": "observaciones"
+                },
+                "ubicacion": {
+                  "column": "ubicacion"
+                },
+                "updatedAt": {
+                  "column": "updated_at"
+                }
+              },
+              "namespaceId": "public",
+              "table": "iv_mesa"
+            }
+          },
+          "MesaInvitado": {
+            "fields": {
+              "activo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "idInvitado": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idMesa": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idMesaInvitado": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "numeroAsiento": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "observacion": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 500
+                  }
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "invitado": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idInvitado"
+                  ],
+                  "targetFields": [
+                    "idInvitado"
+                  ]
+                },
+                "to": {
+                  "model": "Invitado",
+                  "namespace": "public"
+                }
+              },
+              "mesa": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idMesa"
+                  ],
+                  "targetFields": [
+                    "idMesa"
+                  ]
+                },
+                "to": {
+                  "model": "Mesa",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "activo": {
+                  "column": "activo"
+                },
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "idInvitado": {
+                  "column": "id_invitado"
+                },
+                "idMesa": {
+                  "column": "id_mesa"
+                },
+                "idMesaInvitado": {
+                  "column": "id_mesa_invitado"
+                },
+                "numeroAsiento": {
+                  "column": "numero_asiento"
+                },
+                "observacion": {
+                  "column": "observacion"
+                },
+                "updatedAt": {
+                  "column": "updated_at"
+                }
+              },
+              "namespaceId": "public",
+              "table": "iv_mesa_invitado"
             }
           },
           "Notificacion": {
@@ -1876,6 +2771,21 @@
               }
             },
             "relations": {
+              "invitados": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idPersonaNatural"
+                  ],
+                  "targetFields": [
+                    "idPersonaNatural"
+                  ]
+                },
+                "to": {
+                  "model": "Invitado",
+                  "namespace": "public"
+                }
+              },
               "ubigeo": {
                 "cardinality": "N:1",
                 "nullable": true,
@@ -3233,6 +4143,498 @@
               "table": "au_registro_pendiente"
             }
           },
+          "RequerimientoAlimentario": {
+            "fields": {
+              "activo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "codigo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 50
+                  }
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "descripcion": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 500
+                  }
+                }
+              },
+              "idRequerimientoAlimentario": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "nombre": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 100
+                  }
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "invitados": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idRequerimientoAlimentario"
+                  ],
+                  "targetFields": [
+                    "idRequerimientoAlimentario"
+                  ]
+                },
+                "to": {
+                  "model": "InvitadoRequerimientoAlimentario",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "activo": {
+                  "column": "activo"
+                },
+                "codigo": {
+                  "column": "codigo"
+                },
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "descripcion": {
+                  "column": "descripcion"
+                },
+                "idRequerimientoAlimentario": {
+                  "column": "id_requerimiento_alimentario"
+                },
+                "nombre": {
+                  "column": "nombre"
+                },
+                "updatedAt": {
+                  "column": "updated_at"
+                }
+              },
+              "namespaceId": "public",
+              "table": "iv_requerimiento_alimentario"
+            }
+          },
+          "Rsvp": {
+            "fields": {
+              "cantidadAsistentesConfirmados": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "confirmacionDigital": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "estadoRsvp": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "iv_estado_rsvp",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "fechaConfirmacionDigital": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "fechaRespuesta": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "fechaVerificacionManual1": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "fechaVerificacionManual2": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "idInvitado": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idRsvp": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idUsuarioVerificacionManual1": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "idUsuarioVerificacionManual2": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "verificacionManual1": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "verificacionManual2": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "historial": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idRsvp"
+                  ],
+                  "targetFields": [
+                    "idRsvp"
+                  ]
+                },
+                "to": {
+                  "model": "RsvpHistorial",
+                  "namespace": "public"
+                }
+              },
+              "invitado": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idInvitado"
+                  ],
+                  "targetFields": [
+                    "idInvitado"
+                  ]
+                },
+                "to": {
+                  "model": "Invitado",
+                  "namespace": "public"
+                }
+              },
+              "usuarioVerificacionManual1": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idUsuarioVerificacionManual1"
+                  ],
+                  "targetFields": [
+                    "idUsuario"
+                  ]
+                },
+                "to": {
+                  "model": "Usuario",
+                  "namespace": "public"
+                }
+              },
+              "usuarioVerificacionManual2": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idUsuarioVerificacionManual2"
+                  ],
+                  "targetFields": [
+                    "idUsuario"
+                  ]
+                },
+                "to": {
+                  "model": "Usuario",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "cantidadAsistentesConfirmados": {
+                  "column": "cantidad_asistentes_confirmados"
+                },
+                "confirmacionDigital": {
+                  "column": "confirmacion_digital"
+                },
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "estadoRsvp": {
+                  "column": "estado_rsvp"
+                },
+                "fechaConfirmacionDigital": {
+                  "column": "fecha_confirmacion_digital"
+                },
+                "fechaRespuesta": {
+                  "column": "fecha_respuesta"
+                },
+                "fechaVerificacionManual1": {
+                  "column": "fecha_verificacion_manual_1"
+                },
+                "fechaVerificacionManual2": {
+                  "column": "fecha_verificacion_manual_2"
+                },
+                "idInvitado": {
+                  "column": "id_invitado"
+                },
+                "idRsvp": {
+                  "column": "id_rsvp"
+                },
+                "idUsuarioVerificacionManual1": {
+                  "column": "id_usuario_verificacion_manual_1"
+                },
+                "idUsuarioVerificacionManual2": {
+                  "column": "id_usuario_verificacion_manual_2"
+                },
+                "updatedAt": {
+                  "column": "updated_at"
+                },
+                "verificacionManual1": {
+                  "column": "verificacion_manual_1"
+                },
+                "verificacionManual2": {
+                  "column": "verificacion_manual_2"
+                }
+              },
+              "namespaceId": "public",
+              "table": "iv_rsvp"
+            }
+          },
+          "RsvpHistorial": {
+            "fields": {
+              "canal": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "iv_canal_rsvp",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "estadoAnterior": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "iv_estado_rsvp",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "estadoNuevo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "iv_estado_rsvp",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "fechaCambio": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "idRsvp": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idRsvpHistorial": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idUsuario": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "observacion": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 1000
+                  }
+                }
+              }
+            },
+            "relations": {
+              "rsvp": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idRsvp"
+                  ],
+                  "targetFields": [
+                    "idRsvp"
+                  ]
+                },
+                "to": {
+                  "model": "Rsvp",
+                  "namespace": "public"
+                }
+              },
+              "usuario": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idUsuario"
+                  ],
+                  "targetFields": [
+                    "idUsuario"
+                  ]
+                },
+                "to": {
+                  "model": "Usuario",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "canal": {
+                  "column": "canal"
+                },
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "estadoAnterior": {
+                  "column": "estado_anterior"
+                },
+                "estadoNuevo": {
+                  "column": "estado_nuevo"
+                },
+                "fechaCambio": {
+                  "column": "fecha_cambio"
+                },
+                "idRsvp": {
+                  "column": "id_rsvp"
+                },
+                "idRsvpHistorial": {
+                  "column": "id_rsvp_historial"
+                },
+                "idUsuario": {
+                  "column": "id_usuario"
+                },
+                "observacion": {
+                  "column": "observacion"
+                }
+              },
+              "namespaceId": "public",
+              "table": "iv_rsvp_historial"
+            }
+          },
           "Sesion": {
             "fields": {
               "fechaCreacion": {
@@ -3982,6 +5384,21 @@
                   "namespace": "public"
                 }
               },
+              "historialRsvp": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idUsuario"
+                  ],
+                  "targetFields": [
+                    "idUsuario"
+                  ]
+                },
+                "to": {
+                  "model": "RsvpHistorial",
+                  "namespace": "public"
+                }
+              },
               "matrimoniosNovio1": {
                 "cardinality": "1:N",
                 "on": {
@@ -4055,6 +5472,36 @@
                 },
                 "to": {
                   "model": "Proyecto",
+                  "namespace": "public"
+                }
+              },
+              "rsvpsVerificacionManual1": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idUsuario"
+                  ],
+                  "targetFields": [
+                    "idUsuarioVerificacionManual1"
+                  ]
+                },
+                "to": {
+                  "model": "Rsvp",
+                  "namespace": "public"
+                }
+              },
+              "rsvpsVerificacionManual2": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idUsuario"
+                  ],
+                  "targetFields": [
+                    "idUsuarioVerificacionManual2"
+                  ]
+                },
+                "to": {
+                  "model": "Rsvp",
                   "namespace": "public"
                 }
               },
@@ -6935,6 +8382,1093 @@
               },
               "uniques": []
             },
+            "iv_categoria_relacion": {
+              "columns": {
+                "activo": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "codigo": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 50
+                  }
+                },
+                "created_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "descripcion": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 500
+                  }
+                },
+                "id_categoria_relacion": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "expression": "autoincrement()",
+                    "kind": "function"
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "nombre": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 100
+                  }
+                },
+                "orden": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "updated_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [],
+              "indexes": [],
+              "primaryKey": {
+                "columns": [
+                  "id_categoria_relacion"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "codigo"
+                  ]
+                }
+              ]
+            },
+            "iv_invitado": {
+              "checks": [
+                {
+                  "expression": "\"lado_relacion\" IN ('NOVIA', 'NOVIO', 'AMBOS', 'OTRO')",
+                  "name": "iv_invitado_lado_relacion_check_97f471a8",
+                  "prefix": "iv_invitado_lado_relacion_check"
+                }
+              ],
+              "columns": {
+                "activo": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "cantidad_pases": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": 1
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "created_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "es_titular": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "id_categoria_relacion": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "id_invitado": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_invitado_titular": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": true
+                },
+                "id_matrimonio": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_persona_natural": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "lado_relacion": {
+                  "codecId": "pg/text@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": "AMBOS"
+                  },
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "iv_lado_relacion",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "observaciones": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 1000
+                  }
+                },
+                "updated_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_matrimonio"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "iv_invitado"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_matrimonio"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_matrimonio"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_persona_natural"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "iv_invitado"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_persona_natural"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "in_persona_natural"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_categoria_relacion"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "iv_invitado"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_categoria_relacion"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "iv_categoria_relacion"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_invitado_titular"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "iv_invitado"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_invitado"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "iv_invitado"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "activo"
+                  ],
+                  "name": "iv_invitado_activo_idx_4c0f2ecc",
+                  "prefix": "iv_invitado_activo_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_categoria_relacion"
+                  ],
+                  "name": "iv_invitado_id_categoria_relacion_idx_8ba92f0d",
+                  "prefix": "iv_invitado_id_categoria_relacion_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_invitado_titular"
+                  ],
+                  "name": "iv_invitado_id_invitado_titular_idx_55b89b45",
+                  "prefix": "iv_invitado_id_invitado_titular_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_matrimonio"
+                  ],
+                  "name": "iv_invitado_id_matrimonio_idx_97ab526e",
+                  "prefix": "iv_invitado_id_matrimonio_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_persona_natural"
+                  ],
+                  "name": "iv_invitado_id_persona_natural_idx_2ece1570",
+                  "prefix": "iv_invitado_id_persona_natural_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_invitado"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "id_matrimonio",
+                    "id_persona_natural"
+                  ]
+                }
+              ]
+            },
+            "iv_invitado_requerimiento_alimentario": {
+              "columns": {
+                "activo": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "created_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "detalle": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 500
+                  }
+                },
+                "id_invitado": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_invitado_requerimiento_alimentario": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_requerimiento_alimentario": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "updated_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_invitado"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "iv_invitado_requerimiento_alimentario"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_invitado"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "iv_invitado"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_requerimiento_alimentario"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "iv_invitado_requerimiento_alimentario"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_requerimiento_alimentario"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "iv_requerimiento_alimentario"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "id_invitado"
+                  ],
+                  "name": "iv_inv_req_alim_inv_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_requerimiento_alimentario"
+                  ],
+                  "name": "iv_inv_req_alim_req_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_invitado_requerimiento_alimentario"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "id_invitado",
+                    "id_requerimiento_alimentario"
+                  ]
+                }
+              ]
+            },
+            "iv_mesa": {
+              "columns": {
+                "activo": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "capacidad": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "created_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "id_matrimonio": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_mesa": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "nombre": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 100
+                  }
+                },
+                "numero": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "observaciones": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 1000
+                  }
+                },
+                "ubicacion": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 250
+                  }
+                },
+                "updated_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_matrimonio"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "iv_mesa"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_matrimonio"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_matrimonio"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "id_matrimonio"
+                  ],
+                  "name": "iv_mesa_id_matrimonio_idx_97ab526e",
+                  "prefix": "iv_mesa_id_matrimonio_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_mesa"
+                ]
+              },
+              "uniques": []
+            },
+            "iv_mesa_invitado": {
+              "columns": {
+                "activo": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "created_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "id_invitado": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_mesa": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_mesa_invitado": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "numero_asiento": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "observacion": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 500
+                  }
+                },
+                "updated_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_mesa"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "iv_mesa_invitado"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_mesa"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "iv_mesa"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_invitado"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "iv_mesa_invitado"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_invitado"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "iv_invitado"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "id_invitado"
+                  ],
+                  "name": "iv_mesa_invitado_id_invitado_idx_da2f6d21",
+                  "prefix": "iv_mesa_invitado_id_invitado_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_mesa"
+                  ],
+                  "name": "iv_mesa_invitado_id_mesa_idx_6d74982c",
+                  "prefix": "iv_mesa_invitado_id_mesa_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_mesa_invitado"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "id_mesa",
+                    "id_invitado"
+                  ]
+                }
+              ]
+            },
+            "iv_requerimiento_alimentario": {
+              "columns": {
+                "activo": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "codigo": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 50
+                  }
+                },
+                "created_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "descripcion": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 500
+                  }
+                },
+                "id_requerimiento_alimentario": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "expression": "autoincrement()",
+                    "kind": "function"
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "nombre": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 100
+                  }
+                },
+                "updated_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [],
+              "indexes": [],
+              "primaryKey": {
+                "columns": [
+                  "id_requerimiento_alimentario"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "codigo"
+                  ]
+                }
+              ]
+            },
+            "iv_rsvp": {
+              "checks": [
+                {
+                  "expression": "\"estado_rsvp\" IN ('PENDIENTE', 'CONFIRMADO', 'NO_ASISTE')",
+                  "name": "iv_rsvp_estado_rsvp_check_7c306183",
+                  "prefix": "iv_rsvp_estado_rsvp_check"
+                }
+              ],
+              "columns": {
+                "cantidad_asistentes_confirmados": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "confirmacion_digital": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": false
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "created_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "estado_rsvp": {
+                  "codecId": "pg/text@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": "PENDIENTE"
+                  },
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "iv_estado_rsvp",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "fecha_confirmacion_digital": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": true
+                },
+                "fecha_respuesta": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": true
+                },
+                "fecha_verificacion_manual_1": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": true
+                },
+                "fecha_verificacion_manual_2": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": true
+                },
+                "id_invitado": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_rsvp": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_usuario_verificacion_manual_1": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "id_usuario_verificacion_manual_2": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "updated_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "verificacion_manual_1": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": false
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "verificacion_manual_2": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": false
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_invitado"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "iv_rsvp"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_invitado"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "iv_invitado"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_usuario_verificacion_manual_1"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "iv_rsvp"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_usuario"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "au_usuario"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_usuario_verificacion_manual_2"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "iv_rsvp"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_usuario"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "au_usuario"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "estado_rsvp"
+                  ],
+                  "name": "iv_rsvp_estado_rsvp_idx_7f4af6a0",
+                  "prefix": "iv_rsvp_estado_rsvp_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_usuario_verificacion_manual_1"
+                  ],
+                  "name": "iv_rsvp_id_usuario_verificacion_manual_1_idx_c73f53d9",
+                  "prefix": "iv_rsvp_id_usuario_verificacion_manual_1_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_usuario_verificacion_manual_2"
+                  ],
+                  "name": "iv_rsvp_id_usuario_verificacion_manual_2_idx_f4c986df",
+                  "prefix": "iv_rsvp_id_usuario_verificacion_manual_2_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_rsvp"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "id_invitado"
+                  ]
+                }
+              ]
+            },
+            "iv_rsvp_historial": {
+              "checks": [
+                {
+                  "expression": "\"canal\" IN ('MANUAL', 'DIGITAL', 'SISTEMA')",
+                  "name": "iv_rsvp_historial_canal_check_d6e88a8a",
+                  "prefix": "iv_rsvp_historial_canal_check"
+                },
+                {
+                  "expression": "\"estado_anterior\" IN ('PENDIENTE', 'CONFIRMADO', 'NO_ASISTE')",
+                  "name": "iv_rsvp_historial_estado_anterior_check_87ee2fda",
+                  "prefix": "iv_rsvp_historial_estado_anterior_check"
+                },
+                {
+                  "expression": "\"estado_nuevo\" IN ('PENDIENTE', 'CONFIRMADO', 'NO_ASISTE')",
+                  "name": "iv_rsvp_historial_estado_nuevo_check_37200580",
+                  "prefix": "iv_rsvp_historial_estado_nuevo_check"
+                }
+              ],
+              "columns": {
+                "canal": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "iv_canal_rsvp",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "created_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "estado_anterior": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "iv_estado_rsvp",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "estado_nuevo": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "iv_estado_rsvp",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "fecha_cambio": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "id_rsvp": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_rsvp_historial": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_usuario": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "observacion": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 1000
+                  }
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_rsvp"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "iv_rsvp_historial"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_rsvp"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "iv_rsvp"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_usuario"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "iv_rsvp_historial"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_usuario"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "au_usuario"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "fecha_cambio"
+                  ],
+                  "name": "iv_rsvp_historial_fecha_cambio_idx_0c50a538",
+                  "prefix": "iv_rsvp_historial_fecha_cambio_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_rsvp"
+                  ],
+                  "name": "iv_rsvp_historial_id_rsvp_idx_edb653fc",
+                  "prefix": "iv_rsvp_historial_id_rsvp_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_usuario"
+                  ],
+                  "name": "iv_rsvp_historial_id_usuario_idx_00d592a0",
+                  "prefix": "iv_rsvp_historial_id_usuario_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_rsvp_historial"
+                ]
+              },
+              "uniques": []
+            },
             "nt_notificacion": {
               "columns": {
                 "activo": {
@@ -7305,6 +9839,31 @@
                 "OTROS"
               ]
             },
+            "iv_canal_rsvp": {
+              "kind": "valueSet",
+              "values": [
+                "MANUAL",
+                "DIGITAL",
+                "SISTEMA"
+              ]
+            },
+            "iv_estado_rsvp": {
+              "kind": "valueSet",
+              "values": [
+                "PENDIENTE",
+                "CONFIRMADO",
+                "NO_ASISTE"
+              ]
+            },
+            "iv_lado_relacion": {
+              "kind": "valueSet",
+              "values": [
+                "NOVIA",
+                "NOVIO",
+                "AMBOS",
+                "OTRO"
+              ]
+            },
             "nt_tipo_evento_cronograma": {
               "kind": "valueSet",
               "values": [
@@ -7321,10 +9880,10 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "114444530efb2738e08f10e17776b84fe6addca0fd9db0bf7cc2f8cf937b6fea"
+    "storageHash": "672c4927d44b7df966c870f87dca0504cb0659c67d5e16d79b08f159d568798e"
   },
   "execution": {
-    "executionHash": "10efde7b19d58abdd2d962f042a72887cfba163192377bec284620424408a21c",
+    "executionHash": "c1e5f021c2c37ce252a87b59c324137033b8eb55b9609ccd0fc6ef356b4348d5",
     "mutations": {
       "defaults": [
         {
@@ -7526,6 +10085,177 @@
             "column": "fecha_modificacion",
             "namespace": "public",
             "table": "in_persona_natural"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updated_at",
+            "namespace": "public",
+            "table": "iv_categoria_relacion"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id_invitado",
+            "namespace": "public",
+            "table": "iv_invitado"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updated_at",
+            "namespace": "public",
+            "table": "iv_invitado"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id_invitado_requerimiento_alimentario",
+            "namespace": "public",
+            "table": "iv_invitado_requerimiento_alimentario"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updated_at",
+            "namespace": "public",
+            "table": "iv_invitado_requerimiento_alimentario"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id_mesa",
+            "namespace": "public",
+            "table": "iv_mesa"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updated_at",
+            "namespace": "public",
+            "table": "iv_mesa"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id_mesa_invitado",
+            "namespace": "public",
+            "table": "iv_mesa_invitado"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updated_at",
+            "namespace": "public",
+            "table": "iv_mesa_invitado"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updated_at",
+            "namespace": "public",
+            "table": "iv_requerimiento_alimentario"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id_rsvp",
+            "namespace": "public",
+            "table": "iv_rsvp"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updated_at",
+            "namespace": "public",
+            "table": "iv_rsvp"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id_rsvp_historial",
+            "namespace": "public",
+            "table": "iv_rsvp_historial"
           }
         },
         {

@@ -34,9 +34,9 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'114444530efb2738e08f10e17776b84fe6addca0fd9db0bf7cc2f8cf937b6fea'>;
+  StorageHashBase<'672c4927d44b7df966c870f87dca0504cb0659c67d5e16d79b08f159d568798e'>;
 export type ExecutionHash =
-  ExecutionHashBase<'10efde7b19d58abdd2d962f042a72887cfba163192377bec284620424408a21c'>;
+  ExecutionHashBase<'c1e5f021c2c37ce252a87b59c324137033b8eb55b9609ccd0fc6ef356b4348d5'>;
 export type ProfileHash =
   ProfileHashBase<'3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2'>;
 
@@ -263,6 +263,16 @@ export type FieldOutputTypes = {
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     };
+    readonly CategoriaRelacion: {
+      readonly idCategoriaRelacion: CodecTypes['pg/int4@1']['output'];
+      readonly codigo: Varchar<50>;
+      readonly nombre: Varchar<100>;
+      readonly descripcion: Varchar<500> | null;
+      readonly orden: CodecTypes['pg/int4@1']['output'];
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
     readonly Dependencia: {
       readonly idDependencia: CodecTypes['pg/uuid@1']['output'];
       readonly idActividadPredecesora: CodecTypes['pg/uuid@1']['output'];
@@ -307,6 +317,29 @@ export type FieldOutputTypes = {
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     };
+    readonly Invitado: {
+      readonly idInvitado: CodecTypes['pg/uuid@1']['output'];
+      readonly idMatrimonio: CodecTypes['pg/uuid@1']['output'];
+      readonly idPersonaNatural: CodecTypes['pg/int4@1']['output'];
+      readonly idCategoriaRelacion: CodecTypes['pg/int4@1']['output'] | null;
+      readonly ladoRelacion: 'NOVIA' | 'NOVIO' | 'AMBOS' | 'OTRO';
+      readonly esTitular: CodecTypes['pg/bool@1']['output'];
+      readonly idInvitadoTitular: CodecTypes['pg/uuid@1']['output'] | null;
+      readonly cantidadPases: CodecTypes['pg/int4@1']['output'];
+      readonly observaciones: Varchar<1000> | null;
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly InvitadoRequerimientoAlimentario: {
+      readonly idInvitadoRequerimientoAlimentario: CodecTypes['pg/uuid@1']['output'];
+      readonly idInvitado: CodecTypes['pg/uuid@1']['output'];
+      readonly idRequerimientoAlimentario: CodecTypes['pg/int4@1']['output'];
+      readonly detalle: Varchar<500> | null;
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
     readonly Matrimonio: {
       readonly idMatrimonio: CodecTypes['pg/uuid@1']['output'];
       readonly idProyecto: CodecTypes['pg/uuid@1']['output'];
@@ -320,6 +353,28 @@ export type FieldOutputTypes = {
       readonly estado: CodecTypes['pg/bool@1']['output'] | null;
       readonly fechaCreacion: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly fechaModificacion: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+    };
+    readonly Mesa: {
+      readonly idMesa: CodecTypes['pg/uuid@1']['output'];
+      readonly idMatrimonio: CodecTypes['pg/uuid@1']['output'];
+      readonly nombre: Varchar<100>;
+      readonly numero: CodecTypes['pg/int4@1']['output'] | null;
+      readonly capacidad: CodecTypes['pg/int4@1']['output'];
+      readonly ubicacion: Varchar<250> | null;
+      readonly observaciones: Varchar<1000> | null;
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly MesaInvitado: {
+      readonly idMesaInvitado: CodecTypes['pg/uuid@1']['output'];
+      readonly idMesa: CodecTypes['pg/uuid@1']['output'];
+      readonly idInvitado: CodecTypes['pg/uuid@1']['output'];
+      readonly numeroAsiento: CodecTypes['pg/int4@1']['output'] | null;
+      readonly observacion: Varchar<500> | null;
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     };
     readonly Notificacion: {
       readonly idNotificacion: CodecTypes['pg/uuid@1']['output'];
@@ -452,6 +507,43 @@ export type FieldOutputTypes = {
       readonly fechaExpiracion: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly fechaVerificacion: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
     };
+    readonly RequerimientoAlimentario: {
+      readonly idRequerimientoAlimentario: CodecTypes['pg/int4@1']['output'];
+      readonly codigo: Varchar<50>;
+      readonly nombre: Varchar<100>;
+      readonly descripcion: Varchar<500> | null;
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly Rsvp: {
+      readonly idRsvp: CodecTypes['pg/uuid@1']['output'];
+      readonly idInvitado: CodecTypes['pg/uuid@1']['output'];
+      readonly estadoRsvp: 'PENDIENTE' | 'CONFIRMADO' | 'NO_ASISTE';
+      readonly fechaRespuesta: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+      readonly confirmacionDigital: CodecTypes['pg/bool@1']['output'];
+      readonly fechaConfirmacionDigital: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+      readonly verificacionManual1: CodecTypes['pg/bool@1']['output'];
+      readonly fechaVerificacionManual1: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+      readonly idUsuarioVerificacionManual1: CodecTypes['pg/int4@1']['output'] | null;
+      readonly verificacionManual2: CodecTypes['pg/bool@1']['output'];
+      readonly fechaVerificacionManual2: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+      readonly idUsuarioVerificacionManual2: CodecTypes['pg/int4@1']['output'] | null;
+      readonly cantidadAsistentesConfirmados: CodecTypes['pg/int4@1']['output'] | null;
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly RsvpHistorial: {
+      readonly idRsvpHistorial: CodecTypes['pg/uuid@1']['output'];
+      readonly idRsvp: CodecTypes['pg/uuid@1']['output'];
+      readonly estadoAnterior: 'PENDIENTE' | 'CONFIRMADO' | 'NO_ASISTE' | null;
+      readonly estadoNuevo: 'PENDIENTE' | 'CONFIRMADO' | 'NO_ASISTE';
+      readonly canal: 'MANUAL' | 'DIGITAL' | 'SISTEMA';
+      readonly fechaCambio: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly idUsuario: CodecTypes['pg/int4@1']['output'] | null;
+      readonly observacion: Varchar<1000> | null;
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
     readonly Sesion: {
       readonly idSesion: CodecTypes['pg/int4@1']['output'];
       readonly idUsuario: CodecTypes['pg/int4@1']['output'];
@@ -538,6 +630,16 @@ export type FieldInputTypes = {
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
     };
+    readonly CategoriaRelacion: {
+      readonly idCategoriaRelacion: CodecTypes['pg/int4@1']['input'];
+      readonly codigo: CodecTypes['sql/varchar@1']['input'];
+      readonly nombre: CodecTypes['sql/varchar@1']['input'];
+      readonly descripcion: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly orden: CodecTypes['pg/int4@1']['input'];
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
     readonly Dependencia: {
       readonly idDependencia: CodecTypes['pg/uuid@1']['input'];
       readonly idActividadPredecesora: CodecTypes['pg/uuid@1']['input'];
@@ -582,6 +684,29 @@ export type FieldInputTypes = {
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
     };
+    readonly Invitado: {
+      readonly idInvitado: CodecTypes['pg/uuid@1']['input'];
+      readonly idMatrimonio: CodecTypes['pg/uuid@1']['input'];
+      readonly idPersonaNatural: CodecTypes['pg/int4@1']['input'];
+      readonly idCategoriaRelacion: CodecTypes['pg/int4@1']['input'] | null;
+      readonly ladoRelacion: 'NOVIA' | 'NOVIO' | 'AMBOS' | 'OTRO';
+      readonly esTitular: CodecTypes['pg/bool@1']['input'];
+      readonly idInvitadoTitular: CodecTypes['pg/uuid@1']['input'] | null;
+      readonly cantidadPases: CodecTypes['pg/int4@1']['input'];
+      readonly observaciones: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly InvitadoRequerimientoAlimentario: {
+      readonly idInvitadoRequerimientoAlimentario: CodecTypes['pg/uuid@1']['input'];
+      readonly idInvitado: CodecTypes['pg/uuid@1']['input'];
+      readonly idRequerimientoAlimentario: CodecTypes['pg/int4@1']['input'];
+      readonly detalle: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
     readonly Matrimonio: {
       readonly idMatrimonio: CodecTypes['pg/uuid@1']['input'];
       readonly idProyecto: CodecTypes['pg/uuid@1']['input'];
@@ -595,6 +720,28 @@ export type FieldInputTypes = {
       readonly estado: CodecTypes['pg/bool@1']['input'] | null;
       readonly fechaCreacion: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly fechaModificacion: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
+    };
+    readonly Mesa: {
+      readonly idMesa: CodecTypes['pg/uuid@1']['input'];
+      readonly idMatrimonio: CodecTypes['pg/uuid@1']['input'];
+      readonly nombre: CodecTypes['sql/varchar@1']['input'];
+      readonly numero: CodecTypes['pg/int4@1']['input'] | null;
+      readonly capacidad: CodecTypes['pg/int4@1']['input'];
+      readonly ubicacion: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly observaciones: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly MesaInvitado: {
+      readonly idMesaInvitado: CodecTypes['pg/uuid@1']['input'];
+      readonly idMesa: CodecTypes['pg/uuid@1']['input'];
+      readonly idInvitado: CodecTypes['pg/uuid@1']['input'];
+      readonly numeroAsiento: CodecTypes['pg/int4@1']['input'] | null;
+      readonly observacion: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
     };
     readonly Notificacion: {
       readonly idNotificacion: CodecTypes['pg/uuid@1']['input'];
@@ -726,6 +873,43 @@ export type FieldInputTypes = {
       readonly fechaCreacion: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly fechaExpiracion: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly fechaVerificacion: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
+    };
+    readonly RequerimientoAlimentario: {
+      readonly idRequerimientoAlimentario: CodecTypes['pg/int4@1']['input'];
+      readonly codigo: CodecTypes['sql/varchar@1']['input'];
+      readonly nombre: CodecTypes['sql/varchar@1']['input'];
+      readonly descripcion: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly Rsvp: {
+      readonly idRsvp: CodecTypes['pg/uuid@1']['input'];
+      readonly idInvitado: CodecTypes['pg/uuid@1']['input'];
+      readonly estadoRsvp: 'PENDIENTE' | 'CONFIRMADO' | 'NO_ASISTE';
+      readonly fechaRespuesta: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
+      readonly confirmacionDigital: CodecTypes['pg/bool@1']['input'];
+      readonly fechaConfirmacionDigital: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
+      readonly verificacionManual1: CodecTypes['pg/bool@1']['input'];
+      readonly fechaVerificacionManual1: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
+      readonly idUsuarioVerificacionManual1: CodecTypes['pg/int4@1']['input'] | null;
+      readonly verificacionManual2: CodecTypes['pg/bool@1']['input'];
+      readonly fechaVerificacionManual2: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
+      readonly idUsuarioVerificacionManual2: CodecTypes['pg/int4@1']['input'] | null;
+      readonly cantidadAsistentesConfirmados: CodecTypes['pg/int4@1']['input'] | null;
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly RsvpHistorial: {
+      readonly idRsvpHistorial: CodecTypes['pg/uuid@1']['input'];
+      readonly idRsvp: CodecTypes['pg/uuid@1']['input'];
+      readonly estadoAnterior: 'PENDIENTE' | 'CONFIRMADO' | 'NO_ASISTE' | null;
+      readonly estadoNuevo: 'PENDIENTE' | 'CONFIRMADO' | 'NO_ASISTE';
+      readonly canal: 'MANUAL' | 'DIGITAL' | 'SISTEMA';
+      readonly fechaCambio: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly idUsuario: CodecTypes['pg/int4@1']['input'] | null;
+      readonly observacion: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
     };
     readonly Sesion: {
       readonly idSesion: CodecTypes['pg/int4@1']['input'];
@@ -1036,6 +1220,100 @@ export type StorageColumnTypes = {
       readonly id_ubigeo: Varchar<6>;
       readonly provincia: Varchar<100>;
     };
+    readonly iv_categoria_relacion: {
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly codigo: Varchar<50>;
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly descripcion: Varchar<500> | null;
+      readonly id_categoria_relacion: CodecTypes['pg/int4@1']['output'];
+      readonly nombre: Varchar<100>;
+      readonly orden: CodecTypes['pg/int4@1']['output'];
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly iv_invitado: {
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly cantidad_pases: CodecTypes['pg/int4@1']['output'];
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly es_titular: CodecTypes['pg/bool@1']['output'];
+      readonly id_categoria_relacion: CodecTypes['pg/int4@1']['output'] | null;
+      readonly id_invitado: CodecTypes['pg/uuid@1']['output'];
+      readonly id_invitado_titular: CodecTypes['pg/uuid@1']['output'] | null;
+      readonly id_matrimonio: CodecTypes['pg/uuid@1']['output'];
+      readonly id_persona_natural: CodecTypes['pg/int4@1']['output'];
+      readonly lado_relacion: 'NOVIA' | 'NOVIO' | 'AMBOS' | 'OTRO';
+      readonly observaciones: Varchar<1000> | null;
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly iv_invitado_requerimiento_alimentario: {
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly detalle: Varchar<500> | null;
+      readonly id_invitado: CodecTypes['pg/uuid@1']['output'];
+      readonly id_invitado_requerimiento_alimentario: CodecTypes['pg/uuid@1']['output'];
+      readonly id_requerimiento_alimentario: CodecTypes['pg/int4@1']['output'];
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly iv_mesa: {
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly capacidad: CodecTypes['pg/int4@1']['output'];
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly id_matrimonio: CodecTypes['pg/uuid@1']['output'];
+      readonly id_mesa: CodecTypes['pg/uuid@1']['output'];
+      readonly nombre: Varchar<100>;
+      readonly numero: CodecTypes['pg/int4@1']['output'] | null;
+      readonly observaciones: Varchar<1000> | null;
+      readonly ubicacion: Varchar<250> | null;
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly iv_mesa_invitado: {
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly id_invitado: CodecTypes['pg/uuid@1']['output'];
+      readonly id_mesa: CodecTypes['pg/uuid@1']['output'];
+      readonly id_mesa_invitado: CodecTypes['pg/uuid@1']['output'];
+      readonly numero_asiento: CodecTypes['pg/int4@1']['output'] | null;
+      readonly observacion: Varchar<500> | null;
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly iv_requerimiento_alimentario: {
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly codigo: Varchar<50>;
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly descripcion: Varchar<500> | null;
+      readonly id_requerimiento_alimentario: CodecTypes['pg/int4@1']['output'];
+      readonly nombre: Varchar<100>;
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly iv_rsvp: {
+      readonly cantidad_asistentes_confirmados: CodecTypes['pg/int4@1']['output'] | null;
+      readonly confirmacion_digital: CodecTypes['pg/bool@1']['output'];
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly estado_rsvp: 'PENDIENTE' | 'CONFIRMADO' | 'NO_ASISTE';
+      readonly fecha_confirmacion_digital: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+      readonly fecha_respuesta: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+      readonly fecha_verificacion_manual_1:
+        CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+      readonly fecha_verificacion_manual_2:
+        CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+      readonly id_invitado: CodecTypes['pg/uuid@1']['output'];
+      readonly id_rsvp: CodecTypes['pg/uuid@1']['output'];
+      readonly id_usuario_verificacion_manual_1: CodecTypes['pg/int4@1']['output'] | null;
+      readonly id_usuario_verificacion_manual_2: CodecTypes['pg/int4@1']['output'] | null;
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly verificacion_manual_1: CodecTypes['pg/bool@1']['output'];
+      readonly verificacion_manual_2: CodecTypes['pg/bool@1']['output'];
+    };
+    readonly iv_rsvp_historial: {
+      readonly canal: 'MANUAL' | 'DIGITAL' | 'SISTEMA';
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly estado_anterior: 'PENDIENTE' | 'CONFIRMADO' | 'NO_ASISTE' | null;
+      readonly estado_nuevo: 'PENDIENTE' | 'CONFIRMADO' | 'NO_ASISTE';
+      readonly fecha_cambio: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly id_rsvp: CodecTypes['pg/uuid@1']['output'];
+      readonly id_rsvp_historial: CodecTypes['pg/uuid@1']['output'];
+      readonly id_usuario: CodecTypes['pg/int4@1']['output'] | null;
+      readonly observacion: Varchar<1000> | null;
+    };
     readonly nt_notificacion: {
       readonly activo: CodecTypes['pg/bool@1']['output'];
       readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
@@ -1311,6 +1589,98 @@ export type StorageColumnInputTypes = {
       readonly id_ubigeo: CodecTypes['sql/varchar@1']['input'];
       readonly provincia: CodecTypes['sql/varchar@1']['input'];
     };
+    readonly iv_categoria_relacion: {
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly codigo: CodecTypes['sql/varchar@1']['input'];
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly descripcion: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly id_categoria_relacion: CodecTypes['pg/int4@1']['input'];
+      readonly nombre: CodecTypes['sql/varchar@1']['input'];
+      readonly orden: CodecTypes['pg/int4@1']['input'];
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly iv_invitado: {
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly cantidad_pases: CodecTypes['pg/int4@1']['input'];
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly es_titular: CodecTypes['pg/bool@1']['input'];
+      readonly id_categoria_relacion: CodecTypes['pg/int4@1']['input'] | null;
+      readonly id_invitado: CodecTypes['pg/uuid@1']['input'];
+      readonly id_invitado_titular: CodecTypes['pg/uuid@1']['input'] | null;
+      readonly id_matrimonio: CodecTypes['pg/uuid@1']['input'];
+      readonly id_persona_natural: CodecTypes['pg/int4@1']['input'];
+      readonly lado_relacion: 'NOVIA' | 'NOVIO' | 'AMBOS' | 'OTRO';
+      readonly observaciones: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly iv_invitado_requerimiento_alimentario: {
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly detalle: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly id_invitado: CodecTypes['pg/uuid@1']['input'];
+      readonly id_invitado_requerimiento_alimentario: CodecTypes['pg/uuid@1']['input'];
+      readonly id_requerimiento_alimentario: CodecTypes['pg/int4@1']['input'];
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly iv_mesa: {
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly capacidad: CodecTypes['pg/int4@1']['input'];
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly id_matrimonio: CodecTypes['pg/uuid@1']['input'];
+      readonly id_mesa: CodecTypes['pg/uuid@1']['input'];
+      readonly nombre: CodecTypes['sql/varchar@1']['input'];
+      readonly numero: CodecTypes['pg/int4@1']['input'] | null;
+      readonly observaciones: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly ubicacion: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly iv_mesa_invitado: {
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly id_invitado: CodecTypes['pg/uuid@1']['input'];
+      readonly id_mesa: CodecTypes['pg/uuid@1']['input'];
+      readonly id_mesa_invitado: CodecTypes['pg/uuid@1']['input'];
+      readonly numero_asiento: CodecTypes['pg/int4@1']['input'] | null;
+      readonly observacion: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly iv_requerimiento_alimentario: {
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly codigo: CodecTypes['sql/varchar@1']['input'];
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly descripcion: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly id_requerimiento_alimentario: CodecTypes['pg/int4@1']['input'];
+      readonly nombre: CodecTypes['sql/varchar@1']['input'];
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly iv_rsvp: {
+      readonly cantidad_asistentes_confirmados: CodecTypes['pg/int4@1']['input'] | null;
+      readonly confirmacion_digital: CodecTypes['pg/bool@1']['input'];
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly estado_rsvp: 'PENDIENTE' | 'CONFIRMADO' | 'NO_ASISTE';
+      readonly fecha_confirmacion_digital: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
+      readonly fecha_respuesta: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
+      readonly fecha_verificacion_manual_1: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
+      readonly fecha_verificacion_manual_2: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
+      readonly id_invitado: CodecTypes['pg/uuid@1']['input'];
+      readonly id_rsvp: CodecTypes['pg/uuid@1']['input'];
+      readonly id_usuario_verificacion_manual_1: CodecTypes['pg/int4@1']['input'] | null;
+      readonly id_usuario_verificacion_manual_2: CodecTypes['pg/int4@1']['input'] | null;
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly verificacion_manual_1: CodecTypes['pg/bool@1']['input'];
+      readonly verificacion_manual_2: CodecTypes['pg/bool@1']['input'];
+    };
+    readonly iv_rsvp_historial: {
+      readonly canal: 'MANUAL' | 'DIGITAL' | 'SISTEMA';
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly estado_anterior: 'PENDIENTE' | 'CONFIRMADO' | 'NO_ASISTE' | null;
+      readonly estado_nuevo: 'PENDIENTE' | 'CONFIRMADO' | 'NO_ASISTE';
+      readonly fecha_cambio: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly id_rsvp: CodecTypes['pg/uuid@1']['input'];
+      readonly id_rsvp_historial: CodecTypes['pg/uuid@1']['input'];
+      readonly id_usuario: CodecTypes['pg/int4@1']['input'] | null;
+      readonly observacion: CodecTypes['sql/varchar@1']['input'] | null;
+    };
     readonly nt_notificacion: {
       readonly activo: CodecTypes['pg/bool@1']['input'];
       readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
@@ -1387,12 +1757,15 @@ export namespace Models {
     estado: CodecTypes['pg/bool@1']['output'] | null;
     fechaCreacion: CodecTypes['pg/timestamptz-temporal@1']['output'];
     fechaModificacion: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+    invitados: public_Invitado[];
+    mesas: public_Mesa[];
     novio1: public_Usuario | null;
     novio2: public_Usuario | null;
     proyecto: public_Proyecto;
     tipoCeremonia: public_TipoCeremonia | null;
     ubigeo: public_Ubigeo | null;
-    readonly [RelationKeys]?: 'novio1' | 'novio2' | 'proyecto' | 'tipoCeremonia' | 'ubigeo';
+    readonly [RelationKeys]?:
+      'invitados' | 'mesas' | 'novio1' | 'novio2' | 'proyecto' | 'tipoCeremonia' | 'ubigeo';
   };
   export type public_TipoCeremonia = {
     idTipoCeremonia: CodecTypes['pg/int4@1']['output'];
@@ -1413,6 +1786,137 @@ export namespace Models {
     actividadesPlantilla: public_PlantillaActividad[];
     proyectos: public_Proyecto[];
     readonly [RelationKeys]?: 'actividadesPlantilla' | 'proyectos';
+  };
+  export type public_CategoriaRelacion = {
+    idCategoriaRelacion: CodecTypes['pg/int4@1']['output'];
+    codigo: Varchar<50>;
+    nombre: Varchar<100>;
+    descripcion: Varchar<500> | null;
+    orden: CodecTypes['pg/int4@1']['output'];
+    activo: CodecTypes['pg/bool@1']['output'];
+    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    invitados: public_Invitado[];
+    readonly [RelationKeys]?: 'invitados';
+  };
+  export type public_Invitado = {
+    idInvitado: CodecTypes['pg/uuid@1']['output'];
+    idMatrimonio: CodecTypes['pg/uuid@1']['output'];
+    idPersonaNatural: CodecTypes['pg/int4@1']['output'];
+    idCategoriaRelacion: CodecTypes['pg/int4@1']['output'] | null;
+    ladoRelacion: 'NOVIA' | 'NOVIO' | 'AMBOS' | 'OTRO';
+    esTitular: CodecTypes['pg/bool@1']['output'];
+    idInvitadoTitular: CodecTypes['pg/uuid@1']['output'] | null;
+    cantidadPases: CodecTypes['pg/int4@1']['output'];
+    observaciones: Varchar<1000> | null;
+    activo: CodecTypes['pg/bool@1']['output'];
+    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    acompanantes: public_Invitado[];
+    asignacionesMesa: public_MesaInvitado[];
+    categoriaRelacion: public_CategoriaRelacion | null;
+    matrimonio: public_Matrimonio;
+    personaNatural: public_PersonaNatural;
+    requerimientos: public_InvitadoRequerimientoAlimentario[];
+    rsvp: public_Rsvp | null;
+    titular: public_Invitado | null;
+    readonly [RelationKeys]?:
+      | 'acompanantes'
+      | 'asignacionesMesa'
+      | 'categoriaRelacion'
+      | 'matrimonio'
+      | 'personaNatural'
+      | 'requerimientos'
+      | 'rsvp'
+      | 'titular';
+  };
+  export type public_RequerimientoAlimentario = {
+    idRequerimientoAlimentario: CodecTypes['pg/int4@1']['output'];
+    codigo: Varchar<50>;
+    nombre: Varchar<100>;
+    descripcion: Varchar<500> | null;
+    activo: CodecTypes['pg/bool@1']['output'];
+    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    invitados: public_InvitadoRequerimientoAlimentario[];
+    readonly [RelationKeys]?: 'invitados';
+  };
+  export type public_InvitadoRequerimientoAlimentario = {
+    idInvitadoRequerimientoAlimentario: CodecTypes['pg/uuid@1']['output'];
+    idInvitado: CodecTypes['pg/uuid@1']['output'];
+    idRequerimientoAlimentario: CodecTypes['pg/int4@1']['output'];
+    detalle: Varchar<500> | null;
+    activo: CodecTypes['pg/bool@1']['output'];
+    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    invitado: public_Invitado;
+    requerimiento: public_RequerimientoAlimentario;
+    readonly [RelationKeys]?: 'invitado' | 'requerimiento';
+  };
+  export type public_Rsvp = {
+    idRsvp: CodecTypes['pg/uuid@1']['output'];
+    idInvitado: CodecTypes['pg/uuid@1']['output'];
+    estadoRsvp: 'PENDIENTE' | 'CONFIRMADO' | 'NO_ASISTE';
+    fechaRespuesta: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+    confirmacionDigital: CodecTypes['pg/bool@1']['output'];
+    fechaConfirmacionDigital: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+    verificacionManual1: CodecTypes['pg/bool@1']['output'];
+    fechaVerificacionManual1: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+    idUsuarioVerificacionManual1: CodecTypes['pg/int4@1']['output'] | null;
+    verificacionManual2: CodecTypes['pg/bool@1']['output'];
+    fechaVerificacionManual2: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+    idUsuarioVerificacionManual2: CodecTypes['pg/int4@1']['output'] | null;
+    cantidadAsistentesConfirmados: CodecTypes['pg/int4@1']['output'] | null;
+    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    historial: public_RsvpHistorial[];
+    invitado: public_Invitado;
+    usuarioVerificacionManual1: public_Usuario | null;
+    usuarioVerificacionManual2: public_Usuario | null;
+    readonly [RelationKeys]?:
+      'historial' | 'invitado' | 'usuarioVerificacionManual1' | 'usuarioVerificacionManual2';
+  };
+  export type public_RsvpHistorial = {
+    idRsvpHistorial: CodecTypes['pg/uuid@1']['output'];
+    idRsvp: CodecTypes['pg/uuid@1']['output'];
+    estadoAnterior: 'PENDIENTE' | 'CONFIRMADO' | 'NO_ASISTE' | null;
+    estadoNuevo: 'PENDIENTE' | 'CONFIRMADO' | 'NO_ASISTE';
+    canal: 'MANUAL' | 'DIGITAL' | 'SISTEMA';
+    fechaCambio: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    idUsuario: CodecTypes['pg/int4@1']['output'] | null;
+    observacion: Varchar<1000> | null;
+    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    rsvp: public_Rsvp;
+    usuario: public_Usuario | null;
+    readonly [RelationKeys]?: 'rsvp' | 'usuario';
+  };
+  export type public_Mesa = {
+    idMesa: CodecTypes['pg/uuid@1']['output'];
+    idMatrimonio: CodecTypes['pg/uuid@1']['output'];
+    nombre: Varchar<100>;
+    numero: CodecTypes['pg/int4@1']['output'] | null;
+    capacidad: CodecTypes['pg/int4@1']['output'];
+    ubicacion: Varchar<250> | null;
+    observaciones: Varchar<1000> | null;
+    activo: CodecTypes['pg/bool@1']['output'];
+    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    asignaciones: public_MesaInvitado[];
+    matrimonio: public_Matrimonio;
+    readonly [RelationKeys]?: 'asignaciones' | 'matrimonio';
+  };
+  export type public_MesaInvitado = {
+    idMesaInvitado: CodecTypes['pg/uuid@1']['output'];
+    idMesa: CodecTypes['pg/uuid@1']['output'];
+    idInvitado: CodecTypes['pg/uuid@1']['output'];
+    numeroAsiento: CodecTypes['pg/int4@1']['output'] | null;
+    observacion: Varchar<500> | null;
+    activo: CodecTypes['pg/bool@1']['output'];
+    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    invitado: public_Invitado;
+    mesa: public_Mesa;
+    readonly [RelationKeys]?: 'invitado' | 'mesa';
   };
   export type public_PlantillaHito = {
     idPlantillaHito: CodecTypes['pg/int4@1']['output'];
@@ -1649,9 +2153,10 @@ export namespace Models {
     esActivo: CodecTypes['pg/bool@1']['output'];
     fechaCreacion: CodecTypes['pg/timestamptz-temporal@1']['output'];
     fechaModificacion: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    invitados: public_Invitado[];
     ubigeo: public_Ubigeo | null;
     usuarios: public_Usuario[];
-    readonly [RelationKeys]?: 'ubigeo' | 'usuarios';
+    readonly [RelationKeys]?: 'invitados' | 'ubigeo' | 'usuarios';
   };
   export type public_Entidad = {
     idEntidad: CodecTypes['pg/int4@1']['output'];
@@ -1685,22 +2190,28 @@ export namespace Models {
     fechaModificacion: CodecTypes['pg/timestamptz-temporal@1']['output'];
     actividadesResponsable: public_Actividad[];
     entidad: public_Entidad | null;
+    historialRsvp: public_RsvpHistorial[];
     matrimoniosNovio1: public_Matrimonio[];
     matrimoniosNovio2: public_Matrimonio[];
     notificacionesDestino: public_Notificacion[];
     personaNatural: public_PersonaNatural;
     proyectosPm: public_Proyecto[];
+    rsvpsVerificacionManual1: public_Rsvp[];
+    rsvpsVerificacionManual2: public_Rsvp[];
     sesiones: public_Sesion[];
     timingsResponsable: public_Timing[];
     tokensCuenta: public_TokenCuenta[];
     readonly [RelationKeys]?:
       | 'actividadesResponsable'
       | 'entidad'
+      | 'historialRsvp'
       | 'matrimoniosNovio1'
       | 'matrimoniosNovio2'
       | 'notificacionesDestino'
       | 'personaNatural'
       | 'proyectosPm'
+      | 'rsvpsVerificacionManual1'
+      | 'rsvpsVerificacionManual2'
       | 'sesiones'
       | 'timingsResponsable'
       | 'tokensCuenta';
@@ -1746,6 +2257,14 @@ export declare const models: {
     Matrimonio: Models.public_Matrimonio;
     TipoCeremonia: Models.public_TipoCeremonia;
     FaseProyecto: Models.public_FaseProyecto;
+    CategoriaRelacion: Models.public_CategoriaRelacion;
+    Invitado: Models.public_Invitado;
+    RequerimientoAlimentario: Models.public_RequerimientoAlimentario;
+    InvitadoRequerimientoAlimentario: Models.public_InvitadoRequerimientoAlimentario;
+    Rsvp: Models.public_Rsvp;
+    RsvpHistorial: Models.public_RsvpHistorial;
+    Mesa: Models.public_Mesa;
+    MesaInvitado: Models.public_MesaInvitado;
     PlantillaHito: Models.public_PlantillaHito;
     PlantillaActividad: Models.public_PlantillaActividad;
     PlantillaActividadTipoCeremonia: Models.public_PlantillaActividadTipoCeremonia;
@@ -3854,6 +4373,810 @@ type ContractBase = Omit<
               indexes: readonly [];
               foreignKeys: readonly [];
             };
+            readonly iv_categoria_relacion: {
+              columns: {
+                readonly id_categoria_relacion: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'function';
+                    readonly expression: 'autoincrement()';
+                  };
+                };
+                readonly codigo: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly length: 50 };
+                };
+                readonly nombre: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly length: 100 };
+                };
+                readonly descripcion: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly length: 500 };
+                };
+                readonly orden: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                };
+                readonly activo: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', true>;
+                  };
+                };
+                readonly created_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                };
+                readonly updated_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id_categoria_relacion'] };
+              uniques: readonly [{ readonly columns: readonly ['codigo'] }];
+              indexes: readonly [];
+              foreignKeys: readonly [];
+            };
+            readonly iv_invitado: {
+              columns: {
+                readonly id_invitado: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly id_matrimonio: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly id_persona_natural: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                };
+                readonly id_categoria_relacion: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: true;
+                };
+                readonly lado_relacion: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/text@1', 'AMBOS'>;
+                  };
+                };
+                readonly es_titular: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', true>;
+                  };
+                };
+                readonly id_invitado_titular: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: true;
+                };
+                readonly cantidad_pases: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/int4@1', 1>;
+                  };
+                };
+                readonly observaciones: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly length: 1000 };
+                };
+                readonly activo: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', true>;
+                  };
+                };
+                readonly created_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                };
+                readonly updated_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id_invitado'] };
+              uniques: readonly [
+                { readonly columns: readonly ['id_matrimonio', 'id_persona_natural'] },
+              ];
+              indexes: readonly [
+                {
+                  readonly name: 'iv_invitado_id_matrimonio_idx_97ab526e';
+                  readonly prefix: 'iv_invitado_id_matrimonio_idx';
+                  readonly columns: readonly ['id_matrimonio'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'iv_invitado_id_persona_natural_idx_2ece1570';
+                  readonly prefix: 'iv_invitado_id_persona_natural_idx';
+                  readonly columns: readonly ['id_persona_natural'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'iv_invitado_id_categoria_relacion_idx_8ba92f0d';
+                  readonly prefix: 'iv_invitado_id_categoria_relacion_idx';
+                  readonly columns: readonly ['id_categoria_relacion'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'iv_invitado_id_invitado_titular_idx_55b89b45';
+                  readonly prefix: 'iv_invitado_id_invitado_titular_idx';
+                  readonly columns: readonly ['id_invitado_titular'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'iv_invitado_activo_idx_4c0f2ecc';
+                  readonly prefix: 'iv_invitado_activo_idx';
+                  readonly columns: readonly ['activo'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'iv_invitado';
+                    readonly columns: readonly ['id_matrimonio'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'gp_matrimonio';
+                    readonly columns: readonly ['id_matrimonio'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'iv_invitado';
+                    readonly columns: readonly ['id_persona_natural'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'in_persona_natural';
+                    readonly columns: readonly ['id_persona_natural'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'iv_invitado';
+                    readonly columns: readonly ['id_categoria_relacion'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'iv_categoria_relacion';
+                    readonly columns: readonly ['id_categoria_relacion'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'iv_invitado';
+                    readonly columns: readonly ['id_invitado_titular'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'iv_invitado';
+                    readonly columns: readonly ['id_invitado'];
+                  };
+                },
+              ];
+            };
+            readonly iv_invitado_requerimiento_alimentario: {
+              columns: {
+                readonly id_invitado_requerimiento_alimentario: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly id_invitado: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly id_requerimiento_alimentario: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                };
+                readonly detalle: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly length: 500 };
+                };
+                readonly activo: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', true>;
+                  };
+                };
+                readonly created_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                };
+                readonly updated_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id_invitado_requerimiento_alimentario'] };
+              uniques: readonly [
+                { readonly columns: readonly ['id_invitado', 'id_requerimiento_alimentario'] },
+              ];
+              indexes: readonly [
+                {
+                  readonly name: 'iv_inv_req_alim_inv_idx';
+                  readonly columns: readonly ['id_invitado'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'iv_inv_req_alim_req_idx';
+                  readonly columns: readonly ['id_requerimiento_alimentario'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'iv_invitado_requerimiento_alimentario';
+                    readonly columns: readonly ['id_invitado'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'iv_invitado';
+                    readonly columns: readonly ['id_invitado'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'iv_invitado_requerimiento_alimentario';
+                    readonly columns: readonly ['id_requerimiento_alimentario'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'iv_requerimiento_alimentario';
+                    readonly columns: readonly ['id_requerimiento_alimentario'];
+                  };
+                },
+              ];
+            };
+            readonly iv_mesa: {
+              columns: {
+                readonly id_mesa: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly id_matrimonio: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly nombre: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly length: 100 };
+                };
+                readonly numero: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: true;
+                };
+                readonly capacidad: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                };
+                readonly ubicacion: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly length: 250 };
+                };
+                readonly observaciones: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly length: 1000 };
+                };
+                readonly activo: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', true>;
+                  };
+                };
+                readonly created_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                };
+                readonly updated_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id_mesa'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'iv_mesa_id_matrimonio_idx_97ab526e';
+                  readonly prefix: 'iv_mesa_id_matrimonio_idx';
+                  readonly columns: readonly ['id_matrimonio'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'iv_mesa';
+                    readonly columns: readonly ['id_matrimonio'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'gp_matrimonio';
+                    readonly columns: readonly ['id_matrimonio'];
+                  };
+                },
+              ];
+            };
+            readonly iv_mesa_invitado: {
+              columns: {
+                readonly id_mesa_invitado: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly id_mesa: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly id_invitado: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly numero_asiento: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: true;
+                };
+                readonly observacion: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly length: 500 };
+                };
+                readonly activo: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', true>;
+                  };
+                };
+                readonly created_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                };
+                readonly updated_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id_mesa_invitado'] };
+              uniques: readonly [{ readonly columns: readonly ['id_mesa', 'id_invitado'] }];
+              indexes: readonly [
+                {
+                  readonly name: 'iv_mesa_invitado_id_mesa_idx_6d74982c';
+                  readonly prefix: 'iv_mesa_invitado_id_mesa_idx';
+                  readonly columns: readonly ['id_mesa'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'iv_mesa_invitado_id_invitado_idx_da2f6d21';
+                  readonly prefix: 'iv_mesa_invitado_id_invitado_idx';
+                  readonly columns: readonly ['id_invitado'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'iv_mesa_invitado';
+                    readonly columns: readonly ['id_mesa'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'iv_mesa';
+                    readonly columns: readonly ['id_mesa'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'iv_mesa_invitado';
+                    readonly columns: readonly ['id_invitado'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'iv_invitado';
+                    readonly columns: readonly ['id_invitado'];
+                  };
+                },
+              ];
+            };
+            readonly iv_requerimiento_alimentario: {
+              columns: {
+                readonly id_requerimiento_alimentario: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'function';
+                    readonly expression: 'autoincrement()';
+                  };
+                };
+                readonly codigo: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly length: 50 };
+                };
+                readonly nombre: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly length: 100 };
+                };
+                readonly descripcion: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly length: 500 };
+                };
+                readonly activo: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', true>;
+                  };
+                };
+                readonly created_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                };
+                readonly updated_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id_requerimiento_alimentario'] };
+              uniques: readonly [{ readonly columns: readonly ['codigo'] }];
+              indexes: readonly [];
+              foreignKeys: readonly [];
+            };
+            readonly iv_rsvp: {
+              columns: {
+                readonly id_rsvp: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly id_invitado: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly estado_rsvp: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/text@1', 'PENDIENTE'>;
+                  };
+                };
+                readonly fecha_respuesta: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: true;
+                };
+                readonly confirmacion_digital: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', false>;
+                  };
+                };
+                readonly fecha_confirmacion_digital: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: true;
+                };
+                readonly verificacion_manual_1: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', false>;
+                  };
+                };
+                readonly fecha_verificacion_manual_1: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: true;
+                };
+                readonly id_usuario_verificacion_manual_1: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: true;
+                };
+                readonly verificacion_manual_2: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', false>;
+                  };
+                };
+                readonly fecha_verificacion_manual_2: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: true;
+                };
+                readonly id_usuario_verificacion_manual_2: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: true;
+                };
+                readonly cantidad_asistentes_confirmados: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: true;
+                };
+                readonly created_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                };
+                readonly updated_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id_rsvp'] };
+              uniques: readonly [{ readonly columns: readonly ['id_invitado'] }];
+              indexes: readonly [
+                {
+                  readonly name: 'iv_rsvp_estado_rsvp_idx_7f4af6a0';
+                  readonly prefix: 'iv_rsvp_estado_rsvp_idx';
+                  readonly columns: readonly ['estado_rsvp'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'iv_rsvp_id_usuario_verificacion_manual_1_idx_c73f53d9';
+                  readonly prefix: 'iv_rsvp_id_usuario_verificacion_manual_1_idx';
+                  readonly columns: readonly ['id_usuario_verificacion_manual_1'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'iv_rsvp_id_usuario_verificacion_manual_2_idx_f4c986df';
+                  readonly prefix: 'iv_rsvp_id_usuario_verificacion_manual_2_idx';
+                  readonly columns: readonly ['id_usuario_verificacion_manual_2'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'iv_rsvp';
+                    readonly columns: readonly ['id_invitado'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'iv_invitado';
+                    readonly columns: readonly ['id_invitado'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'iv_rsvp';
+                    readonly columns: readonly ['id_usuario_verificacion_manual_1'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'au_usuario';
+                    readonly columns: readonly ['id_usuario'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'iv_rsvp';
+                    readonly columns: readonly ['id_usuario_verificacion_manual_2'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'au_usuario';
+                    readonly columns: readonly ['id_usuario'];
+                  };
+                },
+              ];
+            };
+            readonly iv_rsvp_historial: {
+              columns: {
+                readonly id_rsvp_historial: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly id_rsvp: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly estado_anterior: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+                readonly estado_nuevo: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+                readonly canal: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+                readonly fecha_cambio: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                };
+                readonly id_usuario: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: true;
+                };
+                readonly observacion: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly length: 1000 };
+                };
+                readonly created_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id_rsvp_historial'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'iv_rsvp_historial_id_rsvp_idx_edb653fc';
+                  readonly prefix: 'iv_rsvp_historial_id_rsvp_idx';
+                  readonly columns: readonly ['id_rsvp'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'iv_rsvp_historial_fecha_cambio_idx_0c50a538';
+                  readonly prefix: 'iv_rsvp_historial_fecha_cambio_idx';
+                  readonly columns: readonly ['fecha_cambio'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'iv_rsvp_historial_id_usuario_idx_00d592a0';
+                  readonly prefix: 'iv_rsvp_historial_id_usuario_idx';
+                  readonly columns: readonly ['id_usuario'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'iv_rsvp_historial';
+                    readonly columns: readonly ['id_rsvp'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'iv_rsvp';
+                    readonly columns: readonly ['id_rsvp'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'iv_rsvp_historial';
+                    readonly columns: readonly ['id_usuario'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'au_usuario';
+                    readonly columns: readonly ['id_usuario'];
+                  };
+                },
+              ];
+            };
             readonly nt_notificacion: {
               columns: {
                 readonly id_notificacion: {
@@ -4129,6 +5452,18 @@ type ContractBase = Omit<
               readonly kind: 'valueSet';
               readonly values: readonly ['PUBLICA', 'PRIVADA', 'RELIGIOSA', 'OTROS'];
             };
+            readonly iv_canal_rsvp: {
+              readonly kind: 'valueSet';
+              readonly values: readonly ['MANUAL', 'DIGITAL', 'SISTEMA'];
+            };
+            readonly iv_estado_rsvp: {
+              readonly kind: 'valueSet';
+              readonly values: readonly ['PENDIENTE', 'CONFIRMADO', 'NO_ASISTE'];
+            };
+            readonly iv_lado_relacion: {
+              readonly kind: 'valueSet';
+              readonly values: readonly ['NOVIA', 'NOVIO', 'AMBOS', 'OTRO'];
+            };
             readonly nt_tipo_evento_cronograma: {
               readonly kind: 'valueSet';
               readonly values: readonly [
@@ -4165,6 +5500,32 @@ type ContractBase = Omit<
     readonly gp_fase_proyecto: {
       readonly namespace: 'public' & NamespaceId;
       readonly model: 'FaseProyecto';
+    };
+    readonly iv_categoria_relacion: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'CategoriaRelacion';
+    };
+    readonly iv_invitado: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'Invitado';
+    };
+    readonly iv_requerimiento_alimentario: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'RequerimientoAlimentario';
+    };
+    readonly iv_invitado_requerimiento_alimentario: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'InvitadoRequerimientoAlimentario';
+    };
+    readonly iv_rsvp: { readonly namespace: 'public' & NamespaceId; readonly model: 'Rsvp' };
+    readonly iv_rsvp_historial: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'RsvpHistorial';
+    };
+    readonly iv_mesa: { readonly namespace: 'public' & NamespaceId; readonly model: 'Mesa' };
+    readonly iv_mesa_invitado: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'MesaInvitado';
     };
     readonly cr_plantilla_hito: {
       readonly namespace: 'public' & NamespaceId;
@@ -4436,6 +5797,87 @@ type ContractBase = Omit<
                 readonly responsableTexto: { readonly column: 'responsable_texto' };
                 readonly orden: { readonly column: 'orden' };
                 readonly modificadoManualmente: { readonly column: 'modificado_manualmente' };
+                readonly activo: { readonly column: 'activo' };
+                readonly createdAt: { readonly column: 'created_at' };
+                readonly updatedAt: { readonly column: 'updated_at' };
+              };
+            };
+          };
+          readonly CategoriaRelacion: {
+            readonly fields: {
+              readonly idCategoriaRelacion: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly codigo: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 50 };
+                };
+              };
+              readonly nombre: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 100 };
+                };
+              };
+              readonly descripcion: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 500 };
+                };
+              };
+              readonly orden: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly activo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+            };
+            readonly relations: {
+              readonly invitados: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Invitado';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idCategoriaRelacion'];
+                  readonly targetFields: readonly ['idCategoriaRelacion'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'iv_categoria_relacion';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly idCategoriaRelacion: { readonly column: 'id_categoria_relacion' };
+                readonly codigo: { readonly column: 'codigo' };
+                readonly nombre: { readonly column: 'nombre' };
+                readonly descripcion: { readonly column: 'descripcion' };
+                readonly orden: { readonly column: 'orden' };
                 readonly activo: { readonly column: 'activo' };
                 readonly createdAt: { readonly column: 'created_at' };
                 readonly updatedAt: { readonly column: 'updated_at' };
@@ -4852,6 +6294,263 @@ type ContractBase = Omit<
               };
             };
           };
+          readonly Invitado: {
+            readonly fields: {
+              readonly idInvitado: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly idMatrimonio: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly idPersonaNatural: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly idCategoriaRelacion: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly ladoRelacion: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly esTitular: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly idInvitadoTitular: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly cantidadPases: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly observaciones: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 1000 };
+                };
+              };
+              readonly activo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+            };
+            readonly relations: {
+              readonly acompanantes: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Invitado';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idInvitado'];
+                  readonly targetFields: readonly ['idInvitadoTitular'];
+                };
+              };
+              readonly asignacionesMesa: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'MesaInvitado';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idInvitado'];
+                  readonly targetFields: readonly ['idInvitado'];
+                };
+              };
+              readonly categoriaRelacion: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'CategoriaRelacion';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['idCategoriaRelacion'];
+                  readonly targetFields: readonly ['idCategoriaRelacion'];
+                };
+              };
+              readonly matrimonio: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Matrimonio';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['idMatrimonio'];
+                  readonly targetFields: readonly ['idMatrimonio'];
+                };
+              };
+              readonly personaNatural: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'PersonaNatural';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['idPersonaNatural'];
+                  readonly targetFields: readonly ['idPersonaNatural'];
+                };
+              };
+              readonly requerimientos: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'InvitadoRequerimientoAlimentario';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idInvitado'];
+                  readonly targetFields: readonly ['idInvitado'];
+                };
+              };
+              readonly rsvp: {
+                readonly to: { readonly namespace: 'public' & NamespaceId; readonly model: 'Rsvp' };
+                readonly cardinality: '1:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['idInvitado'];
+                  readonly targetFields: readonly ['idInvitado'];
+                };
+              };
+              readonly titular: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Invitado';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['idInvitadoTitular'];
+                  readonly targetFields: readonly ['idInvitado'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'iv_invitado';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly idInvitado: { readonly column: 'id_invitado' };
+                readonly idMatrimonio: { readonly column: 'id_matrimonio' };
+                readonly idPersonaNatural: { readonly column: 'id_persona_natural' };
+                readonly idCategoriaRelacion: { readonly column: 'id_categoria_relacion' };
+                readonly ladoRelacion: { readonly column: 'lado_relacion' };
+                readonly esTitular: { readonly column: 'es_titular' };
+                readonly idInvitadoTitular: { readonly column: 'id_invitado_titular' };
+                readonly cantidadPases: { readonly column: 'cantidad_pases' };
+                readonly observaciones: { readonly column: 'observaciones' };
+                readonly activo: { readonly column: 'activo' };
+                readonly createdAt: { readonly column: 'created_at' };
+                readonly updatedAt: { readonly column: 'updated_at' };
+              };
+            };
+          };
+          readonly InvitadoRequerimientoAlimentario: {
+            readonly fields: {
+              readonly idInvitadoRequerimientoAlimentario: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly idInvitado: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly idRequerimientoAlimentario: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly detalle: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 500 };
+                };
+              };
+              readonly activo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+            };
+            readonly relations: {
+              readonly invitado: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Invitado';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['idInvitado'];
+                  readonly targetFields: readonly ['idInvitado'];
+                };
+              };
+              readonly requerimiento: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'RequerimientoAlimentario';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['idRequerimientoAlimentario'];
+                  readonly targetFields: readonly ['idRequerimientoAlimentario'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'iv_invitado_requerimiento_alimentario';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly idInvitadoRequerimientoAlimentario: {
+                  readonly column: 'id_invitado_requerimiento_alimentario';
+                };
+                readonly idInvitado: { readonly column: 'id_invitado' };
+                readonly idRequerimientoAlimentario: {
+                  readonly column: 'id_requerimiento_alimentario';
+                };
+                readonly detalle: { readonly column: 'detalle' };
+                readonly activo: { readonly column: 'activo' };
+                readonly createdAt: { readonly column: 'created_at' };
+                readonly updatedAt: { readonly column: 'updated_at' };
+              };
+            };
+          };
           readonly Matrimonio: {
             readonly fields: {
               readonly idMatrimonio: {
@@ -4921,6 +6620,25 @@ type ContractBase = Omit<
               };
             };
             readonly relations: {
+              readonly invitados: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Invitado';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idMatrimonio'];
+                  readonly targetFields: readonly ['idMatrimonio'];
+                };
+              };
+              readonly mesas: {
+                readonly to: { readonly namespace: 'public' & NamespaceId; readonly model: 'Mesa' };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idMatrimonio'];
+                  readonly targetFields: readonly ['idMatrimonio'];
+                };
+              };
               readonly novio1: {
                 readonly to: {
                   readonly namespace: 'public' & NamespaceId;
@@ -4998,6 +6716,192 @@ type ContractBase = Omit<
                 readonly estado: { readonly column: 'estado' };
                 readonly fechaCreacion: { readonly column: 'fecha_creacion' };
                 readonly fechaModificacion: { readonly column: 'fecha_modificacion' };
+              };
+            };
+          };
+          readonly Mesa: {
+            readonly fields: {
+              readonly idMesa: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly idMatrimonio: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly nombre: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 100 };
+                };
+              };
+              readonly numero: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly capacidad: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly ubicacion: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 250 };
+                };
+              };
+              readonly observaciones: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 1000 };
+                };
+              };
+              readonly activo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+            };
+            readonly relations: {
+              readonly asignaciones: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'MesaInvitado';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idMesa'];
+                  readonly targetFields: readonly ['idMesa'];
+                };
+              };
+              readonly matrimonio: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Matrimonio';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['idMatrimonio'];
+                  readonly targetFields: readonly ['idMatrimonio'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'iv_mesa';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly idMesa: { readonly column: 'id_mesa' };
+                readonly idMatrimonio: { readonly column: 'id_matrimonio' };
+                readonly nombre: { readonly column: 'nombre' };
+                readonly numero: { readonly column: 'numero' };
+                readonly capacidad: { readonly column: 'capacidad' };
+                readonly ubicacion: { readonly column: 'ubicacion' };
+                readonly observaciones: { readonly column: 'observaciones' };
+                readonly activo: { readonly column: 'activo' };
+                readonly createdAt: { readonly column: 'created_at' };
+                readonly updatedAt: { readonly column: 'updated_at' };
+              };
+            };
+          };
+          readonly MesaInvitado: {
+            readonly fields: {
+              readonly idMesaInvitado: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly idMesa: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly idInvitado: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly numeroAsiento: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly observacion: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 500 };
+                };
+              };
+              readonly activo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+            };
+            readonly relations: {
+              readonly invitado: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Invitado';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['idInvitado'];
+                  readonly targetFields: readonly ['idInvitado'];
+                };
+              };
+              readonly mesa: {
+                readonly to: { readonly namespace: 'public' & NamespaceId; readonly model: 'Mesa' };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['idMesa'];
+                  readonly targetFields: readonly ['idMesa'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'iv_mesa_invitado';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly idMesaInvitado: { readonly column: 'id_mesa_invitado' };
+                readonly idMesa: { readonly column: 'id_mesa' };
+                readonly idInvitado: { readonly column: 'id_invitado' };
+                readonly numeroAsiento: { readonly column: 'numero_asiento' };
+                readonly observacion: { readonly column: 'observacion' };
+                readonly activo: { readonly column: 'activo' };
+                readonly createdAt: { readonly column: 'created_at' };
+                readonly updatedAt: { readonly column: 'updated_at' };
               };
             };
           };
@@ -5301,6 +7205,17 @@ type ContractBase = Omit<
               };
             };
             readonly relations: {
+              readonly invitados: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Invitado';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idPersonaNatural'];
+                  readonly targetFields: readonly ['idPersonaNatural'];
+                };
+              };
               readonly ubigeo: {
                 readonly to: {
                   readonly namespace: 'public' & NamespaceId;
@@ -6198,6 +8113,336 @@ type ContractBase = Omit<
               };
             };
           };
+          readonly RequerimientoAlimentario: {
+            readonly fields: {
+              readonly idRequerimientoAlimentario: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly codigo: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 50 };
+                };
+              };
+              readonly nombre: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 100 };
+                };
+              };
+              readonly descripcion: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 500 };
+                };
+              };
+              readonly activo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+            };
+            readonly relations: {
+              readonly invitados: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'InvitadoRequerimientoAlimentario';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idRequerimientoAlimentario'];
+                  readonly targetFields: readonly ['idRequerimientoAlimentario'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'iv_requerimiento_alimentario';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly idRequerimientoAlimentario: {
+                  readonly column: 'id_requerimiento_alimentario';
+                };
+                readonly codigo: { readonly column: 'codigo' };
+                readonly nombre: { readonly column: 'nombre' };
+                readonly descripcion: { readonly column: 'descripcion' };
+                readonly activo: { readonly column: 'activo' };
+                readonly createdAt: { readonly column: 'created_at' };
+                readonly updatedAt: { readonly column: 'updated_at' };
+              };
+            };
+          };
+          readonly Rsvp: {
+            readonly fields: {
+              readonly idRsvp: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly idInvitado: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly estadoRsvp: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly fechaRespuesta: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly confirmacionDigital: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly fechaConfirmacionDigital: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly verificacionManual1: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly fechaVerificacionManual1: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly idUsuarioVerificacionManual1: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly verificacionManual2: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly fechaVerificacionManual2: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly idUsuarioVerificacionManual2: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly cantidadAsistentesConfirmados: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+            };
+            readonly relations: {
+              readonly historial: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'RsvpHistorial';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idRsvp'];
+                  readonly targetFields: readonly ['idRsvp'];
+                };
+              };
+              readonly invitado: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Invitado';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['idInvitado'];
+                  readonly targetFields: readonly ['idInvitado'];
+                };
+              };
+              readonly usuarioVerificacionManual1: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Usuario';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['idUsuarioVerificacionManual1'];
+                  readonly targetFields: readonly ['idUsuario'];
+                };
+              };
+              readonly usuarioVerificacionManual2: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Usuario';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['idUsuarioVerificacionManual2'];
+                  readonly targetFields: readonly ['idUsuario'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'iv_rsvp';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly idRsvp: { readonly column: 'id_rsvp' };
+                readonly idInvitado: { readonly column: 'id_invitado' };
+                readonly estadoRsvp: { readonly column: 'estado_rsvp' };
+                readonly fechaRespuesta: { readonly column: 'fecha_respuesta' };
+                readonly confirmacionDigital: { readonly column: 'confirmacion_digital' };
+                readonly fechaConfirmacionDigital: {
+                  readonly column: 'fecha_confirmacion_digital';
+                };
+                readonly verificacionManual1: { readonly column: 'verificacion_manual_1' };
+                readonly fechaVerificacionManual1: {
+                  readonly column: 'fecha_verificacion_manual_1';
+                };
+                readonly idUsuarioVerificacionManual1: {
+                  readonly column: 'id_usuario_verificacion_manual_1';
+                };
+                readonly verificacionManual2: { readonly column: 'verificacion_manual_2' };
+                readonly fechaVerificacionManual2: {
+                  readonly column: 'fecha_verificacion_manual_2';
+                };
+                readonly idUsuarioVerificacionManual2: {
+                  readonly column: 'id_usuario_verificacion_manual_2';
+                };
+                readonly cantidadAsistentesConfirmados: {
+                  readonly column: 'cantidad_asistentes_confirmados';
+                };
+                readonly createdAt: { readonly column: 'created_at' };
+                readonly updatedAt: { readonly column: 'updated_at' };
+              };
+            };
+          };
+          readonly RsvpHistorial: {
+            readonly fields: {
+              readonly idRsvpHistorial: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly idRsvp: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly estadoAnterior: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly estadoNuevo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly canal: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly fechaCambio: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly idUsuario: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly observacion: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 1000 };
+                };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+            };
+            readonly relations: {
+              readonly rsvp: {
+                readonly to: { readonly namespace: 'public' & NamespaceId; readonly model: 'Rsvp' };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['idRsvp'];
+                  readonly targetFields: readonly ['idRsvp'];
+                };
+              };
+              readonly usuario: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Usuario';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['idUsuario'];
+                  readonly targetFields: readonly ['idUsuario'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'iv_rsvp_historial';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly idRsvpHistorial: { readonly column: 'id_rsvp_historial' };
+                readonly idRsvp: { readonly column: 'id_rsvp' };
+                readonly estadoAnterior: { readonly column: 'estado_anterior' };
+                readonly estadoNuevo: { readonly column: 'estado_nuevo' };
+                readonly canal: { readonly column: 'canal' };
+                readonly fechaCambio: { readonly column: 'fecha_cambio' };
+                readonly idUsuario: { readonly column: 'id_usuario' };
+                readonly observacion: { readonly column: 'observacion' };
+                readonly createdAt: { readonly column: 'created_at' };
+              };
+            };
+          };
           readonly Sesion: {
             readonly fields: {
               readonly idSesion: {
@@ -6714,6 +8959,17 @@ type ContractBase = Omit<
                   readonly targetFields: readonly ['idEntidad'];
                 };
               };
+              readonly historialRsvp: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'RsvpHistorial';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idUsuario'];
+                  readonly targetFields: readonly ['idUsuario'];
+                };
+              };
               readonly matrimoniosNovio1: {
                 readonly to: {
                   readonly namespace: 'public' & NamespaceId;
@@ -6768,6 +9024,22 @@ type ContractBase = Omit<
                 readonly on: {
                   readonly localFields: readonly ['idUsuario'];
                   readonly targetFields: readonly ['idPm'];
+                };
+              };
+              readonly rsvpsVerificacionManual1: {
+                readonly to: { readonly namespace: 'public' & NamespaceId; readonly model: 'Rsvp' };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idUsuario'];
+                  readonly targetFields: readonly ['idUsuarioVerificacionManual1'];
+                };
+              };
+              readonly rsvpsVerificacionManual2: {
+                readonly to: { readonly namespace: 'public' & NamespaceId; readonly model: 'Rsvp' };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idUsuario'];
+                  readonly targetFields: readonly ['idUsuarioVerificacionManual2'];
                 };
               };
               readonly sesiones: {
@@ -6832,6 +9104,31 @@ type ContractBase = Omit<
               { readonly name: 'FIJO_EVENTO'; readonly value: 'FIJO_EVENTO' },
               { readonly name: 'DIA_EVENTO'; readonly value: 'DIA_EVENTO' },
               { readonly name: 'POST_EVENTO'; readonly value: 'POST_EVENTO' },
+            ];
+          };
+          readonly iv_lado_relacion: {
+            readonly codecId: 'pg/text@1';
+            readonly members: readonly [
+              { readonly name: 'NOVIA'; readonly value: 'NOVIA' },
+              { readonly name: 'NOVIO'; readonly value: 'NOVIO' },
+              { readonly name: 'AMBOS'; readonly value: 'AMBOS' },
+              { readonly name: 'OTRO'; readonly value: 'OTRO' },
+            ];
+          };
+          readonly iv_estado_rsvp: {
+            readonly codecId: 'pg/text@1';
+            readonly members: readonly [
+              { readonly name: 'PENDIENTE'; readonly value: 'PENDIENTE' },
+              { readonly name: 'CONFIRMADO'; readonly value: 'CONFIRMADO' },
+              { readonly name: 'NO_ASISTE'; readonly value: 'NO_ASISTE' },
+            ];
+          };
+          readonly iv_canal_rsvp: {
+            readonly codecId: 'pg/text@1';
+            readonly members: readonly [
+              { readonly name: 'MANUAL'; readonly value: 'MANUAL' },
+              { readonly name: 'DIGITAL'; readonly value: 'DIGITAL' },
+              { readonly name: 'SISTEMA'; readonly value: 'SISTEMA' },
             ];
           };
           readonly cr_prioridad_actividad: {
@@ -7062,6 +9359,117 @@ type ContractBase = Omit<
           };
           readonly onCreate: { readonly kind: 'generator'; readonly id: 'instantNow' };
           readonly onUpdate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'iv_categoria_relacion';
+            readonly column: 'updated_at';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+          readonly onUpdate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'iv_invitado';
+            readonly column: 'id_invitado';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'uuidv4' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'iv_invitado';
+            readonly column: 'updated_at';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+          readonly onUpdate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'iv_invitado_requerimiento_alimentario';
+            readonly column: 'id_invitado_requerimiento_alimentario';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'uuidv4' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'iv_invitado_requerimiento_alimentario';
+            readonly column: 'updated_at';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+          readonly onUpdate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'iv_mesa';
+            readonly column: 'id_mesa';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'uuidv4' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'iv_mesa';
+            readonly column: 'updated_at';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+          readonly onUpdate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'iv_mesa_invitado';
+            readonly column: 'id_mesa_invitado';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'uuidv4' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'iv_mesa_invitado';
+            readonly column: 'updated_at';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+          readonly onUpdate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'iv_requerimiento_alimentario';
+            readonly column: 'updated_at';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+          readonly onUpdate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'iv_rsvp';
+            readonly column: 'id_rsvp';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'uuidv4' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'iv_rsvp';
+            readonly column: 'updated_at';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+          readonly onUpdate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'iv_rsvp_historial';
+            readonly column: 'id_rsvp_historial';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'uuidv4' };
         },
         {
           readonly ref: {

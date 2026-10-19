@@ -49,6 +49,8 @@ model Matrimonio {
   novio2            Usuario?       @relation("matrimonios_novio2", fields:[idNovio2], references:[idUsuario], onDelete: Restrict)
   ubigeo            Ubigeo?        @relation(fields:[ciudadUbicacion], references:[idUbigeo], onDelete: Restrict)
   tipoCeremonia     TipoCeremonia? @relation(fields:[idTipoCeremonia], references:[idTipoCeremonia], onDelete: Restrict)
+  invitados         Invitado[]
+  mesas             Mesa[]
 
   @@index([idNovio1])
   @@index([idNovio2])
@@ -87,6 +89,179 @@ enum cr_tipo_temporal {
   FIJO_EVENTO
   DIA_EVENTO
   POST_EVENTO
+}
+
+enum iv_lado_relacion {
+  NOVIA
+  NOVIO
+  AMBOS
+  OTRO
+}
+
+enum iv_estado_rsvp {
+  PENDIENTE
+  CONFIRMADO
+  NO_ASISTE
+}
+
+enum iv_canal_rsvp {
+  MANUAL
+  DIGITAL
+  SISTEMA
+}
+
+model CategoriaRelacion {
+  idCategoriaRelacion Int                  @id @default(autoincrement()) @map("id_categoria_relacion")
+  codigo              VarChar(50)          @unique
+  nombre              VarChar(100)
+  descripcion         VarChar(500)?
+  orden               Int
+  activo              Boolean              @default(true)
+  createdAt           DateTime             @default(now()) @map("created_at")
+  updatedAt           temporal.updatedAt() @map("updated_at")
+  invitados           Invitado[]
+
+  @@map("iv_categoria_relacion")
+}
+
+model Invitado {
+  idInvitado          Uuid                               @id @default(uuid()) @map("id_invitado")
+  idMatrimonio        Uuid                               @map("id_matrimonio")
+  idPersonaNatural    Int                                @map("id_persona_natural")
+  idCategoriaRelacion Int?                               @map("id_categoria_relacion")
+  ladoRelacion        iv_lado_relacion                   @default(AMBOS) @map("lado_relacion")
+  esTitular           Boolean                            @default(true) @map("es_titular")
+  idInvitadoTitular   Uuid?                              @map("id_invitado_titular")
+  cantidadPases       Int                                @default(1) @map("cantidad_pases")
+  observaciones       VarChar(1000)?
+  activo              Boolean                            @default(true)
+  createdAt           DateTime                           @default(now()) @map("created_at")
+  updatedAt           temporal.updatedAt()               @map("updated_at")
+  matrimonio          Matrimonio                         @relation(fields:[idMatrimonio], references:[idMatrimonio], onDelete: Restrict)
+  personaNatural      PersonaNatural                     @relation(fields:[idPersonaNatural], references:[idPersonaNatural], onDelete: Restrict)
+  categoriaRelacion   CategoriaRelacion?                 @relation(fields:[idCategoriaRelacion], references:[idCategoriaRelacion], onDelete: Restrict)
+  titular             Invitado?                          @relation("acompanantes_titular", fields:[idInvitadoTitular], references:[idInvitado], onDelete: Restrict)
+  acompanantes        Invitado[]                         @relation("acompanantes_titular")
+  requerimientos      InvitadoRequerimientoAlimentario[]
+  rsvp                Rsvp?
+  asignacionesMesa    MesaInvitado[]
+
+  @@index([idMatrimonio])
+  @@index([idPersonaNatural])
+  @@index([idCategoriaRelacion])
+  @@index([idInvitadoTitular])
+  @@index([activo])
+  @@unique([idMatrimonio, idPersonaNatural])
+  @@map("iv_invitado")
+}
+
+model RequerimientoAlimentario {
+  idRequerimientoAlimentario Int                                @id @default(autoincrement()) @map("id_requerimiento_alimentario")
+  codigo                     VarChar(50)                        @unique
+  nombre                     VarChar(100)
+  descripcion                VarChar(500)?
+  activo                     Boolean                            @default(true)
+  createdAt                  DateTime                           @default(now()) @map("created_at")
+  updatedAt                  temporal.updatedAt()               @map("updated_at")
+  invitados                  InvitadoRequerimientoAlimentario[]
+
+  @@map("iv_requerimiento_alimentario")
+}
+
+model InvitadoRequerimientoAlimentario {
+  idInvitadoRequerimientoAlimentario Uuid                     @id @default(uuid()) @map("id_invitado_requerimiento_alimentario")
+  idInvitado                         Uuid                     @map("id_invitado")
+  idRequerimientoAlimentario         Int                      @map("id_requerimiento_alimentario")
+  detalle                            VarChar(500)?
+  activo                             Boolean                  @default(true)
+  createdAt                          DateTime                 @default(now()) @map("created_at")
+  updatedAt                          temporal.updatedAt()     @map("updated_at")
+  invitado                           Invitado                 @relation(fields:[idInvitado], references:[idInvitado], onDelete: Restrict)
+  requerimiento                      RequerimientoAlimentario @relation(fields:[idRequerimientoAlimentario], references:[idRequerimientoAlimentario], onDelete: Restrict)
+
+  @@unique([idInvitado, idRequerimientoAlimentario])
+  @@index([idInvitado], map: "iv_inv_req_alim_inv_idx")
+  @@index([idRequerimientoAlimentario], map: "iv_inv_req_alim_req_idx")
+  @@map("iv_invitado_requerimiento_alimentario")
+}
+
+model Rsvp {
+  idRsvp                        Uuid                 @id @default(uuid()) @map("id_rsvp")
+  idInvitado                    Uuid                 @unique @map("id_invitado")
+  estadoRsvp                    iv_estado_rsvp       @default(PENDIENTE) @map("estado_rsvp")
+  fechaRespuesta                DateTime?            @map("fecha_respuesta")
+  confirmacionDigital           Boolean              @default(false) @map("confirmacion_digital")
+  fechaConfirmacionDigital      DateTime?            @map("fecha_confirmacion_digital")
+  verificacionManual1           Boolean              @default(false) @map("verificacion_manual_1")
+  fechaVerificacionManual1      DateTime?            @map("fecha_verificacion_manual_1")
+  idUsuarioVerificacionManual1  Int?                 @map("id_usuario_verificacion_manual_1")
+  verificacionManual2           Boolean              @default(false) @map("verificacion_manual_2")
+  fechaVerificacionManual2      DateTime?            @map("fecha_verificacion_manual_2")
+  idUsuarioVerificacionManual2  Int?                 @map("id_usuario_verificacion_manual_2")
+  cantidadAsistentesConfirmados Int?                 @map("cantidad_asistentes_confirmados")
+  createdAt                     DateTime             @default(now()) @map("created_at")
+  updatedAt                     temporal.updatedAt() @map("updated_at")
+  invitado                      Invitado             @relation(fields:[idInvitado], references:[idInvitado], onDelete: Restrict)
+  usuarioVerificacionManual1    Usuario?             @relation("rsvp_verificacion_1", fields:[idUsuarioVerificacionManual1], references:[idUsuario], onDelete: Restrict)
+  usuarioVerificacionManual2    Usuario?             @relation("rsvp_verificacion_2", fields:[idUsuarioVerificacionManual2], references:[idUsuario], onDelete: Restrict)
+  historial                     RsvpHistorial[]
+
+  @@index([estadoRsvp])
+  @@map("iv_rsvp")
+}
+
+model RsvpHistorial {
+  idRsvpHistorial Uuid            @id @default(uuid()) @map("id_rsvp_historial")
+  idRsvp          Uuid            @map("id_rsvp")
+  estadoAnterior  iv_estado_rsvp? @map("estado_anterior")
+  estadoNuevo     iv_estado_rsvp  @map("estado_nuevo")
+  canal           iv_canal_rsvp
+  fechaCambio     DateTime        @default(now()) @map("fecha_cambio")
+  idUsuario       Int?            @map("id_usuario")
+  observacion     VarChar(1000)?
+  createdAt       DateTime        @default(now()) @map("created_at")
+  rsvp            Rsvp            @relation(fields:[idRsvp], references:[idRsvp], onDelete: Restrict)
+  usuario         Usuario?        @relation("rsvp_historial_usuario", fields:[idUsuario], references:[idUsuario], onDelete: Restrict)
+
+  @@index([idRsvp])
+  @@index([fechaCambio])
+  @@map("iv_rsvp_historial")
+}
+
+model Mesa {
+  idMesa        Uuid                 @id @default(uuid()) @map("id_mesa")
+  idMatrimonio  Uuid                 @map("id_matrimonio")
+  nombre        VarChar(100)
+  numero        Int?
+  capacidad     Int
+  ubicacion     VarChar(250)?
+  observaciones VarChar(1000)?
+  activo        Boolean              @default(true)
+  createdAt     DateTime             @default(now()) @map("created_at")
+  updatedAt     temporal.updatedAt() @map("updated_at")
+  matrimonio    Matrimonio           @relation(fields:[idMatrimonio], references:[idMatrimonio], onDelete: Restrict)
+  asignaciones  MesaInvitado[]
+
+  @@index([idMatrimonio])
+  @@map("iv_mesa")
+}
+
+model MesaInvitado {
+  idMesaInvitado Uuid                 @id @default(uuid()) @map("id_mesa_invitado")
+  idMesa         Uuid                 @map("id_mesa")
+  idInvitado     Uuid                 @map("id_invitado")
+  numeroAsiento  Int?                 @map("numero_asiento")
+  observacion    VarChar(500)?
+  activo         Boolean              @default(true)
+  createdAt      DateTime             @default(now()) @map("created_at")
+  updatedAt      temporal.updatedAt() @map("updated_at")
+  mesa           Mesa                 @relation(fields:[idMesa], references:[idMesa], onDelete: Restrict)
+  invitado       Invitado             @relation(fields:[idInvitado], references:[idInvitado], onDelete: Restrict)
+
+  @@unique([idMesa, idInvitado])
+  @@index([idMesa])
+  @@index([idInvitado])
+  @@map("iv_mesa_invitado")
 }
 
 enum cr_prioridad_actividad {
@@ -415,6 +590,7 @@ model PersonaNatural {
 
   ubigeo            Ubigeo?              @relation(fields:[codigoUbigeo], references:[idUbigeo], onDelete: Restrict)
   usuarios          Usuario[]
+  invitados         Invitado[]
 
   @@index([codigoUbigeo], map: "in_persona_natural_codigo_ubigeo_idx")
   @@map("in_persona_natural")
@@ -453,28 +629,31 @@ enum au_tipo_token_cuenta {
 }
 
 model Usuario {
-  idUsuario              Int                  @id @default(autoincrement()) @map("id_usuario")
-  idPersonaNatural       Int                  @map("id_persona_natural")
-  idEntidad              Int?                 @map("id_entidad")
-  usuario                VarChar(150)         @unique
-  tipoUsuario            au_tipo_usuario      @map("tipo_usuario")
-  contrasenaHash         VarChar(255)         @map("contrasena_hash")
-  correoVerificado       Boolean              @default(false) @map("correo_verificado")
-  esActivo               Boolean              @default(true) @map("es_activo")
-  ultimoAcceso           DateTime             @map("ultimo_acceso")
-  fechaCreacion          DateTime             @default(now()) @map("fecha_creacion")
-  fechaModificacion      temporal.updatedAt() @map("fecha_modificacion")
+  idUsuario                Int                  @id @default(autoincrement()) @map("id_usuario")
+  idPersonaNatural         Int                  @map("id_persona_natural")
+  idEntidad                Int?                 @map("id_entidad")
+  usuario                  VarChar(150)         @unique
+  tipoUsuario              au_tipo_usuario      @map("tipo_usuario")
+  contrasenaHash           VarChar(255)         @map("contrasena_hash")
+  correoVerificado         Boolean              @default(false) @map("correo_verificado")
+  esActivo                 Boolean              @default(true) @map("es_activo")
+  ultimoAcceso             DateTime             @map("ultimo_acceso")
+  fechaCreacion            DateTime             @default(now()) @map("fecha_creacion")
+  fechaModificacion        temporal.updatedAt() @map("fecha_modificacion")
 
-  personaNatural         PersonaNatural       @relation(fields:[idPersonaNatural], references:[idPersonaNatural], onDelete: Restrict)
-  entidad                Entidad?             @relation(fields:[idEntidad], references:[idEntidad], onDelete: Restrict)
-  sesiones               Sesion[]
-  tokensCuenta           TokenCuenta[]
-  proyectosPm            Proyecto[]           @relation("proyectos_pm")
-  matrimoniosNovio1      Matrimonio[]         @relation("matrimonios_novio1")
-  matrimoniosNovio2      Matrimonio[]         @relation("matrimonios_novio2")
-  actividadesResponsable Actividad[]          @relation("actividades_responsable")
-  timingsResponsable     Timing[]             @relation("timings_responsable")
-  notificacionesDestino  Notificacion[]       @relation("notificaciones_destino")
+  personaNatural           PersonaNatural       @relation(fields:[idPersonaNatural], references:[idPersonaNatural], onDelete: Restrict)
+  entidad                  Entidad?             @relation(fields:[idEntidad], references:[idEntidad], onDelete: Restrict)
+  sesiones                 Sesion[]
+  tokensCuenta             TokenCuenta[]
+  proyectosPm              Proyecto[]           @relation("proyectos_pm")
+  matrimoniosNovio1        Matrimonio[]         @relation("matrimonios_novio1")
+  matrimoniosNovio2        Matrimonio[]         @relation("matrimonios_novio2")
+  actividadesResponsable   Actividad[]          @relation("actividades_responsable")
+  timingsResponsable       Timing[]             @relation("timings_responsable")
+  notificacionesDestino    Notificacion[]       @relation("notificaciones_destino")
+  rsvpsVerificacionManual1 Rsvp[]               @relation("rsvp_verificacion_1")
+  rsvpsVerificacionManual2 Rsvp[]               @relation("rsvp_verificacion_2")
+  historialRsvp            RsvpHistorial[]      @relation("rsvp_historial_usuario")
 
   @@index([idPersonaNatural])
   @@index([idEntidad])
