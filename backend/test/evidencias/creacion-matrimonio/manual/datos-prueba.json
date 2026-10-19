@@ -1,28 +1,115 @@
 {
-  "idEjecucion": "manual-creacion-matrimonio-RELIGIOSO_CIVIL",
-  "fechaHora": "2026-10-19T21:54:03.826Z",
-  "idWeddingPlanner": 1,
+  "idEjecucion": "manual-creacion-matrimonio-RELIGIOSO_CIVIL-1792447474677",
   "tipoCeremonia": "RELIGIOSO_CIVIL",
-  "datos": {
+  "weddingPlanner": 1,
+  "matrimonioA": {
     "pareja1": {
-      "nombres": "Pareja RELIGIOSO_CIVIL Uno",
-      "apellidoPaterno": "Manual",
-      "dni": "99030001",
-      "usuario": "pareja.religioso_civil.uno",
+      "nombres": "A1 RELIGIOSO_CIVIL",
+      "apellidoPaterno": "Prueba",
+      "dni": "97475256",
+      "usuario": "manual.1792447475255.a1",
       "contrasena": "********"
     },
     "pareja2": {
-      "nombres": "Pareja RELIGIOSO_CIVIL Dos",
-      "apellidoPaterno": "Manual",
-      "dni": "99030002",
-      "usuario": "pareja.religioso_civil.dos",
+      "nombres": "A2 RELIGIOSO_CIVIL",
+      "apellidoPaterno": "Prueba",
+      "dni": "97475257",
+      "usuario": "manual.1792447475255.a2",
       "contrasena": "********"
     },
-    "fechaMatrimonio": "2027-01-20",
+    "fechaMatrimonio": "2027-10-19",
     "cantidadInvitados": 120,
     "presupuesto": 25000,
     "idTipoCeremonia": 4,
-    "objetivos": "Validar creación manual reproducible.",
-    "necesidades": "Cronograma generado desde plantillas activas."
+    "objetivos": "Validación manual aislada.",
+    "necesidades": "Cronograma desde plantillas activas."
+  },
+  "intentoB": {
+    "pareja1": {
+      "nombres": "B1 RELIGIOSO_CIVIL",
+      "apellidoPaterno": "Prueba",
+      "dni": "97475256",
+      "usuario": "manual.1792447475255.b1",
+      "contrasena": "********"
+    },
+    "pareja2": {
+      "nombres": "B2 RELIGIOSO_CIVIL",
+      "apellidoPaterno": "Prueba",
+      "dni": "97475260",
+      "usuario": "manual.1792447475255.b2",
+      "contrasena": "********"
+    },
+    "fechaMatrimonio": "2027-10-20",
+    "cantidadInvitados": 120,
+    "presupuesto": 25000,
+    "idTipoCeremonia": 4,
+    "objetivos": "Validación manual aislada.",
+    "necesidades": "Cronograma desde plantillas activas."
+  },
+  "intentoC": {
+    "pareja1": {
+      "nombres": "C1 RELIGIOSO_CIVIL",
+      "apellidoPaterno": "Prueba",
+      "dni": "97475256",
+      "usuario": "manual.1792447475255.c1",
+      "contrasena": "********"
+    },
+    "pareja2": {
+      "nombres": "C2 RELIGIOSO_CIVIL",
+      "apellidoPaterno": "Prueba",
+      "dni": "97475261",
+      "usuario": "manual.1792447475255.c2",
+      "contrasena": "********"
+    },
+    "fechaMatrimonio": "2027-10-21",
+    "cantidadInvitados": 120,
+    "presupuesto": 25000,
+    "idTipoCeremonia": 4,
+    "objetivos": "Validación manual aislada.",
+    "necesidades": "Cronograma desde plantillas activas."
+  },
+  "intentoD": {
+    "pareja1": {
+      "nombres": "D1 RELIGIOSO_CIVIL",
+      "apellidoPaterno": "Prueba",
+      "dni": "97475258",
+      "usuario": "manual.1792447475255.d1",
+      "contrasena": "********"
+    },
+    "pareja2": {
+      "nombres": "D2 RELIGIOSO_CIVIL",
+      "apellidoPaterno": "Prueba",
+      "dni": "97475259",
+      "usuario": "manual.1792447475255.d2",
+      "contrasena": "********"
+    },
+    "fechaMatrimonio": "2027-10-19",
+    "cantidadInvitados": 120,
+    "presupuesto": 25000,
+    "idTipoCeremonia": 4,
+    "objetivos": "Validación manual aislada.",
+    "necesidades": "Cronograma desde plantillas activas."
+  },
+  "intentoFechaInsuficiente": {
+    "pareja1": {
+      "nombres": "F1 RELIGIOSO_CIVIL",
+      "apellidoPaterno": "Prueba",
+      "dni": "97475262",
+      "usuario": "manual.1792447475255.f1",
+      "contrasena": "********"
+    },
+    "pareja2": {
+      "nombres": "F2 RELIGIOSO_CIVIL",
+      "apellidoPaterno": "Prueba",
+      "dni": "97475263",
+      "usuario": "manual.1792447475255.f2",
+      "contrasena": "********"
+    },
+    "fechaMatrimonio": "2026-10-20",
+    "cantidadInvitados": 120,
+    "presupuesto": 25000,
+    "idTipoCeremonia": 4,
+    "objetivos": "Validación manual aislada.",
+    "necesidades": "Cronograma desde plantillas activas."
   }
 }

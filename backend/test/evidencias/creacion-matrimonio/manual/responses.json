@@ -1,1 +1,95 @@
-{}
+{
+  "matrimonioA": {
+    "proyecto": {
+      "alcance": null,
+      "estado": true,
+      "fechaCreacion": "2026-10-19T22:04:35.456Z",
+      "fechaFin": null,
+      "fechaInicio": "2026-10-19T22:04:35.258Z",
+      "fechaModificacion": null,
+      "idProyecto": "983fb367-a9a3-4e33-a10b-0ffcdc345462",
+      "idFaseProyecto": 2,
+      "idPm": 1,
+      "necesidades": "Cronograma desde plantillas activas.",
+      "nombre": "Matrimonio de A1 RELIGIOSO_CIVIL & A2 RELIGIOSO_CIVIL",
+      "objetivos": "Validación manual aislada.",
+      "presupuesto": "25000.00",
+      "restricciones": null,
+      "supuestos": null
+    },
+    "matrimonio": {
+      "cantidadInvitados": 120,
+      "ciudadUbicacion": null,
+      "estado": true,
+      "fechaCreacion": "2026-10-19T22:04:35.461Z",
+      "fechaMatrimonio": "2027-10-19T00:00:00.000Z",
+      "fechaModificacion": null,
+      "idMatrimonio": "5830a8f8-1e7c-4b53-80d5-f0bd175b7756",
+      "idNovio1": 2,
+      "idNovio2": 3,
+      "idProyecto": "983fb367-a9a3-4e33-a10b-0ffcdc345462",
+      "idTipoCeremonia": 4,
+      "ideasMoonboard": null
+    },
+    "cronograma": {
+      "hitos_creados": 12,
+      "actividades_creadas": 15,
+      "dependencias_creadas": 27,
+      "elementos_timing_creados": 19
+    }
+  },
+  "Duplicado WP + fecha": {
+    "tipo": "ConflictException",
+    "mensaje": "Ya tienes un matrimonio activo para la misma fecha.",
+    "status": 409
+  },
+  "DNI en matrimonio no cerrado": {
+    "tipo": "ConflictException",
+    "mensaje": "Una persona de la pareja ya participa en un matrimonio que no está en cierre.",
+    "status": 409
+  },
+  "Fecha insuficiente": {
+    "tipo": "BadRequestException",
+    "mensaje": "La fecha del matrimonio debe estar al menos a 30 días de hoy.",
+    "status": 400
+  },
+  "mismoDniDespuesCierre": {
+    "proyecto": {
+      "alcance": null,
+      "estado": true,
+      "fechaCreacion": "2026-10-19T22:04:35.855Z",
+      "fechaFin": null,
+      "fechaInicio": "2026-10-19T22:04:35.724Z",
+      "fechaModificacion": null,
+      "idProyecto": "523fa566-acf3-47d3-ade5-028890f7418b",
+      "idFaseProyecto": 2,
+      "idPm": 1,
+      "necesidades": "Cronograma desde plantillas activas.",
+      "nombre": "Matrimonio de C1 RELIGIOSO_CIVIL & C2 RELIGIOSO_CIVIL",
+      "objetivos": "Validación manual aislada.",
+      "presupuesto": "25000.00",
+      "restricciones": null,
+      "supuestos": null
+    },
+    "matrimonio": {
+      "cantidadInvitados": 120,
+      "ciudadUbicacion": null,
+      "estado": true,
+      "fechaCreacion": "2026-10-19T22:04:35.859Z",
+      "fechaMatrimonio": "2027-10-21T00:00:00.000Z",
+      "fechaModificacion": null,
+      "idMatrimonio": "bc9b747e-43ab-4f26-a463-eaa822479ebc",
+      "idNovio1": 2,
+      "idNovio2": 4,
+      "idProyecto": "523fa566-acf3-47d3-ade5-028890f7418b",
+      "idTipoCeremonia": 4,
+      "ideasMoonboard": null
+    },
+    "cronograma": {
+      "hitos_creados": 12,
+      "actividades_creadas": 15,
+      "dependencias_creadas": 27,
+      "elementos_timing_creados": 19
+    }
+  }
+}

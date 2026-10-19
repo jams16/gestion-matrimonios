@@ -7,7 +7,7 @@
     "correoElectronico": "weddingplanner.prueba@example.test"
   },
   "confirmarRegistro": {
-    "token": "77****70"
+    "token": "23****50"
   },
   "finalizarRegistro": {
     "ejecutada": true,
@@ -17,6 +17,6 @@
     "ruc": "",
     "telefono": "",
     "correoCorporativo": "",
-    "token": "77****70"
+    "token": "23****50"
   }
 }

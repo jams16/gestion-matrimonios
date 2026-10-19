@@ -2,16 +2,49 @@
   {
     "nombre": "Duplicado WP + fecha",
     "estado": "PASS",
-    "detalle": "Ya tienes un matrimonio activo para la misma fecha."
+    "esperado": "Ya tienes un matrimonio activo para la misma fecha.",
+    "obtenido": "Ya tienes un matrimonio activo para la misma fecha.",
+    "regla": "Wedding Planner + fecha",
+    "origen": {
+      "idProyecto": "983fb367-a9a3-4e33-a10b-0ffcdc345462",
+      "idMatrimonio": "5830a8f8-1e7c-4b53-80d5-f0bd175b7756",
+      "fase": 2,
+      "dni": null
+    },
+    "intento": {
+      "fecha": "2027-10-19",
+      "dni1": "97475258",
+      "dni2": "97475259"
+    }
   },
   {
     "nombre": "DNI en matrimonio no cerrado",
     "estado": "PASS",
-    "detalle": "El proyecto ya tiene un cronograma generado."
+    "esperado": "Una persona de la pareja ya participa en un matrimonio que no está en cierre.",
+    "obtenido": "Una persona de la pareja ya participa en un matrimonio que no está en cierre.",
+    "regla": "DNI en proyecto no CIERRE",
+    "origen": {
+      "idProyecto": "983fb367-a9a3-4e33-a10b-0ffcdc345462",
+      "idMatrimonio": "5830a8f8-1e7c-4b53-80d5-f0bd175b7756",
+      "fase": 2,
+      "dni": "97475256"
+    },
+    "intento": {
+      "fecha": "2027-10-20",
+      "dniReutilizado": "97475256",
+      "dniNuevo": "97475260"
+    }
   },
   {
     "nombre": "Fecha insuficiente",
     "estado": "PASS",
-    "detalle": "La fecha del matrimonio debe estar al menos a 30 días de hoy."
+    "esperado": "La fecha del matrimonio debe estar al menos a 30 días de hoy.",
+    "obtenido": "La fecha del matrimonio debe estar al menos a 30 días de hoy.",
+    "regla": "Fecha mínima",
+    "intento": {
+      "fecha": "2026-10-20",
+      "dni1": "97475262",
+      "dni2": "97475263"
+    }
   }
 ]
