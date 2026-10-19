@@ -1,7 +1,11 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
-import { ConflictException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  HttpException,
+} from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 
@@ -12,60 +16,62 @@ import { GuardarOnboardingMatrimonioUseCase } from '../src/modules/proyectos/app
 import { ActualizarProyectoUseCase } from '../src/modules/proyectos/application/use-cases/proyectos.use-cases';
 import { ProyectosModule } from '../src/modules/proyectos/proyectos.module';
 
-type Estado = 'PASS' | 'FAIL' | 'WARN';
-type Paso = { nombre: string; estado: Estado; detalle: string };
+type Estado = 'PASS' | 'FAIL';
+type Paso = {
+  nombre: string;
+  estado: Estado;
+  esperado: string;
+  obtenido: string;
+  regla: string;
+  origen?: Record<string, unknown>;
+  intento?: Record<string, unknown>;
+};
 type Tipo = 'CIVIL' | 'RELIGIOSO' | 'RELIGIOSO_CIVIL' | 'SIMBOLICO';
+type Pareja = {
+  nombres: string;
+  apellidoPaterno: string;
+  dni: string;
+  usuario: string;
+  contrasena: string;
+};
+type DatosMatrimonio = {
+  pareja1: Pareja;
+  pareja2: Pareja;
+  fechaMatrimonio: string;
+  cantidadInvitados: number;
+  presupuesto: number;
+  idTipoCeremonia: number;
+  objetivos: string;
+  necesidades: string;
+};
 
-const tiposValidos: Tipo[] = [
-  'CIVIL',
-  'RELIGIOSO',
-  'RELIGIOSO_CIVIL',
-  'SIMBOLICO',
-];
+const tiposValidos: Tipo[] = ['CIVIL', 'RELIGIOSO', 'RELIGIOSO_CIVIL', 'SIMBOLICO'];
 const tipoSolicitado = (() => {
-  const parametro = process.argv.find((item) => item.startsWith('--tipo='));
-  const tipo = (parametro?.split('=')[1] ?? 'SIMBOLICO').toUpperCase() as Tipo;
-  if (!tiposValidos.includes(tipo)) {
-    throw new Error(`Tipo inválido: ${tipo}. Usa ${tiposValidos.join(', ')}.`);
-  }
+  const argumento = process.argv.find((item) => item.startsWith('--tipo='));
+  const tipo = (argumento?.split('=')[1] ?? 'SIMBOLICO').toUpperCase() as Tipo;
+  if (!tiposValidos.includes(tipo)) throw new Error(`Tipo inválido: ${tipo}.`);
   return tipo;
 })();
-const indiceTipo = tiposValidos.indexOf(tipoSolicitado) + 1;
-const raiz = join(
-  process.cwd(),
-  'test',
-  'evidencias',
-  'creacion-matrimonio',
-  'manual',
-);
+const raiz = join(process.cwd(), 'test', 'evidencias', 'creacion-matrimonio', 'manual');
+const idEjecucion = `manual-creacion-matrimonio-${tipoSolicitado}-${Date.now()}`;
 
 const serializar = (valor: unknown): unknown => {
   if (valor === null || typeof valor !== 'object') return valor;
   if (valor instanceof Date) return valor.toISOString();
   if ('epochMilliseconds' in valor)
-    return new Date(
-      Number((valor as { epochMilliseconds: number }).epochMilliseconds),
-    ).toISOString();
+    return new Date(Number((valor as { epochMilliseconds: number }).epochMilliseconds)).toISOString();
   if (Array.isArray(valor)) return valor.map(serializar);
-  return Object.fromEntries(
-    Object.entries(valor as Record<string, unknown>).map(
-      ([clave, contenido]) => [clave, serializar(contenido)],
-    ),
-  );
+  return Object.fromEntries(Object.entries(valor as Record<string, unknown>).map(([clave, dato]) => [clave, serializar(dato)]));
 };
 const guardar = (nombre: string, contenido: unknown) =>
-  writeFile(
-    join(raiz, nombre),
-    `${JSON.stringify(serializar(contenido), null, 2)}\n`,
-    'utf8',
-  );
+  writeFile(join(raiz, nombre), `${JSON.stringify(serializar(contenido), null, 2)}\n`, 'utf8');
 const dia = (dias: number) => {
-  const resultado = new Date();
-  resultado.setUTCHours(0, 0, 0, 0);
-  resultado.setUTCDate(resultado.getUTCDate() + dias);
-  return resultado.toISOString().slice(0, 10);
+  const fecha = new Date();
+  fecha.setUTCHours(0, 0, 0, 0);
+  fecha.setUTCDate(fecha.getUTCDate() + dias);
+  return fecha.toISOString().slice(0, 10);
 };
-const fechaPorTipo = () => dia(90 + indiceTipo);
+const mensaje = (error: unknown) => error instanceof Error ? error.message : String(error);
 
 async function ejecutar() {
   const pasos: Paso[] = [];
@@ -74,6 +80,7 @@ async function ejecutar() {
   const responses: Record<string, unknown> = {};
   const registros: Record<string, unknown> = {};
   let prisma: PrismaService | undefined;
+
   try {
     await mkdir(raiz, { recursive: true });
     const modulo = await Test.createTestingModule({
@@ -86,382 +93,131 @@ async function ejecutar() {
     }).compile();
     const prismaActual = modulo.get(PrismaService);
     prisma = prismaActual;
-    const guardarMatrimonio = modulo.get(GuardarOnboardingMatrimonioUseCase);
+    const onboarding = modulo.get(GuardarOnboardingMatrimonioUseCase);
     const actualizarProyecto = modulo.get(ActualizarProyectoUseCase);
     const orm = prismaActual.client.orm.public;
-    const usuarios = (await orm.Usuario.all()) as Array<
-      Record<string, unknown>
-    >;
+    const [usuarios, tipos, fases, personas, matrimonios, proyectos] = await Promise.all([
+      orm.Usuario.all(), orm.TipoCeremonia.all(), orm.FaseProyecto.all(), orm.PersonaNatural.all(), orm.Matrimonio.all(), orm.Proyecto.all(),
+    ]) as Array<Array<Record<string, unknown>>>;
     const idPmConfigurado = Number(process.env.MANUAL_WEDDING_PLANNER_ID ?? 0);
-    const planner = usuarios.find(
-      (usuario) =>
-        Number(usuario.idUsuario) === idPmConfigurado ||
-        (!idPmConfigurado &&
-          usuario.tipoUsuario === 'PROJECT_MANAGER' &&
-          usuario.esActivo !== false),
-    );
+    const planner = usuarios.find((u) => Number(u.idUsuario) === idPmConfigurado || (!idPmConfigurado && u.tipoUsuario === 'PROJECT_MANAGER' && u.esActivo !== false));
+    const tipo = tipos.find((t) => t.codigo === tipoSolicitado && t.activo !== false);
+    const faseInicio = fases.find((f) => f.codigo === 'INICIO' && f.activo !== false);
+    const faseCierre = fases.find((f) => f.codigo === 'CIERRE' && f.activo !== false);
     if (!planner) {
       throw new Error(
-        'No se encontró Wedding Planner. Define MANUAL_WEDDING_PLANNER_ID en backend/.env.',
+        'No existe un Wedding Planner (PROJECT_MANAGER) activo. Registra uno antes de ejecutar esta prueba o configura MANUAL_WEDDING_PLANNER_ID.',
       );
     }
-    const tipos = (await orm.TipoCeremonia.all()) as Array<
-      Record<string, unknown>
-    >;
-    const tipo = tipos.find(
-      (item) => item.codigo === tipoSolicitado && item.activo !== false,
-    );
-    if (!tipo)
-      throw new Error(`No existe el catálogo activo ${tipoSolicitado}.`);
-    const fases = (await orm.FaseProyecto.all()) as Array<
-      Record<string, unknown>
-    >;
-    const faseInicio = fases.find((fase) => fase.codigo === 'INICIO');
-    const faseCierre = fases.find((fase) => fase.codigo === 'CIERRE');
-    if (!faseInicio || !faseCierre)
-      throw new Error('Faltan las fases INICIO o CIERRE.');
+    if (!tipo || !faseInicio || !faseCierre) {
+      throw new Error('Faltan catálogos base requeridos para la prueba.');
+    }
 
-    const datos = {
-      pareja1: {
-        nombres: `Pareja ${tipoSolicitado} Uno`,
-        apellidoPaterno: 'Manual',
-        dni: `99${String(indiceTipo).padStart(2, '0')}0001`,
-        usuario: `pareja.${tipoSolicitado.toLowerCase()}.uno`,
-        contrasena: 'PruebaManualSegura1!',
-      },
-      pareja2: {
-        nombres: `Pareja ${tipoSolicitado} Dos`,
-        apellidoPaterno: 'Manual',
-        dni: `99${String(indiceTipo).padStart(2, '0')}0002`,
-        usuario: `pareja.${tipoSolicitado.toLowerCase()}.dos`,
-        contrasena: 'PruebaManualSegura1!',
-      },
-      fechaMatrimonio: fechaPorTipo(),
-      cantidadInvitados: 120,
-      presupuesto: 25000,
-      idTipoCeremonia: Number(tipo.idTipoCeremonia),
-      objetivos: 'Validar creación manual reproducible.',
-      necesidades: 'Cronograma generado desde plantillas activas.',
+    const dnisExistentes = new Set(personas.map((p) => String(p.dni ?? '')).filter(Boolean));
+    let cursorDni = Number(String(Date.now()).slice(-7));
+    const nuevoDni = () => {
+      do { cursorDni = (cursorDni + 1) % 10_000_000; } while (dnisExistentes.has(`9${String(cursorDni).padStart(7, '0')}`));
+      const dni = `9${String(cursorDni).padStart(7, '0')}`;
+      dnisExistentes.add(dni);
+      return dni;
     };
-    await guardar('datos-prueba.json', {
-      idEjecucion: `manual-creacion-matrimonio-${tipoSolicitado}`,
-      fechaHora: new Date().toISOString(),
-      idWeddingPlanner: planner.idUsuario,
-      tipoCeremonia: tipoSolicitado,
-      datos: {
-        ...datos,
-        pareja1: { ...datos.pareja1, contrasena: '********' },
-        pareja2: { ...datos.pareja2, contrasena: '********' },
-      },
-    });
-    await guardar('casos-prueba.json', [
-      {
-        id: 'CP-MAN-01',
-        nombre: 'Crear matrimonio válido',
-        tipo: 'FUNCIONAL',
-        objetivo:
-          'Crear o reutilizar de forma controlada un matrimonio del tipo seleccionado.',
-        resultado_esperado:
-          'Proyecto activo en fase INICIO y cronograma consistente.',
-      },
-      {
-        id: 'CP-MAN-02',
-        nombre: 'Validaciones de negocio',
-        tipo: 'FUNCIONAL',
-        objetivo: 'Comprobar fecha mínima, DNI y carga del Wedding Planner.',
-        resultado_esperado: 'Los intentos inválidos son rechazados.',
-      },
-    ]);
-
-    const matrimonios = (await orm.Matrimonio.all()) as Array<
-      Record<string, unknown>
-    >;
-    const proyectos = (await orm.Proyecto.all()) as Array<
-      Record<string, unknown>
-    >;
-    const existente = matrimonios.find((matrimonio) => {
-      const proyecto = proyectos.find(
-        (item) => item.idProyecto === matrimonio.idProyecto,
-      );
-      const fecha = String(matrimonio.fechaMatrimonio ?? '').slice(0, 10);
-      return (
-        proyecto?.idPm === planner.idUsuario && fecha === datos.fechaMatrimonio
-      );
-    });
-    let resultado: Record<string, unknown> | undefined;
-    if (existente) {
-      resultado = {
-        proyecto: proyectos.find(
-          (item) => item.idProyecto === existente.idProyecto,
-        ),
-        matrimonio: existente,
-        reutilizado: true,
-      };
-      pasos.push({
-        nombre: 'Matrimonio válido',
-        estado: 'WARN',
-        detalle:
-          'Se reutilizó el matrimonio fijo ya existente para evitar duplicados.',
-      });
-    } else {
-      requests.crearMatrimonio = {
-        ...datos,
-        pareja1: { ...datos.pareja1, contrasena: '********' },
-        pareja2: { ...datos.pareja2, contrasena: '********' },
-      };
-      resultado = (await guardarMatrimonio.execute(
-        datos,
-        Number(planner.idUsuario),
-        true,
-      )) as Record<string, unknown>;
-      responses.crearMatrimonio = resultado;
-      pasos.push({
-        nombre: 'Matrimonio válido',
-        estado: 'PASS',
-        detalle:
-          'Se ejecutó GuardarOnboardingMatrimonioUseCase con iniciar=true.',
-      });
-    }
-    const proyecto = resultado.proyecto as Record<string, unknown>;
-    const matrimonio = resultado.matrimonio as Record<string, unknown>;
-    const [hitos, actividades, dependencias, timing] = await Promise.all([
-      orm.Hito.all(),
-      orm.Actividad.all(),
-      orm.Dependencia.all(),
-      orm.Timing.all(),
-    ]);
-    const hitosProyecto = (hitos as Array<Record<string, unknown>>).filter(
-      (item) => item.idProyecto === proyecto.idProyecto,
+    const fechasOcupadas = new Set(
+      matrimonios.filter((m) => proyectos.find((p) => p.idProyecto === m.idProyecto)?.idPm === planner.idUsuario)
+        .map((m) => String(m.fechaMatrimonio ?? '').slice(0, 10)),
     );
-    const actividadesProyecto = (
-      actividades as Array<Record<string, unknown>>
-    ).filter((item) => item.idProyecto === proyecto.idProyecto);
-    const timingProyecto = (timing as Array<Record<string, unknown>>).filter(
-      (item) => item.idProyecto === proyecto.idProyecto,
-    );
-    const actividadesIds = new Set(
-      actividadesProyecto.map((item) => item.idActividad),
-    );
-    const dependenciasProyecto = (
-      dependencias as Array<Record<string, unknown>>
-    ).filter(
-      (item) =>
-        actividadesIds.has(item.idActividadPredecesora) &&
-        actividadesIds.has(item.idActividadSucesora),
-    );
-    registros.gp_proyecto = proyecto;
-    registros.gp_matrimonio = matrimonio;
-    registros.cr_hito = hitosProyecto;
-    registros.cr_actividad = actividadesProyecto;
-    registros.cr_dependencia = dependenciasProyecto;
-    registros.cr_timing = timingProyecto;
-    const faseCorrecta =
-      proyecto.estado === true &&
-      proyecto.idFaseProyecto === faseInicio.idFaseProyecto;
-    pasos.push({
-      nombre: 'Proyecto activo en fase INICIO',
-      estado: faseCorrecta ? 'PASS' : 'FAIL',
-      detalle: `estado=${String(proyecto.estado)}, idFaseProyecto=${String(proyecto.idFaseProyecto)}`,
-    });
-    pasos.push({
-      nombre: 'Tipo de ceremonia',
-      estado:
-        matrimonio.idTipoCeremonia === tipo.idTipoCeremonia ? 'PASS' : 'FAIL',
-      detalle: tipoSolicitado,
-    });
-    const sinDependenciasHuerfanas = dependenciasProyecto.every(
-      (item) =>
-        actividadesIds.has(item.idActividadPredecesora) &&
-        actividadesIds.has(item.idActividadSucesora),
-    );
-    pasos.push({
-      nombre: 'Dependencias consistentes',
-      estado: sinDependenciasHuerfanas ? 'PASS' : 'FAIL',
-      detalle: `${dependenciasProyecto.length} dependencias generadas.`,
-    });
-    const cronogramaExiste =
-      hitosProyecto.length +
-        actividadesProyecto.length +
-        timingProyecto.length >
-      0;
-    pasos.push({
-      nombre: 'Cronograma generado',
-      estado: cronogramaExiste ? 'PASS' : 'WARN',
-      detalle: cronogramaExiste
-        ? `${hitosProyecto.length} hitos, ${actividadesProyecto.length} actividades y ${timingProyecto.length} timing.`
-        : 'No hay plantillas activas con las que generar elementos.',
-    });
-
-    const intentarRechazo = async (
-      nombre: string,
-      cambios: Record<string, unknown>,
-    ) => {
-      try {
-        await guardarMatrimonio.execute(
-          { ...datos, ...cambios } as never,
-          Number(planner.idUsuario),
-          true,
-        );
-        pasos.push({
-          nombre,
-          estado: 'FAIL',
-          detalle: 'La operación fue aceptada y debía rechazarse.',
-        });
-      } catch (error) {
-        const esperado =
-          error instanceof ConflictException || error instanceof Error;
-        pasos.push({
-          nombre,
-          estado: esperado ? 'PASS' : 'FAIL',
-          detalle: error instanceof Error ? error.message : String(error),
-        });
-      }
+    let desplazamientoFecha = 365;
+    const fechaLibre = () => {
+      let fecha: string;
+      do { fecha = dia(desplazamientoFecha++); } while (fechasOcupadas.has(fecha));
+      fechasOcupadas.add(fecha);
+      return fecha;
     };
-    await intentarRechazo('Duplicado WP + fecha', {
-      pareja1: {
-        ...datos.pareja1,
-        dni: `88${String(indiceTipo).padStart(2, '0')}0001`,
-        usuario: `duplicado.${tipoSolicitado}.uno`,
-      },
-      pareja2: {
-        ...datos.pareja2,
-        dni: `88${String(indiceTipo).padStart(2, '0')}0002`,
-        usuario: `duplicado.${tipoSolicitado}.dos`,
-      },
+    const token = String(Date.now());
+    const pareja = (prefijo: string, dni: string): Pareja => ({
+      nombres: `${prefijo} ${tipoSolicitado}`,
+      apellidoPaterno: 'Prueba',
+      dni,
+      usuario: `manual.${token}.${prefijo.toLowerCase()}`,
+      contrasena: 'PruebaManualSegura1!',
     });
-    await intentarRechazo('DNI en matrimonio no cerrado', {
-      fechaMatrimonio: dia(120 + indiceTipo),
+    const crearDatos = (pareja1: Pareja, pareja2: Pareja, fechaMatrimonio: string): DatosMatrimonio => ({
+      pareja1, pareja2, fechaMatrimonio, cantidadInvitados: 120, presupuesto: 25000,
+      idTipoCeremonia: Number(tipo.idTipoCeremonia), objetivos: 'Validación manual aislada.', necesidades: 'Cronograma desde plantillas activas.',
     });
-    await intentarRechazo('Fecha insuficiente', { fechaMatrimonio: dia(1) });
+    const dniX = nuevoDni();
+    const datosA = crearDatos(pareja('A1', dniX), pareja('A2', nuevoDni()), fechaLibre());
+    const datosD = crearDatos(pareja('D1', nuevoDni()), pareja('D2', nuevoDni()), datosA.fechaMatrimonio);
+    const datosB = crearDatos(pareja('B1', dniX), pareja('B2', nuevoDni()), fechaLibre());
+    const datosC = crearDatos(pareja('C1', dniX), pareja('C2', nuevoDni()), fechaLibre());
+    const datosFechaInsuficiente = crearDatos(pareja('F1', nuevoDni()), pareja('F2', nuevoDni()), dia(1));
+    await guardar('datos-prueba.json', { idEjecucion, tipoCeremonia: tipoSolicitado, weddingPlanner: planner.idUsuario, matrimonioA: ocultar(datosA), intentoB: ocultar(datosB), intentoC: ocultar(datosC), intentoD: ocultar(datosD), intentoFechaInsuficiente: ocultar(datosFechaInsuficiente) });
 
-    const yaTieneNuevoMatrimonio = matrimonios.some((item) => {
-      const proyectoRelacionado = proyectos.find(
-        (candidate) => candidate.idProyecto === item.idProyecto,
-      );
-      return (
-        item.idMatrimonio !== matrimonio.idMatrimonio &&
-        (item.idNovio1 === matrimonio.idNovio1 ||
-          item.idNovio2 === matrimonio.idNovio2) &&
-        proyectoRelacionado?.idFaseProyecto === faseInicio.idFaseProyecto
-      );
-    });
-    if (yaTieneNuevoMatrimonio) {
-      pasos.push({
-        nombre: 'Mismo DNI después de CIERRE',
-        estado: 'WARN',
-        detalle:
-          'Ya existe un segundo matrimonio creado en una ejecución previa; se conserva para inspección.',
-      });
-    } else {
-      await actualizarProyecto.execute(String(proyecto.idProyecto), {
-        idFaseProyecto: Number(faseCierre.idFaseProyecto),
-        estado: true,
-      });
-      try {
-        const posteriorCierre = await guardarMatrimonio.execute(
-          { ...datos, fechaMatrimonio: dia(180 + indiceTipo) },
-          Number(planner.idUsuario),
-          true,
-        );
-        responses.mismoDniDespuesCierre = posteriorCierre;
-        pasos.push({
-          nombre: 'Mismo DNI después de CIERRE',
-          estado: 'PASS',
-          detalle:
-            'El proyecto previo se pasó a CIERRE mediante el caso de uso real y el mismo DNI fue admitido en una nueva boda.',
-        });
-      } catch (error) {
-        pasos.push({
-          nombre: 'Mismo DNI después de CIERRE',
-          estado: 'FAIL',
-          detalle: error instanceof Error ? error.message : String(error),
-        });
-      }
+    requests.matrimonioA = ocultar(datosA);
+    const resultadoA = await onboarding.execute(datosA, Number(planner.idUsuario), true) as Record<string, unknown>;
+    const proyectoA = resultadoA.proyecto as Record<string, unknown>;
+    const matrimonioA = resultadoA.matrimonio as Record<string, unknown>;
+    responses.matrimonioA = resultadoA;
+    registros.matrimonioOrigenA = { proyecto: proyectoA, matrimonio: matrimonioA, dniX, cronograma: resultadoA.cronograma };
+    const cronogramaA = resultadoA.cronograma as Record<string, unknown> | undefined;
+    const baseCorrecta = proyectoA.estado === true && proyectoA.idFaseProyecto === faseInicio.idFaseProyecto && matrimonioA.idTipoCeremonia === tipo.idTipoCeremonia && !!cronogramaA;
+    pasos.push({ nombre: 'Matrimonio A válido', estado: baseCorrecta ? 'PASS' : 'FAIL', esperado: 'A crea proyecto INICIO, ceremonia solicitada y cronograma.', obtenido: baseCorrecta ? 'A creado correctamente.' : 'A no cumple fase, ceremonia o cronograma.', regla: 'Caso base', origen: resumenOrigen(proyectoA, matrimonioA, dniX) });
+
+    await esperarRechazo({ nombre: 'Duplicado WP + fecha', onboarding, datos: datosD, idPm: Number(planner.idUsuario), tipo: ConflictException, texto: 'Ya tienes un matrimonio activo para la misma fecha.', regla: 'Wedding Planner + fecha', origen: resumenOrigen(proyectoA, matrimonioA, null), intento: { fecha: datosD.fechaMatrimonio, dni1: datosD.pareja1.dni, dni2: datosD.pareja2.dni }, pasos, requests, responses });
+    await esperarRechazo({ nombre: 'DNI en matrimonio no cerrado', onboarding, datos: datosB, idPm: Number(planner.idUsuario), tipo: ConflictException, texto: 'Una persona de la pareja ya participa en un matrimonio que no está en cierre.', regla: 'DNI en proyecto no CIERRE', origen: resumenOrigen(proyectoA, matrimonioA, dniX), intento: { fecha: datosB.fechaMatrimonio, dniReutilizado: dniX, dniNuevo: datosB.pareja2.dni }, pasos, requests, responses });
+    await esperarRechazo({ nombre: 'Fecha insuficiente', onboarding, datos: datosFechaInsuficiente, idPm: Number(planner.idUsuario), tipo: BadRequestException, texto: 'La fecha del matrimonio debe estar al menos a 30 días de hoy.', regla: 'Fecha mínima', origen: undefined, intento: { fecha: datosFechaInsuficiente.fechaMatrimonio, dni1: datosFechaInsuficiente.pareja1.dni, dni2: datosFechaInsuficiente.pareja2.dni }, pasos, requests, responses });
+
+    await actualizarProyecto.execute(String(proyectoA.idProyecto), { idFaseProyecto: Number(faseCierre.idFaseProyecto), estado: true });
+    const proyectoACerrado = await orm.Proyecto.first({ idProyecto: String(proyectoA.idProyecto) as never }) as Record<string, unknown>;
+    const cierreCorrecto = proyectoACerrado.idFaseProyecto === faseCierre.idFaseProyecto;
+    try {
+      requests.mismoDniDespuesCierre = ocultar(datosC);
+      const resultadoC = await onboarding.execute(datosC, Number(planner.idUsuario), true) as Record<string, unknown>;
+      responses.mismoDniDespuesCierre = resultadoC;
+      const proyectoC = resultadoC.proyecto as Record<string, unknown>;
+      const matrimonioC = resultadoC.matrimonio as Record<string, unknown>;
+      const cronogramaC = resultadoC.cronograma as Record<string, unknown> | undefined;
+      const creadoCorrectamente = cierreCorrecto && proyectoC.idProyecto !== proyectoA.idProyecto && proyectoC.idFaseProyecto === faseInicio.idFaseProyecto && !!cronogramaC;
+      registros.matrimonioNuevoC = { proyecto: proyectoC, matrimonio: matrimonioC, dniReutilizado: dniX, cronograma: cronogramaC };
+      pasos.push({ nombre: 'Mismo DNI después de CIERRE', estado: creadoCorrectamente ? 'PASS' : 'FAIL', esperado: 'C crea proyecto nuevo INICIO y cronograma propio.', obtenido: creadoCorrectamente ? 'C creado con proyecto distinto después del cierre de A.' : 'C no creó un proyecto nuevo válido.', regla: 'DNI permitido tras CIERRE', origen: resumenOrigen(proyectoACerrado, matrimonioA, dniX), intento: resumenOrigen(proyectoC, matrimonioC, dniX) });
+    } catch (error) {
+      pasos.push({ nombre: 'Mismo DNI después de CIERRE', estado: 'FAIL', esperado: 'Crear C luego de cerrar A.', obtenido: mensaje(error), regla: 'DNI permitido tras CIERRE', origen: resumenOrigen(proyectoACerrado, matrimonioA, dniX), intento: { fecha: datosC.fechaMatrimonio, dniReutilizado: dniX } });
     }
-    await guardar(
-      'casos-negativos.json',
-      pasos.filter((paso) =>
-        [
-          'Duplicado WP + fecha',
-          'DNI en matrimonio no cerrado',
-          'Fecha insuficiente',
-        ].includes(paso.nombre),
-      ),
-    );
-    await guardar('cronograma-generado.json', {
-      hitos: hitosProyecto,
-      actividades: actividadesProyecto,
-      dependencias: dependenciasProyecto,
-      timing: timingProyecto,
-    });
+    await guardar('casos-negativos.json', pasos.filter((p) => ['Duplicado WP + fecha', 'DNI en matrimonio no cerrado', 'Fecha insuficiente'].includes(p.nombre)));
   } catch (error) {
-    const detalle = error instanceof Error ? error.message : String(error);
-    errores.push(detalle);
-    pasos.push({ nombre: 'Ejecución', estado: 'FAIL', detalle });
+    const detalle = mensaje(error); errores.push(detalle);
+    pasos.push({ nombre: 'Ejecución', estado: 'FAIL', esperado: 'Runner ejecutable.', obtenido: detalle, regla: 'Infraestructura' });
   } finally {
-    await guardar('requests.json', requests);
-    await guardar('responses.json', responses);
-    await guardar('registros-creados.json', registros);
-    const fallos = pasos.filter((paso) => paso.estado === 'FAIL').length;
-    const global = fallos === 0 && errores.length === 0 ? 'PASS' : 'FAIL';
-    await writeFile(
-      join(raiz, 'resultado.md'),
-      [
-        '# Resultado de ejecución',
-        '',
-        '## 1. Identificación de la prueba',
-        `- Nombre: creación manual de matrimonio (${tipoSolicitado}).`,
-        `- ID de ejecución: \`manual-creacion-matrimonio-${tipoSolicitado}\`.`,
-        `- Fecha/hora: ${new Date().toISOString()}.`,
-        '- Tipo: funcional.',
-        '- Entorno: configuración normal del backend y base de datos configurada.',
-        '- Objetivo: crear y verificar un matrimonio mediante el caso de uso real.',
-        '',
-        '## 2. Precondiciones',
-        '- Existe un Wedding Planner activo y los catálogos requeridos.',
-        '',
-        '## 3. Datos de entrada',
-        '- Ver `datos-prueba.json` y `casos-prueba.json`.',
-        '',
-        '## 4. Ejecución paso a paso',
-        '',
-        '| Acción | Método/servicio | Esperado | Obtenido | HTTP | Comprobación BD | Evidencia | Estado |',
-        '| --- | --- | --- | --- | --- | --- | --- | --- |',
-        ...pasos.map(
-          (paso) =>
-            `| ${paso.nombre} | GuardarOnboardingMatrimonioUseCase | Según regla | ${paso.detalle} | N/A | registros-creados.json | JSON de ejecución | ${paso.estado} |`,
-        ),
-        '',
-        '## 5. Registros creados/modificados',
-        '| Modelo/tabla | ID | Acción | Campos relevantes | Evidencia |',
-        '| --- | --- | --- | --- | --- |',
-        '| gp_proyecto / gp_matrimonio / cr_* | Ver JSON | Crear, reutilizar o actualizar | fase, estado, ceremonia y cronograma | registros-creados.json |',
-        '',
-        '## 6. Validaciones realizadas',
-        '- Fase INICIO, estado activo, ceremonia, dependencias, DNI, fecha mínima y Wedding Planner+fecha.',
-        '',
-        '## 7. Incidencias o warnings',
-        errores.length
-          ? errores.map((item) => `- ${item}`).join('\n')
-          : '- Ninguna.',
-        '',
-        '## 8. Reproducción',
-        `- Comando: \`pnpm.cmd test:manual:creacion-matrimonio -- --tipo=${tipoSolicitado}\`.`,
-        '- La carpeta manual se sobrescribe; los registros de BD no se eliminan.',
-      ].join('\n') + '\n',
-      'utf8',
-    );
-    await writeFile(
-      join(raiz, 'resultado-final.md'),
-      `# Resultado final\n\n## Resumen\n\n| Métrica | Resultado |\n|---|---|\n| Casos ejecutados | ${pasos.length} |\n| PASS | ${pasos.filter((paso) => paso.estado === 'PASS').length} |\n| FAIL | ${fallos} |\n| Resultado global | ${global} |\n\n## Casos de prueba\n\n| ID | Caso | Tipo | Resultado esperado | Resultado obtenido | Estado |\n|---|---|---|---|---|---|\n${pasos.map((paso, indice) => `| CP-MAN-${String(indice + 1).padStart(2, '0')} | ${paso.nombre} | FUNCIONAL | Según regla | ${paso.detalle} | ${paso.estado} |`).join('\n')}\n\n## Evidencias principales\n\n| Evidencia | Archivo |\n|---|---|\n| Entradas | datos-prueba.json |\n| Registros | registros-creados.json |\n| Cronograma | cronograma-generado.json |\n| Casos negativos | casos-negativos.json |\n\n## Resultado funcional\nEl runner ejecutó el flujo real sin limpieza de datos.\n\n## Limitaciones\nLas cantidades dependen de las plantillas activas en la BD.\n\n## Reproducción\n\`pnpm.cmd test:manual:creacion-matrimonio -- --tipo=${tipoSolicitado}\`\n\n## Conclusión\nResultado ${global} conforme a las evidencias listadas.\n`,
-      'utf8',
-    );
-    for (const paso of pasos)
-      console.log(`${paso.estado} ${paso.nombre}: ${paso.detalle}`);
-    console.log(`\nResultado global: ${global}`);
-    console.log(`Reporte: ${raiz}`);
+    await guardar('requests.json', requests); await guardar('responses.json', responses); await guardar('registros-creados.json', registros);
+    const fallos = pasos.filter((p) => p.estado === 'FAIL').length;
+    const global = fallos || errores.length ? 'FAIL' : 'PASS';
+    const filas = pasos.map((p) => `| ${p.nombre} | ${p.esperado} | ${p.obtenido} | ${p.regla} | ${JSON.stringify(p.origen ?? {})} | ${JSON.stringify(p.intento ?? {})} | ${p.estado} |`);
+    const encabezado = ['# Resultado de ejecución', '', `- ID de ejecución: \`${idEjecucion}\``, `- Fecha/hora: ${new Date().toISOString()}`, `- Comando: \`pnpm.cmd test:manual:creacion-matrimonio -- --tipo=${tipoSolicitado}\``, '', '| Caso | Resultado esperado | Resultado real | Regla | Origen | Intento | Estado |', '| --- | --- | --- | --- | --- | --- | --- |', ...filas, '', `## Resultado global: ${global}`, '', 'Ver `datos-prueba.json`, `requests.json`, `responses.json` y `registros-creados.json`.'].join('\n');
+    await writeFile(join(raiz, 'resultado.md'), `${encabezado}\n`, 'utf8');
+    await writeFile(join(raiz, 'resultado-final.md'), `${encabezado}\n`, 'utf8');
+    for (const paso of pasos) console.log(`${paso.estado} ${paso.nombre}: ${paso.obtenido}`);
+    console.log(`\nResultado global: ${global}`); console.log(`Reporte: ${raiz}`);
     if (prisma) await prisma.onModuleDestroy();
     if (global === 'FAIL') process.exitCode = 1;
+  }
+}
+
+function ocultar(datos: DatosMatrimonio) {
+  return { ...datos, pareja1: { ...datos.pareja1, contrasena: '********' }, pareja2: { ...datos.pareja2, contrasena: '********' } };
+}
+function resumenOrigen(proyecto: Record<string, unknown>, matrimonio: Record<string, unknown>, dni: string | null) {
+  return { idProyecto: proyecto.idProyecto, idMatrimonio: matrimonio.idMatrimonio, fase: proyecto.idFaseProyecto, dni };
+}
+async function esperarRechazo(opciones: {
+  nombre: string; onboarding: GuardarOnboardingMatrimonioUseCase; datos: DatosMatrimonio; idPm: number; tipo: typeof ConflictException | typeof BadRequestException; texto: string; regla: string; origen?: Record<string, unknown>; intento: Record<string, unknown>; pasos: Paso[]; requests: Record<string, unknown>; responses: Record<string, unknown>;
+}) {
+  opciones.requests[opciones.nombre] = ocultar(opciones.datos);
+  try {
+    await opciones.onboarding.execute(opciones.datos, opciones.idPm, true);
+    opciones.pasos.push({ nombre: opciones.nombre, estado: 'FAIL', esperado: opciones.texto, obtenido: 'La operación fue aceptada.', regla: opciones.regla, origen: opciones.origen, intento: opciones.intento });
+  } catch (error) {
+    const textoReal = mensaje(error); const claseCorrecta = error instanceof opciones.tipo; const mensajeCorrecto = textoReal.includes(opciones.texto);
+    opciones.responses[opciones.nombre] = { tipo: error instanceof HttpException ? error.constructor.name : typeof error, mensaje: textoReal, status: error instanceof HttpException ? error.getStatus() : null };
+    opciones.pasos.push({ nombre: opciones.nombre, estado: claseCorrecta && mensajeCorrecto ? 'PASS' : 'FAIL', esperado: opciones.texto, obtenido: textoReal, regla: opciones.regla, origen: opciones.origen, intento: opciones.intento });
   }
 }
 
