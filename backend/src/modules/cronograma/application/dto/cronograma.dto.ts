@@ -243,3 +243,23 @@ export class CambiarEstadoTimingDto {
   @IsEnum(EstadoActividadDto)
   estado!: EstadoActividadDto;
 }
+
+export class PrevisualizarReprogramacionActividadDto {
+  @ApiPropertyOptional({ example: '2027-01-10T09:00:00.000Z' })
+  @IsOptional()
+  @IsDateString()
+  nuevaFechaInicio?: string;
+
+  @ApiProperty({ example: '2027-01-12T18:00:00.000Z' })
+  @IsDateString()
+  nuevaFechaFin!: string;
+}
+
+export class ConfirmarReprogramacionActividadDto extends PrevisualizarReprogramacionActividadDto {
+  @ApiProperty({
+    description: 'Indica si se aplican también los desplazamientos sugeridos.',
+  })
+  @Transform(booleano)
+  @IsBoolean()
+  propagar!: boolean;
+}

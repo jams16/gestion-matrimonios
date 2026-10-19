@@ -38,6 +38,8 @@ import {
   ListarCronogramaDto,
   ListarHitosDto,
   ListarTimingDto,
+  ConfirmarReprogramacionActividadDto,
+  PrevisualizarReprogramacionActividadDto,
 } from '../../application/dto/cronograma.dto';
 import {
   ConsultarCronogramaUseCase,
@@ -46,6 +48,7 @@ import {
   GestionarHitosUseCase,
   GestionarTimingUseCase,
 } from '../../application/use-cases/gestionar-cronograma.use-cases';
+import { ReprogramarActividadUseCase } from '../../application/use-cases/reprogramar-actividad.use-case';
 
 type SolicitudAutenticada = { usuarioAutenticado: { sub: number } };
 
@@ -60,6 +63,7 @@ export class CronogramaController {
     private readonly actividades: GestionarActividadesUseCase,
     private readonly dependencias: GestionarDependenciasUseCase,
     private readonly timing: GestionarTimingUseCase,
+    private readonly reprogramarActividad: ReprogramarActividadUseCase,
   ) {}
 
   @Get()
@@ -243,6 +247,44 @@ export class CronogramaController {
       data: await this.actividades.obtener(
         idProyecto,
         idActividad,
+        request.usuarioAutenticado.sub,
+      ),
+    };
+  }
+  @Post('actividades/:idActividad/reprogramacion/preview')
+  @ApiOperation({
+    summary: 'Previsualizar el impacto de reprogramar una actividad',
+  })
+  async previsualizarReprogramacion(
+    @Param('idProyecto', ParseUUIDPipe) idProyecto: string,
+    @Param('idActividad', ParseUUIDPipe) idActividad: string,
+    @Body() dto: PrevisualizarReprogramacionActividadDto,
+    @Req() request: SolicitudAutenticada,
+  ) {
+    return {
+      mensaje: 'Impacto de reprogramación obtenido correctamente.',
+      data: await this.reprogramarActividad.previsualizar(
+        idProyecto,
+        idActividad,
+        dto,
+        request.usuarioAutenticado.sub,
+      ),
+    };
+  }
+  @Post('actividades/:idActividad/reprogramacion/confirmar')
+  @ApiOperation({ summary: 'Confirmar la reprogramación de una actividad' })
+  async confirmarReprogramacion(
+    @Param('idProyecto', ParseUUIDPipe) idProyecto: string,
+    @Param('idActividad', ParseUUIDPipe) idActividad: string,
+    @Body() dto: ConfirmarReprogramacionActividadDto,
+    @Req() request: SolicitudAutenticada,
+  ) {
+    return {
+      mensaje: 'Actividad reprogramada correctamente.',
+      data: await this.reprogramarActividad.confirmar(
+        idProyecto,
+        idActividad,
+        dto,
         request.usuarioAutenticado.sub,
       ),
     };

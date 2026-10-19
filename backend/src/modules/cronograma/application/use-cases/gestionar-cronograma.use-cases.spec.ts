@@ -19,10 +19,22 @@ class RepositorioMemoria extends CronogramaCrudRepository {
   actividades: Record<string, unknown>[] = [];
   dependencias: Record<string, unknown>[] = [];
   actualizaciones: Record<string, unknown>[] = [];
+  async ejecutarEnTransaccionCrud<T>(
+    operacion: (repositorio: CronogramaCrudRepository) => Promise<T>,
+  ) {
+    return operacion(this);
+  }
   async obtenerProyecto(id: string) {
     return id === proyecto || id === otroProyecto
       ? { idProyecto: id, idPm: 10, nombre: 'Proyecto' }
       : null;
+  }
+  async obtenerVentanaProyecto(idProyecto: string) {
+    void idProyecto;
+    return {
+      fechaInicio: new Date('2026-01-01'),
+      fechaMatrimonio: new Date('2030-01-01'),
+    };
   }
   async listarHitos(idProyecto: string, filtros: FiltrosCronograma) {
     void idProyecto;

@@ -7,10 +7,17 @@ export interface FiltrosCronograma {
 }
 
 export abstract class CronogramaCrudRepository {
+  abstract ejecutarEnTransaccionCrud<T>(
+    operacion: (repositorio: CronogramaCrudRepository) => Promise<T>,
+  ): Promise<T>;
   abstract obtenerProyecto(idProyecto: string): Promise<{
     idProyecto: string;
     idPm: number | null;
     nombre: string | null;
+  } | null>;
+  abstract obtenerVentanaProyecto(idProyecto: string): Promise<{
+    fechaInicio: Date | null;
+    fechaMatrimonio: Date | null;
   } | null>;
   abstract listarHitos(
     idProyecto: string,

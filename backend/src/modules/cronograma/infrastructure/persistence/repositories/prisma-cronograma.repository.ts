@@ -44,6 +44,19 @@ export class PrismaCronogramaRepository
     );
   }
 
+  ejecutarEnTransaccionCrud<T>(
+    operacion: (repositorio: CronogramaCrudRepository) => Promise<T>,
+  ): Promise<T> {
+    return this.prisma.client.transaction((tx) =>
+      operacion(
+        new PrismaCronogramaRepository(
+          this.prisma,
+          tx as unknown as ClienteCronograma,
+        ),
+      ),
+    );
+  }
+
   async obtenerContextoProyecto(
     idProyecto: string,
   ): Promise<ContextoCronogramaProyecto | null> {
@@ -207,6 +220,15 @@ export class PrismaCronogramaRepository
       nombre: string | null;
     } | null;
     return proyecto;
+  }
+
+  async obtenerVentanaProyecto(idProyecto: string) {
+    const contexto = await this.obtenerContextoProyecto(idProyecto);
+    if (!contexto) return null;
+    return {
+      fechaInicio: contexto.fechaInicio,
+      fechaMatrimonio: contexto.fechaMatrimonio,
+    };
   }
 
   async listarHitos(
