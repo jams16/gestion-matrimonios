@@ -12,11 +12,18 @@ import {
   PlantillasCronograma,
   TipoTemporalCronograma,
 } from '../../../domain/repositories/cronograma.repository';
+import {
+  CronogramaCrudRepository,
+  FiltrosCronograma,
+} from '../../../domain/repositories/cronograma-crud.repository';
 
 type ClienteCronograma = typeof PrismaService.prototype.client;
 
 @Injectable()
-export class PrismaCronogramaRepository extends CronogramaRepository {
+export class PrismaCronogramaRepository
+  extends CronogramaRepository
+  implements CronogramaCrudRepository
+{
   constructor(
     private readonly prisma: PrismaService,
     private readonly db: ClienteCronograma = prisma.client,
@@ -191,6 +198,198 @@ export class PrismaCronogramaRepository extends CronogramaRepository {
     } as never);
   }
 
+  async obtenerProyecto(idProyecto: string) {
+    const proyecto = (await this.db.orm.public.Proyecto.first({
+      idProyecto: idProyecto as never,
+    })) as {
+      idProyecto: string;
+      idPm: number | null;
+      nombre: string | null;
+    } | null;
+    return proyecto;
+  }
+
+  async listarHitos(
+    idProyecto: string,
+    filtros: FiltrosCronograma,
+  ): Promise<Record<string, unknown>[]> {
+    const hitos = (await this.db.orm.public.Hito.all()) as Array<
+      Record<string, unknown>
+    >;
+    return hitos
+      .filter((hito) => this.perteneceYCoincide(hito, idProyecto, filtros))
+      .sort((a, b) => Number(a.orden) - Number(b.orden));
+  }
+
+  async obtenerHito(idHito: string): Promise<Record<string, unknown> | null> {
+    return (await this.db.orm.public.Hito.first({
+      idHito: idHito as never,
+    })) as Record<string, unknown> | null;
+  }
+
+  async crearHitoManual(
+    data: Record<string, unknown>,
+  ): Promise<Record<string, unknown>> {
+    return (await this.db.orm.public.Hito.create(
+      this.normalizarFechas(data, ['fechaObjetivo']) as never,
+    )) as Record<string, unknown>;
+  }
+
+  async actualizarHito(
+    idHito: string,
+    data: Record<string, unknown>,
+  ): Promise<Record<string, unknown>> {
+    return (await this.db.orm.public.Hito.where({
+      idHito: idHito as never,
+    }).update(
+      this.normalizarFechas(data, ['fechaObjetivo']) as never,
+    )) as Record<string, unknown>;
+  }
+
+  async listarActividades(
+    idProyecto: string,
+    filtros: FiltrosCronograma,
+  ): Promise<Record<string, unknown>[]> {
+    const actividades = (await this.db.orm.public.Actividad.all()) as Array<
+      Record<string, unknown>
+    >;
+    return actividades
+      .filter(
+        (actividad) =>
+          this.perteneceYCoincide(actividad, idProyecto, filtros) &&
+          (!filtros.idHito || actividad.idHito === filtros.idHito) &&
+          (!filtros.idUsuarioResponsable ||
+            actividad.idUsuarioResponsable === filtros.idUsuarioResponsable),
+      )
+      .sort((a, b) => Number(a.orden) - Number(b.orden));
+  }
+
+  async obtenerActividad(
+    idActividad: string,
+  ): Promise<Record<string, unknown> | null> {
+    return (await this.db.orm.public.Actividad.first({
+      idActividad: idActividad as never,
+    })) as Record<string, unknown> | null;
+  }
+
+  async crearActividadManual(
+    data: Record<string, unknown>,
+  ): Promise<Record<string, unknown>> {
+    return (await this.db.orm.public.Actividad.create(
+      this.normalizarFechas(data, ['fechaInicio', 'fechaFin']) as never,
+    )) as Record<string, unknown>;
+  }
+
+  async actualizarActividad(
+    idActividad: string,
+    data: Record<string, unknown>,
+  ): Promise<Record<string, unknown>> {
+    return (await this.db.orm.public.Actividad.where({
+      idActividad: idActividad as never,
+    }).update(
+      this.normalizarFechas(data, ['fechaInicio', 'fechaFin']) as never,
+    )) as Record<string, unknown>;
+  }
+
+  async listarDependencias(
+    idProyecto: string,
+  ): Promise<Record<string, unknown>[]> {
+    const [dependencias, actividades] = await Promise.all([
+      this.db.orm.public.Dependencia.all(),
+      this.db.orm.public.Actividad.all(),
+    ]);
+    const porId = new Map(
+      (actividades as Array<Record<string, unknown>>).map((actividad) => [
+        String(actividad.idActividad),
+        actividad,
+      ]),
+    );
+    return (dependencias as Array<Record<string, unknown>>)
+      .map((dependencia) => {
+        const predecesora = porId.get(
+          String(dependencia.idActividadPredecesora),
+        );
+        const sucesora = porId.get(String(dependencia.idActividadSucesora));
+        return {
+          ...dependencia,
+          idProyecto: predecesora?.idProyecto,
+          nombreActividadPredecesora: predecesora?.nombre ?? null,
+          nombreActividadSucesora: sucesora?.nombre ?? null,
+        };
+      })
+      .filter((dependencia) => dependencia.idProyecto === idProyecto);
+  }
+
+  async obtenerDependencia(
+    idDependencia: string,
+  ): Promise<Record<string, unknown> | null> {
+    return (await this.db.orm.public.Dependencia.first({
+      idDependencia: idDependencia as never,
+    })) as Record<string, unknown> | null;
+  }
+
+  async crearDependenciaManual(
+    data: Record<string, unknown>,
+  ): Promise<Record<string, unknown>> {
+    return (await this.db.orm.public.Dependencia.create(
+      data as never,
+    )) as Record<string, unknown>;
+  }
+
+  async eliminarDependencia(idDependencia: string): Promise<void> {
+    await this.db.orm.public.Dependencia.where({
+      idDependencia: idDependencia as never,
+    }).delete();
+  }
+
+  async listarTiming(
+    idProyecto: string,
+    filtros: FiltrosCronograma,
+  ): Promise<Record<string, unknown>[]> {
+    const timing = (await this.db.orm.public.Timing.all()) as Array<
+      Record<string, unknown>
+    >;
+    return timing
+      .filter(
+        (item) =>
+          this.perteneceYCoincide(item, idProyecto, filtros) &&
+          (!filtros.idUsuarioResponsable ||
+            item.idUsuarioResponsable === filtros.idUsuarioResponsable),
+      )
+      .sort(
+        (a, b) =>
+          this.aFecha(a.fechaHoraInicio)!.getTime() -
+          this.aFecha(b.fechaHoraInicio)!.getTime(),
+      );
+  }
+
+  async obtenerTiming(
+    idTiming: string,
+  ): Promise<Record<string, unknown> | null> {
+    return (await this.db.orm.public.Timing.first({
+      idTiming: idTiming as never,
+    })) as Record<string, unknown> | null;
+  }
+
+  async crearTimingManual(
+    data: Record<string, unknown>,
+  ): Promise<Record<string, unknown>> {
+    return (await this.db.orm.public.Timing.create(
+      this.normalizarFechas(data, ['fechaHoraInicio', 'fechaHoraFin']) as never,
+    )) as Record<string, unknown>;
+  }
+
+  async actualizarTiming(
+    idTiming: string,
+    data: Record<string, unknown>,
+  ): Promise<Record<string, unknown>> {
+    return (await this.db.orm.public.Timing.where({
+      idTiming: idTiming as never,
+    }).update(
+      this.normalizarFechas(data, ['fechaHoraInicio', 'fechaHoraFin']) as never,
+    )) as Record<string, unknown>;
+  }
+
   private agruparTiposCeremonia(
     relaciones: Array<Record<string, unknown>>,
     campoPlantilla: 'idPlantillaActividad' | 'idPlantillaTiming',
@@ -224,5 +423,30 @@ export class PrismaCronogramaRepository extends CronogramaRepository {
 
   private aTextoONulo(valor: unknown): string | null {
     return valor === null || valor === undefined ? null : String(valor);
+  }
+
+  private perteneceYCoincide(
+    registro: Record<string, unknown>,
+    idProyecto: string,
+    filtros: FiltrosCronograma,
+  ): boolean {
+    return (
+      registro.idProyecto === idProyecto &&
+      (!filtros.estado || registro.estado === filtros.estado) &&
+      (filtros.activo === undefined || registro.activo === filtros.activo)
+    );
+  }
+
+  private normalizarFechas(
+    data: Record<string, unknown>,
+    campos: string[],
+  ): Record<string, unknown> {
+    const normalizado = { ...data };
+    for (const campo of campos) {
+      if (normalizado[campo] instanceof Date) {
+        normalizado[campo] = this.aInstant(normalizado[campo] as Date);
+      }
+    }
+    return normalizado;
   }
 }
