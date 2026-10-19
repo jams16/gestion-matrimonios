@@ -1,7 +1,5 @@
 import { Temporal } from 'temporal-polyfill';
 
-import { EstadoProyecto } from '../enums/estado-proyecto.enum';
-
 export interface Proyecto {
   idProyecto: string;
   nombre: string | null;
@@ -14,7 +12,8 @@ export interface Proyecto {
   supuestos: string | null;
   restricciones: string | null;
   alcance: string | null;
-  estado: EstadoProyecto | null;
+  idFaseProyecto: number | null;
+  estado: boolean;
   fechaCreacion: Temporal.Instant;
   fechaModificacion: Temporal.Instant | null;
 }

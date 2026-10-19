@@ -1,7 +1,7 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
 import {
-  IsEnum,
+  IsBoolean,
   IsIn,
   IsInt,
   IsOptional,
@@ -11,7 +11,6 @@ import {
   Min,
 } from 'class-validator';
 
-import { EstadoProyecto } from '../../domain/enums/estado-proyecto.enum';
 import { booleano } from './dto-utils';
 
 export class ListarProyectosDto {
@@ -69,8 +68,16 @@ export class ListarProyectosDto {
   @IsString()
   nombre?: string;
 
-  @ApiPropertyOptional({ enum: EstadoProyecto })
+  @ApiPropertyOptional({ default: true })
+  @Transform(booleano)
   @IsOptional()
-  @IsEnum(EstadoProyecto)
-  estado?: EstadoProyecto;
+  @IsBoolean()
+  estado?: boolean;
+
+  @ApiPropertyOptional({ minimum: 1 })
+  @Type(() => Number)
+  @IsOptional()
+  @IsInt()
+  @Min(1)
+  idFaseProyecto?: number;
 }

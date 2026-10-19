@@ -1,0 +1,21 @@
+{
+  "estado_inicial": {
+    "correo": "wp-prueba-1792444295667@example.test",
+    "personas": 0,
+    "usuarios": 0,
+    "pendientes": 0
+  },
+  "solicitar": {
+    "nombres": "Wedding Planner Prueba",
+    "apellidoPaterno": "Automatizada",
+    "apellidoMaterno": "Integracion",
+    "correoElectronico": "wp-prueba-1792444295667@example.test"
+  },
+  "confirmar": {
+    "token": "enmascarado"
+  },
+  "finalizar": {
+    "usuario": "wp-prueba-1792444295667",
+    "contrasena": "********"
+  }
+}

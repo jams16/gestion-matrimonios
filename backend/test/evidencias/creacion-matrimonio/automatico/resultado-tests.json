@@ -1,0 +1,14 @@
+{
+  "suite": "generar-cronograma-desde-plantilla",
+  "casos": [
+    "ESCALABLE para 395 días",
+    "ESCALABLE sin fecha anterior al inicio",
+    "FIJO_EVENTO",
+    "DIA_EVENTO",
+    "filtro por tipo de ceremonia",
+    "dependencia omitida cuando una actividad no se genera"
+  ],
+  "pass": 6,
+  "fail": 0,
+  "resultado": "PASS"
+}

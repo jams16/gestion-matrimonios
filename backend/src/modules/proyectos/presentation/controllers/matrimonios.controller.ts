@@ -34,7 +34,10 @@ import {
   ListarResumenMatrimoniosUseCase,
   ObtenerMatrimonioUseCase,
 } from '../../application/use-cases/matrimonios.use-cases';
-import { GuardarOnboardingMatrimonioUseCase, ObtenerOnboardingMatrimonioUseCase } from '../../application/use-cases/onboarding-matrimonio.use-case';
+import {
+  GuardarOnboardingMatrimonioUseCase,
+  ObtenerOnboardingMatrimonioUseCase,
+} from '../../application/use-cases/onboarding-matrimonio.use-case';
 import { GuardarOnboardingMatrimonioDto } from '../../application/dto/guardar-onboarding-matrimonio.dto';
 import { JwtAccessGuard } from '../../../autenticacion/presentation/guards/jwt-access.guard';
 
@@ -59,7 +62,13 @@ export class MatrimoniosController {
     @Param('id', ParseUUIDPipe) id: string,
     @Req() request: { usuarioAutenticado: { sub: number } },
   ) {
-    return { mensaje: 'Borrador obtenido correctamente.', data: await this.obtenerOnboarding.execute(id, request.usuarioAutenticado.sub) };
+    return {
+      mensaje: 'Borrador obtenido correctamente.',
+      data: await this.obtenerOnboarding.execute(
+        id,
+        request.usuarioAutenticado.sub,
+      ),
+    };
   }
 
   @Post('onboarding/borrador')
@@ -69,7 +78,13 @@ export class MatrimoniosController {
     @Body() dto: GuardarOnboardingMatrimonioDto,
     @Req() request: { usuarioAutenticado: { sub: number } },
   ) {
-    return { mensaje: 'Borrador guardado correctamente.', data: await this.guardarOnboarding.execute(dto, request.usuarioAutenticado.sub) };
+    return {
+      mensaje: 'Borrador guardado correctamente.',
+      data: await this.guardarOnboarding.execute(
+        dto,
+        request.usuarioAutenticado.sub,
+      ),
+    };
   }
 
   @Post('onboarding/comenzar')
@@ -79,7 +94,14 @@ export class MatrimoniosController {
     @Body() dto: GuardarOnboardingMatrimonioDto,
     @Req() request: { usuarioAutenticado: { sub: number } },
   ) {
-    return { mensaje: 'Matrimonio creado correctamente.', data: await this.guardarOnboarding.execute(dto, request.usuarioAutenticado.sub, true) };
+    return {
+      mensaje: 'Matrimonio creado correctamente.',
+      data: await this.guardarOnboarding.execute(
+        dto,
+        request.usuarioAutenticado.sub,
+        true,
+      ),
+    };
   }
 
   @Post()

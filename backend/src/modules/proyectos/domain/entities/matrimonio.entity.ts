@@ -1,7 +1,5 @@
 import { Temporal } from 'temporal-polyfill';
 
-import { TipoCeremonia } from '../enums/tipo-ceremonia.enum';
-
 export interface Matrimonio {
   idMatrimonio: string;
   idProyecto: string;
@@ -9,7 +7,7 @@ export interface Matrimonio {
   idNovio2: number | null;
   fechaMatrimonio: Temporal.Instant | null;
   cantidadInvitados: number | null;
-  tipoCeremonia: TipoCeremonia | null;
+  idTipoCeremonia: number | null;
   ciudadUbicacion: string | null;
   ideasMoonboard: string | null;
   estado: boolean | null;

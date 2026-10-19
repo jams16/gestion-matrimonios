@@ -1,10 +1,15 @@
 {
+  "registro_pendiente": {
+    "id": 1,
+    "correo": "wp-prueba-1792444295667@example.test",
+    "verificado": true
+  },
   "persona": {
     "idPersonaNatural": 1000,
     "nombres": "Wedding Planner Prueba",
     "apellidoPaterno": "Automatizada",
     "apellidoMaterno": "Integracion",
-    "correoElectronico": "wp-prueba-1792441049531@example.test"
+    "correoElectronico": "wp-prueba-1792444295667@example.test"
   },
   "entidad": {
     "idEntidad": 1000,
@@ -15,18 +20,16 @@
     "correoElectronico": null
   },
   "usuario": {
-    "idUsuario": 1000,
     "idPersonaNatural": 1000,
     "idEntidad": 1000,
-    "usuario": "wp-prueba-1792441049531",
+    "usuario": "wp-prueba-1792444295667",
     "tipoUsuario": "PROJECT_MANAGER",
+    "contrasenaHash": "oculto",
+    "ultimoAcceso": "2026-10-19T21:11:35.826Z",
+    "idUsuario": 1000,
     "correoVerificado": true,
     "esActivo": true,
-    "contrasenaHash": "oculto"
-  },
-  "registroPendiente": {
-    "idRegistro": 1,
-    "fechaVerificacion": "2026-10-19T20:17:29.608Z",
-    "tokenHash": "oculto"
+    "fechaCreacion": "2026-10-19T21:11:35.827Z",
+    "fechaModificacion": "2026-10-19T21:11:35.828Z"
   }
 }

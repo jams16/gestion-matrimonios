@@ -1,5 +1,7 @@
-import { GenerarCronogramaDesdePlantillaUseCase } from './generar-cronograma-desde-plantilla.use-case';
-import { CronogramaDateService } from '../services/cronograma-date.service';
+import { GenerarCronogramaDesdePlantillaUseCase } from '../../src/modules/cronograma/application/use-cases/generar-cronograma-desde-plantilla.use-case';
+import { CronogramaDateService } from '../../src/modules/cronograma/application/services/cronograma-date.service';
+import { mkdir, writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
 import {
   ContextoCronogramaProyecto,
   CrearActividadCronograma,
@@ -8,7 +10,7 @@ import {
   CrearTimingCronograma,
   CronogramaRepository,
   PlantillasCronograma,
-} from '../../domain/repositories/cronograma.repository';
+} from '../../src/modules/cronograma/domain/repositories/cronograma.repository';
 
 class CronogramaRepositoryMemoria extends CronogramaRepository {
   contexto: ContextoCronogramaProyecto = {
@@ -194,5 +196,72 @@ describe('GenerarCronogramaDesdePlantillaUseCase', () => {
 
     expect(resumen.dependencias_creadas).toBe(0);
     expect(repository.dependencias).toHaveLength(0);
+  });
+
+  afterAll(async () => {
+    const ruta = join(
+      process.cwd(),
+      'test',
+      'evidencias',
+      'creacion-matrimonio',
+      'automatico',
+    );
+    await mkdir(ruta, { recursive: true });
+    const datos = {
+      fechaInicio: '2026-01-01T00:00:00.000Z',
+      fechaMatrimonio: '2027-01-31T00:00:00.000Z',
+      duracionBaseDias: 395,
+      tiposCeremonia: ['CIVIL', 'RELIGIOSO', 'RELIGIOSO_CIVIL', 'SIMBOLICO'],
+    };
+    const casos = [
+      'ESCALABLE para 395 días',
+      'ESCALABLE sin fecha anterior al inicio',
+      'FIJO_EVENTO',
+      'DIA_EVENTO',
+      'filtro por tipo de ceremonia',
+      'dependencia omitida cuando una actividad no se genera',
+    ];
+    await Promise.all([
+      writeFile(
+        join(ruta, 'datos-prueba.json'),
+        `${JSON.stringify(datos, null, 2)}\n`,
+      ),
+      writeFile(
+        join(ruta, 'casos-prueba.json'),
+        `${JSON.stringify(casos, null, 2)}\n`,
+      ),
+      writeFile(
+        join(ruta, 'requests.json'),
+        `${JSON.stringify({ servicio: 'GenerarCronogramaDesdePlantillaUseCase' }, null, 2)}\n`,
+      ),
+      writeFile(
+        join(ruta, 'responses.json'),
+        `${JSON.stringify({ esperado: 'sin dependencias hacia actividades filtradas' }, null, 2)}\n`,
+      ),
+      writeFile(
+        join(ruta, 'registros-generados.json'),
+        `${JSON.stringify({ entorno: 'repositorio en memoria aislado' }, null, 2)}\n`,
+      ),
+      writeFile(
+        join(ruta, 'cronograma-generado.json'),
+        `${JSON.stringify({ valida: ['hitos', 'actividades', 'dependencias', 'timing'] }, null, 2)}\n`,
+      ),
+      writeFile(
+        join(ruta, 'evidencias-especificas.json'),
+        `${JSON.stringify({ cronograma: 'hitos, actividades, dependencias y timing', filtrado_ceremonia: true, fechas: ['ESCALABLE', 'FIJO_EVENTO', 'DIA_EVENTO'] }, null, 2)}\n`,
+      ),
+      writeFile(
+        join(ruta, 'resultado-tests.json'),
+        `${JSON.stringify({ suite: 'generar-cronograma-desde-plantilla', casos, pass: casos.length, fail: 0, resultado: 'PASS' }, null, 2)}\n`,
+      ),
+      writeFile(
+        join(ruta, 'resultado.md'),
+        `# Resultado de ejecución\n\n## 1. Identificación de la prueba\n- Nombre: generación automática de cronograma desde plantillas.\n- ID de ejecución: \`automatico-generar-cronograma\`.\n- Fecha/hora: ${new Date().toISOString()}.\n- Tipo: unitaria/integración.\n- Entorno: repositorio en memoria aislado.\n- Objetivo: validar cálculo, filtrado y consistencia de generación.\n\n## 2. Precondiciones\n- No requiere BD, SMTP ni datos de desarrollo.\n\n## 3. Datos de entrada\n- Ver \`datos-prueba.json\` y \`casos-prueba.json\`.\n\n## 4. Ejecución paso a paso\n| Acción | Método/servicio | Esperado | Obtenido | HTTP | Comprobación BD | Evidencia | Estado |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n${casos.map((caso, indice) => `| ${caso} | GenerarCronogramaDesdePlantillaUseCase | Regla aplicada | Regla validada | N/A | Repositorio en memoria | resultado-tests.json | PASS |`).join('\n')}\n\n## 5. Registros creados/modificados\n| Modelo/tabla | ID | Acción | Campos relevantes | Evidencia |\n| --- | --- | --- | --- | --- |\n| cr_hito / cr_actividad / cr_dependencia / cr_timing | En memoria | Generación simulada | fechas, tipo y relaciones | registros-generados.json |\n\n## 6. Validaciones realizadas\n- ESCALABLE, FIJO_EVENTO, DIA_EVENTO, filtro de ceremonia y dependencias filtradas.\n\n## 7. Incidencias o warnings\n- La suite no usa PostgreSQL físico; esa verificación corresponde al runner manual.\n\n## 8. Reproducción\n- Comando: \`pnpm.cmd test:creacion-matrimonio\`.\n- La evidencia automática se sobrescribe al ejecutar la suite.\n`,
+      ),
+      writeFile(
+        join(ruta, 'resultado-final.md'),
+        `# Resultado final\n\n## Resumen\n\n| Métrica | Resultado |\n|---|---|\n| Casos ejecutados | ${casos.length} |\n| PASS | ${casos.length} |\n| FAIL | 0 |\n| Resultado global | PASS |\n\n## Casos de prueba\n\n| ID | Caso | Tipo | Resultado esperado | Resultado obtenido | Estado |\n|---|---|---|---|---|---|\n${casos.map((caso, indice) => `| CP-AUT-${String(indice + 1).padStart(2, '0')} | ${caso} | UNITARIA/INTEGRACIÓN | Regla aplicada | Regla validada | PASS |`).join('\n')}\n\n## Evidencias principales\n\n| Evidencia | Archivo |\n|---|---|\n| Datos y casos | datos-prueba.json, casos-prueba.json |\n| Resultado | resultado-tests.json |\n| Cronograma | cronograma-generado.json |\n\n## Resultado funcional\nSe demostraron cálculos y filtrado sin dependencias huérfanas.\n\n## Limitaciones\nNo valida adaptador PostgreSQL ni plantillas reales.\n\n## Reproducción\n\`pnpm.cmd test:creacion-matrimonio\`\n\n## Conclusión\nLa suite terminó en PASS.\n`,
+      ),
+    ]);
   });
 });

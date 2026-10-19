@@ -1,0 +1,9 @@
+{
+  "cronograma": "hitos, actividades, dependencias y timing",
+  "filtrado_ceremonia": true,
+  "fechas": [
+    "ESCALABLE",
+    "FIJO_EVENTO",
+    "DIA_EVENTO"
+  ]
+}

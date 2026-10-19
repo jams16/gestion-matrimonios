@@ -1,0 +1,11 @@
+[
+  {
+    "id": "CP-MAN-HIST-01",
+    "nombre": "Runner manual pendiente de ejecución normalizada",
+    "tipo": "FUNCIONAL",
+    "objetivo": "Crear un matrimonio y comprobar sus relaciones reales.",
+    "resultado_esperado": "Evidencia generada por el runner manual.",
+    "resultado_obtenido": "No ejecutado durante la estandarización.",
+    "estado": "PENDIENTE"
+  }
+]

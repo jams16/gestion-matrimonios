@@ -2,7 +2,6 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
 import {
   IsBoolean,
-  IsEnum,
   IsISO8601,
   IsInt,
   IsOptional,
@@ -13,7 +12,6 @@ import {
   Min,
 } from 'class-validator';
 
-import { TipoCeremonia } from '../../domain/enums/tipo-ceremonia.enum';
 import { booleano, emptyToNull } from './dto-utils';
 
 export class CrearMatrimonioDto {
@@ -48,10 +46,15 @@ export class CrearMatrimonioDto {
   @Min(0)
   cantidadInvitados?: number | null;
 
-  @ApiPropertyOptional({ enum: TipoCeremonia })
+  @ApiPropertyOptional({
+    minimum: 1,
+    description: 'ID del catálogo gp_tipo_ceremonia.',
+  })
+  @Type(() => Number)
   @IsOptional()
-  @IsEnum(TipoCeremonia)
-  tipoCeremonia?: TipoCeremonia | null;
+  @IsInt()
+  @Min(1)
+  idTipoCeremonia?: number | null;
 
   @ApiPropertyOptional({ minLength: 6, maxLength: 6 })
   @Transform(emptyToNull)

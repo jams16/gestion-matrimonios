@@ -109,6 +109,16 @@ async function ejecutar() {
     solicitud,
     finalizacion: { ...finalizacion, contrasena: '********' },
   });
+  await guardarJson(carpetaEjecucion, 'casos-prueba.json', [
+    {
+      id: 'CP-MAN-01',
+      nombre: 'Registro y verificación reproducible',
+      tipo: 'FUNCIONAL',
+      objetivo:
+        'Crear/verificar la cuenta fija o rechazar correctamente el duplicado.',
+      resultado_esperado: 'Escenario A o B válido.',
+    },
+  ]);
 
   let app: INestApplication<App> | undefined;
   let correo: CorreoCapturadorManual | undefined;
@@ -374,33 +384,56 @@ async function ejecutar() {
 
     const global = errores.length === 0 ? 'PASS' : 'FAIL';
     const lineas = [
-      '# Resultado del runner manual: registro Wedding Planner',
+      '# Resultado de ejecución',
       '',
-      `- ID de ejecución: \`${idEjecucion}\``,
-      `- Fecha/hora: ${fecha.toISOString()}`,
-      `- Escenario: ${escenario === 'A' ? 'ESCENARIO A: creación nueva y verificación' : escenario === 'B' ? 'ESCENARIO B: intento de registro duplicado correctamente rechazado' : 'NO DETERMINADO'}`,
-      '- Objetivo: registrar, verificar y persistir una cuenta Wedding Planner en la BD configurada.',
-      '- Comando: `pnpm.cmd test:manual:registro-wedding-planner`',
-      `- Reportes JSON: datos-prueba.json, requests.json, responses.json, registros-creados.json, correo-verificacion.json`,
+      '## 1. Identificación de la prueba',
+      '- Nombre: registro manual Wedding Planner.',
+      `- ID de ejecución: \`${idEjecucion}\`.`,
+      `- Fecha/hora: ${fecha.toISOString()}.`,
+      '- Tipo: funcional.',
+      '- Entorno: configuración normal del backend y BD configurada.',
+      '- Objetivo: registrar, verificar y persistir una cuenta Wedding Planner.',
       '',
-      '| Paso | Método/servicio | Esperado | Obtenido | HTTP | BD | Estado |',
-      '| --- | --- | --- | --- | --- | --- | --- |',
+      '## 2. Precondiciones',
+      '- Configuración normal de autenticación y cuenta de datos fijos disponible.',
+      '',
+      '## 3. Datos de entrada',
+      '- Ver `datos-prueba.json` y `casos-prueba.json`.',
+      '',
+      '## 4. Ejecución paso a paso',
+      '',
+      '| Acción | Método/servicio | Esperado | Obtenido | HTTP | Comprobación BD | Evidencia | Estado |',
+      '| --- | --- | --- | --- | --- | --- | --- | --- |',
       ...pasos.map(
         (paso) =>
-          `| ${paso.nombre} | Endpoint real / servicio de correo capturado | ${paso.estado === 'PASS' ? 'Correcto' : 'Correcto sin errores'} | ${paso.detalle} | ${paso.statusHttp ?? '—'} | Ver registros-creados.json | ${paso.estado} |`,
+          `| ${paso.nombre} | Endpoint real / correo capturado | Según escenario | ${paso.detalle} | ${paso.statusHttp ?? '—'} | registros-creados.json | requests/responses JSON | ${paso.estado} |`,
       ),
       '',
-      `## Resultado global: ${global}`,
+      '## 5. Registros creados/modificados',
+      '| Modelo/tabla | ID | Acción | Campos relevantes | Evidencia |',
+      '| --- | --- | --- | --- | --- |',
+      '| au_registro_pendiente / in_persona_natural / in_entidad / au_usuario | Ver JSON | Crear/verificar o rechazar duplicado | correo y perfil | registros-creados.json |',
       '',
+      '## 6. Validaciones realizadas',
+      `- ${escenario === 'A' ? 'Registro, correo, verificación y perfil.' : 'Detección de duplicado sin envío de correo.'}`,
+      '',
+      '## 7. Incidencias o warnings',
       errores.length
-        ? `## Errores/warnings\n${errores.map((error) => `- ${error}`).join('\n')}`
-        : '## Errores/warnings\n- Ninguno.',
+        ? errores.map((error) => `- ${error}`).join('\n')
+        : '- Ninguno.',
       '',
-      'Los registros creados se conservan deliberadamente para su inspección; el runner no ejecuta limpieza ni rollback.',
+      '## 8. Reproducción',
+      '- Comando: `pnpm.cmd test:manual:registro-wedding-planner`.',
+      '- La carpeta manual se sobrescribe; el runner no elimina registros de la BD.',
     ];
     await writeFile(
       join(carpetaEjecucion, 'resultado.md'),
       `${lineas.join('\n')}\n`,
+      'utf8',
+    );
+    await writeFile(
+      join(carpetaEjecucion, 'resultado-final.md'),
+      `# Resultado final\n\n## Resumen\n\n| Métrica | Resultado |\n|---|---|\n| Casos ejecutados | ${pasos.length} |\n| PASS | ${pasos.filter((paso) => paso.estado === 'PASS').length} |\n| FAIL | ${pasos.filter((paso) => paso.estado === 'FAIL').length} |\n| Resultado global | ${global} |\n\n## Casos de prueba\n\n| ID | Caso | Tipo | Resultado esperado | Resultado obtenido | Estado |\n|---|---|---|---|---|---|\n${pasos.map((paso, indice) => `| CP-MAN-${String(indice + 1).padStart(2, '0')} | ${paso.nombre} | FUNCIONAL | Según escenario | ${paso.detalle} | ${paso.estado} |`).join('\n')}\n\n## Evidencias principales\n\n| Evidencia | Archivo |\n|---|---|\n| Datos/casos | datos-prueba.json, casos-prueba.json |\n| Requests/responses | requests.json, responses.json |\n| Registros | registros-creados.json |\n| Verificación | correo-verificacion.json |\n\n## Resultado funcional\nSe documentó el flujo real sin falsear el escenario A o B.\n\n## Limitaciones\nEl resultado depende de que la cuenta fija exista o no en la BD.\n\n## Reproducción\n\`pnpm.cmd test:manual:registro-wedding-planner\`\n\n## Conclusión\nResultado ${global}.\n`,
       'utf8',
     );
     await app?.close();

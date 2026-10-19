@@ -1,0 +1,4 @@
+{
+  "estado": "PENDIENTE",
+  "nota": "Se sobrescribirá por pnpm.cmd test:manual:creacion-matrimonio -- --tipo=<TIPO>."
+}

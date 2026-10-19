@@ -1,0 +1,9 @@
+[
+  {
+    "id": "CP-AUT-01",
+    "nombre": "Registro y verificación de Wedding Planner",
+    "tipo": "INTEGRACION",
+    "objetivo": "Solicitar, confirmar y finalizar el registro.",
+    "resultado_esperado": "Perfil PROJECT_MANAGER verificado."
+  }
+]

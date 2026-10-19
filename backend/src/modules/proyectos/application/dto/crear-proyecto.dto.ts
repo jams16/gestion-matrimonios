@@ -1,7 +1,7 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
 import {
-  IsEnum,
+  IsBoolean,
   IsISO8601,
   IsInt,
   IsNumber,
@@ -11,8 +11,7 @@ import {
   Min,
 } from 'class-validator';
 
-import { EstadoProyecto } from '../../domain/enums/estado-proyecto.enum';
-import { emptyToNull } from './dto-utils';
+import { booleano, emptyToNull } from './dto-utils';
 
 export class CrearProyectoDto {
   @ApiPropertyOptional({ maxLength: 150 })
@@ -83,8 +82,16 @@ export class CrearProyectoDto {
   @MaxLength(1000)
   alcance?: string | null;
 
-  @ApiPropertyOptional({ enum: EstadoProyecto })
+  @ApiPropertyOptional({ minimum: 1, description: 'ID de gp_fase_proyecto.' })
+  @Type(() => Number)
   @IsOptional()
-  @IsEnum(EstadoProyecto)
-  estado?: EstadoProyecto | null;
+  @IsInt()
+  @Min(1)
+  idFaseProyecto?: number | null;
+
+  @ApiPropertyOptional({ default: true })
+  @Transform(booleano)
+  @IsOptional()
+  @IsBoolean()
+  estado?: boolean;
 }

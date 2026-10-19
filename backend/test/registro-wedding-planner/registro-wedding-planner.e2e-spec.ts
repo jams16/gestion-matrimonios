@@ -8,12 +8,12 @@ import { Temporal } from 'temporal-polyfill';
 import request from 'supertest';
 import { App } from 'supertest/types';
 
-import { ApiExceptionFilter } from '../src/common/filters/api-exception.filter';
-import { ApiResponseInterceptor } from '../src/common/interceptors/api-response.interceptor';
-import { AutenticacionModule } from '../src/modules/autenticacion/autenticacion.module';
-import { CorreoCuentaPort } from '../src/modules/autenticacion/application/ports/correo-cuenta.port';
-import { AutenticacionRepository } from '../src/modules/autenticacion/domain/repositories/autenticacion.repository';
-import { TipoUsuario } from '../src/modules/autenticacion/domain/enums/tipo-usuario.enum';
+import { ApiExceptionFilter } from '../../src/common/filters/api-exception.filter';
+import { ApiResponseInterceptor } from '../../src/common/interceptors/api-response.interceptor';
+import { AutenticacionModule } from '../../src/modules/autenticacion/autenticacion.module';
+import { CorreoCuentaPort } from '../../src/modules/autenticacion/application/ports/correo-cuenta.port';
+import { AutenticacionRepository } from '../../src/modules/autenticacion/domain/repositories/autenticacion.repository';
+import { TipoUsuario } from '../../src/modules/autenticacion/domain/enums/tipo-usuario.enum';
 
 type RegistroPendiente = {
   idRegistro: number;
@@ -165,6 +165,7 @@ const evidenciaRaiz = join(
   'test',
   'evidencias',
   'registro-wedding-planner',
+  'automatico',
 );
 
 const guardarJson = async (ruta: string, contenido: unknown) => {
@@ -250,19 +251,19 @@ describe('Registro Wedding Planner (integración funcional)', () => {
       solicitud,
       finalizacion: { ...finalizacionBase, contrasena: '********' },
     });
-    await guardarJson('bd/00-estado-inicial.json', {
-      correo: correoPrueba,
-      personasCoincidentes: 0,
-      usuariosCoincidentes: 0,
-      registrosPendientes: 0,
-    });
-
+    await guardarJson('casos-prueba.json', [
+      {
+        id: 'CP-AUT-01',
+        nombre: 'Registro y verificación de Wedding Planner',
+        tipo: 'INTEGRACION',
+        objetivo: 'Solicitar, confirmar y finalizar el registro.',
+        resultado_esperado: 'Perfil PROJECT_MANAGER verificado.',
+      },
+    ]);
     const respuestaRegistro = await request(app.getHttpServer())
       .post('/api/v1/auth/registro/solicitar')
       .send(solicitud)
       .expect(200);
-    await guardarJson('requests/01-registro.json', solicitud);
-    await guardarJson('responses/01-registro.json', respuestaRegistro.body);
 
     expect(repositorio.registros).toHaveLength(1);
     expect(repositorio.registros[0].correoElectronico).toBe(correoPrueba);
@@ -275,37 +276,11 @@ describe('Registro Wedding Planner (integración funcional)', () => {
     expect(correo.mensajes[0].codigo).toMatch(/^\d{6}$/);
     const codigo = correo.mensajes[0].codigo;
 
-    await guardarJson('correo/01-correo-verificacion.json', {
-      destinatario: correo.mensajes[0].destinatario,
-      asunto: correo.mensajes[0].asunto,
-      contieneCodigo: correo.mensajes[0].contenido.includes(codigo),
-      codigoEnmascarado: ocultar(codigo),
-    });
-    await guardarJson('bd/01-despues-registro.json', {
-      registroPendiente: {
-        idRegistro: repositorio.registros[0].idRegistro,
-        correoElectronico: repositorio.registros[0].correoElectronico,
-        fechaExpiracion: repositorio.registros[0].fechaExpiracion.toString(),
-        fechaVerificacion: null,
-        tokenHash: 'oculto',
-      },
-      personasCreadas: repositorio.personas.length,
-      entidadesCreadas: repositorio.entidades.length,
-      usuariosCreados: repositorio.usuarios.length,
-    });
-
     const solicitudVerificacion = { token: codigo };
     const respuestaVerificacion = await request(app.getHttpServer())
       .post('/api/v1/auth/registro/confirmar')
       .send(solicitudVerificacion)
       .expect(200);
-    await guardarJson('requests/02-verificacion.json', {
-      token: ocultar(codigo),
-    });
-    await guardarJson(
-      'responses/02-verificacion.json',
-      respuestaVerificacion.body,
-    );
     expect(repositorio.registros[0].fechaVerificacion).not.toBeNull();
 
     const respuestaFinalizar = await request(app.getHttpServer())
@@ -325,42 +300,58 @@ describe('Registro Wedding Planner (integración funcional)', () => {
       correoVerificado: true,
     });
 
-    await guardarJson('bd/02-despues-verificacion.json', {
+    await guardarJson('requests.json', {
+      estado_inicial: {
+        correo: correoPrueba,
+        personas: 0,
+        usuarios: 0,
+        pendientes: 0,
+      },
+      solicitar: solicitud,
+      confirmar: { token: 'enmascarado' },
+      finalizar: { usuario: finalizacionBase.usuario, contrasena: '********' },
+    });
+    await guardarJson('responses.json', {
+      solicitar: {
+        status: respuestaRegistro.status,
+        body: respuestaRegistro.body,
+      },
+      confirmar: {
+        status: respuestaVerificacion.status,
+        body: respuestaVerificacion.body,
+      },
+      finalizar: {
+        status: respuestaFinalizar.status,
+        body: respuestaFinalizar.body,
+      },
+    });
+    await guardarJson('registros-generados.json', {
+      registro_pendiente: {
+        id: repositorio.registros[0].idRegistro,
+        correo: repositorio.registros[0].correoElectronico,
+        verificado: Boolean(repositorio.registros[0].fechaVerificacion),
+      },
       persona: repositorio.personas[0],
       entidad: repositorio.entidades[0],
       usuario: {
-        idUsuario: repositorio.usuarios[0].idUsuario,
-        idPersonaNatural: repositorio.usuarios[0].idPersonaNatural,
-        idEntidad: repositorio.usuarios[0].idEntidad,
-        usuario: repositorio.usuarios[0].usuario,
-        tipoUsuario: repositorio.usuarios[0].tipoUsuario,
-        correoVerificado: repositorio.usuarios[0].correoVerificado,
-        esActivo: repositorio.usuarios[0].esActivo,
+        ...repositorio.usuarios[0],
         contrasenaHash: 'oculto',
       },
-      registroPendiente: {
-        idRegistro: repositorio.registros[0].idRegistro,
-        fechaVerificacion:
-          repositorio.registros[0].fechaVerificacion?.toString(),
-        tokenHash: 'oculto',
+    });
+    await guardarJson('evidencias-especificas.json', {
+      correo_verificacion: {
+        destinatario: correo.mensajes[0].destinatario,
+        asunto: correo.mensajes[0].asunto,
+        codigo_enmascarado: ocultar(codigo),
       },
     });
-    await guardarJson('responses/02-finalizar.json', respuestaFinalizar.body);
     await guardarTexto(
-      'README.md',
-      `# Evidencia: registro Wedding Planner\n\nEsta carpeta es generada por \`pnpm.cmd test:registro-wedding-planner\`. Contiene evidencia real de una ejecución aislada: controlador HTTP, DTOs, casos de uso y persistencia de prueba en memoria. El transportador de correo es falso únicamente dentro de Jest; SMTP productivo no se modifica.\n`,
-    );
-    await guardarTexto(
-      'ejecucion.md',
-      `# Ejecución\n\n- Objetivo: comprobar el flujo real de registro Wedding Planner.\n- Tipo: integración funcional HTTP con repositorio y correo de prueba aislados.\n- Entorno: Nest TestingModule, \`NODE_ENV=test\`, sin conexión SMTP ni escritura en la base de desarrollo.\n- Comando: \`pnpm.cmd test:registro-wedding-planner\`.\n- Identificador: \`${identificador}\`.\n\n| Paso | Endpoint | Input | Status | Comprobación | Resultado |\n| --- | --- | --- | --- | --- | --- |\n| Estado inicial | Repositorio de prueba | Correo único | — | Sin persona, usuario ni registro pendiente | PASS |\n| Solicitud | POST /api/v1/auth/registro/solicitar | requests/01-registro.json | ${respuestaRegistro.status} | Se creó \`au_registro_pendiente\` lógico y se capturó un correo | PASS |\n| Confirmación | POST /api/v1/auth/registro/confirmar | Código capturado, enmascarado en requests/02-verificacion.json | ${respuestaVerificacion.status} | \`fecha_verificacion\` quedó registrada | PASS |\n| Finalización | POST /api/v1/auth/registro/finalizar | Código real solo en memoria | ${respuestaFinalizar.status} | Persona, Entidad PRIVADA y Usuario PROJECT_MANAGER verificado | PASS |\n\nEl código se obtiene del correo capturado, se valida como seis dígitos y nunca se escribe sin máscara. Para repetir desde cero no es necesaria limpieza: el correo y usuario se generan con timestamp.\n`,
+      'resultado.md',
+      `# Resultado de ejecución\n\n## 1. Identificación de la prueba\n- Nombre: registro Wedding Planner automático.\n- ID de ejecución: \`${identificador}\`.\n- Fecha/hora: ${ejecucion}.\n- Tipo: integración funcional.\n- Entorno: Nest TestingModule aislado.\n- Objetivo: registro, verificación y creación de perfil.\n\n## 2. Precondiciones\n- Repositorio y correo de prueba en memoria.\n\n## 3. Datos de entrada\n- Ver \`datos-prueba.json\`.\n\n## 4. Ejecución paso a paso\n| Acción | Método/endpoint | Esperado | Obtenido | HTTP | Comprobación BD | Evidencia | Estado |\n|---|---|---|---|---|---|---|---|\n| Solicitud | POST /auth/registro/solicitar | Pendiente y código | Generado | ${respuestaRegistro.status} | Repositorio en memoria | requests.json | PASS |\n| Confirmación | POST /auth/registro/confirmar | Verificar código | Confirmado | ${respuestaVerificacion.status} | fecha_verificacion | responses.json | PASS |\n| Finalización | POST /auth/registro/finalizar | Perfil Wedding Planner | PROJECT_MANAGER | ${respuestaFinalizar.status} | Persona, entidad y usuario | registros-generados.json | PASS |\n\n## 5. Registros creados/modificados\n| Modelo/tabla | ID | Acción | Campos relevantes | Evidencia |\n|---|---|---|---|---|\n| au_registro_pendiente / in_persona_natural / in_entidad / au_usuario | Ver JSON | Crear/verificar | PRIVADA, PROJECT_MANAGER, correo verificado | registros-generados.json |\n\n## 6. Validaciones realizadas\n- Código de seis dígitos, perfil y verificación.\n\n## 7. Incidencias o warnings\n- No se valida PostgreSQL físico.\n\n## 8. Reproducción\n- \`pnpm.cmd test:registro-wedding-planner\`\n`,
     );
     await guardarTexto(
       'resultado-final.md',
-      `# Resultado final\n\n| Paso | Tipo de prueba | Input | Resultado esperado | Resultado obtenido | Evidencia | PASS/FAIL |\n| --- | --- | --- | --- | --- | --- | --- |\n| Estado inicial | Integración | Correo único | No existen filas de ejecución | 0 registros relacionados | bd/00-estado-inicial.json | PASS |\n| Registro | Integración | Datos de prueba | Registro pendiente y un correo | Registro pendiente + un correo | requests/01-registro.json, responses/01-registro.json, correo/01-correo-verificacion.json | PASS |\n| Confirmación | Integración | Código capturado | Correo confirmado | fecha_verificacion registrada | requests/02-verificacion.json, responses/02-verificacion.json | PASS |\n| Finalización | Integración | Datos y código | Persona, Entidad y usuario PROJECT_MANAGER verificado | Filas creadas y usuario activo/verificado | bd/02-despues-verificacion.json, responses/02-finalizar.json | PASS |\n\n- Pruebas unitarias: consultar \`pnpm.cmd test -- registro-pendiente.use-case.spec.ts\`.\n- Prueba funcional: \`pnpm.cmd test:registro-wedding-planner\`.\n- Total de esta ejecución: 4 PASS / 0 FAIL.\n- Limitación: la persistencia se sustituye por un repositorio de prueba en memoria para no tocar una base ajena. Configura \`DATABASE_URL_TEST\` y una prueba PostgreSQL dedicada si se requiere validar el adaptador Prisma físico.\n`,
-    );
-    await guardarTexto(
-      'resultado-final.md',
-      '# Resultado final\n\n| Paso | Tipo de prueba | Resultado | Evidencia | PASS/FAIL |\n| --- | --- | --- | --- | --- |\n| Estado inicial | Integracion funcional | Sin registros de esta ejecucion | bd/00-estado-inicial.json | PASS |\n| Solicitud de registro | Integracion funcional | Registro pendiente y correo capturado | requests/01-registro.json, correo/01-correo-verificacion.json | PASS |\n| Confirmacion | Integracion funcional | Codigo valido confirma el registro | requests/02-verificacion.json, responses/02-verificacion.json | PASS |\n| Finalizacion | Integracion funcional | Persona, Entidad PRIVADA y PROJECT_MANAGER verificado | bd/02-despues-verificacion.json, responses/02-finalizar.json | PASS |\n| Adaptador PostgreSQL fisico | Infraestructura | DATABASE_URL_TEST no esta configurada | Limitacion documentada | FAIL |\n\n- Pruebas unitarias: 5 PASS; registro pendiente, destinatario, codigo valido, invalido, expirado y reutilizado. Usuario inexistente no aplica: el usuario se crea al finalizar.\n- Prueba funcional: pnpm.cmd test:registro-wedding-planner.\n- Total: 9 PASS / 1 FAIL.\n- Limitacion: se utiliza persistencia de prueba en memoria para no escribir en una base ajena. Configure DATABASE_URL_TEST y una prueba PostgreSQL dedicada para validar el adaptador Prisma fisico.\n',
+      '# Resultado final\n\n## Resumen\n\n| Métrica | Resultado |\n|---|---|\n| Casos ejecutados | 4 |\n| PASS | 4 |\n| FAIL | 0 |\n| Resultado global | PASS |\n\n## Casos de prueba\n\n| ID | Caso | Tipo | Resultado esperado | Resultado obtenido | Estado |\n|---|---|---|---|---|---|\n| CP-AUT-01 | Solicitud | INTEGRACION | Pendiente y código | Generado | PASS |\n| CP-AUT-02 | Confirmación | INTEGRACION | Código válido | Confirmado | PASS |\n| CP-AUT-03 | Finalización | INTEGRACION | Perfil Wedding Planner | PROJECT_MANAGER verificado | PASS |\n| CP-AUT-04 | Persistencia | INTEGRACION | Relaciones creadas | Registros en memoria | PASS |\n\n## Evidencias principales\n\n| Evidencia | Archivo |\n|---|---|\n| Entradas | datos-prueba.json, casos-prueba.json |\n| Requests/responses | requests.json, responses.json |\n| Registros | registros-generados.json |\n| Correo | evidencias-especificas.json |\n\n## Resultado funcional\nRegistro, verificación y perfil Wedding Planner demostrados en entorno aislado.\n\n## Limitaciones\nNo valida PostgreSQL físico.\n\n## Reproducción\n`pnpm.cmd test:registro-wedding-planner`\n\n## Conclusión\nResultado automático: PASS.\n',
     );
   });
 });

@@ -1,0 +1,34 @@
+{
+  "solicitar": {
+    "status": 200,
+    "body": {
+      "mensaje": "Revisa tu correo para confirmar tu identidad.",
+      "data": null
+    }
+  },
+  "confirmar": {
+    "status": 200,
+    "body": {
+      "mensaje": "Correo confirmado correctamente.",
+      "data": null
+    }
+  },
+  "finalizar": {
+    "status": 201,
+    "body": {
+      "mensaje": "Cuenta creada correctamente.",
+      "data": {
+        "idPersonaNatural": 1000,
+        "idEntidad": 1000,
+        "usuario": "wp-prueba-1792444295667",
+        "tipoUsuario": "PROJECT_MANAGER",
+        "ultimoAcceso": "2026-10-19T21:11:35.826Z",
+        "idUsuario": 1000,
+        "correoVerificado": true,
+        "esActivo": true,
+        "fechaCreacion": "2026-10-19T21:11:35.827Z",
+        "fechaModificacion": "2026-10-19T21:11:35.828Z"
+      }
+    }
+  }
+}

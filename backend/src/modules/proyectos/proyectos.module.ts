@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AutenticacionModule } from '../autenticacion/autenticacion.module';
+import { CronogramaModule } from '../cronograma/cronograma.module';
 
 import {
   ActualizarMatrimonioUseCase,
@@ -9,7 +10,10 @@ import {
   ListarResumenMatrimoniosUseCase,
   ObtenerMatrimonioUseCase,
 } from './application/use-cases/matrimonios.use-cases';
-import { GuardarOnboardingMatrimonioUseCase, ObtenerOnboardingMatrimonioUseCase } from './application/use-cases/onboarding-matrimonio.use-case';
+import {
+  GuardarOnboardingMatrimonioUseCase,
+  ObtenerOnboardingMatrimonioUseCase,
+} from './application/use-cases/onboarding-matrimonio.use-case';
 import {
   ActualizarProyectoUseCase,
   CrearProyectoUseCase,
@@ -23,7 +27,7 @@ import { MatrimoniosController } from './presentation/controllers/matrimonios.co
 import { ProyectosController } from './presentation/controllers/proyectos.controller';
 
 @Module({
-  imports: [AutenticacionModule],
+  imports: [AutenticacionModule, CronogramaModule],
   controllers: [ProyectosController, MatrimoniosController],
   providers: [
     CrearProyectoUseCase,

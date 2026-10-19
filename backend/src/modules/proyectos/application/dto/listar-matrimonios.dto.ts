@@ -2,7 +2,6 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
 import {
   IsBoolean,
-  IsEnum,
   IsIn,
   IsInt,
   IsOptional,
@@ -13,7 +12,6 @@ import {
   Min,
 } from 'class-validator';
 
-import { TipoCeremonia } from '../../domain/enums/tipo-ceremonia.enum';
 import { booleano } from './dto-utils';
 
 export class ListarMatrimoniosDto {
@@ -92,10 +90,12 @@ export class ListarMatrimoniosDto {
   @Min(1)
   idNovio2?: number;
 
-  @ApiPropertyOptional({ enum: TipoCeremonia })
+  @ApiPropertyOptional({ minimum: 1 })
+  @Type(() => Number)
   @IsOptional()
-  @IsEnum(TipoCeremonia)
-  tipoCeremonia?: TipoCeremonia;
+  @IsInt()
+  @Min(1)
+  idTipoCeremonia?: number;
 
   @ApiPropertyOptional({ minLength: 6, maxLength: 6 })
   @IsOptional()

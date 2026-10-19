@@ -1,0 +1,11 @@
+{
+  "fechaInicio": "2026-01-01T00:00:00.000Z",
+  "fechaMatrimonio": "2027-01-31T00:00:00.000Z",
+  "duracionBaseDias": 395,
+  "tiposCeremonia": [
+    "CIVIL",
+    "RELIGIOSO",
+    "RELIGIOSO_CIVIL",
+    "SIMBOLICO"
+  ]
+}
