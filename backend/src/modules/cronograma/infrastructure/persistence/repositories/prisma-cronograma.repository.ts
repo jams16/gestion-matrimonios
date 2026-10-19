@@ -22,7 +22,7 @@ type FilaSql = Record<string, unknown>;
 type ClientePlantillasSql = {
   connect(): Promise<void>;
   end(): Promise<void>;
-  query(sql: string): Promise<{ rows: FilaSql[] }>;
+  query(sql: string, valores?: unknown[]): Promise<{ rows: FilaSql[] }>;
 };
 type ConstructorClientePlantillasSql = new (opciones: {
   connectionString: string | undefined;
@@ -110,8 +110,8 @@ export class PrismaCronogramaRepository
   async existeCronogramaGenerado(idProyecto: string): Promise<boolean> {
     const [hitos, actividades, timings] = await Promise.all([
       this.db.orm.public.Hito.all(),
-      this.db.orm.public.Actividad.all(),
-      this.db.orm.public.Timing.all(),
+      this.leerActividadesOperativas(),
+      this.leerTimingOperativo(),
     ]);
     return [hitos, actividades, timings].some((items) =>
       (items as Array<{ idProyecto: string }>).some(
@@ -236,8 +236,29 @@ export class PrismaCronogramaRepository
       idProyecto: string;
       idPm: number | null;
       nombre: string | null;
+      idFaseProyecto: number | null;
+      estado: boolean;
     } | null;
     return proyecto;
+  }
+
+  async listarFasesProyecto(): Promise<
+    Array<{ idFaseProyecto: number; codigo: string; activo: boolean }>
+  > {
+    return (await this.db.orm.public.FaseProyecto.all()) as Array<{
+      idFaseProyecto: number;
+      codigo: string;
+      activo: boolean;
+    }>;
+  }
+
+  async actualizarProyectoFase(
+    idProyecto: string,
+    idFaseProyecto: number,
+  ): Promise<void> {
+    await this.db.orm.public.Proyecto.where({
+      idProyecto: idProyecto as never,
+    }).update({ idFaseProyecto } as never);
   }
 
   async obtenerVentanaProyecto(idProyecto: string) {
@@ -290,9 +311,7 @@ export class PrismaCronogramaRepository
     idProyecto: string,
     filtros: FiltrosCronograma,
   ): Promise<Record<string, unknown>[]> {
-    const actividades = (await this.db.orm.public.Actividad.all()) as Array<
-      Record<string, unknown>
-    >;
+    const actividades = await this.leerActividadesOperativas();
     return actividades
       .filter(
         (actividad) =>
@@ -307,9 +326,9 @@ export class PrismaCronogramaRepository
   async obtenerActividad(
     idActividad: string,
   ): Promise<Record<string, unknown> | null> {
-    return (await this.db.orm.public.Actividad.first({
-      idActividad: idActividad as never,
-    })) as Record<string, unknown> | null;
+    return (await this.leerActividadesOperativas()).find(
+      (actividad) => actividad.idActividad === idActividad,
+    ) ?? null;
   }
 
   async crearActividadManual(
@@ -324,11 +343,20 @@ export class PrismaCronogramaRepository
     idActividad: string,
     data: Record<string, unknown>,
   ): Promise<Record<string, unknown>> {
-    return (await this.db.orm.public.Actividad.where({
-      idActividad: idActividad as never,
-    }).update(
-      this.normalizarFechas(data, ['fechaInicio', 'fechaFin']) as never,
-    )) as Record<string, unknown>;
+    await this.actualizarOperativo(
+      'cr_actividad',
+      'id_actividad',
+      idActividad,
+      data,
+      {
+        idHito: 'id_hito', idPlantillaActividad: 'id_plantilla_actividad',
+        nombre: 'nombre', descripcion: 'descripcion', listaVerificacion: 'lista_verificacion',
+        entregable: 'entregable', fechaInicio: 'fecha_inicio', fechaFin: 'fecha_fin',
+        prioridad: 'prioridad', estado: 'estado', idUsuarioResponsable: 'id_usuario_responsable',
+        responsableTexto: 'responsable_texto', orden: 'orden', modificadoManualmente: 'modificado_manualmente', activo: 'activo',
+      },
+    );
+    return { idActividad, ...data };
   }
 
   async listarDependencias(
@@ -336,7 +364,7 @@ export class PrismaCronogramaRepository
   ): Promise<Record<string, unknown>[]> {
     const [dependencias, actividades] = await Promise.all([
       this.db.orm.public.Dependencia.all(),
-      this.db.orm.public.Actividad.all(),
+      this.leerActividadesOperativas(),
     ]);
     const porId = new Map(
       (actividades as Array<Record<string, unknown>>).map((actividad) => [
@@ -386,9 +414,7 @@ export class PrismaCronogramaRepository
     idProyecto: string,
     filtros: FiltrosCronograma,
   ): Promise<Record<string, unknown>[]> {
-    const timing = (await this.db.orm.public.Timing.all()) as Array<
-      Record<string, unknown>
-    >;
+    const timing = await this.leerTimingOperativo();
     return timing
       .filter(
         (item) =>
@@ -406,9 +432,9 @@ export class PrismaCronogramaRepository
   async obtenerTiming(
     idTiming: string,
   ): Promise<Record<string, unknown> | null> {
-    return (await this.db.orm.public.Timing.first({
-      idTiming: idTiming as never,
-    })) as Record<string, unknown> | null;
+    return (await this.leerTimingOperativo()).find(
+      (timing) => timing.idTiming === idTiming,
+    ) ?? null;
   }
 
   async crearTimingManual(
@@ -423,11 +449,20 @@ export class PrismaCronogramaRepository
     idTiming: string,
     data: Record<string, unknown>,
   ): Promise<Record<string, unknown>> {
-    return (await this.db.orm.public.Timing.where({
-      idTiming: idTiming as never,
-    }).update(
-      this.normalizarFechas(data, ['fechaHoraInicio', 'fechaHoraFin']) as never,
-    )) as Record<string, unknown>;
+    await this.actualizarOperativo(
+      'cr_timing',
+      'id_timing',
+      idTiming,
+      data,
+      {
+        idPlantillaTiming: 'id_plantilla_timing', actividad: 'actividad',
+        fechaHoraInicio: 'fecha_hora_inicio', fechaHoraFin: 'fecha_hora_fin',
+        duracionMinutos: 'duracion_minutos', idUsuarioResponsable: 'id_usuario_responsable',
+        responsableTexto: 'responsable_texto', listaVerificacion: 'lista_verificacion',
+        estado: 'estado', orden: 'orden', modificadoManualmente: 'modificado_manualmente', activo: 'activo',
+      },
+    );
+    return { idTiming, ...data };
   }
 
   private agruparTiposCeremonia(
@@ -441,6 +476,77 @@ export class PrismaCronogramaRepository
       mapa.set(idPlantilla, tipos);
       return mapa;
     }, new Map<number, number[]>());
+  }
+
+  /**
+   * Algunas filas legadas guardan JSON escalar. Prisma 8 no las decodifica,
+   * aunque PostgreSQL las conserva correctamente; se leen por pg y se exponen
+   * con la misma forma camelCase del cliente Prisma.
+   */
+  private async leerActividadesOperativas(): Promise<Record<string, unknown>[]> {
+    const filas = await this.consultarSql('SELECT * FROM public.cr_actividad');
+    return filas.map((fila) => this.mapearFilaOperativa(fila));
+  }
+
+  private async leerTimingOperativo(): Promise<Record<string, unknown>[]> {
+    const filas = await this.consultarSql('SELECT * FROM public.cr_timing');
+    return filas.map((fila) => this.mapearFilaOperativa(fila));
+  }
+
+  private async consultarSql(sql: string, valores?: unknown[]): Promise<FilaSql[]> {
+    pg.types.setTypeParser(114, (valor) => valor);
+    pg.types.setTypeParser(3802, (valor) => valor);
+    const cliente = new pg.Client({ connectionString: process.env.DATABASE_URL });
+    await cliente.connect();
+    try {
+      return (await cliente.query(sql, valores)).rows;
+    } finally {
+      await cliente.end();
+    }
+  }
+
+  private mapearFilaOperativa(fila: FilaSql): Record<string, unknown> {
+    const mapa: Record<string, string> = {
+      id_actividad: 'idActividad', id_proyecto: 'idProyecto', id_hito: 'idHito',
+      id_plantilla_actividad: 'idPlantillaActividad', lista_verificacion: 'listaVerificacion',
+      fecha_inicio: 'fechaInicio', fecha_fin: 'fechaFin', id_usuario_responsable: 'idUsuarioResponsable',
+      responsable_texto: 'responsableTexto', modificado_manualmente: 'modificadoManualmente',
+      id_timing: 'idTiming', id_plantilla_timing: 'idPlantillaTiming',
+      fecha_hora_inicio: 'fechaHoraInicio', fecha_hora_fin: 'fechaHoraFin',
+      duracion_minutos: 'duracionMinutos', created_at: 'createdAt', updated_at: 'updatedAt',
+    };
+    return Object.fromEntries(Object.entries(fila).map(([clave, valor]) => [
+      mapa[clave] ?? clave,
+      clave === 'lista_verificacion' ? this.aJsonONulo(valor) : valor,
+    ]));
+  }
+
+  private async actualizarOperativo(
+    tabla: 'cr_actividad' | 'cr_timing',
+    columnaId: string,
+    id: string,
+    datos: Record<string, unknown>,
+    columnas: Record<string, string>,
+  ): Promise<void> {
+    const asignaciones: string[] = [];
+    const valores: unknown[] = [];
+    for (const [campo, valor] of Object.entries(datos)) {
+      const columna = columnas[campo];
+      if (!columna) continue;
+      valores.push(
+        campo === 'listaVerificacion' && valor !== null && typeof valor !== 'string'
+          ? JSON.stringify(valor)
+          : valor instanceof Date ? valor.toISOString() : valor,
+      );
+      asignaciones.push(`"${columna}" = $${valores.length}`);
+    }
+    if (!asignaciones.length) return;
+    asignaciones.push('updated_at = CURRENT_TIMESTAMP');
+    valores.push(id);
+    await this.consultarSql(
+      `UPDATE public.${tabla} SET ${asignaciones.join(', ')} WHERE "${columnaId}" = $${valores.length}`,
+      valores,
+    );
   }
 
   private async leerPlantillasCompatibles(): Promise<{

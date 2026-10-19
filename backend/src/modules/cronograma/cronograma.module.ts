@@ -5,6 +5,7 @@ import { GenerarCronogramaDesdePlantillaUseCase } from './application/use-cases/
 import { ReprogramarActividadUseCase } from './application/use-cases/reprogramar-actividad.use-case';
 import {
   ConsultarCronogramaUseCase,
+  ConfirmarPlanificacionCronogramaUseCase,
   GestionarActividadesUseCase,
   GestionarDependenciasUseCase,
   GestionarHitosUseCase,
@@ -31,6 +32,7 @@ import { CronogramaController } from './presentation/controllers/cronograma.cont
     GestionarDependenciasUseCase,
     GestionarTimingUseCase,
     ConsultarCronogramaUseCase,
+    ConfirmarPlanificacionCronogramaUseCase,
     ReprogramarActividadUseCase,
   ],
   exports: [CronogramaDateService, GenerarCronogramaDesdePlantillaUseCase],

@@ -6,6 +6,7 @@ import {
 } from '../../domain/repositories/cronograma-crud.repository';
 import {
   ConsultarCronogramaUseCase,
+  ConfirmarPlanificacionCronogramaUseCase,
   GestionarActividadesUseCase,
   GestionarDependenciasUseCase,
 } from './gestionar-cronograma.use-cases';
@@ -17,17 +18,33 @@ const actividadB = '44444444-4444-4444-8444-444444444444';
 
 class RepositorioMemoria extends CronogramaCrudRepository {
   actividades: Record<string, unknown>[] = [];
+  hitos: Record<string, unknown>[] = [];
   dependencias: Record<string, unknown>[] = [];
   actualizaciones: Record<string, unknown>[] = [];
   async ejecutarEnTransaccionCrud<T>(
     operacion: (repositorio: CronogramaCrudRepository) => Promise<T>,
-  ) {
+  ): Promise<T> {
     return operacion(this);
   }
   async obtenerProyecto(id: string) {
     return id === proyecto || id === otroProyecto
-      ? { idProyecto: id, idPm: 10, nombre: 'Proyecto' }
+      ? {
+          idProyecto: id,
+          idPm: 10,
+          nombre: 'Proyecto',
+          idFaseProyecto: 2,
+          estado: true,
+        }
       : null;
+  }
+  async listarFasesProyecto() {
+    return [
+      { idFaseProyecto: 2, codigo: 'INICIO', activo: true },
+      { idFaseProyecto: 3, codigo: 'PLANIFICACION', activo: true },
+    ];
+  }
+  async actualizarProyectoFase(_: string, idFaseProyecto: number) {
+    this.faseActualizada = idFaseProyecto;
   }
   async obtenerVentanaProyecto(idProyecto: string) {
     void idProyecto;
@@ -37,9 +54,10 @@ class RepositorioMemoria extends CronogramaCrudRepository {
     };
   }
   async listarHitos(idProyecto: string, filtros: FiltrosCronograma) {
-    void idProyecto;
-    void filtros;
-    return [];
+    return this.hitos.filter(
+      (h) => h.idProyecto === idProyecto &&
+        (filtros.activo === undefined || h.activo === filtros.activo),
+    );
   }
   async obtenerHito(idHito: string) {
     void idHito;
@@ -104,6 +122,7 @@ class RepositorioMemoria extends CronogramaCrudRepository {
   async actualizarTiming(_: string, data: Record<string, unknown>) {
     return data;
   }
+  faseActualizada?: number;
 }
 
 describe('Gestionar cronograma', () => {
@@ -150,7 +169,7 @@ describe('Gestionar cronograma', () => {
     await actividades.cambiarEstado(
       proyecto,
       actividadA,
-      { estado: 'EN_PROCESO' },
+      { estado: 'EN_PROCESO' as never },
       10,
     );
     expect(repository.actualizaciones.at(-1)).toMatchObject({
@@ -203,5 +222,20 @@ describe('Gestionar cronograma', () => {
       retrasadas: 1,
       total_hitos: 0,
     });
+  });
+
+  it('confirma INICIO a PLANIFICACION cuando existe cronograma activo', async () => {
+    repository.actividades = [{ ...repository.actividades[0], activo: true }];
+    const hito: Record<string, unknown> = {
+      idHito: '77777777-7777-4777-8777-777777777777',
+      idProyecto: proyecto,
+      activo: true,
+    };
+    repository.hitos = [hito];
+    const resultado = await new ConfirmarPlanificacionCronogramaUseCase(
+      repository,
+    ).ejecutar(proyecto, 10);
+    expect(resultado.faseActual).toBe('PLANIFICACION');
+    expect(repository.faseActualizada).toBe(3);
   });
 });

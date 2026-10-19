@@ -1,0 +1,8 @@
+{
+  "servicios": [
+    "GestionarActividadesUseCase",
+    "GestionarDependenciasUseCase",
+    "ReprogramarActividadUseCase",
+    "ConfirmarPlanificacionCronogramaUseCase"
+  ]
+}

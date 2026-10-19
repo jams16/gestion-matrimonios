@@ -1,0 +1,97 @@
+[
+  {
+    "id": "CRON-LIST-01",
+    "caso": "Listado general",
+    "esperado": "Hitos, actividades, dependencias y timing del proyecto."
+  },
+  {
+    "id": "HIT-02",
+    "caso": "Crear hito",
+    "esperado": "Hito manual activo."
+  },
+  {
+    "id": "HIT-03",
+    "caso": "Editar hito de plantilla",
+    "esperado": "Se conserva trazabilidad y se permite editar."
+  },
+  {
+    "id": "HIT-04/05",
+    "caso": "Editar/cambiar estado hito manual",
+    "esperado": "Cambios persistidos."
+  },
+  {
+    "id": "ACT-01/02",
+    "caso": "Listar y filtrar actividades",
+    "esperado": "Listado activo del proyecto."
+  },
+  {
+    "id": "ACT-03",
+    "caso": "Crear actividad",
+    "esperado": "Actividad manual activa."
+  },
+  {
+    "id": "HIT-06",
+    "caso": "Desactivar hito manual",
+    "esperado": "El hito queda con activo=false."
+  },
+  {
+    "id": "ACT-04/PLAN-07",
+    "caso": "Editar actividad de plantilla cerca de boda",
+    "esperado": "Guardar sin bloqueo por plantilla."
+  },
+  {
+    "id": "ACT-05/07",
+    "caso": "Editar y desactivar actividad manual",
+    "esperado": "activo=false."
+  },
+  {
+    "id": "DEP-02/03",
+    "caso": "Crear dependencia manual",
+    "esperado": "Dependencia válida entre instancias operativas."
+  },
+  {
+    "id": "DEP-04",
+    "caso": "Dependencia duplicada",
+    "esperado": "La dependencia ya existe."
+  },
+  {
+    "id": "DEP-05",
+    "caso": "Autodependencia",
+    "esperado": "Una actividad no puede depender de sí misma."
+  },
+  {
+    "id": "DEP-06",
+    "caso": "Ciclo",
+    "esperado": "La dependencia generaría un ciclo."
+  },
+  {
+    "id": "DEP-08",
+    "caso": "Eliminar dependencia",
+    "esperado": "Eliminación física según diseño actual."
+  },
+  {
+    "id": "TIM-02",
+    "caso": "Crear timing",
+    "esperado": "Timing manual activo."
+  },
+  {
+    "id": "TIM-03/04/06",
+    "caso": "Editar plantilla/manual y desactivar",
+    "esperado": "Plantilla no bloquea; manual queda inactivo."
+  },
+  {
+    "id": "FASE-01",
+    "caso": "INICIO a PLANIFICACION",
+    "esperado": "Cambio persistido."
+  },
+  {
+    "id": "PLAN-01..06",
+    "caso": "Edición posterior en PLANIFICACION",
+    "esperado": "Cronograma continúa editable."
+  },
+  {
+    "id": "CRON-LIST-FINAL",
+    "caso": "Listado final",
+    "esperado": "Cambios visibles y registros inactivos excluidos."
+  }
+]

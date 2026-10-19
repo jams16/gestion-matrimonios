@@ -1,0 +1,15 @@
+{
+  "ejecucion": "manual-gestion-cronograma-2026-10-19T22:46:21.848Z",
+  "proyecto": {
+    "idProyecto": "eb03491c-9ca4-4cbb-996d-ef9c1cb245f4",
+    "idMatrimonio": "4e505057-c952-4081-bc17-435bfb37c9c2",
+    "idUsuario": 1,
+    "fase": "INICIO",
+    "ceremonia": "SIMBOLICO",
+    "fechaBoda": "2027-10-21T00:00:00.000Z",
+    "hitosActivos": 12,
+    "actividadesActivas": 15,
+    "timingActivos": 12
+  },
+  "aviso": "No se creó matrimonio; todos los cambios se aplican a instancias cr_* existentes."
+}

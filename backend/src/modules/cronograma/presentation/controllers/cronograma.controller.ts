@@ -43,6 +43,7 @@ import {
 } from '../../application/dto/cronograma.dto';
 import {
   ConsultarCronogramaUseCase,
+  ConfirmarPlanificacionCronogramaUseCase,
   GestionarActividadesUseCase,
   GestionarDependenciasUseCase,
   GestionarHitosUseCase,
@@ -64,6 +65,7 @@ export class CronogramaController {
     private readonly dependencias: GestionarDependenciasUseCase,
     private readonly timing: GestionarTimingUseCase,
     private readonly reprogramarActividad: ReprogramarActividadUseCase,
+    private readonly confirmarPlanificacion: ConfirmarPlanificacionCronogramaUseCase,
   ) {}
 
   @Get()
@@ -98,6 +100,22 @@ export class CronogramaController {
         request.usuarioAutenticado.sub,
       ),
     };
+  }
+
+  @Post('confirmar-planificacion')
+  @ApiOperation({
+    summary: 'Confirmar el cronograma inicial y pasar de INICIO a PLANIFICACION',
+  })
+  @ApiOkResponse({ description: 'Cronograma confirmado correctamente.' })
+  async confirmarPlanificacionInicial(
+    @Param('idProyecto', ParseUUIDPipe) idProyecto: string,
+    @Req() request: SolicitudAutenticada,
+  ) {
+    const data = await this.confirmarPlanificacion.ejecutar(
+      idProyecto,
+      request.usuarioAutenticado.sub,
+    );
+    return { mensaje: data.mensaje, data };
   }
 
   @Get('hitos')

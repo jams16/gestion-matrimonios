@@ -1,0 +1,26 @@
+{
+  "proyecto": {
+    "alcance": null,
+    "estado": true,
+    "fechaCreacion": "2026-10-19T22:44:40.968Z",
+    "fechaFin": null,
+    "fechaInicio": "2026-10-19T22:44:40.850Z",
+    "fechaModificacion": null,
+    "idProyecto": "eb03491c-9ca4-4cbb-996d-ef9c1cb245f4",
+    "idFaseProyecto": 2,
+    "idPm": 1,
+    "necesidades": "Cronograma desde plantillas activas.",
+    "nombre": "Matrimonio de C1 SIMBOLICO & C2 SIMBOLICO",
+    "objetivos": "Validación manual aislada.",
+    "presupuesto": "25000.00",
+    "restricciones": null,
+    "supuestos": null
+  },
+  "faseInicial": "INICIO",
+  "noSeModificaronPlantillas": true,
+  "reglas": [
+    "plantilla como trazabilidad",
+    "soft delete de hito/actividad/timing",
+    "delete físico de dependencia"
+  ]
+}

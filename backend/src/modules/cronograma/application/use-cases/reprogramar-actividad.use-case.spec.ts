@@ -53,13 +53,28 @@ class RepositorioReprogramacion extends CronogramaCrudRepository {
   ];
   async ejecutarEnTransaccionCrud<T>(
     op: (repo: CronogramaCrudRepository) => Promise<T>,
-  ) {
+  ): Promise<T> {
     return op(this);
   }
   async obtenerProyecto(id: string) {
     return id === proyecto || id === otro
-      ? { idProyecto: id, idPm: 10, nombre: 'Proyecto' }
+      ? {
+          idProyecto: id,
+          idPm: 10,
+          nombre: 'Proyecto',
+          idFaseProyecto: 2,
+          estado: true,
+        }
       : null;
+  }
+  async listarFasesProyecto() {
+    return [
+      { idFaseProyecto: 2, codigo: 'INICIO', activo: true },
+      { idFaseProyecto: 3, codigo: 'PLANIFICACION', activo: true },
+    ];
+  }
+  async actualizarProyectoFase() {
+    return;
   }
   async obtenerVentanaProyecto() {
     return {

@@ -20,13 +20,13 @@
       "data": {
         "correoVerificado": true,
         "esActivo": true,
-        "fechaCreacion": "2026-10-19T22:04:10.535038Z",
-        "fechaModificacion": "2026-10-19T22:04:10.538Z",
+        "fechaCreacion": "2026-10-19T22:43:48.072076Z",
+        "fechaModificacion": "2026-10-19T22:43:48.188Z",
         "idEntidad": 1,
         "idPersonaNatural": 1,
         "idUsuario": 1,
         "tipoUsuario": "PROJECT_MANAGER",
-        "ultimoAcceso": "2026-10-19T22:04:10.531Z",
+        "ultimoAcceso": "2026-10-19T22:43:48.069Z",
         "usuario": "weddingplanner.prueba"
       }
     }

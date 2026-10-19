@@ -423,6 +423,56 @@ export class ConsultarCronogramaUseCase {
   }
 }
 
+/** Confirma la revisión inicial, sin convertir el cronograma en inmutable. */
+@Injectable()
+export class ConfirmarPlanificacionCronogramaUseCase {
+  constructor(private readonly repository: CronogramaCrudRepository) {}
+
+  async ejecutar(idProyecto: string, idUsuario: number) {
+    return this.repository.ejecutarEnTransaccionCrud(async (repositorio) => {
+      const proyecto = await validarProyecto(repositorio, idProyecto, idUsuario);
+      if (!proyecto.estado)
+        throw new BadRequestException('El proyecto no está activo.');
+
+      const [contexto, fases, hitos, actividades] = await Promise.all([
+        repositorio.obtenerVentanaProyecto(idProyecto),
+        repositorio.listarFasesProyecto(),
+        repositorio.listarHitos(idProyecto, { activo: true }),
+        repositorio.listarActividades(idProyecto, { activo: true }),
+      ]);
+      if (!contexto?.fechaMatrimonio)
+        throw new BadRequestException('El proyecto no tiene un matrimonio asociado.');
+      if (!hitos.length || !actividades.length)
+        throw new BadRequestException('El proyecto no tiene un cronograma generado.');
+
+      const faseInicio = fases.find(
+        (fase) => fase.codigo === 'INICIO' && fase.activo,
+      );
+      const fasePlanificacion = fases.find(
+        (fase) => fase.codigo === 'PLANIFICACION' && fase.activo,
+      );
+      if (!faseInicio || !fasePlanificacion)
+        throw new BadRequestException('No se encontraron las fases requeridas.');
+      if (proyecto.idFaseProyecto !== faseInicio.idFaseProyecto)
+        throw new ConflictException(
+          'El proyecto debe estar en la fase INICIO para confirmar la planificación.',
+        );
+
+      await repositorio.actualizarProyectoFase(
+        idProyecto,
+        fasePlanificacion.idFaseProyecto,
+      );
+      return {
+        idProyecto,
+        faseAnterior: faseInicio.codigo,
+        faseActual: fasePlanificacion.codigo,
+        mensaje:
+          'Cronograma confirmado. El proyecto pasó a la fase de planificación.',
+      };
+    });
+  }
+}
+
 async function validarProyecto(
   repository: CronogramaCrudRepository,
   idProyecto: string,

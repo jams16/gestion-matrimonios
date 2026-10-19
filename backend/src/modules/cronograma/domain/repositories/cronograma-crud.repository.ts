@@ -14,7 +14,16 @@ export abstract class CronogramaCrudRepository {
     idProyecto: string;
     idPm: number | null;
     nombre: string | null;
+    idFaseProyecto: number | null;
+    estado: boolean;
   } | null>;
+  abstract listarFasesProyecto(): Promise<
+    Array<{ idFaseProyecto: number; codigo: string; activo: boolean }>
+  >;
+  abstract actualizarProyectoFase(
+    idProyecto: string,
+    idFaseProyecto: number,
+  ): Promise<void>;
   abstract obtenerVentanaProyecto(idProyecto: string): Promise<{
     fechaInicio: Date | null;
     fechaMatrimonio: Date | null;

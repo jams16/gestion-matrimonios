@@ -6,15 +6,15 @@
     "obtenido": "Ya tienes un matrimonio activo para la misma fecha.",
     "regla": "Wedding Planner + fecha",
     "origen": {
-      "idProyecto": "983fb367-a9a3-4e33-a10b-0ffcdc345462",
-      "idMatrimonio": "5830a8f8-1e7c-4b53-80d5-f0bd175b7756",
+      "idProyecto": "ab47da9d-4c91-492e-94b0-be47f82ed6aa",
+      "idMatrimonio": "e041e273-97e5-42ee-92e7-97a229a1ae9d",
       "fase": 2,
       "dni": null
     },
     "intento": {
       "fecha": "2027-10-19",
-      "dni1": "97475258",
-      "dni2": "97475259"
+      "dni1": "99880411",
+      "dni2": "99880412"
     }
   },
   {
@@ -24,15 +24,15 @@
     "obtenido": "Una persona de la pareja ya participa en un matrimonio que no está en cierre.",
     "regla": "DNI en proyecto no CIERRE",
     "origen": {
-      "idProyecto": "983fb367-a9a3-4e33-a10b-0ffcdc345462",
-      "idMatrimonio": "5830a8f8-1e7c-4b53-80d5-f0bd175b7756",
+      "idProyecto": "ab47da9d-4c91-492e-94b0-be47f82ed6aa",
+      "idMatrimonio": "e041e273-97e5-42ee-92e7-97a229a1ae9d",
       "fase": 2,
-      "dni": "97475256"
+      "dni": "99880409"
     },
     "intento": {
       "fecha": "2027-10-20",
-      "dniReutilizado": "97475256",
-      "dniNuevo": "97475260"
+      "dniReutilizado": "99880409",
+      "dniNuevo": "99880413"
     }
   },
   {
@@ -43,8 +43,8 @@
     "regla": "Fecha mínima",
     "intento": {
       "fecha": "2026-10-20",
-      "dni1": "97475262",
-      "dni2": "97475263"
+      "dni1": "99880415",
+      "dni2": "99880416"
     }
   }
 ]
