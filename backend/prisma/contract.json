@@ -20,12 +20,44 @@
       "model": "Usuario",
       "namespace": "public"
     },
+    "gp_fase_proyecto": {
+      "model": "FaseProyecto",
+      "namespace": "public"
+    },
     "gp_matrimonio": {
       "model": "Matrimonio",
       "namespace": "public"
     },
+    "gp_plantilla_actividad": {
+      "model": "PlantillaActividad",
+      "namespace": "public"
+    },
+    "gp_plantilla_actividad_tipo_ceremonia": {
+      "model": "PlantillaActividadTipoCeremonia",
+      "namespace": "public"
+    },
+    "gp_plantilla_dependencia": {
+      "model": "PlantillaDependencia",
+      "namespace": "public"
+    },
+    "gp_plantilla_hito": {
+      "model": "PlantillaHito",
+      "namespace": "public"
+    },
+    "gp_plantilla_timing": {
+      "model": "PlantillaTiming",
+      "namespace": "public"
+    },
+    "gp_plantilla_timing_tipo_ceremonia": {
+      "model": "PlantillaTimingTipoCeremonia",
+      "namespace": "public"
+    },
     "gp_proyecto": {
       "model": "Proyecto",
+      "namespace": "public"
+    },
+    "gp_tipo_ceremonia": {
+      "model": "TipoCeremonia",
       "namespace": "public"
     },
     "in_entidad": {
@@ -71,49 +103,58 @@
               }
             ]
           },
-          "gp_estado_proyecto": {
+          "gp_prioridad_actividad": {
             "codecId": "pg/text@1",
             "members": [
               {
-                "name": "BORRADOR",
-                "value": "BORRADOR"
+                "name": "BAJA",
+                "value": "BAJA"
               },
+              {
+                "name": "MEDIA",
+                "value": "MEDIA"
+              },
+              {
+                "name": "ALTA",
+                "value": "ALTA"
+              },
+              {
+                "name": "CRITICA",
+                "value": "CRITICA"
+              }
+            ]
+          },
+          "gp_tipo_dependencia": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "FINISH_TO_START",
+                "value": "FINISH_TO_START"
+              }
+            ]
+          },
+          "gp_tipo_temporal": {
+            "codecId": "pg/text@1",
+            "members": [
               {
                 "name": "INICIO",
                 "value": "INICIO"
               },
               {
-                "name": "PLANIFICACION",
-                "value": "PLANIFICACION"
+                "name": "ESCALABLE",
+                "value": "ESCALABLE"
               },
               {
-                "name": "EJECUCION",
-                "value": "EJECUCION"
+                "name": "FIJO_EVENTO",
+                "value": "FIJO_EVENTO"
               },
               {
-                "name": "CIERRE",
-                "value": "CIERRE"
-              }
-            ]
-          },
-          "gp_tipo_ceremonia": {
-            "codecId": "pg/text@1",
-            "members": [
-              {
-                "name": "RELIGIOSO",
-                "value": "RELIGIOSO"
+                "name": "DIA_EVENTO",
+                "value": "DIA_EVENTO"
               },
               {
-                "name": "CIVIL",
-                "value": "CIVIL"
-              },
-              {
-                "name": "RELIGIOSO_Y_CIVIL",
-                "value": "RELIGIOSO_Y_CIVIL"
-              },
-              {
-                "name": "SIMBOLICO",
-                "value": "SIMBOLICO"
+                "name": "POST_EVENTO",
+                "value": "POST_EVENTO"
               }
             ]
           },
@@ -343,6 +384,117 @@
               "table": "in_entidad"
             }
           },
+          "FaseProyecto": {
+            "fields": {
+              "activo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "codigo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 50
+                  }
+                }
+              },
+              "descripcion": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 500
+                  }
+                }
+              },
+              "idFaseProyecto": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "nombre": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 100
+                  }
+                }
+              },
+              "orden": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "actividadesPlantilla": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idFaseProyecto"
+                  ],
+                  "targetFields": [
+                    "idFaseProyecto"
+                  ]
+                },
+                "to": {
+                  "model": "PlantillaActividad",
+                  "namespace": "public"
+                }
+              },
+              "proyectos": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idFaseProyecto"
+                  ],
+                  "targetFields": [
+                    "idFaseProyecto"
+                  ]
+                },
+                "to": {
+                  "model": "Proyecto",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "activo": {
+                  "column": "activo"
+                },
+                "codigo": {
+                  "column": "codigo"
+                },
+                "descripcion": {
+                  "column": "descripcion"
+                },
+                "idFaseProyecto": {
+                  "column": "id_fase_proyecto"
+                },
+                "nombre": {
+                  "column": "nombre"
+                },
+                "orden": {
+                  "column": "orden"
+                }
+              },
+              "namespaceId": "public",
+              "table": "gp_fase_proyecto"
+            }
+          },
           "Matrimonio": {
             "fields": {
               "cantidadInvitados": {
@@ -418,6 +570,13 @@
                   "kind": "scalar"
                 }
               },
+              "idTipoCeremonia": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
               "ideasMoonboard": {
                 "nullable": true,
                 "type": {
@@ -426,19 +585,6 @@
                   "typeParams": {
                     "length": 1000
                   }
-                }
-              },
-              "tipoCeremonia": {
-                "nullable": true,
-                "type": {
-                  "codecId": "pg/text@1",
-                  "kind": "scalar"
-                },
-                "valueSet": {
-                  "entityKind": "enum",
-                  "entityName": "gp_tipo_ceremonia",
-                  "namespaceId": "public",
-                  "plane": "domain"
                 }
               }
             },
@@ -491,6 +637,22 @@
                   "namespace": "public"
                 }
               },
+              "tipoCeremonia": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idTipoCeremonia"
+                  ],
+                  "targetFields": [
+                    "idTipoCeremonia"
+                  ]
+                },
+                "to": {
+                  "model": "TipoCeremonia",
+                  "namespace": "public"
+                }
+              },
               "ubigeo": {
                 "cardinality": "N:1",
                 "nullable": true,
@@ -540,11 +702,11 @@
                 "idProyecto": {
                   "column": "id_proyecto"
                 },
+                "idTipoCeremonia": {
+                  "column": "id_tipo_ceremonia"
+                },
                 "ideasMoonboard": {
                   "column": "ideas_moonboard"
-                },
-                "tipoCeremonia": {
-                  "column": "tipo_ceremonia"
                 }
               },
               "namespaceId": "public",
@@ -738,6 +900,835 @@
               "table": "in_persona_natural"
             }
           },
+          "PlantillaActividad": {
+            "fields": {
+              "activo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "codigo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 50
+                  }
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "diasAntesBase": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "diasAntesMinimo": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "duracionEstimadaDias": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "entregable": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 500
+                  }
+                }
+              },
+              "idFaseProyecto": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "idPlantillaActividad": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "idPlantillaHito": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "listaVerificacion": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/json@1",
+                  "kind": "scalar"
+                }
+              },
+              "nombre": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 200
+                  }
+                }
+              },
+              "orden": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "prioridad": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "gp_prioridad_actividad",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "responsableSugerido": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 150
+                  }
+                }
+              },
+              "tipoTemporal": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "gp_tipo_temporal",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "dependenciasPredecesora": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idPlantillaActividad"
+                  ],
+                  "targetFields": [
+                    "idActividadPredecesora"
+                  ]
+                },
+                "to": {
+                  "model": "PlantillaDependencia",
+                  "namespace": "public"
+                }
+              },
+              "dependenciasSucesora": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idPlantillaActividad"
+                  ],
+                  "targetFields": [
+                    "idActividadSucesora"
+                  ]
+                },
+                "to": {
+                  "model": "PlantillaDependencia",
+                  "namespace": "public"
+                }
+              },
+              "faseProyecto": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idFaseProyecto"
+                  ],
+                  "targetFields": [
+                    "idFaseProyecto"
+                  ]
+                },
+                "to": {
+                  "model": "FaseProyecto",
+                  "namespace": "public"
+                }
+              },
+              "hito": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idPlantillaHito"
+                  ],
+                  "targetFields": [
+                    "idPlantillaHito"
+                  ]
+                },
+                "to": {
+                  "model": "PlantillaHito",
+                  "namespace": "public"
+                }
+              },
+              "tiposCeremonia": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idPlantillaActividad"
+                  ],
+                  "targetFields": [
+                    "idPlantillaActividad"
+                  ]
+                },
+                "to": {
+                  "model": "PlantillaActividadTipoCeremonia",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "activo": {
+                  "column": "activo"
+                },
+                "codigo": {
+                  "column": "codigo"
+                },
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "diasAntesBase": {
+                  "column": "dias_antes_base"
+                },
+                "diasAntesMinimo": {
+                  "column": "dias_antes_minimo"
+                },
+                "duracionEstimadaDias": {
+                  "column": "duracion_estimada_dias"
+                },
+                "entregable": {
+                  "column": "entregable"
+                },
+                "idFaseProyecto": {
+                  "column": "id_fase_proyecto"
+                },
+                "idPlantillaActividad": {
+                  "column": "id_plantilla_actividad"
+                },
+                "idPlantillaHito": {
+                  "column": "id_plantilla_hito"
+                },
+                "listaVerificacion": {
+                  "column": "lista_verificacion"
+                },
+                "nombre": {
+                  "column": "nombre"
+                },
+                "orden": {
+                  "column": "orden"
+                },
+                "prioridad": {
+                  "column": "prioridad"
+                },
+                "responsableSugerido": {
+                  "column": "responsable_sugerido"
+                },
+                "tipoTemporal": {
+                  "column": "tipo_temporal"
+                },
+                "updatedAt": {
+                  "column": "updated_at"
+                }
+              },
+              "namespaceId": "public",
+              "table": "gp_plantilla_actividad"
+            }
+          },
+          "PlantillaActividadTipoCeremonia": {
+            "fields": {
+              "idPlantillaActividad": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "idPlantillaActividadTipoCeremonia": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "idTipoCeremonia": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "actividad": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idPlantillaActividad"
+                  ],
+                  "targetFields": [
+                    "idPlantillaActividad"
+                  ]
+                },
+                "to": {
+                  "model": "PlantillaActividad",
+                  "namespace": "public"
+                }
+              },
+              "tipoCeremonia": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idTipoCeremonia"
+                  ],
+                  "targetFields": [
+                    "idTipoCeremonia"
+                  ]
+                },
+                "to": {
+                  "model": "TipoCeremonia",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "idPlantillaActividad": {
+                  "column": "id_plantilla_actividad"
+                },
+                "idPlantillaActividadTipoCeremonia": {
+                  "column": "id_plantilla_actividad_tipo_ceremonia"
+                },
+                "idTipoCeremonia": {
+                  "column": "id_tipo_ceremonia"
+                }
+              },
+              "namespaceId": "public",
+              "table": "gp_plantilla_actividad_tipo_ceremonia"
+            }
+          },
+          "PlantillaDependencia": {
+            "fields": {
+              "diasDesfase": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "idActividadPredecesora": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "idActividadSucesora": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "idPlantillaDependencia": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "tipoDependencia": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "gp_tipo_dependencia",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              }
+            },
+            "relations": {
+              "predecesora": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idActividadPredecesora"
+                  ],
+                  "targetFields": [
+                    "idPlantillaActividad"
+                  ]
+                },
+                "to": {
+                  "model": "PlantillaActividad",
+                  "namespace": "public"
+                }
+              },
+              "sucesora": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idActividadSucesora"
+                  ],
+                  "targetFields": [
+                    "idPlantillaActividad"
+                  ]
+                },
+                "to": {
+                  "model": "PlantillaActividad",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "diasDesfase": {
+                  "column": "dias_desfase"
+                },
+                "idActividadPredecesora": {
+                  "column": "id_actividad_predecesora"
+                },
+                "idActividadSucesora": {
+                  "column": "id_actividad_sucesora"
+                },
+                "idPlantillaDependencia": {
+                  "column": "id_plantilla_dependencia"
+                },
+                "tipoDependencia": {
+                  "column": "tipo_dependencia"
+                }
+              },
+              "namespaceId": "public",
+              "table": "gp_plantilla_dependencia"
+            }
+          },
+          "PlantillaHito": {
+            "fields": {
+              "activo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "codigo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 50
+                  }
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "criterioAceptacion": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 1000
+                  }
+                }
+              },
+              "diasAntesBase": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "diasAntesMinimo": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "idPlantillaHito": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "nombre": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 200
+                  }
+                }
+              },
+              "orden": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "tipoTemporal": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "gp_tipo_temporal",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "actividades": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idPlantillaHito"
+                  ],
+                  "targetFields": [
+                    "idPlantillaHito"
+                  ]
+                },
+                "to": {
+                  "model": "PlantillaActividad",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "activo": {
+                  "column": "activo"
+                },
+                "codigo": {
+                  "column": "codigo"
+                },
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "criterioAceptacion": {
+                  "column": "criterio_aceptacion"
+                },
+                "diasAntesBase": {
+                  "column": "dias_antes_base"
+                },
+                "diasAntesMinimo": {
+                  "column": "dias_antes_minimo"
+                },
+                "idPlantillaHito": {
+                  "column": "id_plantilla_hito"
+                },
+                "nombre": {
+                  "column": "nombre"
+                },
+                "orden": {
+                  "column": "orden"
+                },
+                "tipoTemporal": {
+                  "column": "tipo_temporal"
+                },
+                "updatedAt": {
+                  "column": "updated_at"
+                }
+              },
+              "namespaceId": "public",
+              "table": "gp_plantilla_hito"
+            }
+          },
+          "PlantillaTiming": {
+            "fields": {
+              "actividad": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 200
+                  }
+                }
+              },
+              "activo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "codigo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 50
+                  }
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "duracionMinutos": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "horaInicio": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/time-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "idPlantillaTiming": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "listaVerificacion": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/json@1",
+                  "kind": "scalar"
+                }
+              },
+              "orden": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "responsableSugerido": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 150
+                  }
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "tiposCeremonia": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idPlantillaTiming"
+                  ],
+                  "targetFields": [
+                    "idPlantillaTiming"
+                  ]
+                },
+                "to": {
+                  "model": "PlantillaTimingTipoCeremonia",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "actividad": {
+                  "column": "actividad"
+                },
+                "activo": {
+                  "column": "activo"
+                },
+                "codigo": {
+                  "column": "codigo"
+                },
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "duracionMinutos": {
+                  "column": "duracion_minutos"
+                },
+                "horaInicio": {
+                  "column": "hora_inicio"
+                },
+                "idPlantillaTiming": {
+                  "column": "id_plantilla_timing"
+                },
+                "listaVerificacion": {
+                  "column": "lista_verificacion"
+                },
+                "orden": {
+                  "column": "orden"
+                },
+                "responsableSugerido": {
+                  "column": "responsable_sugerido"
+                },
+                "updatedAt": {
+                  "column": "updated_at"
+                }
+              },
+              "namespaceId": "public",
+              "table": "gp_plantilla_timing"
+            }
+          },
+          "PlantillaTimingTipoCeremonia": {
+            "fields": {
+              "idPlantillaTiming": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "idPlantillaTimingTipoCeremonia": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "idTipoCeremonia": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "timing": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idPlantillaTiming"
+                  ],
+                  "targetFields": [
+                    "idPlantillaTiming"
+                  ]
+                },
+                "to": {
+                  "model": "PlantillaTiming",
+                  "namespace": "public"
+                }
+              },
+              "tipoCeremonia": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idTipoCeremonia"
+                  ],
+                  "targetFields": [
+                    "idTipoCeremonia"
+                  ]
+                },
+                "to": {
+                  "model": "TipoCeremonia",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "idPlantillaTiming": {
+                  "column": "id_plantilla_timing"
+                },
+                "idPlantillaTimingTipoCeremonia": {
+                  "column": "id_plantilla_timing_tipo_ceremonia"
+                },
+                "idTipoCeremonia": {
+                  "column": "id_tipo_ceremonia"
+                }
+              },
+              "namespaceId": "public",
+              "table": "gp_plantilla_timing_tipo_ceremonia"
+            }
+          },
           "Proyecto": {
             "fields": {
               "alcance": {
@@ -751,16 +1742,10 @@
                 }
               },
               "estado": {
-                "nullable": true,
+                "nullable": false,
                 "type": {
-                  "codecId": "pg/text@1",
+                  "codecId": "pg/bool@1",
                   "kind": "scalar"
-                },
-                "valueSet": {
-                  "entityKind": "enum",
-                  "entityName": "gp_estado_proyecto",
-                  "namespaceId": "public",
-                  "plane": "domain"
                 }
               },
               "fechaCreacion": {
@@ -788,6 +1773,13 @@
                 "nullable": true,
                 "type": {
                   "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "idFaseProyecto": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
                   "kind": "scalar"
                 }
               },
@@ -868,6 +1860,22 @@
               }
             },
             "relations": {
+              "faseProyecto": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idFaseProyecto"
+                  ],
+                  "targetFields": [
+                    "idFaseProyecto"
+                  ]
+                },
+                "to": {
+                  "model": "FaseProyecto",
+                  "namespace": "public"
+                }
+              },
               "matrimonio": {
                 "cardinality": "1:1",
                 "nullable": true,
@@ -920,6 +1928,9 @@
                 },
                 "fechaModificacion": {
                   "column": "fecha_modificacion"
+                },
+                "idFaseProyecto": {
+                  "column": "id_fase_proyecto"
                 },
                 "idPm": {
                   "column": "id_pm"
@@ -1155,6 +2166,92 @@
               },
               "namespaceId": "public",
               "table": "au_sesion"
+            }
+          },
+          "TipoCeremonia": {
+            "fields": {
+              "activo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "codigo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 50
+                  }
+                }
+              },
+              "descripcion": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 500
+                  }
+                }
+              },
+              "idTipoCeremonia": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "nombre": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 100
+                  }
+                }
+              }
+            },
+            "relations": {
+              "matrimonios": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idTipoCeremonia"
+                  ],
+                  "targetFields": [
+                    "idTipoCeremonia"
+                  ]
+                },
+                "to": {
+                  "model": "Matrimonio",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "activo": {
+                  "column": "activo"
+                },
+                "codigo": {
+                  "column": "codigo"
+                },
+                "descripcion": {
+                  "column": "descripcion"
+                },
+                "idTipoCeremonia": {
+                  "column": "id_tipo_ceremonia"
+                },
+                "nombre": {
+                  "column": "nombre"
+                }
+              },
+              "namespaceId": "public",
+              "table": "gp_tipo_ceremonia"
             }
           },
           "TokenCuenta": {
@@ -2059,14 +3156,72 @@
                 }
               ]
             },
-            "gp_matrimonio": {
-              "checks": [
-                {
-                  "expression": "\"tipo_ceremonia\" IN ('RELIGIOSO', 'CIVIL', 'RELIGIOSO_Y_CIVIL', 'SIMBOLICO')",
-                  "name": "gp_matrimonio_tipo_ceremonia_check_8c419e2d",
-                  "prefix": "gp_matrimonio_tipo_ceremonia_check"
+            "gp_fase_proyecto": {
+              "columns": {
+                "activo": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "codigo": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 50
+                  }
+                },
+                "descripcion": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 500
+                  }
+                },
+                "id_fase_proyecto": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "expression": "autoincrement()",
+                    "kind": "function"
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "nombre": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 100
+                  }
+                },
+                "orden": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
                 }
-              ],
+              },
+              "foreignKeys": [],
+              "indexes": [],
+              "primaryKey": {
+                "columns": [
+                  "id_fase_proyecto"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "codigo"
+                  ]
+                }
+              ]
+            },
+            "gp_matrimonio": {
               "columns": {
                 "cantidad_invitados": {
                   "codecId": "pg/int4@1",
@@ -2125,23 +3280,17 @@
                   "nativeType": "uuid",
                   "nullable": false
                 },
+                "id_tipo_ceremonia": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
                 "ideas_moonboard": {
                   "codecId": "sql/varchar@1",
                   "nativeType": "character varying",
                   "nullable": true,
                   "typeParams": {
                     "length": 1000
-                  }
-                },
-                "tipo_ceremonia": {
-                  "codecId": "pg/text@1",
-                  "nativeType": "text",
-                  "nullable": true,
-                  "valueSet": {
-                    "entityKind": "valueSet",
-                    "entityName": "gp_tipo_ceremonia",
-                    "namespaceId": "public",
-                    "plane": "storage"
                   }
                 }
               },
@@ -2213,6 +3362,23 @@
                     "namespaceId": "public",
                     "tableName": "in_ubigeo"
                   }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_tipo_ceremonia"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_matrimonio"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_tipo_ceremonia"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_tipo_ceremonia"
+                  }
                 }
               ],
               "indexes": [
@@ -2239,6 +3405,14 @@
                   "name": "gp_matrimonio_id_novio2_idx_8e50726e",
                   "prefix": "gp_matrimonio_id_novio2_idx",
                   "unique": false
+                },
+                {
+                  "columns": [
+                    "id_tipo_ceremonia"
+                  ],
+                  "name": "gp_matrimonio_id_tipo_ceremonia_idx_c038373a",
+                  "prefix": "gp_matrimonio_id_tipo_ceremonia_idx",
+                  "unique": false
                 }
               ],
               "primaryKey": {
@@ -2254,14 +3428,712 @@
                 }
               ]
             },
-            "gp_proyecto": {
+            "gp_plantilla_actividad": {
               "checks": [
                 {
-                  "expression": "\"estado\" IN ('BORRADOR', 'INICIO', 'PLANIFICACION', 'EJECUCION', 'CIERRE')",
-                  "name": "gp_proyecto_estado_check_8f4f8f4a",
-                  "prefix": "gp_proyecto_estado_check"
+                  "expression": "\"prioridad\" IN ('BAJA', 'MEDIA', 'ALTA', 'CRITICA')",
+                  "name": "gp_plantilla_actividad_prioridad_check_a1f6ee2f",
+                  "prefix": "gp_plantilla_actividad_prioridad_check"
+                },
+                {
+                  "expression": "\"tipo_temporal\" IN ('INICIO', 'ESCALABLE', 'FIJO_EVENTO', 'DIA_EVENTO', 'POST_EVENTO')",
+                  "name": "gp_plantilla_actividad_tipo_temporal_check_77c07874",
+                  "prefix": "gp_plantilla_actividad_tipo_temporal_check"
                 }
               ],
+              "columns": {
+                "activo": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "codigo": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 50
+                  }
+                },
+                "created_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "dias_antes_base": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "dias_antes_minimo": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "duracion_estimada_dias": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "entregable": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 500
+                  }
+                },
+                "id_fase_proyecto": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "id_plantilla_actividad": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "expression": "autoincrement()",
+                    "kind": "function"
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "id_plantilla_hito": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "lista_verificacion": {
+                  "codecId": "pg/json@1",
+                  "nativeType": "json",
+                  "nullable": true
+                },
+                "nombre": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 200
+                  }
+                },
+                "orden": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "prioridad": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "gp_prioridad_actividad",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "responsable_sugerido": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 150
+                  }
+                },
+                "tipo_temporal": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "gp_tipo_temporal",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "updated_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_plantilla_hito"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_plantilla_actividad"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_plantilla_hito"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_plantilla_hito"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_fase_proyecto"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_plantilla_actividad"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_fase_proyecto"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_fase_proyecto"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "id_fase_proyecto"
+                  ],
+                  "name": "gp_plantilla_actividad_id_fase_proyecto_idx_0ca9d564",
+                  "prefix": "gp_plantilla_actividad_id_fase_proyecto_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_plantilla_hito"
+                  ],
+                  "name": "gp_plantilla_actividad_id_plantilla_hito_idx_99ae877f",
+                  "prefix": "gp_plantilla_actividad_id_plantilla_hito_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_plantilla_actividad"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "codigo"
+                  ]
+                }
+              ]
+            },
+            "gp_plantilla_actividad_tipo_ceremonia": {
+              "columns": {
+                "id_plantilla_actividad": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "id_plantilla_actividad_tipo_ceremonia": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "expression": "autoincrement()",
+                    "kind": "function"
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "id_tipo_ceremonia": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_plantilla_actividad"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_plantilla_actividad_tipo_ceremonia"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_plantilla_actividad"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_plantilla_actividad"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_tipo_ceremonia"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_plantilla_actividad_tipo_ceremonia"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_tipo_ceremonia"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_tipo_ceremonia"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "id_plantilla_actividad"
+                  ],
+                  "name": "gp_plantilla_actividad_tipo_ceremonia_id_plantilla_act_396101d8",
+                  "prefix": "gp_plantilla_actividad_tipo_ceremonia_id_plantilla_act",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_tipo_ceremonia"
+                  ],
+                  "name": "gp_plantilla_actividad_tipo_ceremonia_id_tipo_ceremoni_c038373a",
+                  "prefix": "gp_plantilla_actividad_tipo_ceremonia_id_tipo_ceremoni",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_plantilla_actividad_tipo_ceremonia"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "id_plantilla_actividad",
+                    "id_tipo_ceremonia"
+                  ]
+                }
+              ]
+            },
+            "gp_plantilla_dependencia": {
+              "checks": [
+                {
+                  "expression": "\"tipo_dependencia\" IN ('FINISH_TO_START')",
+                  "name": "gp_plantilla_dependencia_tipo_dependencia_check_d4c2b17a",
+                  "prefix": "gp_plantilla_dependencia_tipo_dependencia_check"
+                }
+              ],
+              "columns": {
+                "dias_desfase": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": 0
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "id_actividad_predecesora": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "id_actividad_sucesora": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "id_plantilla_dependencia": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "expression": "autoincrement()",
+                    "kind": "function"
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "tipo_dependencia": {
+                  "codecId": "pg/text@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": "FINISH_TO_START"
+                  },
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "gp_tipo_dependencia",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_actividad_predecesora"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_plantilla_dependencia"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_plantilla_actividad"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_plantilla_actividad"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_actividad_sucesora"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_plantilla_dependencia"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_plantilla_actividad"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_plantilla_actividad"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "id_actividad_predecesora"
+                  ],
+                  "name": "gp_plantilla_dependencia_id_actividad_predecesora_idx_26ea0d79",
+                  "prefix": "gp_plantilla_dependencia_id_actividad_predecesora_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_actividad_sucesora"
+                  ],
+                  "name": "gp_plantilla_dependencia_id_actividad_sucesora_idx_9be5e6fb",
+                  "prefix": "gp_plantilla_dependencia_id_actividad_sucesora_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_plantilla_dependencia"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "id_actividad_predecesora",
+                    "id_actividad_sucesora"
+                  ]
+                }
+              ]
+            },
+            "gp_plantilla_hito": {
+              "checks": [
+                {
+                  "expression": "\"tipo_temporal\" IN ('INICIO', 'ESCALABLE', 'FIJO_EVENTO', 'DIA_EVENTO', 'POST_EVENTO')",
+                  "name": "gp_plantilla_hito_tipo_temporal_check_77c07874",
+                  "prefix": "gp_plantilla_hito_tipo_temporal_check"
+                }
+              ],
+              "columns": {
+                "activo": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "codigo": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 50
+                  }
+                },
+                "created_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "criterio_aceptacion": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 1000
+                  }
+                },
+                "dias_antes_base": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "dias_antes_minimo": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "id_plantilla_hito": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "expression": "autoincrement()",
+                    "kind": "function"
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "nombre": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 200
+                  }
+                },
+                "orden": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "tipo_temporal": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "gp_tipo_temporal",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "updated_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [],
+              "indexes": [],
+              "primaryKey": {
+                "columns": [
+                  "id_plantilla_hito"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "codigo"
+                  ]
+                }
+              ]
+            },
+            "gp_plantilla_timing": {
+              "columns": {
+                "actividad": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 200
+                  }
+                },
+                "activo": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "codigo": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 50
+                  }
+                },
+                "created_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "duracion_minutos": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "hora_inicio": {
+                  "codecId": "pg/time-temporal@1",
+                  "nativeType": "time",
+                  "nullable": false
+                },
+                "id_plantilla_timing": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "expression": "autoincrement()",
+                    "kind": "function"
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "lista_verificacion": {
+                  "codecId": "pg/json@1",
+                  "nativeType": "json",
+                  "nullable": true
+                },
+                "orden": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "responsable_sugerido": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 150
+                  }
+                },
+                "updated_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [],
+              "indexes": [],
+              "primaryKey": {
+                "columns": [
+                  "id_plantilla_timing"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "codigo"
+                  ]
+                }
+              ]
+            },
+            "gp_plantilla_timing_tipo_ceremonia": {
+              "columns": {
+                "id_plantilla_timing": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "id_plantilla_timing_tipo_ceremonia": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "expression": "autoincrement()",
+                    "kind": "function"
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "id_tipo_ceremonia": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_plantilla_timing"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_plantilla_timing_tipo_ceremonia"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_plantilla_timing"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_plantilla_timing"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_tipo_ceremonia"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_plantilla_timing_tipo_ceremonia"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_tipo_ceremonia"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_tipo_ceremonia"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "id_plantilla_timing"
+                  ],
+                  "name": "gp_plantilla_timing_tipo_ceremonia_id_plantilla_timing_a11bed11",
+                  "prefix": "gp_plantilla_timing_tipo_ceremonia_id_plantilla_timing",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_tipo_ceremonia"
+                  ],
+                  "name": "gp_plantilla_timing_tipo_ceremonia_id_tipo_ceremonia_i_c038373a",
+                  "prefix": "gp_plantilla_timing_tipo_ceremonia_id_tipo_ceremonia_i",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_plantilla_timing_tipo_ceremonia"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "id_plantilla_timing",
+                    "id_tipo_ceremonia"
+                  ]
+                }
+              ]
+            },
+            "gp_proyecto": {
               "columns": {
                 "alcance": {
                   "codecId": "sql/varchar@1",
@@ -2272,15 +4144,13 @@
                   }
                 },
                 "estado": {
-                  "codecId": "pg/text@1",
-                  "nativeType": "text",
-                  "nullable": true,
-                  "valueSet": {
-                    "entityKind": "valueSet",
-                    "entityName": "gp_estado_proyecto",
-                    "namespaceId": "public",
-                    "plane": "storage"
-                  }
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
                 },
                 "fecha_creacion": {
                   "codecId": "pg/timestamptz-temporal@1",
@@ -2310,6 +4180,11 @@
                   "codecId": "pg/uuid@1",
                   "nativeType": "uuid",
                   "nullable": false
+                },
+                "id_fase_proyecto": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
                 },
                 "id_pm": {
                   "codecId": "pg/int4@1",
@@ -2383,9 +4258,34 @@
                     "namespaceId": "public",
                     "tableName": "au_usuario"
                   }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_fase_proyecto"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_proyecto"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_fase_proyecto"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_fase_proyecto"
+                  }
                 }
               ],
               "indexes": [
+                {
+                  "columns": [
+                    "id_fase_proyecto"
+                  ],
+                  "name": "gp_proyecto_id_fase_proyecto_idx_0ca9d564",
+                  "prefix": "gp_proyecto_id_fase_proyecto_idx",
+                  "unique": false
+                },
                 {
                   "columns": [
                     "id_pm"
@@ -2401,6 +4301,66 @@
                 ]
               },
               "uniques": []
+            },
+            "gp_tipo_ceremonia": {
+              "columns": {
+                "activo": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "codigo": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 50
+                  }
+                },
+                "descripcion": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 500
+                  }
+                },
+                "id_tipo_ceremonia": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "expression": "autoincrement()",
+                    "kind": "function"
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "nombre": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 100
+                  }
+                }
+              },
+              "foreignKeys": [],
+              "indexes": [],
+              "primaryKey": {
+                "columns": [
+                  "id_tipo_ceremonia"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "codigo"
+                  ]
+                }
+              ]
             },
             "in_entidad": {
               "checks": [
@@ -2761,23 +4721,29 @@
                 "OTROS"
               ]
             },
-            "gp_estado_proyecto": {
+            "gp_prioridad_actividad": {
               "kind": "valueSet",
               "values": [
-                "BORRADOR",
-                "INICIO",
-                "PLANIFICACION",
-                "EJECUCION",
-                "CIERRE"
+                "BAJA",
+                "MEDIA",
+                "ALTA",
+                "CRITICA"
               ]
             },
-            "gp_tipo_ceremonia": {
+            "gp_tipo_dependencia": {
               "kind": "valueSet",
               "values": [
-                "RELIGIOSO",
-                "CIVIL",
-                "RELIGIOSO_Y_CIVIL",
-                "SIMBOLICO"
+                "FINISH_TO_START"
+              ]
+            },
+            "gp_tipo_temporal": {
+              "kind": "valueSet",
+              "values": [
+                "INICIO",
+                "ESCALABLE",
+                "FIJO_EVENTO",
+                "DIA_EVENTO",
+                "POST_EVENTO"
               ]
             },
             "in_tipo_entidad": {
@@ -2795,10 +4761,10 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "1ff57f93f03da3985a78b7eef6739d2c5ce6aa1270f687f755a496a38289dde1"
+    "storageHash": "f45bb72600f96380a16d9dee58c79e85e97cec1b1d8fb7e1cb4fa506b8f91e06"
   },
   "execution": {
-    "executionHash": "7eca2a8eb79a516990143de38e072f93d393e19155870251d88f21cc63165d8b",
+    "executionHash": "01071910d254203efc131fe61029c1c9e516073580b6271152ec706734d2d33a",
     "mutations": {
       "defaults": [
         {
@@ -2825,6 +4791,51 @@
             "column": "id_matrimonio",
             "namespace": "public",
             "table": "gp_matrimonio"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updated_at",
+            "namespace": "public",
+            "table": "gp_plantilla_actividad"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updated_at",
+            "namespace": "public",
+            "table": "gp_plantilla_hito"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updated_at",
+            "namespace": "public",
+            "table": "gp_plantilla_timing"
           }
         },
         {
