@@ -1,0 +1,563 @@
+[
+  {
+    "id": "table.nt_notificacion",
+    "label": "Create table \"nt_notificacion\"",
+    "summary": "Creates table \"nt_notificacion\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "nt_notificacion"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"nt_notificacion\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"nt_notificacion\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"nt_notificacion\"",
+        "sql": "CREATE TABLE \"public\".\"nt_notificacion\" (\n  \"activo\" bool DEFAULT true NOT NULL,\n  \"created_at\" timestamptz DEFAULT (now()) NOT NULL,\n  \"enviada_push\" bool DEFAULT false NOT NULL,\n  \"fecha_generacion\" timestamptz DEFAULT (now()) NOT NULL,\n  \"fecha_programada\" timestamptz,\n  \"id_notificacion\" uuid NOT NULL,\n  \"id_proyecto\" uuid,\n  \"id_usuario_destino\" int4 NOT NULL,\n  \"leida\" bool DEFAULT false NOT NULL,\n  \"mensaje\" character varying(1000) NOT NULL,\n  \"tipo\" character varying(50) NOT NULL,\n  \"titulo\" character varying(200) NOT NULL,\n  \"updated_at\" timestamptz NOT NULL,\n  PRIMARY KEY (\"id_notificacion\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"nt_notificacion\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"nt_notificacion\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.nt_notificacion_cronograma",
+    "label": "Create table \"nt_notificacion_cronograma\"",
+    "summary": "Creates table \"nt_notificacion_cronograma\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "nt_notificacion_cronograma"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"nt_notificacion_cronograma\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"nt_notificacion_cronograma\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"nt_notificacion_cronograma\"",
+        "sql": "CREATE TABLE \"public\".\"nt_notificacion_cronograma\" (\n  \"fecha_referencia\" timestamptz,\n  \"id_actividad\" uuid,\n  \"id_hito\" uuid,\n  \"id_notificacion\" uuid NOT NULL,\n  \"tipo_evento_cronograma\" text NOT NULL,\n  PRIMARY KEY (\"id_notificacion\"),\n  CONSTRAINT \"nt_notificacion_cronograma_tipo_evento_cronograma_chec_f9892b6f\" CHECK (\"tipo_evento_cronograma\" IN ('ACTIVIDAD_PROXIMA_VENCER', 'ACTIVIDAD_VENCIDA', 'ACTIVIDAD_REPROGRAMADA', 'HITO_PROXIMO', 'HITO_VENCIDO'))\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"nt_notificacion_cronograma\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"nt_notificacion_cronograma\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.nt_notificacion.nt_notificacion_activo_idx_4c0f2ecc",
+    "label": "Create index \"nt_notificacion_activo_idx_4c0f2ecc\" on \"nt_notificacion\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "nt_notificacion_activo_idx_4c0f2ecc",
+        "table": "nt_notificacion"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"nt_notificacion_activo_idx_4c0f2ecc\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"nt_notificacion_activo_idx_4c0f2ecc\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"nt_notificacion_activo_idx_4c0f2ecc\"",
+        "sql": "CREATE INDEX \"nt_notificacion_activo_idx_4c0f2ecc\" ON \"public\".\"nt_notificacion\" (\"activo\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"nt_notificacion_activo_idx_4c0f2ecc\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"nt_notificacion_activo_idx_4c0f2ecc\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.nt_notificacion.nt_notificacion_id_proyecto_idx_4279b0d1",
+    "label": "Create index \"nt_notificacion_id_proyecto_idx_4279b0d1\" on \"nt_notificacion\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "nt_notificacion_id_proyecto_idx_4279b0d1",
+        "table": "nt_notificacion"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"nt_notificacion_id_proyecto_idx_4279b0d1\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"nt_notificacion_id_proyecto_idx_4279b0d1\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"nt_notificacion_id_proyecto_idx_4279b0d1\"",
+        "sql": "CREATE INDEX \"nt_notificacion_id_proyecto_idx_4279b0d1\" ON \"public\".\"nt_notificacion\" (\"id_proyecto\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"nt_notificacion_id_proyecto_idx_4279b0d1\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"nt_notificacion_id_proyecto_idx_4279b0d1\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.nt_notificacion.nt_notificacion_id_usuario_destino_idx_5d5aa4a9",
+    "label": "Create index \"nt_notificacion_id_usuario_destino_idx_5d5aa4a9\" on \"nt_notificacion\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "nt_notificacion_id_usuario_destino_idx_5d5aa4a9",
+        "table": "nt_notificacion"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"nt_notificacion_id_usuario_destino_idx_5d5aa4a9\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"nt_notificacion_id_usuario_destino_idx_5d5aa4a9\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"nt_notificacion_id_usuario_destino_idx_5d5aa4a9\"",
+        "sql": "CREATE INDEX \"nt_notificacion_id_usuario_destino_idx_5d5aa4a9\" ON \"public\".\"nt_notificacion\" (\"id_usuario_destino\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"nt_notificacion_id_usuario_destino_idx_5d5aa4a9\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"nt_notificacion_id_usuario_destino_idx_5d5aa4a9\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.nt_notificacion.nt_notificacion_leida_idx_7c47c0b3",
+    "label": "Create index \"nt_notificacion_leida_idx_7c47c0b3\" on \"nt_notificacion\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "nt_notificacion_leida_idx_7c47c0b3",
+        "table": "nt_notificacion"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"nt_notificacion_leida_idx_7c47c0b3\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"nt_notificacion_leida_idx_7c47c0b3\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"nt_notificacion_leida_idx_7c47c0b3\"",
+        "sql": "CREATE INDEX \"nt_notificacion_leida_idx_7c47c0b3\" ON \"public\".\"nt_notificacion\" (\"leida\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"nt_notificacion_leida_idx_7c47c0b3\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"nt_notificacion_leida_idx_7c47c0b3\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.nt_notificacion_cronograma.nt_notificacion_cronograma_id_actividad_idx_e1ffad2c",
+    "label": "Create index \"nt_notificacion_cronograma_id_actividad_idx_e1ffad2c\" on \"nt_notificacion_cronograma\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "nt_notificacion_cronograma_id_actividad_idx_e1ffad2c",
+        "table": "nt_notificacion_cronograma"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"nt_notificacion_cronograma_id_actividad_idx_e1ffad2c\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"nt_notificacion_cronograma_id_actividad_idx_e1ffad2c\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"nt_notificacion_cronograma_id_actividad_idx_e1ffad2c\"",
+        "sql": "CREATE INDEX \"nt_notificacion_cronograma_id_actividad_idx_e1ffad2c\" ON \"public\".\"nt_notificacion_cronograma\" (\"id_actividad\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"nt_notificacion_cronograma_id_actividad_idx_e1ffad2c\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"nt_notificacion_cronograma_id_actividad_idx_e1ffad2c\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.nt_notificacion_cronograma.nt_notificacion_cronograma_id_hito_idx_0a1cccf3",
+    "label": "Create index \"nt_notificacion_cronograma_id_hito_idx_0a1cccf3\" on \"nt_notificacion_cronograma\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "nt_notificacion_cronograma_id_hito_idx_0a1cccf3",
+        "table": "nt_notificacion_cronograma"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"nt_notificacion_cronograma_id_hito_idx_0a1cccf3\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"nt_notificacion_cronograma_id_hito_idx_0a1cccf3\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"nt_notificacion_cronograma_id_hito_idx_0a1cccf3\"",
+        "sql": "CREATE INDEX \"nt_notificacion_cronograma_id_hito_idx_0a1cccf3\" ON \"public\".\"nt_notificacion_cronograma\" (\"id_hito\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"nt_notificacion_cronograma_id_hito_idx_0a1cccf3\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"nt_notificacion_cronograma_id_hito_idx_0a1cccf3\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.nt_notificacion_cronograma.nt_notificacion_cronograma_tipo_evento_cronograma_idx_43547b14",
+    "label": "Create index \"nt_notificacion_cronograma_tipo_evento_cronograma_idx_43547b14\" on \"nt_notificacion_cronograma\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "nt_notificacion_cronograma_tipo_evento_cronograma_idx_43547b14",
+        "table": "nt_notificacion_cronograma"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"nt_notificacion_cronograma_tipo_evento_cronograma_idx_43547b14\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"nt_notificacion_cronograma_tipo_evento_cronograma_idx_43547b14\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"nt_notificacion_cronograma_tipo_evento_cronograma_idx_43547b14\"",
+        "sql": "CREATE INDEX \"nt_notificacion_cronograma_tipo_evento_cronograma_idx_43547b14\" ON \"public\".\"nt_notificacion_cronograma\" (\"tipo_evento_cronograma\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"nt_notificacion_cronograma_tipo_evento_cronograma_idx_43547b14\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"nt_notificacion_cronograma_tipo_evento_cronograma_idx_43547b14\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.nt_notificacion.nt_notificacion_id_usuario_destino_fkey",
+    "label": "Add foreign key \"nt_notificacion_id_usuario_destino_fkey\" on \"nt_notificacion\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "nt_notificacion_id_usuario_destino_fkey",
+        "table": "nt_notificacion"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"nt_notificacion_id_usuario_destino_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "nt_notificacion_id_usuario_destino_fkey",
+          "public",
+          "\"public\".\"nt_notificacion\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"nt_notificacion_id_usuario_destino_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"nt_notificacion\"\nADD CONSTRAINT \"nt_notificacion_id_usuario_destino_fkey\"\nFOREIGN KEY (\"id_usuario_destino\")\nREFERENCES \"public\".\"au_usuario\" (\"id_usuario\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"nt_notificacion_id_usuario_destino_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "nt_notificacion_id_usuario_destino_fkey",
+          "public",
+          "\"public\".\"nt_notificacion\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.nt_notificacion.nt_notificacion_id_proyecto_fkey",
+    "label": "Add foreign key \"nt_notificacion_id_proyecto_fkey\" on \"nt_notificacion\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "nt_notificacion_id_proyecto_fkey",
+        "table": "nt_notificacion"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"nt_notificacion_id_proyecto_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "nt_notificacion_id_proyecto_fkey",
+          "public",
+          "\"public\".\"nt_notificacion\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"nt_notificacion_id_proyecto_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"nt_notificacion\"\nADD CONSTRAINT \"nt_notificacion_id_proyecto_fkey\"\nFOREIGN KEY (\"id_proyecto\")\nREFERENCES \"public\".\"gp_proyecto\" (\"idProyecto\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"nt_notificacion_id_proyecto_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "nt_notificacion_id_proyecto_fkey",
+          "public",
+          "\"public\".\"nt_notificacion\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.nt_notificacion_cronograma.nt_notificacion_cronograma_id_notificacion_fkey",
+    "label": "Add foreign key \"nt_notificacion_cronograma_id_notificacion_fkey\" on \"nt_notificacion_cronograma\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "nt_notificacion_cronograma_id_notificacion_fkey",
+        "table": "nt_notificacion_cronograma"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"nt_notificacion_cronograma_id_notificacion_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "nt_notificacion_cronograma_id_notificacion_fkey",
+          "public",
+          "\"public\".\"nt_notificacion_cronograma\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"nt_notificacion_cronograma_id_notificacion_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"nt_notificacion_cronograma\"\nADD CONSTRAINT \"nt_notificacion_cronograma_id_notificacion_fkey\"\nFOREIGN KEY (\"id_notificacion\")\nREFERENCES \"public\".\"nt_notificacion\" (\"id_notificacion\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"nt_notificacion_cronograma_id_notificacion_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "nt_notificacion_cronograma_id_notificacion_fkey",
+          "public",
+          "\"public\".\"nt_notificacion_cronograma\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.nt_notificacion_cronograma.nt_notificacion_cronograma_id_actividad_fkey",
+    "label": "Add foreign key \"nt_notificacion_cronograma_id_actividad_fkey\" on \"nt_notificacion_cronograma\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "nt_notificacion_cronograma_id_actividad_fkey",
+        "table": "nt_notificacion_cronograma"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"nt_notificacion_cronograma_id_actividad_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "nt_notificacion_cronograma_id_actividad_fkey",
+          "public",
+          "\"public\".\"nt_notificacion_cronograma\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"nt_notificacion_cronograma_id_actividad_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"nt_notificacion_cronograma\"\nADD CONSTRAINT \"nt_notificacion_cronograma_id_actividad_fkey\"\nFOREIGN KEY (\"id_actividad\")\nREFERENCES \"public\".\"cr_actividad\" (\"id_actividad\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"nt_notificacion_cronograma_id_actividad_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "nt_notificacion_cronograma_id_actividad_fkey",
+          "public",
+          "\"public\".\"nt_notificacion_cronograma\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.nt_notificacion_cronograma.nt_notificacion_cronograma_id_hito_fkey",
+    "label": "Add foreign key \"nt_notificacion_cronograma_id_hito_fkey\" on \"nt_notificacion_cronograma\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "nt_notificacion_cronograma_id_hito_fkey",
+        "table": "nt_notificacion_cronograma"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"nt_notificacion_cronograma_id_hito_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "nt_notificacion_cronograma_id_hito_fkey",
+          "public",
+          "\"public\".\"nt_notificacion_cronograma\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"nt_notificacion_cronograma_id_hito_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"nt_notificacion_cronograma\"\nADD CONSTRAINT \"nt_notificacion_cronograma_id_hito_fkey\"\nFOREIGN KEY (\"id_hito\")\nREFERENCES \"public\".\"cr_hito\" (\"id_hito\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"nt_notificacion_cronograma_id_hito_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "nt_notificacion_cronograma_id_hito_fkey",
+          "public",
+          "\"public\".\"nt_notificacion_cronograma\""
+        ]
+      }
+    ]
+  }
+]

@@ -22,6 +22,7 @@ model Proyecto {
   hitos             Hito[]
   actividades       Actividad[]
   timings           Timing[]
+  notificaciones    Notificacion[]
 
   @@index([idPm])
   @@index([idFaseProyecto])
@@ -112,6 +113,14 @@ enum cr_estado_actividad {
   COMPLETADA
   CANCELADA
   NO_APLICA
+}
+
+enum nt_tipo_evento_cronograma {
+  ACTIVIDAD_PROXIMA_VENCER
+  ACTIVIDAD_VENCIDA
+  ACTIVIDAD_REPROGRAMADA
+  HITO_PROXIMO
+  HITO_VENCIDO
 }
 
 model PlantillaHito {
@@ -217,22 +226,23 @@ model PlantillaTimingTipoCeremonia {
 }
 
 model Hito {
-  idHito                Uuid                 @id @default(uuid()) @map("id_hito")
-  idProyecto            Uuid                 @map("id_proyecto")
-  idPlantillaHito       Int?                 @map("id_plantilla_hito")
+  idHito                Uuid                     @id @default(uuid()) @map("id_hito")
+  idProyecto            Uuid                     @map("id_proyecto")
+  idPlantillaHito       Int?                     @map("id_plantilla_hito")
   nombre                VarChar(200)
-  criterioAceptacion    VarChar(1000)?       @map("criterio_aceptacion")
-  fechaObjetivo         DateTime             @map("fecha_objetivo")
-  estado                cr_estado_hito       @default(PENDIENTE)
+  criterioAceptacion    VarChar(1000)?           @map("criterio_aceptacion")
+  fechaObjetivo         DateTime                 @map("fecha_objetivo")
+  estado                cr_estado_hito           @default(PENDIENTE)
   orden                 Int
-  modificadoManualmente Boolean              @default(false) @map("modificado_manualmente")
-  activo                Boolean              @default(true)
-  createdAt             DateTime             @default(now()) @map("created_at")
-  updatedAt             temporal.updatedAt() @map("updated_at")
+  modificadoManualmente Boolean                  @default(false) @map("modificado_manualmente")
+  activo                Boolean                  @default(true)
+  createdAt             DateTime                 @default(now()) @map("created_at")
+  updatedAt             temporal.updatedAt()     @map("updated_at")
 
-  proyecto              Proyecto             @relation(fields:[idProyecto], references:[idProyecto], onDelete: Restrict)
-  plantillaHito         PlantillaHito?       @relation(fields:[idPlantillaHito], references:[idPlantillaHito], onDelete: Restrict)
+  proyecto              Proyecto                 @relation(fields:[idProyecto], references:[idProyecto], onDelete: Restrict)
+  plantillaHito         PlantillaHito?           @relation(fields:[idPlantillaHito], references:[idPlantillaHito], onDelete: Restrict)
   actividades           Actividad[]
+  notificaciones        NotificacionCronograma[]
 
   @@index([idProyecto])
   @@index([idPlantillaHito])
@@ -241,32 +251,33 @@ model Hito {
 }
 
 model Actividad {
-  idActividad             Uuid                    @id @default(uuid()) @map("id_actividad")
-  idProyecto              Uuid                    @map("id_proyecto")
-  idHito                  Uuid?                   @map("id_hito")
-  idPlantillaActividad    Int?                    @map("id_plantilla_actividad")
+  idActividad             Uuid                     @id @default(uuid()) @map("id_actividad")
+  idProyecto              Uuid                     @map("id_proyecto")
+  idHito                  Uuid?                    @map("id_hito")
+  idPlantillaActividad    Int?                     @map("id_plantilla_actividad")
   nombre                  VarChar(200)
   descripcion             VarChar(1000)?
-  listaVerificacion       Json?                   @map("lista_verificacion")
+  listaVerificacion       Json?                    @map("lista_verificacion")
   entregable              VarChar(500)?
-  fechaInicio             DateTime?               @map("fecha_inicio")
-  fechaFin                DateTime                @map("fecha_fin")
+  fechaInicio             DateTime?                @map("fecha_inicio")
+  fechaFin                DateTime                 @map("fecha_fin")
   prioridad               cr_prioridad_actividad?
-  estado                  cr_estado_actividad     @default(PENDIENTE)
-  idUsuarioResponsable    Int?                    @map("id_usuario_responsable")
-  responsableTexto        VarChar(150)?           @map("responsable_texto")
+  estado                  cr_estado_actividad      @default(PENDIENTE)
+  idUsuarioResponsable    Int?                     @map("id_usuario_responsable")
+  responsableTexto        VarChar(150)?            @map("responsable_texto")
   orden                   Int
-  modificadoManualmente   Boolean                 @default(false) @map("modificado_manualmente")
-  activo                  Boolean                 @default(true)
-  createdAt               DateTime                @default(now()) @map("created_at")
-  updatedAt               temporal.updatedAt()    @map("updated_at")
+  modificadoManualmente   Boolean                  @default(false) @map("modificado_manualmente")
+  activo                  Boolean                  @default(true)
+  createdAt               DateTime                 @default(now()) @map("created_at")
+  updatedAt               temporal.updatedAt()     @map("updated_at")
 
-  proyecto                Proyecto                @relation(fields:[idProyecto], references:[idProyecto], onDelete: Restrict)
-  hito                    Hito?                   @relation(fields:[idHito], references:[idHito], onDelete: Restrict)
-  plantillaActividad      PlantillaActividad?     @relation(fields:[idPlantillaActividad], references:[idPlantillaActividad], onDelete: Restrict)
-  responsable             Usuario?                @relation("actividades_responsable", fields:[idUsuarioResponsable], references:[idUsuario], onDelete: Restrict)
-  dependenciasPredecesora Dependencia[]           @relation("actividades_predecesora")
-  dependenciasSucesora    Dependencia[]           @relation("actividades_sucesora")
+  proyecto                Proyecto                 @relation(fields:[idProyecto], references:[idProyecto], onDelete: Restrict)
+  hito                    Hito?                    @relation(fields:[idHito], references:[idHito], onDelete: Restrict)
+  plantillaActividad      PlantillaActividad?      @relation(fields:[idPlantillaActividad], references:[idPlantillaActividad], onDelete: Restrict)
+  responsable             Usuario?                 @relation("actividades_responsable", fields:[idUsuarioResponsable], references:[idUsuario], onDelete: Restrict)
+  dependenciasPredecesora Dependencia[]            @relation("actividades_predecesora")
+  dependenciasSucesora    Dependencia[]            @relation("actividades_sucesora")
+  notificaciones          NotificacionCronograma[]
 
   @@index([idProyecto])
   @@index([idHito])
@@ -323,6 +334,49 @@ model Timing {
   @@index([fechaHoraInicio])
   @@index([fechaHoraFin])
   @@map("cr_timing")
+}
+
+model Notificacion {
+  idNotificacion   Uuid                    @id @default(uuid()) @map("id_notificacion")
+  idUsuarioDestino Int                     @map("id_usuario_destino")
+  idProyecto       Uuid?                   @map("id_proyecto")
+  tipo             VarChar(50)
+  titulo           VarChar(200)
+  mensaje          VarChar(1000)
+  fechaGeneracion  DateTime                @default(now()) @map("fecha_generacion")
+  fechaProgramada  DateTime?               @map("fecha_programada")
+  leida            Boolean                 @default(false)
+  enviadaPush      Boolean                 @default(false) @map("enviada_push")
+  activo           Boolean                 @default(true)
+  createdAt        DateTime                @default(now()) @map("created_at")
+  updatedAt        temporal.updatedAt()    @map("updated_at")
+
+  usuarioDestino   Usuario                 @relation("notificaciones_destino", fields:[idUsuarioDestino], references:[idUsuario], onDelete: Restrict)
+  proyecto         Proyecto?               @relation(fields:[idProyecto], references:[idProyecto], onDelete: Restrict)
+  cronograma       NotificacionCronograma?
+
+  @@index([idUsuarioDestino])
+  @@index([idProyecto])
+  @@index([leida])
+  @@index([activo])
+  @@map("nt_notificacion")
+}
+
+model NotificacionCronograma {
+  idNotificacion       Uuid                      @id @map("id_notificacion")
+  idActividad          Uuid?                     @map("id_actividad")
+  idHito               Uuid?                     @map("id_hito")
+  tipoEventoCronograma nt_tipo_evento_cronograma @map("tipo_evento_cronograma")
+  fechaReferencia      DateTime?                 @map("fecha_referencia")
+
+  notificacion         Notificacion              @relation(fields:[idNotificacion], references:[idNotificacion], onDelete: Restrict)
+  actividad            Actividad?                @relation(fields:[idActividad], references:[idActividad], onDelete: Restrict)
+  hito                 Hito?                     @relation(fields:[idHito], references:[idHito], onDelete: Restrict)
+
+  @@index([idActividad])
+  @@index([idHito])
+  @@index([tipoEventoCronograma])
+  @@map("nt_notificacion_cronograma")
 }
 
 model Ubigeo {
@@ -420,6 +474,7 @@ model Usuario {
   matrimoniosNovio2      Matrimonio[]         @relation("matrimonios_novio2")
   actividadesResponsable Actividad[]          @relation("actividades_responsable")
   timingsResponsable     Timing[]             @relation("timings_responsable")
+  notificacionesDestino  Notificacion[]       @relation("notificaciones_destino")
 
   @@index([idPersonaNatural])
   @@index([idEntidad])

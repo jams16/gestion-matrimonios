@@ -15,12 +15,14 @@ import {
   ReprogramacionActividadesService,
 } from '../services/reprogramacion-actividades.service';
 import { CronogramaCrudRepository } from '../../domain/repositories/cronograma-crud.repository';
+import { NotificacionesCronogramaPort } from '../../../notificaciones/domain/ports/notificaciones-cronograma.port';
 
 @Injectable()
 export class ReprogramarActividadUseCase {
   constructor(
     private readonly repository: CronogramaCrudRepository,
     private readonly reprogramacion: ReprogramacionActividadesService,
+    private readonly notificaciones?: NotificacionesCronogramaPort,
   ) {}
 
   async previsualizar(
@@ -44,41 +46,62 @@ export class ReprogramarActividadUseCase {
     dto: ConfirmarReprogramacionActividadDto,
     idUsuario: number,
   ) {
-    return this.repository.ejecutarEnTransaccionCrud(async (repositorio) => {
-      const resultado = await this.preparar(
-        repositorio,
+    const confirmada = await this.repository.ejecutarEnTransaccionCrud(
+      async (repositorio) => {
+        const resultado = await this.preparar(
+          repositorio,
+          idProyecto,
+          idActividad,
+          dto,
+          idUsuario,
+        );
+        if (!dto.propagar && resultado.impacto.actividades_afectadas.length) {
+          throw new ConflictException(
+            'La reprogramación dejaría dependencias FINISH_TO_START inválidas. Usa propagar=true para aplicar los desplazamientos sugeridos.',
+          );
+        }
+        await repositorio.actualizarActividad(idActividad, {
+          fechaInicio: resultado.actividad_origen.fecha_inicio_sugerida,
+          fechaFin: resultado.actividad_origen.fecha_fin_sugerida,
+          modificadoManualmente: true,
+        });
+        if (dto.propagar) {
+          for (const actividad of resultado.impacto.actividades_afectadas) {
+            await repositorio.actualizarActividad(actividad.id_actividad, {
+              fechaInicio: actividad.fecha_inicio_sugerida,
+              fechaFin: actividad.fecha_fin_sugerida,
+              modificadoManualmente: true,
+            });
+          }
+        }
+        return {
+          actividad_origen: resultado.actividad_origen,
+          impacto: dto.propagar
+            ? resultado.impacto
+            : { actividades_afectadas: [], hitos_afectados: [] },
+          propagado: dto.propagar,
+        };
+      },
+    );
+    if (this.notificaciones) {
+      await this.notificaciones.notificarActividadReprogramada(
         idProyecto,
         idActividad,
-        dto,
-        idUsuario,
+        confirmada.actividad_origen.fecha_fin_sugerida,
       );
-      if (!dto.propagar && resultado.impacto.actividades_afectadas.length) {
-        throw new ConflictException(
-          'La reprogramación dejaría dependencias FINISH_TO_START inválidas. Usa propagar=true para aplicar los desplazamientos sugeridos.',
+      if (dto.propagar) {
+        await Promise.all(
+          confirmada.impacto.actividades_afectadas.map((actividad) =>
+            this.notificaciones!.notificarActividadReprogramada(
+              idProyecto,
+              actividad.id_actividad,
+              actividad.fecha_fin_sugerida,
+            ),
+          ),
         );
       }
-      await repositorio.actualizarActividad(idActividad, {
-        fechaInicio: resultado.actividad_origen.fecha_inicio_sugerida,
-        fechaFin: resultado.actividad_origen.fecha_fin_sugerida,
-        modificadoManualmente: true,
-      });
-      if (dto.propagar) {
-        for (const actividad of resultado.impacto.actividades_afectadas) {
-          await repositorio.actualizarActividad(actividad.id_actividad, {
-            fechaInicio: actividad.fecha_inicio_sugerida,
-            fechaFin: actividad.fecha_fin_sugerida,
-            modificadoManualmente: true,
-          });
-        }
-      }
-      return {
-        actividad_origen: resultado.actividad_origen,
-        impacto: dto.propagar
-          ? resultado.impacto
-          : { actividades_afectadas: [], hitos_afectados: [] },
-        propagado: dto.propagar,
-      };
-    });
+    }
+    return confirmada;
   }
 
   private async preparar(

@@ -7,6 +7,7 @@ import { AutenticacionModule } from './modules/autenticacion/autenticacion.modul
 import { UsuariosModule } from './modules/usuarios/usuarios.module';
 import { ProyectosModule } from './modules/proyectos/proyectos.module';
 import { CronogramaModule } from './modules/cronograma/cronograma.module';
+import { NotificacionesModule } from './modules/notificaciones/notificaciones.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { CronogramaModule } from './modules/cronograma/cronograma.module';
     UsuariosModule,
     ProyectosModule,
     CronogramaModule,
+    NotificacionesModule,
   ],
 })
 export class AppModule {}

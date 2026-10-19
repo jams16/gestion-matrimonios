@@ -87,6 +87,14 @@
     "in_ubigeo": {
       "model": "Ubigeo",
       "namespace": "public"
+    },
+    "nt_notificacion": {
+      "model": "Notificacion",
+      "namespace": "public"
+    },
+    "nt_notificacion_cronograma": {
+      "model": "NotificacionCronograma",
+      "namespace": "public"
     }
   },
   "domain": {
@@ -238,6 +246,31 @@
               {
                 "name": "OTROS",
                 "value": "OTROS"
+              }
+            ]
+          },
+          "nt_tipo_evento_cronograma": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "ACTIVIDAD_PROXIMA_VENCER",
+                "value": "ACTIVIDAD_PROXIMA_VENCER"
+              },
+              {
+                "name": "ACTIVIDAD_VENCIDA",
+                "value": "ACTIVIDAD_VENCIDA"
+              },
+              {
+                "name": "ACTIVIDAD_REPROGRAMADA",
+                "value": "ACTIVIDAD_REPROGRAMADA"
+              },
+              {
+                "name": "HITO_PROXIMO",
+                "value": "HITO_PROXIMO"
+              },
+              {
+                "name": "HITO_VENCIDO",
+                "value": "HITO_VENCIDO"
               }
             ]
           }
@@ -447,6 +480,21 @@
                 },
                 "to": {
                   "model": "Hito",
+                  "namespace": "public"
+                }
+              },
+              "notificaciones": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idActividad"
+                  ],
+                  "targetFields": [
+                    "idActividad"
+                  ]
+                },
+                "to": {
+                  "model": "NotificacionCronograma",
                   "namespace": "public"
                 }
               },
@@ -1092,6 +1140,21 @@
                   "namespace": "public"
                 }
               },
+              "notificaciones": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idHito"
+                  ],
+                  "targetFields": [
+                    "idHito"
+                  ]
+                },
+                "to": {
+                  "model": "NotificacionCronograma",
+                  "namespace": "public"
+                }
+              },
               "plantillaHito": {
                 "cardinality": "N:1",
                 "nullable": true,
@@ -1384,6 +1447,321 @@
               },
               "namespaceId": "public",
               "table": "gp_matrimonio"
+            }
+          },
+          "Notificacion": {
+            "fields": {
+              "activo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "enviadaPush": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "fechaGeneracion": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "fechaProgramada": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "idNotificacion": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idProyecto": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idUsuarioDestino": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "leida": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "mensaje": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 1000
+                  }
+                }
+              },
+              "tipo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 50
+                  }
+                }
+              },
+              "titulo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 200
+                  }
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "cronograma": {
+                "cardinality": "1:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idNotificacion"
+                  ],
+                  "targetFields": [
+                    "idNotificacion"
+                  ]
+                },
+                "to": {
+                  "model": "NotificacionCronograma",
+                  "namespace": "public"
+                }
+              },
+              "proyecto": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idProyecto"
+                  ],
+                  "targetFields": [
+                    "idProyecto"
+                  ]
+                },
+                "to": {
+                  "model": "Proyecto",
+                  "namespace": "public"
+                }
+              },
+              "usuarioDestino": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idUsuarioDestino"
+                  ],
+                  "targetFields": [
+                    "idUsuario"
+                  ]
+                },
+                "to": {
+                  "model": "Usuario",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "activo": {
+                  "column": "activo"
+                },
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "enviadaPush": {
+                  "column": "enviada_push"
+                },
+                "fechaGeneracion": {
+                  "column": "fecha_generacion"
+                },
+                "fechaProgramada": {
+                  "column": "fecha_programada"
+                },
+                "idNotificacion": {
+                  "column": "id_notificacion"
+                },
+                "idProyecto": {
+                  "column": "id_proyecto"
+                },
+                "idUsuarioDestino": {
+                  "column": "id_usuario_destino"
+                },
+                "leida": {
+                  "column": "leida"
+                },
+                "mensaje": {
+                  "column": "mensaje"
+                },
+                "tipo": {
+                  "column": "tipo"
+                },
+                "titulo": {
+                  "column": "titulo"
+                },
+                "updatedAt": {
+                  "column": "updated_at"
+                }
+              },
+              "namespaceId": "public",
+              "table": "nt_notificacion"
+            }
+          },
+          "NotificacionCronograma": {
+            "fields": {
+              "fechaReferencia": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "idActividad": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idHito": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idNotificacion": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "tipoEventoCronograma": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "nt_tipo_evento_cronograma",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              }
+            },
+            "relations": {
+              "actividad": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idActividad"
+                  ],
+                  "targetFields": [
+                    "idActividad"
+                  ]
+                },
+                "to": {
+                  "model": "Actividad",
+                  "namespace": "public"
+                }
+              },
+              "hito": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idHito"
+                  ],
+                  "targetFields": [
+                    "idHito"
+                  ]
+                },
+                "to": {
+                  "model": "Hito",
+                  "namespace": "public"
+                }
+              },
+              "notificacion": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idNotificacion"
+                  ],
+                  "targetFields": [
+                    "idNotificacion"
+                  ]
+                },
+                "to": {
+                  "model": "Notificacion",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "fechaReferencia": {
+                  "column": "fecha_referencia"
+                },
+                "idActividad": {
+                  "column": "id_actividad"
+                },
+                "idHito": {
+                  "column": "id_hito"
+                },
+                "idNotificacion": {
+                  "column": "id_notificacion"
+                },
+                "tipoEventoCronograma": {
+                  "column": "tipo_evento_cronograma"
+                }
+              },
+              "namespaceId": "public",
+              "table": "nt_notificacion_cronograma"
             }
           },
           "PersonaNatural": {
@@ -2640,6 +3018,21 @@
                   "namespace": "public"
                 }
               },
+              "notificaciones": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idProyecto"
+                  ],
+                  "targetFields": [
+                    "idProyecto"
+                  ]
+                },
+                "to": {
+                  "model": "Notificacion",
+                  "namespace": "public"
+                }
+              },
               "projectManager": {
                 "cardinality": "N:1",
                 "nullable": true,
@@ -3616,6 +4009,21 @@
                 },
                 "to": {
                   "model": "Matrimonio",
+                  "namespace": "public"
+                }
+              },
+              "notificacionesDestino": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idUsuario"
+                  ],
+                  "targetFields": [
+                    "idUsuarioDestino"
+                  ]
+                },
+                "to": {
+                  "model": "Notificacion",
                   "namespace": "public"
                 }
               },
@@ -6526,6 +6934,307 @@
                 ]
               },
               "uniques": []
+            },
+            "nt_notificacion": {
+              "columns": {
+                "activo": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "created_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "enviada_push": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": false
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "fecha_generacion": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "fecha_programada": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": true
+                },
+                "id_notificacion": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_proyecto": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": true
+                },
+                "id_usuario_destino": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "leida": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": false
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "mensaje": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 1000
+                  }
+                },
+                "tipo": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 50
+                  }
+                },
+                "titulo": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 200
+                  }
+                },
+                "updated_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_usuario_destino"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "nt_notificacion"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_usuario"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "au_usuario"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_proyecto"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "nt_notificacion"
+                  },
+                  "target": {
+                    "columns": [
+                      "idProyecto"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_proyecto"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "activo"
+                  ],
+                  "name": "nt_notificacion_activo_idx_4c0f2ecc",
+                  "prefix": "nt_notificacion_activo_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_proyecto"
+                  ],
+                  "name": "nt_notificacion_id_proyecto_idx_4279b0d1",
+                  "prefix": "nt_notificacion_id_proyecto_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_usuario_destino"
+                  ],
+                  "name": "nt_notificacion_id_usuario_destino_idx_5d5aa4a9",
+                  "prefix": "nt_notificacion_id_usuario_destino_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "leida"
+                  ],
+                  "name": "nt_notificacion_leida_idx_7c47c0b3",
+                  "prefix": "nt_notificacion_leida_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_notificacion"
+                ]
+              },
+              "uniques": []
+            },
+            "nt_notificacion_cronograma": {
+              "checks": [
+                {
+                  "expression": "\"tipo_evento_cronograma\" IN ('ACTIVIDAD_PROXIMA_VENCER', 'ACTIVIDAD_VENCIDA', 'ACTIVIDAD_REPROGRAMADA', 'HITO_PROXIMO', 'HITO_VENCIDO')",
+                  "name": "nt_notificacion_cronograma_tipo_evento_cronograma_chec_f9892b6f",
+                  "prefix": "nt_notificacion_cronograma_tipo_evento_cronograma_chec"
+                }
+              ],
+              "columns": {
+                "fecha_referencia": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": true
+                },
+                "id_actividad": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": true
+                },
+                "id_hito": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": true
+                },
+                "id_notificacion": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "tipo_evento_cronograma": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "nt_tipo_evento_cronograma",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_notificacion"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "nt_notificacion_cronograma"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_notificacion"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "nt_notificacion"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_actividad"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "nt_notificacion_cronograma"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_actividad"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "cr_actividad"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_hito"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "nt_notificacion_cronograma"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_hito"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "cr_hito"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "id_actividad"
+                  ],
+                  "name": "nt_notificacion_cronograma_id_actividad_idx_e1ffad2c",
+                  "prefix": "nt_notificacion_cronograma_id_actividad_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_hito"
+                  ],
+                  "name": "nt_notificacion_cronograma_id_hito_idx_0a1cccf3",
+                  "prefix": "nt_notificacion_cronograma_id_hito_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "tipo_evento_cronograma"
+                  ],
+                  "name": "nt_notificacion_cronograma_tipo_evento_cronograma_idx_43547b14",
+                  "prefix": "nt_notificacion_cronograma_tipo_evento_cronograma_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_notificacion"
+                ]
+              },
+              "uniques": []
             }
           },
           "valueSet": {
@@ -6595,6 +7304,16 @@
                 "RELIGIOSA",
                 "OTROS"
               ]
+            },
+            "nt_tipo_evento_cronograma": {
+              "kind": "valueSet",
+              "values": [
+                "ACTIVIDAD_PROXIMA_VENCER",
+                "ACTIVIDAD_VENCIDA",
+                "ACTIVIDAD_REPROGRAMADA",
+                "HITO_PROXIMO",
+                "HITO_VENCIDO"
+              ]
             }
           }
         },
@@ -6602,10 +7321,10 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "0f018d43e41118bb6f1b804a8f6bf95dc88251e92f69a2f1d127ea65aa8a2471"
+    "storageHash": "114444530efb2738e08f10e17776b84fe6addca0fd9db0bf7cc2f8cf937b6fea"
   },
   "execution": {
-    "executionHash": "e4643bc6c4b80048b40b9b7aeb674c22ce74e912994fb9803259247e5a59b95a",
+    "executionHash": "10efde7b19d58abdd2d962f042a72887cfba163192377bec284620424408a21c",
     "mutations": {
       "defaults": [
         {
@@ -6807,6 +7526,32 @@
             "column": "fecha_modificacion",
             "namespace": "public",
             "table": "in_persona_natural"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id_notificacion",
+            "namespace": "public",
+            "table": "nt_notificacion"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updated_at",
+            "namespace": "public",
+            "table": "nt_notificacion"
           }
         }
       ]

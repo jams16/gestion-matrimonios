@@ -34,9 +34,9 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'0f018d43e41118bb6f1b804a8f6bf95dc88251e92f69a2f1d127ea65aa8a2471'>;
+  StorageHashBase<'114444530efb2738e08f10e17776b84fe6addca0fd9db0bf7cc2f8cf937b6fea'>;
 export type ExecutionHash =
-  ExecutionHashBase<'e4643bc6c4b80048b40b9b7aeb674c22ce74e912994fb9803259247e5a59b95a'>;
+  ExecutionHashBase<'10efde7b19d58abdd2d962f042a72887cfba163192377bec284620424408a21c'>;
 export type ProfileHash =
   ProfileHashBase<'3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2'>;
 
@@ -321,6 +321,33 @@ export type FieldOutputTypes = {
       readonly fechaCreacion: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly fechaModificacion: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
     };
+    readonly Notificacion: {
+      readonly idNotificacion: CodecTypes['pg/uuid@1']['output'];
+      readonly idUsuarioDestino: CodecTypes['pg/int4@1']['output'];
+      readonly idProyecto: CodecTypes['pg/uuid@1']['output'] | null;
+      readonly tipo: Varchar<50>;
+      readonly titulo: Varchar<200>;
+      readonly mensaje: Varchar<1000>;
+      readonly fechaGeneracion: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly fechaProgramada: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+      readonly leida: CodecTypes['pg/bool@1']['output'];
+      readonly enviadaPush: CodecTypes['pg/bool@1']['output'];
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly NotificacionCronograma: {
+      readonly idNotificacion: CodecTypes['pg/uuid@1']['output'];
+      readonly idActividad: CodecTypes['pg/uuid@1']['output'] | null;
+      readonly idHito: CodecTypes['pg/uuid@1']['output'] | null;
+      readonly tipoEventoCronograma:
+        | 'ACTIVIDAD_PROXIMA_VENCER'
+        | 'ACTIVIDAD_VENCIDA'
+        | 'ACTIVIDAD_REPROGRAMADA'
+        | 'HITO_PROXIMO'
+        | 'HITO_VENCIDO';
+      readonly fechaReferencia: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+    };
     readonly PersonaNatural: {
       readonly idPersonaNatural: CodecTypes['pg/int4@1']['output'];
       readonly nombres: Varchar<100>;
@@ -568,6 +595,33 @@ export type FieldInputTypes = {
       readonly estado: CodecTypes['pg/bool@1']['input'] | null;
       readonly fechaCreacion: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly fechaModificacion: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
+    };
+    readonly Notificacion: {
+      readonly idNotificacion: CodecTypes['pg/uuid@1']['input'];
+      readonly idUsuarioDestino: CodecTypes['pg/int4@1']['input'];
+      readonly idProyecto: CodecTypes['pg/uuid@1']['input'] | null;
+      readonly tipo: CodecTypes['sql/varchar@1']['input'];
+      readonly titulo: CodecTypes['sql/varchar@1']['input'];
+      readonly mensaje: CodecTypes['sql/varchar@1']['input'];
+      readonly fechaGeneracion: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly fechaProgramada: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
+      readonly leida: CodecTypes['pg/bool@1']['input'];
+      readonly enviadaPush: CodecTypes['pg/bool@1']['input'];
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly NotificacionCronograma: {
+      readonly idNotificacion: CodecTypes['pg/uuid@1']['input'];
+      readonly idActividad: CodecTypes['pg/uuid@1']['input'] | null;
+      readonly idHito: CodecTypes['pg/uuid@1']['input'] | null;
+      readonly tipoEventoCronograma:
+        | 'ACTIVIDAD_PROXIMA_VENCER'
+        | 'ACTIVIDAD_VENCIDA'
+        | 'ACTIVIDAD_REPROGRAMADA'
+        | 'HITO_PROXIMO'
+        | 'HITO_VENCIDO';
+      readonly fechaReferencia: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
     };
     readonly PersonaNatural: {
       readonly idPersonaNatural: CodecTypes['pg/int4@1']['input'];
@@ -982,6 +1036,33 @@ export type StorageColumnTypes = {
       readonly id_ubigeo: Varchar<6>;
       readonly provincia: Varchar<100>;
     };
+    readonly nt_notificacion: {
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly enviada_push: CodecTypes['pg/bool@1']['output'];
+      readonly fecha_generacion: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly fecha_programada: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+      readonly id_notificacion: CodecTypes['pg/uuid@1']['output'];
+      readonly id_proyecto: CodecTypes['pg/uuid@1']['output'] | null;
+      readonly id_usuario_destino: CodecTypes['pg/int4@1']['output'];
+      readonly leida: CodecTypes['pg/bool@1']['output'];
+      readonly mensaje: Varchar<1000>;
+      readonly tipo: Varchar<50>;
+      readonly titulo: Varchar<200>;
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly nt_notificacion_cronograma: {
+      readonly fecha_referencia: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+      readonly id_actividad: CodecTypes['pg/uuid@1']['output'] | null;
+      readonly id_hito: CodecTypes['pg/uuid@1']['output'] | null;
+      readonly id_notificacion: CodecTypes['pg/uuid@1']['output'];
+      readonly tipo_evento_cronograma:
+        | 'ACTIVIDAD_PROXIMA_VENCER'
+        | 'ACTIVIDAD_VENCIDA'
+        | 'ACTIVIDAD_REPROGRAMADA'
+        | 'HITO_PROXIMO'
+        | 'HITO_VENCIDO';
+    };
   };
 };
 export type StorageColumnInputTypes = {
@@ -1230,6 +1311,33 @@ export type StorageColumnInputTypes = {
       readonly id_ubigeo: CodecTypes['sql/varchar@1']['input'];
       readonly provincia: CodecTypes['sql/varchar@1']['input'];
     };
+    readonly nt_notificacion: {
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly enviada_push: CodecTypes['pg/bool@1']['input'];
+      readonly fecha_generacion: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly fecha_programada: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
+      readonly id_notificacion: CodecTypes['pg/uuid@1']['input'];
+      readonly id_proyecto: CodecTypes['pg/uuid@1']['input'] | null;
+      readonly id_usuario_destino: CodecTypes['pg/int4@1']['input'];
+      readonly leida: CodecTypes['pg/bool@1']['input'];
+      readonly mensaje: CodecTypes['sql/varchar@1']['input'];
+      readonly tipo: CodecTypes['sql/varchar@1']['input'];
+      readonly titulo: CodecTypes['sql/varchar@1']['input'];
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly nt_notificacion_cronograma: {
+      readonly fecha_referencia: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
+      readonly id_actividad: CodecTypes['pg/uuid@1']['input'] | null;
+      readonly id_hito: CodecTypes['pg/uuid@1']['input'] | null;
+      readonly id_notificacion: CodecTypes['pg/uuid@1']['input'];
+      readonly tipo_evento_cronograma:
+        | 'ACTIVIDAD_PROXIMA_VENCER'
+        | 'ACTIVIDAD_VENCIDA'
+        | 'ACTIVIDAD_REPROGRAMADA'
+        | 'HITO_PROXIMO'
+        | 'HITO_VENCIDO';
+    };
   };
 };
 
@@ -1254,10 +1362,17 @@ export namespace Models {
     faseProyecto: public_FaseProyecto | null;
     hitos: public_Hito[];
     matrimonio: public_Matrimonio | null;
+    notificaciones: public_Notificacion[];
     projectManager: public_Usuario | null;
     timings: public_Timing[];
     readonly [RelationKeys]?:
-      'actividades' | 'faseProyecto' | 'hitos' | 'matrimonio' | 'projectManager' | 'timings';
+      | 'actividades'
+      | 'faseProyecto'
+      | 'hitos'
+      | 'matrimonio'
+      | 'notificaciones'
+      | 'projectManager'
+      | 'timings';
   };
   export type public_Matrimonio = {
     idMatrimonio: CodecTypes['pg/uuid@1']['output'];
@@ -1403,9 +1518,10 @@ export namespace Models {
     createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     actividades: public_Actividad[];
+    notificaciones: public_NotificacionCronograma[];
     plantillaHito: public_PlantillaHito | null;
     proyecto: public_Proyecto;
-    readonly [RelationKeys]?: 'actividades' | 'plantillaHito' | 'proyecto';
+    readonly [RelationKeys]?: 'actividades' | 'notificaciones' | 'plantillaHito' | 'proyecto';
   };
   export type public_Actividad = {
     idActividad: CodecTypes['pg/uuid@1']['output'];
@@ -1430,6 +1546,7 @@ export namespace Models {
     dependenciasPredecesora: public_Dependencia[];
     dependenciasSucesora: public_Dependencia[];
     hito: public_Hito | null;
+    notificaciones: public_NotificacionCronograma[];
     plantillaActividad: public_PlantillaActividad | null;
     proyecto: public_Proyecto;
     responsable: public_Usuario | null;
@@ -1437,6 +1554,7 @@ export namespace Models {
       | 'dependenciasPredecesora'
       | 'dependenciasSucesora'
       | 'hito'
+      | 'notificaciones'
       | 'plantillaActividad'
       | 'proyecto'
       | 'responsable';
@@ -1472,6 +1590,41 @@ export namespace Models {
     proyecto: public_Proyecto;
     responsable: public_Usuario | null;
     readonly [RelationKeys]?: 'plantillaTiming' | 'proyecto' | 'responsable';
+  };
+  export type public_Notificacion = {
+    idNotificacion: CodecTypes['pg/uuid@1']['output'];
+    idUsuarioDestino: CodecTypes['pg/int4@1']['output'];
+    idProyecto: CodecTypes['pg/uuid@1']['output'] | null;
+    tipo: Varchar<50>;
+    titulo: Varchar<200>;
+    mensaje: Varchar<1000>;
+    fechaGeneracion: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    fechaProgramada: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+    leida: CodecTypes['pg/bool@1']['output'];
+    enviadaPush: CodecTypes['pg/bool@1']['output'];
+    activo: CodecTypes['pg/bool@1']['output'];
+    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    cronograma: public_NotificacionCronograma | null;
+    proyecto: public_Proyecto | null;
+    usuarioDestino: public_Usuario;
+    readonly [RelationKeys]?: 'cronograma' | 'proyecto' | 'usuarioDestino';
+  };
+  export type public_NotificacionCronograma = {
+    idNotificacion: CodecTypes['pg/uuid@1']['output'];
+    idActividad: CodecTypes['pg/uuid@1']['output'] | null;
+    idHito: CodecTypes['pg/uuid@1']['output'] | null;
+    tipoEventoCronograma:
+      | 'ACTIVIDAD_PROXIMA_VENCER'
+      | 'ACTIVIDAD_VENCIDA'
+      | 'ACTIVIDAD_REPROGRAMADA'
+      | 'HITO_PROXIMO'
+      | 'HITO_VENCIDO';
+    fechaReferencia: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+    actividad: public_Actividad | null;
+    hito: public_Hito | null;
+    notificacion: public_Notificacion;
+    readonly [RelationKeys]?: 'actividad' | 'hito' | 'notificacion';
   };
   export type public_Ubigeo = {
     idUbigeo: Varchar<6>;
@@ -1534,6 +1687,7 @@ export namespace Models {
     entidad: public_Entidad | null;
     matrimoniosNovio1: public_Matrimonio[];
     matrimoniosNovio2: public_Matrimonio[];
+    notificacionesDestino: public_Notificacion[];
     personaNatural: public_PersonaNatural;
     proyectosPm: public_Proyecto[];
     sesiones: public_Sesion[];
@@ -1544,6 +1698,7 @@ export namespace Models {
       | 'entidad'
       | 'matrimoniosNovio1'
       | 'matrimoniosNovio2'
+      | 'notificacionesDestino'
       | 'personaNatural'
       | 'proyectosPm'
       | 'sesiones'
@@ -1601,6 +1756,8 @@ export declare const models: {
     Actividad: Models.public_Actividad;
     Dependencia: Models.public_Dependencia;
     Timing: Models.public_Timing;
+    Notificacion: Models.public_Notificacion;
+    NotificacionCronograma: Models.public_NotificacionCronograma;
     Ubigeo: Models.public_Ubigeo;
     PersonaNatural: Models.public_PersonaNatural;
     Entidad: Models.public_Entidad;
@@ -3697,6 +3854,235 @@ type ContractBase = Omit<
               indexes: readonly [];
               foreignKeys: readonly [];
             };
+            readonly nt_notificacion: {
+              columns: {
+                readonly id_notificacion: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly id_usuario_destino: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                };
+                readonly id_proyecto: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: true;
+                };
+                readonly tipo: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly length: 50 };
+                };
+                readonly titulo: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly length: 200 };
+                };
+                readonly mensaje: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly length: 1000 };
+                };
+                readonly fecha_generacion: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                };
+                readonly fecha_programada: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: true;
+                };
+                readonly leida: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', false>;
+                  };
+                };
+                readonly enviada_push: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', false>;
+                  };
+                };
+                readonly activo: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', true>;
+                  };
+                };
+                readonly created_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                };
+                readonly updated_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id_notificacion'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'nt_notificacion_id_usuario_destino_idx_5d5aa4a9';
+                  readonly prefix: 'nt_notificacion_id_usuario_destino_idx';
+                  readonly columns: readonly ['id_usuario_destino'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'nt_notificacion_id_proyecto_idx_4279b0d1';
+                  readonly prefix: 'nt_notificacion_id_proyecto_idx';
+                  readonly columns: readonly ['id_proyecto'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'nt_notificacion_leida_idx_7c47c0b3';
+                  readonly prefix: 'nt_notificacion_leida_idx';
+                  readonly columns: readonly ['leida'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'nt_notificacion_activo_idx_4c0f2ecc';
+                  readonly prefix: 'nt_notificacion_activo_idx';
+                  readonly columns: readonly ['activo'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'nt_notificacion';
+                    readonly columns: readonly ['id_usuario_destino'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'au_usuario';
+                    readonly columns: readonly ['id_usuario'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'nt_notificacion';
+                    readonly columns: readonly ['id_proyecto'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'gp_proyecto';
+                    readonly columns: readonly ['idProyecto'];
+                  };
+                },
+              ];
+            };
+            readonly nt_notificacion_cronograma: {
+              columns: {
+                readonly id_notificacion: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly id_actividad: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: true;
+                };
+                readonly id_hito: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: true;
+                };
+                readonly tipo_evento_cronograma: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+                readonly fecha_referencia: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: true;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id_notificacion'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'nt_notificacion_cronograma_id_actividad_idx_e1ffad2c';
+                  readonly prefix: 'nt_notificacion_cronograma_id_actividad_idx';
+                  readonly columns: readonly ['id_actividad'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'nt_notificacion_cronograma_id_hito_idx_0a1cccf3';
+                  readonly prefix: 'nt_notificacion_cronograma_id_hito_idx';
+                  readonly columns: readonly ['id_hito'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'nt_notificacion_cronograma_tipo_evento_cronograma_idx_43547b14';
+                  readonly prefix: 'nt_notificacion_cronograma_tipo_evento_cronograma_idx';
+                  readonly columns: readonly ['tipo_evento_cronograma'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'nt_notificacion_cronograma';
+                    readonly columns: readonly ['id_notificacion'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'nt_notificacion';
+                    readonly columns: readonly ['id_notificacion'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'nt_notificacion_cronograma';
+                    readonly columns: readonly ['id_actividad'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'cr_actividad';
+                    readonly columns: readonly ['id_actividad'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'nt_notificacion_cronograma';
+                    readonly columns: readonly ['id_hito'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'cr_hito';
+                    readonly columns: readonly ['id_hito'];
+                  };
+                },
+              ];
+            };
           };
           readonly valueSet: {
             readonly au_tipo_token_cuenta: {
@@ -3742,6 +4128,16 @@ type ContractBase = Omit<
             readonly in_tipo_entidad: {
               readonly kind: 'valueSet';
               readonly values: readonly ['PUBLICA', 'PRIVADA', 'RELIGIOSA', 'OTROS'];
+            };
+            readonly nt_tipo_evento_cronograma: {
+              readonly kind: 'valueSet';
+              readonly values: readonly [
+                'ACTIVIDAD_PROXIMA_VENCER',
+                'ACTIVIDAD_VENCIDA',
+                'ACTIVIDAD_REPROGRAMADA',
+                'HITO_PROXIMO',
+                'HITO_VENCIDO',
+              ];
             };
           };
         };
@@ -3804,6 +4200,14 @@ type ContractBase = Omit<
       readonly model: 'Dependencia';
     };
     readonly cr_timing: { readonly namespace: 'public' & NamespaceId; readonly model: 'Timing' };
+    readonly nt_notificacion: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'Notificacion';
+    };
+    readonly nt_notificacion_cronograma: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'NotificacionCronograma';
+    };
     readonly in_ubigeo: { readonly namespace: 'public' & NamespaceId; readonly model: 'Ubigeo' };
     readonly in_persona_natural: {
       readonly namespace: 'public' & NamespaceId;
@@ -3962,6 +4366,17 @@ type ContractBase = Omit<
                 readonly on: {
                   readonly localFields: readonly ['idHito'];
                   readonly targetFields: readonly ['idHito'];
+                };
+              };
+              readonly notificaciones: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'NotificacionCronograma';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idActividad'];
+                  readonly targetFields: readonly ['idActividad'];
                 };
               };
               readonly plantillaActividad: {
@@ -4382,6 +4797,17 @@ type ContractBase = Omit<
                   readonly targetFields: readonly ['idHito'];
                 };
               };
+              readonly notificaciones: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'NotificacionCronograma';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idHito'];
+                  readonly targetFields: readonly ['idHito'];
+                };
+              };
               readonly plantillaHito: {
                 readonly to: {
                   readonly namespace: 'public' & NamespaceId;
@@ -4572,6 +4998,216 @@ type ContractBase = Omit<
                 readonly estado: { readonly column: 'estado' };
                 readonly fechaCreacion: { readonly column: 'fecha_creacion' };
                 readonly fechaModificacion: { readonly column: 'fecha_modificacion' };
+              };
+            };
+          };
+          readonly Notificacion: {
+            readonly fields: {
+              readonly idNotificacion: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly idUsuarioDestino: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly idProyecto: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly tipo: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 50 };
+                };
+              };
+              readonly titulo: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 200 };
+                };
+              };
+              readonly mensaje: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 1000 };
+                };
+              };
+              readonly fechaGeneracion: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly fechaProgramada: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly leida: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly enviadaPush: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly activo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+            };
+            readonly relations: {
+              readonly cronograma: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'NotificacionCronograma';
+                };
+                readonly cardinality: '1:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['idNotificacion'];
+                  readonly targetFields: readonly ['idNotificacion'];
+                };
+              };
+              readonly proyecto: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Proyecto';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['idProyecto'];
+                  readonly targetFields: readonly ['idProyecto'];
+                };
+              };
+              readonly usuarioDestino: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Usuario';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['idUsuarioDestino'];
+                  readonly targetFields: readonly ['idUsuario'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'nt_notificacion';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly idNotificacion: { readonly column: 'id_notificacion' };
+                readonly idUsuarioDestino: { readonly column: 'id_usuario_destino' };
+                readonly idProyecto: { readonly column: 'id_proyecto' };
+                readonly tipo: { readonly column: 'tipo' };
+                readonly titulo: { readonly column: 'titulo' };
+                readonly mensaje: { readonly column: 'mensaje' };
+                readonly fechaGeneracion: { readonly column: 'fecha_generacion' };
+                readonly fechaProgramada: { readonly column: 'fecha_programada' };
+                readonly leida: { readonly column: 'leida' };
+                readonly enviadaPush: { readonly column: 'enviada_push' };
+                readonly activo: { readonly column: 'activo' };
+                readonly createdAt: { readonly column: 'created_at' };
+                readonly updatedAt: { readonly column: 'updated_at' };
+              };
+            };
+          };
+          readonly NotificacionCronograma: {
+            readonly fields: {
+              readonly idNotificacion: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly idActividad: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly idHito: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly tipoEventoCronograma: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly fechaReferencia: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+            };
+            readonly relations: {
+              readonly actividad: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Actividad';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['idActividad'];
+                  readonly targetFields: readonly ['idActividad'];
+                };
+              };
+              readonly hito: {
+                readonly to: { readonly namespace: 'public' & NamespaceId; readonly model: 'Hito' };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['idHito'];
+                  readonly targetFields: readonly ['idHito'];
+                };
+              };
+              readonly notificacion: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Notificacion';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['idNotificacion'];
+                  readonly targetFields: readonly ['idNotificacion'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'nt_notificacion_cronograma';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly idNotificacion: { readonly column: 'id_notificacion' };
+                readonly idActividad: { readonly column: 'id_actividad' };
+                readonly idHito: { readonly column: 'id_hito' };
+                readonly tipoEventoCronograma: { readonly column: 'tipo_evento_cronograma' };
+                readonly fechaReferencia: { readonly column: 'fecha_referencia' };
               };
             };
           };
@@ -5420,6 +6056,17 @@ type ContractBase = Omit<
                   readonly targetFields: readonly ['idProyecto'];
                 };
               };
+              readonly notificaciones: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Notificacion';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idProyecto'];
+                  readonly targetFields: readonly ['idProyecto'];
+                };
+              };
               readonly projectManager: {
                 readonly to: {
                   readonly namespace: 'public' & NamespaceId;
@@ -6089,6 +6736,17 @@ type ContractBase = Omit<
                   readonly targetFields: readonly ['idNovio2'];
                 };
               };
+              readonly notificacionesDestino: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Notificacion';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idUsuario'];
+                  readonly targetFields: readonly ['idUsuarioDestino'];
+                };
+              };
               readonly personaNatural: {
                 readonly to: {
                   readonly namespace: 'public' & NamespaceId;
@@ -6208,6 +6866,19 @@ type ContractBase = Omit<
               { readonly name: 'COMPLETADA'; readonly value: 'COMPLETADA' },
               { readonly name: 'CANCELADA'; readonly value: 'CANCELADA' },
               { readonly name: 'NO_APLICA'; readonly value: 'NO_APLICA' },
+            ];
+          };
+          readonly nt_tipo_evento_cronograma: {
+            readonly codecId: 'pg/text@1';
+            readonly members: readonly [
+              {
+                readonly name: 'ACTIVIDAD_PROXIMA_VENCER';
+                readonly value: 'ACTIVIDAD_PROXIMA_VENCER';
+              },
+              { readonly name: 'ACTIVIDAD_VENCIDA'; readonly value: 'ACTIVIDAD_VENCIDA' },
+              { readonly name: 'ACTIVIDAD_REPROGRAMADA'; readonly value: 'ACTIVIDAD_REPROGRAMADA' },
+              { readonly name: 'HITO_PROXIMO'; readonly value: 'HITO_PROXIMO' },
+              { readonly name: 'HITO_VENCIDO'; readonly value: 'HITO_VENCIDO' },
             ];
           };
           readonly in_tipo_entidad: {
@@ -6388,6 +7059,23 @@ type ContractBase = Omit<
             readonly namespace: 'public';
             readonly table: 'in_persona_natural';
             readonly column: 'fecha_modificacion';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+          readonly onUpdate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'nt_notificacion';
+            readonly column: 'id_notificacion';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'uuidv4' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'nt_notificacion';
+            readonly column: 'updated_at';
           };
           readonly onCreate: { readonly kind: 'generator'; readonly id: 'instantNow' };
           readonly onUpdate: { readonly kind: 'generator'; readonly id: 'instantNow' };

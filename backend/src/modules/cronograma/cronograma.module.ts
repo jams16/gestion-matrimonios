@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AutenticacionModule } from '../autenticacion/autenticacion.module';
+import { NotificacionesModule } from '../notificaciones/notificaciones.module';
 import { GenerarCronogramaDesdePlantillaUseCase } from './application/use-cases/generar-cronograma-desde-plantilla.use-case';
 import { ReprogramarActividadUseCase } from './application/use-cases/reprogramar-actividad.use-case';
 import {
@@ -17,7 +18,7 @@ import { PrismaCronogramaRepository } from './infrastructure/persistence/reposit
 import { CronogramaController } from './presentation/controllers/cronograma.controller';
 
 @Module({
-  imports: [AutenticacionModule],
+  imports: [AutenticacionModule, NotificacionesModule],
   controllers: [CronogramaController],
   providers: [
     CronogramaDateService,
