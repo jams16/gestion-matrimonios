@@ -3,6 +3,7 @@ import {
   ConflictException,
   Injectable,
 } from '@nestjs/common';
+import * as argon2 from 'argon2';
 import { Temporal } from 'temporal-polyfill';
 
 import { PrismaService } from '../../../../../infrastructure/database/prisma/prisma.service';
@@ -369,7 +370,7 @@ export class PrismaProyectosRepository implements ProyectosRepository {
           .idPersonaNatural,
         usuario: pareja.usuario,
         tipoUsuario: 'OTROS',
-        contrasenaHash: await require('argon2').hash(pareja.contrasena),
+        contrasenaHash: await argon2.hash(pareja.contrasena),
         correoVerificado: true,
         ultimoAcceso: ahora,
       } as never) as Promise<{ idUsuario: number }>;

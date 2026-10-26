@@ -80,6 +80,8 @@ async function ejecutar() {
   const carpetaEjecucion = join(
     process.cwd(),
     'test',
+    'backup',
+    'legacy',
     'evidencias',
     'registro-wedding-planner',
     'manual',

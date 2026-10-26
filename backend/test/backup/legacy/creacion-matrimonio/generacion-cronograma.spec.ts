@@ -202,6 +202,8 @@ describe('GenerarCronogramaDesdePlantillaUseCase', () => {
     const ruta = join(
       process.cwd(),
       'test',
+      'backup',
+      'legacy',
       'evidencias',
       'creacion-matrimonio',
       'automatico',

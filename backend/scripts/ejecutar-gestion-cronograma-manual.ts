@@ -23,7 +23,7 @@ import {
 
 type Estado = 'PASS' | 'FAIL' | 'WARN';
 type Paso = { id: string; caso: string; esperado: string; obtenido: string; estado: Estado };
-const ruta = join(process.cwd(), 'test', 'evidencias', 'gestion-cronograma', 'manual');
+const ruta = join(process.cwd(), 'test', 'backup', 'legacy', 'evidencias', 'gestion-cronograma', 'manual');
 const ejecucion = `manual-gestion-cronograma-${new Date().toISOString()}`;
 const pasos: Paso[] = [];
 const requests: Record<string, unknown> = {};

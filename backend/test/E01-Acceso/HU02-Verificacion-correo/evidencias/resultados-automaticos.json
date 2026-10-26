@@ -1,0 +1,27 @@
+[
+  {
+    "id": "CP-E01-HU02-01",
+    "estado": "FAIL",
+    "detalle": "El mecanismo real es un código de seis dígitos; CA006 exige un enlace único en el correo."
+  },
+  {
+    "id": "CP-E01-HU02-02",
+    "estado": "PASS",
+    "detalle": "El comportamiento observado cumplió el resultado esperado."
+  },
+  {
+    "id": "CP-E01-HU02-03",
+    "estado": "PASS",
+    "detalle": "El comportamiento observado cumplió el resultado esperado."
+  },
+  {
+    "id": "CP-E01-HU02-04",
+    "estado": "PASS",
+    "detalle": "El comportamiento observado cumplió el resultado esperado."
+  },
+  {
+    "id": "CP-E01-HU02-05",
+    "estado": "FAIL",
+    "detalle": "expect(received).toBeLessThanOrEqual(expected)\n\nExpected: <= 1\nReceived:    2"
+  }
+]

@@ -1,0 +1,22 @@
+[
+  {
+    "id": "CP-E01-HU03-01",
+    "estado": "PASS",
+    "detalle": "El comportamiento observado cumplió el resultado esperado."
+  },
+  {
+    "id": "CP-E01-HU03-02",
+    "estado": "PASS",
+    "detalle": "El comportamiento observado cumplió el resultado esperado."
+  },
+  {
+    "id": "CP-E01-HU03-03",
+    "estado": "PASS",
+    "detalle": "El comportamiento observado cumplió el resultado esperado."
+  },
+  {
+    "id": "CP-E01-HU03-04",
+    "estado": "PASS",
+    "detalle": "El comportamiento observado cumplió el resultado esperado."
+  }
+]

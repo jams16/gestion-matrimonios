@@ -52,7 +52,7 @@ const tipoSolicitado = (() => {
   if (!tiposValidos.includes(tipo)) throw new Error(`Tipo inválido: ${tipo}.`);
   return tipo;
 })();
-const raiz = join(process.cwd(), 'test', 'evidencias', 'creacion-matrimonio', 'manual');
+const raiz = join(process.cwd(), 'test', 'backup', 'legacy', 'evidencias', 'creacion-matrimonio', 'manual');
 const idEjecucion = `manual-creacion-matrimonio-${tipoSolicitado}-${Date.now()}`;
 
 const serializar = (valor: unknown): unknown => {

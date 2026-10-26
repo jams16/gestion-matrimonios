@@ -8,12 +8,12 @@ import { Temporal } from 'temporal-polyfill';
 import request from 'supertest';
 import { App } from 'supertest/types';
 
-import { ApiExceptionFilter } from '../../src/common/filters/api-exception.filter';
-import { ApiResponseInterceptor } from '../../src/common/interceptors/api-response.interceptor';
-import { AutenticacionModule } from '../../src/modules/autenticacion/autenticacion.module';
-import { CorreoCuentaPort } from '../../src/modules/autenticacion/application/ports/correo-cuenta.port';
-import { AutenticacionRepository } from '../../src/modules/autenticacion/domain/repositories/autenticacion.repository';
-import { TipoUsuario } from '../../src/modules/autenticacion/domain/enums/tipo-usuario.enum';
+import { ApiExceptionFilter } from '../../../../src/common/filters/api-exception.filter';
+import { ApiResponseInterceptor } from '../../../../src/common/interceptors/api-response.interceptor';
+import { AutenticacionModule } from '../../../../src/modules/autenticacion/autenticacion.module';
+import { CorreoCuentaPort } from '../../../../src/modules/autenticacion/application/ports/correo-cuenta.port';
+import { AutenticacionRepository } from '../../../../src/modules/autenticacion/domain/repositories/autenticacion.repository';
+import { TipoUsuario } from '../../../../src/modules/autenticacion/domain/enums/tipo-usuario.enum';
 
 type RegistroPendiente = {
   idRegistro: number;
@@ -163,6 +163,8 @@ class CorreoRegistroCapturado extends CorreoCuentaPort {
 const evidenciaRaiz = join(
   process.cwd(),
   'test',
+  'backup',
+  'legacy',
   'evidencias',
   'registro-wedding-planner',
   'automatico',

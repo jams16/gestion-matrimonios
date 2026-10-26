@@ -1,0 +1,17 @@
+[
+  {
+    "id": "CP-E01-HU06-01",
+    "estado": "FAIL",
+    "detalle": "expect(received).toBe(expected) // Object.is equality\n\nExpected: 401\nReceived: 200"
+  },
+  {
+    "id": "CP-E01-HU06-03",
+    "estado": "FAIL",
+    "detalle": "expect(received).toBe(expected) // Object.is equality\n\nExpected: 401\nReceived: 200"
+  },
+  {
+    "id": "CP-E01-HU06-05",
+    "estado": "FAIL",
+    "detalle": "expect(received).toBe(expected) // Object.is equality\n\nExpected: 401\nReceived: 200"
+  }
+]

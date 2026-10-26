@@ -1,0 +1,17 @@
+[
+  {
+    "id": "CP-E01-HU04-01",
+    "estado": "FAIL",
+    "detalle": "expect(received).toHaveProperty(path)\n\nExpected path: \"nombres\"\nReceived path: []\n\nReceived value: {\"correoVerificado\": true, \"esActivo\": true, \"fechaCreacion\": \"2026-10-26T20:39:42.290847Z\", \"fechaModificacion\": \"2026-10-26T20:39:42.47Z\", \"idEntidad\": 24, \"idPersonaNatural\": 27, \"idUsuario\": 27, \"tipoUsuario\": \"PROJECT_MANAGER\", \"ultimoAcceso\": \"2026-10-26T20:39:42.468Z\", \"usuario\": \"e01hu04read17930471820751\"}"
+  },
+  {
+    "id": "CP-E01-HU04-02",
+    "estado": "FAIL",
+    "detalle": "expect(received).toBe(expected) // Object.is equality\n\nExpected: 200\nReceived: 400"
+  },
+  {
+    "id": "CP-E01-HU04-03",
+    "estado": "FAIL",
+    "detalle": "expect(received).toMatch(expected)\n\nExpected pattern: /email/i\nReceived string:  \"property correoElectronico should not exist\""
+  }
+]

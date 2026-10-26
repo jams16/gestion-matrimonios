@@ -1,4 +1,5 @@
 import { Injectable, Optional } from '@nestjs/common';
+import * as pg from 'pg';
 import { Temporal } from 'temporal-polyfill';
 
 import { PrismaService } from '../../../../../infrastructure/database/prisma/prisma.service';
@@ -30,7 +31,7 @@ type ConstructorClientePlantillasSql = new (opciones: {
 
 // `pg` ya forma parte de las dependencias del backend. Se usa solo para leer
 // plantillas con JSON escalar legado, que el codec JSON de Prisma 8 no decodifica.
-const pg = require('pg') as {
+const clientePg = pg as unknown as {
   Client: ConstructorClientePlantillasSql;
   types: { setTypeParser(oid: number, parser: (valor: string) => string): void };
 };
@@ -494,9 +495,9 @@ export class PrismaCronogramaRepository
   }
 
   private async consultarSql(sql: string, valores?: unknown[]): Promise<FilaSql[]> {
-    pg.types.setTypeParser(114, (valor) => valor);
-    pg.types.setTypeParser(3802, (valor) => valor);
-    const cliente = new pg.Client({ connectionString: process.env.DATABASE_URL });
+    clientePg.types.setTypeParser(114, (valor: string) => valor);
+    clientePg.types.setTypeParser(3802, (valor: string) => valor);
+    const cliente = new clientePg.Client({ connectionString: process.env.DATABASE_URL });
     await cliente.connect();
     try {
       return (await cliente.query(sql, valores)).rows;
@@ -557,9 +558,9 @@ export class PrismaCronogramaRepository
     actividadTipos: FilaSql[];
     timingTipos: FilaSql[];
   }> {
-    pg.types.setTypeParser(114, (valor) => valor);
-    pg.types.setTypeParser(3802, (valor) => valor);
-    const cliente = new pg.Client({ connectionString: process.env.DATABASE_URL });
+    clientePg.types.setTypeParser(114, (valor: string) => valor);
+    clientePg.types.setTypeParser(3802, (valor: string) => valor);
+    const cliente = new clientePg.Client({ connectionString: process.env.DATABASE_URL });
     await cliente.connect();
     try {
       // Un cliente pg procesa una consulta por vez; ejecutar en secuencia evita

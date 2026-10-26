@@ -1,0 +1,8 @@
+{
+  "epica": "E01-Acceso",
+  "fecha": "2026-10-26T20:34:28.551Z",
+  "pruebasAutomaticasEjecutadas": 1,
+  "resultado": "PASS",
+  "alcance": "Control del runner y protección del entorno de pruebas. Los casos funcionales HU01-HU06 se agregan en sus carpetas automatico/.",
+  "baseDeDatos": "postgresql://postgres:****@localhost:5432/gestion_matrimonios_test"
+}

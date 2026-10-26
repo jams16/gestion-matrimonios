@@ -1,0 +1,37 @@
+[
+  {
+    "id": "CP-E01-HU01-01",
+    "estado": "PASS",
+    "detalle": "El comportamiento observado cumplió el resultado esperado."
+  },
+  {
+    "id": "CP-E01-HU01-02",
+    "estado": "PASS",
+    "detalle": "El comportamiento observado cumplió el resultado esperado."
+  },
+  {
+    "id": "CP-E01-HU01-02",
+    "estado": "PASS",
+    "detalle": "El comportamiento observado cumplió el resultado esperado."
+  },
+  {
+    "id": "CP-E01-HU01-02",
+    "estado": "PASS",
+    "detalle": "El comportamiento observado cumplió el resultado esperado."
+  },
+  {
+    "id": "CP-E01-HU01-02",
+    "estado": "PASS",
+    "detalle": "El comportamiento observado cumplió el resultado esperado."
+  },
+  {
+    "id": "CP-E01-HU01-03",
+    "estado": "FAIL",
+    "detalle": "La API no implementa un campo de confirmación de contraseña; el rechazo proviene de forbidNonWhitelisted y no de la regla CA002."
+  },
+  {
+    "id": "CP-E01-HU01-04",
+    "estado": "PASS",
+    "detalle": "El comportamiento observado cumplió el resultado esperado."
+  }
+]

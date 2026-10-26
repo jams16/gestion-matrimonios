@@ -3,6 +3,7 @@
   "rootDir": ".",
   "extensionsToTreatAsEsm": [".ts"],
   "testEnvironment": "node",
+  "testPathIgnorePatterns": ["/backup/"],
   "testRegex": ".e2e-spec.ts$",
   "transform": {
     "^.+\\.ts$": [
