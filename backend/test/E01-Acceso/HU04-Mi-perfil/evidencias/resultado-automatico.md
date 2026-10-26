@@ -7,7 +7,7 @@
 Expected path: "nombres"
 Received path: []
 
-Received value: {"correoVerificado": true, "esActivo": true, "fechaCreacion": "2026-10-26T21:05:23.462284Z", "fechaModificacion": "2026-10-26T21:05:23.612Z", "idEntidad": 7, "idPersonaNatural": 19, "idUsuario": 19, "tipoUsuario": "PROJECT_MANAGER", "ultimoAcceso": "2026-10-26T21:05:23.61Z", "usuario": "claudia.benites.1"} |
+Received value: {"correoVerificado": true, "esActivo": true, "fechaCreacion": "2026-10-26T21:29:16.864753Z", "fechaModificacion": "2026-10-26T21:29:17.043Z", "idEntidad": 33, "idPersonaNatural": 68, "idUsuario": 68, "tipoUsuario": "PROJECT_MANAGER", "ultimoAcceso": "2026-10-26T21:29:17.038Z", "usuario": "claudia.benites.212901.1"} |
 | CP-E01-HU04-02 | FAIL | expect(received).toBe(expected) // Object.is equality
 
 Expected: 200

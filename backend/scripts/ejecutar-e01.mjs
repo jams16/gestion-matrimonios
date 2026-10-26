@@ -190,4 +190,11 @@ escribirJson('registros-generados.json', { idEjecucion, registros: [
 escribirJson('evidencias-especificas.json', evaluados.map((caso) => ({ id: caso.id, nombre: caso.nombre, variantes: caso.variantes, detalleTecnico: caso.tecnico })));
 writeFileSync(join(evidenciaRaiz, 'resultado.md'), reporte, 'utf8');
 writeFileSync(join(raiz, 'resultado-final.md'), reporte, 'utf8');
+const tesis = `# Tabla de resultados para tesis – E01
+
+| ID | HU | CA | Tipo | Descripción/objetivo | Precondiciones | Datos de prueba | Componente/Endpoint | Pasos | Resultado esperado | Resultado obtenido | Evidencia | Estado | Observaciones |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+${evaluados.map((caso) => `| ${caso.id} | ${caso.hu} | ${caso.ca} | ${caso.tipo} | ${caso.nombre} | Base de pruebas y catálogos cargados | ${datosPorHu[caso.hu]} | ${caso.endpoint} | Petición y validación de efectos${caso.variantes.length ? `; variantes: ${caso.variantes.join(', ')}` : ''} | ${esperado[caso.id]} | ${caso.obtenido} | Evidencias E01 | ${caso.estado} | ${caso.tipo === 'MIXTO' ? 'Parte Flutter manual pendiente.' : caso.tipo === 'MANUAL' ? 'Verificación manual requerida.' : '—'} |`).join('\n')}
+`;
+writeFileSync(join(raiz, 'tabla-tesis.md'), tesis, 'utf8');
 process.exit(ejecucionJest.status ?? 1);

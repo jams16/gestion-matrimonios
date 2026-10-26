@@ -488,7 +488,7 @@
 
 ### CP-E01-HU04-01
 
-- expect(received).toHaveProperty(path)<br><br>Expected path: "nombres"<br>Received path: []<br><br>Received value: {"correoVerificado": true, "esActivo": true, "fechaCreacion": "2026-10-26T21:05:23.462284Z", "fechaModificacion": "2026-10-26T21:05:23.612Z", "idEntidad": 7, "idPersonaNatural": 19, "idUsuario": 19, "tipoUsuario": "PROJECT_MANAGER", "ultimoAcceso": "2026-10-26T21:05:23.61Z", "usuario": "claudia.benites.1"}
+- expect(received).toHaveProperty(path)<br><br>Expected path: "nombres"<br>Received path: []<br><br>Received value: {"correoVerificado": true, "esActivo": true, "fechaCreacion": "2026-10-26T21:29:16.864753Z", "fechaModificacion": "2026-10-26T21:29:17.043Z", "idEntidad": 33, "idPersonaNatural": 68, "idUsuario": 68, "tipoUsuario": "PROJECT_MANAGER", "ultimoAcceso": "2026-10-26T21:29:17.038Z", "usuario": "claudia.benites.212901.1"}
 
 ### CP-E01-HU04-02
 
@@ -508,15 +508,15 @@
 
 ### CP-E01-HU06-01
 
-- expect(received).not.toContain(expected) // indexOf<br><br>Expected value: not "14207977-02ec-4e24-ac45-d0a14c8a662b"<br>Received array:     ["f50027fd-49d2-451b-94bf-b2e1a623ecba", "14207977-02ec-4e24-ac45-d0a14c8a662b"]
+- expect(received).not.toContain(expected) // indexOf<br><br>Expected value: not "05d6ebf0-288e-40c7-8f0d-3d7c91c7ca0b"<br>Received array:     ["f50027fd-49d2-451b-94bf-b2e1a623ecba", "14207977-02ec-4e24-ac45-d0a14c8a662b", "62c8f06e-a536-47e4-8840-82455bfca7be", "19495816-b0e0-428e-8815-9f55eee622f1", "74064226-1c2a-48ab-80b1-f3668fbc9181", "6dd8ec29-3bda-4942-bcf2-883e4db386b8", "a3582d52-9139-400a-abdd-cf64bb745755", "05d6ebf0-288e-40c7-8f0d-3d7c91c7ca0b"]
 
 ### CP-E01-HU06-03
 
-- expect(received).not.toContain(expected) // indexOf<br><br>Expected value: not "19495816-b0e0-428e-8815-9f55eee622f1"<br>Received array:     ["f50027fd-49d2-451b-94bf-b2e1a623ecba", "14207977-02ec-4e24-ac45-d0a14c8a662b", "62c8f06e-a536-47e4-8840-82455bfca7be", "19495816-b0e0-428e-8815-9f55eee622f1"]
+- expect(received).not.toContain(expected) // indexOf<br><br>Expected value: not "4bf1556b-04d4-4551-96b3-b36f39fbe5fe"<br>Received array:     ["f50027fd-49d2-451b-94bf-b2e1a623ecba", "14207977-02ec-4e24-ac45-d0a14c8a662b", "62c8f06e-a536-47e4-8840-82455bfca7be", "19495816-b0e0-428e-8815-9f55eee622f1", "74064226-1c2a-48ab-80b1-f3668fbc9181", "6dd8ec29-3bda-4942-bcf2-883e4db386b8", "a3582d52-9139-400a-abdd-cf64bb745755", "05d6ebf0-288e-40c7-8f0d-3d7c91c7ca0b", "450b9c1f-0fcf-419b-9df8-c9a6d237b2d5", "4bf1556b-04d4-4551-96b3-b36f39fbe5fe"]
 
 ### CP-E01-HU06-05
 
-- expect(received).not.toContain(expected) // indexOf<br><br>Expected value: not "6dd8ec29-3bda-4942-bcf2-883e4db386b8"<br>Received array:     ["f50027fd-49d2-451b-94bf-b2e1a623ecba", "14207977-02ec-4e24-ac45-d0a14c8a662b", "62c8f06e-a536-47e4-8840-82455bfca7be", "19495816-b0e0-428e-8815-9f55eee622f1", "74064226-1c2a-48ab-80b1-f3668fbc9181", "6dd8ec29-3bda-4942-bcf2-883e4db386b8"]
+- expect(received).not.toContain(expected) // indexOf<br><br>Expected value: not "cd84a255-65d3-42d3-9f59-432219ed5e02"<br>Received array:     ["f50027fd-49d2-451b-94bf-b2e1a623ecba", "14207977-02ec-4e24-ac45-d0a14c8a662b", "62c8f06e-a536-47e4-8840-82455bfca7be", "19495816-b0e0-428e-8815-9f55eee622f1", "74064226-1c2a-48ab-80b1-f3668fbc9181", "6dd8ec29-3bda-4942-bcf2-883e4db386b8", "a3582d52-9139-400a-abdd-cf64bb745755", "05d6ebf0-288e-40c7-8f0d-3d7c91c7ca0b", "450b9c1f-0fcf-419b-9df8-c9a6d237b2d5", "4bf1556b-04d4-4551-96b3-b36f39fbe5fe", "3768b853-15fe-485c-9a0a-1df4ce7dc344", "cd84a255-65d3-42d3-9f59-432219ed5e02"]
 
 ## Resumen de diagnóstico
 

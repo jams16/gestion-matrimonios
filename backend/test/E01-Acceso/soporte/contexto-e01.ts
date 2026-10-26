@@ -102,7 +102,7 @@ export const datosUnicos = (prefijo: string) => {
   return {
     ...perfil,
     correo: `${perfil.correo}+${sufijo}@example.com`,
-    usuario: `${perfil.usuario}.${secuencia}`.slice(0, 40),
+    usuario: `${perfil.usuario}.${ejecucion.slice(-6)}.${secuencia}`.slice(0, 40),
     contrasena: 'Prueba#2026',
     nombreComercial: perfil.empresa,
   };
@@ -213,8 +213,8 @@ export async function crearBorradorMatrimonio(
     .post('/api/v1/matrimonios/onboarding/borrador')
     .set('Authorization', `Bearer ${accessToken}`)
     .send({
-      pareja1: { nombres: 'Mateo', apellidoPaterno: 'Salinas', dni: baseDni, usuario: `mateo.salinas.${secuencia}`, contrasena: 'Pareja#2026' },
-      pareja2: { nombres: 'Isabella', apellidoPaterno: 'Cárdenas', dni: segundoDni, usuario: `isabella.cardenas.${secuencia}`, contrasena: 'Pareja#2026' },
+      pareja1: { nombres: 'Mateo', apellidoPaterno: 'Salinas', dni: baseDni, usuario: `mateo.salinas.${(process.env.E01_RUN_ID ?? 'local').slice(-6)}.${secuencia}`, contrasena: 'Pareja#2026' },
+      pareja2: { nombres: 'Isabella', apellidoPaterno: 'Cárdenas', dni: segundoDni, usuario: `isabella.cardenas.${(process.env.E01_RUN_ID ?? 'local').slice(-6)}.${secuencia}`, contrasena: 'Pareja#2026' },
       fechaMatrimonio,
       cantidadInvitados: 50,
       presupuesto: 10000,
