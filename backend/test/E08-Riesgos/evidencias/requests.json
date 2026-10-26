@@ -1,0 +1,107 @@
+[
+  {
+    "id": "CP-E08-HU47-01",
+    "componente": "RiesgosModule",
+    "tipo": "AUTOMATIZADO"
+  },
+  {
+    "id": "CP-E08-HU47-02",
+    "componente": "RiesgosModule",
+    "tipo": "MIXTO"
+  },
+  {
+    "id": "CP-E08-HU47-03",
+    "componente": "RiesgosModule",
+    "tipo": "AUTOMATIZADO"
+  },
+  {
+    "id": "CP-E08-HU47-04",
+    "componente": "RiesgosModule",
+    "tipo": "AUTOMATIZADO"
+  },
+  {
+    "id": "CP-E08-HU48-01",
+    "componente": "RiesgosModule",
+    "tipo": "AUTOMATIZADO"
+  },
+  {
+    "id": "CP-E08-HU48-02",
+    "componente": "RiesgosModule",
+    "tipo": "AUTOMATIZADO"
+  },
+  {
+    "id": "CP-E08-HU48-03",
+    "componente": "RiesgosModule",
+    "tipo": "AUTOMATIZADO"
+  },
+  {
+    "id": "CP-E08-HU48-04",
+    "componente": "RiesgosModule",
+    "tipo": "AUTOMATIZADO"
+  },
+  {
+    "id": "CP-E08-HU49-01",
+    "componente": "RiesgosModule",
+    "tipo": "AUTOMATIZADO"
+  },
+  {
+    "id": "CP-E08-HU49-02",
+    "componente": "RiesgosModule",
+    "tipo": "MIXTO"
+  },
+  {
+    "id": "CP-E08-HU49-03",
+    "componente": "RiesgosModule",
+    "tipo": "AUTOMATIZADO"
+  },
+  {
+    "id": "CP-E08-HU50-01",
+    "componente": "RiesgosModule",
+    "tipo": "AUTOMATIZADO"
+  },
+  {
+    "id": "CP-E08-HU50-02",
+    "componente": "RiesgosModule",
+    "tipo": "AUTOMATIZADO"
+  },
+  {
+    "id": "CP-E08-HU50-03",
+    "componente": "RiesgosModule",
+    "tipo": "AUTOMATIZADO"
+  },
+  {
+    "id": "CP-E08-HU50-04",
+    "componente": "RiesgosModule",
+    "tipo": "AUTOMATIZADO"
+  },
+  {
+    "id": "CP-E08-HU51-01",
+    "componente": "RiesgosModule",
+    "tipo": "AUTOMATIZADO"
+  },
+  {
+    "id": "CP-E08-HU51-02",
+    "componente": "RiesgosModule",
+    "tipo": "MIXTO"
+  },
+  {
+    "id": "CP-E08-HU51-03",
+    "componente": "RiesgosModule",
+    "tipo": "AUTOMATIZADO"
+  },
+  {
+    "id": "CP-E08-HU52-01",
+    "componente": "RiesgosModule",
+    "tipo": "AUTOMATIZADO"
+  },
+  {
+    "id": "CP-E08-HU52-02",
+    "componente": "RiesgosModule",
+    "tipo": "AUTOMATIZADO"
+  },
+  {
+    "id": "CP-E08-HU52-03",
+    "componente": "RiesgosModule",
+    "tipo": "AUTOMATIZADO"
+  }
+]

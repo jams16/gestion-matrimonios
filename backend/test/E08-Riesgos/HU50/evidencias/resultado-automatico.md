@@ -1,0 +1,4 @@
+CP-E08-HU50-01 FAIL Funcionalidad no implementada: gastos de riesgo; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
+CP-E08-HU50-02 FAIL Funcionalidad no implementada: comprobantes de riesgo; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
+CP-E08-HU50-03 FAIL Funcionalidad no implementada: integración financiera de riesgos; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
+CP-E08-HU50-04 FAIL Funcionalidad no implementada: reportes financieros de riesgos; RiesgosModule no registra servicios, controladores ni modelos de riesgos.

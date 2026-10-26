@@ -1,0 +1,17 @@
+[
+  {
+    "id": "CP-E08-HU52-01",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: sugerencias de mitigación; RiesgosModule no registra servicios, controladores ni modelos de riesgos."
+  },
+  {
+    "id": "CP-E08-HU52-02",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: estados de mitigación; RiesgosModule no registra servicios, controladores ni modelos de riesgos."
+  },
+  {
+    "id": "CP-E08-HU52-03",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: historial de sugerencias; RiesgosModule no registra servicios, controladores ni modelos de riesgos."
+  }
+]

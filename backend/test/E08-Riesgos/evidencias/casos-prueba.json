@@ -1,0 +1,233 @@
+[
+  {
+    "hu": "HU47",
+    "id": "CP-E08-HU47-01",
+    "nombre": "Registro de planes de contingencia con alternativas",
+    "ca": "CA227, CA228",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: planes de contingencia; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "obtenido": "Funcionalidad no implementada: planes de contingencia; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints."
+  },
+  {
+    "hu": "HU47",
+    "id": "CP-E08-HU47-02",
+    "nombre": "Consulta de planes desde el riesgo",
+    "ca": "CA229",
+    "tipo": "MIXTO",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: consulta de planes; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "obtenido": "Funcionalidad no implementada: consulta de planes; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints."
+  },
+  {
+    "hu": "HU47",
+    "id": "CP-E08-HU47-03",
+    "nombre": "Activación de plan de contingencia",
+    "ca": "CA230",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: activación de contingencia; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "obtenido": "Funcionalidad no implementada: activación de contingencia; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints."
+  },
+  {
+    "hu": "HU47",
+    "id": "CP-E08-HU47-04",
+    "nombre": "Historial y versionado de planes",
+    "ca": "CA231",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: historial de planes; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "obtenido": "Funcionalidad no implementada: historial de planes; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints."
+  },
+  {
+    "hu": "HU48",
+    "id": "CP-E08-HU48-01",
+    "nombre": "Consulta del catálogo base de riesgos",
+    "ca": "CA232, CA233",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: catálogo de riesgos; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "obtenido": "Funcionalidad no implementada: catálogo de riesgos; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints."
+  },
+  {
+    "hu": "HU48",
+    "id": "CP-E08-HU48-02",
+    "nombre": "Búsqueda y filtrado de riesgos",
+    "ca": "CA234",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: filtros de riesgos; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "obtenido": "Funcionalidad no implementada: filtros de riesgos; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints."
+  },
+  {
+    "hu": "HU48",
+    "id": "CP-E08-HU48-03",
+    "nombre": "Consulta de mitigaciones y planes predefinidos",
+    "ca": "CA235",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: mitigaciones predefinidas; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "obtenido": "Funcionalidad no implementada: mitigaciones predefinidas; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints."
+  },
+  {
+    "hu": "HU48",
+    "id": "CP-E08-HU48-04",
+    "nombre": "Incorporación de riesgo desde catálogo",
+    "ca": "CA236",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: instancia operacional independiente; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "obtenido": "Funcionalidad no implementada: instancia operacional independiente; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints."
+  },
+  {
+    "hu": "HU49",
+    "id": "CP-E08-HU49-01",
+    "nombre": "Generación de alerta por riesgo crítico o incidencia",
+    "ca": "CA237, CA238",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: alertas de riesgos; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "obtenido": "Funcionalidad no implementada: alertas de riesgos; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints."
+  },
+  {
+    "hu": "HU49",
+    "id": "CP-E08-HU49-02",
+    "nombre": "Acceso desde alerta a riesgo y acciones de respuesta",
+    "ca": "CA239, CA240",
+    "tipo": "MIXTO",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: referencias de alerta; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "obtenido": "Funcionalidad no implementada: referencias de alerta; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints."
+  },
+  {
+    "hu": "HU49",
+    "id": "CP-E08-HU49-03",
+    "nombre": "Estado de atención de la alerta",
+    "ca": "CA241",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: estado de alerta de riesgo; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "obtenido": "Funcionalidad no implementada: estado de alerta de riesgo; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints."
+  },
+  {
+    "hu": "HU50",
+    "id": "CP-E08-HU50-01",
+    "nombre": "Registro de gasto extraordinario",
+    "ca": "CA242",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: gastos de riesgo; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "obtenido": "Funcionalidad no implementada: gastos de riesgo; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints."
+  },
+  {
+    "hu": "HU50",
+    "id": "CP-E08-HU50-02",
+    "nombre": "Comprobante asociado a gasto de riesgo",
+    "ca": "CA243",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: comprobantes de riesgo; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "obtenido": "Funcionalidad no implementada: comprobantes de riesgo; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints."
+  },
+  {
+    "hu": "HU50",
+    "id": "CP-E08-HU50-03",
+    "nombre": "Impacto financiero de los gastos de riesgo",
+    "ca": "CA244, CA245",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: integración financiera de riesgos; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "obtenido": "Funcionalidad no implementada: integración financiera de riesgos; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints."
+  },
+  {
+    "hu": "HU50",
+    "id": "CP-E08-HU50-04",
+    "nombre": "Inclusión de gastos de riesgo en reportes",
+    "ca": "CA246",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: reportes financieros de riesgos; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "obtenido": "Funcionalidad no implementada: reportes financieros de riesgos; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints."
+  },
+  {
+    "hu": "HU51",
+    "id": "CP-E08-HU51-01",
+    "nombre": "Evaluación y cálculo automático de severidad",
+    "ca": "CA247, CA248",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: matriz de severidad; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "obtenido": "Funcionalidad no implementada: matriz de severidad; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints."
+  },
+  {
+    "hu": "HU51",
+    "id": "CP-E08-HU51-02",
+    "nombre": "Matriz y consulta por severidad",
+    "ca": "CA249, CA250",
+    "tipo": "MIXTO",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: consulta por severidad; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "obtenido": "Funcionalidad no implementada: consulta por severidad; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints."
+  },
+  {
+    "hu": "HU51",
+    "id": "CP-E08-HU51-03",
+    "nombre": "Recálculo de severidad",
+    "ca": "CA251",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: recálculo de severidad; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "obtenido": "Funcionalidad no implementada: recálculo de severidad; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints."
+  },
+  {
+    "hu": "HU52",
+    "id": "CP-E08-HU52-01",
+    "nombre": "Sugerencia automática de medidas de mitigación",
+    "ca": "CA252, CA253",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: sugerencias de mitigación; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "obtenido": "Funcionalidad no implementada: sugerencias de mitigación; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints."
+  },
+  {
+    "hu": "HU52",
+    "id": "CP-E08-HU52-02",
+    "nombre": "Vinculación y estado de medidas/protocolos",
+    "ca": "CA254, CA255",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: estados de mitigación; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "obtenido": "Funcionalidad no implementada: estados de mitigación; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints."
+  },
+  {
+    "hu": "HU52",
+    "id": "CP-E08-HU52-03",
+    "nombre": "Recálculo de sugerencias conservando historial",
+    "ca": "CA256",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: historial de sugerencias; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "obtenido": "Funcionalidad no implementada: historial de sugerencias; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints."
+  }
+]

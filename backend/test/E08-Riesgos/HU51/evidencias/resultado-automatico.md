@@ -1,0 +1,3 @@
+CP-E08-HU51-01 FAIL Funcionalidad no implementada: matriz de severidad; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
+CP-E08-HU51-02 FAIL Funcionalidad no implementada: consulta por severidad; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
+CP-E08-HU51-03 FAIL Funcionalidad no implementada: recálculo de severidad; RiesgosModule no registra servicios, controladores ni modelos de riesgos.

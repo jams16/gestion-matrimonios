@@ -1,0 +1,2 @@
+import { evaluar, guardar, Resultado } from '../../soporte/contexto';
+describe('HU51', () => { const resultados: Resultado[] = []; afterAll(() => guardar('HU51', resultados)); it('CP-E08-HU51-01 - Evaluación y cálculo automático de severidad', () => evaluar(resultados, 'CP-E08-HU51-01', 'matriz de severidad')); it('CP-E08-HU51-02 - Matriz y consulta por severidad', () => evaluar(resultados, 'CP-E08-HU51-02', 'consulta por severidad')); it('CP-E08-HU51-03 - Recálculo de severidad', () => evaluar(resultados, 'CP-E08-HU51-03', 'recálculo de severidad')); });

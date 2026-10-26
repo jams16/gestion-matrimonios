@@ -1,0 +1,3 @@
+CP-E08-HU52-01 FAIL Funcionalidad no implementada: sugerencias de mitigación; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
+CP-E08-HU52-02 FAIL Funcionalidad no implementada: estados de mitigación; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
+CP-E08-HU52-03 FAIL Funcionalidad no implementada: historial de sugerencias; RiesgosModule no registra servicios, controladores ni modelos de riesgos.

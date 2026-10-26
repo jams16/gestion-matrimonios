@@ -1,0 +1,22 @@
+[
+  {
+    "id": "CP-E08-HU48-01",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: catálogo de riesgos; RiesgosModule no registra servicios, controladores ni modelos de riesgos."
+  },
+  {
+    "id": "CP-E08-HU48-02",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: filtros de riesgos; RiesgosModule no registra servicios, controladores ni modelos de riesgos."
+  },
+  {
+    "id": "CP-E08-HU48-03",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: mitigaciones predefinidas; RiesgosModule no registra servicios, controladores ni modelos de riesgos."
+  },
+  {
+    "id": "CP-E08-HU48-04",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: instancia operacional independiente; RiesgosModule no registra servicios, controladores ni modelos de riesgos."
+  }
+]
