@@ -41,7 +41,7 @@ describe('HU01 - Registrar una nueva cuenta', () => {
       const respuesta = await cliente(contexto).post('/api/v1/auth/registro/solicitar').send(cuerpo);
       expect(respuesta.status).toBe(400);
       expect(respuesta.body.data).toBeNull();
-    });
+    }, _nombre);
   });
 
   it('CP-E01-HU01-03 - aplica política de contraseña y exige confirmación', async () => {

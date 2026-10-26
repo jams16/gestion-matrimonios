@@ -2,15 +2,15 @@
 
 | Caso | Estado | Resultado obtenido |
 |---|---|---|
-| CP-E01-HU06-01 | FAIL | expect(received).toBe(expected) // Object.is equality
+| CP-E01-HU06-01 | FAIL | expect(received).not.toContain(expected) // indexOf
 
-Expected: 401
-Received: 200 |
-| CP-E01-HU06-03 | FAIL | expect(received).toBe(expected) // Object.is equality
+Expected value: not "1979e554-23c7-4e73-b82a-1315de3c537b"
+Received array:     ["2a624f38-1f5b-441d-8dac-9a0a8d0e4c9a", "f3eb7d2e-f568-47bc-b0dc-9ae905a6b6b0", "81271982-bc93-44ac-82e7-42f0b5973424", "3951d2d9-00f1-4c04-bcbf-2e2765a39465", "89681f7e-d05d-4d11-8776-ae91d7e470bd", "ee129a7f-3c6a-4b3d-918f-dfcf7c9ee11f", "fbafdd57-a9d9-41ca-9894-4c6563e668fc", "61d4b26c-4a53-4428-a963-372bc6a7b14e", "d4645013-35b4-4faf-9624-35fc8d5a1645", "04f1a458-5a9d-4042-95a9-1daec8a2d16a", "dae5e19b-fa94-415d-8f40-bc29436bd39a", "fa62e58d-6888-4c95-8a4f-2e61442930f3", "f4facc2e-bf45-487e-a4b4-a99ddca6624a", "59545970-91eb-4052-967c-d79edaa9fd22", "bfcca160-3303-4c00-a91a-a2cd2fc3aba8", "1979e554-23c7-4e73-b82a-1315de3c537b"] |
+| CP-E01-HU06-03 | FAIL | expect(received).not.toContain(expected) // indexOf
 
-Expected: 401
-Received: 200 |
-| CP-E01-HU06-05 | FAIL | expect(received).toBe(expected) // Object.is equality
+Expected value: not "fac4ef77-4df0-4a59-84c5-38475dc87141"
+Received array:     ["2a624f38-1f5b-441d-8dac-9a0a8d0e4c9a", "f3eb7d2e-f568-47bc-b0dc-9ae905a6b6b0", "81271982-bc93-44ac-82e7-42f0b5973424", "3951d2d9-00f1-4c04-bcbf-2e2765a39465", "89681f7e-d05d-4d11-8776-ae91d7e470bd", "ee129a7f-3c6a-4b3d-918f-dfcf7c9ee11f", "fbafdd57-a9d9-41ca-9894-4c6563e668fc", "61d4b26c-4a53-4428-a963-372bc6a7b14e", "d4645013-35b4-4faf-9624-35fc8d5a1645", "04f1a458-5a9d-4042-95a9-1daec8a2d16a", "dae5e19b-fa94-415d-8f40-bc29436bd39a", "fa62e58d-6888-4c95-8a4f-2e61442930f3", "f4facc2e-bf45-487e-a4b4-a99ddca6624a", "59545970-91eb-4052-967c-d79edaa9fd22", "bfcca160-3303-4c00-a91a-a2cd2fc3aba8", "1979e554-23c7-4e73-b82a-1315de3c537b", "5dcefbca-a8c2-4b96-b466-6e18fd71047b", "fac4ef77-4df0-4a59-84c5-38475dc87141"] |
+| CP-E01-HU06-05 | FAIL | expect(received).not.toContain(expected) // indexOf
 
-Expected: 401
-Received: 200 |
+Expected value: not "7132f9ea-3130-4a14-ac82-c9c62a7f48bb"
+Received array:     ["2a624f38-1f5b-441d-8dac-9a0a8d0e4c9a", "f3eb7d2e-f568-47bc-b0dc-9ae905a6b6b0", "81271982-bc93-44ac-82e7-42f0b5973424", "3951d2d9-00f1-4c04-bcbf-2e2765a39465", "89681f7e-d05d-4d11-8776-ae91d7e470bd", "ee129a7f-3c6a-4b3d-918f-dfcf7c9ee11f", "fbafdd57-a9d9-41ca-9894-4c6563e668fc", "61d4b26c-4a53-4428-a963-372bc6a7b14e", "d4645013-35b4-4faf-9624-35fc8d5a1645", "04f1a458-5a9d-4042-95a9-1daec8a2d16a", "dae5e19b-fa94-415d-8f40-bc29436bd39a", "fa62e58d-6888-4c95-8a4f-2e61442930f3", "f4facc2e-bf45-487e-a4b4-a99ddca6624a", "59545970-91eb-4052-967c-d79edaa9fd22", "bfcca160-3303-4c00-a91a-a2cd2fc3aba8", "1979e554-23c7-4e73-b82a-1315de3c537b", "5dcefbca-a8c2-4b96-b466-6e18fd71047b", "fac4ef77-4df0-4a59-84c5-38475dc87141", "d6470024-7b0a-423d-8a6a-12fe06d22211", "7132f9ea-3130-4a14-ac82-c9c62a7f48bb"] |

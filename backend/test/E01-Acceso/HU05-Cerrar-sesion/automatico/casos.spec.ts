@@ -29,7 +29,11 @@ describe('HU05 - Cerrar sesión de forma segura', () => {
 
   it('CP-E01-HU05-03 - invalida la sesión por inactividad configurada', async () => {
     await ejecutarCaso(resultados, 'CP-E01-HU05-03', async () => {
-      expect(process.env.SESSION_INACTIVITY_TIMEOUT).toMatch(/^\d+[smhd]$/);
+      const limite = process.env.SESSION_INACTIVITY_TIMEOUT;
+      if (!limite) {
+        throw new Error('No existe una política SESSION_INACTIVITY_TIMEOUT configurada ni lógica backend de expiración por inactividad.');
+      }
+      expect(limite).toMatch(/^\d+[smhd]$/);
     });
   });
 });

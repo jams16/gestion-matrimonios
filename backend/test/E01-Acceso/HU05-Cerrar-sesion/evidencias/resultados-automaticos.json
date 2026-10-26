@@ -7,6 +7,6 @@
   {
     "id": "CP-E01-HU05-03",
     "estado": "FAIL",
-    "detalle": "expect(received).toMatch(expected)\n\nMatcher error: received value must be a string\n\nReceived has value: undefined"
+    "detalle": "No existe una política SESSION_INACTIVITY_TIMEOUT configurada ni lógica backend de expiración por inactividad."
   }
 ]

@@ -37,6 +37,7 @@ export type ResultadoCaso = {
   id: string;
   estado: 'PASS' | 'FAIL';
   detalle: string;
+  variante?: string;
 };
 
 export const verificarBasePruebas = () => {
@@ -159,17 +160,53 @@ export async function expirarRegistroPendiente(
   }).update({ fechaExpiracion: Temporal.Instant.from('2000-01-01T00:00:00Z') } as never);
 }
 
+export async function crearBorradorMatrimonio(
+  contexto: ContextoE01,
+  accessToken: string,
+  prefijo: string,
+) {
+  const datos = datosUnicos(prefijo);
+  const tipos = await contexto.app.get(PrismaService).client.orm.public.TipoCeremonia.all() as unknown as Array<{
+    idTipoCeremonia: number;
+    activo: boolean;
+  }>;
+  const tipo = tipos.find((item) => item.activo !== false);
+  if (!tipo) throw new Error('No existe un tipo de ceremonia activo en la base de prueba.');
+  // Los datos de prueba persisten entre ejecuciones. La semilla temporal evita
+  // reutilizar DNI de borradores de una corrida anterior y enmascarar HU06.
+  const semillaDni = (Date.now() % 80_000_000) + (secuencia * 2);
+  const baseDni = String(10_000_000 + (semillaDni % 80_000_000)).padStart(8, '0');
+  const segundoDni = String(10_000_000 + ((semillaDni + 1) % 80_000_000)).padStart(8, '0');
+  const fecha = new Date();
+  fecha.setUTCDate(fecha.getUTCDate() + 90);
+  const fechaMatrimonio = fecha.toISOString().slice(0, 10);
+  const respuesta = await cliente(contexto)
+    .post('/api/v1/matrimonios/onboarding/borrador')
+    .set('Authorization', `Bearer ${accessToken}`)
+    .send({
+      pareja1: { nombres: `Pareja ${prefijo}`, apellidoPaterno: 'Uno', dni: baseDni, usuario: `${datos.usuario}a`, contrasena: 'Pareja#2026' },
+      pareja2: { nombres: `Pareja ${prefijo}`, apellidoPaterno: 'Dos', dni: segundoDni, usuario: `${datos.usuario}b`, contrasena: 'Pareja#2026' },
+      fechaMatrimonio,
+      cantidadInvitados: 50,
+      presupuesto: 10000,
+      idTipoCeremonia: tipo.idTipoCeremonia,
+    });
+  if (respuesta.status !== 201) throw new Error(`No se creó el borrador: HTTP ${respuesta.status}; ${respuesta.body.mensaje ?? ''}`);
+  return respuesta.body.data as { proyecto: { idProyecto: string }; matrimonio: { idMatrimonio: string } };
+}
+
 export async function ejecutarCaso(
   resultados: ResultadoCaso[],
   id: string,
   accion: () => Promise<void>,
+  variante?: string,
 ) {
   try {
     await accion();
-    resultados.push({ id, estado: 'PASS', detalle: 'El comportamiento observado cumplió el resultado esperado.' });
+    resultados.push({ id, estado: 'PASS', detalle: 'El comportamiento observado cumplió el resultado esperado.', variante });
   } catch (error) {
     const detalle = error instanceof Error ? error.message : String(error);
-    resultados.push({ id, estado: 'FAIL', detalle });
+    resultados.push({ id, estado: 'FAIL', detalle, variante });
     throw error;
   }
 }

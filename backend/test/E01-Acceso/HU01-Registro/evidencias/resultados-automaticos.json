@@ -7,22 +7,26 @@
   {
     "id": "CP-E01-HU01-02",
     "estado": "PASS",
-    "detalle": "El comportamiento observado cumplió el resultado esperado."
+    "detalle": "El comportamiento observado cumplió el resultado esperado.",
+    "variante": "nombres vacío"
   },
   {
     "id": "CP-E01-HU01-02",
     "estado": "PASS",
-    "detalle": "El comportamiento observado cumplió el resultado esperado."
+    "detalle": "El comportamiento observado cumplió el resultado esperado.",
+    "variante": "apellido vacío"
   },
   {
     "id": "CP-E01-HU01-02",
     "estado": "PASS",
-    "detalle": "El comportamiento observado cumplió el resultado esperado."
+    "detalle": "El comportamiento observado cumplió el resultado esperado.",
+    "variante": "correo vacío"
   },
   {
     "id": "CP-E01-HU01-02",
     "estado": "PASS",
-    "detalle": "El comportamiento observado cumplió el resultado esperado."
+    "detalle": "El comportamiento observado cumplió el resultado esperado.",
+    "variante": "correo inválido"
   },
   {
     "id": "CP-E01-HU01-03",
