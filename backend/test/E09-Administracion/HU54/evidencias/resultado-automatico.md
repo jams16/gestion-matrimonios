@@ -1,0 +1,4 @@
+CP-E09-HU54-01 FAIL Funcionalidad no implementada: política de inactividad; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.
+CP-E09-HU54-02 FAIL Funcionalidad no implementada: alerta previa de inactividad; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.
+CP-E09-HU54-03 FAIL Funcionalidad no implementada: scheduler de inactividad; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.
+CP-E09-HU54-04 FAIL Funcionalidad no implementada: suspensión administrativa auditada; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.

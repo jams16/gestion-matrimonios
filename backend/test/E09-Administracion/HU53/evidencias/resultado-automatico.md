@@ -1,0 +1,4 @@
+CP-E09-HU53-01 FAIL Funcionalidad no implementada: gestión administrativa de Wedding Planners; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.
+CP-E09-HU53-02 FAIL Funcionalidad no implementada: alta administrativa de Wedding Planner; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.
+CP-E09-HU53-03 FAIL Funcionalidad no implementada: métricas administrativas; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.
+CP-E09-HU53-04 FAIL Funcionalidad no implementada: eliminación condicionada; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.

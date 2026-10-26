@@ -1,0 +1,3 @@
+CP-E09-HU56-01 FAIL Funcionalidad no implementada: catálogo global administrativo; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.
+CP-E09-HU56-02 FAIL Funcionalidad no implementada: desactivación de catálogo; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.
+CP-E09-HU56-03 FAIL Funcionalidad no implementada: versionado de catálogo; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.

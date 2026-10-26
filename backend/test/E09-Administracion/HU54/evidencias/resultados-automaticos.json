@@ -1,0 +1,22 @@
+[
+  {
+    "id": "CP-E09-HU54-01",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: política de inactividad; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo."
+  },
+  {
+    "id": "CP-E09-HU54-02",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: alerta previa de inactividad; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo."
+  },
+  {
+    "id": "CP-E09-HU54-03",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: scheduler de inactividad; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo."
+  },
+  {
+    "id": "CP-E09-HU54-04",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: suspensión administrativa auditada; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo."
+  }
+]

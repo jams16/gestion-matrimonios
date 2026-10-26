@@ -1,0 +1,22 @@
+[
+  {
+    "id": "CP-E09-HU53-01",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: gestión administrativa de Wedding Planners; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo."
+  },
+  {
+    "id": "CP-E09-HU53-02",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: alta administrativa de Wedding Planner; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo."
+  },
+  {
+    "id": "CP-E09-HU53-03",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: métricas administrativas; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo."
+  },
+  {
+    "id": "CP-E09-HU53-04",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: eliminación condicionada; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo."
+  }
+]

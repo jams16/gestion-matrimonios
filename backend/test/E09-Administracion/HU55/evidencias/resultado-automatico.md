@@ -1,0 +1,3 @@
+CP-E09-HU55-01 FAIL Funcionalidad no implementada: listado administrativo de suspendidas; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.
+CP-E09-HU55-02 FAIL Funcionalidad no implementada: reactivación administrativa; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.
+CP-E09-HU55-03 FAIL Funcionalidad no implementada: auditoría de reactivación; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.

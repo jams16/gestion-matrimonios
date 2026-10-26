@@ -1,0 +1,22 @@
+[
+  {
+    "id": "CP-E09-HU57-01",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: reportes de soporte; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo."
+  },
+  {
+    "id": "CP-E09-HU57-02",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: bandeja de soporte; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo."
+  },
+  {
+    "id": "CP-E09-HU57-03",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: estados de soporte; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo."
+  },
+  {
+    "id": "CP-E09-HU57-04",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: respuesta e historial de soporte; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo."
+  }
+]

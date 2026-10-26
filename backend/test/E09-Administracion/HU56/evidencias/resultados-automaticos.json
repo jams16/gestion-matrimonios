@@ -1,0 +1,17 @@
+[
+  {
+    "id": "CP-E09-HU56-01",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: catálogo global administrativo; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo."
+  },
+  {
+    "id": "CP-E09-HU56-02",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: desactivación de catálogo; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo."
+  },
+  {
+    "id": "CP-E09-HU56-03",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: versionado de catálogo; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo."
+  }
+]

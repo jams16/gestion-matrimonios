@@ -1,0 +1,4 @@
+CP-E09-HU57-01 FAIL Funcionalidad no implementada: reportes de soporte; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.
+CP-E09-HU57-02 FAIL Funcionalidad no implementada: bandeja de soporte; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.
+CP-E09-HU57-03 FAIL Funcionalidad no implementada: estados de soporte; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.
+CP-E09-HU57-04 FAIL Funcionalidad no implementada: respuesta e historial de soporte; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.

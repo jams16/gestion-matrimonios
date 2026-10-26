@@ -1,0 +1,200 @@
+[
+  {
+    "hu": "HU53",
+    "id": "CP-E09-HU53-01",
+    "nombre": "Consulta, búsqueda y filtrado de Wedding Planners",
+    "ca": "CA257, CA259",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: gestión administrativa de Wedding Planners; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.",
+    "obtenido": "Funcionalidad no implementada: gestión administrativa de Wedding Planners; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar endpoints o modelos."
+  },
+  {
+    "hu": "HU53",
+    "id": "CP-E09-HU53-02",
+    "nombre": "Creación y actualización administrativa de Wedding Planner",
+    "ca": "CA258",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: alta administrativa de Wedding Planner; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.",
+    "obtenido": "Funcionalidad no implementada: alta administrativa de Wedding Planner; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar endpoints o modelos."
+  },
+  {
+    "hu": "HU53",
+    "id": "CP-E09-HU53-03",
+    "nombre": "Métricas de uso de Wedding Planner",
+    "ca": "CA260",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: métricas administrativas; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.",
+    "obtenido": "Funcionalidad no implementada: métricas administrativas; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar endpoints o modelos."
+  },
+  {
+    "hu": "HU53",
+    "id": "CP-E09-HU53-04",
+    "nombre": "Eliminación condicionada por historial",
+    "ca": "CA261",
+    "tipo": "MIXTO",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: eliminación condicionada; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.",
+    "obtenido": "Funcionalidad no implementada: eliminación condicionada; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar endpoints o modelos."
+  },
+  {
+    "hu": "HU54",
+    "id": "CP-E09-HU54-01",
+    "nombre": "Registro y cálculo de inactividad",
+    "ca": "CA262",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: política de inactividad; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.",
+    "obtenido": "Funcionalidad no implementada: política de inactividad; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar endpoints o modelos."
+  },
+  {
+    "hu": "HU54",
+    "id": "CP-E09-HU54-02",
+    "nombre": "Alerta previa por inactividad",
+    "ca": "CA263",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: alerta previa de inactividad; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.",
+    "obtenido": "Funcionalidad no implementada: alerta previa de inactividad; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar endpoints o modelos."
+  },
+  {
+    "hu": "HU54",
+    "id": "CP-E09-HU54-03",
+    "nombre": "Desactivación automática por inactividad",
+    "ca": "CA264",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: scheduler de inactividad; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.",
+    "obtenido": "Funcionalidad no implementada: scheduler de inactividad; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar endpoints o modelos."
+  },
+  {
+    "hu": "HU54",
+    "id": "CP-E09-HU54-04",
+    "nombre": "Desactivación manual conservando historial",
+    "ca": "CA265, CA266",
+    "tipo": "MIXTO",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: suspensión administrativa auditada; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.",
+    "obtenido": "Funcionalidad no implementada: suspensión administrativa auditada; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar endpoints o modelos."
+  },
+  {
+    "hu": "HU55",
+    "id": "CP-E09-HU55-01",
+    "nombre": "Consulta de cuentas desactivadas",
+    "ca": "CA267",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: listado administrativo de suspendidas; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.",
+    "obtenido": "Funcionalidad no implementada: listado administrativo de suspendidas; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar endpoints o modelos."
+  },
+  {
+    "hu": "HU55",
+    "id": "CP-E09-HU55-02",
+    "nombre": "Reactivación y recuperación de acceso",
+    "ca": "CA268, CA269",
+    "tipo": "MIXTO",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: reactivación administrativa; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.",
+    "obtenido": "Funcionalidad no implementada: reactivación administrativa; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar endpoints o modelos."
+  },
+  {
+    "hu": "HU55",
+    "id": "CP-E09-HU55-03",
+    "nombre": "Conservación y auditoría de reactivación",
+    "ca": "CA270",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: auditoría de reactivación; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.",
+    "obtenido": "Funcionalidad no implementada: auditoría de reactivación; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar endpoints o modelos."
+  },
+  {
+    "hu": "HU56",
+    "id": "CP-E09-HU56-01",
+    "nombre": "Registro y actualización de elemento del catálogo",
+    "ca": "CA271, CA272",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: catálogo global administrativo; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.",
+    "obtenido": "Funcionalidad no implementada: catálogo global administrativo; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar endpoints o modelos."
+  },
+  {
+    "hu": "HU56",
+    "id": "CP-E09-HU56-02",
+    "nombre": "Desactivación sin afectar proyectos existentes",
+    "ca": "CA273",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: desactivación de catálogo; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.",
+    "obtenido": "Funcionalidad no implementada: desactivación de catálogo; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar endpoints o modelos."
+  },
+  {
+    "hu": "HU56",
+    "id": "CP-E09-HU56-03",
+    "nombre": "Versionado del catálogo global",
+    "ca": "CA274",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: versionado de catálogo; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.",
+    "obtenido": "Funcionalidad no implementada: versionado de catálogo; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar endpoints o modelos."
+  },
+  {
+    "hu": "HU57",
+    "id": "CP-E09-HU57-01",
+    "nombre": "Registro de reporte de soporte",
+    "ca": "CA275",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: reportes de soporte; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.",
+    "obtenido": "Funcionalidad no implementada: reportes de soporte; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar endpoints o modelos."
+  },
+  {
+    "hu": "HU57",
+    "id": "CP-E09-HU57-02",
+    "nombre": "Consulta y filtrado de reportes",
+    "ca": "CA276",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: bandeja de soporte; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.",
+    "obtenido": "Funcionalidad no implementada: bandeja de soporte; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar endpoints o modelos."
+  },
+  {
+    "hu": "HU57",
+    "id": "CP-E09-HU57-03",
+    "nombre": "Actualización del estado de soporte",
+    "ca": "CA277",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: estados de soporte; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.",
+    "obtenido": "Funcionalidad no implementada: estados de soporte; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar endpoints o modelos."
+  },
+  {
+    "hu": "HU57",
+    "id": "CP-E09-HU57-04",
+    "nombre": "Respuesta, notificación e historial de soporte",
+    "ca": "CA278, CA279",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: respuesta e historial de soporte; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.",
+    "obtenido": "Funcionalidad no implementada: respuesta e historial de soporte; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar endpoints o modelos."
+  }
+]

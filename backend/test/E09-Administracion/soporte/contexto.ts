@@ -1,0 +1,6 @@
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
+export type Resultado = { id:string; estado:'PASS'|'FAIL'; detalle:string };
+const modulo = join(process.cwd(), 'src', 'modules', 'administracion', 'administracion.module.ts');
+export async function evaluar(registros:Resultado[], id:string, capacidad:string) { const codigo = await readFile(modulo, 'utf8'); const existe = codigo.includes('Controller') || codigo.includes('Service'); const detalle = existe ? `Capacidad localizada: ${capacidad}.` : `Funcionalidad no implementada: ${capacidad}; AdministracionModule no registra controladores ni servicios y no existe un rol Administrador administrativo.`; const resultado:Resultado = { id, estado:existe?'PASS':'FAIL', detalle }; registros.push(resultado); if(!existe) throw new Error(detalle); }
+export async function guardar(hu:string, registros:Resultado[]) { const dir=join(process.cwd(),'test','E09-Administracion',hu,'evidencias'); await mkdir(dir,{recursive:true}); await writeFile(join(dir,'resultados-automaticos.json'),JSON.stringify(registros,null,2)); await writeFile(join(dir,'resultado-automatico.md'),registros.map(x=>`${x.id} ${x.estado} ${x.detalle}`).join('\n')); }

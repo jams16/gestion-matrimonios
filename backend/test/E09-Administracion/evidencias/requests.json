@@ -1,0 +1,92 @@
+[
+  {
+    "id": "CP-E09-HU53-01",
+    "componente": "AdministracionModule",
+    "tipo": "AUTOMATIZADO"
+  },
+  {
+    "id": "CP-E09-HU53-02",
+    "componente": "AdministracionModule",
+    "tipo": "AUTOMATIZADO"
+  },
+  {
+    "id": "CP-E09-HU53-03",
+    "componente": "AdministracionModule",
+    "tipo": "AUTOMATIZADO"
+  },
+  {
+    "id": "CP-E09-HU53-04",
+    "componente": "AdministracionModule",
+    "tipo": "MIXTO"
+  },
+  {
+    "id": "CP-E09-HU54-01",
+    "componente": "AdministracionModule",
+    "tipo": "AUTOMATIZADO"
+  },
+  {
+    "id": "CP-E09-HU54-02",
+    "componente": "AdministracionModule",
+    "tipo": "AUTOMATIZADO"
+  },
+  {
+    "id": "CP-E09-HU54-03",
+    "componente": "AdministracionModule",
+    "tipo": "AUTOMATIZADO"
+  },
+  {
+    "id": "CP-E09-HU54-04",
+    "componente": "AdministracionModule",
+    "tipo": "MIXTO"
+  },
+  {
+    "id": "CP-E09-HU55-01",
+    "componente": "AdministracionModule",
+    "tipo": "AUTOMATIZADO"
+  },
+  {
+    "id": "CP-E09-HU55-02",
+    "componente": "AdministracionModule",
+    "tipo": "MIXTO"
+  },
+  {
+    "id": "CP-E09-HU55-03",
+    "componente": "AdministracionModule",
+    "tipo": "AUTOMATIZADO"
+  },
+  {
+    "id": "CP-E09-HU56-01",
+    "componente": "AdministracionModule",
+    "tipo": "AUTOMATIZADO"
+  },
+  {
+    "id": "CP-E09-HU56-02",
+    "componente": "AdministracionModule",
+    "tipo": "AUTOMATIZADO"
+  },
+  {
+    "id": "CP-E09-HU56-03",
+    "componente": "AdministracionModule",
+    "tipo": "AUTOMATIZADO"
+  },
+  {
+    "id": "CP-E09-HU57-01",
+    "componente": "AdministracionModule",
+    "tipo": "AUTOMATIZADO"
+  },
+  {
+    "id": "CP-E09-HU57-02",
+    "componente": "AdministracionModule",
+    "tipo": "AUTOMATIZADO"
+  },
+  {
+    "id": "CP-E09-HU57-03",
+    "componente": "AdministracionModule",
+    "tipo": "AUTOMATIZADO"
+  },
+  {
+    "id": "CP-E09-HU57-04",
+    "componente": "AdministracionModule",
+    "tipo": "AUTOMATIZADO"
+  }
+]

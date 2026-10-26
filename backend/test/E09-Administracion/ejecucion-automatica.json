@@ -1,0 +1,19 @@
+{
+  "epic": "E09",
+  "total": 18,
+  "jest": 18,
+  "pass": 0,
+  "fail": 18,
+  "suites": "test/E09-Administracion",
+  "excluidos": [
+    "test/backup/legacy",
+    "test/E01-Acceso",
+    "test/E02-Usuarios",
+    "test/E03-Proyecto",
+    "test/E04-Cronograma",
+    "test/E05-Presupuesto",
+    "test/E06-Invitados",
+    "test/E07-Proveedores",
+    "test/E08-Riesgos"
+  ]
+}
