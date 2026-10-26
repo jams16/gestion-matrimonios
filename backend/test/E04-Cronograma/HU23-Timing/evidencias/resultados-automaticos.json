@@ -1,0 +1,29 @@
+[
+  {
+    "id": "CP-E04-HU23-01",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: timing-con-ubicacion. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+  },
+  {
+    "id": "CP-E04-HU23-02",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: solapamiento-timing. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.",
+    "variante": "mismo responsable"
+  },
+  {
+    "id": "CP-E04-HU23-02",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: solapamiento-timing. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.",
+    "variante": "ubicacion exclusiva"
+  },
+  {
+    "id": "CP-E04-HU23-03",
+    "estado": "PASS",
+    "detalle": "La capacidad evaluada esta disponible en la implementacion actual."
+  },
+  {
+    "id": "CP-E04-HU23-04",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: exportacion-timing. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+  }
+]

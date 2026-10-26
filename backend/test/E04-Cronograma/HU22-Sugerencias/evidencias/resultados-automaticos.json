@@ -1,0 +1,17 @@
+[
+  {
+    "id": "CP-E04-HU22-01",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: catalogo-sugerencias. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+  },
+  {
+    "id": "CP-E04-HU22-02",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: seleccion-sugerencia. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+  },
+  {
+    "id": "CP-E04-HU22-03",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: instancia-desde-sugerencia. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+  }
+]

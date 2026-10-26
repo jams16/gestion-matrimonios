@@ -1,0 +1,41 @@
+[
+  {
+    "id": "CP-E04-HU15-01",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: actividad-con-categoria. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+  },
+  {
+    "id": "CP-E04-HU15-02",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: actividad-validacion. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.",
+    "variante": "nombre"
+  },
+  {
+    "id": "CP-E04-HU15-02",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: actividad-validacion. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.",
+    "variante": "fecha limite"
+  },
+  {
+    "id": "CP-E04-HU15-02",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: actividad-validacion. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.",
+    "variante": "prioridad"
+  },
+  {
+    "id": "CP-E04-HU15-02",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: actividad-validacion. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.",
+    "variante": "responsable"
+  },
+  {
+    "id": "CP-E04-HU15-03",
+    "estado": "PASS",
+    "detalle": "La capacidad evaluada esta disponible en la implementacion actual."
+  },
+  {
+    "id": "CP-E04-HU15-04",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: historial-asignacion. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+  }
+]

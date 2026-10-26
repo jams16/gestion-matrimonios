@@ -1,0 +1,162 @@
+[
+  {
+    "id": "CP-E04-HU15-01",
+    "estado": "FAIL",
+    "resultado": "La capacidad requerida no existe completamente en la implementacion actual."
+  },
+  {
+    "id": "CP-E04-HU15-02",
+    "estado": "FAIL",
+    "resultado": "La capacidad requerida no existe completamente en la implementacion actual."
+  },
+  {
+    "id": "CP-E04-HU15-03",
+    "estado": "PASS",
+    "resultado": "La capacidad backend evaluada esta disponible en la implementacion actual."
+  },
+  {
+    "id": "CP-E04-HU15-04",
+    "estado": "FAIL",
+    "resultado": "La capacidad requerida no existe completamente en la implementacion actual."
+  },
+  {
+    "id": "CP-E04-HU16-01",
+    "estado": "FAIL",
+    "resultado": "La capacidad requerida no existe completamente en la implementacion actual."
+  },
+  {
+    "id": "CP-E04-HU16-02",
+    "estado": "FAIL",
+    "resultado": "La capacidad requerida no existe completamente en la implementacion actual."
+  },
+  {
+    "id": "CP-E04-HU16-03",
+    "estado": "FAIL",
+    "resultado": "La capacidad requerida no existe completamente en la implementacion actual."
+  },
+  {
+    "id": "CP-E04-HU16-04",
+    "estado": "FAIL",
+    "resultado": "La capacidad requerida no existe completamente en la implementacion actual."
+  },
+  {
+    "id": "CP-E04-HU17-01",
+    "estado": "PASS",
+    "resultado": "La capacidad backend evaluada esta disponible en la implementacion actual."
+  },
+  {
+    "id": "CP-E04-HU17-02",
+    "estado": "FAIL",
+    "resultado": "La capacidad requerida no existe completamente en la implementacion actual."
+  },
+  {
+    "id": "CP-E04-HU17-03",
+    "estado": "FAIL",
+    "resultado": "La capacidad requerida no existe completamente en la implementacion actual."
+  },
+  {
+    "id": "CP-E04-HU18-01",
+    "estado": "FAIL",
+    "resultado": "La capacidad requerida no existe completamente en la implementacion actual."
+  },
+  {
+    "id": "CP-E04-HU18-02",
+    "estado": "PASS",
+    "resultado": "La capacidad backend evaluada esta disponible en la implementacion actual."
+  },
+  {
+    "id": "CP-E04-HU18-03",
+    "estado": "FAIL",
+    "resultado": "La capacidad requerida no existe completamente en la implementacion actual."
+  },
+  {
+    "id": "CP-E04-HU18-04",
+    "estado": "FAIL",
+    "resultado": "La capacidad requerida no existe completamente en la implementacion actual."
+  },
+  {
+    "id": "CP-E04-HU19-01",
+    "estado": "FAIL",
+    "resultado": "La capacidad requerida no existe completamente en la implementacion actual."
+  },
+  {
+    "id": "CP-E04-HU19-02",
+    "estado": "FAIL",
+    "resultado": "La capacidad requerida no existe completamente en la implementacion actual."
+  },
+  {
+    "id": "CP-E04-HU19-03",
+    "estado": "PASS",
+    "resultado": "La capacidad backend evaluada esta disponible en la implementacion actual."
+  },
+  {
+    "id": "CP-E04-HU19-04",
+    "estado": "FAIL",
+    "resultado": "La capacidad requerida no existe completamente en la implementacion actual."
+  },
+  {
+    "id": "CP-E04-HU20-01",
+    "estado": "PASS",
+    "resultado": "La capacidad backend evaluada esta disponible en la implementacion actual."
+  },
+  {
+    "id": "CP-E04-HU20-02",
+    "estado": "FAIL",
+    "resultado": "La capacidad requerida no existe completamente en la implementacion actual."
+  },
+  {
+    "id": "CP-E04-HU20-03",
+    "estado": "FAIL",
+    "resultado": "La capacidad requerida no existe completamente en la implementacion actual."
+  },
+  {
+    "id": "CP-E04-HU20-04",
+    "estado": "FAIL",
+    "resultado": "La capacidad requerida no existe completamente en la implementacion actual."
+  },
+  {
+    "id": "CP-E04-HU21-01",
+    "estado": "PASS",
+    "resultado": "La capacidad backend evaluada esta disponible en la implementacion actual."
+  },
+  {
+    "id": "CP-E04-HU21-02",
+    "estado": "FAIL",
+    "resultado": "La capacidad requerida no existe completamente en la implementacion actual."
+  },
+  {
+    "id": "CP-E04-HU22-01",
+    "estado": "FAIL",
+    "resultado": "La capacidad requerida no existe completamente en la implementacion actual."
+  },
+  {
+    "id": "CP-E04-HU22-02",
+    "estado": "FAIL",
+    "resultado": "La capacidad requerida no existe completamente en la implementacion actual."
+  },
+  {
+    "id": "CP-E04-HU22-03",
+    "estado": "FAIL",
+    "resultado": "La capacidad requerida no existe completamente en la implementacion actual."
+  },
+  {
+    "id": "CP-E04-HU23-01",
+    "estado": "FAIL",
+    "resultado": "La capacidad requerida no existe completamente en la implementacion actual."
+  },
+  {
+    "id": "CP-E04-HU23-02",
+    "estado": "FAIL",
+    "resultado": "La capacidad requerida no existe completamente en la implementacion actual."
+  },
+  {
+    "id": "CP-E04-HU23-03",
+    "estado": "PASS",
+    "resultado": "La capacidad backend evaluada esta disponible en la implementacion actual."
+  },
+  {
+    "id": "CP-E04-HU23-04",
+    "estado": "FAIL",
+    "resultado": "La capacidad requerida no existe completamente en la implementacion actual."
+  }
+]

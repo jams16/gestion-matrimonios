@@ -1,0 +1,459 @@
+[
+  {
+    "hu": "HU15",
+    "id": "CP-E04-HU15-01",
+    "ca": "CA071, CA073",
+    "nombre": "Registro valido de actividad e incorporacion al cronograma",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnico": [
+      "Funcionalidad no implementada: actividad-con-categoria. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ],
+    "obtenido": "La capacidad requerida no existe completamente en la implementacion actual.",
+    "interpretacion": "Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia."
+  },
+  {
+    "hu": "HU15",
+    "id": "CP-E04-HU15-02",
+    "ca": "CA072",
+    "nombre": "Validacion de datos obligatorios de actividad",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "variantes": [
+      "nombre",
+      "fecha limite",
+      "prioridad",
+      "responsable"
+    ],
+    "tecnico": [
+      "Funcionalidad no implementada: actividad-validacion. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.",
+      "Funcionalidad no implementada: actividad-validacion. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.",
+      "Funcionalidad no implementada: actividad-validacion. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.",
+      "Funcionalidad no implementada: actividad-validacion. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ],
+    "obtenido": "La capacidad requerida no existe completamente en la implementacion actual.",
+    "interpretacion": "Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia."
+  },
+  {
+    "hu": "HU15",
+    "id": "CP-E04-HU15-03",
+    "ca": "CA074",
+    "nombre": "Edicion de una actividad existente",
+    "tipo": "AUTOMATIZADO",
+    "estado": "PASS",
+    "variantes": [],
+    "tecnico": [],
+    "obtenido": "La capacidad backend evaluada esta disponible en la implementacion actual.",
+    "interpretacion": "Criterio tecnico cubierto por la implementacion actual."
+  },
+  {
+    "hu": "HU15",
+    "id": "CP-E04-HU15-04",
+    "ca": "CA075",
+    "nombre": "Cambio de responsable",
+    "tipo": "MIXTO",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnico": [
+      "Funcionalidad no implementada: historial-asignacion. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ],
+    "obtenido": "La capacidad requerida no existe completamente en la implementacion actual.",
+    "interpretacion": "Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia."
+  },
+  {
+    "hu": "HU16",
+    "id": "CP-E04-HU16-01",
+    "ca": "CA076, CA077",
+    "nombre": "Supervision centralizada por miembro",
+    "tipo": "MIXTO",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnico": [
+      "Funcionalidad no implementada: panel-por-miembro. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ],
+    "obtenido": "La capacidad requerida no existe completamente en la implementacion actual.",
+    "interpretacion": "Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia."
+  },
+  {
+    "hu": "HU16",
+    "id": "CP-E04-HU16-02",
+    "ca": "CA078",
+    "nombre": "Calculo de avance por miembro o frente",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnico": [
+      "Funcionalidad no implementada: avance-por-miembro. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ],
+    "obtenido": "La capacidad requerida no existe completamente en la implementacion actual.",
+    "interpretacion": "Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia."
+  },
+  {
+    "hu": "HU16",
+    "id": "CP-E04-HU16-03",
+    "ca": "CA079",
+    "nombre": "Actualizacion del panel tras cambios",
+    "tipo": "MIXTO",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnico": [
+      "Funcionalidad no implementada: panel-por-miembro. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ],
+    "obtenido": "La capacidad requerida no existe completamente en la implementacion actual.",
+    "interpretacion": "Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia."
+  },
+  {
+    "hu": "HU16",
+    "id": "CP-E04-HU16-04",
+    "ca": "CA080",
+    "nombre": "Identificacion de retrasadas y proximas a vencer",
+    "tipo": "MIXTO",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnico": [
+      "Funcionalidad no implementada: panel-retrasadas-proximas. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ],
+    "obtenido": "La capacidad requerida no existe completamente en la implementacion actual.",
+    "interpretacion": "Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia."
+  },
+  {
+    "hu": "HU17",
+    "id": "CP-E04-HU17-01",
+    "ca": "CA081, CA082, CA084",
+    "nombre": "Consulta y filtrado de hitos",
+    "tipo": "MIXTO",
+    "estado": "PASS",
+    "variantes": [],
+    "tecnico": [],
+    "obtenido": "La capacidad backend evaluada esta disponible en la implementacion actual.",
+    "interpretacion": "Criterio tecnico cubierto por la implementacion actual."
+  },
+  {
+    "hu": "HU17",
+    "id": "CP-E04-HU17-02",
+    "ca": "CA083",
+    "nombre": "Cumplimiento automatico de un hito",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnico": [
+      "Funcionalidad no implementada: cumplimiento-automatico-hito. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ],
+    "obtenido": "La capacidad requerida no existe completamente en la implementacion actual.",
+    "interpretacion": "Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia."
+  },
+  {
+    "hu": "HU17",
+    "id": "CP-E04-HU17-03",
+    "ca": "CA085",
+    "nombre": "Hitos cumplidos en avance e historial",
+    "tipo": "MIXTO",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnico": [
+      "Funcionalidad no implementada: historial-hitos. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ],
+    "obtenido": "La capacidad requerida no existe completamente en la implementacion actual.",
+    "interpretacion": "Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia."
+  },
+  {
+    "hu": "HU18",
+    "id": "CP-E04-HU18-01",
+    "ca": "CA086",
+    "nombre": "Configuracion de anticipaciones",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnico": [
+      "Funcionalidad no implementada: anticipaciones-configurables. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ],
+    "obtenido": "La capacidad requerida no existe completamente en la implementacion actual.",
+    "interpretacion": "Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia."
+  },
+  {
+    "hu": "HU18",
+    "id": "CP-E04-HU18-02",
+    "ca": "CA087, CA088",
+    "nombre": "Generacion de alerta de vencimiento",
+    "tipo": "AUTOMATIZADO",
+    "estado": "PASS",
+    "variantes": [],
+    "tecnico": [],
+    "obtenido": "La capacidad backend evaluada esta disponible en la implementacion actual.",
+    "interpretacion": "Criterio tecnico cubierto por la implementacion actual."
+  },
+  {
+    "hu": "HU18",
+    "id": "CP-E04-HU18-03",
+    "ca": "CA089",
+    "nombre": "Acceso al detalle desde alerta",
+    "tipo": "MIXTO",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnico": [
+      "Funcionalidad no implementada: enlace-detalle-alerta. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ],
+    "obtenido": "La capacidad requerida no existe completamente en la implementacion actual.",
+    "interpretacion": "Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia."
+  },
+  {
+    "hu": "HU18",
+    "id": "CP-E04-HU18-04",
+    "ca": "CA090",
+    "nombre": "Supresion de alertas para actividades no vigentes",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "variantes": [
+      "completada",
+      "cancelada",
+      "no aplica"
+    ],
+    "tecnico": [
+      "Funcionalidad no implementada: supresion-alertas. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.",
+      "Funcionalidad no implementada: supresion-alertas. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.",
+      "Funcionalidad no implementada: supresion-alertas. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ],
+    "obtenido": "La capacidad requerida no existe completamente en la implementacion actual.",
+    "interpretacion": "Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia."
+  },
+  {
+    "hu": "HU19",
+    "id": "CP-E04-HU19-01",
+    "ca": "CA091",
+    "nombre": "Reprogramacion y conservacion del valor anterior",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnico": [
+      "Funcionalidad no implementada: historial-reprogramacion. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ],
+    "obtenido": "La capacidad requerida no existe completamente en la implementacion actual.",
+    "interpretacion": "Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia."
+  },
+  {
+    "hu": "HU19",
+    "id": "CP-E04-HU19-02",
+    "ca": "CA092",
+    "nombre": "Margen de seguridad",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnico": [
+      "Funcionalidad no implementada: margen-seguridad. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ],
+    "obtenido": "La capacidad requerida no existe completamente en la implementacion actual.",
+    "interpretacion": "Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia."
+  },
+  {
+    "hu": "HU19",
+    "id": "CP-E04-HU19-03",
+    "ca": "CA093",
+    "nombre": "Deteccion de conflictos por reprogramacion",
+    "tipo": "AUTOMATIZADO",
+    "estado": "PASS",
+    "variantes": [],
+    "tecnico": [],
+    "obtenido": "La capacidad backend evaluada esta disponible en la implementacion actual.",
+    "interpretacion": "Criterio tecnico cubierto por la implementacion actual."
+  },
+  {
+    "hu": "HU19",
+    "id": "CP-E04-HU19-04",
+    "ca": "CA094",
+    "nombre": "Impacto por cambio de fecha del matrimonio",
+    "tipo": "MIXTO",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnico": [
+      "Funcionalidad no implementada: impacto-fecha-matrimonio. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ],
+    "obtenido": "La capacidad requerida no existe completamente en la implementacion actual.",
+    "interpretacion": "Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia."
+  },
+  {
+    "hu": "HU20",
+    "id": "CP-E04-HU20-01",
+    "ca": "CA095, CA098",
+    "nombre": "Cambio de estado y actualizacion del avance",
+    "tipo": "AUTOMATIZADO",
+    "estado": "PASS",
+    "variantes": [],
+    "tecnico": [],
+    "obtenido": "La capacidad backend evaluada esta disponible en la implementacion actual.",
+    "interpretacion": "Criterio tecnico cubierto por la implementacion actual."
+  },
+  {
+    "hu": "HU20",
+    "id": "CP-E04-HU20-02",
+    "ca": "CA096",
+    "nombre": "Deteccion automatica de retraso",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnico": [
+      "Funcionalidad no implementada: retrasadas-regla-completa. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ],
+    "obtenido": "La capacidad requerida no existe completamente en la implementacion actual.",
+    "interpretacion": "Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia."
+  },
+  {
+    "hu": "HU20",
+    "id": "CP-E04-HU20-03",
+    "ca": "CA097, CA102",
+    "nombre": "Bloqueo de completado por dependencia pendiente",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnico": [
+      "Funcionalidad no implementada: bloqueo-completado-dependencia. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ],
+    "obtenido": "La capacidad requerida no existe completamente en la implementacion actual.",
+    "interpretacion": "Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia."
+  },
+  {
+    "hu": "HU20",
+    "id": "CP-E04-HU20-04",
+    "ca": "CA099",
+    "nombre": "Autorizacion e identificacion de cambios de estado",
+    "tipo": "MIXTO",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnico": [
+      "Funcionalidad no implementada: historial-cambio-estado. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ],
+    "obtenido": "La capacidad requerida no existe completamente en la implementacion actual.",
+    "interpretacion": "Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia."
+  },
+  {
+    "hu": "HU21",
+    "id": "CP-E04-HU21-01",
+    "ca": "CA100, CA101",
+    "nombre": "Creacion de dependencias y prevencion de ciclos",
+    "tipo": "AUTOMATIZADO",
+    "estado": "PASS",
+    "variantes": [
+      "valida",
+      "consigo misma",
+      "ciclo directo",
+      "ciclo indirecto"
+    ],
+    "tecnico": [],
+    "obtenido": "La capacidad backend evaluada esta disponible en la implementacion actual.",
+    "interpretacion": "Criterio tecnico cubierto por la implementacion actual."
+  },
+  {
+    "hu": "HU21",
+    "id": "CP-E04-HU21-02",
+    "ca": "CA103, CA104",
+    "nombre": "Dependencias sugeridas y personalizables",
+    "tipo": "MIXTO",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnico": [
+      "Funcionalidad no implementada: dependencias-sugeridas. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ],
+    "obtenido": "La capacidad requerida no existe completamente en la implementacion actual.",
+    "interpretacion": "Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia."
+  },
+  {
+    "hu": "HU22",
+    "id": "CP-E04-HU22-01",
+    "ca": "CA105",
+    "nombre": "Consulta de tareas sugeridas",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnico": [
+      "Funcionalidad no implementada: catalogo-sugerencias. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ],
+    "obtenido": "La capacidad requerida no existe completamente en la implementacion actual.",
+    "interpretacion": "Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia."
+  },
+  {
+    "hu": "HU22",
+    "id": "CP-E04-HU22-02",
+    "ca": "CA106, CA107, CA109",
+    "nombre": "Seleccion y personalizacion de tareas sugeridas",
+    "tipo": "MIXTO",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnico": [
+      "Funcionalidad no implementada: seleccion-sugerencia. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ],
+    "obtenido": "La capacidad requerida no existe completamente en la implementacion actual.",
+    "interpretacion": "Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia."
+  },
+  {
+    "hu": "HU22",
+    "id": "CP-E04-HU22-03",
+    "ca": "CA108",
+    "nombre": "Creacion de instancia independiente desde sugerencia",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnico": [
+      "Funcionalidad no implementada: instancia-desde-sugerencia. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ],
+    "obtenido": "La capacidad requerida no existe completamente en la implementacion actual.",
+    "interpretacion": "Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia."
+  },
+  {
+    "hu": "HU23",
+    "id": "CP-E04-HU23-01",
+    "ca": "CA110, CA111",
+    "nombre": "Registro y orden cronologico del timing",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnico": [
+      "Funcionalidad no implementada: timing-con-ubicacion. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ],
+    "obtenido": "La capacidad requerida no existe completamente en la implementacion actual.",
+    "interpretacion": "Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia."
+  },
+  {
+    "hu": "HU23",
+    "id": "CP-E04-HU23-02",
+    "ca": "CA112",
+    "nombre": "Deteccion de solapamientos incompatibles",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "variantes": [
+      "mismo responsable",
+      "ubicacion exclusiva"
+    ],
+    "tecnico": [
+      "Funcionalidad no implementada: solapamiento-timing. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.",
+      "Funcionalidad no implementada: solapamiento-timing. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ],
+    "obtenido": "La capacidad requerida no existe completamente en la implementacion actual.",
+    "interpretacion": "Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia."
+  },
+  {
+    "hu": "HU23",
+    "id": "CP-E04-HU23-03",
+    "ca": "CA113",
+    "nombre": "Edicion de actividad del timing",
+    "tipo": "AUTOMATIZADO",
+    "estado": "PASS",
+    "variantes": [],
+    "tecnico": [],
+    "obtenido": "La capacidad backend evaluada esta disponible en la implementacion actual.",
+    "interpretacion": "Criterio tecnico cubierto por la implementacion actual."
+  },
+  {
+    "hu": "HU23",
+    "id": "CP-E04-HU23-04",
+    "ca": "CA114",
+    "nombre": "Exportacion o version compartible del timing",
+    "tipo": "MIXTO",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnico": [
+      "Funcionalidad no implementada: exportacion-timing. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ],
+    "obtenido": "La capacidad requerida no existe completamente en la implementacion actual.",
+    "interpretacion": "Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia."
+  }
+]

@@ -1,0 +1,235 @@
+[
+  {
+    "id": "CP-E04-HU15-01",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: actividad-con-categoria. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ]
+  },
+  {
+    "id": "CP-E04-HU15-02",
+    "variantes": [
+      "nombre",
+      "fecha limite",
+      "prioridad",
+      "responsable"
+    ],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: actividad-validacion. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.",
+      "Funcionalidad no implementada: actividad-validacion. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.",
+      "Funcionalidad no implementada: actividad-validacion. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.",
+      "Funcionalidad no implementada: actividad-validacion. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ]
+  },
+  {
+    "id": "CP-E04-HU15-03",
+    "variantes": [],
+    "detalleTecnico": []
+  },
+  {
+    "id": "CP-E04-HU15-04",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: historial-asignacion. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ]
+  },
+  {
+    "id": "CP-E04-HU16-01",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: panel-por-miembro. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ]
+  },
+  {
+    "id": "CP-E04-HU16-02",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: avance-por-miembro. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ]
+  },
+  {
+    "id": "CP-E04-HU16-03",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: panel-por-miembro. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ]
+  },
+  {
+    "id": "CP-E04-HU16-04",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: panel-retrasadas-proximas. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ]
+  },
+  {
+    "id": "CP-E04-HU17-01",
+    "variantes": [],
+    "detalleTecnico": []
+  },
+  {
+    "id": "CP-E04-HU17-02",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: cumplimiento-automatico-hito. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ]
+  },
+  {
+    "id": "CP-E04-HU17-03",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: historial-hitos. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ]
+  },
+  {
+    "id": "CP-E04-HU18-01",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: anticipaciones-configurables. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ]
+  },
+  {
+    "id": "CP-E04-HU18-02",
+    "variantes": [],
+    "detalleTecnico": []
+  },
+  {
+    "id": "CP-E04-HU18-03",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: enlace-detalle-alerta. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ]
+  },
+  {
+    "id": "CP-E04-HU18-04",
+    "variantes": [
+      "completada",
+      "cancelada",
+      "no aplica"
+    ],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: supresion-alertas. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.",
+      "Funcionalidad no implementada: supresion-alertas. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.",
+      "Funcionalidad no implementada: supresion-alertas. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ]
+  },
+  {
+    "id": "CP-E04-HU19-01",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: historial-reprogramacion. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ]
+  },
+  {
+    "id": "CP-E04-HU19-02",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: margen-seguridad. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ]
+  },
+  {
+    "id": "CP-E04-HU19-03",
+    "variantes": [],
+    "detalleTecnico": []
+  },
+  {
+    "id": "CP-E04-HU19-04",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: impacto-fecha-matrimonio. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ]
+  },
+  {
+    "id": "CP-E04-HU20-01",
+    "variantes": [],
+    "detalleTecnico": []
+  },
+  {
+    "id": "CP-E04-HU20-02",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: retrasadas-regla-completa. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ]
+  },
+  {
+    "id": "CP-E04-HU20-03",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: bloqueo-completado-dependencia. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ]
+  },
+  {
+    "id": "CP-E04-HU20-04",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: historial-cambio-estado. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ]
+  },
+  {
+    "id": "CP-E04-HU21-01",
+    "variantes": [
+      "valida",
+      "consigo misma",
+      "ciclo directo",
+      "ciclo indirecto"
+    ],
+    "detalleTecnico": []
+  },
+  {
+    "id": "CP-E04-HU21-02",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: dependencias-sugeridas. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ]
+  },
+  {
+    "id": "CP-E04-HU22-01",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: catalogo-sugerencias. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ]
+  },
+  {
+    "id": "CP-E04-HU22-02",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: seleccion-sugerencia. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ]
+  },
+  {
+    "id": "CP-E04-HU22-03",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: instancia-desde-sugerencia. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ]
+  },
+  {
+    "id": "CP-E04-HU23-01",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: timing-con-ubicacion. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ]
+  },
+  {
+    "id": "CP-E04-HU23-02",
+    "variantes": [
+      "mismo responsable",
+      "ubicacion exclusiva"
+    ],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: solapamiento-timing. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.",
+      "Funcionalidad no implementada: solapamiento-timing. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ]
+  },
+  {
+    "id": "CP-E04-HU23-03",
+    "variantes": [],
+    "detalleTecnico": []
+  },
+  {
+    "id": "CP-E04-HU23-04",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: exportacion-timing. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ]
+  }
+]
