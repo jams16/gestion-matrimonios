@@ -1,0 +1,17 @@
+[
+  {
+    "id": "CP-E06-HU35-01",
+    "estado": "PASS",
+    "detalle": "La capacidad evaluada existe en el modulo Invitados."
+  },
+  {
+    "id": "CP-E06-HU35-02",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: seguimiento-rsvp."
+  },
+  {
+    "id": "CP-E06-HU35-03",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: recordatorios-rsvp."
+  }
+]

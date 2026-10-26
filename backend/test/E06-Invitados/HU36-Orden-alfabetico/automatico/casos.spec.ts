@@ -1,0 +1,1 @@
+import{R,e,guardar}from'../../soporte/contexto-e06';describe('HU36',()=>{const r:R[]=[];afterAll(()=>guardar('HU36-Orden-alfabetico',r));it('CP-E06-HU36-01 - Ordenamiento alfabetico combinado con filtros',()=>e(r,'CP-E06-HU36-01','orden'));it('CP-E06-HU36-02 - Persistencia de la preferencia de ordenamiento',()=>e(r,'CP-E06-HU36-02','preferencia-orden'));});

@@ -1,0 +1,22 @@
+[
+  {
+    "id": "CP-E06-HU30-01",
+    "estado": "PASS",
+    "detalle": "La capacidad evaluada existe en el modulo Invitados."
+  },
+  {
+    "id": "CP-E06-HU30-02",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: validacion."
+  },
+  {
+    "id": "CP-E06-HU30-03",
+    "estado": "PASS",
+    "detalle": "La capacidad evaluada existe en el modulo Invitados."
+  },
+  {
+    "id": "CP-E06-HU30-04",
+    "estado": "PASS",
+    "detalle": "La capacidad evaluada existe en el modulo Invitados."
+  }
+]

@@ -1,0 +1,98 @@
+[
+  {
+    "id": "CP-E06-HU30-01",
+    "estado": "PASS"
+  },
+  {
+    "id": "CP-E06-HU30-02",
+    "estado": "FAIL"
+  },
+  {
+    "id": "CP-E06-HU30-03",
+    "estado": "PASS"
+  },
+  {
+    "id": "CP-E06-HU30-04",
+    "estado": "PASS"
+  },
+  {
+    "id": "CP-E06-HU31-01",
+    "estado": "PASS"
+  },
+  {
+    "id": "CP-E06-HU31-02",
+    "estado": "PASS"
+  },
+  {
+    "id": "CP-E06-HU31-03",
+    "estado": "FAIL"
+  },
+  {
+    "id": "CP-E06-HU32-01",
+    "estado": "PASS"
+  },
+  {
+    "id": "CP-E06-HU32-02",
+    "estado": "FAIL"
+  },
+  {
+    "id": "CP-E06-HU32-03",
+    "estado": "FAIL"
+  },
+  {
+    "id": "CP-E06-HU33-01",
+    "estado": "FAIL"
+  },
+  {
+    "id": "CP-E06-HU33-02",
+    "estado": "FAIL"
+  },
+  {
+    "id": "CP-E06-HU33-03",
+    "estado": "FAIL"
+  },
+  {
+    "id": "CP-E06-HU34-01",
+    "estado": "FAIL"
+  },
+  {
+    "id": "CP-E06-HU34-02",
+    "estado": "FAIL"
+  },
+  {
+    "id": "CP-E06-HU34-03",
+    "estado": "FAIL"
+  },
+  {
+    "id": "CP-E06-HU35-01",
+    "estado": "PASS"
+  },
+  {
+    "id": "CP-E06-HU35-02",
+    "estado": "FAIL"
+  },
+  {
+    "id": "CP-E06-HU35-03",
+    "estado": "FAIL"
+  },
+  {
+    "id": "CP-E06-HU36-01",
+    "estado": "PASS"
+  },
+  {
+    "id": "CP-E06-HU36-02",
+    "estado": "FAIL"
+  },
+  {
+    "id": "CP-E06-HU37-01",
+    "estado": "FAIL"
+  },
+  {
+    "id": "CP-E06-HU37-02",
+    "estado": "FAIL"
+  },
+  {
+    "id": "CP-E06-HU37-03",
+    "estado": "FAIL"
+  }
+]

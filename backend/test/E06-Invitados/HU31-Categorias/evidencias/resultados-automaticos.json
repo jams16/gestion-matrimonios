@@ -1,0 +1,17 @@
+[
+  {
+    "id": "CP-E06-HU31-01",
+    "estado": "PASS",
+    "detalle": "La capacidad evaluada existe en el modulo Invitados."
+  },
+  {
+    "id": "CP-E06-HU31-02",
+    "estado": "PASS",
+    "detalle": "La capacidad evaluada existe en el modulo Invitados."
+  },
+  {
+    "id": "CP-E06-HU31-03",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: permisos-colaborador."
+  }
+]

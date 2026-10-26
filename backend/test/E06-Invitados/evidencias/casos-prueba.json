@@ -1,0 +1,314 @@
+[
+  {
+    "hu": "HU30",
+    "id": "CP-E06-HU30-01",
+    "nombre": "Registro y consulta de invitado",
+    "ca": "CA144",
+    "tipo": "AUTOMATIZADO",
+    "estado": "PASS",
+    "detalle": [
+      "La capacidad evaluada existe en el modulo Invitados."
+    ],
+    "obtenido": "La capacidad evaluada existe en Invitados.",
+    "interpretacion": "Criterio tecnico cubierto."
+  },
+  {
+    "hu": "HU30",
+    "id": "CP-E06-HU30-02",
+    "nombre": "Validacion de datos del invitado",
+    "ca": "CA145",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "detalle": [
+      "Funcionalidad no implementada: validacion."
+    ],
+    "obtenido": "La capacidad no esta implementada completamente.",
+    "interpretacion": "Funcionalidad no implementada o incompleta."
+  },
+  {
+    "hu": "HU30",
+    "id": "CP-E06-HU30-03",
+    "nombre": "Edicion de invitado",
+    "ca": "CA146",
+    "tipo": "AUTOMATIZADO",
+    "estado": "PASS",
+    "detalle": [
+      "La capacidad evaluada existe en el modulo Invitados."
+    ],
+    "obtenido": "La capacidad evaluada existe en Invitados.",
+    "interpretacion": "Criterio tecnico cubierto."
+  },
+  {
+    "hu": "HU30",
+    "id": "CP-E06-HU30-04",
+    "nombre": "Retiro del invitado y actualizacion del total",
+    "ca": "CA147",
+    "tipo": "AUTOMATIZADO",
+    "estado": "PASS",
+    "detalle": [
+      "La capacidad evaluada existe en el modulo Invitados."
+    ],
+    "obtenido": "La capacidad evaluada existe en Invitados.",
+    "interpretacion": "Criterio tecnico cubierto."
+  },
+  {
+    "hu": "HU31",
+    "id": "CP-E06-HU31-01",
+    "nombre": "Clasificacion y filtrado por relacion",
+    "ca": "CA148",
+    "tipo": "AUTOMATIZADO",
+    "estado": "PASS",
+    "detalle": [
+      "La capacidad evaluada existe en el modulo Invitados."
+    ],
+    "obtenido": "La capacidad evaluada existe en Invitados.",
+    "interpretacion": "Criterio tecnico cubierto."
+  },
+  {
+    "hu": "HU31",
+    "id": "CP-E06-HU31-02",
+    "nombre": "Cambio y retiro del filtro",
+    "ca": "CA149",
+    "tipo": "AUTOMATIZADO",
+    "estado": "PASS",
+    "detalle": [
+      "La capacidad evaluada existe en el modulo Invitados."
+    ],
+    "obtenido": "La capacidad evaluada existe en Invitados.",
+    "interpretacion": "Criterio tecnico cubierto."
+  },
+  {
+    "hu": "HU31",
+    "id": "CP-E06-HU31-03",
+    "nombre": "Filtrado por colaborador autorizado",
+    "ca": "CA150",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "detalle": [
+      "Funcionalidad no implementada: permisos-colaborador."
+    ],
+    "obtenido": "La capacidad no esta implementada completamente.",
+    "interpretacion": "Funcionalidad no implementada o incompleta."
+  },
+  {
+    "hu": "HU32",
+    "id": "CP-E06-HU32-01",
+    "nombre": "Gestion de requerimientos alimentarios",
+    "ca": "CA151",
+    "tipo": "AUTOMATIZADO",
+    "estado": "PASS",
+    "detalle": [
+      "La capacidad evaluada existe en el modulo Invitados."
+    ],
+    "obtenido": "La capacidad evaluada existe en Invitados.",
+    "interpretacion": "Criterio tecnico cubierto."
+  },
+  {
+    "hu": "HU32",
+    "id": "CP-E06-HU32-02",
+    "nombre": "Filtro y resumen por requerimiento alimentario",
+    "ca": "CA152",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "detalle": [
+      "Funcionalidad no implementada: filtros-requerimientos."
+    ],
+    "obtenido": "La capacidad no esta implementada completamente.",
+    "interpretacion": "Funcionalidad no implementada o incompleta."
+  },
+  {
+    "hu": "HU32",
+    "id": "CP-E06-HU32-03",
+    "nombre": "Exportacion del listado alimentario",
+    "ca": "CA153",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "detalle": [
+      "Funcionalidad no implementada: exportacion-alimentaria."
+    ],
+    "obtenido": "La capacidad no esta implementada completamente.",
+    "interpretacion": "Funcionalidad no implementada o incompleta."
+  },
+  {
+    "hu": "HU33",
+    "id": "CP-E06-HU33-01",
+    "nombre": "Asignacion y consulta por mesa",
+    "ca": "CA154",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "detalle": [
+      "Funcionalidad no implementada: mesas."
+    ],
+    "obtenido": "La capacidad no esta implementada completamente.",
+    "interpretacion": "Funcionalidad no implementada o incompleta."
+  },
+  {
+    "hu": "HU33",
+    "id": "CP-E06-HU33-02",
+    "nombre": "Reasignacion de mesa sin duplicidad",
+    "ca": "CA155",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "detalle": [
+      "Funcionalidad no implementada: reubicacion-mesa."
+    ],
+    "obtenido": "La capacidad no esta implementada completamente.",
+    "interpretacion": "Funcionalidad no implementada o incompleta."
+  },
+  {
+    "hu": "HU33",
+    "id": "CP-E06-HU33-03",
+    "nombre": "Representacion grafica de mesas",
+    "ca": "CA156",
+    "tipo": "MANUAL",
+    "estado": "FAIL",
+    "detalle": [
+      "Funcionalidad no implementada: grafico-mesas."
+    ],
+    "obtenido": "La capacidad no esta implementada completamente.",
+    "interpretacion": "Funcionalidad no implementada o incompleta."
+  },
+  {
+    "hu": "HU34",
+    "id": "CP-E06-HU34-01",
+    "nombre": "Calculo de asistencia confirmada",
+    "ca": "CA157",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "detalle": [
+      "Funcionalidad no implementada: estadisticas."
+    ],
+    "obtenido": "La capacidad no esta implementada completamente.",
+    "interpretacion": "Funcionalidad no implementada o incompleta."
+  },
+  {
+    "hu": "HU34",
+    "id": "CP-E06-HU34-02",
+    "nombre": "Pendientes de respuesta y actualizacion estadistica",
+    "ca": "CA158",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "detalle": [
+      "Funcionalidad no implementada: estadisticas."
+    ],
+    "obtenido": "La capacidad no esta implementada completamente.",
+    "interpretacion": "Funcionalidad no implementada o incompleta."
+  },
+  {
+    "hu": "HU34",
+    "id": "CP-E06-HU34-03",
+    "nombre": "Permisos sobre estadisticas de invitados",
+    "ca": "CA159",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "detalle": [
+      "Funcionalidad no implementada: estadisticas."
+    ],
+    "obtenido": "La capacidad no esta implementada completamente.",
+    "interpretacion": "Funcionalidad no implementada o incompleta."
+  },
+  {
+    "hu": "HU35",
+    "id": "CP-E06-HU35-01",
+    "nombre": "Gestion y actualizacion del RSVP",
+    "ca": "CA160",
+    "tipo": "AUTOMATIZADO",
+    "estado": "PASS",
+    "detalle": [
+      "La capacidad evaluada existe en el modulo Invitados."
+    ],
+    "obtenido": "La capacidad evaluada existe en Invitados.",
+    "interpretacion": "Criterio tecnico cubierto."
+  },
+  {
+    "hu": "HU35",
+    "id": "CP-E06-HU35-02",
+    "nombre": "Fechas de seguimiento RSVP",
+    "ca": "CA161",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "detalle": [
+      "Funcionalidad no implementada: seguimiento-rsvp."
+    ],
+    "obtenido": "La capacidad no esta implementada completamente.",
+    "interpretacion": "Funcionalidad no implementada o incompleta."
+  },
+  {
+    "hu": "HU35",
+    "id": "CP-E06-HU35-03",
+    "nombre": "Recordatorios unicamente para RSVP pendientes",
+    "ca": "CA162",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "detalle": [
+      "Funcionalidad no implementada: recordatorios-rsvp."
+    ],
+    "obtenido": "La capacidad no esta implementada completamente.",
+    "interpretacion": "Funcionalidad no implementada o incompleta."
+  },
+  {
+    "hu": "HU36",
+    "id": "CP-E06-HU36-01",
+    "nombre": "Ordenamiento alfabetico combinado con filtros",
+    "ca": "CA163",
+    "tipo": "AUTOMATIZADO",
+    "estado": "PASS",
+    "detalle": [
+      "La capacidad evaluada existe en el modulo Invitados."
+    ],
+    "obtenido": "La capacidad evaluada existe en Invitados.",
+    "interpretacion": "Criterio tecnico cubierto."
+  },
+  {
+    "hu": "HU36",
+    "id": "CP-E06-HU36-02",
+    "nombre": "Persistencia de la preferencia de ordenamiento",
+    "ca": "CA164",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "detalle": [
+      "Funcionalidad no implementada: preferencia-orden."
+    ],
+    "obtenido": "La capacidad no esta implementada completamente.",
+    "interpretacion": "Funcionalidad no implementada o incompleta."
+  },
+  {
+    "hu": "HU37",
+    "id": "CP-E06-HU37-01",
+    "nombre": "Generacion y envio de invitacion digital",
+    "ca": "CA165",
+    "tipo": "MIXTO",
+    "estado": "FAIL",
+    "detalle": [
+      "Funcionalidad no implementada: invitacion-digital."
+    ],
+    "obtenido": "La capacidad no esta implementada completamente.",
+    "interpretacion": "Funcionalidad no implementada o incompleta."
+  },
+  {
+    "hu": "HU37",
+    "id": "CP-E06-HU37-02",
+    "nombre": "Registro de interaccion sin alterar automaticamente RSVP",
+    "ca": "CA166",
+    "tipo": "MIXTO",
+    "estado": "FAIL",
+    "detalle": [
+      "Funcionalidad no implementada: invitacion-digital."
+    ],
+    "obtenido": "La capacidad no esta implementada completamente.",
+    "interpretacion": "Funcionalidad no implementada o incompleta."
+  },
+  {
+    "hu": "HU37",
+    "id": "CP-E06-HU37-03",
+    "nombre": "Notificacion a Wedding Planner por interaccion",
+    "ca": "CA167",
+    "tipo": "MIXTO",
+    "estado": "FAIL",
+    "detalle": [
+      "Funcionalidad no implementada: invitacion-digital."
+    ],
+    "obtenido": "La capacidad no esta implementada completamente.",
+    "interpretacion": "Funcionalidad no implementada o incompleta."
+  }
+]

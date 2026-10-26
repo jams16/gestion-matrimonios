@@ -1,0 +1,1 @@
+{"comando":"pnpm.cmd test:e06","alcance":"Solo test/E06-Invitados","excluye":["E01-Acceso","E02-Usuarios","E03-Proyecto","E04-Cronograma","E05-Presupuesto","E07-Proveedores","E08-Riesgos","E09-Administracion","backup"]}

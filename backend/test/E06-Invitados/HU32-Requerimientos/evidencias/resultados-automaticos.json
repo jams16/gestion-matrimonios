@@ -1,0 +1,17 @@
+[
+  {
+    "id": "CP-E06-HU32-01",
+    "estado": "PASS",
+    "detalle": "La capacidad evaluada existe en el modulo Invitados."
+  },
+  {
+    "id": "CP-E06-HU32-02",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: filtros-requerimientos."
+  },
+  {
+    "id": "CP-E06-HU32-03",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: exportacion-alimentaria."
+  }
+]

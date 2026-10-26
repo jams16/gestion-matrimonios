@@ -1,0 +1,17 @@
+[
+  {
+    "id": "CP-E06-HU33-01",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: mesas."
+  },
+  {
+    "id": "CP-E06-HU33-02",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: reubicacion-mesa."
+  },
+  {
+    "id": "CP-E06-HU33-03",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: grafico-mesas."
+  }
+]
