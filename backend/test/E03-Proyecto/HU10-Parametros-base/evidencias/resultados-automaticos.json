@@ -1,0 +1,53 @@
+[
+  {
+    "id": "CP-E03-HU10-01",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: parametros-base-estilo. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+  },
+  {
+    "id": "CP-E03-HU10-02",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: validacion-parametros-base. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio.",
+    "variante": "datos de pareja"
+  },
+  {
+    "id": "CP-E03-HU10-02",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: validacion-parametros-base. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio.",
+    "variante": "fecha"
+  },
+  {
+    "id": "CP-E03-HU10-02",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: validacion-parametros-base. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio.",
+    "variante": "presupuesto"
+  },
+  {
+    "id": "CP-E03-HU10-02",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: validacion-parametros-base. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio.",
+    "variante": "estilo"
+  },
+  {
+    "id": "CP-E03-HU10-03",
+    "estado": "PASS",
+    "detalle": "La capacidad evaluada está disponible en la implementación actual."
+  },
+  {
+    "id": "CP-E03-HU10-04",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: estilo-evento. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+  },
+  {
+    "id": "CP-E03-HU10-05",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: confirmacion-cambios-sensibles. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio.",
+    "variante": "cambio de fecha"
+  },
+  {
+    "id": "CP-E03-HU10-05",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: confirmacion-cambios-sensibles. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio.",
+    "variante": "cambio de presupuesto"
+  }
+]

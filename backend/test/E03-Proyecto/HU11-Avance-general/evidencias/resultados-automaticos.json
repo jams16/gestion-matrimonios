@@ -1,0 +1,29 @@
+[
+  {
+    "id": "CP-E03-HU11-01",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: dashboard-avance. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+  },
+  {
+    "id": "CP-E03-HU11-02",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: dashboard-rsvp. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+  },
+  {
+    "id": "CP-E03-HU11-03",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: dashboard-presupuesto. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio.",
+    "variante": "sin excedente"
+  },
+  {
+    "id": "CP-E03-HU11-03",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: dashboard-presupuesto. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio.",
+    "variante": "con excedente"
+  },
+  {
+    "id": "CP-E03-HU11-04",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: dashboard-permisos. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+  }
+]

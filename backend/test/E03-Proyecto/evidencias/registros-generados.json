@@ -1,0 +1,3 @@
+{
+  "nota": "Las pruebas unitarias no escriben PostgreSQL; no se crearon datos operativos para capacidades ausentes."
+}

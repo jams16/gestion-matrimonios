@@ -1,0 +1,102 @@
+[
+  {
+    "id": "CP-E03-HU10-01",
+    "estado": "FAIL",
+    "resultado": "La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado."
+  },
+  {
+    "id": "CP-E03-HU10-02",
+    "estado": "FAIL",
+    "resultado": "La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado."
+  },
+  {
+    "id": "CP-E03-HU10-03",
+    "estado": "PASS",
+    "resultado": "La lógica existente respondió conforme al criterio técnico evaluado."
+  },
+  {
+    "id": "CP-E03-HU10-04",
+    "estado": "FAIL",
+    "resultado": "La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado."
+  },
+  {
+    "id": "CP-E03-HU10-05",
+    "estado": "FAIL",
+    "resultado": "La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado."
+  },
+  {
+    "id": "CP-E03-HU11-01",
+    "estado": "FAIL",
+    "resultado": "La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado."
+  },
+  {
+    "id": "CP-E03-HU11-02",
+    "estado": "FAIL",
+    "resultado": "La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado."
+  },
+  {
+    "id": "CP-E03-HU11-03",
+    "estado": "FAIL",
+    "resultado": "La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado."
+  },
+  {
+    "id": "CP-E03-HU11-04",
+    "estado": "FAIL",
+    "resultado": "La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado."
+  },
+  {
+    "id": "CP-E03-HU12-01",
+    "estado": "FAIL",
+    "resultado": "La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado."
+  },
+  {
+    "id": "CP-E03-HU12-02",
+    "estado": "FAIL",
+    "resultado": "La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado."
+  },
+  {
+    "id": "CP-E03-HU12-03",
+    "estado": "FAIL",
+    "resultado": "La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado."
+  },
+  {
+    "id": "CP-E03-HU13-01",
+    "estado": "FAIL",
+    "resultado": "La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado."
+  },
+  {
+    "id": "CP-E03-HU13-02",
+    "estado": "FAIL",
+    "resultado": "La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado."
+  },
+  {
+    "id": "CP-E03-HU13-03",
+    "estado": "FAIL",
+    "resultado": "La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado."
+  },
+  {
+    "id": "CP-E03-HU13-04",
+    "estado": "FAIL",
+    "resultado": "La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado."
+  },
+  {
+    "id": "CP-E03-HU14-01",
+    "estado": "PASS",
+    "resultado": "La lógica existente respondió conforme al criterio técnico evaluado."
+  },
+  {
+    "id": "CP-E03-HU14-02",
+    "estado": "FAIL",
+    "resultado": "La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado."
+  },
+  {
+    "id": "CP-E03-HU14-03",
+    "estado": "FAIL",
+    "resultado": "La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado."
+  },
+  {
+    "id": "CP-E03-HU14-04",
+    "estado": "PASS",
+    "resultado": "La lógica existente respondió conforme al criterio técnico evaluado."
+  }
+]

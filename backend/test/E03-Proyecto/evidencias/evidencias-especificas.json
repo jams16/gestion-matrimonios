@@ -1,0 +1,158 @@
+[
+  {
+    "id": "CP-E03-HU10-01",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: parametros-base-estilo. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ]
+  },
+  {
+    "id": "CP-E03-HU10-02",
+    "variantes": [
+      "datos de pareja",
+      "fecha",
+      "presupuesto",
+      "estilo"
+    ],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: validacion-parametros-base. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio.",
+      "Funcionalidad no implementada: validacion-parametros-base. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio.",
+      "Funcionalidad no implementada: validacion-parametros-base. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio.",
+      "Funcionalidad no implementada: validacion-parametros-base. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ]
+  },
+  {
+    "id": "CP-E03-HU10-03",
+    "variantes": [],
+    "detalleTecnico": []
+  },
+  {
+    "id": "CP-E03-HU10-04",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: estilo-evento. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ]
+  },
+  {
+    "id": "CP-E03-HU10-05",
+    "variantes": [
+      "cambio de fecha",
+      "cambio de presupuesto"
+    ],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: confirmacion-cambios-sensibles. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio.",
+      "Funcionalidad no implementada: confirmacion-cambios-sensibles. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ]
+  },
+  {
+    "id": "CP-E03-HU11-01",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: dashboard-avance. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ]
+  },
+  {
+    "id": "CP-E03-HU11-02",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: dashboard-rsvp. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ]
+  },
+  {
+    "id": "CP-E03-HU11-03",
+    "variantes": [
+      "sin excedente",
+      "con excedente"
+    ],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: dashboard-presupuesto. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio.",
+      "Funcionalidad no implementada: dashboard-presupuesto. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ]
+  },
+  {
+    "id": "CP-E03-HU11-04",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: dashboard-permisos. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ]
+  },
+  {
+    "id": "CP-E03-HU12-01",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: catalogo-metodologias. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ]
+  },
+  {
+    "id": "CP-E03-HU12-02",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: referencia-metodologica. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ]
+  },
+  {
+    "id": "CP-E03-HU12-03",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: aplicacion-practica-metodologia. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ]
+  },
+  {
+    "id": "CP-E03-HU13-01",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: contexto-matrimonio. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ]
+  },
+  {
+    "id": "CP-E03-HU13-02",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: indicadores-integrados. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ]
+  },
+  {
+    "id": "CP-E03-HU13-03",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: fuente-compartida. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ]
+  },
+  {
+    "id": "CP-E03-HU13-04",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: permisos-contextuales. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ]
+  },
+  {
+    "id": "CP-E03-HU14-01",
+    "variantes": [],
+    "detalleTecnico": []
+  },
+  {
+    "id": "CP-E03-HU14-02",
+    "variantes": [
+      "dependencia habilitada",
+      "prioridad",
+      "proximidad de fecha límite"
+    ],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: flujo-recomendado. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio.",
+      "Funcionalidad no implementada: flujo-recomendado. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio.",
+      "Funcionalidad no implementada: flujo-recomendado. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ]
+  },
+  {
+    "id": "CP-E03-HU14-03",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: flujo-actualizacion. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    ]
+  },
+  {
+    "id": "CP-E03-HU14-04",
+    "variantes": [],
+    "detalleTecnico": []
+  }
+]
