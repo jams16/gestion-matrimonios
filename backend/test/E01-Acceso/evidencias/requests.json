@@ -1,0 +1,170 @@
+[
+  {
+    "id": "CP-E01-HU01-01",
+    "nombre": "Registro exitoso de una nueva cuenta Wedding Planner",
+    "endpointComponente": "POST /api/v1/auth/registro/*",
+    "datosUtilizados": "Solicitudes sintéticas de registro; CP02 usa nombre, apellido y correo vacíos, y correo inválido",
+    "pasosEjecutados": "Se ejecutaron las acciones del caso."
+  },
+  {
+    "id": "CP-E01-HU01-02",
+    "nombre": "Validación de campos obligatorios y correo",
+    "endpointComponente": "POST /api/v1/auth/registro/solicitar",
+    "datosUtilizados": "Solicitudes sintéticas de registro; CP02 usa nombre, apellido y correo vacíos, y correo inválido",
+    "pasosEjecutados": "Se ejecutaron las acciones del caso. Variantes: nombres vacío, apellido vacío, correo vacío, correo inválido."
+  },
+  {
+    "id": "CP-E01-HU01-03",
+    "nombre": "Política y confirmación de contraseña",
+    "endpointComponente": "POST /api/v1/auth/registro/finalizar",
+    "datosUtilizados": "Solicitudes sintéticas de registro; CP02 usa nombre, apellido y correo vacíos, y correo inválido",
+    "pasosEjecutados": "Se ejecutaron las acciones del caso."
+  },
+  {
+    "id": "CP-E01-HU01-04",
+    "nombre": "Rechazo de correo previamente registrado",
+    "endpointComponente": "POST /api/v1/auth/registro/solicitar",
+    "datosUtilizados": "Solicitudes sintéticas de registro; CP02 usa nombre, apellido y correo vacíos, y correo inválido",
+    "pasosEjecutados": "Se ejecutaron las acciones del caso."
+  },
+  {
+    "id": "CP-E01-HU02-01",
+    "nombre": "Generación de correo de verificación",
+    "endpointComponente": "POST /api/v1/auth/registro/solicitar",
+    "datosUtilizados": "Cuenta pendiente sintética, token/código capturado y solicitudes de verificación",
+    "pasosEjecutados": "Se ejecutaron las acciones del caso."
+  },
+  {
+    "id": "CP-E01-HU02-02",
+    "nombre": "Confirmación de correo vigente",
+    "endpointComponente": "POST /api/v1/auth/registro/confirmar",
+    "datosUtilizados": "Cuenta pendiente sintética, token/código capturado y solicitudes de verificación",
+    "pasosEjecutados": "Se ejecutaron las acciones del caso."
+  },
+  {
+    "id": "CP-E01-HU02-03",
+    "nombre": "Rechazo de token inválido, usado o expirado",
+    "endpointComponente": "POST /api/v1/auth/registro/confirmar",
+    "datosUtilizados": "Cuenta pendiente sintética, token/código capturado y solicitudes de verificación",
+    "pasosEjecutados": "Se ejecutaron las acciones del caso."
+  },
+  {
+    "id": "CP-E01-HU02-04",
+    "nombre": "Bloqueo de acceso sin correo verificado",
+    "endpointComponente": "POST /api/v1/auth/login",
+    "datosUtilizados": "Cuenta pendiente sintética, token/código capturado y solicitudes de verificación",
+    "pasosEjecutados": "Se ejecutaron las acciones del caso."
+  },
+  {
+    "id": "CP-E01-HU02-05",
+    "nombre": "Control de reenvíos de verificación",
+    "endpointComponente": "POST /api/v1/auth/verificar-correo/solicitar",
+    "datosUtilizados": "Cuenta pendiente sintética, token/código capturado y solicitudes de verificación",
+    "pasosEjecutados": "Se ejecutaron las acciones del caso."
+  },
+  {
+    "id": "CP-E01-HU03-01",
+    "nombre": "Inicio de sesión válido",
+    "endpointComponente": "POST /api/v1/auth/login",
+    "datosUtilizados": "Credenciales válidas, inválidas y pendientes; refresh token emitido por el backend",
+    "pasosEjecutados": "Se ejecutaron las acciones del caso."
+  },
+  {
+    "id": "CP-E01-HU03-02",
+    "nombre": "Rechazo genérico de credenciales inválidas",
+    "endpointComponente": "POST /api/v1/auth/login",
+    "datosUtilizados": "Credenciales válidas, inválidas y pendientes; refresh token emitido por el backend",
+    "pasosEjecutados": "Se ejecutaron las acciones del caso."
+  },
+  {
+    "id": "CP-E01-HU03-03",
+    "nombre": "Bloqueo de cuenta no verificada",
+    "endpointComponente": "POST /api/v1/auth/login",
+    "datosUtilizados": "Credenciales válidas, inválidas y pendientes; refresh token emitido por el backend",
+    "pasosEjecutados": "Se ejecutaron las acciones del caso."
+  },
+  {
+    "id": "CP-E01-HU03-04",
+    "nombre": "Renovación de sesión con refresh token",
+    "endpointComponente": "POST /api/v1/auth/refresh",
+    "datosUtilizados": "Credenciales válidas, inválidas y pendientes; refresh token emitido por el backend",
+    "pasosEjecutados": "Se ejecutaron las acciones del caso."
+  },
+  {
+    "id": "CP-E01-HU04-01",
+    "nombre": "Consulta de información personal del perfil",
+    "endpointComponente": "GET /api/v1/usuarios/:id",
+    "datosUtilizados": "Cuenta autenticada y payload con datos personales y de contacto",
+    "pasosEjecutados": "Se ejecutaron las acciones del caso."
+  },
+  {
+    "id": "CP-E01-HU04-02",
+    "nombre": "Actualización de datos personales y contacto",
+    "endpointComponente": "PATCH /api/v1/usuarios/:id",
+    "datosUtilizados": "Cuenta autenticada y payload con datos personales y de contacto",
+    "pasosEjecutados": "Se ejecutaron las acciones del caso."
+  },
+  {
+    "id": "CP-E01-HU04-03",
+    "nombre": "Validación de correo en el perfil",
+    "endpointComponente": "PATCH /api/v1/usuarios/:id",
+    "datosUtilizados": "Cuenta autenticada y payload con datos personales y de contacto",
+    "pasosEjecutados": "Se ejecutaron las acciones del caso."
+  },
+  {
+    "id": "CP-E01-HU05-01",
+    "nombre": "Botón y confirmación de cerrar sesión",
+    "endpointComponente": "Componente Flutter de perfil",
+    "datosUtilizados": "Access token y refresh token de una sesión sintética autenticada",
+    "pasosEjecutados": "Se ejecutaron las acciones del caso."
+  },
+  {
+    "id": "CP-E01-HU05-02",
+    "nombre": "Revocación de sesión al cerrar sesión",
+    "endpointComponente": "POST logout y GET usuarios/:id",
+    "datosUtilizados": "Access token y refresh token de una sesión sintética autenticada",
+    "pasosEjecutados": "Se ejecutaron las acciones del caso."
+  },
+  {
+    "id": "CP-E01-HU05-03",
+    "nombre": "Expiración de sesión por inactividad",
+    "endpointComponente": "Configuración de sesión y guard JWT",
+    "datosUtilizados": "Access token y refresh token de una sesión sintética autenticada",
+    "pasosEjecutados": "Se ejecutaron las acciones del caso."
+  },
+  {
+    "id": "CP-E01-HU06-01",
+    "nombre": "Listado aislado por Wedding Planner",
+    "endpointComponente": "GET /api/v1/matrimonios/resumen",
+    "datosUtilizados": "Dos Wedding Planners autenticadas (WP-A/WP-B), con borradores y DNI únicos",
+    "pasosEjecutados": "Se ejecutaron las acciones del caso."
+  },
+  {
+    "id": "CP-E01-HU06-02",
+    "nombre": "Selección de matrimonio activo",
+    "endpointComponente": "Selector Flutter",
+    "datosUtilizados": "Dos Wedding Planners autenticadas (WP-A/WP-B), con borradores y DNI únicos",
+    "pasosEjecutados": "Se ejecutaron las acciones del caso."
+  },
+  {
+    "id": "CP-E01-HU06-03",
+    "nombre": "Aislamiento de información entre Wedding Planners",
+    "endpointComponente": "GET /api/v1/matrimonios/resumen",
+    "datosUtilizados": "Dos Wedding Planners autenticadas (WP-A/WP-B), con borradores y DNI únicos",
+    "pasosEjecutados": "Se ejecutaron las acciones del caso."
+  },
+  {
+    "id": "CP-E01-HU06-04",
+    "nombre": "Cambio de matrimonio activo",
+    "endpointComponente": "Selector Flutter",
+    "datosUtilizados": "Dos Wedding Planners autenticadas (WP-A/WP-B), con borradores y DNI únicos",
+    "pasosEjecutados": "Se ejecutaron las acciones del caso."
+  },
+  {
+    "id": "CP-E01-HU06-05",
+    "nombre": "Búsqueda y filtros de matrimonios",
+    "endpointComponente": "GET /api/v1/matrimonios/resumen",
+    "datosUtilizados": "Dos Wedding Planners autenticadas (WP-A/WP-B), con borradores y DNI únicos",
+    "pasosEjecutados": "Se ejecutaron las acciones del caso."
+  }
+]

@@ -1,0 +1,9 @@
+{
+  "idEjecucion": "20261026210515",
+  "registros": [
+    "Cuentas Wedding Planner verificadas de Daniela Ramírez Torres y Alejandra Castro Montalvo.",
+    "Cuentas pendientes para validación de verificación e inicio de sesión.",
+    "Borradores de matrimonio de Mateo Salinas e Isabella Cárdenas para HU06."
+  ],
+  "nota": "Los registros se crean mediante endpoints reales durante la ejecución; los IDs quedan en las respuestas y en la base de pruebas."
+}

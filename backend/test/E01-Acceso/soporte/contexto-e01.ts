@@ -68,14 +68,43 @@ export async function crearContextoE01(): Promise<ContextoE01> {
 export const cliente = (contexto: ContextoE01) => request(contexto.app.getHttpServer());
 
 let secuencia = 0;
+const perfiles: Record<string, { nombres: string; apellidoPaterno: string; apellidoMaterno: string; correo: string; usuario: string; empresa: string }> = {
+  e01hu01ok: { nombres: 'Daniela', apellidoPaterno: 'Ramírez', apellidoMaterno: 'Torres', correo: 'daniela.ramirez.e01', usuario: 'daniela.ramirez', empresa: 'Ramírez Eventos' },
+  e01hu01pass: { nombres: 'Valeria', apellidoPaterno: 'Salazar', apellidoMaterno: 'Mendoza', correo: 'valeria.salazar.e01', usuario: 'valeria.salazar', empresa: 'Salazar Bodas' },
+  e01hu01dup: { nombres: 'Camila', apellidoPaterno: 'Rojas', apellidoMaterno: 'Paredes', correo: 'camila.rojas.e01', usuario: 'camila.rojas', empresa: 'Rojas Celebraciones' },
+  e01hu02pendiente: { nombres: 'Andrea', apellidoPaterno: 'Vega', apellidoMaterno: 'Castillo', correo: 'andrea.vega.e01', usuario: 'andrea.vega', empresa: 'Vega Eventos' },
+  e01hu02valido: { nombres: 'Luciana', apellidoPaterno: 'Morales', apellidoMaterno: 'Silva', correo: 'luciana.morales.e01', usuario: 'luciana.morales', empresa: 'Morales Wedding Studio' },
+  e01hu02usado: { nombres: 'Mariana', apellidoPaterno: 'Delgado', apellidoMaterno: 'Ríos', correo: 'mariana.delgado.e01', usuario: 'mariana.delgado', empresa: 'Delgado Bodas' },
+  e01hu02expirado: { nombres: 'Paola', apellidoPaterno: 'Navarro', apellidoMaterno: 'León', correo: 'paola.navarro.e01', usuario: 'paola.navarro', empresa: 'Navarro Eventos' },
+  e01hu02pendientelogin: { nombres: 'Sofía', apellidoPaterno: 'Cárdenas', apellidoMaterno: 'Ruiz', correo: 'sofia.cardenas.e01', usuario: 'sofia.cardenas', empresa: 'Cárdenas Bodas' },
+  e01hu02reenvio: { nombres: 'Elena', apellidoPaterno: 'Fuentes', apellidoMaterno: 'Vargas', correo: 'elena.fuentes.e01', usuario: 'elena.fuentes', empresa: 'Fuentes Eventos' },
+  e01hu03ok: { nombres: 'Natalia', apellidoPaterno: 'Herrera', apellidoMaterno: 'Luna', correo: 'natalia.herrera.e01', usuario: 'natalia.herrera', empresa: 'Herrera Wedding Planner' },
+  e01hu03bad: { nombres: 'Carolina', apellidoPaterno: 'Mejía', apellidoMaterno: 'Soto', correo: 'carolina.mejia.e01', usuario: 'carolina.mejia', empresa: 'Mejía Bodas' },
+  e01hu03pendiente: { nombres: 'Rosa', apellidoPaterno: 'Arias', apellidoMaterno: 'Núñez', correo: 'rosa.arias.e01', usuario: 'rosa.arias', empresa: 'Arias Eventos' },
+  e01hu03refresh: { nombres: 'Gabriela', apellidoPaterno: 'Ponce', apellidoMaterno: 'Vera', correo: 'gabriela.ponce.e01', usuario: 'gabriela.ponce', empresa: 'Ponce Celebraciones' },
+  e01hu04read: { nombres: 'Claudia', apellidoPaterno: 'Benites', apellidoMaterno: 'Flores', correo: 'claudia.benites.e01', usuario: 'claudia.benites', empresa: 'Benites Eventos' },
+  e01hu04edit: { nombres: 'Mónica', apellidoPaterno: 'Quispe', apellidoMaterno: 'Guzmán', correo: 'monica.quispe.e01', usuario: 'monica.quispe', empresa: 'Quispe Bodas' },
+  e01hu04invalid: { nombres: 'Verónica', apellidoPaterno: 'Cabrera', apellidoMaterno: 'Peña', correo: 'veronica.cabrera.e01', usuario: 'veronica.cabrera', empresa: 'Cabrera Eventos' },
+  e01hu05logout: { nombres: 'Patricia', apellidoPaterno: 'Espinoza', apellidoMaterno: 'Mora', correo: 'patricia.espinoza.e01', usuario: 'patricia.espinoza', empresa: 'Espinoza Bodas' },
+  e01hu06listaA: { nombres: 'Daniela', apellidoPaterno: 'Ramírez', apellidoMaterno: 'Torres', correo: 'daniela.ramirez.lista', usuario: 'daniela.ramirez.lista', empresa: 'Ramírez Eventos' },
+  e01hu06listaB: { nombres: 'Alejandra', apellidoPaterno: 'Castro', apellidoMaterno: 'Montalvo', correo: 'alejandra.castro.lista', usuario: 'alejandra.castro.lista', empresa: 'Castro Eventos' },
+  e01hu06aislaA: { nombres: 'Daniela', apellidoPaterno: 'Ramírez', apellidoMaterno: 'Torres', correo: 'daniela.ramirez.aislamiento', usuario: 'daniela.ramirez.aislamiento', empresa: 'Ramírez Eventos' },
+  e01hu06aislaB: { nombres: 'Alejandra', apellidoPaterno: 'Castro', apellidoMaterno: 'Montalvo', correo: 'alejandra.castro.aislamiento', usuario: 'alejandra.castro.aislamiento', empresa: 'Castro Eventos' },
+  e01hu06filtroA: { nombres: 'Daniela', apellidoPaterno: 'Ramírez', apellidoMaterno: 'Torres', correo: 'daniela.ramirez.filtros', usuario: 'daniela.ramirez.filtros', empresa: 'Ramírez Eventos' },
+  e01hu06filtroB: { nombres: 'Alejandra', apellidoPaterno: 'Castro', apellidoMaterno: 'Montalvo', correo: 'alejandra.castro.filtros', usuario: 'alejandra.castro.filtros', empresa: 'Castro Eventos' },
+};
+
 export const datosUnicos = (prefijo: string) => {
   secuencia += 1;
-  const sufijo = `${Date.now()}${secuencia}`;
+  const perfil = perfiles[prefijo] ?? { nombres: 'María', apellidoPaterno: 'Campos', apellidoMaterno: 'Ortiz', correo: 'maria.campos.e01', usuario: 'maria.campos', empresa: 'Campos Eventos' };
+  const ejecucion = process.env.E01_RUN_ID ?? 'local';
+  const sufijo = `${ejecucion}.${secuencia}`;
   return {
-    correo: `${prefijo}.${sufijo}@example.test`,
-    usuario: `${prefijo}${sufijo}`.slice(0, 40),
+    ...perfil,
+    correo: `${perfil.correo}+${sufijo}@example.com`,
+    usuario: `${perfil.usuario}.${secuencia}`.slice(0, 40),
     contrasena: 'Prueba#2026',
-    nombreComercial: `Empresa ${prefijo} ${sufijo}`,
+    nombreComercial: perfil.empresa,
   };
 };
 
@@ -86,9 +115,9 @@ export async function registrarYVerificar(
   const datos = datosUnicos(prefijo);
   const api = cliente(contexto);
   const solicitud = await api.post('/api/v1/auth/registro/solicitar').send({
-    nombres: 'Prueba',
-    apellidoPaterno: 'E01',
-    apellidoMaterno: 'Automatica',
+    nombres: datos.nombres,
+    apellidoPaterno: datos.apellidoPaterno,
+    apellidoMaterno: datos.apellidoMaterno,
     correoElectronico: datos.correo,
   });
   if (solicitud.status !== 200) throw new Error(`Solicitud de registro: HTTP ${solicitud.status}`);
@@ -121,9 +150,9 @@ export async function crearUsuarioPendiente(
   const datos = datosUnicos(prefijo);
   const prisma = contexto.app.get(PrismaService).client.orm.public;
   const persona = await prisma.PersonaNatural.create({
-    nombres: 'Pendiente',
-    apellidoPaterno: 'E01',
-    apellidoMaterno: 'Automatica',
+    nombres: datos.nombres,
+    apellidoPaterno: datos.apellidoPaterno,
+    apellidoMaterno: datos.apellidoMaterno,
     correoElectronico: datos.correo,
     telefono: null,
     dni: null,
@@ -184,8 +213,8 @@ export async function crearBorradorMatrimonio(
     .post('/api/v1/matrimonios/onboarding/borrador')
     .set('Authorization', `Bearer ${accessToken}`)
     .send({
-      pareja1: { nombres: `Pareja ${prefijo}`, apellidoPaterno: 'Uno', dni: baseDni, usuario: `${datos.usuario}a`, contrasena: 'Pareja#2026' },
-      pareja2: { nombres: `Pareja ${prefijo}`, apellidoPaterno: 'Dos', dni: segundoDni, usuario: `${datos.usuario}b`, contrasena: 'Pareja#2026' },
+      pareja1: { nombres: 'Mateo', apellidoPaterno: 'Salinas', dni: baseDni, usuario: `mateo.salinas.${secuencia}`, contrasena: 'Pareja#2026' },
+      pareja2: { nombres: 'Isabella', apellidoPaterno: 'Cárdenas', dni: segundoDni, usuario: `isabella.cardenas.${secuencia}`, contrasena: 'Pareja#2026' },
       fechaMatrimonio,
       cantidadInvitados: 50,
       presupuesto: 10000,

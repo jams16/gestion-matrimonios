@@ -32,10 +32,10 @@ describe('HU01 - Registrar una nueva cuenta', () => {
   });
 
   it.each([
-    ['nombres vacío', { nombres: '', apellidoPaterno: 'E01', correoElectronico: 'campo@example.test' }],
-    ['apellido vacío', { nombres: 'Prueba', apellidoPaterno: '', correoElectronico: 'campo@example.test' }],
-    ['correo vacío', { nombres: 'Prueba', apellidoPaterno: 'E01', correoElectronico: '' }],
-    ['correo inválido', { nombres: 'Prueba', apellidoPaterno: 'E01', correoElectronico: 'correo-invalido' }],
+    ['nombres vacío', { nombres: '', apellidoPaterno: 'Mendoza', correoElectronico: 'valentina.mendoza@example.com' }],
+    ['apellido vacío', { nombres: 'Valentina', apellidoPaterno: '', correoElectronico: 'valentina.mendoza@example.com' }],
+    ['correo vacío', { nombres: 'Valentina', apellidoPaterno: 'Mendoza', correoElectronico: '' }],
+    ['correo inválido', { nombres: 'Valentina', apellidoPaterno: 'Mendoza', correoElectronico: 'valentina.mendoza' }],
   ])('CP-E01-HU01-02 - rechaza %s', async (_nombre, cuerpo) => {
     await ejecutarCaso(resultados, 'CP-E01-HU01-02', async () => {
       const respuesta = await cliente(contexto).post('/api/v1/auth/registro/solicitar').send(cuerpo);
@@ -48,7 +48,7 @@ describe('HU01 - Registrar una nueva cuenta', () => {
     await ejecutarCaso(resultados, 'CP-E01-HU01-03', async () => {
       const datos = datosUnicos('e01hu01pass');
       const api = cliente(contexto);
-      await api.post('/api/v1/auth/registro/solicitar').send({ nombres: 'Prueba', apellidoPaterno: 'E01', correoElectronico: datos.correo }).expect(200);
+      await api.post('/api/v1/auth/registro/solicitar').send({ nombres: datos.nombres, apellidoPaterno: datos.apellidoPaterno, correoElectronico: datos.correo }).expect(200);
       const token = contexto.correo.registros.at(-1)?.token;
       await api.post('/api/v1/auth/registro/confirmar').send({ token }).expect(200);
       for (const contrasena of ['Ab1#', 'abcdef1#', 'ABCDEF1#', 'Abcdefgh#']) {

@@ -1,0 +1,170 @@
+[
+  {
+    "id": "CP-E01-HU01-01",
+    "nombre": "Registro exitoso de una nueva cuenta Wedding Planner",
+    "estado": "PASS",
+    "resultadoObtenido": "Se enviaron datos válidos de persona, empresa, usuario y contraseña. El flujo creó una cuenta PROJECT_MANAGER con correo verificado.",
+    "interpretacion": "La cuenta Wedding Planner quedó disponible para autenticación."
+  },
+  {
+    "id": "CP-E01-HU01-02",
+    "nombre": "Validación de campos obligatorios y correo",
+    "estado": "PASS",
+    "resultadoObtenido": "Las cuatro variantes —nombres vacíos, apellido vacío, correo vacío y correo inválido— respondieron HTTP 400.",
+    "interpretacion": "La API aplicó las validaciones requeridas."
+  },
+  {
+    "id": "CP-E01-HU01-03",
+    "nombre": "Política y confirmación de contraseña",
+    "estado": "FAIL",
+    "resultadoObtenido": "El DTO no contempla confirmación de contraseña. NestJS rechazó el campo como propiedad no permitida antes de comparar ambos valores.",
+    "interpretacion": "Hay rechazo HTTP, pero no por la regla CA002 de coincidencia."
+  },
+  {
+    "id": "CP-E01-HU01-04",
+    "nombre": "Rechazo de correo previamente registrado",
+    "estado": "PASS",
+    "resultadoObtenido": "Tras crear la primera cuenta, una nueva solicitud con el mismo correo respondió HTTP 409.",
+    "interpretacion": "El correo no pudo reutilizarse."
+  },
+  {
+    "id": "CP-E01-HU02-01",
+    "nombre": "Generación de correo de verificación",
+    "estado": "FAIL",
+    "resultadoObtenido": "Se capturó un correo de prueba con código numérico único de seis dígitos; no contiene enlace de verificación.",
+    "interpretacion": "CA006 exige enlace único; el mecanismo actual no lo cumple literalmente."
+  },
+  {
+    "id": "CP-E01-HU02-02",
+    "nombre": "Confirmación de correo vigente",
+    "estado": "PASS",
+    "resultadoObtenido": "El código vigente fue confirmado y la cuenta quedó con correo verificado.",
+    "interpretacion": "La verificación mediante el mecanismo actual funciona."
+  },
+  {
+    "id": "CP-E01-HU02-03",
+    "nombre": "Rechazo de token inválido, usado o expirado",
+    "estado": "PASS",
+    "resultadoObtenido": "Los tokens inexistente, usado y expirado fueron rechazados con HTTP 400.",
+    "interpretacion": "La validación de invalidez, uso y expiración funciona."
+  },
+  {
+    "id": "CP-E01-HU02-04",
+    "nombre": "Bloqueo de acceso sin correo verificado",
+    "estado": "PASS",
+    "resultadoObtenido": "Una cuenta pendiente recibió HTTP 403 al intentar iniciar sesión.",
+    "interpretacion": "El backend bloquea el acceso antes de verificar el correo."
+  },
+  {
+    "id": "CP-E01-HU02-05",
+    "nombre": "Control de reenvíos de verificación",
+    "estado": "FAIL",
+    "resultadoObtenido": "Dos solicitudes consecutivas de reenvío fueron aceptadas y generaron dos mecanismos.",
+    "interpretacion": "No se observó limitación temporal; CA010 no se cumple."
+  },
+  {
+    "id": "CP-E01-HU03-01",
+    "nombre": "Inicio de sesión válido",
+    "estado": "PASS",
+    "resultadoObtenido": "La cuenta verificada recibió access token, refresh token y tipo PROJECT_MANAGER.",
+    "interpretacion": "La autenticación y el tipo de usuario funcionaron."
+  },
+  {
+    "id": "CP-E01-HU03-02",
+    "nombre": "Rechazo genérico de credenciales inválidas",
+    "estado": "PASS",
+    "resultadoObtenido": "Contraseña incorrecta y correo inexistente devolvieron HTTP 401 con el mismo mensaje.",
+    "interpretacion": "No se reveló cuál credencial era incorrecta."
+  },
+  {
+    "id": "CP-E01-HU03-03",
+    "nombre": "Bloqueo de cuenta no verificada",
+    "estado": "PASS",
+    "resultadoObtenido": "La cuenta pendiente recibió HTTP 403 al iniciar sesión.",
+    "interpretacion": "Se aplica la restricción de verificación."
+  },
+  {
+    "id": "CP-E01-HU03-04",
+    "nombre": "Renovación de sesión con refresh token",
+    "estado": "PASS",
+    "resultadoObtenido": "El refresh token vigente fue aceptado y se entregó un nuevo par de tokens.",
+    "interpretacion": "La reapertura de Flutter queda como verificación manual."
+  },
+  {
+    "id": "CP-E01-HU04-01",
+    "nombre": "Consulta de información personal del perfil",
+    "estado": "FAIL",
+    "resultadoObtenido": "GET /usuarios/:id devolvió datos de cuenta, pero no nombres, apellidos, correo ni teléfono.",
+    "interpretacion": "No existe API de perfil con los datos CA016."
+  },
+  {
+    "id": "CP-E01-HU04-02",
+    "nombre": "Actualización de datos personales y contacto",
+    "estado": "FAIL",
+    "resultadoObtenido": "PATCH /usuarios/:id recibió los campos personales y respondió HTTP 400 porque no pertenecen al DTO.",
+    "interpretacion": "El endpoint no permite la actualización exigida."
+  },
+  {
+    "id": "CP-E01-HU04-03",
+    "nombre": "Validación de correo en el perfil",
+    "estado": "FAIL",
+    "resultadoObtenido": "correoElectronico fue rechazado como propiedad no permitida antes de evaluar el formato.",
+    "interpretacion": "La validación específica de formato CA018 no se ejecuta."
+  },
+  {
+    "id": "CP-E01-HU05-01",
+    "nombre": "Botón y confirmación de cerrar sesión",
+    "estado": "MANUAL",
+    "resultadoObtenido": "Pendiente de ejecutar visualmente en Flutter.",
+    "interpretacion": "Una prueba API no acredita botón ni diálogo visual."
+  },
+  {
+    "id": "CP-E01-HU05-02",
+    "nombre": "Revocación de sesión al cerrar sesión",
+    "estado": "FAIL",
+    "resultadoObtenido": "El refresh token fue revocado, pero el access token previo permitió GET /usuarios/:id con HTTP 200.",
+    "interpretacion": "El access token vigente no se invalida; CA024 falla."
+  },
+  {
+    "id": "CP-E01-HU05-03",
+    "nombre": "Expiración de sesión por inactividad",
+    "estado": "FAIL",
+    "resultadoObtenido": "No existe SESSION_INACTIVITY_TIMEOUT ni política backend de inactividad.",
+    "interpretacion": "No existe soporte verificable para CA025."
+  },
+  {
+    "id": "CP-E01-HU06-01",
+    "nombre": "Listado aislado por Wedding Planner",
+    "estado": "FAIL",
+    "resultadoObtenido": "Con sesión WP-A se crearon borradores de WP-A y WP-B; el resumen HTTP 200 devolvió ambos.",
+    "interpretacion": "El endpoint no filtra por Wedding Planner."
+  },
+  {
+    "id": "CP-E01-HU06-02",
+    "nombre": "Selección de matrimonio activo",
+    "estado": "MANUAL",
+    "resultadoObtenido": "Pendiente de ejecutar en Flutter.",
+    "interpretacion": "No existe endpoint backend para matrimonio activo."
+  },
+  {
+    "id": "CP-E01-HU06-03",
+    "nombre": "Aislamiento de información entre Wedding Planners",
+    "estado": "FAIL",
+    "resultadoObtenido": "La consulta autenticada como WP-A incluyó un proyecto creado por WP-B.",
+    "interpretacion": "Se confirmó filtración entre matrimonios."
+  },
+  {
+    "id": "CP-E01-HU06-04",
+    "nombre": "Cambio de matrimonio activo",
+    "estado": "MANUAL",
+    "resultadoObtenido": "Pendiente de ejecutar en Flutter.",
+    "interpretacion": "El cambio de contexto es una interacción frontend."
+  },
+  {
+    "id": "CP-E01-HU06-05",
+    "nombre": "Búsqueda y filtros de matrimonios",
+    "estado": "FAIL",
+    "resultadoObtenido": "Aun enviando búsqueda y fechas, la respuesta incluyó el borrador de WP-B.",
+    "interpretacion": "El resumen ignora parámetros y no implementa búsqueda/filtros."
+  }
+]

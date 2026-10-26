@@ -1,0 +1,22 @@
+{
+  "idEjecucion": "20261026210515",
+  "weddingPlanners": [
+    {
+      "nombreCompleto": "Daniela Ramírez Torres",
+      "correoBase": "daniela.ramirez.*@example.com",
+      "empresa": "Ramírez Eventos"
+    },
+    {
+      "nombreCompleto": "Alejandra Castro Montalvo",
+      "correoBase": "alejandra.castro.*@example.com",
+      "empresa": "Castro Eventos"
+    }
+  ],
+  "parejas": [
+    {
+      "pareja": "Mateo Salinas e Isabella Cárdenas",
+      "uso": "Borradores de HU06"
+    }
+  ],
+  "reglaIdentificadores": "El sufijo técnico de ejecución evita colisiones; la identidad visible se conserva legible."
+}

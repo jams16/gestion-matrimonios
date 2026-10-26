@@ -1,0 +1,173 @@
+[
+  {
+    "id": "CP-E01-HU01-01",
+    "nombre": "Registro exitoso de una nueva cuenta Wedding Planner",
+    "variantes": [],
+    "detalleTecnico": []
+  },
+  {
+    "id": "CP-E01-HU01-02",
+    "nombre": "Validación de campos obligatorios y correo",
+    "variantes": [
+      "nombres vacío",
+      "apellido vacío",
+      "correo vacío",
+      "correo inválido"
+    ],
+    "detalleTecnico": []
+  },
+  {
+    "id": "CP-E01-HU01-03",
+    "nombre": "Política y confirmación de contraseña",
+    "variantes": [],
+    "detalleTecnico": [
+      "La API no implementa un campo de confirmación de contraseña; el rechazo proviene de forbidNonWhitelisted y no de la regla CA002."
+    ]
+  },
+  {
+    "id": "CP-E01-HU01-04",
+    "nombre": "Rechazo de correo previamente registrado",
+    "variantes": [],
+    "detalleTecnico": []
+  },
+  {
+    "id": "CP-E01-HU02-01",
+    "nombre": "Generación de correo de verificación",
+    "variantes": [],
+    "detalleTecnico": [
+      "El mecanismo real es un código de seis dígitos; CA006 exige un enlace único en el correo."
+    ]
+  },
+  {
+    "id": "CP-E01-HU02-02",
+    "nombre": "Confirmación de correo vigente",
+    "variantes": [],
+    "detalleTecnico": []
+  },
+  {
+    "id": "CP-E01-HU02-03",
+    "nombre": "Rechazo de token inválido, usado o expirado",
+    "variantes": [],
+    "detalleTecnico": []
+  },
+  {
+    "id": "CP-E01-HU02-04",
+    "nombre": "Bloqueo de acceso sin correo verificado",
+    "variantes": [],
+    "detalleTecnico": []
+  },
+  {
+    "id": "CP-E01-HU02-05",
+    "nombre": "Control de reenvíos de verificación",
+    "variantes": [],
+    "detalleTecnico": [
+      "expect(received).toBeLessThanOrEqual(expected)\n\nExpected: <= 1\nReceived:    2"
+    ]
+  },
+  {
+    "id": "CP-E01-HU03-01",
+    "nombre": "Inicio de sesión válido",
+    "variantes": [],
+    "detalleTecnico": []
+  },
+  {
+    "id": "CP-E01-HU03-02",
+    "nombre": "Rechazo genérico de credenciales inválidas",
+    "variantes": [],
+    "detalleTecnico": []
+  },
+  {
+    "id": "CP-E01-HU03-03",
+    "nombre": "Bloqueo de cuenta no verificada",
+    "variantes": [],
+    "detalleTecnico": []
+  },
+  {
+    "id": "CP-E01-HU03-04",
+    "nombre": "Renovación de sesión con refresh token",
+    "variantes": [],
+    "detalleTecnico": []
+  },
+  {
+    "id": "CP-E01-HU04-01",
+    "nombre": "Consulta de información personal del perfil",
+    "variantes": [],
+    "detalleTecnico": [
+      "expect(received).toHaveProperty(path)\n\nExpected path: \"nombres\"\nReceived path: []\n\nReceived value: {\"correoVerificado\": true, \"esActivo\": true, \"fechaCreacion\": \"2026-10-26T21:05:23.462284Z\", \"fechaModificacion\": \"2026-10-26T21:05:23.612Z\", \"idEntidad\": 7, \"idPersonaNatural\": 19, \"idUsuario\": 19, \"tipoUsuario\": \"PROJECT_MANAGER\", \"ultimoAcceso\": \"2026-10-26T21:05:23.61Z\", \"usuario\": \"claudia.benites.1\"}"
+    ]
+  },
+  {
+    "id": "CP-E01-HU04-02",
+    "nombre": "Actualización de datos personales y contacto",
+    "variantes": [],
+    "detalleTecnico": [
+      "expect(received).toBe(expected) // Object.is equality\n\nExpected: 200\nReceived: 400"
+    ]
+  },
+  {
+    "id": "CP-E01-HU04-03",
+    "nombre": "Validación de correo en el perfil",
+    "variantes": [],
+    "detalleTecnico": [
+      "expect(received).toMatch(expected)\n\nExpected pattern: /email/i\nReceived string:  \"property correoElectronico should not exist\""
+    ]
+  },
+  {
+    "id": "CP-E01-HU05-01",
+    "nombre": "Botón y confirmación de cerrar sesión",
+    "variantes": [],
+    "detalleTecnico": []
+  },
+  {
+    "id": "CP-E01-HU05-02",
+    "nombre": "Revocación de sesión al cerrar sesión",
+    "variantes": [],
+    "detalleTecnico": [
+      "expect(received).toBe(expected) // Object.is equality\n\nExpected: 401\nReceived: 200"
+    ]
+  },
+  {
+    "id": "CP-E01-HU05-03",
+    "nombre": "Expiración de sesión por inactividad",
+    "variantes": [],
+    "detalleTecnico": [
+      "No existe una política SESSION_INACTIVITY_TIMEOUT configurada ni lógica backend de expiración por inactividad."
+    ]
+  },
+  {
+    "id": "CP-E01-HU06-01",
+    "nombre": "Listado aislado por Wedding Planner",
+    "variantes": [],
+    "detalleTecnico": [
+      "expect(received).not.toContain(expected) // indexOf\n\nExpected value: not \"14207977-02ec-4e24-ac45-d0a14c8a662b\"\nReceived array:     [\"f50027fd-49d2-451b-94bf-b2e1a623ecba\", \"14207977-02ec-4e24-ac45-d0a14c8a662b\"]"
+    ]
+  },
+  {
+    "id": "CP-E01-HU06-02",
+    "nombre": "Selección de matrimonio activo",
+    "variantes": [],
+    "detalleTecnico": []
+  },
+  {
+    "id": "CP-E01-HU06-03",
+    "nombre": "Aislamiento de información entre Wedding Planners",
+    "variantes": [],
+    "detalleTecnico": [
+      "expect(received).not.toContain(expected) // indexOf\n\nExpected value: not \"19495816-b0e0-428e-8815-9f55eee622f1\"\nReceived array:     [\"f50027fd-49d2-451b-94bf-b2e1a623ecba\", \"14207977-02ec-4e24-ac45-d0a14c8a662b\", \"62c8f06e-a536-47e4-8840-82455bfca7be\", \"19495816-b0e0-428e-8815-9f55eee622f1\"]"
+    ]
+  },
+  {
+    "id": "CP-E01-HU06-04",
+    "nombre": "Cambio de matrimonio activo",
+    "variantes": [],
+    "detalleTecnico": []
+  },
+  {
+    "id": "CP-E01-HU06-05",
+    "nombre": "Búsqueda y filtros de matrimonios",
+    "variantes": [],
+    "detalleTecnico": [
+      "expect(received).not.toContain(expected) // indexOf\n\nExpected value: not \"6dd8ec29-3bda-4942-bcf2-883e4db386b8\"\nReceived array:     [\"f50027fd-49d2-451b-94bf-b2e1a623ecba\", \"14207977-02ec-4e24-ac45-d0a14c8a662b\", \"62c8f06e-a536-47e4-8840-82455bfca7be\", \"19495816-b0e0-428e-8815-9f55eee622f1\", \"74064226-1c2a-48ab-80b1-f3668fbc9181\", \"6dd8ec29-3bda-4942-bcf2-883e4db386b8\"]"
+    ]
+  }
+]
