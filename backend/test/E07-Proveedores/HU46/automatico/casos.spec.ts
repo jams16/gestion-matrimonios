@@ -1,0 +1,1 @@
+import{R,e,g}from'../../soporte/contexto';describe('HU46',()=>{const r:R[]=[];afterAll(()=>g('HU46',r));it.each(['01','02','03'])('CP-E07-HU46-%s - Tiempo de respuesta',n=>e(r,`CP-E07-HU46-${n}`,'tiempo-respuesta'));});

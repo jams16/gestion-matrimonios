@@ -1,0 +1,1 @@
+import{R,e,g}from'../../soporte/contexto';describe('HU40',()=>{const r:R[]=[];afterAll(()=>g('HU40',r));it.each(['01','02','03'])('CP-E07-HU40-%s - Seguimiento de cumplimiento',n=>e(r,`CP-E07-HU40-${n}`,'checklist-proveedor'));});

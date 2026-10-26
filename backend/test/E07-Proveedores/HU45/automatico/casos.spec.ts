@@ -1,0 +1,1 @@
+import{R,e,g}from'../../soporte/contexto';describe('HU45',()=>{const r:R[]=[];afterAll(()=>g('HU45',r));it('CP-E07-HU45-01 - Asignacion y modificacion de prioridad',()=>e(r,'CP-E07-HU45-01','prioridad'));it.each(['02','03'])('CP-E07-HU45-%s - Recomendaciones de contratacion',n=>e(r,`CP-E07-HU45-${n}`,'recomendaciones'));});

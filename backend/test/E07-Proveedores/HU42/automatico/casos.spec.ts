@@ -1,0 +1,1 @@
+import{R,e,g}from'../../soporte/contexto';describe('HU42',()=>{const r:R[]=[];afterAll(()=>g('HU42',r));it.each(['01','02','03'])('CP-E07-HU42-%s - Evaluacion de proveedor',n=>e(r,`CP-E07-HU42-${n}`,'evaluaciones'));});

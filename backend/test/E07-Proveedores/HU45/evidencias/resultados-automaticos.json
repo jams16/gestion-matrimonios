@@ -1,0 +1,17 @@
+[
+  {
+    "id": "CP-E07-HU45-01",
+    "estado": "PASS",
+    "detalle": "La capacidad fue localizada en los endpoints, DTOs y servicio reales de Proveedores."
+  },
+  {
+    "id": "CP-E07-HU45-02",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: recomendaciones."
+  },
+  {
+    "id": "CP-E07-HU45-03",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: recomendaciones."
+  }
+]

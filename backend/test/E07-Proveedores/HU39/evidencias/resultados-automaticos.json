@@ -1,0 +1,17 @@
+[
+  {
+    "id": "CP-E07-HU39-01",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: limite-favoritos."
+  },
+  {
+    "id": "CP-E07-HU39-02",
+    "estado": "PASS",
+    "detalle": "La capacidad fue localizada en los endpoints, DTOs y servicio reales de Proveedores."
+  },
+  {
+    "id": "CP-E07-HU39-03",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: comparacion."
+  }
+]

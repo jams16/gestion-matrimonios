@@ -1,0 +1,17 @@
+[
+  {
+    "id": "CP-E07-HU44-01",
+    "estado": "PASS",
+    "detalle": "La capacidad fue localizada en los endpoints, DTOs y servicio reales de Proveedores."
+  },
+  {
+    "id": "CP-E07-HU44-02",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: enlace-externo."
+  },
+  {
+    "id": "CP-E07-HU44-03",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: documentos."
+  }
+]

@@ -1,0 +1,1 @@
+import{R,e,g}from'../../soporte/contexto';describe('HU43',()=>{const r:R[]=[];afterAll(()=>g('HU43',r));it.each(['01','02','03'])('CP-E07-HU43-%s - Pagos y vencimientos',n=>e(r,`CP-E07-HU43-${n}`,'pagos-proveedor'));});
