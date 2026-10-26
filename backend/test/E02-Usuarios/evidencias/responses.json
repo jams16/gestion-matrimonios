@@ -1,0 +1,62 @@
+[
+  {
+    "id": "CP-E02-HU08-01",
+    "nombre": "Incorporación de un miembro con rol operativo",
+    "estado": "FAIL",
+    "resultadoObtenido": "La auditoría del contrato Prisma y de los módulos actuales no encontró entidades, DTOs, controladores ni endpoint para miembros, roles operativos o permisos por proyecto."
+  },
+  {
+    "id": "CP-E02-HU08-02",
+    "nombre": "Invitación del nuevo miembro al proyecto",
+    "estado": "FAIL",
+    "resultadoObtenido": "La auditoría del contrato Prisma y de los módulos actuales no encontró entidades, DTOs, controladores ni endpoint para miembros, roles operativos o permisos por proyecto."
+  },
+  {
+    "id": "CP-E02-HU08-03",
+    "nombre": "Asignación de múltiples roles operativos",
+    "estado": "FAIL",
+    "resultadoObtenido": "La auditoría del contrato Prisma y de los módulos actuales no encontró entidades, DTOs, controladores ni endpoint para miembros, roles operativos o permisos por proyecto."
+  },
+  {
+    "id": "CP-E02-HU08-04",
+    "nombre": "Modificación de roles con conservación del historial",
+    "estado": "FAIL",
+    "resultadoObtenido": "La auditoría del contrato Prisma y de los módulos actuales no encontró entidades, DTOs, controladores ni endpoint para miembros, roles operativos o permisos por proyecto."
+  },
+  {
+    "id": "CP-E02-HU08-05",
+    "nombre": "Inhabilitación de un colaborador",
+    "estado": "FAIL",
+    "resultadoObtenido": "La auditoría del contrato Prisma y de los módulos actuales no encontró entidades, DTOs, controladores ni endpoint para miembros, roles operativos o permisos por proyecto."
+  },
+  {
+    "id": "CP-E02-HU09-01",
+    "nombre": "Acceso inicial según tipo de usuario",
+    "estado": "FAIL",
+    "resultadoObtenido": "La auditoría del contrato Prisma y de los módulos actuales no encontró entidades, DTOs, controladores ni endpoint para miembros, roles operativos o permisos por proyecto."
+  },
+  {
+    "id": "CP-E02-HU09-02",
+    "nombre": "Configuración de permisos de consulta y modificación",
+    "estado": "FAIL",
+    "resultadoObtenido": "La auditoría del contrato Prisma y de los módulos actuales no encontró entidades, DTOs, controladores ni endpoint para miembros, roles operativos o permisos por proyecto."
+  },
+  {
+    "id": "CP-E02-HU09-03",
+    "nombre": "Bloqueo de operaciones sin autorización",
+    "estado": "FAIL",
+    "resultadoObtenido": "La auditoría del contrato Prisma y de los módulos actuales no encontró entidades, DTOs, controladores ni endpoint para miembros, roles operativos o permisos por proyecto."
+  },
+  {
+    "id": "CP-E02-HU09-04",
+    "nombre": "Independencia de permisos entre matrimonios",
+    "estado": "FAIL",
+    "resultadoObtenido": "La auditoría del contrato Prisma y de los módulos actuales no encontró entidades, DTOs, controladores ni endpoint para miembros, roles operativos o permisos por proyecto."
+  },
+  {
+    "id": "CP-E02-HU09-05",
+    "nombre": "Visualización según permisos y asignaciones vigentes",
+    "estado": "FAIL",
+    "resultadoObtenido": "La auditoría del contrato Prisma y de los módulos actuales no encontró entidades, DTOs, controladores ni endpoint para miembros, roles operativos o permisos por proyecto."
+  }
+]

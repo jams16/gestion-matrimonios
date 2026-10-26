@@ -1,0 +1,156 @@
+[
+  {
+    "id": "CP-E02-HU08-01",
+    "hu": "HU08",
+    "ca": "CA036",
+    "tipo": "AUTOMATIZADO",
+    "nombre": "Incorporación de un miembro con rol operativo",
+    "endpoint": "No disponible; auditoría de contrato y módulos",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnicos": [
+      "La auditoría del contrato y módulos actuales no encontró entidades ni API para miembros, roles operativos o permisos por proyecto."
+    ],
+    "obtenido": "La auditoría del contrato Prisma y de los módulos actuales no encontró entidades, DTOs, controladores ni endpoint para miembros, roles operativos o permisos por proyecto.",
+    "interpretacion": "La funcionalidad requerida no está implementada en el modelo ni en los controladores actuales; el criterio no puede cumplirse."
+  },
+  {
+    "id": "CP-E02-HU08-02",
+    "hu": "HU08",
+    "ca": "CA037",
+    "tipo": "AUTOMATIZADO",
+    "nombre": "Invitación del nuevo miembro al proyecto",
+    "endpoint": "No disponible; auditoría de contrato y módulos",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnicos": [
+      "La auditoría del contrato y módulos actuales no encontró entidades ni API para miembros, roles operativos o permisos por proyecto."
+    ],
+    "obtenido": "La auditoría del contrato Prisma y de los módulos actuales no encontró entidades, DTOs, controladores ni endpoint para miembros, roles operativos o permisos por proyecto.",
+    "interpretacion": "La funcionalidad requerida no está implementada en el modelo ni en los controladores actuales; el criterio no puede cumplirse."
+  },
+  {
+    "id": "CP-E02-HU08-03",
+    "hu": "HU08",
+    "ca": "CA038",
+    "tipo": "AUTOMATIZADO",
+    "nombre": "Asignación de múltiples roles operativos",
+    "endpoint": "No disponible; auditoría de contrato y módulos",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnicos": [
+      "La auditoría del contrato y módulos actuales no encontró entidades ni API para miembros, roles operativos o permisos por proyecto."
+    ],
+    "obtenido": "La auditoría del contrato Prisma y de los módulos actuales no encontró entidades, DTOs, controladores ni endpoint para miembros, roles operativos o permisos por proyecto.",
+    "interpretacion": "La funcionalidad requerida no está implementada en el modelo ni en los controladores actuales; el criterio no puede cumplirse."
+  },
+  {
+    "id": "CP-E02-HU08-04",
+    "hu": "HU08",
+    "ca": "CA039",
+    "tipo": "AUTOMATIZADO",
+    "nombre": "Modificación de roles con conservación del historial",
+    "endpoint": "No disponible; auditoría de contrato y módulos",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnicos": [
+      "La auditoría del contrato y módulos actuales no encontró entidades ni API para miembros, roles operativos o permisos por proyecto."
+    ],
+    "obtenido": "La auditoría del contrato Prisma y de los módulos actuales no encontró entidades, DTOs, controladores ni endpoint para miembros, roles operativos o permisos por proyecto.",
+    "interpretacion": "La funcionalidad requerida no está implementada en el modelo ni en los controladores actuales; el criterio no puede cumplirse."
+  },
+  {
+    "id": "CP-E02-HU08-05",
+    "hu": "HU08",
+    "ca": "CA040",
+    "tipo": "AUTOMATIZADO",
+    "nombre": "Inhabilitación de un colaborador",
+    "endpoint": "No disponible; auditoría de contrato y módulos",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnicos": [
+      "La auditoría del contrato y módulos actuales no encontró entidades ni API para miembros, roles operativos o permisos por proyecto."
+    ],
+    "obtenido": "La auditoría del contrato Prisma y de los módulos actuales no encontró entidades, DTOs, controladores ni endpoint para miembros, roles operativos o permisos por proyecto.",
+    "interpretacion": "La funcionalidad requerida no está implementada en el modelo ni en los controladores actuales; el criterio no puede cumplirse."
+  },
+  {
+    "id": "CP-E02-HU09-01",
+    "hu": "HU09",
+    "ca": "CA041",
+    "tipo": "AUTOMATIZADO",
+    "nombre": "Acceso inicial según tipo de usuario",
+    "endpoint": "No disponible; auditoría de contrato y módulos",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnicos": [
+      "La auditoría del contrato y módulos actuales no encontró entidades ni API para miembros, roles operativos o permisos por proyecto."
+    ],
+    "obtenido": "La auditoría del contrato Prisma y de los módulos actuales no encontró entidades, DTOs, controladores ni endpoint para miembros, roles operativos o permisos por proyecto.",
+    "interpretacion": "La funcionalidad requerida no está implementada en el modelo ni en los controladores actuales; el criterio no puede cumplirse."
+  },
+  {
+    "id": "CP-E02-HU09-02",
+    "hu": "HU09",
+    "ca": "CA042",
+    "tipo": "AUTOMATIZADO",
+    "nombre": "Configuración de permisos de consulta y modificación",
+    "endpoint": "No disponible; auditoría de contrato y módulos",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnicos": [
+      "La auditoría del contrato y módulos actuales no encontró entidades ni API para miembros, roles operativos o permisos por proyecto."
+    ],
+    "obtenido": "La auditoría del contrato Prisma y de los módulos actuales no encontró entidades, DTOs, controladores ni endpoint para miembros, roles operativos o permisos por proyecto.",
+    "interpretacion": "La funcionalidad requerida no está implementada en el modelo ni en los controladores actuales; el criterio no puede cumplirse."
+  },
+  {
+    "id": "CP-E02-HU09-03",
+    "hu": "HU09",
+    "ca": "CA043",
+    "tipo": "AUTOMATIZADO",
+    "nombre": "Bloqueo de operaciones sin autorización",
+    "endpoint": "No disponible; auditoría de contrato y módulos",
+    "estado": "FAIL",
+    "variantes": [
+      "sin permiso de consulta",
+      "sin permiso de modificación"
+    ],
+    "tecnicos": [
+      "La auditoría del contrato y módulos actuales no encontró entidades ni API para miembros, roles operativos o permisos por proyecto.",
+      "La auditoría del contrato y módulos actuales no encontró entidades ni API para miembros, roles operativos o permisos por proyecto."
+    ],
+    "obtenido": "La auditoría del contrato Prisma y de los módulos actuales no encontró entidades, DTOs, controladores ni endpoint para miembros, roles operativos o permisos por proyecto.",
+    "interpretacion": "La funcionalidad requerida no está implementada en el modelo ni en los controladores actuales; el criterio no puede cumplirse."
+  },
+  {
+    "id": "CP-E02-HU09-04",
+    "hu": "HU09",
+    "ca": "CA044",
+    "tipo": "AUTOMATIZADO",
+    "nombre": "Independencia de permisos entre matrimonios",
+    "endpoint": "No disponible; auditoría de contrato y módulos",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnicos": [
+      "La auditoría del contrato y módulos actuales no encontró entidades ni API para miembros, roles operativos o permisos por proyecto."
+    ],
+    "obtenido": "La auditoría del contrato Prisma y de los módulos actuales no encontró entidades, DTOs, controladores ni endpoint para miembros, roles operativos o permisos por proyecto.",
+    "interpretacion": "La funcionalidad requerida no está implementada en el modelo ni en los controladores actuales; el criterio no puede cumplirse."
+  },
+  {
+    "id": "CP-E02-HU09-05",
+    "hu": "HU09",
+    "ca": "CA045",
+    "tipo": "MIXTO",
+    "nombre": "Visualización según permisos y asignaciones vigentes",
+    "endpoint": "No disponible; auditoría de contrato y módulos",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnicos": [
+      "La auditoría del contrato y módulos actuales no encontró entidades ni API para miembros, roles operativos o permisos por proyecto."
+    ],
+    "obtenido": "La auditoría del contrato Prisma y de los módulos actuales no encontró entidades, DTOs, controladores ni endpoint para miembros, roles operativos o permisos por proyecto.",
+    "interpretacion": "La funcionalidad requerida no está implementada en el modelo ni en los controladores actuales; el criterio no puede cumplirse."
+  }
+]

@@ -1,0 +1,27 @@
+[
+  {
+    "id": "CP-E02-HU08-01",
+    "estado": "FAIL",
+    "detalle": "La auditoría del contrato y módulos actuales no encontró entidades ni API para miembros, roles operativos o permisos por proyecto."
+  },
+  {
+    "id": "CP-E02-HU08-02",
+    "estado": "FAIL",
+    "detalle": "La auditoría del contrato y módulos actuales no encontró entidades ni API para miembros, roles operativos o permisos por proyecto."
+  },
+  {
+    "id": "CP-E02-HU08-03",
+    "estado": "FAIL",
+    "detalle": "La auditoría del contrato y módulos actuales no encontró entidades ni API para miembros, roles operativos o permisos por proyecto."
+  },
+  {
+    "id": "CP-E02-HU08-04",
+    "estado": "FAIL",
+    "detalle": "La auditoría del contrato y módulos actuales no encontró entidades ni API para miembros, roles operativos o permisos por proyecto."
+  },
+  {
+    "id": "CP-E02-HU08-05",
+    "estado": "FAIL",
+    "detalle": "La auditoría del contrato y módulos actuales no encontró entidades ni API para miembros, roles operativos o permisos por proyecto."
+  }
+]

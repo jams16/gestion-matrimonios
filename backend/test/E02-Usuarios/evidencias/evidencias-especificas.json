@@ -1,0 +1,86 @@
+[
+  {
+    "id": "CP-E02-HU08-01",
+    "nombre": "Incorporación de un miembro con rol operativo",
+    "variantes": [],
+    "detalleTecnico": [
+      "La auditoría del contrato y módulos actuales no encontró entidades ni API para miembros, roles operativos o permisos por proyecto."
+    ]
+  },
+  {
+    "id": "CP-E02-HU08-02",
+    "nombre": "Invitación del nuevo miembro al proyecto",
+    "variantes": [],
+    "detalleTecnico": [
+      "La auditoría del contrato y módulos actuales no encontró entidades ni API para miembros, roles operativos o permisos por proyecto."
+    ]
+  },
+  {
+    "id": "CP-E02-HU08-03",
+    "nombre": "Asignación de múltiples roles operativos",
+    "variantes": [],
+    "detalleTecnico": [
+      "La auditoría del contrato y módulos actuales no encontró entidades ni API para miembros, roles operativos o permisos por proyecto."
+    ]
+  },
+  {
+    "id": "CP-E02-HU08-04",
+    "nombre": "Modificación de roles con conservación del historial",
+    "variantes": [],
+    "detalleTecnico": [
+      "La auditoría del contrato y módulos actuales no encontró entidades ni API para miembros, roles operativos o permisos por proyecto."
+    ]
+  },
+  {
+    "id": "CP-E02-HU08-05",
+    "nombre": "Inhabilitación de un colaborador",
+    "variantes": [],
+    "detalleTecnico": [
+      "La auditoría del contrato y módulos actuales no encontró entidades ni API para miembros, roles operativos o permisos por proyecto."
+    ]
+  },
+  {
+    "id": "CP-E02-HU09-01",
+    "nombre": "Acceso inicial según tipo de usuario",
+    "variantes": [],
+    "detalleTecnico": [
+      "La auditoría del contrato y módulos actuales no encontró entidades ni API para miembros, roles operativos o permisos por proyecto."
+    ]
+  },
+  {
+    "id": "CP-E02-HU09-02",
+    "nombre": "Configuración de permisos de consulta y modificación",
+    "variantes": [],
+    "detalleTecnico": [
+      "La auditoría del contrato y módulos actuales no encontró entidades ni API para miembros, roles operativos o permisos por proyecto."
+    ]
+  },
+  {
+    "id": "CP-E02-HU09-03",
+    "nombre": "Bloqueo de operaciones sin autorización",
+    "variantes": [
+      "sin permiso de consulta",
+      "sin permiso de modificación"
+    ],
+    "detalleTecnico": [
+      "La auditoría del contrato y módulos actuales no encontró entidades ni API para miembros, roles operativos o permisos por proyecto.",
+      "La auditoría del contrato y módulos actuales no encontró entidades ni API para miembros, roles operativos o permisos por proyecto."
+    ]
+  },
+  {
+    "id": "CP-E02-HU09-04",
+    "nombre": "Independencia de permisos entre matrimonios",
+    "variantes": [],
+    "detalleTecnico": [
+      "La auditoría del contrato y módulos actuales no encontró entidades ni API para miembros, roles operativos o permisos por proyecto."
+    ]
+  },
+  {
+    "id": "CP-E02-HU09-05",
+    "nombre": "Visualización según permisos y asignaciones vigentes",
+    "variantes": [],
+    "detalleTecnico": [
+      "La auditoría del contrato y módulos actuales no encontró entidades ni API para miembros, roles operativos o permisos por proyecto."
+    ]
+  }
+]

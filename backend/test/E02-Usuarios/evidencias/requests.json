@@ -1,0 +1,65 @@
+[
+  {
+    "id": "CP-E02-HU08-01",
+    "nombre": "Incorporación de un miembro con rol operativo",
+    "endpoint": "No disponible; auditoría de contrato y módulos",
+    "variantes": []
+  },
+  {
+    "id": "CP-E02-HU08-02",
+    "nombre": "Invitación del nuevo miembro al proyecto",
+    "endpoint": "No disponible; auditoría de contrato y módulos",
+    "variantes": []
+  },
+  {
+    "id": "CP-E02-HU08-03",
+    "nombre": "Asignación de múltiples roles operativos",
+    "endpoint": "No disponible; auditoría de contrato y módulos",
+    "variantes": []
+  },
+  {
+    "id": "CP-E02-HU08-04",
+    "nombre": "Modificación de roles con conservación del historial",
+    "endpoint": "No disponible; auditoría de contrato y módulos",
+    "variantes": []
+  },
+  {
+    "id": "CP-E02-HU08-05",
+    "nombre": "Inhabilitación de un colaborador",
+    "endpoint": "No disponible; auditoría de contrato y módulos",
+    "variantes": []
+  },
+  {
+    "id": "CP-E02-HU09-01",
+    "nombre": "Acceso inicial según tipo de usuario",
+    "endpoint": "No disponible; auditoría de contrato y módulos",
+    "variantes": []
+  },
+  {
+    "id": "CP-E02-HU09-02",
+    "nombre": "Configuración de permisos de consulta y modificación",
+    "endpoint": "No disponible; auditoría de contrato y módulos",
+    "variantes": []
+  },
+  {
+    "id": "CP-E02-HU09-03",
+    "nombre": "Bloqueo de operaciones sin autorización",
+    "endpoint": "No disponible; auditoría de contrato y módulos",
+    "variantes": [
+      "sin permiso de consulta",
+      "sin permiso de modificación"
+    ]
+  },
+  {
+    "id": "CP-E02-HU09-04",
+    "nombre": "Independencia de permisos entre matrimonios",
+    "endpoint": "No disponible; auditoría de contrato y módulos",
+    "variantes": []
+  },
+  {
+    "id": "CP-E02-HU09-05",
+    "nombre": "Visualización según permisos y asignaciones vigentes",
+    "endpoint": "No disponible; auditoría de contrato y módulos",
+    "variantes": []
+  }
+]
