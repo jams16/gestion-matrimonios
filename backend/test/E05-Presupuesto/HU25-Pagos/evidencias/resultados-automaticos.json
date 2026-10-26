@@ -1,0 +1,60 @@
+[
+  {
+    "id": "CP-E05-HU25-01",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: pagos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+  },
+  {
+    "id": "CP-E05-HU25-02",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: pagos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes.",
+    "variante": "cero"
+  },
+  {
+    "id": "CP-E05-HU25-02",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: pagos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes.",
+    "variante": "negativo"
+  },
+  {
+    "id": "CP-E05-HU25-02",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: pagos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes.",
+    "variante": "mayor al saldo"
+  },
+  {
+    "id": "CP-E05-HU25-02",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: pagos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes.",
+    "variante": "igual al saldo"
+  },
+  {
+    "id": "CP-E05-HU25-02",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: pagos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes.",
+    "variante": "menor al saldo"
+  },
+  {
+    "id": "CP-E05-HU25-03",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: comprobante-pago. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+  },
+  {
+    "id": "CP-E05-HU25-04",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: compromisos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes.",
+    "variante": "pendiente no vencida"
+  },
+  {
+    "id": "CP-E05-HU25-04",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: compromisos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes.",
+    "variante": "pendiente vencida"
+  },
+  {
+    "id": "CP-E05-HU25-04",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: compromisos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes.",
+    "variante": "pagada"
+  }
+]

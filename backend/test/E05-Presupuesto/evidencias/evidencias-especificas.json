@@ -1,0 +1,180 @@
+[
+  {
+    "id": "CP-E05-HU24-01",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: costos-estimado-real. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+    ]
+  },
+  {
+    "id": "CP-E05-HU24-02",
+    "variantes": [
+      "negativo",
+      "no numerico",
+      "cero",
+      "positivo"
+    ],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: validacion-montos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes.",
+      "Funcionalidad no implementada: validacion-montos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes.",
+      "Funcionalidad no implementada: validacion-montos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes.",
+      "Funcionalidad no implementada: validacion-montos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+    ]
+  },
+  {
+    "id": "CP-E05-HU24-03",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: desviacion-presupuestaria. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+    ]
+  },
+  {
+    "id": "CP-E05-HU25-01",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: pagos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+    ]
+  },
+  {
+    "id": "CP-E05-HU25-02",
+    "variantes": [
+      "cero",
+      "negativo",
+      "mayor al saldo",
+      "igual al saldo",
+      "menor al saldo"
+    ],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: pagos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes.",
+      "Funcionalidad no implementada: pagos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes.",
+      "Funcionalidad no implementada: pagos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes.",
+      "Funcionalidad no implementada: pagos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes.",
+      "Funcionalidad no implementada: pagos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+    ]
+  },
+  {
+    "id": "CP-E05-HU25-03",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: comprobante-pago. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+    ]
+  },
+  {
+    "id": "CP-E05-HU25-04",
+    "variantes": [
+      "pendiente no vencida",
+      "pendiente vencida",
+      "pagada"
+    ],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: compromisos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes.",
+      "Funcionalidad no implementada: compromisos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes.",
+      "Funcionalidad no implementada: compromisos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+    ]
+  },
+  {
+    "id": "CP-E05-HU26-01",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: desglose-categoria. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+    ]
+  },
+  {
+    "id": "CP-E05-HU26-02",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: desglose-categoria. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+    ]
+  },
+  {
+    "id": "CP-E05-HU26-03",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: grafico-presupuesto. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+    ]
+  },
+  {
+    "id": "CP-E05-HU27-01",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: alertas-financieras. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+    ]
+  },
+  {
+    "id": "CP-E05-HU27-02",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: alertas-financieras. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+    ]
+  },
+  {
+    "id": "CP-E05-HU27-03",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: alertas-financieras. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+    ]
+  },
+  {
+    "id": "CP-E05-HU27-04",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: alertas-financieras. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+    ]
+  },
+  {
+    "id": "CP-E05-HU28-01",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: reporte-financiero. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+    ]
+  },
+  {
+    "id": "CP-E05-HU28-02",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: reporte-financiero. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+    ]
+  },
+  {
+    "id": "CP-E05-HU28-03",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: exportacion-financiera. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+    ]
+  },
+  {
+    "id": "CP-E05-HU28-04",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: reporte-financiero. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+    ]
+  },
+  {
+    "id": "CP-E05-HU29-01",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: sincronizacion-proveedor-presupuesto. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+    ]
+  },
+  {
+    "id": "CP-E05-HU29-02",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: sincronizacion-proveedor-presupuesto. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+    ]
+  },
+  {
+    "id": "CP-E05-HU29-03",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: sincronizacion-proveedor-presupuesto. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+    ]
+  },
+  {
+    "id": "CP-E05-HU29-04",
+    "variantes": [],
+    "detalleTecnico": [
+      "Funcionalidad no implementada: sincronizacion-proveedor-presupuesto. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+    ]
+  }
+]

@@ -1,0 +1,36 @@
+[
+  {
+    "id": "CP-E05-HU24-01",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: costos-estimado-real. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+  },
+  {
+    "id": "CP-E05-HU24-02",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: validacion-montos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes.",
+    "variante": "negativo"
+  },
+  {
+    "id": "CP-E05-HU24-02",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: validacion-montos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes.",
+    "variante": "no numerico"
+  },
+  {
+    "id": "CP-E05-HU24-02",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: validacion-montos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes.",
+    "variante": "cero"
+  },
+  {
+    "id": "CP-E05-HU24-02",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: validacion-montos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes.",
+    "variante": "positivo"
+  },
+  {
+    "id": "CP-E05-HU24-03",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: desviacion-presupuestaria. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+  }
+]

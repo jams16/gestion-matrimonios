@@ -1,0 +1,22 @@
+[
+  {
+    "id": "CP-E05-HU27-01",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: alertas-financieras. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+  },
+  {
+    "id": "CP-E05-HU27-02",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: alertas-financieras. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+  },
+  {
+    "id": "CP-E05-HU27-03",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: alertas-financieras. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+  },
+  {
+    "id": "CP-E05-HU27-04",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: alertas-financieras. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+  }
+]

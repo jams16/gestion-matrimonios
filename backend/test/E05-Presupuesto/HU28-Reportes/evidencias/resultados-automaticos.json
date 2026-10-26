@@ -1,0 +1,22 @@
+[
+  {
+    "id": "CP-E05-HU28-01",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: reporte-financiero. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+  },
+  {
+    "id": "CP-E05-HU28-02",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: reporte-financiero. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+  },
+  {
+    "id": "CP-E05-HU28-03",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: exportacion-financiera. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+  },
+  {
+    "id": "CP-E05-HU28-04",
+    "estado": "FAIL",
+    "detalle": "Funcionalidad no implementada: reporte-financiero. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+  }
+]

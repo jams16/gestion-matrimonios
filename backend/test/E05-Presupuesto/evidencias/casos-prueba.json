@@ -1,0 +1,334 @@
+[
+  {
+    "hu": "HU24",
+    "id": "CP-E05-HU24-01",
+    "ca": "CA115, CA116",
+    "nombre": "Registro de costos estimado y real con categoria financiera",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnico": [
+      "Funcionalidad no implementada: costos-estimado-real. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+    ],
+    "obtenido": "No existe un modulo financiero que cubra el criterio.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar tablas o endpoints."
+  },
+  {
+    "hu": "HU24",
+    "id": "CP-E05-HU24-02",
+    "ca": "CA117",
+    "nombre": "Validacion de montos de costo",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "variantes": [
+      "negativo",
+      "no numerico",
+      "cero",
+      "positivo"
+    ],
+    "tecnico": [
+      "Funcionalidad no implementada: validacion-montos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes.",
+      "Funcionalidad no implementada: validacion-montos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes.",
+      "Funcionalidad no implementada: validacion-montos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes.",
+      "Funcionalidad no implementada: validacion-montos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+    ],
+    "obtenido": "No existe un modulo financiero que cubra el criterio.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar tablas o endpoints."
+  },
+  {
+    "hu": "HU24",
+    "id": "CP-E05-HU24-03",
+    "ca": "CA118, CA119",
+    "nombre": "Actualizacion de costos y desviacion presupuestaria",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnico": [
+      "Funcionalidad no implementada: desviacion-presupuestaria. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+    ],
+    "obtenido": "No existe un modulo financiero que cubra el criterio.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar tablas o endpoints."
+  },
+  {
+    "hu": "HU25",
+    "id": "CP-E05-HU25-01",
+    "ca": "CA120, CA121",
+    "nombre": "Registro de pago y recalculo de saldo pendiente",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnico": [
+      "Funcionalidad no implementada: pagos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+    ],
+    "obtenido": "No existe un modulo financiero que cubra el criterio.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar tablas o endpoints."
+  },
+  {
+    "hu": "HU25",
+    "id": "CP-E05-HU25-02",
+    "ca": "CA122",
+    "nombre": "Validacion del monto de pago",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "variantes": [
+      "cero",
+      "negativo",
+      "mayor al saldo",
+      "igual al saldo",
+      "menor al saldo"
+    ],
+    "tecnico": [
+      "Funcionalidad no implementada: pagos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes.",
+      "Funcionalidad no implementada: pagos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes.",
+      "Funcionalidad no implementada: pagos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes.",
+      "Funcionalidad no implementada: pagos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes.",
+      "Funcionalidad no implementada: pagos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+    ],
+    "obtenido": "No existe un modulo financiero que cubra el criterio.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar tablas o endpoints."
+  },
+  {
+    "hu": "HU25",
+    "id": "CP-E05-HU25-03",
+    "ca": "CA123",
+    "nombre": "Comprobante asociado al pago",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnico": [
+      "Funcionalidad no implementada: comprobante-pago. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+    ],
+    "obtenido": "No existe un modulo financiero que cubra el criterio.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar tablas o endpoints."
+  },
+  {
+    "hu": "HU25",
+    "id": "CP-E05-HU25-04",
+    "ca": "CA124",
+    "nombre": "Seguimiento de compromisos pendientes y vencidos",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "variantes": [
+      "pendiente no vencida",
+      "pendiente vencida",
+      "pagada"
+    ],
+    "tecnico": [
+      "Funcionalidad no implementada: compromisos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes.",
+      "Funcionalidad no implementada: compromisos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes.",
+      "Funcionalidad no implementada: compromisos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+    ],
+    "obtenido": "No existe un modulo financiero que cubra el criterio.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar tablas o endpoints."
+  },
+  {
+    "hu": "HU26",
+    "id": "CP-E05-HU26-01",
+    "ca": "CA125, CA126",
+    "nombre": "Calculo del desglose porcentual por categoria",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnico": [
+      "Funcionalidad no implementada: desglose-categoria. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+    ],
+    "obtenido": "No existe un modulo financiero que cubra el criterio.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar tablas o endpoints."
+  },
+  {
+    "hu": "HU26",
+    "id": "CP-E05-HU26-02",
+    "ca": "CA127",
+    "nombre": "Actualizacion del desglose porcentual",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnico": [
+      "Funcionalidad no implementada: desglose-categoria. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+    ],
+    "obtenido": "No existe un modulo financiero que cubra el criterio.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar tablas o endpoints."
+  },
+  {
+    "hu": "HU26",
+    "id": "CP-E05-HU26-03",
+    "ca": "CA128",
+    "nombre": "Representacion visual del desglose presupuestario",
+    "tipo": "MANUAL",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnico": [
+      "Funcionalidad no implementada: grafico-presupuesto. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+    ],
+    "obtenido": "No existe un modulo financiero que cubra el criterio.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar tablas o endpoints."
+  },
+  {
+    "hu": "HU27",
+    "id": "CP-E05-HU27-01",
+    "ca": "CA129, CA130",
+    "nombre": "Alerta de sobrepresupuesto por categoria",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnico": [
+      "Funcionalidad no implementada: alertas-financieras. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+    ],
+    "obtenido": "No existe un modulo financiero que cubra el criterio.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar tablas o endpoints."
+  },
+  {
+    "hu": "HU27",
+    "id": "CP-E05-HU27-02",
+    "ca": "CA131",
+    "nombre": "Alerta de desbalance global",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnico": [
+      "Funcionalidad no implementada: alertas-financieras. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+    ],
+    "obtenido": "No existe un modulo financiero que cubra el criterio.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar tablas o endpoints."
+  },
+  {
+    "hu": "HU27",
+    "id": "CP-E05-HU27-03",
+    "ca": "CA132",
+    "nombre": "Actualizacion de alertas financieras",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnico": [
+      "Funcionalidad no implementada: alertas-financieras. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+    ],
+    "obtenido": "No existe un modulo financiero que cubra el criterio.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar tablas o endpoints."
+  },
+  {
+    "hu": "HU27",
+    "id": "CP-E05-HU27-04",
+    "ca": "CA133",
+    "nombre": "Acceso desde alerta al detalle financiero",
+    "tipo": "MIXTO",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnico": [
+      "Funcionalidad no implementada: alertas-financieras. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+    ],
+    "obtenido": "No existe un modulo financiero que cubra el criterio.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar tablas o endpoints."
+  },
+  {
+    "hu": "HU28",
+    "id": "CP-E05-HU28-01",
+    "ca": "CA134, CA137",
+    "nombre": "Generacion de reporte financiero consolidado",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnico": [
+      "Funcionalidad no implementada: reporte-financiero. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+    ],
+    "obtenido": "No existe un modulo financiero que cubra el criterio.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar tablas o endpoints."
+  },
+  {
+    "hu": "HU28",
+    "id": "CP-E05-HU28-02",
+    "ca": "CA135",
+    "nombre": "Filtrado del reporte financiero",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnico": [
+      "Funcionalidad no implementada: reporte-financiero. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+    ],
+    "obtenido": "No existe un modulo financiero que cubra el criterio.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar tablas o endpoints."
+  },
+  {
+    "hu": "HU28",
+    "id": "CP-E05-HU28-03",
+    "ca": "CA136",
+    "nombre": "Exportacion consistente en PDF y CSV",
+    "tipo": "MIXTO",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnico": [
+      "Funcionalidad no implementada: exportacion-financiera. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+    ],
+    "obtenido": "No existe un modulo financiero que cubra el criterio.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar tablas o endpoints."
+  },
+  {
+    "hu": "HU28",
+    "id": "CP-E05-HU28-04",
+    "ca": "CA138",
+    "nombre": "Reporte sin datos coincidentes",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnico": [
+      "Funcionalidad no implementada: reporte-financiero. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+    ],
+    "obtenido": "No existe un modulo financiero que cubra el criterio.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar tablas o endpoints."
+  },
+  {
+    "hu": "HU29",
+    "id": "CP-E05-HU29-01",
+    "ca": "CA139, CA140",
+    "nombre": "Incorporacion automatica de contratacion al presupuesto",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnico": [
+      "Funcionalidad no implementada: sincronizacion-proveedor-presupuesto. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+    ],
+    "obtenido": "No existe un modulo financiero que cubra el criterio.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar tablas o endpoints."
+  },
+  {
+    "hu": "HU29",
+    "id": "CP-E05-HU29-02",
+    "ca": "CA141",
+    "nombre": "Vinculacion contratacion-gasto sin duplicidad",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnico": [
+      "Funcionalidad no implementada: sincronizacion-proveedor-presupuesto. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+    ],
+    "obtenido": "No existe un modulo financiero que cubra el criterio.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar tablas o endpoints."
+  },
+  {
+    "hu": "HU29",
+    "id": "CP-E05-HU29-03",
+    "ca": "CA142",
+    "nombre": "Sincronizacion al modificar monto contratado",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnico": [
+      "Funcionalidad no implementada: sincronizacion-proveedor-presupuesto. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+    ],
+    "obtenido": "No existe un modulo financiero que cubra el criterio.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar tablas o endpoints."
+  },
+  {
+    "hu": "HU29",
+    "id": "CP-E05-HU29-04",
+    "ca": "CA143",
+    "nombre": "Recalculo financiero posterior a contratacion",
+    "tipo": "AUTOMATIZADO",
+    "estado": "FAIL",
+    "variantes": [],
+    "tecnico": [
+      "Funcionalidad no implementada: sincronizacion-proveedor-presupuesto. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
+    ],
+    "obtenido": "No existe un modulo financiero que cubra el criterio.",
+    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar tablas o endpoints."
+  }
+]
