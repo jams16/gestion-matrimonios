@@ -56,6 +56,7 @@ import { JwtAccessGuard } from './presentation/guards/jwt-access.guard';
   exports: [
     JwtModule,
     AutenticacionRepository,
+    CorreoCuentaPort,
     GestionarUsuariosUseCase,
     JwtAccessGuard,
   ],

@@ -14,4 +14,9 @@ export abstract class CorreoCuentaPort {
     nombre: string,
     token: string,
   ): Promise<void>;
+  abstract enviarInvitacion(
+    destinatario: string,
+    nombre: string,
+    enlace: string,
+  ): Promise<void>;
 }

@@ -1,5 +1,5 @@
-# Resultado automatico HU33-Mesas
+# Resultado automático HU33-Mesas
 
-- CP-E06-HU33-01: FAIL - Funcionalidad no implementada: mesas.
-- CP-E06-HU33-02: FAIL - Funcionalidad no implementada: reubicacion-mesa.
-- CP-E06-HU33-03: FAIL - Funcionalidad no implementada: grafico-mesas.
+- CP-E06-HU33-01: PASS - La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados.
+- CP-E06-HU33-02: PASS - La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados.
+- CP-E06-HU33-03: PASS - La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados.

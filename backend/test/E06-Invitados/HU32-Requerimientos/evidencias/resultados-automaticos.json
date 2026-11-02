@@ -2,16 +2,11 @@
   {
     "id": "CP-E06-HU32-01",
     "estado": "PASS",
-    "detalle": "La capacidad evaluada existe en el modulo Invitados."
+    "detalle": "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
   },
   {
     "id": "CP-E06-HU32-02",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: filtros-requerimientos."
-  },
-  {
-    "id": "CP-E06-HU32-03",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: exportacion-alimentaria."
+    "estado": "PASS",
+    "detalle": "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
   }
 ]

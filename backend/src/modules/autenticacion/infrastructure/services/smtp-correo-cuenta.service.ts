@@ -70,6 +70,19 @@ export class SmtpCorreoCuentaService implements CorreoCuentaPort, OnModuleInit {
       `Código de registro enviado. messageId=${info.messageId}; respuesta SMTP=${info.response}`,
     );
   }
+  async enviarInvitacion(destinatario: string, nombre: string, enlace: string) {
+    this.logger.log(`Intentando enviar invitación digital a: ${destinatario}`);
+    const frontend = this.config.get<string>('FRONTEND_URL');
+    if (!frontend) throw new ServiceUnavailableException('El correo de invitaciones no está configurado.');
+    const url = enlace.startsWith('http') ? enlace : `${frontend.replace(/\/$/, '')}${enlace}`;
+    const info = await this._transporter().sendMail({
+      from: this.config.get<string>('SMTP_FROM') ?? this.config.get<string>('SMTP_USER'),
+      to: destinatario,
+      subject: 'Tu invitación de boda',
+      html: `<p>Hola ${nombre},</p><p>Te han invitado a una boda. Consulta tu invitación y confirma tu asistencia:</p><p><a href="${url}" style="display:inline-block;padding:12px 18px;background:#6750a4;color:#fff;text-decoration:none;border-radius:6px">Ver invitación</a></p>`,
+    });
+    this.logger.log(`Invitación digital enviada. messageId=${info.messageId}; respuesta SMTP=${info.response}`);
+  }
   private async enviar(
     destinatario: string,
     nombre: string,

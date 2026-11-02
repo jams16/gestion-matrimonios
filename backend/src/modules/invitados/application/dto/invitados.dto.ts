@@ -4,6 +4,7 @@ import { IsBoolean, IsEmail, IsEnum, IsInt, IsOptional, IsString, IsUUID, MaxLen
 
 export enum LadoRelacionDto { NOVIA='NOVIA', NOVIO='NOVIO', AMBOS='AMBOS', OTRO='OTRO' }
 export enum EstadoRsvpDto { PENDIENTE='PENDIENTE', CONFIRMADO='CONFIRMADO', NO_ASISTE='NO_ASISTE' }
+export enum OrdenInvitadosDto { APELLIDOS_ASC='APELLIDOS_ASC', NOMBRES_ASC='NOMBRES_ASC', RSVP_ASC='RSVP_ASC' }
 const bool = ({ value }: { value: unknown }) => value === 'true' ? true : value === 'false' ? false : value;
 
 export class PersonaInvitadoDto {
@@ -28,11 +29,15 @@ export class ListarInvitadosDto {
   @IsOptional() @IsEnum(LadoRelacionDto) ladoRelacion?: LadoRelacionDto;
   @IsOptional() @IsEnum(EstadoRsvpDto) estadoRsvp?: EstadoRsvpDto;
   @IsOptional() @IsUUID() idMesa?: string;
+  @IsOptional() @Type(() => Number) @IsInt() @Min(1) idRequerimientoAlimentario?: number;
   @IsOptional() @Transform(bool) @IsBoolean() conRequerimiento?: boolean;
   @IsOptional() @Transform(bool) @IsBoolean() esTitular?: boolean;
   @IsOptional() @Transform(bool) @IsBoolean() activo?: boolean;
   @IsOptional() @IsString() orden?: string;
 }
+export class ReasignarMesaDto { @IsUUID() idMesaDestino!: string; }
+export class PreferenciaOrdenDto { @IsEnum(OrdenInvitadosDto) orden!: OrdenInvitadosDto; }
+export class InteraccionInvitacionDto { @IsOptional() @IsString() @MaxLength(500) detalle?: string; }
 export class ActualizarRsvpDto {
   @IsOptional() @IsEnum(EstadoRsvpDto) estadoRsvp?: EstadoRsvpDto;
   @IsOptional() @Type(() => Number) @IsInt() @Min(0) cantidadAsistentesConfirmados?: number;

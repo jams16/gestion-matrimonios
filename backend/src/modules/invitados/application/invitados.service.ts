@@ -1,11 +1,14 @@
-import { BadRequestException, ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, ForbiddenException, Inject, Injectable, NotFoundException, Optional } from '@nestjs/common';
 import { Temporal } from 'temporal-polyfill';
 import { PrismaService } from '../../../infrastructure/database/prisma/prisma.service';
+import { CorreoCuentaPort } from '../../autenticacion/application/ports/correo-cuenta.port';
 import { ActualizarInvitadoDto, ActualizarMesaDto, ActualizarRsvpDto, CrearInvitadoDto, CrearMesaDto, ListarInvitadosDto, RequerimientoDto } from './dto/invitados.dto';
 
 @Injectable()
 export class InvitadosService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService, @Optional() @Inject(CorreoCuentaPort) private readonly correo?: CorreoCuentaPort) {}
+  /** Preferencia por usuario/matrimonio. El cliente también recibe el orden en cada respuesta. */
+  private readonly preferenciasOrden = new Map<string, string>();
   private get db(): any { return this.prisma.client.orm.public; }
   private ahora() { return Temporal.Instant.from(new Date().toISOString()); }
 
@@ -14,7 +17,9 @@ export class InvitadosService {
     if (!matrimonio) throw new NotFoundException('Matrimonio no encontrado.');
     const proyecto = await db.Proyecto.first({ idProyecto: matrimonio.idProyecto as never });
     if (!proyecto) throw new NotFoundException('Proyecto del matrimonio no encontrado.');
-    if (proyecto.idPm !== idUsuario) throw new ForbiddenException('No tienes permiso para administrar los invitados de este matrimonio.');
+    // El PM y las dos personas vinculadas al matrimonio son los únicos usuarios
+    // actualmente relacionados al proyecto; no se concede acceso por conocer un ID.
+    if (proyecto.idPm !== idUsuario && matrimonio.idNovio1 !== idUsuario && matrimonio.idNovio2 !== idUsuario) throw new ForbiddenException('No tienes permiso para administrar los invitados de este matrimonio.');
     return matrimonio;
   }
   private async invitado(m: string, i: string, db = this.db) {
@@ -49,8 +54,15 @@ export class InvitadosService {
     await this.acceso(m, u); const r = await this.relaciones();
     return (await this.db.Invitado.all()).filter((x: any) => x.idMatrimonio === m).map((x: any) => this.detalle(x, r)).filter((x: any) => {
       const nombre = `${x.personaNatural?.nombres ?? ''} ${x.personaNatural?.apellidoPaterno ?? ''} ${x.personaNatural?.apellidoMaterno ?? ''}`.toLowerCase();
-      return (f.activo === undefined || x.activo === f.activo) && (!f.buscar || nombre.includes(f.buscar.toLowerCase())) && (!f.idCategoriaRelacion || x.idCategoriaRelacion === f.idCategoriaRelacion) && (!f.ladoRelacion || x.ladoRelacion === f.ladoRelacion) && (!f.estadoRsvp || x.rsvp?.estadoRsvp === f.estadoRsvp) && (!f.idMesa || x.mesa?.idMesa === f.idMesa) && (f.esTitular === undefined || x.esTitular === f.esTitular) && (f.conRequerimiento === undefined || Boolean(x.requerimientosAlimentarios.length) === f.conRequerimiento);
-    }).sort((a: any, b: any) => `${a.personaNatural?.apellidoPaterno ?? ''} ${a.personaNatural?.apellidoMaterno ?? ''} ${a.personaNatural?.nombres ?? ''}`.localeCompare(`${b.personaNatural?.apellidoPaterno ?? ''} ${b.personaNatural?.apellidoMaterno ?? ''} ${b.personaNatural?.nombres ?? ''}`, 'es'));
+      return (f.activo === undefined || x.activo === f.activo) && (!f.buscar || nombre.includes(f.buscar.toLowerCase())) && (!f.idCategoriaRelacion || x.idCategoriaRelacion === f.idCategoriaRelacion) && (!f.ladoRelacion || x.ladoRelacion === f.ladoRelacion) && (!f.estadoRsvp || x.rsvp?.estadoRsvp === f.estadoRsvp) && (!f.idMesa || x.mesa?.idMesa === f.idMesa) && (f.esTitular === undefined || x.esTitular === f.esTitular) && (f.conRequerimiento === undefined || Boolean(x.requerimientosAlimentarios.length) === f.conRequerimiento) && (!(f as any).idRequerimientoAlimentario || x.requerimientosAlimentarios.some((v: any) => v.idRequerimientoAlimentario === Number((f as any).idRequerimientoAlimentario)));
+    }).sort((a: any, b: any) => {
+      const orden = f.orden ?? this.preferenciasOrden.get(`${u}:${m}`) ?? 'APELLIDOS_ASC';
+      if (orden === 'RSVP_ASC') return String(a.rsvp?.estadoRsvp ?? 'PENDIENTE').localeCompare(String(b.rsvp?.estadoRsvp ?? 'PENDIENTE'));
+      const texto = (x: any) => orden === 'NOMBRES_ASC'
+        ? `${x.personaNatural?.nombres ?? ''} ${x.personaNatural?.apellidoPaterno ?? ''}`
+        : `${x.personaNatural?.apellidoPaterno ?? ''} ${x.personaNatural?.apellidoMaterno ?? ''} ${x.personaNatural?.nombres ?? ''}`;
+      return texto(a).localeCompare(texto(b), 'es');
+    });
   }
   async obtener(m: string, i: string, u: number) { await this.acceso(m, u); return this.detalle(await this.invitado(m, i), await this.relaciones()); }
 
@@ -102,6 +114,52 @@ export class InvitadosService {
   async invitadosMesa(m: string, mesaId: string, u: number) { await this.acceso(m, u); await this.mesa(m, mesaId); const r = await this.relaciones(); const invs = await this.db.Invitado.all(); return (await this.db.MesaInvitado.all()).filter((x: any) => x.idMesa === mesaId && x.activo).map((x: any) => ({ ...x, invitado: this.detalle(invs.find((v: any) => v.idInvitado === x.idInvitado), r) })); }
   async asignar(m: string, mesaId: string, invId: string, u: number) { return this.prisma.client.transaction(async (tx: any) => { const db = tx.orm.public; await this.acceso(m, u, db); const mesa = await this.mesa(m, mesaId, db); const inv = await this.invitado(m, invId, db); if (!mesa.activo || !inv.activo) throw new BadRequestException('La mesa y el invitado deben estar activos.'); const todas = await db.MesaInvitado.all(); if (todas.some((x: any) => x.idInvitado === invId && x.activo)) throw new ConflictException('El invitado ya tiene una mesa activa.'); if (todas.filter((x: any) => x.idMesa === mesaId && x.activo).length >= mesa.capacidad) throw new BadRequestException('La mesa alcanzó su capacidad.'); const previa = todas.find((x: any) => x.idMesa === mesaId && x.idInvitado === invId); return previa ? db.MesaInvitado.where({ idMesaInvitado: previa.idMesaInvitado as never }).update({ activo: true } as never) : db.MesaInvitado.create({ idMesa: mesaId, idInvitado: invId, activo: true } as never); }); }
   async retirarAsignacion(m: string, mesaId: string, invId: string, u: number) { await this.acceso(m, u); await this.mesa(m, mesaId); await this.invitado(m, invId); const x = (await this.db.MesaInvitado.all()).find((a: any) => a.idMesa === mesaId && a.idInvitado === invId && a.activo); if (!x) throw new NotFoundException('Asignación de mesa no encontrada.'); return this.db.MesaInvitado.where({ idMesaInvitado: x.idMesaInvitado as never }).update({ activo: false } as never); }
+  async reasignar(m: string, invitadoId: string, mesaDestinoId: string, u: number) {
+    return this.prisma.client.transaction(async (tx: any) => {
+      const db = tx.orm.public; await this.acceso(m, u, db); await this.invitado(m, invitadoId, db); const destino = await this.mesa(m, mesaDestinoId, db);
+      const asignaciones = await db.MesaInvitado.all();
+      if (asignaciones.filter((x: any) => x.idMesa === mesaDestinoId && x.activo).length >= destino.capacidad) throw new BadRequestException('La mesa destino alcanzó su capacidad.');
+      for (const actual of asignaciones.filter((x: any) => x.idInvitado === invitadoId && x.activo)) await db.MesaInvitado.where({ idMesaInvitado: actual.idMesaInvitado as never }).update({ activo: false } as never);
+      const previa = asignaciones.find((x: any) => x.idMesa === mesaDestinoId && x.idInvitado === invitadoId);
+      return previa ? db.MesaInvitado.where({ idMesaInvitado: previa.idMesaInvitado as never }).update({ activo: true } as never) : db.MesaInvitado.create({ idMesa: mesaDestinoId, idInvitado: invitadoId, activo: true } as never);
+    });
+  }
+  async representacionMesas(m: string, u: number) {
+    const mesas = await this.mesas(m, u); const asignaciones = await this.db.MesaInvitado.all(); const r = await this.relaciones(); const invitados = await this.db.Invitado.all();
+    return mesas.map((mesa: any) => { const filas = asignaciones.filter((a: any) => a.idMesa === mesa.idMesa && a.activo); return { ...mesa, ocupados: filas.length, disponibles: Math.max(0, mesa.capacidad - filas.length), invitados: filas.map((a: any) => this.detalle(invitados.find((x: any) => x.idInvitado === a.idInvitado), r)) }; });
+  }
+  async resumen(m: string, u: number) {
+    const invitados = await this.listar(m, { activo: true }, u); const activos = invitados.filter((x: any) => x.activo); const porEstado = (estado: string) => activos.filter((x: any) => x.rsvp?.estadoRsvp === estado);
+    const confirmados = porEstado('CONFIRMADO'); const pendientes = porEstado('PENDIENTE'); const noAsisten = porEstado('NO_ASISTE');
+    return { total_invitados: activos.length, total_pases: activos.reduce((n: number, x: any) => n + x.cantidadPases, 0), confirmados: confirmados.length, pendientes: pendientes.length, no_asisten: noAsisten.length, asistentes_confirmados: confirmados.reduce((n: number, x: any) => n + (x.rsvp?.cantidadAsistentesConfirmados ?? x.cantidadPases), 0), porcentaje_confirmacion: activos.length ? Number(((confirmados.length * 100) / activos.length).toFixed(2)) : 0 };
+  }
+  async resumenRequerimientos(m: string, u: number) {
+    const invitados = await this.listar(m, { activo: true }, u); const resumen = new Map<string, any>();
+    for (const invitado of invitados as any[]) for (const rel of invitado.requerimientosAlimentarios) { const clave = String(rel.idRequerimientoAlimentario); const actual = resumen.get(clave) ?? { idRequerimientoAlimentario: rel.idRequerimientoAlimentario, nombre: rel.requerimiento?.nombre ?? 'Sin nombre', cantidad: 0, invitados: [] }; actual.cantidad++; actual.invitados.push(invitado.idInvitado); resumen.set(clave, actual); }
+    return [...resumen.values()];
+  }
+  async seguimientoRsvp(m: string, u: number) {
+    const matrimonio: any = await this.acceso(m, u); const pendientes = (await this.listar(m, { activo: true, estadoRsvp: 'PENDIENTE' as never }, u)) as any[];
+    const fechaBoda = matrimonio.fechaMatrimonio ? new Date(String(matrimonio.fechaMatrimonio)) : null;
+    const fechaSeguimiento = fechaBoda ? new Date(fechaBoda.getTime() - 30 * 86400000).toISOString() : null;
+    return pendientes.map((invitado) => ({ invitado, fecha_seguimiento: fechaSeguimiento, requiere_recordatorio: true }));
+  }
+  async guardarPreferenciaOrden(m: string, orden: string, u: number) { await this.acceso(m, u); this.preferenciasOrden.set(`${u}:${m}`, orden); return { orden }; }
+  async enviarRecordatoriosRsvp(m: string, u: number) {
+    const matrimonio: any = await this.acceso(m, u); const pendientes = await this.seguimientoRsvp(m, u); const db: any = this.db; const enviados: string[] = [];
+    for (const item of pendientes as any[]) {
+      const invitado = item.invitado; const correo = invitado.personaNatural?.correoElectronico;
+      if (!correo) continue;
+      const rsvp = invitado.rsvp;
+      if (rsvp) await db.RsvpHistorial.create({ idRsvp: rsvp.idRsvp, estadoNuevo: 'PENDIENTE', canal: 'SISTEMA', idUsuario: u, observacion: 'Recordatorio RSVP generado.' } as never);
+      enviados.push(invitado.idInvitado);
+    }
+    if (enviados.length && db.Notificacion?.create && matrimonio.idProyecto) await db.Notificacion.create({ idUsuarioDestino: u, idProyecto: matrimonio.idProyecto, tipo: 'INVITADOS', titulo: 'Recordatorios RSVP generados', mensaje: `Se generaron ${enviados.length} recordatorios RSVP pendientes.`, leida: false, enviadaPush: false, activo: true } as never);
+    return { recordatorios_generados: enviados.length, invitados: enviados };
+  }
+  async generarInvitacionDigital(m: string, i: string, u: number) { await this.acceso(m, u); const invitado: any = await this.obtener(m, i, u); if (!invitado.personaNatural?.correoElectronico) throw new BadRequestException('El invitado debe tener correo electrónico para recibir una invitación digital.'); const token = Buffer.from(`${i}.${Date.now()}`).toString('base64url'); const enlace = `/invitaciones/${token}`; if (!this.correo) throw new BadRequestException('El servicio de correo para invitaciones no está disponible.'); await this.correo.enviarInvitacion(invitado.personaNatural.correoElectronico, invitado.personaNatural.nombres ?? 'invitado', enlace); if (invitado.rsvp) await this.db.RsvpHistorial.create({ idRsvp: invitado.rsvp.idRsvp, estadoNuevo: invitado.rsvp.estadoRsvp, canal: 'SISTEMA', idUsuario: u, observacion: 'Invitación digital enviada.' } as never); return { idInvitado: i, destinatario: invitado.personaNatural.correoElectronico, enlace, token, enviado: true }; }
+  async registrarInteraccionInvitacion(m: string, i: string, detalle: string | undefined, u: number) { const matrimonio: any = await this.acceso(m, u); const invitado: any = await this.obtener(m, i, u); if (!invitado.rsvp) throw new NotFoundException('RSVP no encontrado.'); await this.db.RsvpHistorial.create({ idRsvp: invitado.rsvp.idRsvp, estadoNuevo: invitado.rsvp.estadoRsvp, canal: 'DIGITAL', idUsuario: null, observacion: detalle ?? 'Interacción con invitación digital.' } as never); if (this.db.Notificacion?.create) await this.db.Notificacion.create({ idUsuarioDestino: u, idProyecto: matrimonio.idProyecto, tipo: 'INVITADOS', titulo: 'Interacción con invitación', mensaje: `${invitado.personaNatural?.nombres ?? 'Un invitado'} interactuó con su invitación digital.`, leida: false, enviadaPush: false, activo: true } as never); return { registrado: true, estado_rsvp: invitado.rsvp.estadoRsvp };
+  }
   async categorias() { return (await this.db.CategoriaRelacion.all()).filter((x: any) => x.activo).sort((a: any, b: any) => a.orden - b.orden); }
   async catalogoRequerimientos() { return (await this.db.RequerimientoAlimentario.all()).filter((x: any) => x.activo).sort((a: any, b: any) => a.nombre.localeCompare(b.nombre, 'es')); }
 }

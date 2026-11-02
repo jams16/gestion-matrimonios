@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req, UseGuard
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtAccessGuard } from '../../autenticacion/presentation/guards/jwt-access.guard';
 import { InvitadosService } from '../application/invitados.service';
-import { ActualizarInvitadoDto, ActualizarMesaDto, ActualizarRsvpDto, CrearInvitadoDto, CrearMesaDto, ListarInvitadosDto, RequerimientoDto } from '../application/dto/invitados.dto';
+import { ActualizarInvitadoDto, ActualizarMesaDto, ActualizarRsvpDto, CrearInvitadoDto, CrearMesaDto, InteraccionInvitacionDto, ListarInvitadosDto, PreferenciaOrdenDto, ReasignarMesaDto, RequerimientoDto } from '../application/dto/invitados.dto';
 
 @ApiTags('Invitados')
 @ApiBearerAuth()
@@ -16,6 +16,11 @@ export class InvitadosController {
   @Get('invitados/catalogos/requerimientos-alimentarios') @ApiOperation({ summary: 'Listar requerimientos alimentarios activos' }) catalogo() { return this.service.catalogoRequerimientos(); }
 
   @Get('matrimonios/:idMatrimonio/invitados') listar(@Param('idMatrimonio') m: string, @Query() q: ListarInvitadosDto, @Req() r: any) { return this.service.listar(m, q, this.usuario(r)); }
+  @Get('matrimonios/:idMatrimonio/invitados/resumen') resumen(@Param('idMatrimonio') m: string, @Req() r: any) { return this.service.resumen(m, this.usuario(r)); }
+  @Get('matrimonios/:idMatrimonio/invitados/requerimientos-alimentarios/resumen') resumenRequerimientos(@Param('idMatrimonio') m: string, @Req() r: any) { return this.service.resumenRequerimientos(m, this.usuario(r)); }
+  @Get('matrimonios/:idMatrimonio/invitados/rsvp/seguimiento') seguimientoRsvp(@Param('idMatrimonio') m: string, @Req() r: any) { return this.service.seguimientoRsvp(m, this.usuario(r)); }
+  @Patch('matrimonios/:idMatrimonio/invitados/preferencias/orden') preferenciaOrden(@Param('idMatrimonio') m: string, @Body() d: PreferenciaOrdenDto, @Req() r: any) { return this.service.guardarPreferenciaOrden(m, d.orden, this.usuario(r)); }
+  @Post('matrimonios/:idMatrimonio/invitados/rsvp/recordatorios') recordatorios(@Param('idMatrimonio') m: string, @Req() r: any) { return this.service.enviarRecordatoriosRsvp(m, this.usuario(r)); }
   @Post('matrimonios/:idMatrimonio/invitados') crear(@Param('idMatrimonio') m: string, @Body() d: CrearInvitadoDto, @Req() r: any) { return this.service.crear(m, d, this.usuario(r)); }
   @Get('matrimonios/:idMatrimonio/invitados/:idInvitado') obtener(@Param('idMatrimonio') m: string, @Param('idInvitado') i: string, @Req() r: any) { return this.service.obtener(m, i, this.usuario(r)); }
   @Patch('matrimonios/:idMatrimonio/invitados/:idInvitado') editar(@Param('idMatrimonio') m: string, @Param('idInvitado') i: string, @Body() d: ActualizarInvitadoDto, @Req() r: any) { return this.service.actualizar(m, i, d, this.usuario(r)); }
@@ -29,6 +34,8 @@ export class InvitadosController {
   @Get('matrimonios/:idMatrimonio/invitados/:idInvitado/requerimientos-alimentarios') requerimientos(@Param('idMatrimonio') m: string, @Param('idInvitado') i: string, @Req() r: any) { return this.service.requerimientos(m, i, this.usuario(r)); }
   @Post('matrimonios/:idMatrimonio/invitados/:idInvitado/requerimientos-alimentarios') agregarReq(@Param('idMatrimonio') m: string, @Param('idInvitado') i: string, @Body() d: RequerimientoDto, @Req() r: any) { return this.service.agregarReq(m, i, d, this.usuario(r)); }
   @Delete('matrimonios/:idMatrimonio/invitados/:idInvitado/requerimientos-alimentarios/:idRequerimiento') retirarReq(@Param('idMatrimonio') m: string, @Param('idInvitado') i: string, @Param('idRequerimiento') rel: string, @Req() r: any) { return this.service.retirarReq(m, i, rel, this.usuario(r)); }
+  @Post('matrimonios/:idMatrimonio/invitados/:idInvitado/invitacion-digital') invitacion(@Param('idMatrimonio') m: string, @Param('idInvitado') i: string, @Req() r: any) { return this.service.generarInvitacionDigital(m, i, this.usuario(r)); }
+  @Post('matrimonios/:idMatrimonio/invitados/:idInvitado/invitacion-digital/interacciones') interaccion(@Param('idMatrimonio') m: string, @Param('idInvitado') i: string, @Body() d: InteraccionInvitacionDto, @Req() r: any) { return this.service.registrarInteraccionInvitacion(m, i, d.detalle, this.usuario(r)); }
   @Get('matrimonios/:idMatrimonio/mesas') mesas(@Param('idMatrimonio') m: string, @Req() r: any) { return this.service.mesas(m, this.usuario(r)); }
   @Post('matrimonios/:idMatrimonio/mesas') crearMesa(@Param('idMatrimonio') m: string, @Body() d: CrearMesaDto, @Req() r: any) { return this.service.crearMesa(m, d, this.usuario(r)); }
   @Get('matrimonios/:idMatrimonio/mesas/:idMesa') obtenerMesa(@Param('idMatrimonio') m: string, @Param('idMesa') i: string, @Req() r: any) { return this.service.obtenerMesa(m, i, this.usuario(r)); }
@@ -37,4 +44,6 @@ export class InvitadosController {
   @Get('matrimonios/:idMatrimonio/mesas/:idMesa/invitados') invitadosMesa(@Param('idMatrimonio') m: string, @Param('idMesa') mesa: string, @Req() r: any) { return this.service.invitadosMesa(m, mesa, this.usuario(r)); }
   @Post('matrimonios/:idMatrimonio/mesas/:idMesa/invitados/:idInvitado') asignar(@Param('idMatrimonio') m: string, @Param('idMesa') mesa: string, @Param('idInvitado') inv: string, @Req() r: any) { return this.service.asignar(m, mesa, inv, this.usuario(r)); }
   @Delete('matrimonios/:idMatrimonio/mesas/:idMesa/invitados/:idInvitado') retirar(@Param('idMatrimonio') m: string, @Param('idMesa') mesa: string, @Param('idInvitado') inv: string, @Req() r: any) { return this.service.retirarAsignacion(m, mesa, inv, this.usuario(r)); }
+  @Post('matrimonios/:idMatrimonio/mesas/invitados/:idInvitado/reasignar') reasignar(@Param('idMatrimonio') m: string, @Param('idInvitado') inv: string, @Body() d: ReasignarMesaDto, @Req() r: any) { return this.service.reasignar(m, inv, d.idMesaDestino, this.usuario(r)); }
+  @Get('matrimonios/:idMatrimonio/mesas/representacion') representacionMesas(@Param('idMatrimonio') m: string, @Req() r: any) { return this.service.representacionMesas(m, this.usuario(r)); }
 }
