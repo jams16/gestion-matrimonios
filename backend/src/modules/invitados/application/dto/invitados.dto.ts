@@ -1,6 +1,6 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { Transform, Type } from 'class-transformer';
-import { IsBoolean, IsEmail, IsEnum, IsInt, IsOptional, IsString, IsUUID, MaxLength, Min, ValidateNested } from 'class-validator';
+import { IsBoolean, IsEmail, IsEnum, IsInt, IsNotEmpty, IsOptional, IsString, IsUUID, Length, MaxLength, Min, ValidateNested } from 'class-validator';
 
 export enum LadoRelacionDto { NOVIA='NOVIA', NOVIO='NOVIO', AMBOS='AMBOS', OTRO='OTRO' }
 export enum EstadoRsvpDto { PENDIENTE='PENDIENTE', CONFIRMADO='CONFIRMADO', NO_ASISTE='NO_ASISTE' }
@@ -8,7 +8,7 @@ export enum OrdenInvitadosDto { APELLIDOS_ASC='APELLIDOS_ASC', NOMBRES_ASC='NOMB
 const bool = ({ value }: { value: unknown }) => value === 'true' ? true : value === 'false' ? false : value;
 
 export class PersonaInvitadoDto {
-  @IsOptional() @IsString() @MaxLength(8) dni?: string;
+  @IsString() @IsNotEmpty() @Length(8, 8) dni!: string;
   @IsString() @MaxLength(100) nombres!: string;
   @IsString() @MaxLength(100) apellidoPaterno!: string;
   @IsOptional() @IsString() @MaxLength(100) apellidoMaterno?: string;
@@ -18,6 +18,7 @@ export class PersonaInvitadoDto {
 export class CrearInvitadoDto {
   @ValidateNested() @Type(() => PersonaInvitadoDto) persona!: PersonaInvitadoDto;
   @IsOptional() @Type(() => Number) @IsInt() @Min(1) idCategoriaRelacion?: number;
+  @IsOptional() @IsString() @MaxLength(100) nombreCategoriaRelacion?: string;
   @IsOptional() @IsEnum(LadoRelacionDto) ladoRelacion?: LadoRelacionDto;
   @IsOptional() @Type(() => Number) @IsInt() @Min(1) cantidadPases?: number;
   @IsOptional() @IsString() @MaxLength(1000) observaciones?: string;

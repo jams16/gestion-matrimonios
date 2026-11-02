@@ -10,6 +10,7 @@ import '../../features/proyectos/presentation/pages/seleccionar_matrimonio_page.
 import '../../features/proyectos/presentation/pages/crear_matrimonio_page.dart';
 import '../../features/cronograma/presentation/pages/cronograma_page.dart';
 import '../../features/cronograma/presentation/pages/planificar_matrimonio_page.dart';
+import '../../features/invitados/presentation/gestion_invitados_pages.dart';
 import '../../features/autenticacion/infrastructure/auth_session.dart';
 import 'route_names.dart';
 
@@ -43,7 +44,29 @@ final appRouter = GoRouter(
     ),
     GoRoute(
       path: '/gestion',
-      builder: (context, state) => InicioPage(nombre: state.extra, seccion: 2),
+      builder: (context, state) {
+        final idProyecto = AuthSession.idProyectoActivo;
+        return InicioPage(
+          nombre: state.extra,
+          seccion: 2,
+          contenidoGestion: idProyecto == null
+              ? null
+              : GestionPage(idProyecto: idProyecto),
+        );
+      },
+    ),
+    GoRoute(
+      path: '/gestion/invitados',
+      builder: (context, state) {
+        final idProyecto = AuthSession.idProyectoActivo;
+        return InicioPage(
+          nombre: state.extra,
+          seccion: 2,
+          contenidoGestion: idProyecto == null
+              ? null
+              : ListaInvitadosPage(idProyecto: idProyecto),
+        );
+      },
     ),
     GoRoute(
       path: '/proveedores',

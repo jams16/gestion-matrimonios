@@ -49,6 +49,18 @@ export class InvitadosService {
       requerimientosAlimentarios: r.requerimientos.filter((v: any) => v.idInvitado === x.idInvitado && v.activo).map((v: any) => ({ ...v, requerimiento: r.catalogo.find((c: any) => c.idRequerimientoAlimentario === v.idRequerimientoAlimentario) ?? null })),
     };
   }
+  private async resolverCategoria(dto: CrearInvitadoDto | ActualizarInvitadoDto, db = this.db) {
+    if (dto.idCategoriaRelacion !== undefined) return dto.idCategoriaRelacion;
+    const nombre = dto.nombreCategoriaRelacion?.trim();
+    if (!nombre) return undefined;
+    const categorias = await db.CategoriaRelacion.all();
+    const existente = categorias.find((x: any) => x.nombre.trim().toLocaleLowerCase('es') === nombre.toLocaleLowerCase('es'));
+    if (existente) return existente.idCategoriaRelacion;
+    const codigoBase = nombre.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase().replace(/[^A-Z0-9]+/g, '_').replace(/^_|_$/g, '').slice(0, 42) || 'RELACION';
+    const codigo = `${codigoBase}_${categorias.length + 1}`.slice(0, 50);
+    const creada = await db.CategoriaRelacion.create({ codigo, nombre, descripcion: null, orden: Math.max(0, ...categorias.map((x: any) => Number(x.orden) || 0)) + 1, activo: true } as never);
+    return creada.idCategoriaRelacion;
+  }
 
   async listar(m: string, f: ListarInvitadosDto, u: number) {
     await this.acceso(m, u); const r = await this.relaciones();
@@ -70,7 +82,14 @@ export class InvitadosService {
     return this.prisma.client.transaction(async (tx: any) => {
       const db = tx.orm.public; await this.acceso(m, u, db);
       let persona = dto.persona.dni ? await db.PersonaNatural.first({ dni: dto.persona.dni as never }) : null;
-      if (!persona) persona = await db.PersonaNatural.create({ ...dto.persona, esActivo: true } as never);
+      // El correo de un invitado es opcional. La tabla de personas se comparte
+      // con cuentas de acceso y, por compatibilidad con su columna NOT NULL,
+      // se persiste vacío cuando el invitado aún no proporcionó uno.
+      if (!persona) persona = await db.PersonaNatural.create({
+        ...dto.persona,
+        correoElectronico: dto.persona.correoElectronico ?? '',
+        esActivo: true,
+      } as never);
       const invitados = await db.Invitado.all();
       const existente = invitados.find((x: any) => x.idMatrimonio === m && x.idPersonaNatural === persona.idPersonaNatural);
       if (existente?.activo) throw new ConflictException('La persona ya es invitada activa de este matrimonio.');
@@ -79,9 +98,10 @@ export class InvitadosService {
         if (!titular.esTitular || !titular.activo) throw new BadRequestException('El titular indicado no es válido.');
         if (invitados.filter((x: any) => x.idInvitadoTitular === titularId && x.activo).length + 1 >= titular.cantidadPases) throw new BadRequestException('Se superó la cantidad de pases del titular.');
       }
+      const idCategoriaRelacion = await this.resolverCategoria(dto, db);
       const invitado = existente
-        ? await db.Invitado.where({ idInvitado: existente.idInvitado as never }).update({ idCategoriaRelacion: dto.idCategoriaRelacion ?? null, ladoRelacion: dto.ladoRelacion ?? 'AMBOS', cantidadPases: dto.cantidadPases ?? 1, observaciones: dto.observaciones ?? null, esTitular: !titularId, idInvitadoTitular: titularId ?? null, activo: true } as never)
-        : await db.Invitado.create({ idMatrimonio: m, idPersonaNatural: persona.idPersonaNatural, idCategoriaRelacion: dto.idCategoriaRelacion ?? null, ladoRelacion: dto.ladoRelacion ?? 'AMBOS', cantidadPases: dto.cantidadPases ?? 1, observaciones: dto.observaciones ?? null, esTitular: !titularId, idInvitadoTitular: titularId ?? null, activo: true } as never);
+        ? await db.Invitado.where({ idInvitado: existente.idInvitado as never }).update({ idCategoriaRelacion: idCategoriaRelacion ?? null, ladoRelacion: dto.ladoRelacion ?? 'AMBOS', cantidadPases: dto.cantidadPases ?? 1, observaciones: dto.observaciones ?? null, esTitular: !titularId, idInvitadoTitular: titularId ?? null, activo: true } as never)
+        : await db.Invitado.create({ idMatrimonio: m, idPersonaNatural: persona.idPersonaNatural, idCategoriaRelacion: idCategoriaRelacion ?? null, ladoRelacion: dto.ladoRelacion ?? 'AMBOS', cantidadPases: dto.cantidadPases ?? 1, observaciones: dto.observaciones ?? null, esTitular: !titularId, idInvitadoTitular: titularId ?? null, activo: true } as never);
       let rsvp = await db.Rsvp.first({ idInvitado: invitado.idInvitado as never });
       if (!rsvp) rsvp = await db.Rsvp.create({ idInvitado: invitado.idInvitado, estadoRsvp: 'PENDIENTE', confirmacionDigital: false, verificacionManual1: false, verificacionManual2: false } as never);
       return { invitado, personaNatural: persona, rsvp };
@@ -91,6 +111,7 @@ export class InvitadosService {
     await this.acceso(m, u); const actual = await this.invitado(m, i);
     if (dto.cantidadPases !== undefined && actual.esTitular && dto.cantidadPases < (await this.db.Invitado.all()).filter((x: any) => x.idInvitadoTitular === i && x.activo).length + 1) throw new BadRequestException('La cantidad de pases no puede ser menor que titular y acompañantes activos.');
     const datos: any = {}; for (const key of ['idCategoriaRelacion', 'ladoRelacion', 'cantidadPases', 'observaciones']) if ((dto as any)[key] !== undefined) datos[key] = (dto as any)[key];
+    const categoria = await this.resolverCategoria(dto); if (categoria !== undefined) datos.idCategoriaRelacion = categoria;
     const invitado = await this.db.Invitado.where({ idInvitado: i as never }).update(datos);
     if (dto.persona) { const persona: any = {}; for (const key of ['nombres', 'apellidoPaterno', 'apellidoMaterno', 'telefono', 'correoElectronico']) if ((dto.persona as any)[key] !== undefined) persona[key] = (dto.persona as any)[key]; if (Object.keys(persona).length) await this.db.PersonaNatural.where({ idPersonaNatural: actual.idPersonaNatural as never }).update(persona); }
     return invitado;

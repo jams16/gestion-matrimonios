@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 class AppTextField extends StatelessWidget {
   const AppTextField({
     super.key,
-    required this.label,
+    this.label,
     this.controller,
     this.focusNode,
     this.hintText,
@@ -26,7 +26,7 @@ class AppTextField extends StatelessWidget {
     this.required = false,
   });
 
-  final String label;
+  final String? label;
 
   final TextEditingController? controller;
   final FocusNode? focusNode;
@@ -60,27 +60,28 @@ class AppTextField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text.rich(
-          TextSpan(
-            children: [
-              TextSpan(
-                text: label,
-                style: Theme.of(
-                  context,
-                ).textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w500),
-              ),
-              if (required)
+        if (label != null && label!.isNotEmpty)
+          Text.rich(
+            TextSpan(
+              children: [
                 TextSpan(
-                  text: ' *',
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.error,
-                    fontWeight: FontWeight.w600,
+                  text: label!,
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
-            ],
+                if (required)
+                  TextSpan(
+                    text: ' *',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.error,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+              ],
+            ),
           ),
-        ),
-        const SizedBox(height: 7),
+        if (label != null && label!.isNotEmpty) const SizedBox(height: 7),
         TextFormField(
           controller: controller,
           focusNode: focusNode,

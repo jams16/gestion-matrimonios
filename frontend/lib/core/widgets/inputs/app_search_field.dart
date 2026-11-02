@@ -6,12 +6,14 @@ class AppSearchField extends StatefulWidget {
   const AppSearchField({
     super.key,
     this.controller,
+    this.label = 'Buscar',
     this.hintText = 'Buscar...',
     this.onChanged,
     this.onSubmitted,
   });
 
   final TextEditingController? controller;
+  final String? label;
   final String hintText;
 
   final ValueChanged<String>? onChanged;
@@ -55,7 +57,7 @@ class _AppSearchFieldState extends State<AppSearchField> {
   @override
   Widget build(BuildContext context) {
     return AppTextField(
-      label: 'Buscar',
+      label: widget.label,
       controller: _controller,
       hintText: widget.hintText,
       textInputAction: TextInputAction.search,

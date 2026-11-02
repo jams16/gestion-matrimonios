@@ -250,7 +250,7 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
           padding: const EdgeInsets.fromLTRB(16, 14, 16, 0),
           child: Row(
             children: [
-              const Text('Plan', style: TextStyle(fontWeight: FontWeight.w800)),
+              const Text('PLAN', style: TextStyle(fontWeight: FontWeight.w800)),
               const Spacer(),
               if (puedeConfirmar)
                 AppButton(

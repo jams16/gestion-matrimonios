@@ -23,11 +23,13 @@ class InicioPage extends StatefulWidget {
     this.nombre,
     this.seccion = 0,
     this.contenidoPlan,
+    this.contenidoGestion,
   });
 
   final Object? nombre;
   final int seccion;
   final Widget? contenidoPlan;
+  final Widget? contenidoGestion;
 
   @override
   State<InicioPage> createState() => _InicioPageState();
@@ -164,6 +166,9 @@ class _InicioPageState extends State<InicioPage> {
   Widget _contenido() {
     if (_seccionActual == 1 && widget.contenidoPlan != null) {
       return widget.contenidoPlan!;
+    }
+    if (_seccionActual == 2 && widget.contenidoGestion != null) {
+      return widget.contenidoGestion!;
     }
     final tarjeta = switch (_seccionActual) {
       0 => _tarjeta(
