@@ -29,7 +29,15 @@ final appRouter = GoRouter(
           return PlanificarMatrimonioPage(idProyecto: extra.idProyecto);
         }
         final idProyecto = AuthSession.idProyectoActivo;
-        if (idProyecto != null) return CronogramaPage(idProyecto: idProyecto);
+        if (idProyecto != null) {
+          return InicioPage(
+            seccion: 1,
+            contenidoPlan: CronogramaPage(
+              idProyecto: idProyecto,
+              embebido: true,
+            ),
+          );
+        }
         return InicioPage(nombre: extra, seccion: 1);
       },
     ),

@@ -607,6 +607,49 @@ export class PrismaProyectosRepository implements ProyectosRepository {
           dni: string | null;
         } | null)
       : null;
+    const usuarioPm = (await this.prisma.client.orm.public.Usuario.first({
+      idUsuario: proyecto.idPm as never,
+    })) as { idUsuario: number; idPersonaNatural: number } | null;
+    const personaPm = usuarioPm
+      ? ((await this.prisma.client.orm.public.PersonaNatural.first({
+          idPersonaNatural: usuarioPm.idPersonaNatural,
+        })) as {
+          nombres: string;
+          apellidoPaterno: string;
+          apellidoMaterno: string | null;
+        } | null)
+      : null;
+    const nombreCompleto = (persona: {
+      nombres: string;
+      apellidoPaterno: string;
+      apellidoMaterno?: string | null;
+    }) =>
+      [persona.nombres, persona.apellidoPaterno, persona.apellidoMaterno]
+        .filter(Boolean)
+        .join(' ');
+    const responsables = [
+      usuarioPm && personaPm
+        ? {
+            idUsuario: usuarioPm.idUsuario,
+            nombreCompleto: nombreCompleto(personaPm),
+            rol: 'PROJECT_MANAGER',
+          }
+        : null,
+      usuario1 && persona1
+        ? {
+            idUsuario: matrimonio.idNovio1,
+            nombreCompleto: nombreCompleto(persona1),
+            rol: 'PAREJA',
+          }
+        : null,
+      usuario2 && persona2
+        ? {
+            idUsuario: matrimonio.idNovio2,
+            nombreCompleto: nombreCompleto(persona2),
+            rol: 'PAREJA',
+          }
+        : null,
+    ].filter((responsable) => responsable !== null);
     return {
       proyecto,
       matrimonio,
@@ -618,6 +661,7 @@ export class PrismaProyectosRepository implements ProyectosRepository {
         persona2 && usuario2
           ? { ...persona2, usuario: usuario2.usuario }
           : null,
+      responsables,
     };
   }
 

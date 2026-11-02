@@ -88,7 +88,7 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
         }
       });
     } catch (_) {
-      // El c�digo se conserva como respaldo si el cat�logo no est� disponible.
+      // El codigo se conserva como respaldo si el catalogo no esta disponible.
     }
   }
 
@@ -110,7 +110,7 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
         );
       });
     } catch (_) {
-      // El selector muestra el estado de cat�logo no disponible sin bloquear el borrador.
+      // El selector muestra el estado de catalogo no disponible sin bloquear el borrador.
     }
   }
 
@@ -204,7 +204,7 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
       _obligatorio(v) ??
       (RegExp(r'^\d{8}$').hasMatch(v!.trim())
           ? null
-          : 'Ingresa un DNI de 8 d�gitos.');
+          : 'Ingresa un DNI de 8 digitos.');
   void _copiarDni(bool value) => setState(() {
     _usarDni = value;
     if (value) {
@@ -488,7 +488,7 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       const Text(
-        'Informaci�n de la pareja 1',
+        'Informacion de la pareja 1',
         style: TextStyle(fontWeight: FontWeight.w700),
       ),
       const SizedBox(height: 12),
@@ -497,14 +497,14 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
       _campo('DNI de la pareja 1', _dni1, dni: true),
       _campo('Usuario de la pareja 1', _usuario1, enabled: !_usarDni),
       _campo(
-        'Contrase�a de la pareja 1',
+        'Contrasena de la pareja 1',
         _contrasena1,
         enabled: !_usarDni,
         password: true,
       ),
       const SizedBox(height: 8),
       const Text(
-        'Informaci�n de la pareja 2',
+        'Informacion de la pareja 2',
         style: TextStyle(fontWeight: FontWeight.w700),
       ),
       const SizedBox(height: 12),
@@ -513,13 +513,13 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
       _campo('DNI de la pareja 2', _dni2, dni: true),
       _campo('Usuario de la pareja 2', _usuario2, enabled: !_usarDni),
       _campo(
-        'Contrase�a de la pareja 2',
+        'Contrasena de la pareja 2',
         _contrasena2,
         enabled: !_usarDni,
         password: true,
       ),
       AppCheckbox(
-        label: 'Usar DNI como usuario y contrase�a',
+        label: 'Usar DNI como usuario y contrasena',
         value: _usarDni,
         onChanged: _copiarDni,
       ),
@@ -581,7 +581,7 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
         return const Text('No se pudieron cargar las ubicaciones.');
       final items = snapshot.data ?? const [];
       return AppSelectField<String>(
-        label: 'Ciudad / Ubicaci�n',
+        label: 'Ciudad / Ubicacion',
         hintText: snapshot.hasData
             ? 'Busca distrito, provincia o departamento'
             : 'Cargando ubicaciones...',
@@ -631,7 +631,7 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
   Widget _selectorTipoCeremonia() {
     if (_tiposCeremonia.isEmpty) {
       return const Text(
-        'El cat�logo de tipos de ceremonia a�n no est� disponible en el servidor.',
+        'El catalogo de tipos de ceremonia aun no esta disponible en el servidor.',
       );
     }
     return AppSelectField<int>(
@@ -718,12 +718,12 @@ class _InicioProyecto extends StatelessWidget {
               ),
               const SizedBox(height: 28),
               const Text(
-                'Comienza la planificaci�n',
+                'Comienza la planificacion',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
               ),
               const SizedBox(height: 12),
               const Text(
-                'En esta fase se registran los datos b�sicos del matrimonio para iniciar la planificaci�n del proyecto',
+                'En esta fase se registran los datos basicos del matrimonio para iniciar la planificacion del proyecto',
                 textAlign: TextAlign.center,
               ),
             ],
@@ -779,7 +779,7 @@ class _Informacion extends StatelessWidget {
       children: [
         Icon(Icons.info_outline, color: AppColors.primary),
         SizedBox(width: 12),
-        Text('Informaci�n'),
+        Text('Informacion'),
       ],
     ),
   );

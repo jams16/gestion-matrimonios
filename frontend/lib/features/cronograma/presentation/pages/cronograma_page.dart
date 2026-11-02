@@ -7,7 +7,10 @@ import 'package:go_router/go_router.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../core/widgets/buttons/app_button.dart';
 import '../../../../core/widgets/feedback/app_snackbar.dart';
+import '../../../../core/widgets/inputs/app_date_field.dart';
 import '../../../../core/widgets/inputs/app_text_field.dart';
+import '../../../../core/widgets/inputs/app_select_field.dart';
+import '../../../../core/widgets/inputs/app_time_field.dart';
 import '../../../../core/widgets/overlays/app_confirmation_dialog.dart';
 import '../../../autenticacion/infrastructure/auth_session.dart';
 import '../../application/providers/cronograma_provider.dart';
@@ -16,9 +19,14 @@ import '../../infrastructure/cronograma_api.dart';
 /// Vista operativa del cronograma. Las reglas de fechas, precedencia, ciclos y
 /// conflictos se ejecutan exclusivamente en los endpoints de Cronograma.
 class CronogramaPage extends ConsumerStatefulWidget {
-  const CronogramaPage({super.key, required this.idProyecto});
+  const CronogramaPage({
+    super.key,
+    required this.idProyecto,
+    this.embebido = false,
+  });
 
   final String idProyecto;
+  final bool embebido;
 
   @override
   ConsumerState<CronogramaPage> createState() => _CronogramaPageState();
@@ -57,7 +65,6 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
   void _programarAutoguardadoActividad(
     Map<String, dynamic>? existente, {
     required String nombre,
-    required String responsableTexto,
   }) {
     if (existente == null || nombre.trim().isEmpty) return;
     _autoguardadoPendiente?.cancel();
@@ -66,10 +73,7 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
         await ref.read(cronogramaApiProvider).actualizarActividad(
           widget.idProyecto,
           existente['idActividad'].toString(),
-          {
-            'nombre': nombre.trim(),
-            'responsableTexto': _nuloSiVacio(responsableTexto),
-          },
+          {'nombre': nombre.trim()},
         );
         _recargar();
         if (mounted) {
@@ -150,6 +154,47 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
       },
       orElse: () => false,
     );
+    final contenido = estado.when(
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (error, _) =>
+          _ErrorCarga(mensaje: _mensajeError(error), alReintentar: _recargar),
+      data: (data) => _contenido(data),
+    );
+    final botonFlotante = estado.maybeWhen(
+      data: (data) => FloatingActionButton.extended(
+        onPressed: _procesando
+            ? null
+            : () => _tabs.index == 0
+                  ? _mostrarAccionesCronograma(data)
+                  : _editarTiming(data, _responsablesDe(data)),
+        icon: Icon(
+          _tabs.index == 0 ? Icons.add_task_outlined : Icons.add_alarm_outlined,
+        ),
+        label: Text(_tabs.index == 0 ? 'Agregar' : 'Agregar momento'),
+      ),
+      orElse: () => null,
+    );
+    if (widget.embebido) {
+      return Stack(
+        children: [
+          contenido,
+          if (puedeConfirmar)
+            Positioned(
+              top: 12,
+              right: 16,
+              child: AppButton(
+                label: 'PLANIFICADO',
+                icon: Icons.verified_outlined,
+                size: AppButtonSize.small,
+                loading: _procesando,
+                onPressed: _confirmarPlanificacion,
+              ),
+            ),
+          if (botonFlotante != null)
+            Positioned(right: 18, bottom: 18, child: botonFlotante),
+        ],
+      );
+    }
     return Scaffold(
       backgroundColor: const Color(0xFFFDFBFF),
       appBar: AppBar(
@@ -167,28 +212,8 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
           ),
         ],
       ),
-      body: estado.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, _) =>
-            _ErrorCarga(mensaje: _mensajeError(error), alReintentar: _recargar),
-        data: (data) => _contenido(data),
-      ),
-      floatingActionButton: estado.maybeWhen(
-        data: (data) => FloatingActionButton.extended(
-          onPressed: _procesando
-              ? null
-              : () => _tabs.index == 0
-                    ? _mostrarAccionesCronograma(data)
-                    : _editarTiming(data),
-          icon: Icon(
-            _tabs.index == 0
-                ? Icons.add_task_outlined
-                : Icons.add_alarm_outlined,
-          ),
-          label: Text(_tabs.index == 0 ? 'Agregar' : 'Agregar momento'),
-        ),
-        orElse: () => null,
-      ),
+      body: contenido,
+      floatingActionButton: botonFlotante,
     );
   }
 
@@ -196,6 +221,12 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
     final cronograma = _mapa(data['cronograma']);
     final matrimonioData = _mapa(data['matrimonio']);
     final matrimonio = _mapa(matrimonioData['matrimonio']);
+    final responsables = _lista(matrimonioData['responsables']);
+    final nombresResponsables = {
+      for (final responsable in responsables)
+        responsable['idUsuario'].toString():
+            responsable['nombreCompleto']?.toString() ?? 'Usuario',
+    };
     final proyecto = _mapa(cronograma['proyecto']);
     final fase = _mapa(proyecto['faseProyecto']);
     final faseCodigo = (fase['codigo'] ?? proyecto['faseProyectoCodigo'] ?? '')
@@ -248,19 +279,27 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
                 hitos: hitos,
                 actividades: actividades,
                 dependencias: dependencias,
-                alEditarActividad: _editarActividad,
+                alEditarActividad: (item) =>
+                    _editarActividad(item, responsables),
                 alEliminarActividad: _eliminarActividad,
-                alCompletarActividad: _completarActividad,
+                alCompletarActividad: (item) => _intentarCompletarActividad(
+                  item,
+                  actividades,
+                  dependencias,
+                ),
                 alEditarHito: _editarHito,
                 alEliminarHito: _eliminarHito,
                 alAgregarDependencia: () => _editarDependencia(actividades),
                 alEliminarDependencia: _eliminarDependencia,
+                nombresResponsables: nombresResponsables,
               ),
               _ListaTiming(
                 timing: timing,
-                alEditar: (item) => _editarTiming(data, existente: item),
+                alEditar: (item) =>
+                    _editarTiming(data, responsables, existente: item),
                 alEliminar: _eliminarTiming,
                 alMover: _moverTiming,
+                nombresResponsables: nombresResponsables,
               ),
             ],
           ),
@@ -269,8 +308,8 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
     );
   }
 
-  void _mostrarAccionesCronograma(Map<String, dynamic> data) {
-    showModalBottomSheet<void>(
+  Future<void> _mostrarAccionesCronograma(Map<String, dynamic> data) async {
+    final accion = await showModalBottomSheet<String>(
       context: context,
       showDragHandle: true,
       builder: (sheetContext) => SafeArea(
@@ -282,18 +321,12 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
               ListTile(
                 leading: const Icon(Icons.flag_outlined),
                 title: const Text('Crear hito'),
-                onTap: () {
-                  Navigator.pop(sheetContext);
-                  _editarHito(null);
-                },
+                onTap: () => Navigator.pop(sheetContext, 'hito'),
               ),
               ListTile(
                 leading: const Icon(Icons.add_task_outlined),
                 title: const Text('Crear actividad'),
-                onTap: () {
-                  Navigator.pop(sheetContext);
-                  _editarActividad(null);
-                },
+                onTap: () => Navigator.pop(sheetContext, 'actividad'),
               ),
               ListTile(
                 leading: const Icon(Icons.library_add_outlined),
@@ -301,38 +334,40 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
                 subtitle: const Text(
                   'Agrega una instancia sin modificar la plantilla.',
                 ),
-                onTap: () {
-                  Navigator.pop(sheetContext);
-                  _sugerencias(data);
-                },
+                onTap: () => Navigator.pop(sheetContext, 'plantilla'),
               ),
               ListTile(
                 leading: const Icon(Icons.account_tree_outlined),
                 title: const Text('Crear dependencia'),
-                onTap: () {
-                  Navigator.pop(sheetContext);
-                  _editarDependencia(
-                    _lista(_mapa(data['cronograma'])['actividades']),
-                  );
-                },
+                onTap: () => Navigator.pop(sheetContext, 'dependencia'),
               ),
             ],
           ),
         ),
       ),
     );
+    if (!mounted || accion == null) return;
+    switch (accion) {
+      case 'hito':
+        await _editarHito(null);
+      case 'actividad':
+        await _editarActividad(null, _responsablesDe(data));
+      case 'plantilla':
+        await _sugerencias(data);
+      case 'dependencia':
+        await _editarDependencia(
+          _lista(_mapa(data['cronograma'])['actividades']),
+        );
+    }
   }
 
   Future<void> _editarHito(Map<String, dynamic>? existente) async {
     final nombre = TextEditingController(
       text: existente?['nombre']?.toString(),
     );
-    final fecha = TextEditingController(
-      text: _isoLocal(
+    DateTime? fecha =
         _fecha(existente?['fechaObjetivo']) ??
-            DateTime.now().add(const Duration(days: 7)),
-      ),
-    );
+        DateTime.now().add(const Duration(days: 7));
     final criterio = TextEditingController(
       text: existente?['criterioAceptacion']?.toString(),
     );
@@ -348,12 +383,10 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
           prefixIcon: const Icon(Icons.flag_outlined),
           validator: _requerido,
         ),
-        AppTextField(
-          label: 'Fecha objetivo (AAAA-MM-DD)',
-          controller: fecha,
-          required: true,
-          prefixIcon: const Icon(Icons.calendar_today_outlined),
-          validator: _fechaValida,
+        AppDateField(
+          label: 'Fecha objetivo',
+          initialDate: fecha,
+          onChanged: (value) => fecha = value,
         ),
         AppTextField(
           label: 'Criterio de aceptación',
@@ -363,10 +396,10 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
         ),
       ],
     );
-    if (!guardar || !form.currentState!.validate()) return;
+    if (!guardar || !form.currentState!.validate() || fecha == null) return;
     final data = <String, dynamic>{
       'nombre': nombre.text.trim(),
-      'fechaObjetivo': _aIso(fecha.text),
+      'fechaObjetivo': fecha!.toIso8601String(),
       'criterioAceptacion': _nuloSiVacio(criterio.text),
     };
     await _ejecutar(
@@ -383,24 +416,22 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
     );
   }
 
-  Future<void> _editarActividad(Map<String, dynamic>? existente) async {
+  List<Map<String, dynamic>> _responsablesDe(Map<String, dynamic> data) =>
+      _lista(_mapa(data['matrimonio'])['responsables']);
+
+  Future<void> _editarActividad(
+    Map<String, dynamic>? existente,
+    List<Map<String, dynamic>> responsables,
+  ) async {
     final nombre = TextEditingController(
       text: existente?['nombre']?.toString(),
     );
-    final inicio = TextEditingController(
-      text: _isoLocal(_fecha(existente?['fechaInicio'])),
-    );
-    final fin = TextEditingController(
-      text: _isoLocal(
+    DateTime? inicio = _fecha(existente?['fechaInicio']);
+    DateTime? fin =
         _fecha(existente?['fechaFin']) ??
-            DateTime.now().add(const Duration(days: 7)),
-      ),
-    );
-    final responsable = TextEditingController(
-      text: existente?['idUsuarioResponsable']?.toString(),
-    );
-    final responsableTexto = TextEditingController(
-      text: existente?['responsableTexto']?.toString(),
+        DateTime.now().add(const Duration(days: 7));
+    int? idResponsable = int.tryParse(
+      existente?['idUsuarioResponsable']?.toString() ?? '',
     );
     String prioridad = existente?['prioridad']?.toString() ?? 'MEDIA';
     final form = GlobalKey<FormState>();
@@ -426,23 +457,19 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
                     onChanged: (valor) => _programarAutoguardadoActividad(
                       existente,
                       nombre: valor,
-                      responsableTexto: responsableTexto.text,
                     ),
                   ),
                   const SizedBox(height: 14),
-                  AppTextField(
-                    label: 'Inicio (AAAA-MM-DD)',
-                    controller: inicio,
-                    prefixIcon: const Icon(Icons.event_outlined),
-                    validator: _fechaOpcional,
+                  AppDateField(
+                    label: 'Fecha de inicio',
+                    initialDate: inicio,
+                    onChanged: (value) => setDialogState(() => inicio = value),
                   ),
                   const SizedBox(height: 14),
-                  AppTextField(
-                    label: 'Fin (AAAA-MM-DD)',
-                    controller: fin,
-                    required: true,
-                    prefixIcon: const Icon(Icons.event_available_outlined),
-                    validator: _fechaValida,
+                  AppDateField(
+                    label: 'Fecha de fin',
+                    initialDate: fin,
+                    onChanged: (value) => setDialogState(() => fin = value),
                   ),
                   const SizedBox(height: 14),
                   DropdownButtonFormField<String>(
@@ -458,24 +485,20 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
                         setDialogState(() => prioridad = value ?? 'MEDIA'),
                   ),
                   const SizedBox(height: 14),
-                  AppTextField(
-                    label: 'ID de usuario responsable',
-                    controller: responsable,
-                    required: existente == null,
-                    keyboardType: TextInputType.number,
-                    prefixIcon: const Icon(Icons.person_outline),
-                    validator: existente == null ? _enteroPositivo : null,
-                  ),
-                  const SizedBox(height: 14),
-                  AppTextField(
-                    label: 'Responsable (texto)',
-                    controller: responsableTexto,
-                    prefixIcon: const Icon(Icons.badge_outlined),
-                    onChanged: (valor) => _programarAutoguardadoActividad(
-                      existente,
-                      nombre: nombre.text,
-                      responsableTexto: valor,
-                    ),
+                  AppSelectField<int>(
+                    label: 'Responsable',
+                    initialValue: idResponsable,
+                    options: responsables
+                        .map(
+                          (item) => AppSelectOption<int>(
+                            value: int.parse(item['idUsuario'].toString()),
+                            label:
+                                item['nombreCompleto']?.toString() ?? 'Usuario',
+                          ),
+                        )
+                        .toList(),
+                    onChanged: (valor) =>
+                        setDialogState(() => idResponsable = valor),
                   ),
                 ],
               ),
@@ -499,14 +522,43 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
     );
     _autoguardadoPendiente?.cancel();
     if (guardar != true) return;
+    if (fin == null) {
+      if (mounted) {
+        AppSnackbar.show(
+          context,
+          message: 'Selecciona la fecha de fin.',
+          type: AppSnackbarType.warning,
+        );
+      }
+      return;
+    }
+    if (inicio != null && inicio!.isAfter(fin!)) {
+      if (mounted) {
+        AppSnackbar.show(
+          context,
+          message:
+              'La fecha de inicio no puede ser posterior a la fecha de fin.',
+          type: AppSnackbarType.warning,
+        );
+      }
+      return;
+    }
+    if (existente == null && idResponsable == null) {
+      if (mounted) {
+        AppSnackbar.show(
+          context,
+          message: 'Selecciona un responsable para la actividad.',
+          type: AppSnackbarType.warning,
+        );
+      }
+      return;
+    }
     final data = <String, dynamic>{
       'nombre': nombre.text.trim(),
-      'fechaInicio': inicio.text.trim().isEmpty ? null : _aIso(inicio.text),
-      'fechaFin': _aIso(fin.text),
+      'fechaInicio': inicio?.toIso8601String(),
+      'fechaFin': fin!.toIso8601String(),
       'prioridad': prioridad,
-      if (responsable.text.trim().isNotEmpty)
-        'idUsuarioResponsable': int.parse(responsable.text.trim()),
-      'responsableTexto': _nuloSiVacio(responsableTexto.text),
+      if (idResponsable != null) 'idUsuarioResponsable': idResponsable,
     };
     if (existente == null) {
       await _ejecutar(
@@ -672,71 +724,134 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
   }
 
   Future<void> _editarTiming(
-    Map<String, dynamic> data, {
+    Map<String, dynamic> data,
+    List<Map<String, dynamic>> responsables, {
     Map<String, dynamic>? existente,
   }) async {
     final actividad = TextEditingController(
       text: existente?['actividad']?.toString(),
     );
-    final inicio = TextEditingController(
-      text: _isoLocal(_fecha(existente?['fechaHoraInicio']) ?? DateTime.now()),
-    );
-    final fin = TextEditingController(
-      text: _isoLocal(
+    final inicioExistente =
+        _fecha(existente?['fechaHoraInicio']) ?? DateTime.now();
+    final finExistente =
         _fecha(existente?['fechaHoraFin']) ??
-            DateTime.now().add(const Duration(hours: 1)),
-      ),
-    );
+        inicioExistente.add(const Duration(hours: 1));
+    DateTime? fechaInicio = inicioExistente;
+    DateTime? fechaFin = finExistente;
+    TimeOfDay? horaInicio = TimeOfDay.fromDateTime(inicioExistente);
+    TimeOfDay? horaFin = TimeOfDay.fromDateTime(finExistente);
     final ubicacion = TextEditingController(
       text: existente?['ubicacion']?.toString(),
     );
-    final responsable = TextEditingController(
-      text: existente?['responsableTexto']?.toString(),
+    int? idResponsable = int.tryParse(
+      existente?['idUsuarioResponsable']?.toString() ?? '',
     );
     final form = GlobalKey<FormState>();
-    final guardar = await _formulario(
-      titulo: existente == null ? 'Nuevo momento' : 'Editar momento',
-      form: form,
-      campos: [
-        AppTextField(
-          label: 'Actividad',
-          controller: actividad,
-          required: true,
-          prefixIcon: const Icon(Icons.schedule_outlined),
-          validator: _requerido,
+    final guardar = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => StatefulBuilder(
+        builder: (context, setDialogState) => AlertDialog(
+          title: Text(existente == null ? 'Nuevo momento' : 'Editar momento'),
+          content: SingleChildScrollView(
+            child: Form(
+              key: form,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  AppTextField(
+                    label: 'Actividad',
+                    controller: actividad,
+                    required: true,
+                    prefixIcon: const Icon(Icons.schedule_outlined),
+                    validator: _requerido,
+                  ),
+                  AppDateField(
+                    label: 'Fecha de inicio',
+                    initialDate: fechaInicio,
+                    onChanged: (value) =>
+                        setDialogState(() => fechaInicio = value),
+                  ),
+                  const SizedBox(height: 14),
+                  AppTimeField(
+                    label: 'Hora de inicio',
+                    initialTime: horaInicio,
+                    onChanged: (value) =>
+                        setDialogState(() => horaInicio = value),
+                  ),
+                  const SizedBox(height: 14),
+                  AppDateField(
+                    label: 'Fecha de fin',
+                    initialDate: fechaFin,
+                    onChanged: (value) =>
+                        setDialogState(() => fechaFin = value),
+                  ),
+                  const SizedBox(height: 14),
+                  AppTimeField(
+                    label: 'Hora de fin',
+                    initialTime: horaFin,
+                    onChanged: (value) => setDialogState(() => horaFin = value),
+                  ),
+                  AppTextField(
+                    label: 'Ubicación',
+                    controller: ubicacion,
+                    prefixIcon: const Icon(Icons.place_outlined),
+                  ),
+                  AppSelectField<int>(
+                    label: 'Responsable',
+                    initialValue: idResponsable,
+                    options: responsables
+                        .map(
+                          (item) => AppSelectOption<int>(
+                            value: int.parse(item['idUsuario'].toString()),
+                            label:
+                                item['nombreCompleto']?.toString() ?? 'Usuario',
+                          ),
+                        )
+                        .toList(),
+                    onChanged: (value) =>
+                        setDialogState(() => idResponsable = value),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext, false),
+              child: const Text('Cancelar'),
+            ),
+            FilledButton(
+              onPressed: () {
+                if (form.currentState!.validate())
+                  Navigator.pop(dialogContext, true);
+              },
+              child: const Text('Guardar'),
+            ),
+          ],
         ),
-        AppTextField(
-          label: 'Inicio (AAAA-MM-DD HH:MM)',
-          controller: inicio,
-          required: true,
-          prefixIcon: const Icon(Icons.play_circle_outline),
-          validator: _fechaHoraValida,
-        ),
-        AppTextField(
-          label: 'Fin (AAAA-MM-DD HH:MM)',
-          controller: fin,
-          required: true,
-          prefixIcon: const Icon(Icons.stop_circle_outlined),
-          validator: _fechaHoraValida,
-        ),
-        AppTextField(
-          label: 'Ubicación',
-          controller: ubicacion,
-          prefixIcon: const Icon(Icons.place_outlined),
-        ),
-        AppTextField(
-          label: 'Responsable',
-          controller: responsable,
-          prefixIcon: const Icon(Icons.person_outline),
-        ),
-      ],
+      ),
     );
-    if (!guardar || !form.currentState!.validate()) return;
-    final fechaInicio = _aIso(inicio.text);
-    final fechaFin = _aIso(fin.text);
-    final duracion = DateTime.parse(
-      fechaFin,
-    ).difference(DateTime.parse(fechaInicio)).inMinutes;
+    if (guardar != true || !form.currentState!.validate()) return;
+    if (fechaInicio == null ||
+        fechaFin == null ||
+        horaInicio == null ||
+        horaFin == null)
+      return;
+    final inicio = DateTime(
+      fechaInicio!.year,
+      fechaInicio!.month,
+      fechaInicio!.day,
+      horaInicio!.hour,
+      horaInicio!.minute,
+    );
+    final fin = DateTime(
+      fechaFin!.year,
+      fechaFin!.month,
+      fechaFin!.day,
+      horaFin!.hour,
+      horaFin!.minute,
+    );
+    final duracion = fin.difference(inicio).inMinutes;
     if (duracion <= 0) {
       if (mounted)
         AppSnackbar.show(
@@ -748,11 +863,11 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
     }
     final payload = <String, dynamic>{
       'actividad': actividad.text.trim(),
-      'fechaHoraInicio': fechaInicio,
-      'fechaHoraFin': fechaFin,
+      'fechaHoraInicio': inicio.toIso8601String(),
+      'fechaHoraFin': fin.toIso8601String(),
       'duracionMinutos': duracion,
       'ubicacion': _nuloSiVacio(ubicacion.text),
-      'responsableTexto': _nuloSiVacio(responsable.text),
+      'idUsuarioResponsable': idResponsable,
     };
     await _ejecutar(
       (api) => existente == null
@@ -768,17 +883,24 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
     );
   }
 
-  Future<void> _moverTiming(Map<String, dynamic> item, int direccion) async {
-    final orden =
-        (int.tryParse(item['orden']?.toString() ?? '') ?? 0) + direccion;
-    await _ejecutar(
-      (api) => api.actualizarTiming(
+  Future<void> _moverTiming(
+    Map<String, dynamic> item,
+    Map<String, dynamic> vecino,
+  ) async {
+    final ordenActual = int.tryParse(item['orden']?.toString() ?? '') ?? 0;
+    final ordenVecino = int.tryParse(vecino['orden']?.toString() ?? '') ?? 0;
+    await _ejecutar((api) async {
+      await api.actualizarTiming(
         widget.idProyecto,
         item['idTiming'].toString(),
-        {'orden': orden},
-      ),
-      exito: 'Orden actualizado.',
-    );
+        {'orden': ordenVecino},
+      );
+      await api.actualizarTiming(
+        widget.idProyecto,
+        vecino['idTiming'].toString(),
+        {'orden': ordenActual},
+      );
+    }, exito: 'Orden actualizado.');
   }
 
   Future<void> _sugerencias(Map<String, dynamic> data) async {
@@ -830,7 +952,7 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
         ),
       );
       if (elegido == null || !mounted) return;
-      await _incorporarSugerencia(elegido);
+      await _incorporarSugerencia(elegido, _responsablesDe(data));
     } catch (error) {
       if (mounted)
         AppSnackbar.show(
@@ -841,11 +963,12 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
     }
   }
 
-  Future<void> _incorporarSugerencia(Map<String, dynamic> sugerencia) async {
-    final fecha = TextEditingController(
-      text: _isoLocal(DateTime.now().add(const Duration(days: 7))),
-    );
-    final responsable = TextEditingController();
+  Future<void> _incorporarSugerencia(
+    Map<String, dynamic> sugerencia,
+    List<Map<String, dynamic>> responsables,
+  ) async {
+    DateTime? fecha = DateTime.now().add(const Duration(days: 7));
+    int? idResponsable;
     final form = GlobalKey<FormState>();
     final guardar = await _formulario(
       titulo: 'Incorporar actividad',
@@ -858,28 +981,34 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
           style: const TextStyle(fontWeight: FontWeight.w700),
         ),
         const SizedBox(height: 14),
-        AppTextField(
-          label: 'Fecha de fin (AAAA-MM-DD)',
-          controller: fecha,
-          required: true,
-          prefixIcon: const Icon(Icons.event_outlined),
-          validator: _fechaValida,
+        AppDateField(
+          label: 'Fecha de fin',
+          initialDate: fecha,
+          onChanged: (value) => fecha = value,
         ),
-        AppTextField(
-          label: 'Responsable (opcional)',
-          controller: responsable,
-          prefixIcon: const Icon(Icons.person_outline),
+        AppSelectField<int>(
+          label: 'Responsable',
+          initialValue: idResponsable,
+          options: responsables
+              .map(
+                (item) => AppSelectOption<int>(
+                  value: int.parse(item['idUsuario'].toString()),
+                  label: item['nombreCompleto']?.toString() ?? 'Usuario',
+                ),
+              )
+              .toList(),
+          onChanged: (value) => idResponsable = value,
         ),
       ],
     );
-    if (!guardar || !form.currentState!.validate()) return;
+    if (!guardar || !form.currentState!.validate() || fecha == null) return;
     await _ejecutar(
       (api) => api.incorporarSugerencia(widget.idProyecto, {
         'idPlantillaActividad': int.parse(
           sugerencia['idPlantillaActividad'].toString(),
         ),
-        'fechaFin': _aIso(fecha.text),
-        'responsableTexto': _nuloSiVacio(responsable.text),
+        'fechaFin': fecha!.toIso8601String(),
+        if (idResponsable != null) 'idUsuarioResponsable': idResponsable,
       }),
       exito: 'Actividad incorporada desde plantilla.',
     );
@@ -894,14 +1023,91 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
     ),
     'Actividad desactivada.',
   );
-  Future<void> _completarActividad(Map<String, dynamic> item) => _ejecutar(
-    (api) => api.cambiarEstadoActividad(
-      widget.idProyecto,
-      item['idActividad'].toString(),
-      'COMPLETADA',
-    ),
-    exito: 'Actividad marcada como completada.',
-  );
+  Future<void> _intentarCompletarActividad(
+    Map<String, dynamic> item,
+    List<Map<String, dynamic>> actividades,
+    List<Map<String, dynamic>> dependencias,
+  ) async {
+    final porId = {
+      for (final actividad in actividades)
+        actividad['idActividad'].toString(): actividad,
+    };
+    final pendientes = dependencias
+        .where(
+          (dependencia) =>
+              dependencia['idActividadSucesora']?.toString() ==
+              item['idActividad']?.toString(),
+        )
+        .map(
+          (dependencia) =>
+              porId[dependencia['idActividadPredecesora']?.toString()],
+        )
+        .whereType<Map<String, dynamic>>()
+        .where((actividad) => actividad['estado']?.toString() != 'COMPLETADA')
+        .toList();
+    if (pendientes.isNotEmpty) {
+      await showDialog<void>(
+        context: context,
+        builder: (dialogContext) => AlertDialog(
+          icon: const Icon(Icons.info_outline, color: AppColors.primary),
+          title: const Text('Hay trabajo pendiente'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Completa primero las actividades de las que depende esta tarea:',
+                ),
+                const SizedBox(height: 10),
+                ...pendientes.map(
+                  (actividad) => Padding(
+                    padding: const EdgeInsets.only(bottom: 6),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.link_outlined, size: 18),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            actividad['nombre']?.toString() ?? 'Actividad',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext),
+              child: const Text('Volver'),
+            ),
+          ],
+        ),
+      );
+      return;
+    }
+    final confirmar = await AppConfirmationDialog.show(
+      context,
+      title: 'Marcar actividad como completada',
+      message:
+          'La actividad se marcara como completada. Podras cambiar su estado despues si es necesario.',
+      confirmLabel: 'Completar',
+      cancelLabel: 'Volver',
+    );
+    if (!confirmar) return;
+    await _ejecutar(
+      (api) => api.cambiarEstadoActividad(
+        widget.idProyecto,
+        item['idActividad'].toString(),
+        'COMPLETADA',
+      ),
+      exito: 'Actividad marcada como completada.',
+    );
+  }
+
   Future<void> _eliminarHito(Map<String, dynamic> item) => _eliminar(
     'Desactivar hito',
     'El hito dejará de mostrarse en el cronograma activo.',
@@ -1057,6 +1263,7 @@ class _ListaCronograma extends StatelessWidget {
     required this.alEliminarHito,
     required this.alAgregarDependencia,
     required this.alEliminarDependencia,
+    required this.nombresResponsables,
   });
   final List<Map<String, dynamic>> hitos, actividades, dependencias;
   final ValueChanged<Map<String, dynamic>> alEditarActividad;
@@ -1064,8 +1271,9 @@ class _ListaCronograma extends StatelessWidget {
   final ValueChanged<Map<String, dynamic>> alCompletarActividad;
   final ValueChanged<Map<String, dynamic>> alEditarHito;
   final ValueChanged<Map<String, dynamic>> alEliminarHito;
-  final ValueChanged<Map<String, dynamic>> alEliminarDependencia;
   final VoidCallback alAgregarDependencia;
+  final ValueChanged<Map<String, dynamic>> alEliminarDependencia;
+  final Map<String, String> nombresResponsables;
   @override
   Widget build(BuildContext context) {
     if (hitos.isEmpty && actividades.isEmpty)
@@ -1076,6 +1284,18 @@ class _ListaCronograma extends StatelessWidget {
             'Agrega hitos, actividades o incorpora elementos desde las plantillas.',
       );
     final sinHito = actividades.where((a) => a['idHito'] == null).toList();
+    final nombresActividades = {
+      for (final actividad in actividades)
+        actividad['idActividad'].toString():
+            actividad['nombre']?.toString() ?? 'Actividad',
+    };
+    final dependenciasPorSucesora = <String, List<Map<String, dynamic>>>{};
+    for (final dependencia in dependencias) {
+      final sucesora = dependencia['idActividadSucesora']?.toString();
+      if (sucesora != null) {
+        (dependenciasPorSucesora[sucesora] ??= []).add(dependencia);
+      }
+    }
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 96),
       children: [
@@ -1092,6 +1312,10 @@ class _ListaCronograma extends StatelessWidget {
             alEditarActividad: alEditarActividad,
             alEliminarActividad: alEliminarActividad,
             alCompletarActividad: alCompletarActividad,
+            dependenciasPorSucesora: dependenciasPorSucesora,
+            nombresActividades: nombresActividades,
+            nombresResponsables: nombresResponsables,
+            alEliminarDependencia: alEliminarDependencia,
           ),
         ),
         if (sinHito.isNotEmpty)
@@ -1103,37 +1327,10 @@ class _ListaCronograma extends StatelessWidget {
             alEditarActividad: alEditarActividad,
             alEliminarActividad: alEliminarActividad,
             alCompletarActividad: alCompletarActividad,
-          ),
-        if (dependencias.isNotEmpty)
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(14),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Dependencias',
-                    style: TextStyle(fontWeight: FontWeight.w800),
-                  ),
-                  ...dependencias.map(
-                    (d) => ListTile(
-                      dense: true,
-                      leading: const Icon(Icons.arrow_forward, size: 18),
-                      title: Text(
-                        '${d['nombrePredecesora'] ?? 'Actividad'} �  ${d['nombreSucesora'] ?? 'Actividad'}',
-                      ),
-                      subtitle: Text(
-                        'Finalizar para iniciar · ${d['diasDesfase'] ?? 0} días de desfase',
-                      ),
-                      trailing: IconButton(
-                        icon: const Icon(Icons.delete_outline),
-                        onPressed: () => alEliminarDependencia(d),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            dependenciasPorSucesora: dependenciasPorSucesora,
+            nombresActividades: nombresActividades,
+            nombresResponsables: nombresResponsables,
+            alEliminarDependencia: alEliminarDependencia,
           ),
         TextButton.icon(
           onPressed: alAgregarDependencia,
@@ -1154,6 +1351,10 @@ class _HitoCard extends StatelessWidget {
     required this.alEditarActividad,
     required this.alEliminarActividad,
     required this.alCompletarActividad,
+    required this.dependenciasPorSucesora,
+    required this.nombresActividades,
+    required this.nombresResponsables,
+    required this.alEliminarDependencia,
   });
   final Map<String, dynamic> hito;
   final List<Map<String, dynamic>> actividades;
@@ -1161,6 +1362,9 @@ class _HitoCard extends StatelessWidget {
   final ValueChanged<Map<String, dynamic>> alEditarActividad,
       alEliminarActividad;
   final ValueChanged<Map<String, dynamic>> alCompletarActividad;
+  final Map<String, List<Map<String, dynamic>>> dependenciasPorSucesora;
+  final Map<String, String> nombresActividades, nombresResponsables;
+  final ValueChanged<Map<String, dynamic>> alEliminarDependencia;
   @override
   Widget build(BuildContext context) => Card(
     margin: const EdgeInsets.only(bottom: 12),
@@ -1204,6 +1408,12 @@ class _HitoCard extends StatelessWidget {
               alEditar: () => alEditarActividad(a),
               alEliminar: () => alEliminarActividad(a),
               alCompletar: () => alCompletarActividad(a),
+              dependencias:
+                  dependenciasPorSucesora[a['idActividad']?.toString()] ??
+                  const [],
+              nombresActividades: nombresActividades,
+              nombresResponsables: nombresResponsables,
+              alEliminarDependencia: alEliminarDependencia,
             ),
           ),
         ],
@@ -1218,12 +1428,20 @@ class _ActividadFila extends StatelessWidget {
     required this.alEditar,
     required this.alEliminar,
     required this.alCompletar,
+    required this.dependencias,
+    required this.nombresActividades,
+    required this.nombresResponsables,
+    required this.alEliminarDependencia,
   });
   final Map<String, dynamic> item;
   final VoidCallback alEditar, alEliminar, alCompletar;
+  final List<Map<String, dynamic>> dependencias;
+  final Map<String, String> nombresActividades, nombresResponsables;
+  final ValueChanged<Map<String, dynamic>> alEliminarDependencia;
   @override
   Widget build(BuildContext context) => ListTile(
-    contentPadding: const EdgeInsets.only(left: 8),
+    isThreeLine: true,
+    contentPadding: const EdgeInsets.only(left: 8, right: 2),
     leading: Icon(
       item['estado'] == 'COMPLETADA'
           ? Icons.check_circle
@@ -1231,8 +1449,66 @@ class _ActividadFila extends StatelessWidget {
       color: item['estado'] == 'COMPLETADA' ? Colors.green : AppColors.primary,
     ),
     title: Text(item['nombre']?.toString() ?? 'Actividad'),
-    subtitle: Text(
-      '${item['estado'] ?? 'PENDIENTE'} · vence ${_fechaCorta(_fecha(item['fechaFin']))}${item['responsableTexto'] == null ? '' : ' · ${item['responsableTexto']}'}',
+    subtitle: Padding(
+      padding: const EdgeInsets.only(top: 6),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Wrap(
+            spacing: 8,
+            runSpacing: 6,
+            children: [
+              _EstadoActividadChip(
+                estado: item['estado']?.toString() ?? 'PENDIENTE',
+              ),
+              _DatoActividad(
+                icon: Icons.event_outlined,
+                texto: 'Vence ${_fechaCorta(_fecha(item['fechaFin']))}',
+              ),
+              if (item['idUsuarioResponsable'] != null)
+                _DatoActividad(
+                  icon: Icons.person_outline,
+                  texto:
+                      nombresResponsables[item['idUsuarioResponsable']
+                          .toString()] ??
+                      'Sin responsable',
+                ),
+            ],
+          ),
+          ...dependencias.map(
+            (dependencia) => Container(
+              margin: const EdgeInsets.only(top: 7),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF4F0FB),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.link_outlined,
+                    size: 16,
+                    color: AppColors.primary,
+                  ),
+                  const SizedBox(width: 6),
+                  Expanded(
+                    child: Text(
+                      'Depende de ${nombresActividades[dependencia['idActividadPredecesora']?.toString()] ?? 'actividad'}',
+                    ),
+                  ),
+                  IconButton(
+                    tooltip: 'Eliminar dependencia',
+                    visualDensity: VisualDensity.compact,
+                    iconSize: 18,
+                    onPressed: () => alEliminarDependencia(dependencia),
+                    icon: const Icon(Icons.link_off_outlined),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     ),
     trailing: PopupMenuButton<String>(
       onSelected: (v) {
@@ -1253,16 +1529,71 @@ class _ActividadFila extends StatelessWidget {
   );
 }
 
+class _EstadoActividadChip extends StatelessWidget {
+  const _EstadoActividadChip({required this.estado});
+  final String estado;
+
+  @override
+  Widget build(BuildContext context) {
+    final (texto, color) = switch (estado) {
+      'COMPLETADA' => ('Completada', Colors.green.shade700),
+      'EN_PROCESO' => ('En proceso', Colors.blue.shade700),
+      'BLOQUEADA' => ('Bloqueada', Colors.orange.shade800),
+      _ => ('Pendiente', AppColors.primary),
+    };
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: .12),
+        borderRadius: BorderRadius.circular(99),
+      ),
+      child: Text(
+        texto,
+        style: TextStyle(
+          color: color,
+          fontWeight: FontWeight.w700,
+          fontSize: 12,
+        ),
+      ),
+    );
+  }
+}
+
+class _DatoActividad extends StatelessWidget {
+  const _DatoActividad({required this.icon, required this.texto});
+  final IconData icon;
+  final String texto;
+
+  @override
+  Widget build(BuildContext context) => Row(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      Icon(
+        icon,
+        size: 15,
+        color: Theme.of(context).colorScheme.onSurfaceVariant,
+      ),
+      const SizedBox(width: 4),
+      ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 190),
+        child: Text(texto, overflow: TextOverflow.ellipsis),
+      ),
+    ],
+  );
+}
+
 class _ListaTiming extends StatelessWidget {
   const _ListaTiming({
     required this.timing,
     required this.alEditar,
     required this.alEliminar,
     required this.alMover,
+    required this.nombresResponsables,
   });
   final List<Map<String, dynamic>> timing;
   final ValueChanged<Map<String, dynamic>> alEditar, alEliminar;
-  final void Function(Map<String, dynamic>, int) alMover;
+  final void Function(Map<String, dynamic>, Map<String, dynamic>) alMover;
+  final Map<String, String> nombresResponsables;
   @override
   Widget build(BuildContext context) {
     if (timing.isEmpty)
@@ -1281,25 +1612,51 @@ class _ListaTiming extends StatelessWidget {
         return Card(
           child: ListTile(
             leading: CircleAvatar(
-              child: Text(_hora(_fecha(item['fechaHoraInicio']))),
+              radius: 27,
+              child: FittedBox(
+                child: Text(
+                  _hora(_fecha(item['fechaHoraInicio'])),
+                  style: const TextStyle(fontWeight: FontWeight.w800),
+                ),
+              ),
             ),
             title: Text(item['actividad']?.toString() ?? 'Momento'),
-            subtitle: Text(
-              '${_hora(_fecha(item['fechaHoraInicio']))} � ${_hora(_fecha(item['fechaHoraFin']))}${item['ubicacion'] == null ? '' : ' · ${item['ubicacion']}'}',
+            subtitle: Wrap(
+              spacing: 8,
+              runSpacing: 4,
+              children: [
+                _DatoActividad(
+                  icon: Icons.schedule_outlined,
+                  texto: 'Hasta ${_hora(_fecha(item['fechaHoraFin']))}',
+                ),
+                if (item['ubicacion'] != null)
+                  _DatoActividad(
+                    icon: Icons.place_outlined,
+                    texto: item['ubicacion'].toString(),
+                  ),
+                if (item['idUsuarioResponsable'] != null)
+                  _DatoActividad(
+                    icon: Icons.person_outline,
+                    texto:
+                        nombresResponsables[item['idUsuarioResponsable']
+                            .toString()] ??
+                        'Sin responsable',
+                  ),
+              ],
             ),
             trailing: Wrap(
               children: [
                 IconButton(
                   tooltip: 'Subir',
                   icon: const Icon(Icons.keyboard_arrow_up),
-                  onPressed: i == 0 ? null : () => alMover(item, -1),
+                  onPressed: i == 0 ? null : () => alMover(item, timing[i - 1]),
                 ),
                 IconButton(
                   tooltip: 'Bajar',
                   icon: const Icon(Icons.keyboard_arrow_down),
                   onPressed: i == timing.length - 1
                       ? null
-                      : () => alMover(item, 1),
+                      : () => alMover(item, timing[i + 1]),
                 ),
                 PopupMenuButton<String>(
                   onSelected: (v) =>
@@ -1385,16 +1742,11 @@ List<Map<String, dynamic>> _lista(Object? value) => value is List
 DateTime? _fecha(Object? value) =>
     value == null ? null : DateTime.tryParse(value.toString())?.toLocal();
 String _fechaCorta(DateTime? value) => value == null
-    ? '�'
+    ? '--'
     : '${value.day.toString().padLeft(2, '0')}/${value.month.toString().padLeft(2, '0')}/${value.year}';
 String _hora(DateTime? value) => value == null
-    ? '�'
+    ? '--'
     : '${value.hour.toString().padLeft(2, '0')}:${value.minute.toString().padLeft(2, '0')}';
-String _isoLocal(DateTime? value) => value == null
-    ? ''
-    : '${value.year.toString().padLeft(4, '0')}-${value.month.toString().padLeft(2, '0')}-${value.day.toString().padLeft(2, '0')}${value.hour == 0 && value.minute == 0 ? '' : ' ${value.hour.toString().padLeft(2, '0')}:${value.minute.toString().padLeft(2, '0')}'}';
-String _aIso(String value) =>
-    DateTime.parse(value.trim().replaceFirst(' ', 'T')).toIso8601String();
 String? _nuloSiVacio(String value) =>
     value.trim().isEmpty ? null : value.trim();
 String? _requerido(String? value) =>

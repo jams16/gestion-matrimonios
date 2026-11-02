@@ -49,20 +49,29 @@ class AppSidebar extends StatelessWidget {
             final item = entry.value;
             final isSelected = entry.key == selectedIndex;
             final color = isSelected ? selectedForegroundColor : null;
-            return Opacity(
-              opacity: item.disabled ? .42 : 1,
-              child: NavigationDrawerDestination(
-                icon: Icon(
+            // NavigationDrawerDestination must stay a direct child of
+            // NavigationDrawer. Wrapping it in Opacity breaks the inherited
+            // destination information used by Material on desktop.
+            return NavigationDrawerDestination(
+              icon: Opacity(
+                opacity: item.disabled ? .42 : 1,
+                child: Icon(
                   item.disabled ? Icons.lock_outline : item.icon,
                   color: color,
                 ),
-                selectedIcon: Icon(
+              ),
+              selectedIcon: Opacity(
+                opacity: item.disabled ? .42 : 1,
+                child: Icon(
                   item.disabled
                       ? Icons.lock_outline
                       : item.selectedIcon ?? item.icon,
                   color: color,
                 ),
-                label: Text(item.label, style: TextStyle(color: color)),
+              ),
+              label: Opacity(
+                opacity: item.disabled ? .42 : 1,
+                child: Text(item.label, style: TextStyle(color: color)),
               ),
             );
           }),

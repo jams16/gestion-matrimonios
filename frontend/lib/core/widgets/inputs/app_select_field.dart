@@ -47,36 +47,40 @@ class AppSelectField<T> extends StatelessWidget {
 
         const SizedBox(height: 7),
 
-        LayoutBuilder(
-          builder: (context, constraints) {
-            return DropdownMenu<T>(
-              width: constraints.maxWidth,
-              initialSelection: initialValue,
-
-              hintText: hintText,
-              helperText: helperText,
-              errorText: errorText,
-
-              enableFilter: searchable,
-              enableSearch: searchable,
-              requestFocusOnTap: searchable,
-
-              leadingIcon: searchable ? const Icon(Icons.search) : null,
-
-              dropdownMenuEntries: options
-                  .map(
-                    (option) => DropdownMenuEntry<T>(
-                      value: option.value,
-                      label: option.label,
-                    ),
-                  )
-                  .toList(),
-
-              onSelected: onChanged,
-            );
-          },
+        DropdownButtonFormField<T>(
+          isExpanded: true,
+          value: options.any((option) => option.value == initialValue)
+              ? initialValue
+              : null,
+          decoration: InputDecoration(
+            hintText: hintText,
+            helperText: helperText,
+            errorText: errorText,
+            prefixIcon: searchable ? const Icon(Icons.search) : null,
+          ),
+          items: options
+              .map(
+                (option) => DropdownMenuItem<T>(
+                  value: option.value,
+                  child: Text(
+                    _textoSeguro(option.label),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              )
+              .toList(),
+          onChanged: onChanged,
         ),
       ],
     );
   }
 }
+
+String _textoSeguro(String texto) => texto
+    .replaceAll('\u00a2', 'ó')
+    .replaceAll('\u00a1', 'í')
+    .replaceAll('\u00a3', 'ú')
+    .replaceAll('\u00a0', 'á')
+    .replaceAll('\u00a4', 'ñ')
+    .replaceAll('\u201a', 'é')
+    .replaceAll('\uFFFD', '');

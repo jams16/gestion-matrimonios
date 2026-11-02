@@ -425,8 +425,9 @@ export class PrismaCronogramaRepository
       )
       .sort(
         (a, b) =>
-          this.aFecha(a.fechaHoraInicio)!.getTime() -
-          this.aFecha(b.fechaHoraInicio)!.getTime(),
+          (Number(a.orden ?? 0) - Number(b.orden ?? 0)) ||
+          (this.aFecha(a.fechaHoraInicio)!.getTime() -
+            this.aFecha(b.fechaHoraInicio)!.getTime()),
       );
   }
 

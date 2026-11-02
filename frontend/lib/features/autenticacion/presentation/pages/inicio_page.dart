@@ -18,10 +18,16 @@ import '../../infrastructure/auth_api.dart';
 import '../../infrastructure/auth_session.dart';
 
 class InicioPage extends StatefulWidget {
-  const InicioPage({super.key, this.nombre, this.seccion = 0});
+  const InicioPage({
+    super.key,
+    this.nombre,
+    this.seccion = 0,
+    this.contenidoPlan,
+  });
 
   final Object? nombre;
   final int seccion;
+  final Widget? contenidoPlan;
 
   @override
   State<InicioPage> createState() => _InicioPageState();
@@ -44,7 +50,7 @@ class _InicioPageState extends State<InicioPage> {
       selectedIcon: Icons.auto_awesome_mosaic,
     ),
     AppNavigationItem(
-      label: 'Gesti�n',
+      label: 'Gestion',
       icon: Icons.account_tree_outlined,
       selectedIcon: Icons.account_tree,
     ),
@@ -54,7 +60,7 @@ class _InicioPageState extends State<InicioPage> {
       selectedIcon: Icons.storefront,
     ),
   ];
-  static const _titulos = ['Home', 'Plan', 'Gesti�n', 'Proveedores'];
+  static const _titulos = ['Home', 'Plan', 'Gestion', 'Proveedores'];
   static const _rutas = ['/home', '/plan', '/gestion', '/proveedores'];
 
   @override
@@ -156,15 +162,18 @@ class _InicioPageState extends State<InicioPage> {
   }
 
   Widget _contenido() {
+    if (_seccionActual == 1 && widget.contenidoPlan != null) {
+      return widget.contenidoPlan!;
+    }
     final tarjeta = switch (_seccionActual) {
       0 => _tarjeta(
         'Vista general',
-        'Aqu� ver�s los avances y recordatorios importantes de tu boda.',
+        'Aqui veras los avances y recordatorios importantes de tu boda.',
         Icons.insights_outlined,
       ),
       1 => _tarjeta(
         'Por empezar',
-        'A�n no tienes actividades planificadas.',
+        'Aun no tienes actividades planificadas.',
         Icons.playlist_add_outlined,
       ),
       2 => _tarjeta(
@@ -173,8 +182,8 @@ class _InicioPageState extends State<InicioPage> {
         Icons.check_circle_outline,
       ),
       _ => _tarjeta(
-        'Directorio vac�o',
-        'A�ade proveedores cuando est�s listo para comparar tus opciones.',
+        'Directorio vacio',
+        'Anade proveedores cuando estes listo para comparar tus opciones.',
         Icons.store_outlined,
       ),
     };
@@ -234,7 +243,7 @@ class _InicioPageState extends State<InicioPage> {
       onPressed: () {},
     ),
     PopupMenuButton<_OpcionPerfil>(
-      tooltip: 'Men� de perfil',
+      tooltip: 'Menu de perfil',
       icon: const Icon(Icons.account_circle_outlined),
       offset: const Offset(-12, 8),
       constraints: const BoxConstraints(minWidth: 260, maxWidth: 300),
@@ -335,7 +344,7 @@ class _InicioPageState extends State<InicioPage> {
                 ),
               ),
               IconButton(
-                tooltip: 'Contraer men�',
+                tooltip: 'Contraer menu',
                 onPressed: () => setState(() => _sidebarContraido = true),
                 icon: const Icon(Icons.menu_open),
               ),
@@ -354,7 +363,7 @@ class _InicioPageState extends State<InicioPage> {
         selectedIndex: _seccionActual,
         onDestinationSelected: _seleccionar,
         leading: IconButton(
-          tooltip: 'Desplegar men�',
+          tooltip: 'Desplegar menu',
           onPressed: () => setState(() => _sidebarContraido = false),
           icon: const Icon(Icons.menu),
         ),
@@ -444,7 +453,7 @@ class _DangerProfileItemState extends State<_DangerProfileItem> {
         children: [
           Icon(Icons.logout, size: 20, color: AppColors.error),
           SizedBox(width: AppSpacing.md),
-          Text('Cerrar sesi�n', style: TextStyle(color: AppColors.error)),
+          Text('Cerrar sesion', style: TextStyle(color: AppColors.error)),
         ],
       ),
     ),
