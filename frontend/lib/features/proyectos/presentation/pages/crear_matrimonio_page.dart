@@ -51,11 +51,14 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
   String? _idProyecto;
   bool _guardando = false;
   late final Future<List<Map<String, dynamic>>> _ubigeos;
+  final Map<String, String> _nombresUbigeo = {};
   @override
   void initState() {
     super.initState();
     _idProyecto = widget.idProyectoBorrador;
     _ubigeos = MatrimoniosRemoteDataSource().listarUbigeos();
+    _cargarNombresUbigeo();
+    _cargarTiposCeremonia();
     if (widget.idProyectoBorrador != null) _cargarBorrador();
     _introTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (!mounted) return;
@@ -66,6 +69,48 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
         setState(() => _segundosRestantes--);
       }
     });
+  }
+
+  Future<void> _cargarNombresUbigeo() async {
+    try {
+      final ubigeos = await _ubigeos;
+      if (!mounted) return;
+      setState(() {
+        for (final ubigeo in ubigeos) {
+          final codigo = ubigeo['idUbigeo']?.toString();
+          if (codigo == null) continue;
+          _nombresUbigeo[codigo] = [
+            ubigeo['distrito'],
+            ubigeo['provincia'],
+            ubigeo['departamento'],
+          ].whereType<String>().where((texto) => texto.trim().isNotEmpty).join(', ');
+        }
+      });
+    } catch (_) {
+      // El código se conserva como respaldo si el catálogo no está disponible.
+    }
+  }
+
+  Future<void> _cargarTiposCeremonia() async {
+    try {
+      final tipos = await MatrimoniosRemoteDataSource().listarTiposCeremonia();
+      if (!mounted) return;
+      setState(() {
+        final existentes = _tiposCeremonia.map((tipo) => tipo.id).toSet();
+        _tiposCeremonia.addAll(
+          tipos
+              .map(
+                (tipo) => _TipoCeremoniaOpcion(
+                  id: _entero(tipo['idTipoCeremonia']) ?? 0,
+                  nombre: tipo['nombre']?.toString() ?? '',
+                ),
+              )
+              .where((tipo) => tipo.id > 0 && !existentes.contains(tipo.id)),
+        );
+      });
+    } catch (_) {
+      // El selector muestra el estado de catálogo no disponible sin bloquear el borrador.
+    }
   }
 
   Future<void> _cargarBorrador() async {
@@ -207,7 +252,8 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
     setState(() => _paso++);
   }
 
-  Map<String, dynamic> _payload() => {
+  Map<String, dynamic> _payload({required bool iniciar}) {
+    final payload = <String, dynamic>{
     'pareja1': {
       'nombres': _nombres1.text.trim(),
       'apellidoPaterno': _apellido1.text.trim(),
@@ -222,22 +268,26 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
       'usuario': _usuario2.text.trim(),
       'contrasena': _contrasena2.text,
     },
-    'fechaMatrimonio': _fecha.text.trim(),
-    'presupuesto': num.tryParse(_presupuesto.text.replaceAll(',', '.')) ?? 0,
-    'cantidadInvitados': _invitados,
-    'idTipoCeremonia': _idTipoCeremonia,
+    if (iniciar || _fecha.text.trim().isNotEmpty)
+      'fechaMatrimonio': _fecha.text.trim(),
+    if (iniciar || _presupuesto.text.trim().isNotEmpty)
+      'presupuesto': num.tryParse(_presupuesto.text.replaceAll(',', '.')) ?? 0,
+    if (iniciar || _invitados > 0) 'cantidadInvitados': _invitados,
+    if (_idTipoCeremonia != null) 'idTipoCeremonia': _idTipoCeremonia,
     'ciudadUbicacion': _ubigeo,
     'objetivos': _objetivos.text.trim(),
     'necesidades': _necesidades.text.trim(),
     'supuestos': _supuestos.text.trim(),
     'restricciones': _restricciones.text.trim(),
     'ideasMoonboard': _moonboard.text.trim(),
-  };
+    };
+    return payload;
+  }
   Future<void> _guardar(bool iniciar) async {
     if (_guardando) return;
     setState(() => _guardando = true);
     try {
-      final datos = _payload();
+      final datos = _payload(iniciar: iniciar);
       if (_idProyecto != null) datos['idProyecto'] = _idProyecto;
       await MatrimoniosRemoteDataSource().guardarOnboarding(
         datos,
@@ -304,6 +354,8 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
   TextEditingController get supuestos => _supuestos;
   TextEditingController get moonboard => _moonboard;
   String? get ubigeo => _ubigeo;
+  String get _lugarResumen =>
+      _nombresUbigeo[_ubigeo] ?? _ubigeo ?? 'Sin definir';
   @override
   Widget build(BuildContext context) {
     if (_mostrandoIntro)
@@ -602,7 +654,7 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
         icon: Icons.people_outline,
         title: 'Datos de la pareja',
         texto:
-            '${nombres1.text} ${apellido1.text} · DNI ${dni1.text}\n${nombres2.text} ${apellido2.text} · DNI ${dni2.text}',
+            'Pareja 1\n${nombres1.text} ${apellido1.text}\nUsuario: ${_usuario1.text}\nDNI: ${dni1.text}\n\nPareja 2\n${nombres2.text} ${apellido2.text}\nUsuario: ${_usuario2.text}\nDNI: ${dni2.text}',
         onEdit: () => setState(() => _paso = 1),
       ),
       const SizedBox(height: 12),
@@ -610,7 +662,7 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
         icon: Icons.favorite_outline,
         title: 'Datos del matrimonio',
         texto:
-            'Fecha: ${fecha.text}\nPresupuesto: S/. ${presupuesto.text}\nInvitados: $_invitados\nLugar: ${ubigeo ?? 'Sin definir'}',
+            'Fecha: ${fecha.text}\nPresupuesto: S/. ${presupuesto.text}\nInvitados: $_invitados\nLugar: $_lugarResumen',
         onEdit: () => setState(() => _paso = 2),
       ),
       const SizedBox(height: 12),
@@ -754,7 +806,9 @@ class _ResumenCard extends StatelessWidget {
                   style: const TextStyle(fontWeight: FontWeight.w800),
                 ),
                 const SizedBox(height: 8),
-                Text(texto),
+                title == 'Datos de la pareja'
+                    ? _DetalleParejas(texto: texto)
+                    : Text(texto),
               ],
             ),
           ),
@@ -767,4 +821,57 @@ class _ResumenCard extends StatelessWidget {
       ),
     ),
   );
+}
+
+class _DetalleParejas extends StatelessWidget {
+  const _DetalleParejas({required this.texto});
+
+  final String texto;
+
+  @override
+  Widget build(BuildContext context) {
+    final parejas = texto.split('\n\n');
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: parejas
+          .map(
+            (pareja) => Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: _DetallePareja(texto: pareja),
+            ),
+          )
+          .toList(),
+    );
+  }
+}
+
+class _DetallePareja extends StatelessWidget {
+  const _DetallePareja({required this.texto});
+
+  final String texto;
+
+  @override
+  Widget build(BuildContext context) {
+    final lineas = texto.split('\n');
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          lineas.isEmpty ? '' : lineas.first,
+          style: Theme.of(context).textTheme.labelMedium?.copyWith(
+            color: AppColors.primary,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        if (lineas.length > 1)
+          Text(
+            lineas[1],
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ...lineas.skip(2).map((linea) => Text(linea)),
+      ],
+    );
+  }
 }

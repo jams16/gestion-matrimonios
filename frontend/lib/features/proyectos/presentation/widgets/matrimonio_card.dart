@@ -66,8 +66,12 @@ class MatrimonioCard extends StatelessWidget {
                           label: matrimonio.ciudadUbicacion,
                         ),
                         const SizedBox(height: AppSpacing.sm),
+                        _ProgresoFases(
+                          completadas: matrimonio.progresoFases,
+                        ),
+                        const SizedBox(height: AppSpacing.sm),
                         _EstadoChip(
-                          fase: matrimonio.etiquetaFase,
+                          fase: matrimonio.etiquetaProgreso,
                           activo: matrimonio.estadoActivo,
                         ),
                       ],
@@ -97,6 +101,31 @@ class MatrimonioCard extends StatelessWidget {
     final mes = fecha.month.toString().padLeft(2, '0');
     return '$dia/$mes/${fecha.year}';
   }
+}
+
+class _ProgresoFases extends StatelessWidget {
+  const _ProgresoFases({required this.completadas});
+
+  final int completadas;
+
+  @override
+  Widget build(BuildContext context) => Row(
+    children: List.generate(
+      5,
+      (index) => Expanded(
+        child: Container(
+          height: 5,
+          margin: EdgeInsets.only(right: index == 4 ? 0 : 4),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(99),
+            color: index < completadas
+                ? AppColors.primary
+                : AppColors.disabledBackground,
+          ),
+        ),
+      ),
+    ),
+  );
 }
 
 class _EstadoChip extends StatelessWidget {

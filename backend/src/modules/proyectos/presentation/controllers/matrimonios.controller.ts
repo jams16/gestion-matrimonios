@@ -32,6 +32,7 @@ import {
   EliminarMatrimonioUseCase,
   ListarMatrimoniosUseCase,
   ListarResumenMatrimoniosUseCase,
+  ListarTiposCeremoniaUseCase,
   ObtenerMatrimonioUseCase,
 } from '../../application/use-cases/matrimonios.use-cases';
 import {
@@ -49,6 +50,7 @@ export class MatrimoniosController {
     private readonly obtener: ObtenerMatrimonioUseCase,
     private readonly listar: ListarMatrimoniosUseCase,
     private readonly listarResumen: ListarResumenMatrimoniosUseCase,
+    private readonly listarTiposCeremoniaUseCase: ListarTiposCeremoniaUseCase,
     private readonly actualizar: ActualizarMatrimonioUseCase,
     private readonly eliminar: EliminarMatrimonioUseCase,
     private readonly guardarOnboarding: GuardarOnboardingMatrimonioUseCase,
@@ -148,6 +150,16 @@ export class MatrimoniosController {
         query,
         request.usuarioAutenticado.sub,
       ),
+    };
+  }
+
+  @Get('tipos-ceremonia')
+  @ApiOperation({ summary: 'Listar tipos de ceremonia activos' })
+  @ApiOkResponse({ description: 'Tipos de ceremonia obtenidos correctamente.' })
+  async listarTiposCeremonia() {
+    return {
+      mensaje: 'Tipos de ceremonia obtenidos correctamente.',
+      data: await this.listarTiposCeremoniaUseCase.execute(),
     };
   }
 

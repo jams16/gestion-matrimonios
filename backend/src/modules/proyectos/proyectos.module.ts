@@ -8,6 +8,7 @@ import {
   EliminarMatrimonioUseCase,
   ListarMatrimoniosUseCase,
   ListarResumenMatrimoniosUseCase,
+  ListarTiposCeremoniaUseCase,
   ObtenerMatrimonioUseCase,
 } from './application/use-cases/matrimonios.use-cases';
 import {
@@ -39,6 +40,7 @@ import { ProyectosController } from './presentation/controllers/proyectos.contro
     ObtenerMatrimonioUseCase,
     ListarMatrimoniosUseCase,
     ListarResumenMatrimoniosUseCase,
+    ListarTiposCeremoniaUseCase,
     ActualizarMatrimonioUseCase,
     EliminarMatrimonioUseCase,
     GuardarOnboardingMatrimonioUseCase,

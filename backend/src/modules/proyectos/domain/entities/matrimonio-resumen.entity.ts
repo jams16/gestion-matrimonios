@@ -6,5 +6,10 @@ export interface MatrimonioResumen {
   nombreProyecto: string | null;
   fechaMatrimonio: Temporal.Instant | null;
   ciudadUbicacion: string | null;
-  estadoProyecto: boolean | null;
+  estado: boolean;
+  idFaseProyecto: number | null;
+  faseProyecto: {
+    codigo: string;
+    nombre: string;
+  } | null;
 }

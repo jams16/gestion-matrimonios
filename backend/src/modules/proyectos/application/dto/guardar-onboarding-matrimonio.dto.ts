@@ -37,17 +37,30 @@ export class GuardarOnboardingMatrimonioDto {
   @ValidateNested()
   @Type(() => ParejaOnboardingDto)
   pareja2: ParejaOnboardingDto;
-  @ApiProperty() @IsString() fechaMatrimonio: string;
-  @ApiProperty() @Type(() => Number) @IsInt() @Min(1) cantidadInvitados: number;
-  @ApiProperty() @Type(() => Number) @Min(0) presupuesto: number;
-  @ApiProperty({
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  fechaMatrimonio?: string;
+  @ApiPropertyOptional()
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  cantidadInvitados?: number;
+  @ApiPropertyOptional()
+  @IsOptional()
+  @Type(() => Number)
+  @Min(0)
+  presupuesto?: number;
+  @ApiPropertyOptional({
     minimum: 1,
     description: 'ID del catálogo gp_tipo_ceremonia.',
   })
   @Type(() => Number)
   @IsInt()
   @Min(1)
-  idTipoCeremonia: number;
+  @IsOptional()
+  idTipoCeremonia?: number;
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()

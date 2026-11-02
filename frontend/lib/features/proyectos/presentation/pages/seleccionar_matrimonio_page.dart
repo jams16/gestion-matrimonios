@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:dio/dio.dart';
 
 import '../../../../app/responsive/app_layout.dart';
 import '../../../../app/responsive/responsive_layout.dart';
@@ -119,7 +120,7 @@ class _Layout extends StatelessWidget {
               child: matrimonios.when(
                 loading: () =>
                     const AppPageLoading(message: 'Cargando matrimonios...'),
-                error: (error, stackTrace) => const _ErrorState(),
+                error: (error, stackTrace) => _ErrorState(error: error),
                 data: (items) => items.isEmpty
                     ? const SingleChildScrollView(child: MatrimoniosEmptyCard())
                     : ListView.separated(
@@ -159,7 +160,26 @@ class _Layout extends StatelessWidget {
 }
 
 class _ErrorState extends ConsumerWidget {
-  const _ErrorState();
+  const _ErrorState({required this.error});
+
+  final Object error;
+
+  String get _mensaje {
+    if (error is StateError) return error.toString().replaceFirst('Bad state: ', '');
+    if (error is DioException) {
+      final respuesta = (error as DioException).response;
+      final estado = respuesta?.statusCode;
+      final data = respuesta?.data;
+      final mensajeApi = data is Map ? data['mensaje']?.toString() : null;
+      if (estado == 401 || estado == 403) {
+        return mensajeApi ?? 'Tu sesión ya no es válida. Inicia sesión nuevamente.';
+      }
+      if (respuesta != null) {
+        return mensajeApi ?? 'El servidor no pudo obtener tus matrimonios.';
+      }
+    }
+    return 'Revisa la conexión con el servidor e inténtalo nuevamente.';
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => Center(
@@ -176,8 +196,8 @@ class _ErrorState extends ConsumerWidget {
           ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
         ),
         const SizedBox(height: AppSpacing.xs),
-        const Text(
-          'Revisa la conexion con el servidor e intentalo nuevamente.',
+        Text(
+          _mensaje,
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: AppSpacing.lg),

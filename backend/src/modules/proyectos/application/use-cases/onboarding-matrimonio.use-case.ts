@@ -14,8 +14,8 @@ export class GuardarOnboardingMatrimonioUseCase {
     idPm: number,
     iniciar = false,
   ) {
-    this.validarFechaMatrimonio(dto.fechaMatrimonio);
-    if (iniciar && dto.idProyecto) {
+    if (iniciar) this.validarDatosParaInicio(dto);
+    if (dto.idProyecto) {
       const proyecto = await this.repository.obtenerProyecto(dto.idProyecto);
       const matrimonio = await this.repository.obtenerMatrimonioPorProyecto(
         dto.idProyecto,
@@ -28,8 +28,9 @@ export class GuardarOnboardingMatrimonioUseCase {
       const resultado = await this.repository.guardarOnboardingMatrimonio(
         dto,
         idPm,
-        true,
+        iniciar,
       );
+      if (!iniciar) return resultado;
       const cronograma = await this.generarCronograma.execute(
         resultado.proyecto.idProyecto,
       );
@@ -58,6 +59,15 @@ export class GuardarOnboardingMatrimonioUseCase {
       resultado.proyecto.idProyecto,
     );
     return { ...resultado, cronograma };
+  }
+
+  private validarDatosParaInicio(dto: GuardarOnboardingMatrimonioDto) {
+    if (!dto.fechaMatrimonio || !dto.idTipoCeremonia || !dto.cantidadInvitados || dto.presupuesto === undefined) {
+      throw new BadRequestException(
+        'Completa los datos obligatorios antes de iniciar el proyecto.',
+      );
+    }
+    this.validarFechaMatrimonio(dto.fechaMatrimonio);
   }
 
   private validarFechaMatrimonio(valor: string) {

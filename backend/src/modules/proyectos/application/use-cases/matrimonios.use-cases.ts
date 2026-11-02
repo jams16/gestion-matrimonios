@@ -93,6 +93,15 @@ export class ListarResumenMatrimoniosUseCase {
 }
 
 @Injectable()
+export class ListarTiposCeremoniaUseCase {
+  constructor(private readonly repository: ProyectosRepository) {}
+
+  execute() {
+    return this.repository.listarTiposCeremoniaActivos();
+  }
+}
+
+@Injectable()
 export class ActualizarMatrimonioUseCase {
   constructor(
     private readonly repository: ProyectosRepository,

@@ -191,6 +191,12 @@ export class PrismaProyectosRepository implements ProyectosRepository {
       (await this.prisma.client.orm.public.Matrimonio.all()) as Matrimonio[];
     const proyectos =
       (await this.prisma.client.orm.public.Proyecto.all()) as Proyecto[];
+    const fases =
+      (await this.prisma.client.orm.public.FaseProyecto.all()) as Array<{
+        idFaseProyecto: number;
+        codigo: string;
+        nombre: string;
+      }>;
     const ubigeos =
       (await this.prisma.client.orm.public.Ubigeo.all()) as Array<{
         idUbigeo: string;
@@ -204,6 +210,9 @@ export class PrismaProyectosRepository implements ProyectosRepository {
     );
     const ubigeosPorId = new Map(
       ubigeos.map((ubigeo) => [ubigeo.idUbigeo, ubigeo]),
+    );
+    const fasesPorId = new Map(
+      fases.map((fase) => [fase.idFaseProyecto, fase]),
     );
 
     const usuarios =
@@ -250,6 +259,9 @@ export class PrismaProyectosRepository implements ProyectosRepository {
         const ubigeo = matrimonio.ciudadUbicacion
           ? ubigeosPorId.get(matrimonio.ciudadUbicacion)
           : null;
+        const fase = proyecto?.idFaseProyecto
+          ? fasesPorId.get(proyecto.idFaseProyecto)
+          : null;
 
         return {
           idMatrimonio: matrimonio.idMatrimonio,
@@ -260,7 +272,11 @@ export class PrismaProyectosRepository implements ProyectosRepository {
             ubigeo,
             matrimonio.ciudadUbicacion,
           ),
-          estadoProyecto: proyecto?.estado ?? null,
+          estado: proyecto?.estado ?? true,
+          idFaseProyecto: proyecto?.idFaseProyecto ?? null,
+          faseProyecto: fase
+            ? { codigo: fase.codigo, nombre: fase.nombre }
+            : null,
         };
       })
       .sort((a, b) =>
@@ -280,15 +296,34 @@ export class PrismaProyectosRepository implements ProyectosRepository {
     }));
   }
 
+  async listarTiposCeremoniaActivos(): Promise<
+    Array<{ idTipoCeremonia: number; codigo: string; nombre: string }>
+  > {
+    const tipos =
+      (await this.prisma.client.orm.public.TipoCeremonia.all()) as Array<{
+        idTipoCeremonia: number;
+        codigo: string;
+        nombre: string;
+        activo: boolean;
+      }>;
+    return tipos
+      .filter((tipo) => tipo.activo !== false)
+      .map(({ idTipoCeremonia, codigo, nombre }) => ({
+        idTipoCeremonia,
+        codigo,
+        nombre,
+      }));
+  }
+
   async guardarOnboardingMatrimonio(
     data: GuardarOnboardingMatrimonioDto,
     idPm: number,
     iniciar: boolean,
   ): Promise<{ proyecto: Proyecto; matrimonio: Matrimonio }> {
     const ahora = Temporal.Now.instant();
-    const fechaMatrimonio = Temporal.Instant.from(
-      `${data.fechaMatrimonio}T00:00:00Z`,
-    );
+    const fechaMatrimonio = data.fechaMatrimonio
+      ? Temporal.Instant.from(`${data.fechaMatrimonio}T00:00:00Z`)
+      : null;
     const [tiposCeremonia, fases] = await Promise.all([
       this.prisma.client.orm.public.TipoCeremonia.all(),
       this.prisma.client.orm.public.FaseProyecto.all(),
@@ -299,7 +334,7 @@ export class PrismaProyectosRepository implements ProyectosRepository {
       (tipo) =>
         tipo.idTipoCeremonia === data.idTipoCeremonia && tipo.activo !== false,
     );
-    if (!tipoCeremonia) {
+    if (data.idTipoCeremonia !== undefined && !tipoCeremonia) {
       throw new BadRequestException(
         'El tipo de ceremonia indicado no existe o está inactivo.',
       );
@@ -317,6 +352,42 @@ export class PrismaProyectosRepository implements ProyectosRepository {
     );
     if (!fase) {
       throw new BadRequestException('No existe la fase de proyecto requerida.');
+    }
+    if (data.idProyecto) {
+      const proyectoActual = await this.obtenerProyecto(data.idProyecto);
+      const matrimonioActual = await this.obtenerMatrimonioPorProyecto(
+        data.idProyecto,
+      );
+      if (!proyectoActual || proyectoActual.idPm !== idPm || !matrimonioActual) {
+        throw new BadRequestException(
+          'El borrador indicado no existe o no te pertenece.',
+        );
+      }
+
+      const proyecto = (await this.prisma.client.orm.public.Proyecto.where({
+        idProyecto: data.idProyecto as never,
+      }).update(this.omitirIndefinidos({
+        presupuesto: data.presupuesto,
+        objetivos: data.objetivos,
+        necesidades: data.necesidades,
+        supuestos: data.supuestos,
+        restricciones: data.restricciones,
+        idFaseProyecto: fase.idFaseProyecto,
+        estado: true,
+        fechaModificacion: ahora,
+      }) as never)) as unknown as Proyecto;
+      const matrimonio = (await this.prisma.client.orm.public.Matrimonio.where({
+        idMatrimonio: matrimonioActual.idMatrimonio as never,
+      }).update(this.omitirIndefinidos({
+        fechaMatrimonio: data.fechaMatrimonio ? fechaMatrimonio : undefined,
+        cantidadInvitados: data.cantidadInvitados,
+        idTipoCeremonia: data.idTipoCeremonia,
+        ciudadUbicacion: data.ciudadUbicacion ?? undefined,
+        ideasMoonboard: data.ideasMoonboard,
+        estado: true,
+        fechaModificacion: ahora,
+      }) as never)) as unknown as Matrimonio;
+      return { proyecto, matrimonio };
     }
     if (iniciar && !data.idProyecto) {
       const personas =
@@ -375,9 +446,12 @@ export class PrismaProyectosRepository implements ProyectosRepository {
         idUsuario: number;
         idPersonaNatural: number;
       }>;
-    const faseCierre = (
-      fases as Array<{ idFaseProyecto: number; codigo: string }>
-    ).find((item) => item.codigo === 'CIERRE');
+    const fasesQueBloqueanDni = new Set([
+      'INICIO',
+      'PLANIFICACION',
+      'MONITOREO_Y_CONTROL',
+      'EJECUCION',
+    ]);
     const dniEnMatrimonioAbierto = (dni: string) => {
       const persona = personasActuales.find((item) => item.dni === dni);
       const usuario = persona
@@ -397,7 +471,14 @@ export class PrismaProyectosRepository implements ProyectosRepository {
         const proyecto = proyectosActuales.find(
           (candidate) => candidate.idProyecto === item.idProyecto,
         );
-        return proyecto?.idFaseProyecto !== faseCierre?.idFaseProyecto;
+        const faseProyecto = (fases as Array<{
+          idFaseProyecto: number;
+          codigo: string;
+        }>).find(
+          (faseActual) =>
+            faseActual.idFaseProyecto === proyecto?.idFaseProyecto,
+        );
+        return !!faseProyecto && fasesQueBloqueanDni.has(faseProyecto.codigo);
       });
     };
     if (
@@ -409,7 +490,12 @@ export class PrismaProyectosRepository implements ProyectosRepository {
       );
     }
     const mismaFechaActiva = matrimoniosActuales.some((item) => {
-      if (item.estado === false || !item.fechaMatrimonio) return false;
+      if (
+        !fechaMatrimonio ||
+        item.estado === false ||
+        !item.fechaMatrimonio
+      )
+        return false;
       const proyecto = proyectosActuales.find(
         (candidate) => candidate.idProyecto === item.idProyecto,
       );

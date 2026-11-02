@@ -54,6 +54,9 @@ export abstract class ProyectosRepository {
 
   abstract usuarioExiste(id: number): Promise<boolean>;
   abstract ubigeoExiste(id: string): Promise<boolean>;
+  abstract listarTiposCeremoniaActivos(): Promise<
+    Array<{ idTipoCeremonia: number; codigo: string; nombre: string }>
+  >;
   abstract guardarOnboardingMatrimonio(
     data: GuardarOnboardingMatrimonioDto,
     idPm: number,

@@ -12,8 +12,14 @@ class MatrimoniosRemoteDataSource {
   final Dio _dio;
 
   Future<List<Map<String, dynamic>>> listarResumenes() async {
+    final token = await AuthSession.obtenerAccessToken();
+    if (token == null || token.isEmpty) {
+      throw StateError('Tu sesión expiró. Inicia sesión nuevamente.');
+    }
+
     final response = await _dio.get<Map<String, dynamic>>(
       '/matrimonios/resumen',
+      options: Options(headers: {'Authorization': 'Bearer $token'}),
     );
     final items = List<Object?>.from(
       response.data?['data'] as List? ?? const [],
@@ -42,6 +48,16 @@ class MatrimoniosRemoteDataSource {
     );
     final data = Map<String, dynamic>.from(response.data?['data'] as Map);
     final items = List<Object?>.from(data['items'] as List? ?? const []);
+    return items.map((item) => Map<String, dynamic>.from(item as Map)).toList();
+  }
+
+  Future<List<Map<String, dynamic>>> listarTiposCeremonia() async {
+    final response = await _dio.get<Map<String, dynamic>>(
+      '/matrimonios/tipos-ceremonia',
+    );
+    final items = List<Object?>.from(
+      response.data?['data'] as List? ?? const [],
+    );
     return items.map((item) => Map<String, dynamic>.from(item as Map)).toList();
   }
 
