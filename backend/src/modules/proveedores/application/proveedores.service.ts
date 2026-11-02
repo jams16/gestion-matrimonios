@@ -177,14 +177,8 @@ export class ProveedoresService {
   async crear(d: CrearProveedorDto) {
     return this.prisma.client.transaction(async (tx: any) => {
       const db = tx.orm.public;
-      if (d.tipoProveedor === 'PERSONA_NATURAL' && !d.idPersonaNatural)
-        throw new BadRequestException(
-          'Un proveedor persona natural requiere idPersonaNatural.',
-        );
-      if (d.tipoProveedor === 'EMPRESA' && !d.idEntidad)
-        throw new BadRequestException(
-          'Un proveedor empresa requiere idEntidad.',
-        );
+      // El directorio puede registrar proveedores independientes. Vincularlos
+      // a PersonaNatural/Entidad es opcional y se conserva cuando ya existe.
       if (
         d.idPersonaNatural &&
         !(await db.PersonaNatural.first({

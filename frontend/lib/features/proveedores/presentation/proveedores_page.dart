@@ -256,10 +256,21 @@ class _ProveedoresPageState extends ConsumerState<ProveedoresPage> {
   }
 
   Future<void> _crearProveedor(String matrimonio) async {
-    final data = await _ProveedorForm.show(context);
+    final categorias = await ref.read(proveedoresCategoriasProvider.future);
+    if (!mounted) return;
+    final data = await _ProveedorForm.show(context, categorias: categorias);
     if (!mounted || data == null) return;
     await _ejecutar(matrimonio, () async {
+      final servicioInicial = data.remove('_servicioInicial');
       final creado = await ref.read(proveedoresApiProvider).crear(data);
+      if (servicioInicial is Map) {
+        await ref
+            .read(proveedoresApiProvider)
+            .crearServicio(
+              creado['idProveedor'].toString(),
+              Map<String, dynamic>.from(servicioInicial),
+            );
+      }
       await ref.read(proveedoresApiProvider).asociar(
         matrimonio,
         creado['idProveedor'].toString(),
@@ -279,6 +290,17 @@ class _ProveedoresPageState extends ConsumerState<ProveedoresPage> {
     if (!mounted || accion == null) return;
     final idProveedor = item['idProveedor'].toString();
     switch (accion) {
+      case 'favorito':
+        final esFavorito = item['favorito'] == true;
+        await _ejecutar(
+          matrimonio,
+          () => ref
+              .read(proveedoresApiProvider)
+              .cambiarFavorito(matrimonio, idProveedor, !esFavorito),
+          exito: esFavorito
+              ? 'Proveedor retirado de favoritos.'
+              : 'Proveedor agregado a favoritos.',
+        );
       case 'relacion':
         final data = await _RelacionForm.show(context, item);
         if (data != null && mounted) {
@@ -526,10 +548,8 @@ class _Filtros extends StatelessWidget {
   final ValueChanged<int?> onCategoria;
   final ValueChanged<String?> onEstado;
   @override
-  Widget build(BuildContext context) => Wrap(
-    spacing: 8,
-    runSpacing: 6,
-    children: [
+  Widget build(BuildContext context) {
+    final chips = <Widget>[
       ChoiceChip(
         label: const Text('Todos'),
         selected: categoria == null && estado == null,
@@ -558,8 +578,24 @@ class _Filtros extends StatelessWidget {
           selected: estado == item.$2,
           onSelected: (_) => onEstado(estado == item.$2 ? null : item.$2),
         ),
-    ],
-  );
+    ];
+    return SizedBox(
+      height: 40,
+      child: ScrollConfiguration(
+        behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+        child: ListView.separated(
+          scrollDirection: Axis.horizontal,
+          primary: false,
+          physics: const AlwaysScrollableScrollPhysics(
+            parent: BouncingScrollPhysics(),
+          ),
+          itemCount: chips.length,
+          separatorBuilder: (_, _) => const SizedBox(width: AppSpacing.sm),
+          itemBuilder: (_, index) => chips[index],
+        ),
+      ),
+    );
+  }
 }
 
 class _ProveedorCard extends StatelessWidget {
@@ -711,9 +747,20 @@ class _DetalleProveedorSheet extends StatelessWidget {
                 onTap: () => Navigator.pop(context, 'relacion'),
               ),
               _AccionAgregar(
+                icon: item['favorito'] == true
+                    ? Icons.favorite_border_outlined
+                    : Icons.favorite_outline,
+                titulo: item['favorito'] == true
+                    ? 'Quitar de favoritos'
+                    : 'Agregar a favoritos',
+                descripcion:
+                    'Marca este proveedor como favorito del matrimonio.',
+                onTap: () => Navigator.pop(context, 'favorito'),
+              ),
+              _AccionAgregar(
                 icon: Icons.add_card_outlined,
-                titulo: 'Agregar servicio',
-                descripcion: 'Añade un servicio y su costo referencial.',
+                titulo: 'Gestionar servicios y paquetes',
+                descripcion: 'Agrega o edita servicios, paquetes y costos.',
                 onTap: () => Navigator.pop(context, 'servicio'),
               ),
               _AccionAgregar(
@@ -844,6 +891,7 @@ class _ProveedorForm {
   static Future<Map<String, dynamic>?> show(
     BuildContext context, {
     Map<String, dynamic>? proveedor,
+    List<Map<String, dynamic>> categorias = const [],
   }) async {
     final nombre = TextEditingController(
       text: proveedor?['nombreComercial']?.toString() ?? '',
@@ -863,7 +911,10 @@ class _ProveedorForm {
     final direccion = TextEditingController(
       text: proveedor?['direccion']?.toString() ?? '',
     );
+    final servicio = TextEditingController();
+    final costoServicio = TextEditingController();
     var tipo = proveedor?['tipoProveedor']?.toString() ?? 'EMPRESA';
+    int? categoriaInicial;
     return showDialog<Map<String, dynamic>>(
       context: context,
       builder: (dialog) => StatefulBuilder(
@@ -893,12 +944,11 @@ class _ProveedorForm {
                     const SizedBox(height: 16),
                     AppTextField(
                       label: tipo == 'EMPRESA'
-                          ? 'ID de entidad'
-                          : 'ID de persona natural',
+                          ? 'ID de entidad (opcional)'
+                          : 'ID de persona natural (opcional)',
                       controller: identificador,
                       prefixIcon: const Icon(Icons.badge_outlined),
                       keyboardType: TextInputType.number,
-                      required: true,
                     ),
                     const SizedBox(height: 16),
                   ],
@@ -928,6 +978,39 @@ class _ProveedorForm {
                     controller: direccion,
                     prefixIcon: const Icon(Icons.location_on_outlined),
                   ),
+                  if (proveedor == null) ...[
+                    const SizedBox(height: 16),
+                    AppSelectField<int>(
+                      label: 'Categoría inicial',
+                      initialValue: categoriaInicial,
+                      options: categorias
+                          .map(
+                            (item) => AppSelectOption(
+                              value: item['idCategoriaServicio'] as int,
+                              label: item['nombre']?.toString() ?? 'Categoría',
+                            ),
+                          )
+                          .toList(),
+                      hintText: 'Selecciona una categoría',
+                      onChanged: (value) =>
+                          setState(() => categoriaInicial = value),
+                    ),
+                    const SizedBox(height: 16),
+                    AppTextField(
+                      label: 'Servicio o paquete inicial',
+                      controller: servicio,
+                      prefixIcon: const Icon(Icons.inventory_2_outlined),
+                    ),
+                    const SizedBox(height: 16),
+                    AppTextField(
+                      label: 'Costo referencial (S/.)',
+                      controller: costoServicio,
+                      prefixIcon: const Icon(Icons.payments_outlined),
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true,
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),
@@ -940,16 +1023,29 @@ class _ProveedorForm {
             AppButton(
               label: 'Guardar',
               onPressed: () {
-                if (nombre.text.trim().isEmpty ||
-                    (proveedor == null &&
-                        int.tryParse(identificador.text) == null))
+                if (nombre.text.trim().isEmpty) return;
+                final idVinculado = int.tryParse(identificador.text.trim());
+                final costo = num.tryParse(costoServicio.text.trim());
+                final tieneServicio =
+                    servicio.text.trim().isNotEmpty ||
+                    categoriaInicial != null ||
+                    costoServicio.text.trim().isNotEmpty;
+                if (tieneServicio &&
+                    (categoriaInicial == null ||
+                        servicio.text.trim().isEmpty ||
+                        costo == null)) {
                   return;
+                }
                 Navigator.pop(dialog, {
                   'tipoProveedor': tipo,
-                  if (proveedor == null && tipo == 'EMPRESA')
-                    'idEntidad': int.parse(identificador.text),
-                  if (proveedor == null && tipo == 'PERSONA_NATURAL')
-                    'idPersonaNatural': int.parse(identificador.text),
+                  if (proveedor == null &&
+                      idVinculado != null &&
+                      tipo == 'EMPRESA')
+                    'idEntidad': idVinculado,
+                  if (proveedor == null &&
+                      idVinculado != null &&
+                      tipo == 'PERSONA_NATURAL')
+                    'idPersonaNatural': idVinculado,
                   'nombreComercial': nombre.text.trim(),
                   if (telefono.text.trim().isNotEmpty)
                     'telefonoContacto': telefono.text.trim(),
@@ -957,6 +1053,13 @@ class _ProveedorForm {
                     'correoContacto': correo.text.trim(),
                   if (direccion.text.trim().isNotEmpty)
                     'direccion': direccion.text.trim(),
+                  if (proveedor == null && categoriaInicial != null)
+                    '_servicioInicial': {
+                      'idCategoriaServicio': categoriaInicial,
+                      'nombre': servicio.text.trim(),
+                      'costoReferencial': costo,
+                      'moneda': 'PEN',
+                    },
                 });
               },
             ),
