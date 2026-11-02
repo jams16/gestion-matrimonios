@@ -464,17 +464,25 @@ export class ConsultarCronogramaUseCase {
       idUsuario,
     );
     const filtros = { activo };
-    const [hitos, actividades, dependencias, timing] = await Promise.all([
+    const [hitos, actividades, dependencias, timing, fases] = await Promise.all([
       this.repository.listarHitos(idProyecto, filtros),
       this.repository.listarActividades(idProyecto, filtros),
       this.repository.listarDependencias(idProyecto),
       this.repository.listarTiming(idProyecto, filtros),
+      this.repository.listarFasesProyecto(),
     ]);
+    const faseProyecto = fases.find(
+      (fase) => fase.idFaseProyecto === proyecto.idFaseProyecto,
+    );
     const actividadesActivas = new Set(
       actividades.map((actividad) => String(actividad.idActividad)),
     );
     return {
-      proyecto,
+      proyecto: {
+        ...proyecto,
+        faseProyecto: faseProyecto ?? null,
+        faseProyectoCodigo: faseProyecto?.codigo ?? null,
+      },
       hitos,
       actividades,
       dependencias: dependencias.filter(
