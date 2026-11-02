@@ -78,8 +78,8 @@ export class ObtenerMatrimonioUseCase {
 export class ListarMatrimoniosUseCase {
   constructor(private readonly repository: ProyectosRepository) {}
 
-  execute(query: ListarMatrimoniosDto) {
-    return this.repository.listarMatrimonios(query);
+  execute(query: ListarMatrimoniosDto, idPm: number) {
+    return this.repository.listarMatrimonios(query, idPm);
   }
 }
 
@@ -87,8 +87,8 @@ export class ListarMatrimoniosUseCase {
 export class ListarResumenMatrimoniosUseCase {
   constructor(private readonly repository: ProyectosRepository) {}
 
-  execute() {
-    return this.repository.listarResumenMatrimonios();
+  execute(query: ListarMatrimoniosDto, idPm: number) {
+    return this.repository.listarResumenMatrimonios(query, idPm);
   }
 }
 

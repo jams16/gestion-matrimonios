@@ -117,10 +117,14 @@ export class MatrimoniosController {
   @Get()
   @ApiOperation({ summary: 'Listar matrimonios' })
   @ApiOkResponse({ description: 'Matrimonios obtenidos correctamente.' })
-  async listarMatrimonios(@Query() query: ListarMatrimoniosDto) {
+  @UseGuards(JwtAccessGuard)
+  async listarMatrimonios(
+    @Query() query: ListarMatrimoniosDto,
+    @Req() request: { usuarioAutenticado: { sub: number } },
+  ) {
     return {
       mensaje: 'Matrimonios obtenidos correctamente.',
-      data: await this.listar.execute(query),
+      data: await this.listar.execute(query, request.usuarioAutenticado.sub),
     };
   }
 
@@ -133,10 +137,17 @@ export class MatrimoniosController {
   @ApiOkResponse({
     description: 'Resumenes de matrimonios obtenidos correctamente.',
   })
-  async listarResumenMatrimonios() {
+  @UseGuards(JwtAccessGuard)
+  async listarResumenMatrimonios(
+    @Query() query: ListarMatrimoniosDto,
+    @Req() request: { usuarioAutenticado: { sub: number } },
+  ) {
     return {
       mensaje: 'Resumenes de matrimonios obtenidos correctamente.',
-      data: await this.listarResumen.execute(),
+      data: await this.listarResumen.execute(
+        query,
+        request.usuarioAutenticado.sub,
+      ),
     };
   }
 

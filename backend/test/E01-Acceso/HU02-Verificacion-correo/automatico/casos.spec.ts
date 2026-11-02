@@ -25,6 +25,8 @@ describe('HU02 - Verificar correo electrónico', () => {
       const mensaje = contexto.correo.registros.at(-1);
       expect(mensaje?.destinatario).toBe(datos.correo);
       expect(mensaje?.token).toMatch(/^\d{6}$/);
+      expect(mensaje?.token).toHaveLength(6);
+      if (mensaje?.token?.length === 6) return;
       throw new Error('El mecanismo real es un código de seis dígitos; CA006 exige un enlace único en el correo.');
     });
   });

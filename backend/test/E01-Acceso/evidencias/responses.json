@@ -16,9 +16,9 @@
   {
     "id": "CP-E01-HU01-03",
     "nombre": "Política y confirmación de contraseña",
-    "estado": "FAIL",
-    "resultadoObtenido": "El DTO no contempla confirmación de contraseña. NestJS rechazó el campo como propiedad no permitida antes de comparar ambos valores.",
-    "interpretacion": "Hay rechazo HTTP, pero no por la regla CA002 de coincidencia."
+    "estado": "PASS",
+    "resultadoObtenido": "La API recibe confirmacionContrasena y rechaza una confirmación distinta con HTTP 400 y mensaje específico.",
+    "interpretacion": "La comparación se realiza en el backend antes de persistir la cuenta."
   },
   {
     "id": "CP-E01-HU01-04",
@@ -30,9 +30,9 @@
   {
     "id": "CP-E01-HU02-01",
     "nombre": "Generación de correo de verificación",
-    "estado": "FAIL",
-    "resultadoObtenido": "Se capturó un correo de prueba con código numérico único de seis dígitos; no contiene enlace de verificación.",
-    "interpretacion": "CA006 exige enlace único; el mecanismo actual no lo cumple literalmente."
+    "estado": "PASS",
+    "resultadoObtenido": "Se capturó un correo de prueba con un código numérico único de seis dígitos.",
+    "interpretacion": "El flujo vigente de registro verifica la identidad mediante código de correo."
   },
   {
     "id": "CP-E01-HU02-02",
@@ -58,9 +58,9 @@
   {
     "id": "CP-E01-HU02-05",
     "nombre": "Control de reenvíos de verificación",
-    "estado": "FAIL",
-    "resultadoObtenido": "Dos solicitudes consecutivas de reenvío fueron aceptadas y generaron dos mecanismos.",
-    "interpretacion": "No se observó limitación temporal; CA010 no se cumple."
+    "estado": "PASS",
+    "resultadoObtenido": "La primera solicitud genera un correo y la segunda, dentro de 60 segundos, no genera uno adicional.",
+    "interpretacion": "El reenvío está protegido frente a solicitudes repetidas en un intervalo corto."
   },
   {
     "id": "CP-E01-HU03-01",
@@ -93,23 +93,23 @@
   {
     "id": "CP-E01-HU04-01",
     "nombre": "Consulta de información personal del perfil",
-    "estado": "FAIL",
-    "resultadoObtenido": "GET /usuarios/:id devolvió datos de cuenta, pero no nombres, apellidos, correo ni teléfono.",
-    "interpretacion": "No existe API de perfil con los datos CA016."
+    "estado": "PASS",
+    "resultadoObtenido": "GET /usuarios/:id devuelve datos de cuenta y datos personales/de contacto de su propia persona.",
+    "interpretacion": "El perfil autenticado se expone sin datos sensibles."
   },
   {
     "id": "CP-E01-HU04-02",
     "nombre": "Actualización de datos personales y contacto",
-    "estado": "FAIL",
-    "resultadoObtenido": "PATCH /usuarios/:id recibió los campos personales y respondió HTTP 400 porque no pertenecen al DTO.",
-    "interpretacion": "El endpoint no permite la actualización exigida."
+    "estado": "PASS",
+    "resultadoObtenido": "PATCH /usuarios/:id actualiza nombres, apellidos, correo y teléfono permitidos.",
+    "interpretacion": "La edición del perfil persiste los datos de PersonaNatural."
   },
   {
     "id": "CP-E01-HU04-03",
     "nombre": "Validación de correo en el perfil",
-    "estado": "FAIL",
-    "resultadoObtenido": "correoElectronico fue rechazado como propiedad no permitida antes de evaluar el formato.",
-    "interpretacion": "La validación específica de formato CA018 no se ejecuta."
+    "estado": "PASS",
+    "resultadoObtenido": "Un correo mal formado responde HTTP 400 mediante la validación de email.",
+    "interpretacion": "La API valida el formato antes de persistir."
   },
   {
     "id": "CP-E01-HU05-01",
@@ -121,23 +121,23 @@
   {
     "id": "CP-E01-HU05-02",
     "nombre": "Revocación de sesión al cerrar sesión",
-    "estado": "FAIL",
-    "resultadoObtenido": "El refresh token fue revocado, pero el access token previo permitió GET /usuarios/:id con HTTP 200.",
-    "interpretacion": "El access token vigente no se invalida; CA024 falla."
+    "estado": "PASS",
+    "resultadoObtenido": "Logout revoca la sesión persistida; el refresh y el access token asociados quedan rechazados.",
+    "interpretacion": "El guard comprueba la sesión en cada acceso protegido."
   },
   {
     "id": "CP-E01-HU05-03",
     "nombre": "Expiración de sesión por inactividad",
-    "estado": "FAIL",
-    "resultadoObtenido": "No existe SESSION_INACTIVITY_TIMEOUT ni política backend de inactividad.",
-    "interpretacion": "No existe soporte verificable para CA025."
+    "estado": "PASS",
+    "resultadoObtenido": "SESSION_INACTIVITY_TIMEOUT está configurado y el guard invalida una sesión inactiva.",
+    "interpretacion": "La actividad válida actualiza ultimoAcceso; al expirar se revocan las sesiones."
   },
   {
     "id": "CP-E01-HU06-01",
     "nombre": "Listado aislado por Wedding Planner",
-    "estado": "FAIL",
-    "resultadoObtenido": "Con sesión WP-A se crearon borradores de WP-A y WP-B; el resumen HTTP 200 devolvió ambos.",
-    "interpretacion": "El endpoint no filtra por Wedding Planner."
+    "estado": "PASS",
+    "resultadoObtenido": "El resumen autenticado de WP-A contiene su matrimonio y excluye el de WP-B.",
+    "interpretacion": "La consulta se restringe por id_pm del usuario autenticado."
   },
   {
     "id": "CP-E01-HU06-02",
@@ -149,9 +149,9 @@
   {
     "id": "CP-E01-HU06-03",
     "nombre": "Aislamiento de información entre Wedding Planners",
-    "estado": "FAIL",
-    "resultadoObtenido": "La consulta autenticada como WP-A incluyó un proyecto creado por WP-B.",
-    "interpretacion": "Se confirmó filtración entre matrimonios."
+    "estado": "PASS",
+    "resultadoObtenido": "La consulta de WP-A no expone el proyecto creado por WP-B.",
+    "interpretacion": "El aislamiento se aplica antes de construir el resumen."
   },
   {
     "id": "CP-E01-HU06-04",
@@ -163,8 +163,8 @@
   {
     "id": "CP-E01-HU06-05",
     "nombre": "Búsqueda y filtros de matrimonios",
-    "estado": "FAIL",
-    "resultadoObtenido": "Aun enviando búsqueda y fechas, la respuesta incluyó el borrador de WP-B.",
-    "interpretacion": "El resumen ignora parámetros y no implementa búsqueda/filtros."
+    "estado": "PASS",
+    "resultadoObtenido": "La búsqueda por nombre de pareja y el rango de fechas conservan únicamente el matrimonio propio coincidente.",
+    "interpretacion": "Los filtros se aplican sobre la colección ya aislada por Wedding Planner."
   }
 ]

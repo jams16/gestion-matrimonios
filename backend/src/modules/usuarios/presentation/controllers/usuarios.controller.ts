@@ -2,11 +2,13 @@ import {
   Body,
   Controller,
   Delete,
+  ForbiddenException,
   Get,
   Param,
   ParseIntPipe,
   Patch,
   Query,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -43,7 +45,12 @@ export class UsuariosController {
   @ApiOperation({ summary: 'Obtener un usuario sin datos sensibles' })
   @ApiParam({ name: 'id', type: Number })
   @ApiNotFoundResponse({ description: 'Usuario no encontrado.' })
-  async obtener(@Param('id', ParseIntPipe) id: number) {
+  async obtener(
+    @Param('id', ParseIntPipe) id: number,
+    @Req() request: { usuarioAutenticado: { sub: number } },
+  ) {
+    if (request.usuarioAutenticado.sub !== id)
+      throw new ForbiddenException('No puedes consultar el perfil de otro usuario.');
     return {
       mensaje: 'Usuario obtenido correctamente.',
       data: await this.usuarios.obtener(id),
@@ -55,7 +62,10 @@ export class UsuariosController {
   async actualizar(
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: UpdateUsuarioDto,
+    @Req() request: { usuarioAutenticado: { sub: number } },
   ) {
+    if (request.usuarioAutenticado.sub !== id)
+      throw new ForbiddenException('No puedes editar el perfil de otro usuario.');
     return {
       mensaje: 'Usuario actualizado correctamente.',
       data: await this.usuarios.actualizar(id, dto),

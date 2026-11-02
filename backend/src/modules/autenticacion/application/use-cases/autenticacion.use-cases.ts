@@ -123,6 +123,10 @@ export class RegistroPendienteUseCase {
     await this.repository.verificarRegistroPendiente(registro.idRegistro);
   }
   async finalizar(dto: FinalizarRegistroDto) {
+    if (dto.contrasena !== dto.confirmacionContrasena)
+      throw new BadRequestException(
+        'La confirmación de contraseña no coincide con la contraseña.',
+      );
     const registro = await this.repository.obtenerRegistroPendiente(
       hashToken(dto.token),
     );
@@ -222,6 +226,7 @@ export class IniciarSesionUseCase {
     const accessToken = await this.jwt.signAsync({
       sub: usuario.idUsuario,
       usuario: usuario.usuario,
+      sid: sesion.idSesion,
     });
     const refreshToken = await this.jwt.signAsync(
       { sub: usuario.idUsuario, sid: sesion.idSesion, token: refresh },
@@ -297,6 +302,7 @@ export class RefrescarSesionUseCase {
       accessToken: await this.jwt.signAsync({
         sub: usuario.idUsuario,
         usuario: usuario.usuario,
+        sid: nuevaSesion.idSesion,
       }),
       refreshToken: await this.jwt.signAsync(
         {
@@ -355,7 +361,19 @@ export class SolicitarVerificacionCorreoUseCase {
       (usuario
         ? await this.repository.personaExiste(usuario.idPersonaNatural)
         : null);
-    if (!usuario || !datos || usuario.correoVerificado) return;
+    if (!usuario || !datos || usuario.correoVerificado) return false;
+    const ultimo = await this.repository.obtenerUltimoTokenCuenta(
+      idUsuario,
+      TipoTokenCuenta.VERIFICACION_CORREO,
+    );
+    if (
+      ultimo &&
+      Temporal.Instant.compare(
+        ahora(),
+        ultimo.fechaCreacion.add({ seconds: 60 }),
+      ) < 0
+    )
+      return false;
     const token = tokenSeguro();
     await this.repository.crearTokenCuenta({
       idUsuario,
@@ -368,6 +386,7 @@ export class SolicitarVerificacionCorreoUseCase {
       `${datos.nombres} ${datos.apellidoPaterno}`,
       token,
     );
+    return true;
   }
   async execute(dto: SolicitarTokenDto) {
     const usuario = await this.repository.buscarUsuario(dto.usuarioOCorreo);
@@ -452,7 +471,8 @@ export class GestionarUsuariosUseCase {
   async obtener(id: number) {
     const usuario = await this.repository.obtenerUsuario(id);
     if (!usuario) throw new NotFoundException('Usuario no encontrado.');
-    return publico(usuario);
+    const persona = await this.repository.personaExiste(usuario.idPersonaNatural);
+    return { ...publico(usuario), ...persona };
   }
   async listar(query: QueryUsuarioDto) {
     const resultado = await this.repository.listarUsuarios(query);
@@ -463,9 +483,53 @@ export class GestionarUsuariosUseCase {
       throw new ConflictException('El usuario ya está registrado.');
     if (dto.idEntidad && !(await this.repository.entidadExiste(dto.idEntidad)))
       throw new BadRequestException('La entidad no existe.');
-    const usuario = await this.repository.actualizarUsuario(id, dto);
+    const usuarioActual = await this.repository.obtenerUsuario(id);
+    if (!usuarioActual) throw new NotFoundException('Usuario no encontrado.');
+    if (
+      dto.correoElectronico &&
+      (await this.repository.correoPersonaExiste(
+        dto.correoElectronico,
+        usuarioActual.idPersonaNatural,
+      ))
+    )
+      throw new ConflictException('El correo ya se encuentra registrado.');
+    const {
+      nombres,
+      apellidoPaterno,
+      apellidoMaterno,
+      correoElectronico,
+      telefono,
+      direccion,
+      ...datosUsuario
+    } = dto;
+    const hayDatosPersona =
+      nombres !== undefined ||
+      apellidoPaterno !== undefined ||
+      apellidoMaterno !== undefined ||
+      correoElectronico !== undefined ||
+      telefono !== undefined ||
+      direccion !== undefined;
+    const persona = hayDatosPersona
+      ? await this.repository.actualizarPersonaNatural(
+          usuarioActual.idPersonaNatural,
+          {
+            nombres,
+            apellidoPaterno,
+            apellidoMaterno,
+            correoElectronico,
+            telefono,
+            direccion,
+          },
+        )
+      : await this.repository.personaExiste(usuarioActual.idPersonaNatural);
+    const datosUsuarioDefinidos = Object.fromEntries(
+      Object.entries(datosUsuario).filter(([, valor]) => valor !== undefined),
+    );
+    const usuario = Object.keys(datosUsuarioDefinidos).length
+      ? await this.repository.actualizarUsuario(id, datosUsuarioDefinidos)
+      : usuarioActual;
     if (!usuario) throw new NotFoundException('Usuario no encontrado.');
-    return publico(usuario);
+    return { ...publico(usuario), ...persona };
   }
   async eliminar(id: number) {
     const usuario = await this.repository.actualizarUsuario(id, {

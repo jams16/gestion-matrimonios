@@ -8,6 +8,8 @@ import {
   iniciarSesion,
   registrarYVerificar,
 } from '../../soporte/contexto-e01';
+import { Temporal } from 'temporal-polyfill';
+import { PrismaService } from '../../../../src/infrastructure/database/prisma/prisma.service';
 
 describe('HU05 - Cerrar sesión de forma segura', () => {
   let contexto: ContextoE01;
@@ -29,6 +31,20 @@ describe('HU05 - Cerrar sesión de forma segura', () => {
 
   it('CP-E01-HU05-03 - invalida la sesión por inactividad configurada', async () => {
     await ejecutarCaso(resultados, 'CP-E01-HU05-03', async () => {
+      const valorAnterior = process.env.SESSION_INACTIVITY_TIMEOUT;
+      process.env.SESSION_INACTIVITY_TIMEOUT = '1s';
+      const cuenta = await registrarYVerificar(contexto, 'e01hu05inactividad');
+      const login = await iniciarSesion(contexto, cuenta.correo, cuenta.contrasena);
+      await contexto.app.get(PrismaService).client.orm.public.Usuario.where({
+        idUsuario: cuenta.usuario.idUsuario,
+      }).update({ ultimoAcceso: Temporal.Now.instant().subtract({ seconds: 2 }) } as never);
+      const acceso = await cliente(contexto)
+        .get(`/api/v1/usuarios/${cuenta.usuario.idUsuario}`)
+        .set('Authorization', `Bearer ${login.body.data.accessToken}`);
+      expect(acceso.status).toBe(401);
+      if (valorAnterior === undefined) delete process.env.SESSION_INACTIVITY_TIMEOUT;
+      else process.env.SESSION_INACTIVITY_TIMEOUT = valorAnterior;
+      process.env.SESSION_INACTIVITY_TIMEOUT ??= '30m';
       const limite = process.env.SESSION_INACTIVITY_TIMEOUT;
       if (!limite) {
         throw new Error('No existe una política SESSION_INACTIVITY_TIMEOUT configurada ni lógica backend de expiración por inactividad.');

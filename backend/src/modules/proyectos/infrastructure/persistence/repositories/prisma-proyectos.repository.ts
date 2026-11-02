@@ -113,12 +113,47 @@ export class PrismaProyectosRepository implements ProyectosRepository {
 
   async listarMatrimonios(
     query: ListarMatrimoniosDto,
+    idPm?: number,
   ): Promise<ResultadoPaginado<Matrimonio>> {
     let items =
       (await this.prisma.client.orm.public.Matrimonio.all()) as Matrimonio[];
+    const proyectos =
+      (await this.prisma.client.orm.public.Proyecto.all()) as Proyecto[];
+    const usuarios =
+      (await this.prisma.client.orm.public.Usuario.all()) as Array<{
+        idUsuario: number;
+        idPersonaNatural: number;
+      }>;
+    const personas =
+      (await this.prisma.client.orm.public.PersonaNatural.all()) as Array<{
+        idPersonaNatural: number;
+        nombres: string;
+        apellidoPaterno: string;
+        apellidoMaterno: string | null;
+      }>;
     const contiene = this.contiene;
+    const proyectoPorId = new Map(
+      proyectos.map((proyecto) => [proyecto.idProyecto, proyecto]),
+    );
+    const nombrePareja = (idUsuario: number | null) => {
+      const usuario = usuarios.find((item) => item.idUsuario === idUsuario);
+      const persona = usuarios
+        ? personas.find(
+            (item) => item.idPersonaNatural === usuario?.idPersonaNatural,
+          )
+        : undefined;
+      return [
+        persona?.nombres,
+        persona?.apellidoPaterno,
+        persona?.apellidoMaterno,
+      ]
+        .filter(Boolean)
+        .join(' ');
+    };
     items = items.filter(
       (matrimonio) =>
+        (idPm === undefined ||
+          proyectoPorId.get(matrimonio.idProyecto)?.idPm === idPm) &&
         (!query.idMatrimonio ||
           matrimonio.idMatrimonio === query.idMatrimonio) &&
         (!query.idProyecto || matrimonio.idProyecto === query.idProyecto) &&
@@ -128,18 +163,30 @@ export class PrismaProyectosRepository implements ProyectosRepository {
           matrimonio.idTipoCeremonia === query.idTipoCeremonia) &&
         contiene(matrimonio.ciudadUbicacion, query.ciudadUbicacion) &&
         (query.estado === undefined || matrimonio.estado === query.estado) &&
+        (!query.fechaDesde ||
+          !matrimonio.fechaMatrimonio ||
+          matrimonio.fechaMatrimonio.toString().slice(0, 10) >= query.fechaDesde) &&
+        (!query.fechaHasta ||
+          !matrimonio.fechaMatrimonio ||
+          matrimonio.fechaMatrimonio.toString().slice(0, 10) <= query.fechaHasta) &&
         (!query.buscar ||
           [
             matrimonio.idMatrimonio,
             matrimonio.idProyecto,
             matrimonio.ciudadUbicacion,
             matrimonio.ideasMoonboard,
+            proyectoPorId.get(matrimonio.idProyecto)?.nombre,
+            nombrePareja(matrimonio.idNovio1),
+            nombrePareja(matrimonio.idNovio2),
           ].some((valor) => contiene(valor, query.buscar))),
     );
     return this.paginarYOrdenar(items, query);
   }
 
-  async listarResumenMatrimonios(): Promise<MatrimonioResumen[]> {
+  async listarResumenMatrimonios(
+    query: ListarMatrimoniosDto = new ListarMatrimoniosDto(),
+    idPm?: number,
+  ): Promise<MatrimonioResumen[]> {
     const matrimonios =
       (await this.prisma.client.orm.public.Matrimonio.all()) as Matrimonio[];
     const proyectos =
@@ -159,8 +206,45 @@ export class PrismaProyectosRepository implements ProyectosRepository {
       ubigeos.map((ubigeo) => [ubigeo.idUbigeo, ubigeo]),
     );
 
+    const usuarios =
+      (await this.prisma.client.orm.public.Usuario.all()) as Array<{
+        idUsuario: number;
+        idPersonaNatural: number;
+      }>;
+    const personas =
+      (await this.prisma.client.orm.public.PersonaNatural.all()) as Array<{
+        idPersonaNatural: number;
+        nombres: string;
+        apellidoPaterno: string;
+        apellidoMaterno: string | null;
+      }>;
+    const nombrePareja = (idUsuario: number | null) => {
+      const usuario = usuarios.find((item) => item.idUsuario === idUsuario);
+      const persona = personas.find(
+        (item) => item.idPersonaNatural === usuario?.idPersonaNatural,
+      );
+      return [persona?.nombres, persona?.apellidoPaterno, persona?.apellidoMaterno]
+        .filter(Boolean)
+        .join(' ');
+    };
     return matrimonios
-      .filter((matrimonio) => matrimonio.estado !== false)
+      .filter((matrimonio) => {
+        const proyecto = proyectosPorId.get(matrimonio.idProyecto);
+        const fecha = matrimonio.fechaMatrimonio?.toString().slice(0, 10);
+        return (
+          matrimonio.estado !== false &&
+          (idPm === undefined || proyecto?.idPm === idPm) &&
+          (!query.buscar ||
+            [
+              proyecto?.nombre,
+              nombrePareja(matrimonio.idNovio1),
+              nombrePareja(matrimonio.idNovio2),
+              matrimonio.ciudadUbicacion,
+            ].some((valor) => this.contiene(valor, query.buscar))) &&
+          (!query.fechaDesde || !fecha || fecha >= query.fechaDesde) &&
+          (!query.fechaHasta || !fecha || fecha <= query.fechaHasta)
+        );
+      })
       .map((matrimonio) => {
         const proyecto = proyectosPorId.get(matrimonio.idProyecto);
         const ubigeo = matrimonio.ciudadUbicacion

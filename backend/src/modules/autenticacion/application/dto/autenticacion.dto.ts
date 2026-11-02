@@ -98,6 +98,11 @@ export class FinalizarRegistroDto {
   @IsString() @Matches(/^\d{6}$/) token: string;
   @IsString() @MinLength(3) @MaxLength(150) usuario: string;
   @IsString() @MinLength(8) @MaxLength(128) contrasena: string;
+  @ApiProperty({
+    format: 'password',
+    description: 'Debe coincidir exactamente con la contraseña ingresada.',
+  })
+  @IsString() @MinLength(8) @MaxLength(128) confirmacionContrasena: string;
   @IsString() @MinLength(1) @MaxLength(200) nombreComercial: string;
   @Transform(vacioComoIndefinido)
   @IsString() @Matches(/^\d{11}$/) @IsOptional() ruc?: string;
@@ -269,4 +274,48 @@ export class UpdateUsuarioDto {
   @Min(1)
   @IsOptional()
   idEntidad?: number | null;
+
+  @ApiPropertyOptional({ maxLength: 100 })
+  @Transform(trim)
+  @IsString()
+  @MinLength(1)
+  @MaxLength(100)
+  @IsOptional()
+  nombres?: string;
+
+  @ApiPropertyOptional({ maxLength: 100 })
+  @Transform(trim)
+  @IsString()
+  @MinLength(1)
+  @MaxLength(100)
+  @IsOptional()
+  apellidoPaterno?: string;
+
+  @ApiPropertyOptional({ maxLength: 100 })
+  @Transform(vacioComoIndefinido)
+  @IsString()
+  @MaxLength(100)
+  @IsOptional()
+  apellidoMaterno?: string;
+
+  @ApiPropertyOptional({ format: 'email', maxLength: 150 })
+  @Transform(trim)
+  @IsEmail()
+  @MaxLength(150)
+  @IsOptional()
+  correoElectronico?: string;
+
+  @ApiPropertyOptional({ maxLength: 15 })
+  @Transform(vacioComoIndefinido)
+  @IsString()
+  @MaxLength(15)
+  @IsOptional()
+  telefono?: string;
+
+  @ApiPropertyOptional({ maxLength: 250 })
+  @Transform(vacioComoIndefinido)
+  @IsString()
+  @MaxLength(250)
+  @IsOptional()
+  direccion?: string;
 }

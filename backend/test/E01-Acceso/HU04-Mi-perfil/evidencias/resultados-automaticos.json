@@ -1,17 +1,17 @@
 [
   {
     "id": "CP-E01-HU04-01",
-    "estado": "FAIL",
-    "detalle": "expect(received).toHaveProperty(path)\n\nExpected path: \"nombres\"\nReceived path: []\n\nReceived value: {\"correoVerificado\": true, \"esActivo\": true, \"fechaCreacion\": \"2026-10-26T21:29:16.864753Z\", \"fechaModificacion\": \"2026-10-26T21:29:17.043Z\", \"idEntidad\": 33, \"idPersonaNatural\": 68, \"idUsuario\": 68, \"tipoUsuario\": \"PROJECT_MANAGER\", \"ultimoAcceso\": \"2026-10-26T21:29:17.038Z\", \"usuario\": \"claudia.benites.212901.1\"}"
+    "estado": "PASS",
+    "detalle": "El comportamiento observado cumplió el resultado esperado."
   },
   {
     "id": "CP-E01-HU04-02",
-    "estado": "FAIL",
-    "detalle": "expect(received).toBe(expected) // Object.is equality\n\nExpected: 200\nReceived: 400"
+    "estado": "PASS",
+    "detalle": "El comportamiento observado cumplió el resultado esperado."
   },
   {
     "id": "CP-E01-HU04-03",
-    "estado": "FAIL",
-    "detalle": "expect(received).toMatch(expected)\n\nExpected pattern: /email/i\nReceived string:  \"property correoElectronico should not exist\""
+    "estado": "PASS",
+    "detalle": "El comportamiento observado cumplió el resultado esperado."
   }
 ]

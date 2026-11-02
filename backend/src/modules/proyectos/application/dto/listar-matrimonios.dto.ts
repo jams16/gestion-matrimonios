@@ -2,6 +2,7 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
 import {
   IsBoolean,
+  IsDateString,
   IsIn,
   IsInt,
   IsOptional,
@@ -108,4 +109,14 @@ export class ListarMatrimoniosDto {
   @IsOptional()
   @IsBoolean()
   estado?: boolean;
+
+  @ApiPropertyOptional({ format: 'date' })
+  @IsOptional()
+  @IsDateString()
+  fechaDesde?: string;
+
+  @ApiPropertyOptional({ format: 'date' })
+  @IsOptional()
+  @IsDateString()
+  fechaHasta?: string;
 }

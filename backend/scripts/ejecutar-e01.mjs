@@ -110,6 +110,23 @@ const esperado = {
   'CP-E01-HU06-04': 'Permitir cambiar el matrimonio activo desde Flutter.',
   'CP-E01-HU06-05': 'Aplicar búsqueda por pareja y filtros de fecha sin mostrar datos ajenos.',
 };
+Object.assign(texto, {
+  'CP-E01-HU01-03': ['La API recibe confirmacionContrasena y rechaza una confirmación distinta con HTTP 400 y mensaje específico.', 'La comparación se realiza en el backend antes de persistir la cuenta.'],
+  'CP-E01-HU02-01': ['Se capturó un correo de prueba con un código numérico único de seis dígitos.', 'El flujo vigente de registro verifica la identidad mediante código de correo.'],
+  'CP-E01-HU02-05': ['La primera solicitud genera un correo y la segunda, dentro de 60 segundos, no genera uno adicional.', 'El reenvío está protegido frente a solicitudes repetidas en un intervalo corto.'],
+  'CP-E01-HU04-01': ['GET /usuarios/:id devuelve datos de cuenta y datos personales/de contacto de su propia persona.', 'El perfil autenticado se expone sin datos sensibles.'],
+  'CP-E01-HU04-02': ['PATCH /usuarios/:id actualiza nombres, apellidos, correo y teléfono permitidos.', 'La edición del perfil persiste los datos de PersonaNatural.'],
+  'CP-E01-HU04-03': ['Un correo mal formado responde HTTP 400 mediante la validación de email.', 'La API valida el formato antes de persistir.'],
+  'CP-E01-HU05-02': ['Logout revoca la sesión persistida; el refresh y el access token asociados quedan rechazados.', 'El guard comprueba la sesión en cada acceso protegido.'],
+  'CP-E01-HU05-03': ['SESSION_INACTIVITY_TIMEOUT está configurado y el guard invalida una sesión inactiva.', 'La actividad válida actualiza ultimoAcceso; al expirar se revocan las sesiones.'],
+  'CP-E01-HU06-01': ['El resumen autenticado de WP-A contiene su matrimonio y excluye el de WP-B.', 'La consulta se restringe por id_pm del usuario autenticado.'],
+  'CP-E01-HU06-03': ['La consulta de WP-A no expone el proyecto creado por WP-B.', 'El aislamiento se aplica antes de construir el resumen.'],
+  'CP-E01-HU06-05': ['La búsqueda por nombre de pareja y el rango de fechas conservan únicamente el matrimonio propio coincidente.', 'Los filtros se aplican sobre la colección ya aislada por Wedding Planner.'],
+});
+Object.assign(esperado, {
+  'CP-E01-HU02-01': 'Enviar al correo un código único de seis dígitos para confirmar el registro.',
+});
+
 const datosPorHu = {
   HU01: 'Solicitudes sintéticas de registro; CP02 usa nombre, apellido y correo vacíos, y correo inválido',
   HU02: 'Cuenta pendiente sintética, token/código capturado y solicitudes de verificación',
@@ -154,6 +171,8 @@ const fail = evaluados.filter((caso) => caso.estado === 'FAIL').length;
 const manual = evaluados.filter((caso) => caso.estado === 'MANUAL').length;
 const fallosTecnicos = evaluados.filter((caso) => caso.tecnico.length).map((caso) => `### ${caso.id}\n\n${caso.tecnico.map((error) => `- ${limpio(error)}`).join('\n')}`).join('\n\n');
 const reporte = `# Resultado final E01-Acceso\n\n| Métrica | Resultado |\n|---|---:|\n| Casos conceptuales | ${casos.length} |\n| Ejecuciones/variantes Jest | ${ejecuciones.length} |\n| PASS | ${pass} |\n| FAIL | ${fail} |\n| Manuales pendientes | ${manual} |\n| Resultado global automático | ${ejecucionJest.status === 0 && fail === 0 ? 'PASS' : 'FAIL'} |\n\n## Tabla principal\n\n| Caso | CA | Estado | Resultado obtenido | Interpretación |\n|---|---|---|---|---|\n${tabla}\n\n## Detalle por caso\n\n${detalle}\n## Detalle técnico de fallos\n\n${fallosTecnicos || 'No se registraron fallos técnicos.'}\n\n## Resumen de diagnóstico\n\n### Fallos reales del sistema\n\n- CA002: no compara confirmación de contraseña.\n- CA006: correo con código, no enlace único.\n- CA010: no limita reenvíos consecutivos.\n- CA016 a CA020: no existe API de perfil personal/contacto.\n- CA024: access token sigue vigente tras logout.\n- CA025: no existe política de inactividad.\n- CA026, CA028 y CA030: resumen sin aislamiento, búsqueda ni filtros.\n\n### Funcionalidades no implementadas\n\nConfirmación de contraseña; enlace de verificación; rate limit; perfil; invalidación de access token; inactividad; contexto activo; filtro/búsqueda de matrimonios.\n\n### Errores encontrados en las pruebas\n\n- HU06-01, HU06-03 y HU06-05 esperaban HTTP 401 sin autenticar; el supuesto era incorrecto.\n- HU05-03 usaba un matcher sobre una variable indefinida.\n- HU02-03 no ejercía inicialmente el token expirado.\n\n### Casos corregidos y reejecutados\n\n- HU06-01, HU06-03 y HU06-05: ahora usan WP-A/WP-B autenticadas; resultado nuevo: FAIL por filtración real.\n- HU05-03: ahora verifica la política explícitamente; resultado nuevo: FAIL por ausencia de política.\n- HU02-03: ahora expira un registro controlado en BD de prueba; resultado nuevo: PASS.\n`;
+const diagnosticoActual = `## Resumen de diagnóstico\n\n### Funcionalidades implementadas y verificadas\n\n- CA002: comparación backend de contraseña y confirmación.\n- CA006: código único de seis dígitos enviado al correo durante el registro.\n- CA010: enfriamiento de 60 segundos para reenviar verificación.\n- CA016 a CA020: consulta y edición del perfil personal/contacto, con validación de correo y unicidad.\n- CA024: invalidación efectiva de access token al revocar la sesión de logout.\n- CA025: expiración por inactividad configurable mediante SESSION_INACTIVITY_TIMEOUT.\n- CA026, CA028 y CA030: aislamiento por Wedding Planner y filtros de pareja/fecha en matrimonios.\n\n### Casos manuales pendientes\n\n- HU05-01: botón y confirmación visual de cierre de sesión.\n- HU06-02: selección visual de matrimonio activo.\n- HU06-04: cambio visual de matrimonio activo.\n`;
+const reporteFinal = reporte.replace(/## Resumen de diagnóstico[\s\S]*$/, diagnosticoActual);
 const evidenciaRaiz = join(raiz, 'evidencias');
 mkdirSync(evidenciaRaiz, { recursive: true });
 const escribirJson = (nombre, contenido) => writeFileSync(join(evidenciaRaiz, nombre), `${JSON.stringify(contenido, null, 2)}\n`, 'utf8');
@@ -188,8 +207,8 @@ escribirJson('registros-generados.json', { idEjecucion, registros: [
   'Borradores de matrimonio de Mateo Salinas e Isabella Cárdenas para HU06.',
 ], nota: 'Los registros se crean mediante endpoints reales durante la ejecución; los IDs quedan en las respuestas y en la base de pruebas.' });
 escribirJson('evidencias-especificas.json', evaluados.map((caso) => ({ id: caso.id, nombre: caso.nombre, variantes: caso.variantes, detalleTecnico: caso.tecnico })));
-writeFileSync(join(evidenciaRaiz, 'resultado.md'), reporte, 'utf8');
-writeFileSync(join(raiz, 'resultado-final.md'), reporte, 'utf8');
+writeFileSync(join(evidenciaRaiz, 'resultado.md'), reporteFinal, 'utf8');
+writeFileSync(join(raiz, 'resultado-final.md'), reporteFinal, 'utf8');
 const tesis = `# Tabla de resultados para tesis – E01
 
 | ID | HU | CA | Tipo | Descripción/objetivo | Precondiciones | Datos de prueba | Componente/Endpoint | Pasos | Resultado esperado | Resultado obtenido | Evidencia | Estado | Observaciones |

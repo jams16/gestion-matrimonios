@@ -209,6 +209,7 @@ class _RegistrarsePageState extends State<RegistrarsePage> {
         'token': _token.text.trim(),
         'usuario': _usuario.text.trim(),
         'contrasena': _clave.text,
+        'confirmacionContrasena': _confirmacion.text,
         'nombreComercial': _empresa.text.trim(),
         'ruc': _ruc.text.trim(),
         'telefono': _telefono.text.trim(),

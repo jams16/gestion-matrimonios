@@ -158,16 +158,47 @@ export class PrismaAutenticacionRepository implements AutenticacionRepository {
     } | null;
     return p;
   }
-  async correoPersonaExiste(correoElectronico: string): Promise<boolean> {
+  async correoPersonaExiste(
+    correoElectronico: string,
+    excluirIdPersonaNatural?: number,
+  ): Promise<boolean> {
     const personas =
       (await this.prisma.client.orm.public.PersonaNatural.all()) as Array<{
+        idPersonaNatural: number;
         correoElectronico: string | null;
       }>;
     const correo = correoElectronico.toLocaleLowerCase('es-PE');
     return personas.some(
       (persona) =>
+        persona.idPersonaNatural !== excluirIdPersonaNatural &&
         persona.correoElectronico?.toLocaleLowerCase('es-PE') === correo,
     );
+  }
+  async actualizarPersonaNatural(
+    id: number,
+    data: {
+      nombres?: string;
+      apellidoPaterno?: string;
+      apellidoMaterno?: string | null;
+      correoElectronico?: string;
+      telefono?: string | null;
+      direccion?: string | null;
+    },
+  ) {
+    if (!(await this.personaExiste(id))) return null;
+    const datos = Object.fromEntries(
+      Object.entries(data).filter(([, valor]) => valor !== undefined),
+    );
+    return this.prisma.client.orm.public.PersonaNatural.where({
+      idPersonaNatural: id,
+    }).update(datos as never) as Promise<{
+      correoElectronico: string;
+      nombres: string;
+      apellidoPaterno: string;
+      apellidoMaterno?: string | null;
+      telefono?: string | null;
+      direccion?: string | null;
+    }>;
   }
   async entidadExiste(id: number): Promise<boolean> {
     return !!(await this.prisma.client.orm.public.Entidad.first({
@@ -222,6 +253,22 @@ export class PrismaAutenticacionRepository implements AutenticacionRepository {
         (t) =>
           t.tokenHash === hash && t.tipoToken === tipo && !t.fechaUtilizacion,
       ) ?? null
+    );
+  }
+  async obtenerUltimoTokenCuenta(
+    idUsuario: number,
+    tipo: TipoTokenCuenta,
+  ): Promise<TokenCuenta | null> {
+    const tokens =
+      (await this.prisma.client.orm.public.TokenCuenta.all()) as TokenCuenta[];
+    return (
+      tokens
+        .filter(
+          (token) => token.idUsuario === idUsuario && token.tipoToken === tipo,
+        )
+        .sort((a, b) =>
+          Temporal.Instant.compare(b.fechaCreacion, a.fechaCreacion),
+        )[0] ?? null
     );
   }
   async usarTokenCuenta(

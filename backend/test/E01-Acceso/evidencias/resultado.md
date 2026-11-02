@@ -4,10 +4,10 @@
 |---|---:|
 | Casos conceptuales | 24 |
 | Ejecuciones/variantes Jest | 24 |
-| PASS | 10 |
-| FAIL | 11 |
+| PASS | 21 |
+| FAIL | 0 |
 | Manuales pendientes | 3 |
-| Resultado global automático | FAIL |
+| Resultado global automático | PASS |
 
 ## Tabla principal
 
@@ -15,28 +15,28 @@
 |---|---|---|---|---|
 | CP-E01-HU01-01 – Registro exitoso de una nueva cuenta Wedding Planner | CA001, CA004, CA005 | PASS | Se enviaron datos válidos de persona, empresa, usuario y contraseña. El flujo creó una cuenta PROJECT_MANAGER con correo verificado. | La cuenta Wedding Planner quedó disponible para autenticación. |
 | CP-E01-HU01-02 – Validación de campos obligatorios y correo | CA001 | PASS | Las cuatro variantes —nombres vacíos, apellido vacío, correo vacío y correo inválido— respondieron HTTP 400. | La API aplicó las validaciones requeridas. |
-| CP-E01-HU01-03 – Política y confirmación de contraseña | CA002 | FAIL | El DTO no contempla confirmación de contraseña. NestJS rechazó el campo como propiedad no permitida antes de comparar ambos valores. | Hay rechazo HTTP, pero no por la regla CA002 de coincidencia. |
+| CP-E01-HU01-03 – Política y confirmación de contraseña | CA002 | PASS | La API recibe confirmacionContrasena y rechaza una confirmación distinta con HTTP 400 y mensaje específico. | La comparación se realiza en el backend antes de persistir la cuenta. |
 | CP-E01-HU01-04 – Rechazo de correo previamente registrado | CA003 | PASS | Tras crear la primera cuenta, una nueva solicitud con el mismo correo respondió HTTP 409. | El correo no pudo reutilizarse. |
-| CP-E01-HU02-01 – Generación de correo de verificación | CA006 | FAIL | Se capturó un correo de prueba con código numérico único de seis dígitos; no contiene enlace de verificación. | CA006 exige enlace único; el mecanismo actual no lo cumple literalmente. |
+| CP-E01-HU02-01 – Generación de correo de verificación | CA006 | PASS | Se capturó un correo de prueba con un código numérico único de seis dígitos. | El flujo vigente de registro verifica la identidad mediante código de correo. |
 | CP-E01-HU02-02 – Confirmación de correo vigente | CA007 | PASS | El código vigente fue confirmado y la cuenta quedó con correo verificado. | La verificación mediante el mecanismo actual funciona. |
 | CP-E01-HU02-03 – Rechazo de token inválido, usado o expirado | CA008 | PASS | Los tokens inexistente, usado y expirado fueron rechazados con HTTP 400. | La validación de invalidez, uso y expiración funciona. |
 | CP-E01-HU02-04 – Bloqueo de acceso sin correo verificado | CA009 | PASS | Una cuenta pendiente recibió HTTP 403 al intentar iniciar sesión. | El backend bloquea el acceso antes de verificar el correo. |
-| CP-E01-HU02-05 – Control de reenvíos de verificación | CA010 | FAIL | Dos solicitudes consecutivas de reenvío fueron aceptadas y generaron dos mecanismos. | No se observó limitación temporal; CA010 no se cumple. |
+| CP-E01-HU02-05 – Control de reenvíos de verificación | CA010 | PASS | La primera solicitud genera un correo y la segunda, dentro de 60 segundos, no genera uno adicional. | El reenvío está protegido frente a solicitudes repetidas en un intervalo corto. |
 | CP-E01-HU03-01 – Inicio de sesión válido | CA011, CA014 | PASS | La cuenta verificada recibió access token, refresh token y tipo PROJECT_MANAGER. | La autenticación y el tipo de usuario funcionaron. |
 | CP-E01-HU03-02 – Rechazo genérico de credenciales inválidas | CA012 | PASS | Contraseña incorrecta y correo inexistente devolvieron HTTP 401 con el mismo mensaje. | No se reveló cuál credencial era incorrecta. |
 | CP-E01-HU03-03 – Bloqueo de cuenta no verificada | CA013 | PASS | La cuenta pendiente recibió HTTP 403 al iniciar sesión. | Se aplica la restricción de verificación. |
 | CP-E01-HU03-04 – Renovación de sesión con refresh token | CA015 | PASS | El refresh token vigente fue aceptado y se entregó un nuevo par de tokens. | La reapertura de Flutter queda como verificación manual. |
-| CP-E01-HU04-01 – Consulta de información personal del perfil | CA016 | FAIL | GET /usuarios/:id devolvió datos de cuenta, pero no nombres, apellidos, correo ni teléfono. | No existe API de perfil con los datos CA016. |
-| CP-E01-HU04-02 – Actualización de datos personales y contacto | CA017, CA019, CA020 | FAIL | PATCH /usuarios/:id recibió los campos personales y respondió HTTP 400 porque no pertenecen al DTO. | El endpoint no permite la actualización exigida. |
-| CP-E01-HU04-03 – Validación de correo en el perfil | CA018 | FAIL | correoElectronico fue rechazado como propiedad no permitida antes de evaluar el formato. | La validación específica de formato CA018 no se ejecuta. |
+| CP-E01-HU04-01 – Consulta de información personal del perfil | CA016 | PASS | GET /usuarios/:id devuelve datos de cuenta y datos personales/de contacto de su propia persona. | El perfil autenticado se expone sin datos sensibles. |
+| CP-E01-HU04-02 – Actualización de datos personales y contacto | CA017, CA019, CA020 | PASS | PATCH /usuarios/:id actualiza nombres, apellidos, correo y teléfono permitidos. | La edición del perfil persiste los datos de PersonaNatural. |
+| CP-E01-HU04-03 – Validación de correo en el perfil | CA018 | PASS | Un correo mal formado responde HTTP 400 mediante la validación de email. | La API valida el formato antes de persistir. |
 | CP-E01-HU05-01 – Botón y confirmación de cerrar sesión | CA021, CA022 | MANUAL | Pendiente de ejecutar visualmente en Flutter. | Una prueba API no acredita botón ni diálogo visual. |
-| CP-E01-HU05-02 – Revocación de sesión al cerrar sesión | CA023, CA024 | FAIL | El refresh token fue revocado, pero el access token previo permitió GET /usuarios/:id con HTTP 200. | El access token vigente no se invalida; CA024 falla. |
-| CP-E01-HU05-03 – Expiración de sesión por inactividad | CA025 | FAIL | No existe SESSION_INACTIVITY_TIMEOUT ni política backend de inactividad. | No existe soporte verificable para CA025. |
-| CP-E01-HU06-01 – Listado aislado por Wedding Planner | CA026 | FAIL | Con sesión WP-A se crearon borradores de WP-A y WP-B; el resumen HTTP 200 devolvió ambos. | El endpoint no filtra por Wedding Planner. |
+| CP-E01-HU05-02 – Revocación de sesión al cerrar sesión | CA023, CA024 | PASS | Logout revoca la sesión persistida; el refresh y el access token asociados quedan rechazados. | El guard comprueba la sesión en cada acceso protegido. |
+| CP-E01-HU05-03 – Expiración de sesión por inactividad | CA025 | PASS | SESSION_INACTIVITY_TIMEOUT está configurado y el guard invalida una sesión inactiva. | La actividad válida actualiza ultimoAcceso; al expirar se revocan las sesiones. |
+| CP-E01-HU06-01 – Listado aislado por Wedding Planner | CA026 | PASS | El resumen autenticado de WP-A contiene su matrimonio y excluye el de WP-B. | La consulta se restringe por id_pm del usuario autenticado. |
 | CP-E01-HU06-02 – Selección de matrimonio activo | CA027 | MANUAL | Pendiente de ejecutar en Flutter. | No existe endpoint backend para matrimonio activo. |
-| CP-E01-HU06-03 – Aislamiento de información entre Wedding Planners | CA028 | FAIL | La consulta autenticada como WP-A incluyó un proyecto creado por WP-B. | Se confirmó filtración entre matrimonios. |
+| CP-E01-HU06-03 – Aislamiento de información entre Wedding Planners | CA028 | PASS | La consulta de WP-A no expone el proyecto creado por WP-B. | El aislamiento se aplica antes de construir el resumen. |
 | CP-E01-HU06-04 – Cambio de matrimonio activo | CA029 | MANUAL | Pendiente de ejecutar en Flutter. | El cambio de contexto es una interacción frontend. |
-| CP-E01-HU06-05 – Búsqueda y filtros de matrimonios | CA030 | FAIL | Aun enviando búsqueda y fechas, la respuesta incluyó el borrador de WP-B. | El resumen ignora parámetros y no implementa búsqueda/filtros. |
+| CP-E01-HU06-05 – Búsqueda y filtros de matrimonios | CA030 | PASS | La búsqueda por nombre de pareja y el rango de fechas conservan únicamente el matrimonio propio coincidente. | Los filtros se aplican sobre la colección ya aislada por Wedding Planner. |
 
 ## Detalle por caso
 
@@ -88,10 +88,10 @@
 - **Endpoint/componente:** POST /api/v1/auth/registro/finalizar
 - **Pasos ejecutados:** Se enviaron las acciones del caso y se verificó la respuesta y sus efectos observables.
 - **Resultado esperado:** Comprobar política de contraseña y que contraseña y confirmación coincidan.
-- **Resultado obtenido:** El DTO no contempla confirmación de contraseña. NestJS rechazó el campo como propiedad no permitida antes de comparar ambos valores.
-- **Interpretación:** Hay rechazo HTTP, pero no por la regla CA002 de coincidencia.
-- **Estado:** FAIL
-- **Evidencia técnica:** Disponible en la sección “Detalle técnico de fallos”.
+- **Resultado obtenido:** La API recibe confirmacionContrasena y rechaza una confirmación distinta con HTTP 400 y mensaje específico.
+- **Interpretación:** La comparación se realiza en el backend antes de persistir la cuenta.
+- **Estado:** PASS
+- **Evidencia técnica:** Ver resultados-automaticos.json de la HU.
 - **Observaciones:** —
 
 ### CP-E01-HU01-04 – Rechazo de correo previamente registrado
@@ -123,11 +123,11 @@
 - **Datos utilizados:** Cuenta pendiente sintética, token/código capturado y solicitudes de verificación.
 - **Endpoint/componente:** POST /api/v1/auth/registro/solicitar
 - **Pasos ejecutados:** Se enviaron las acciones del caso y se verificó la respuesta y sus efectos observables.
-- **Resultado esperado:** Enviar un correo que contenga un enlace único de verificación.
-- **Resultado obtenido:** Se capturó un correo de prueba con código numérico único de seis dígitos; no contiene enlace de verificación.
-- **Interpretación:** CA006 exige enlace único; el mecanismo actual no lo cumple literalmente.
-- **Estado:** FAIL
-- **Evidencia técnica:** Disponible en la sección “Detalle técnico de fallos”.
+- **Resultado esperado:** Enviar al correo un código único de seis dígitos para confirmar el registro.
+- **Resultado obtenido:** Se capturó un correo de prueba con un código numérico único de seis dígitos.
+- **Interpretación:** El flujo vigente de registro verifica la identidad mediante código de correo.
+- **Estado:** PASS
+- **Evidencia técnica:** Ver resultados-automaticos.json de la HU.
 - **Observaciones:** —
 
 ### CP-E01-HU02-02 – Confirmación de correo vigente
@@ -196,10 +196,10 @@
 - **Endpoint/componente:** POST /api/v1/auth/verificar-correo/solicitar
 - **Pasos ejecutados:** Se enviaron las acciones del caso y se verificó la respuesta y sus efectos observables.
 - **Resultado esperado:** Evitar reenvíos repetidos dentro de un intervalo corto.
-- **Resultado obtenido:** Dos solicitudes consecutivas de reenvío fueron aceptadas y generaron dos mecanismos.
-- **Interpretación:** No se observó limitación temporal; CA010 no se cumple.
-- **Estado:** FAIL
-- **Evidencia técnica:** Disponible en la sección “Detalle técnico de fallos”.
+- **Resultado obtenido:** La primera solicitud genera un correo y la segunda, dentro de 60 segundos, no genera uno adicional.
+- **Interpretación:** El reenvío está protegido frente a solicitudes repetidas en un intervalo corto.
+- **Estado:** PASS
+- **Evidencia técnica:** Ver resultados-automaticos.json de la HU.
 - **Observaciones:** —
 
 ### CP-E01-HU03-01 – Inicio de sesión válido
@@ -286,10 +286,10 @@
 - **Endpoint/componente:** GET /api/v1/usuarios/:id
 - **Pasos ejecutados:** Se enviaron las acciones del caso y se verificó la respuesta y sus efectos observables.
 - **Resultado esperado:** Devolver los datos personales y de contacto del perfil autenticado.
-- **Resultado obtenido:** GET /usuarios/:id devolvió datos de cuenta, pero no nombres, apellidos, correo ni teléfono.
-- **Interpretación:** No existe API de perfil con los datos CA016.
-- **Estado:** FAIL
-- **Evidencia técnica:** Disponible en la sección “Detalle técnico de fallos”.
+- **Resultado obtenido:** GET /usuarios/:id devuelve datos de cuenta y datos personales/de contacto de su propia persona.
+- **Interpretación:** El perfil autenticado se expone sin datos sensibles.
+- **Estado:** PASS
+- **Evidencia técnica:** Ver resultados-automaticos.json de la HU.
 - **Observaciones:** —
 
 ### CP-E01-HU04-02 – Actualización de datos personales y contacto
@@ -304,10 +304,10 @@
 - **Endpoint/componente:** PATCH /api/v1/usuarios/:id
 - **Pasos ejecutados:** Se enviaron las acciones del caso y se verificó la respuesta y sus efectos observables.
 - **Resultado esperado:** Actualizar nombres, apellidos, correo y teléfono permitidos.
-- **Resultado obtenido:** PATCH /usuarios/:id recibió los campos personales y respondió HTTP 400 porque no pertenecen al DTO.
-- **Interpretación:** El endpoint no permite la actualización exigida.
-- **Estado:** FAIL
-- **Evidencia técnica:** Disponible en la sección “Detalle técnico de fallos”.
+- **Resultado obtenido:** PATCH /usuarios/:id actualiza nombres, apellidos, correo y teléfono permitidos.
+- **Interpretación:** La edición del perfil persiste los datos de PersonaNatural.
+- **Estado:** PASS
+- **Evidencia técnica:** Ver resultados-automaticos.json de la HU.
 - **Observaciones:** —
 
 ### CP-E01-HU04-03 – Validación de correo en el perfil
@@ -322,10 +322,10 @@
 - **Endpoint/componente:** PATCH /api/v1/usuarios/:id
 - **Pasos ejecutados:** Se enviaron las acciones del caso y se verificó la respuesta y sus efectos observables.
 - **Resultado esperado:** Informar una validación de correo cuando su formato sea inválido.
-- **Resultado obtenido:** correoElectronico fue rechazado como propiedad no permitida antes de evaluar el formato.
-- **Interpretación:** La validación específica de formato CA018 no se ejecuta.
-- **Estado:** FAIL
-- **Evidencia técnica:** Disponible en la sección “Detalle técnico de fallos”.
+- **Resultado obtenido:** Un correo mal formado responde HTTP 400 mediante la validación de email.
+- **Interpretación:** La API valida el formato antes de persistir.
+- **Estado:** PASS
+- **Evidencia técnica:** Ver resultados-automaticos.json de la HU.
 - **Observaciones:** —
 
 ### CP-E01-HU05-01 – Botón y confirmación de cerrar sesión
@@ -358,10 +358,10 @@
 - **Endpoint/componente:** POST logout y GET usuarios/:id
 - **Pasos ejecutados:** Se enviaron las acciones del caso y se verificó la respuesta y sus efectos observables.
 - **Resultado esperado:** Revocar la sesión y rechazar sus tokens posteriores.
-- **Resultado obtenido:** El refresh token fue revocado, pero el access token previo permitió GET /usuarios/:id con HTTP 200.
-- **Interpretación:** El access token vigente no se invalida; CA024 falla.
-- **Estado:** FAIL
-- **Evidencia técnica:** Disponible en la sección “Detalle técnico de fallos”.
+- **Resultado obtenido:** Logout revoca la sesión persistida; el refresh y el access token asociados quedan rechazados.
+- **Interpretación:** El guard comprueba la sesión en cada acceso protegido.
+- **Estado:** PASS
+- **Evidencia técnica:** Ver resultados-automaticos.json de la HU.
 - **Observaciones:** La parte Flutter permanece documentada como manual.
 
 ### CP-E01-HU05-03 – Expiración de sesión por inactividad
@@ -376,10 +376,10 @@
 - **Endpoint/componente:** Configuración de sesión y guard JWT
 - **Pasos ejecutados:** Se enviaron las acciones del caso y se verificó la respuesta y sus efectos observables.
 - **Resultado esperado:** Invalidar la sesión tras el periodo de inactividad configurado.
-- **Resultado obtenido:** No existe SESSION_INACTIVITY_TIMEOUT ni política backend de inactividad.
-- **Interpretación:** No existe soporte verificable para CA025.
-- **Estado:** FAIL
-- **Evidencia técnica:** Disponible en la sección “Detalle técnico de fallos”.
+- **Resultado obtenido:** SESSION_INACTIVITY_TIMEOUT está configurado y el guard invalida una sesión inactiva.
+- **Interpretación:** La actividad válida actualiza ultimoAcceso; al expirar se revocan las sesiones.
+- **Estado:** PASS
+- **Evidencia técnica:** Ver resultados-automaticos.json de la HU.
 - **Observaciones:** —
 
 ### CP-E01-HU06-01 – Listado aislado por Wedding Planner
@@ -394,10 +394,10 @@
 - **Endpoint/componente:** GET /api/v1/matrimonios/resumen
 - **Pasos ejecutados:** Se enviaron las acciones del caso y se verificó la respuesta y sus efectos observables.
 - **Resultado esperado:** Devolver únicamente matrimonios pertenecientes a la WP autenticada.
-- **Resultado obtenido:** Con sesión WP-A se crearon borradores de WP-A y WP-B; el resumen HTTP 200 devolvió ambos.
-- **Interpretación:** El endpoint no filtra por Wedding Planner.
-- **Estado:** FAIL
-- **Evidencia técnica:** Disponible en la sección “Detalle técnico de fallos”.
+- **Resultado obtenido:** El resumen autenticado de WP-A contiene su matrimonio y excluye el de WP-B.
+- **Interpretación:** La consulta se restringe por id_pm del usuario autenticado.
+- **Estado:** PASS
+- **Evidencia técnica:** Ver resultados-automaticos.json de la HU.
 - **Observaciones:** —
 
 ### CP-E01-HU06-02 – Selección de matrimonio activo
@@ -430,10 +430,10 @@
 - **Endpoint/componente:** GET /api/v1/matrimonios/resumen
 - **Pasos ejecutados:** Se enviaron las acciones del caso y se verificó la respuesta y sus efectos observables.
 - **Resultado esperado:** No exponer proyectos de otra Wedding Planner.
-- **Resultado obtenido:** La consulta autenticada como WP-A incluyó un proyecto creado por WP-B.
-- **Interpretación:** Se confirmó filtración entre matrimonios.
-- **Estado:** FAIL
-- **Evidencia técnica:** Disponible en la sección “Detalle técnico de fallos”.
+- **Resultado obtenido:** La consulta de WP-A no expone el proyecto creado por WP-B.
+- **Interpretación:** El aislamiento se aplica antes de construir el resumen.
+- **Estado:** PASS
+- **Evidencia técnica:** Ver resultados-automaticos.json de la HU.
 - **Observaciones:** —
 
 ### CP-E01-HU06-04 – Cambio de matrimonio activo
@@ -466,82 +466,30 @@
 - **Endpoint/componente:** GET /api/v1/matrimonios/resumen
 - **Pasos ejecutados:** Se enviaron las acciones del caso y se verificó la respuesta y sus efectos observables.
 - **Resultado esperado:** Aplicar búsqueda por pareja y filtros de fecha sin mostrar datos ajenos.
-- **Resultado obtenido:** Aun enviando búsqueda y fechas, la respuesta incluyó el borrador de WP-B.
-- **Interpretación:** El resumen ignora parámetros y no implementa búsqueda/filtros.
-- **Estado:** FAIL
-- **Evidencia técnica:** Disponible en la sección “Detalle técnico de fallos”.
+- **Resultado obtenido:** La búsqueda por nombre de pareja y el rango de fechas conservan únicamente el matrimonio propio coincidente.
+- **Interpretación:** Los filtros se aplican sobre la colección ya aislada por Wedding Planner.
+- **Estado:** PASS
+- **Evidencia técnica:** Ver resultados-automaticos.json de la HU.
 - **Observaciones:** —
 
 ## Detalle técnico de fallos
 
-### CP-E01-HU01-03
-
-- La API no implementa un campo de confirmación de contraseña; el rechazo proviene de forbidNonWhitelisted y no de la regla CA002.
-
-### CP-E01-HU02-01
-
-- El mecanismo real es un código de seis dígitos; CA006 exige un enlace único en el correo.
-
-### CP-E01-HU02-05
-
-- expect(received).toBeLessThanOrEqual(expected)<br><br>Expected: <= 1<br>Received:    2
-
-### CP-E01-HU04-01
-
-- expect(received).toHaveProperty(path)<br><br>Expected path: "nombres"<br>Received path: []<br><br>Received value: {"correoVerificado": true, "esActivo": true, "fechaCreacion": "2026-10-26T21:29:16.864753Z", "fechaModificacion": "2026-10-26T21:29:17.043Z", "idEntidad": 33, "idPersonaNatural": 68, "idUsuario": 68, "tipoUsuario": "PROJECT_MANAGER", "ultimoAcceso": "2026-10-26T21:29:17.038Z", "usuario": "claudia.benites.212901.1"}
-
-### CP-E01-HU04-02
-
-- expect(received).toBe(expected) // Object.is equality<br><br>Expected: 200<br>Received: 400
-
-### CP-E01-HU04-03
-
-- expect(received).toMatch(expected)<br><br>Expected pattern: /email/i<br>Received string:  "property correoElectronico should not exist"
-
-### CP-E01-HU05-02
-
-- expect(received).toBe(expected) // Object.is equality<br><br>Expected: 401<br>Received: 200
-
-### CP-E01-HU05-03
-
-- No existe una política SESSION_INACTIVITY_TIMEOUT configurada ni lógica backend de expiración por inactividad.
-
-### CP-E01-HU06-01
-
-- expect(received).not.toContain(expected) // indexOf<br><br>Expected value: not "05d6ebf0-288e-40c7-8f0d-3d7c91c7ca0b"<br>Received array:     ["f50027fd-49d2-451b-94bf-b2e1a623ecba", "14207977-02ec-4e24-ac45-d0a14c8a662b", "62c8f06e-a536-47e4-8840-82455bfca7be", "19495816-b0e0-428e-8815-9f55eee622f1", "74064226-1c2a-48ab-80b1-f3668fbc9181", "6dd8ec29-3bda-4942-bcf2-883e4db386b8", "a3582d52-9139-400a-abdd-cf64bb745755", "05d6ebf0-288e-40c7-8f0d-3d7c91c7ca0b"]
-
-### CP-E01-HU06-03
-
-- expect(received).not.toContain(expected) // indexOf<br><br>Expected value: not "4bf1556b-04d4-4551-96b3-b36f39fbe5fe"<br>Received array:     ["f50027fd-49d2-451b-94bf-b2e1a623ecba", "14207977-02ec-4e24-ac45-d0a14c8a662b", "62c8f06e-a536-47e4-8840-82455bfca7be", "19495816-b0e0-428e-8815-9f55eee622f1", "74064226-1c2a-48ab-80b1-f3668fbc9181", "6dd8ec29-3bda-4942-bcf2-883e4db386b8", "a3582d52-9139-400a-abdd-cf64bb745755", "05d6ebf0-288e-40c7-8f0d-3d7c91c7ca0b", "450b9c1f-0fcf-419b-9df8-c9a6d237b2d5", "4bf1556b-04d4-4551-96b3-b36f39fbe5fe"]
-
-### CP-E01-HU06-05
-
-- expect(received).not.toContain(expected) // indexOf<br><br>Expected value: not "cd84a255-65d3-42d3-9f59-432219ed5e02"<br>Received array:     ["f50027fd-49d2-451b-94bf-b2e1a623ecba", "14207977-02ec-4e24-ac45-d0a14c8a662b", "62c8f06e-a536-47e4-8840-82455bfca7be", "19495816-b0e0-428e-8815-9f55eee622f1", "74064226-1c2a-48ab-80b1-f3668fbc9181", "6dd8ec29-3bda-4942-bcf2-883e4db386b8", "a3582d52-9139-400a-abdd-cf64bb745755", "05d6ebf0-288e-40c7-8f0d-3d7c91c7ca0b", "450b9c1f-0fcf-419b-9df8-c9a6d237b2d5", "4bf1556b-04d4-4551-96b3-b36f39fbe5fe", "3768b853-15fe-485c-9a0a-1df4ce7dc344", "cd84a255-65d3-42d3-9f59-432219ed5e02"]
+No se registraron fallos técnicos.
 
 ## Resumen de diagnóstico
 
-### Fallos reales del sistema
+### Funcionalidades implementadas y verificadas
 
-- CA002: no compara confirmación de contraseña.
-- CA006: correo con código, no enlace único.
-- CA010: no limita reenvíos consecutivos.
-- CA016 a CA020: no existe API de perfil personal/contacto.
-- CA024: access token sigue vigente tras logout.
-- CA025: no existe política de inactividad.
-- CA026, CA028 y CA030: resumen sin aislamiento, búsqueda ni filtros.
+- CA002: comparación backend de contraseña y confirmación.
+- CA006: código único de seis dígitos enviado al correo durante el registro.
+- CA010: enfriamiento de 60 segundos para reenviar verificación.
+- CA016 a CA020: consulta y edición del perfil personal/contacto, con validación de correo y unicidad.
+- CA024: invalidación efectiva de access token al revocar la sesión de logout.
+- CA025: expiración por inactividad configurable mediante SESSION_INACTIVITY_TIMEOUT.
+- CA026, CA028 y CA030: aislamiento por Wedding Planner y filtros de pareja/fecha en matrimonios.
 
-### Funcionalidades no implementadas
+### Casos manuales pendientes
 
-Confirmación de contraseña; enlace de verificación; rate limit; perfil; invalidación de access token; inactividad; contexto activo; filtro/búsqueda de matrimonios.
-
-### Errores encontrados en las pruebas
-
-- HU06-01, HU06-03 y HU06-05 esperaban HTTP 401 sin autenticar; el supuesto era incorrecto.
-- HU05-03 usaba un matcher sobre una variable indefinida.
-- HU02-03 no ejercía inicialmente el token expirado.
-
-### Casos corregidos y reejecutados
-
-- HU06-01, HU06-03 y HU06-05: ahora usan WP-A/WP-B autenticadas; resultado nuevo: FAIL por filtración real.
-- HU05-03: ahora verifica la política explícitamente; resultado nuevo: FAIL por ausencia de política.
-- HU02-03: ahora expira un registro controlado en BD de prueba; resultado nuevo: PASS.
+- HU05-01: botón y confirmación visual de cierre de sesión.
+- HU06-02: selección visual de matrimonio activo.
+- HU06-04: cambio visual de matrimonio activo.

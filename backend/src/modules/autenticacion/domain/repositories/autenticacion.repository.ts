@@ -42,7 +42,28 @@ export abstract class AutenticacionRepository {
     apellidoPaterno: string;
     apellidoMaterno?: string | null;
   } | null>;
-  abstract correoPersonaExiste(correoElectronico: string): Promise<boolean>;
+  abstract correoPersonaExiste(
+    correoElectronico: string,
+    excluirIdPersonaNatural?: number,
+  ): Promise<boolean>;
+  abstract actualizarPersonaNatural(
+    id: number,
+    data: {
+      nombres?: string;
+      apellidoPaterno?: string;
+      apellidoMaterno?: string | null;
+      correoElectronico?: string;
+      telefono?: string | null;
+      direccion?: string | null;
+    },
+  ): Promise<{
+    correoElectronico: string;
+    nombres: string;
+    apellidoPaterno: string;
+    apellidoMaterno?: string | null;
+    telefono?: string | null;
+    direccion?: string | null;
+  } | null>;
   abstract entidadExiste(id: number): Promise<boolean>;
   abstract crearSesion(
     data: Omit<Sesion, 'idSesion' | 'fechaCreacion' | 'fechaRevocacion'>,
@@ -58,6 +79,10 @@ export abstract class AutenticacionRepository {
   ): Promise<TokenCuenta>;
   abstract buscarTokenCuenta(
     hash: string,
+    tipo: TipoTokenCuenta,
+  ): Promise<TokenCuenta | null>;
+  abstract obtenerUltimoTokenCuenta(
+    idUsuario: number,
     tipo: TipoTokenCuenta,
   ): Promise<TokenCuenta | null>;
   abstract usarTokenCuenta(id: number, fecha: Temporal.Instant): Promise<void>;

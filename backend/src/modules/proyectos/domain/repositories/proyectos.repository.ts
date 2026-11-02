@@ -45,8 +45,12 @@ export abstract class ProyectosRepository {
   ): Promise<Matrimonio | null>;
   abstract listarMatrimonios(
     query: ListarMatrimoniosDto,
+    idPm?: number,
   ): Promise<ResultadoPaginado<Matrimonio>>;
-  abstract listarResumenMatrimonios(): Promise<MatrimonioResumen[]>;
+  abstract listarResumenMatrimonios(
+    query?: ListarMatrimoniosDto,
+    idPm?: number,
+  ): Promise<MatrimonioResumen[]>;
 
   abstract usuarioExiste(id: number): Promise<boolean>;
   abstract ubigeoExiste(id: string): Promise<boolean>;

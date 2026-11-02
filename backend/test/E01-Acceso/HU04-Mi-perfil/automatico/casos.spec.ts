@@ -29,7 +29,7 @@ describe('HU04 - Editar información del perfil', () => {
     await ejecutarCaso(resultados, 'CP-E01-HU04-02', async () => {
       const cuenta = await registrarYVerificar(contexto, 'e01hu04edit');
       const login = await iniciarSesion(contexto, cuenta.correo, cuenta.contrasena);
-      const respuesta = await cliente(contexto).patch(`/api/v1/usuarios/${cuenta.usuario.idUsuario}`).set('Authorization', `Bearer ${login.body.data.accessToken}`).send({ nombres: 'Editado', apellidoPaterno: 'Perfil', correoElectronico: 'perfil.editado@example.test', telefono: '999999999' });
+      const respuesta = await cliente(contexto).patch(`/api/v1/usuarios/${cuenta.usuario.idUsuario}`).set('Authorization', `Bearer ${login.body.data.accessToken}`).send({ nombres: 'Editado', apellidoPaterno: 'Perfil', correoElectronico: `perfil.editado.${cuenta.usuario.idUsuario}@example.test`, telefono: '999999999' });
       expect(respuesta.status).toBe(200);
     });
   });

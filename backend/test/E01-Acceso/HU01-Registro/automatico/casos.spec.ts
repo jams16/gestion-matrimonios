@@ -57,6 +57,8 @@ describe('HU01 - Registrar una nueva cuenta', () => {
       }
       const confirmacion = await api.post('/api/v1/auth/registro/finalizar').send({ token, usuario: datos.usuario, contrasena: datos.contrasena, confirmacionContrasena: 'Distinta#2026', nombreComercial: datos.nombreComercial });
       expect(confirmacion.status).toBe(400);
+      expect(confirmacion.body.mensaje).toMatch(/confirmaci.n.*no coincide/i);
+      if (confirmacion.status === 400) return;
       throw new Error('La API no implementa un campo de confirmación de contraseña; el rechazo proviene de forbidNonWhitelisted y no de la regla CA002.');
     });
   });

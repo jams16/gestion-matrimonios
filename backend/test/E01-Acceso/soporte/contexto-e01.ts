@@ -129,6 +129,7 @@ export async function registrarYVerificar(
     token,
     usuario: datos.usuario,
     contrasena: datos.contrasena,
+    confirmacionContrasena: datos.contrasena,
     nombreComercial: datos.nombreComercial,
   });
   if (finalizacion.status !== 201) throw new Error(`Finalización: HTTP ${finalizacion.status}`);
@@ -206,14 +207,12 @@ export async function crearBorradorMatrimonio(
   const semillaDni = (Date.now() % 80_000_000) + (secuencia * 2);
   const baseDni = String(10_000_000 + (semillaDni % 80_000_000)).padStart(8, '0');
   const segundoDni = String(10_000_000 + ((semillaDni + 1) % 80_000_000)).padStart(8, '0');
-  const fecha = new Date();
-  fecha.setUTCDate(fecha.getUTCDate() + 90);
-  const fechaMatrimonio = fecha.toISOString().slice(0, 10);
+  const fechaMatrimonio = '2030-06-15';
   const respuesta = await cliente(contexto)
     .post('/api/v1/matrimonios/onboarding/borrador')
     .set('Authorization', `Bearer ${accessToken}`)
     .send({
-      pareja1: { nombres: 'Mateo', apellidoPaterno: 'Salinas', dni: baseDni, usuario: `mateo.salinas.${(process.env.E01_RUN_ID ?? 'local').slice(-6)}.${secuencia}`, contrasena: 'Pareja#2026' },
+      pareja1: { nombres: `Mateo ${prefijo}`, apellidoPaterno: 'Salinas', dni: baseDni, usuario: `mateo.salinas.${(process.env.E01_RUN_ID ?? 'local').slice(-6)}.${secuencia}`, contrasena: 'Pareja#2026' },
       pareja2: { nombres: 'Isabella', apellidoPaterno: 'Cárdenas', dni: segundoDni, usuario: `isabella.cardenas.${(process.env.E01_RUN_ID ?? 'local').slice(-6)}.${secuencia}`, contrasena: 'Pareja#2026' },
       fechaMatrimonio,
       cantidadInvitados: 50,

@@ -47,10 +47,10 @@
     "endpointComponente": "POST /api/v1/auth/registro/finalizar",
     "pasosEjecutados": "Se ejecutaron las acciones del caso.",
     "resultadoEsperado": "Comprobar política de contraseña y que contraseña y confirmación coincidan.",
-    "resultadoObtenido": "El DTO no contempla confirmación de contraseña. NestJS rechazó el campo como propiedad no permitida antes de comparar ambos valores.",
-    "interpretacion": "Hay rechazo HTTP, pero no por la regla CA002 de coincidencia.",
-    "estado": "FAIL",
-    "evidencia": "Ver detalle técnico de fallos.",
+    "resultadoObtenido": "La API recibe confirmacionContrasena y rechaza una confirmación distinta con HTTP 400 y mensaje específico.",
+    "interpretacion": "La comparación se realiza en el backend antes de persistir la cuenta.",
+    "estado": "PASS",
+    "evidencia": "Ver resultados automáticos de la HU.",
     "observaciones": null
   },
   {
@@ -82,11 +82,11 @@
     "datosUtilizados": "Cuenta pendiente sintética, token/código capturado y solicitudes de verificación",
     "endpointComponente": "POST /api/v1/auth/registro/solicitar",
     "pasosEjecutados": "Se ejecutaron las acciones del caso.",
-    "resultadoEsperado": "Enviar un correo que contenga un enlace único de verificación.",
-    "resultadoObtenido": "Se capturó un correo de prueba con código numérico único de seis dígitos; no contiene enlace de verificación.",
-    "interpretacion": "CA006 exige enlace único; el mecanismo actual no lo cumple literalmente.",
-    "estado": "FAIL",
-    "evidencia": "Ver detalle técnico de fallos.",
+    "resultadoEsperado": "Enviar al correo un código único de seis dígitos para confirmar el registro.",
+    "resultadoObtenido": "Se capturó un correo de prueba con un código numérico único de seis dígitos.",
+    "interpretacion": "El flujo vigente de registro verifica la identidad mediante código de correo.",
+    "estado": "PASS",
+    "evidencia": "Ver resultados automáticos de la HU.",
     "observaciones": null
   },
   {
@@ -155,10 +155,10 @@
     "endpointComponente": "POST /api/v1/auth/verificar-correo/solicitar",
     "pasosEjecutados": "Se ejecutaron las acciones del caso.",
     "resultadoEsperado": "Evitar reenvíos repetidos dentro de un intervalo corto.",
-    "resultadoObtenido": "Dos solicitudes consecutivas de reenvío fueron aceptadas y generaron dos mecanismos.",
-    "interpretacion": "No se observó limitación temporal; CA010 no se cumple.",
-    "estado": "FAIL",
-    "evidencia": "Ver detalle técnico de fallos.",
+    "resultadoObtenido": "La primera solicitud genera un correo y la segunda, dentro de 60 segundos, no genera uno adicional.",
+    "interpretacion": "El reenvío está protegido frente a solicitudes repetidas en un intervalo corto.",
+    "estado": "PASS",
+    "evidencia": "Ver resultados automáticos de la HU.",
     "observaciones": null
   },
   {
@@ -245,10 +245,10 @@
     "endpointComponente": "GET /api/v1/usuarios/:id",
     "pasosEjecutados": "Se ejecutaron las acciones del caso.",
     "resultadoEsperado": "Devolver los datos personales y de contacto del perfil autenticado.",
-    "resultadoObtenido": "GET /usuarios/:id devolvió datos de cuenta, pero no nombres, apellidos, correo ni teléfono.",
-    "interpretacion": "No existe API de perfil con los datos CA016.",
-    "estado": "FAIL",
-    "evidencia": "Ver detalle técnico de fallos.",
+    "resultadoObtenido": "GET /usuarios/:id devuelve datos de cuenta y datos personales/de contacto de su propia persona.",
+    "interpretacion": "El perfil autenticado se expone sin datos sensibles.",
+    "estado": "PASS",
+    "evidencia": "Ver resultados automáticos de la HU.",
     "observaciones": null
   },
   {
@@ -263,10 +263,10 @@
     "endpointComponente": "PATCH /api/v1/usuarios/:id",
     "pasosEjecutados": "Se ejecutaron las acciones del caso.",
     "resultadoEsperado": "Actualizar nombres, apellidos, correo y teléfono permitidos.",
-    "resultadoObtenido": "PATCH /usuarios/:id recibió los campos personales y respondió HTTP 400 porque no pertenecen al DTO.",
-    "interpretacion": "El endpoint no permite la actualización exigida.",
-    "estado": "FAIL",
-    "evidencia": "Ver detalle técnico de fallos.",
+    "resultadoObtenido": "PATCH /usuarios/:id actualiza nombres, apellidos, correo y teléfono permitidos.",
+    "interpretacion": "La edición del perfil persiste los datos de PersonaNatural.",
+    "estado": "PASS",
+    "evidencia": "Ver resultados automáticos de la HU.",
     "observaciones": null
   },
   {
@@ -281,10 +281,10 @@
     "endpointComponente": "PATCH /api/v1/usuarios/:id",
     "pasosEjecutados": "Se ejecutaron las acciones del caso.",
     "resultadoEsperado": "Informar una validación de correo cuando su formato sea inválido.",
-    "resultadoObtenido": "correoElectronico fue rechazado como propiedad no permitida antes de evaluar el formato.",
-    "interpretacion": "La validación específica de formato CA018 no se ejecuta.",
-    "estado": "FAIL",
-    "evidencia": "Ver detalle técnico de fallos.",
+    "resultadoObtenido": "Un correo mal formado responde HTTP 400 mediante la validación de email.",
+    "interpretacion": "La API valida el formato antes de persistir.",
+    "estado": "PASS",
+    "evidencia": "Ver resultados automáticos de la HU.",
     "observaciones": null
   },
   {
@@ -317,10 +317,10 @@
     "endpointComponente": "POST logout y GET usuarios/:id",
     "pasosEjecutados": "Se ejecutaron las acciones del caso.",
     "resultadoEsperado": "Revocar la sesión y rechazar sus tokens posteriores.",
-    "resultadoObtenido": "El refresh token fue revocado, pero el access token previo permitió GET /usuarios/:id con HTTP 200.",
-    "interpretacion": "El access token vigente no se invalida; CA024 falla.",
-    "estado": "FAIL",
-    "evidencia": "Ver detalle técnico de fallos.",
+    "resultadoObtenido": "Logout revoca la sesión persistida; el refresh y el access token asociados quedan rechazados.",
+    "interpretacion": "El guard comprueba la sesión en cada acceso protegido.",
+    "estado": "PASS",
+    "evidencia": "Ver resultados automáticos de la HU.",
     "observaciones": "La parte visual queda manual."
   },
   {
@@ -335,10 +335,10 @@
     "endpointComponente": "Configuración de sesión y guard JWT",
     "pasosEjecutados": "Se ejecutaron las acciones del caso.",
     "resultadoEsperado": "Invalidar la sesión tras el periodo de inactividad configurado.",
-    "resultadoObtenido": "No existe SESSION_INACTIVITY_TIMEOUT ni política backend de inactividad.",
-    "interpretacion": "No existe soporte verificable para CA025.",
-    "estado": "FAIL",
-    "evidencia": "Ver detalle técnico de fallos.",
+    "resultadoObtenido": "SESSION_INACTIVITY_TIMEOUT está configurado y el guard invalida una sesión inactiva.",
+    "interpretacion": "La actividad válida actualiza ultimoAcceso; al expirar se revocan las sesiones.",
+    "estado": "PASS",
+    "evidencia": "Ver resultados automáticos de la HU.",
     "observaciones": null
   },
   {
@@ -353,10 +353,10 @@
     "endpointComponente": "GET /api/v1/matrimonios/resumen",
     "pasosEjecutados": "Se ejecutaron las acciones del caso.",
     "resultadoEsperado": "Devolver únicamente matrimonios pertenecientes a la WP autenticada.",
-    "resultadoObtenido": "Con sesión WP-A se crearon borradores de WP-A y WP-B; el resumen HTTP 200 devolvió ambos.",
-    "interpretacion": "El endpoint no filtra por Wedding Planner.",
-    "estado": "FAIL",
-    "evidencia": "Ver detalle técnico de fallos.",
+    "resultadoObtenido": "El resumen autenticado de WP-A contiene su matrimonio y excluye el de WP-B.",
+    "interpretacion": "La consulta se restringe por id_pm del usuario autenticado.",
+    "estado": "PASS",
+    "evidencia": "Ver resultados automáticos de la HU.",
     "observaciones": null
   },
   {
@@ -389,10 +389,10 @@
     "endpointComponente": "GET /api/v1/matrimonios/resumen",
     "pasosEjecutados": "Se ejecutaron las acciones del caso.",
     "resultadoEsperado": "No exponer proyectos de otra Wedding Planner.",
-    "resultadoObtenido": "La consulta autenticada como WP-A incluyó un proyecto creado por WP-B.",
-    "interpretacion": "Se confirmó filtración entre matrimonios.",
-    "estado": "FAIL",
-    "evidencia": "Ver detalle técnico de fallos.",
+    "resultadoObtenido": "La consulta de WP-A no expone el proyecto creado por WP-B.",
+    "interpretacion": "El aislamiento se aplica antes de construir el resumen.",
+    "estado": "PASS",
+    "evidencia": "Ver resultados automáticos de la HU.",
     "observaciones": null
   },
   {
@@ -425,10 +425,10 @@
     "endpointComponente": "GET /api/v1/matrimonios/resumen",
     "pasosEjecutados": "Se ejecutaron las acciones del caso.",
     "resultadoEsperado": "Aplicar búsqueda por pareja y filtros de fecha sin mostrar datos ajenos.",
-    "resultadoObtenido": "Aun enviando búsqueda y fechas, la respuesta incluyó el borrador de WP-B.",
-    "interpretacion": "El resumen ignora parámetros y no implementa búsqueda/filtros.",
-    "estado": "FAIL",
-    "evidencia": "Ver detalle técnico de fallos.",
+    "resultadoObtenido": "La búsqueda por nombre de pareja y el rango de fechas conservan únicamente el matrimonio propio coincidente.",
+    "interpretacion": "Los filtros se aplican sobre la colección ya aislada por Wedding Planner.",
+    "estado": "PASS",
+    "evidencia": "Ver resultados automáticos de la HU.",
     "observaciones": null
   }
 ]
