@@ -10,6 +10,7 @@ import {
   GestionarDependenciasUseCase,
   GestionarHitosUseCase,
   GestionarTimingUseCase,
+  GestionarSugerenciasCronogramaUseCase,
 } from './application/use-cases/gestionar-cronograma.use-cases';
 import { CronogramaDateService } from './application/services/cronograma-date.service';
 import { ReprogramacionActividadesService } from './application/services/reprogramacion-actividades.service';
@@ -31,6 +32,7 @@ import { CronogramaController } from './presentation/controllers/cronograma.cont
     GestionarActividadesUseCase,
     GestionarDependenciasUseCase,
     GestionarTimingUseCase,
+    GestionarSugerenciasCronogramaUseCase,
     ConsultarCronogramaUseCase,
     ConfirmarPlanificacionCronogramaUseCase,
     ReprogramarActividadUseCase,

@@ -34,7 +34,7 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'2fcc7f5b53183e49386cf6d5af5200f04e1da662a34999689ba726bed81f2c00'>;
+  StorageHashBase<'89f76cc6cfbd48930a151dcb6b8be89e921191172d5e8ac00692a5be7b237c8c'>;
 export type ExecutionHash =
   ExecutionHashBase<'c4397c95ca05ffe42278b60a4e598c390b4436ac57a876c28ba261c0e87c7963'>;
 export type ProfileHash =
@@ -248,6 +248,7 @@ export type FieldOutputTypes = {
       readonly idHito: CodecTypes['pg/uuid@1']['output'] | null;
       readonly idPlantillaActividad: CodecTypes['pg/int4@1']['output'] | null;
       readonly nombre: Varchar<200>;
+      readonly categoria: Varchar<100> | null;
       readonly descripcion: Varchar<1000> | null;
       readonly listaVerificacion: CodecTypes['pg/json@1']['output'] | null;
       readonly entregable: Varchar<500> | null;
@@ -647,6 +648,7 @@ export type FieldOutputTypes = {
       readonly idProyecto: CodecTypes['pg/uuid@1']['output'];
       readonly idPlantillaTiming: CodecTypes['pg/int4@1']['output'] | null;
       readonly actividad: Varchar<200>;
+      readonly ubicacion: Varchar<250> | null;
       readonly fechaHoraInicio: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly fechaHoraFin: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly duracionMinutos: CodecTypes['pg/int4@1']['output'];
@@ -705,6 +707,7 @@ export type FieldInputTypes = {
       readonly idHito: CodecTypes['pg/uuid@1']['input'] | null;
       readonly idPlantillaActividad: CodecTypes['pg/int4@1']['input'] | null;
       readonly nombre: CodecTypes['sql/varchar@1']['input'];
+      readonly categoria: CodecTypes['sql/varchar@1']['input'] | null;
       readonly descripcion: CodecTypes['sql/varchar@1']['input'] | null;
       readonly listaVerificacion: CodecTypes['pg/json@1']['input'] | null;
       readonly entregable: CodecTypes['sql/varchar@1']['input'] | null;
@@ -1104,6 +1107,7 @@ export type FieldInputTypes = {
       readonly idProyecto: CodecTypes['pg/uuid@1']['input'];
       readonly idPlantillaTiming: CodecTypes['pg/int4@1']['input'] | null;
       readonly actividad: CodecTypes['sql/varchar@1']['input'];
+      readonly ubicacion: CodecTypes['sql/varchar@1']['input'] | null;
       readonly fechaHoraInicio: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly fechaHoraFin: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly duracionMinutos: CodecTypes['pg/int4@1']['input'];
@@ -1199,6 +1203,7 @@ export type StorageColumnTypes = {
     };
     readonly cr_actividad: {
       readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly categoria: Varchar<100> | null;
       readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly descripcion: Varchar<1000> | null;
       readonly entregable: Varchar<500> | null;
@@ -1317,6 +1322,7 @@ export type StorageColumnTypes = {
       readonly modificado_manualmente: CodecTypes['pg/bool@1']['output'];
       readonly orden: CodecTypes['pg/int4@1']['output'];
       readonly responsable_texto: Varchar<150> | null;
+      readonly ubicacion: Varchar<250> | null;
       readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
     };
     readonly gp_buena_practica: {
@@ -1658,6 +1664,7 @@ export type StorageColumnInputTypes = {
     };
     readonly cr_actividad: {
       readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly categoria: CodecTypes['sql/varchar@1']['input'] | null;
       readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly descripcion: CodecTypes['sql/varchar@1']['input'] | null;
       readonly entregable: CodecTypes['sql/varchar@1']['input'] | null;
@@ -1776,6 +1783,7 @@ export type StorageColumnInputTypes = {
       readonly modificado_manualmente: CodecTypes['pg/bool@1']['input'];
       readonly orden: CodecTypes['pg/int4@1']['input'];
       readonly responsable_texto: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly ubicacion: CodecTypes['sql/varchar@1']['input'] | null;
       readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
     };
     readonly gp_buena_practica: {
@@ -2430,6 +2438,7 @@ export namespace Models {
     idHito: CodecTypes['pg/uuid@1']['output'] | null;
     idPlantillaActividad: CodecTypes['pg/int4@1']['output'] | null;
     nombre: Varchar<200>;
+    categoria: Varchar<100> | null;
     descripcion: Varchar<1000> | null;
     listaVerificacion: CodecTypes['pg/json@1']['output'] | null;
     entregable: Varchar<500> | null;
@@ -2475,6 +2484,7 @@ export namespace Models {
     idProyecto: CodecTypes['pg/uuid@1']['output'];
     idPlantillaTiming: CodecTypes['pg/int4@1']['output'] | null;
     actividad: Varchar<200>;
+    ubicacion: Varchar<250> | null;
     fechaHoraInicio: CodecTypes['pg/timestamptz-temporal@1']['output'];
     fechaHoraFin: CodecTypes['pg/timestamptz-temporal@1']['output'];
     duracionMinutos: CodecTypes['pg/int4@1']['output'];
@@ -3151,6 +3161,12 @@ type ContractBase = Omit<
                   readonly codecId: 'sql/varchar@1';
                   readonly nullable: false;
                   readonly typeParams: { readonly length: 200 };
+                };
+                readonly categoria: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly length: 100 };
                 };
                 readonly descripcion: {
                   readonly nativeType: 'character varying';
@@ -4083,6 +4099,12 @@ type ContractBase = Omit<
                   readonly codecId: 'sql/varchar@1';
                   readonly nullable: false;
                   readonly typeParams: { readonly length: 200 };
+                };
+                readonly ubicacion: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly length: 250 };
                 };
                 readonly fecha_hora_inicio: {
                   readonly nativeType: 'timestamptz';
@@ -6936,6 +6958,14 @@ type ContractBase = Omit<
                   readonly typeParams: { readonly length: 200 };
                 };
               };
+              readonly categoria: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 100 };
+                };
+              };
               readonly descripcion: {
                 readonly nullable: true;
                 readonly type: {
@@ -7106,6 +7136,7 @@ type ContractBase = Omit<
                 readonly idHito: { readonly column: 'id_hito' };
                 readonly idPlantillaActividad: { readonly column: 'id_plantilla_actividad' };
                 readonly nombre: { readonly column: 'nombre' };
+                readonly categoria: { readonly column: 'categoria' };
                 readonly descripcion: { readonly column: 'descripcion' };
                 readonly listaVerificacion: { readonly column: 'lista_verificacion' };
                 readonly entregable: { readonly column: 'entregable' };
@@ -10708,6 +10739,14 @@ type ContractBase = Omit<
                   readonly typeParams: { readonly length: 200 };
                 };
               };
+              readonly ubicacion: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 250 };
+                };
+              };
               readonly fechaHoraInicio: {
                 readonly nullable: false;
                 readonly type: {
@@ -10819,6 +10858,7 @@ type ContractBase = Omit<
                 readonly idProyecto: { readonly column: 'id_proyecto' };
                 readonly idPlantillaTiming: { readonly column: 'id_plantilla_timing' };
                 readonly actividad: { readonly column: 'actividad' };
+                readonly ubicacion: { readonly column: 'ubicacion' };
                 readonly fechaHoraInicio: { readonly column: 'fecha_hora_inicio' };
                 readonly fechaHoraFin: { readonly column: 'fecha_hora_fin' };
                 readonly duracionMinutos: { readonly column: 'duracion_minutos' };

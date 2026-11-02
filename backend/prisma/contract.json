@@ -456,6 +456,16 @@
                   "kind": "scalar"
                 }
               },
+              "categoria": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 100
+                  }
+                }
+              },
               "createdAt": {
                 "nullable": false,
                 "type": {
@@ -722,6 +732,9 @@
               "fields": {
                 "activo": {
                   "column": "activo"
+                },
+                "categoria": {
+                  "column": "categoria"
                 },
                 "createdAt": {
                   "column": "created_at"
@@ -6204,6 +6217,16 @@
                   }
                 }
               },
+              "ubicacion": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 250
+                  }
+                }
+              },
               "updatedAt": {
                 "nullable": false,
                 "type": {
@@ -6308,6 +6331,9 @@
                 },
                 "responsableTexto": {
                   "column": "responsable_texto"
+                },
+                "ubicacion": {
+                  "column": "ubicacion"
                 },
                 "updatedAt": {
                   "column": "updated_at"
@@ -7447,6 +7473,14 @@
                   },
                   "nativeType": "bool",
                   "nullable": false
+                },
+                "categoria": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 100
+                  }
                 },
                 "created_at": {
                   "codecId": "pg/timestamptz-temporal@1",
@@ -8809,6 +8843,14 @@
                   "nullable": true,
                   "typeParams": {
                     "length": 150
+                  }
+                },
+                "ubicacion": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 250
                   }
                 },
                 "updated_at": {
@@ -12364,7 +12406,7 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "2fcc7f5b53183e49386cf6d5af5200f04e1da662a34999689ba726bed81f2c00"
+    "storageHash": "89f76cc6cfbd48930a151dcb6b8be89e921191172d5e8ac00692a5be7b237c8c"
   },
   "execution": {
     "executionHash": "c4397c95ca05ffe42278b60a4e598c390b4436ac57a876c28ba261c0e87c7963",

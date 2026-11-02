@@ -31,6 +31,7 @@ import {
   CambiarEstadoHitoDto,
   CambiarEstadoTimingDto,
   CrearActividadDto,
+  CrearActividadDesdeSugerenciaDto,
   CrearDependenciaDto,
   CrearHitoDto,
   CrearTimingDto,
@@ -48,6 +49,7 @@ import {
   GestionarDependenciasUseCase,
   GestionarHitosUseCase,
   GestionarTimingUseCase,
+  GestionarSugerenciasCronogramaUseCase,
 } from '../../application/use-cases/gestionar-cronograma.use-cases';
 import { ReprogramarActividadUseCase } from '../../application/use-cases/reprogramar-actividad.use-case';
 
@@ -66,6 +68,7 @@ export class CronogramaController {
     private readonly timing: GestionarTimingUseCase,
     private readonly reprogramarActividad: ReprogramarActividadUseCase,
     private readonly confirmarPlanificacion: ConfirmarPlanificacionCronogramaUseCase,
+    private readonly sugerencias: GestionarSugerenciasCronogramaUseCase,
   ) {}
 
   @Get()
@@ -237,6 +240,16 @@ export class CronogramaController {
       ),
     };
   }
+  @Get('mis-actividades')
+  @ApiOperation({ summary: 'Listar las actividades asignadas al usuario autenticado' })
+  async misActividades(
+    @Param('idProyecto', ParseUUIDPipe) idProyecto: string,
+    @Query() query: ListarActividadesDto,
+    @Req() request: SolicitudAutenticada,
+  ) { return { mensaje: 'Mis actividades obtenidas correctamente.', data: await this.actividades.misActividades(idProyecto, request.usuarioAutenticado.sub, query) }; }
+  @Get('responsables/resumen')
+  @ApiOperation({ summary: 'Obtener avance, retrasos y próximos vencimientos por responsable' })
+  async resumenResponsables(@Param('idProyecto', ParseUUIDPipe) idProyecto: string, @Req() request: SolicitudAutenticada) { return { mensaje: 'Resumen por responsable obtenido correctamente.', data: await this.actividades.resumenPorResponsable(idProyecto, request.usuarioAutenticado.sub) }; }
   @Post('actividades')
   @ApiOperation({ summary: 'Crear una actividad manual' })
   async crearActividad(
@@ -409,6 +422,16 @@ export class CronogramaController {
     };
   }
 
+  @Get('sugerencias/actividades')
+  @ApiOperation({ summary: 'Listar actividades sugeridas desde las plantillas de cronograma' })
+  async listarSugerencias(@Param('idProyecto', ParseUUIDPipe) idProyecto: string, @Req() request: SolicitudAutenticada) { return { mensaje: 'Actividades sugeridas obtenidas correctamente.', data: await this.sugerencias.listar(idProyecto, request.usuarioAutenticado.sub) }; }
+  @Get('sugerencias/dependencias')
+  @ApiOperation({ summary: 'Listar dependencias sugeridas desde las plantillas' })
+  async listarDependenciasSugeridas(@Param('idProyecto', ParseUUIDPipe) idProyecto: string, @Req() request: SolicitudAutenticada) { return { mensaje: 'Dependencias sugeridas obtenidas correctamente.', data: await this.sugerencias.dependencias(idProyecto, request.usuarioAutenticado.sub) }; }
+  @Post('sugerencias/actividades')
+  @ApiOperation({ summary: 'Crear una actividad independiente desde una sugerencia' })
+  async crearDesdeSugerencia(@Param('idProyecto', ParseUUIDPipe) idProyecto: string, @Body() dto: CrearActividadDesdeSugerenciaDto, @Req() request: SolicitudAutenticada) { return { mensaje: 'Actividad creada desde sugerencia correctamente.', data: await this.sugerencias.crearDesdeSugerencia(idProyecto, dto, request.usuarioAutenticado.sub) }; }
+
   @Get('timing')
   @ApiOperation({ summary: 'Listar timing del día del evento' })
   async listarTiming(
@@ -425,6 +448,9 @@ export class CronogramaController {
       ),
     };
   }
+  @Get('timing/exportar')
+  @ApiOperation({ summary: 'Obtener una versión JSON compartible del timing ordenado' })
+  async exportarTiming(@Param('idProyecto', ParseUUIDPipe) idProyecto: string, @Req() request: SolicitudAutenticada) { return { mensaje: 'Timing exportable obtenido correctamente.', data: await this.timing.listar(idProyecto, request.usuarioAutenticado.sub, { activo: true }) }; }
   @Post('timing')
   @ApiOperation({ summary: 'Crear un elemento de timing' })
   async crearTiming(

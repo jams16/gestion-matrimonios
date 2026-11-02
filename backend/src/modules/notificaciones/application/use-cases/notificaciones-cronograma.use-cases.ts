@@ -27,7 +27,7 @@ export class GenerarAlertasCronogramaUseCase {
     ]);
     let generadas = 0;
     for (const actividad of actividades) {
-      if (actividad.activo === false || actividad.estado === 'COMPLETADA')
+      if (actividad.activo === false || ['COMPLETADA', 'CANCELADA', 'NO_APLICA'].includes(String(actividad.estado)))
         continue;
       const fecha = fechaComoDate(actividad.fechaFin);
       if (!fecha) continue;
@@ -59,7 +59,7 @@ export class GenerarAlertasCronogramaUseCase {
       }
     }
     for (const hito of hitos) {
-      if (hito.activo === false || hito.estado === 'COMPLETADO') continue;
+      if (hito.activo === false || ['COMPLETADO', 'NO_APLICA'].includes(String(hito.estado))) continue;
       const fecha = fechaComoDate(hito.fechaObjetivo);
       if (!fecha) continue;
       const clasificacion = this.alertas.clasificar(fecha, hoy);

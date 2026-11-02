@@ -78,4 +78,6 @@ export abstract class CronogramaCrudRepository {
     idTiming: string,
     data: Record<string, unknown>,
   ): Promise<Record<string, unknown>>;
+  abstract listarPlantillasActividad(): Promise<Record<string, unknown>[]>;
+  abstract listarPlantillasDependencia(): Promise<Record<string, unknown>[]>;
 }

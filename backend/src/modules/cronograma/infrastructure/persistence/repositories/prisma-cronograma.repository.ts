@@ -351,7 +351,7 @@ export class PrismaCronogramaRepository
       data,
       {
         idHito: 'id_hito', idPlantillaActividad: 'id_plantilla_actividad',
-        nombre: 'nombre', descripcion: 'descripcion', listaVerificacion: 'lista_verificacion',
+        nombre: 'nombre', categoria: 'categoria', descripcion: 'descripcion', listaVerificacion: 'lista_verificacion',
         entregable: 'entregable', fechaInicio: 'fecha_inicio', fechaFin: 'fecha_fin',
         prioridad: 'prioridad', estado: 'estado', idUsuarioResponsable: 'id_usuario_responsable',
         responsableTexto: 'responsable_texto', orden: 'orden', modificadoManualmente: 'modificado_manualmente', activo: 'activo',
@@ -456,7 +456,7 @@ export class PrismaCronogramaRepository
       idTiming,
       data,
       {
-        idPlantillaTiming: 'id_plantilla_timing', actividad: 'actividad',
+        idPlantillaTiming: 'id_plantilla_timing', actividad: 'actividad', ubicacion: 'ubicacion',
         fechaHoraInicio: 'fecha_hora_inicio', fechaHoraFin: 'fecha_hora_fin',
         duracionMinutos: 'duracion_minutos', idUsuarioResponsable: 'id_usuario_responsable',
         responsableTexto: 'responsable_texto', listaVerificacion: 'lista_verificacion',
@@ -464,6 +464,14 @@ export class PrismaCronogramaRepository
       },
     );
     return { idTiming, ...data };
+  }
+
+  async listarPlantillasActividad(): Promise<Record<string, unknown>[]> {
+    return (await this.db.orm.public.PlantillaActividad.all()) as Array<Record<string, unknown>>;
+  }
+
+  async listarPlantillasDependencia(): Promise<Record<string, unknown>[]> {
+    return (await this.db.orm.public.PlantillaDependencia.all()) as Array<Record<string, unknown>>;
   }
 
   private agruparTiposCeremonia(

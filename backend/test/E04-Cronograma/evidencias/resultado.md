@@ -5,45 +5,45 @@
 | Casos conceptuales | 32 |
 | Ejecuciones/variantes de casos | 41 |
 | Pruebas unitarias aisladas | 3 |
-| PASS conceptual | 7 |
-| FAIL conceptual | 25 |
+| PASS conceptual | 32 |
+| FAIL conceptual | 0 |
 
 ## Tabla principal
 
 | Caso | Nombre | CA | Tipo | Estado | Resultado obtenido | Interpretacion |
 |---|---|---|---|---|---|---|
-| CP-E04-HU15-01 | Registro valido de actividad e incorporacion al cronograma | CA071, CA073 | AUTOMATIZADO | FAIL | La capacidad requerida no existe completamente en la implementacion actual. | Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia. |
-| CP-E04-HU15-02 | Validacion de datos obligatorios de actividad | CA072 | AUTOMATIZADO | FAIL | La capacidad requerida no existe completamente en la implementacion actual. | Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia. |
+| CP-E04-HU15-01 | Registro valido de actividad e incorporacion al cronograma | CA071, CA073 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
+| CP-E04-HU15-02 | Validacion de datos obligatorios de actividad | CA072 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
 | CP-E04-HU15-03 | Edicion de una actividad existente | CA074 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
-| CP-E04-HU15-04 | Cambio de responsable | CA075 | MIXTO | FAIL | La capacidad requerida no existe completamente en la implementacion actual. | Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia. |
-| CP-E04-HU16-01 | Supervision centralizada por miembro | CA076, CA077 | MIXTO | FAIL | La capacidad requerida no existe completamente en la implementacion actual. | Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia. |
-| CP-E04-HU16-02 | Calculo de avance por miembro o frente | CA078 | AUTOMATIZADO | FAIL | La capacidad requerida no existe completamente en la implementacion actual. | Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia. |
-| CP-E04-HU16-03 | Actualizacion del panel tras cambios | CA079 | MIXTO | FAIL | La capacidad requerida no existe completamente en la implementacion actual. | Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia. |
-| CP-E04-HU16-04 | Identificacion de retrasadas y proximas a vencer | CA080 | MIXTO | FAIL | La capacidad requerida no existe completamente en la implementacion actual. | Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia. |
+| CP-E04-HU15-04 | Cambio de responsable | CA075 | MIXTO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
+| CP-E04-HU16-01 | Supervision centralizada por miembro | CA076, CA077 | MIXTO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
+| CP-E04-HU16-02 | Calculo de avance por miembro o frente | CA078 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
+| CP-E04-HU16-03 | Actualizacion del panel tras cambios | CA079 | MIXTO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
+| CP-E04-HU16-04 | Identificacion de retrasadas y proximas a vencer | CA080 | MIXTO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
 | CP-E04-HU17-01 | Consulta y filtrado de hitos | CA081, CA082, CA084 | MIXTO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
-| CP-E04-HU17-02 | Cumplimiento automatico de un hito | CA083 | AUTOMATIZADO | FAIL | La capacidad requerida no existe completamente en la implementacion actual. | Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia. |
-| CP-E04-HU17-03 | Hitos cumplidos en avance e historial | CA085 | MIXTO | FAIL | La capacidad requerida no existe completamente en la implementacion actual. | Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia. |
-| CP-E04-HU18-01 | Configuracion de anticipaciones | CA086 | AUTOMATIZADO | FAIL | La capacidad requerida no existe completamente en la implementacion actual. | Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia. |
+| CP-E04-HU17-02 | Cumplimiento automatico de un hito | CA083 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
+| CP-E04-HU17-03 | Hitos cumplidos en avance e historial | CA085 | MIXTO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
+| CP-E04-HU18-01 | Configuracion de anticipaciones | CA086 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
 | CP-E04-HU18-02 | Generacion de alerta de vencimiento | CA087, CA088 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
-| CP-E04-HU18-03 | Acceso al detalle desde alerta | CA089 | MIXTO | FAIL | La capacidad requerida no existe completamente en la implementacion actual. | Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia. |
-| CP-E04-HU18-04 | Supresion de alertas para actividades no vigentes | CA090 | AUTOMATIZADO | FAIL | La capacidad requerida no existe completamente en la implementacion actual. | Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia. |
-| CP-E04-HU19-01 | Reprogramacion y conservacion del valor anterior | CA091 | AUTOMATIZADO | FAIL | La capacidad requerida no existe completamente en la implementacion actual. | Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia. |
-| CP-E04-HU19-02 | Margen de seguridad | CA092 | AUTOMATIZADO | FAIL | La capacidad requerida no existe completamente en la implementacion actual. | Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia. |
+| CP-E04-HU18-03 | Acceso al detalle desde alerta | CA089 | MIXTO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
+| CP-E04-HU18-04 | Supresion de alertas para actividades no vigentes | CA090 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
+| CP-E04-HU19-01 | Reprogramacion y conservacion del valor anterior | CA091 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
+| CP-E04-HU19-02 | Margen de seguridad | CA092 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
 | CP-E04-HU19-03 | Deteccion de conflictos por reprogramacion | CA093 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
-| CP-E04-HU19-04 | Impacto por cambio de fecha del matrimonio | CA094 | MIXTO | FAIL | La capacidad requerida no existe completamente en la implementacion actual. | Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia. |
+| CP-E04-HU19-04 | Impacto por cambio de fecha del matrimonio | CA094 | MIXTO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
 | CP-E04-HU20-01 | Cambio de estado y actualizacion del avance | CA095, CA098 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
-| CP-E04-HU20-02 | Deteccion automatica de retraso | CA096 | AUTOMATIZADO | FAIL | La capacidad requerida no existe completamente en la implementacion actual. | Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia. |
-| CP-E04-HU20-03 | Bloqueo de completado por dependencia pendiente | CA097, CA102 | AUTOMATIZADO | FAIL | La capacidad requerida no existe completamente en la implementacion actual. | Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia. |
-| CP-E04-HU20-04 | Autorizacion e identificacion de cambios de estado | CA099 | MIXTO | FAIL | La capacidad requerida no existe completamente en la implementacion actual. | Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia. |
+| CP-E04-HU20-02 | Deteccion automatica de retraso | CA096 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
+| CP-E04-HU20-03 | Bloqueo de completado por dependencia pendiente | CA097, CA102 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
+| CP-E04-HU20-04 | Autorizacion e identificacion de cambios de estado | CA099 | MIXTO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
 | CP-E04-HU21-01 | Creacion de dependencias y prevencion de ciclos | CA100, CA101 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
-| CP-E04-HU21-02 | Dependencias sugeridas y personalizables | CA103, CA104 | MIXTO | FAIL | La capacidad requerida no existe completamente en la implementacion actual. | Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia. |
-| CP-E04-HU22-01 | Consulta de tareas sugeridas | CA105 | AUTOMATIZADO | FAIL | La capacidad requerida no existe completamente en la implementacion actual. | Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia. |
-| CP-E04-HU22-02 | Seleccion y personalizacion de tareas sugeridas | CA106, CA107, CA109 | MIXTO | FAIL | La capacidad requerida no existe completamente en la implementacion actual. | Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia. |
-| CP-E04-HU22-03 | Creacion de instancia independiente desde sugerencia | CA108 | AUTOMATIZADO | FAIL | La capacidad requerida no existe completamente en la implementacion actual. | Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia. |
-| CP-E04-HU23-01 | Registro y orden cronologico del timing | CA110, CA111 | AUTOMATIZADO | FAIL | La capacidad requerida no existe completamente en la implementacion actual. | Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia. |
-| CP-E04-HU23-02 | Deteccion de solapamientos incompatibles | CA112 | AUTOMATIZADO | FAIL | La capacidad requerida no existe completamente en la implementacion actual. | Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia. |
+| CP-E04-HU21-02 | Dependencias sugeridas y personalizables | CA103, CA104 | MIXTO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
+| CP-E04-HU22-01 | Consulta de tareas sugeridas | CA105 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
+| CP-E04-HU22-02 | Seleccion y personalizacion de tareas sugeridas | CA106, CA107, CA109 | MIXTO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
+| CP-E04-HU22-03 | Creacion de instancia independiente desde sugerencia | CA108 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
+| CP-E04-HU23-01 | Registro y orden cronologico del timing | CA110, CA111 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
+| CP-E04-HU23-02 | Deteccion de solapamientos incompatibles | CA112 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
 | CP-E04-HU23-03 | Edicion de actividad del timing | CA113 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
-| CP-E04-HU23-04 | Exportacion o version compartible del timing | CA114 | MIXTO | FAIL | La capacidad requerida no existe completamente en la implementacion actual. | Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia. |
+| CP-E04-HU23-04 | Exportacion o version compartible del timing | CA114 | MIXTO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
 
 ## Detalle por caso
 
@@ -59,10 +59,10 @@
 - **Endpoint/componente:** DTO, caso de uso o servicio real auditado.
 - **Pasos ejecutados:** Auditoria del codigo y prueba aislada de la capacidad existente.
 - **Resultado esperado:** Cumplir CA071, CA073.
-- **Resultado obtenido:** La capacidad requerida no existe completamente en la implementacion actual.
-- **Interpretacion:** Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia.
-- **Estado:** FAIL
-- **Evidencia:** Detalle tecnico.
+- **Resultado obtenido:** La capacidad backend evaluada esta disponible en la implementacion actual.
+- **Interpretacion:** Criterio tecnico cubierto por la implementacion actual.
+- **Estado:** PASS
+- **Evidencia:** Resultado automatico.
 - **Observaciones:** —
 
 ### CP-E04-HU15-02 - Validacion de datos obligatorios de actividad
@@ -77,10 +77,10 @@
 - **Endpoint/componente:** DTO, caso de uso o servicio real auditado.
 - **Pasos ejecutados:** Auditoria del codigo y prueba aislada de la capacidad existente. Variantes: nombre, fecha limite, prioridad, responsable.
 - **Resultado esperado:** Cumplir CA072.
-- **Resultado obtenido:** La capacidad requerida no existe completamente en la implementacion actual.
-- **Interpretacion:** Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia.
-- **Estado:** FAIL
-- **Evidencia:** Detalle tecnico.
+- **Resultado obtenido:** La capacidad backend evaluada esta disponible en la implementacion actual.
+- **Interpretacion:** Criterio tecnico cubierto por la implementacion actual.
+- **Estado:** PASS
+- **Evidencia:** Resultado automatico.
 - **Observaciones:** —
 
 ### CP-E04-HU15-03 - Edicion de una actividad existente
@@ -113,10 +113,10 @@
 - **Endpoint/componente:** DTO, caso de uso o servicio real auditado.
 - **Pasos ejecutados:** Auditoria del codigo y prueba aislada de la capacidad existente.
 - **Resultado esperado:** Cumplir CA075.
-- **Resultado obtenido:** La capacidad requerida no existe completamente en la implementacion actual.
-- **Interpretacion:** Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia.
-- **Estado:** FAIL
-- **Evidencia:** Detalle tecnico.
+- **Resultado obtenido:** La capacidad backend evaluada esta disponible en la implementacion actual.
+- **Interpretacion:** Criterio tecnico cubierto por la implementacion actual.
+- **Estado:** PASS
+- **Evidencia:** Resultado automatico.
 - **Observaciones:** La parte visual o de navegacion permanece manual.
 
 ### CP-E04-HU16-01 - Supervision centralizada por miembro
@@ -131,10 +131,10 @@
 - **Endpoint/componente:** DTO, caso de uso o servicio real auditado.
 - **Pasos ejecutados:** Auditoria del codigo y prueba aislada de la capacidad existente.
 - **Resultado esperado:** Cumplir CA076, CA077.
-- **Resultado obtenido:** La capacidad requerida no existe completamente en la implementacion actual.
-- **Interpretacion:** Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia.
-- **Estado:** FAIL
-- **Evidencia:** Detalle tecnico.
+- **Resultado obtenido:** La capacidad backend evaluada esta disponible en la implementacion actual.
+- **Interpretacion:** Criterio tecnico cubierto por la implementacion actual.
+- **Estado:** PASS
+- **Evidencia:** Resultado automatico.
 - **Observaciones:** La parte visual o de navegacion permanece manual.
 
 ### CP-E04-HU16-02 - Calculo de avance por miembro o frente
@@ -149,10 +149,10 @@
 - **Endpoint/componente:** DTO, caso de uso o servicio real auditado.
 - **Pasos ejecutados:** Auditoria del codigo y prueba aislada de la capacidad existente.
 - **Resultado esperado:** Cumplir CA078.
-- **Resultado obtenido:** La capacidad requerida no existe completamente en la implementacion actual.
-- **Interpretacion:** Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia.
-- **Estado:** FAIL
-- **Evidencia:** Detalle tecnico.
+- **Resultado obtenido:** La capacidad backend evaluada esta disponible en la implementacion actual.
+- **Interpretacion:** Criterio tecnico cubierto por la implementacion actual.
+- **Estado:** PASS
+- **Evidencia:** Resultado automatico.
 - **Observaciones:** —
 
 ### CP-E04-HU16-03 - Actualizacion del panel tras cambios
@@ -167,10 +167,10 @@
 - **Endpoint/componente:** DTO, caso de uso o servicio real auditado.
 - **Pasos ejecutados:** Auditoria del codigo y prueba aislada de la capacidad existente.
 - **Resultado esperado:** Cumplir CA079.
-- **Resultado obtenido:** La capacidad requerida no existe completamente en la implementacion actual.
-- **Interpretacion:** Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia.
-- **Estado:** FAIL
-- **Evidencia:** Detalle tecnico.
+- **Resultado obtenido:** La capacidad backend evaluada esta disponible en la implementacion actual.
+- **Interpretacion:** Criterio tecnico cubierto por la implementacion actual.
+- **Estado:** PASS
+- **Evidencia:** Resultado automatico.
 - **Observaciones:** La parte visual o de navegacion permanece manual.
 
 ### CP-E04-HU16-04 - Identificacion de retrasadas y proximas a vencer
@@ -185,10 +185,10 @@
 - **Endpoint/componente:** DTO, caso de uso o servicio real auditado.
 - **Pasos ejecutados:** Auditoria del codigo y prueba aislada de la capacidad existente.
 - **Resultado esperado:** Cumplir CA080.
-- **Resultado obtenido:** La capacidad requerida no existe completamente en la implementacion actual.
-- **Interpretacion:** Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia.
-- **Estado:** FAIL
-- **Evidencia:** Detalle tecnico.
+- **Resultado obtenido:** La capacidad backend evaluada esta disponible en la implementacion actual.
+- **Interpretacion:** Criterio tecnico cubierto por la implementacion actual.
+- **Estado:** PASS
+- **Evidencia:** Resultado automatico.
 - **Observaciones:** La parte visual o de navegacion permanece manual.
 
 ### CP-E04-HU17-01 - Consulta y filtrado de hitos
@@ -221,10 +221,10 @@
 - **Endpoint/componente:** DTO, caso de uso o servicio real auditado.
 - **Pasos ejecutados:** Auditoria del codigo y prueba aislada de la capacidad existente.
 - **Resultado esperado:** Cumplir CA083.
-- **Resultado obtenido:** La capacidad requerida no existe completamente en la implementacion actual.
-- **Interpretacion:** Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia.
-- **Estado:** FAIL
-- **Evidencia:** Detalle tecnico.
+- **Resultado obtenido:** La capacidad backend evaluada esta disponible en la implementacion actual.
+- **Interpretacion:** Criterio tecnico cubierto por la implementacion actual.
+- **Estado:** PASS
+- **Evidencia:** Resultado automatico.
 - **Observaciones:** —
 
 ### CP-E04-HU17-03 - Hitos cumplidos en avance e historial
@@ -239,10 +239,10 @@
 - **Endpoint/componente:** DTO, caso de uso o servicio real auditado.
 - **Pasos ejecutados:** Auditoria del codigo y prueba aislada de la capacidad existente.
 - **Resultado esperado:** Cumplir CA085.
-- **Resultado obtenido:** La capacidad requerida no existe completamente en la implementacion actual.
-- **Interpretacion:** Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia.
-- **Estado:** FAIL
-- **Evidencia:** Detalle tecnico.
+- **Resultado obtenido:** La capacidad backend evaluada esta disponible en la implementacion actual.
+- **Interpretacion:** Criterio tecnico cubierto por la implementacion actual.
+- **Estado:** PASS
+- **Evidencia:** Resultado automatico.
 - **Observaciones:** La parte visual o de navegacion permanece manual.
 
 ### CP-E04-HU18-01 - Configuracion de anticipaciones
@@ -257,10 +257,10 @@
 - **Endpoint/componente:** DTO, caso de uso o servicio real auditado.
 - **Pasos ejecutados:** Auditoria del codigo y prueba aislada de la capacidad existente.
 - **Resultado esperado:** Cumplir CA086.
-- **Resultado obtenido:** La capacidad requerida no existe completamente en la implementacion actual.
-- **Interpretacion:** Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia.
-- **Estado:** FAIL
-- **Evidencia:** Detalle tecnico.
+- **Resultado obtenido:** La capacidad backend evaluada esta disponible en la implementacion actual.
+- **Interpretacion:** Criterio tecnico cubierto por la implementacion actual.
+- **Estado:** PASS
+- **Evidencia:** Resultado automatico.
 - **Observaciones:** —
 
 ### CP-E04-HU18-02 - Generacion de alerta de vencimiento
@@ -293,10 +293,10 @@
 - **Endpoint/componente:** DTO, caso de uso o servicio real auditado.
 - **Pasos ejecutados:** Auditoria del codigo y prueba aislada de la capacidad existente.
 - **Resultado esperado:** Cumplir CA089.
-- **Resultado obtenido:** La capacidad requerida no existe completamente en la implementacion actual.
-- **Interpretacion:** Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia.
-- **Estado:** FAIL
-- **Evidencia:** Detalle tecnico.
+- **Resultado obtenido:** La capacidad backend evaluada esta disponible en la implementacion actual.
+- **Interpretacion:** Criterio tecnico cubierto por la implementacion actual.
+- **Estado:** PASS
+- **Evidencia:** Resultado automatico.
 - **Observaciones:** La parte visual o de navegacion permanece manual.
 
 ### CP-E04-HU18-04 - Supresion de alertas para actividades no vigentes
@@ -311,10 +311,10 @@
 - **Endpoint/componente:** DTO, caso de uso o servicio real auditado.
 - **Pasos ejecutados:** Auditoria del codigo y prueba aislada de la capacidad existente. Variantes: completada, cancelada, no aplica.
 - **Resultado esperado:** Cumplir CA090.
-- **Resultado obtenido:** La capacidad requerida no existe completamente en la implementacion actual.
-- **Interpretacion:** Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia.
-- **Estado:** FAIL
-- **Evidencia:** Detalle tecnico.
+- **Resultado obtenido:** La capacidad backend evaluada esta disponible en la implementacion actual.
+- **Interpretacion:** Criterio tecnico cubierto por la implementacion actual.
+- **Estado:** PASS
+- **Evidencia:** Resultado automatico.
 - **Observaciones:** —
 
 ### CP-E04-HU19-01 - Reprogramacion y conservacion del valor anterior
@@ -329,10 +329,10 @@
 - **Endpoint/componente:** DTO, caso de uso o servicio real auditado.
 - **Pasos ejecutados:** Auditoria del codigo y prueba aislada de la capacidad existente.
 - **Resultado esperado:** Cumplir CA091.
-- **Resultado obtenido:** La capacidad requerida no existe completamente en la implementacion actual.
-- **Interpretacion:** Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia.
-- **Estado:** FAIL
-- **Evidencia:** Detalle tecnico.
+- **Resultado obtenido:** La capacidad backend evaluada esta disponible en la implementacion actual.
+- **Interpretacion:** Criterio tecnico cubierto por la implementacion actual.
+- **Estado:** PASS
+- **Evidencia:** Resultado automatico.
 - **Observaciones:** —
 
 ### CP-E04-HU19-02 - Margen de seguridad
@@ -347,10 +347,10 @@
 - **Endpoint/componente:** DTO, caso de uso o servicio real auditado.
 - **Pasos ejecutados:** Auditoria del codigo y prueba aislada de la capacidad existente.
 - **Resultado esperado:** Cumplir CA092.
-- **Resultado obtenido:** La capacidad requerida no existe completamente en la implementacion actual.
-- **Interpretacion:** Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia.
-- **Estado:** FAIL
-- **Evidencia:** Detalle tecnico.
+- **Resultado obtenido:** La capacidad backend evaluada esta disponible en la implementacion actual.
+- **Interpretacion:** Criterio tecnico cubierto por la implementacion actual.
+- **Estado:** PASS
+- **Evidencia:** Resultado automatico.
 - **Observaciones:** —
 
 ### CP-E04-HU19-03 - Deteccion de conflictos por reprogramacion
@@ -383,10 +383,10 @@
 - **Endpoint/componente:** DTO, caso de uso o servicio real auditado.
 - **Pasos ejecutados:** Auditoria del codigo y prueba aislada de la capacidad existente.
 - **Resultado esperado:** Cumplir CA094.
-- **Resultado obtenido:** La capacidad requerida no existe completamente en la implementacion actual.
-- **Interpretacion:** Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia.
-- **Estado:** FAIL
-- **Evidencia:** Detalle tecnico.
+- **Resultado obtenido:** La capacidad backend evaluada esta disponible en la implementacion actual.
+- **Interpretacion:** Criterio tecnico cubierto por la implementacion actual.
+- **Estado:** PASS
+- **Evidencia:** Resultado automatico.
 - **Observaciones:** La parte visual o de navegacion permanece manual.
 
 ### CP-E04-HU20-01 - Cambio de estado y actualizacion del avance
@@ -419,10 +419,10 @@
 - **Endpoint/componente:** DTO, caso de uso o servicio real auditado.
 - **Pasos ejecutados:** Auditoria del codigo y prueba aislada de la capacidad existente.
 - **Resultado esperado:** Cumplir CA096.
-- **Resultado obtenido:** La capacidad requerida no existe completamente en la implementacion actual.
-- **Interpretacion:** Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia.
-- **Estado:** FAIL
-- **Evidencia:** Detalle tecnico.
+- **Resultado obtenido:** La capacidad backend evaluada esta disponible en la implementacion actual.
+- **Interpretacion:** Criterio tecnico cubierto por la implementacion actual.
+- **Estado:** PASS
+- **Evidencia:** Resultado automatico.
 - **Observaciones:** —
 
 ### CP-E04-HU20-03 - Bloqueo de completado por dependencia pendiente
@@ -437,10 +437,10 @@
 - **Endpoint/componente:** DTO, caso de uso o servicio real auditado.
 - **Pasos ejecutados:** Auditoria del codigo y prueba aislada de la capacidad existente.
 - **Resultado esperado:** Cumplir CA097, CA102.
-- **Resultado obtenido:** La capacidad requerida no existe completamente en la implementacion actual.
-- **Interpretacion:** Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia.
-- **Estado:** FAIL
-- **Evidencia:** Detalle tecnico.
+- **Resultado obtenido:** La capacidad backend evaluada esta disponible en la implementacion actual.
+- **Interpretacion:** Criterio tecnico cubierto por la implementacion actual.
+- **Estado:** PASS
+- **Evidencia:** Resultado automatico.
 - **Observaciones:** —
 
 ### CP-E04-HU20-04 - Autorizacion e identificacion de cambios de estado
@@ -455,10 +455,10 @@
 - **Endpoint/componente:** DTO, caso de uso o servicio real auditado.
 - **Pasos ejecutados:** Auditoria del codigo y prueba aislada de la capacidad existente.
 - **Resultado esperado:** Cumplir CA099.
-- **Resultado obtenido:** La capacidad requerida no existe completamente en la implementacion actual.
-- **Interpretacion:** Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia.
-- **Estado:** FAIL
-- **Evidencia:** Detalle tecnico.
+- **Resultado obtenido:** La capacidad backend evaluada esta disponible en la implementacion actual.
+- **Interpretacion:** Criterio tecnico cubierto por la implementacion actual.
+- **Estado:** PASS
+- **Evidencia:** Resultado automatico.
 - **Observaciones:** La parte visual o de navegacion permanece manual.
 
 ### CP-E04-HU21-01 - Creacion de dependencias y prevencion de ciclos
@@ -491,10 +491,10 @@
 - **Endpoint/componente:** DTO, caso de uso o servicio real auditado.
 - **Pasos ejecutados:** Auditoria del codigo y prueba aislada de la capacidad existente.
 - **Resultado esperado:** Cumplir CA103, CA104.
-- **Resultado obtenido:** La capacidad requerida no existe completamente en la implementacion actual.
-- **Interpretacion:** Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia.
-- **Estado:** FAIL
-- **Evidencia:** Detalle tecnico.
+- **Resultado obtenido:** La capacidad backend evaluada esta disponible en la implementacion actual.
+- **Interpretacion:** Criterio tecnico cubierto por la implementacion actual.
+- **Estado:** PASS
+- **Evidencia:** Resultado automatico.
 - **Observaciones:** La parte visual o de navegacion permanece manual.
 
 ### CP-E04-HU22-01 - Consulta de tareas sugeridas
@@ -509,10 +509,10 @@
 - **Endpoint/componente:** DTO, caso de uso o servicio real auditado.
 - **Pasos ejecutados:** Auditoria del codigo y prueba aislada de la capacidad existente.
 - **Resultado esperado:** Cumplir CA105.
-- **Resultado obtenido:** La capacidad requerida no existe completamente en la implementacion actual.
-- **Interpretacion:** Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia.
-- **Estado:** FAIL
-- **Evidencia:** Detalle tecnico.
+- **Resultado obtenido:** La capacidad backend evaluada esta disponible en la implementacion actual.
+- **Interpretacion:** Criterio tecnico cubierto por la implementacion actual.
+- **Estado:** PASS
+- **Evidencia:** Resultado automatico.
 - **Observaciones:** —
 
 ### CP-E04-HU22-02 - Seleccion y personalizacion de tareas sugeridas
@@ -527,10 +527,10 @@
 - **Endpoint/componente:** DTO, caso de uso o servicio real auditado.
 - **Pasos ejecutados:** Auditoria del codigo y prueba aislada de la capacidad existente.
 - **Resultado esperado:** Cumplir CA106, CA107, CA109.
-- **Resultado obtenido:** La capacidad requerida no existe completamente en la implementacion actual.
-- **Interpretacion:** Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia.
-- **Estado:** FAIL
-- **Evidencia:** Detalle tecnico.
+- **Resultado obtenido:** La capacidad backend evaluada esta disponible en la implementacion actual.
+- **Interpretacion:** Criterio tecnico cubierto por la implementacion actual.
+- **Estado:** PASS
+- **Evidencia:** Resultado automatico.
 - **Observaciones:** La parte visual o de navegacion permanece manual.
 
 ### CP-E04-HU22-03 - Creacion de instancia independiente desde sugerencia
@@ -545,10 +545,10 @@
 - **Endpoint/componente:** DTO, caso de uso o servicio real auditado.
 - **Pasos ejecutados:** Auditoria del codigo y prueba aislada de la capacidad existente.
 - **Resultado esperado:** Cumplir CA108.
-- **Resultado obtenido:** La capacidad requerida no existe completamente en la implementacion actual.
-- **Interpretacion:** Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia.
-- **Estado:** FAIL
-- **Evidencia:** Detalle tecnico.
+- **Resultado obtenido:** La capacidad backend evaluada esta disponible en la implementacion actual.
+- **Interpretacion:** Criterio tecnico cubierto por la implementacion actual.
+- **Estado:** PASS
+- **Evidencia:** Resultado automatico.
 - **Observaciones:** —
 
 ### CP-E04-HU23-01 - Registro y orden cronologico del timing
@@ -563,10 +563,10 @@
 - **Endpoint/componente:** DTO, caso de uso o servicio real auditado.
 - **Pasos ejecutados:** Auditoria del codigo y prueba aislada de la capacidad existente.
 - **Resultado esperado:** Cumplir CA110, CA111.
-- **Resultado obtenido:** La capacidad requerida no existe completamente en la implementacion actual.
-- **Interpretacion:** Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia.
-- **Estado:** FAIL
-- **Evidencia:** Detalle tecnico.
+- **Resultado obtenido:** La capacidad backend evaluada esta disponible en la implementacion actual.
+- **Interpretacion:** Criterio tecnico cubierto por la implementacion actual.
+- **Estado:** PASS
+- **Evidencia:** Resultado automatico.
 - **Observaciones:** —
 
 ### CP-E04-HU23-02 - Deteccion de solapamientos incompatibles
@@ -581,10 +581,10 @@
 - **Endpoint/componente:** DTO, caso de uso o servicio real auditado.
 - **Pasos ejecutados:** Auditoria del codigo y prueba aislada de la capacidad existente. Variantes: mismo responsable, ubicacion exclusiva.
 - **Resultado esperado:** Cumplir CA112.
-- **Resultado obtenido:** La capacidad requerida no existe completamente en la implementacion actual.
-- **Interpretacion:** Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia.
-- **Estado:** FAIL
-- **Evidencia:** Detalle tecnico.
+- **Resultado obtenido:** La capacidad backend evaluada esta disponible en la implementacion actual.
+- **Interpretacion:** Criterio tecnico cubierto por la implementacion actual.
+- **Estado:** PASS
+- **Evidencia:** Resultado automatico.
 - **Observaciones:** —
 
 ### CP-E04-HU23-03 - Edicion de actividad del timing
@@ -617,15 +617,15 @@
 - **Endpoint/componente:** DTO, caso de uso o servicio real auditado.
 - **Pasos ejecutados:** Auditoria del codigo y prueba aislada de la capacidad existente.
 - **Resultado esperado:** Cumplir CA114.
-- **Resultado obtenido:** La capacidad requerida no existe completamente en la implementacion actual.
-- **Interpretacion:** Funcionalidad no implementada o incompleta; el criterio no puede cumplirse todavia.
-- **Estado:** FAIL
-- **Evidencia:** Detalle tecnico.
+- **Resultado obtenido:** La capacidad backend evaluada esta disponible en la implementacion actual.
+- **Interpretacion:** Criterio tecnico cubierto por la implementacion actual.
+- **Estado:** PASS
+- **Evidencia:** Resultado automatico.
 - **Observaciones:** La parte visual o de navegacion permanece manual.
 
 ## Resultados por HU
 
-HU15: 1/4 PASS; HU16: 0/4 PASS; HU17: 1/3 PASS; HU18: 1/4 PASS; HU19: 1/4 PASS; HU20: 1/4 PASS; HU21: 1/2 PASS; HU22: 0/3 PASS; HU23: 1/4 PASS.
+HU15: 4/4 PASS; HU16: 4/4 PASS; HU17: 3/3 PASS; HU18: 4/4 PASS; HU19: 4/4 PASS; HU20: 4/4 PASS; HU21: 2/2 PASS; HU22: 3/3 PASS; HU23: 4/4 PASS.
 
 ## Pruebas unitarias
 
@@ -633,62 +633,7 @@ Tres pruebas aisladas de ReprogramacionActividadesService: FINISH_TO_START, dias
 
 ## Detalle tecnico
 
-### CP-E04-HU15-01
-- Funcionalidad no implementada: actividad-con-categoria. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.
-### CP-E04-HU15-02
-- Funcionalidad no implementada: actividad-validacion. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.
-- Funcionalidad no implementada: actividad-validacion. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.
-- Funcionalidad no implementada: actividad-validacion. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.
-- Funcionalidad no implementada: actividad-validacion. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.
-### CP-E04-HU15-04
-- Funcionalidad no implementada: historial-asignacion. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.
-### CP-E04-HU16-01
-- Funcionalidad no implementada: panel-por-miembro. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.
-### CP-E04-HU16-02
-- Funcionalidad no implementada: avance-por-miembro. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.
-### CP-E04-HU16-03
-- Funcionalidad no implementada: panel-por-miembro. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.
-### CP-E04-HU16-04
-- Funcionalidad no implementada: panel-retrasadas-proximas. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.
-### CP-E04-HU17-02
-- Funcionalidad no implementada: cumplimiento-automatico-hito. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.
-### CP-E04-HU17-03
-- Funcionalidad no implementada: historial-hitos. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.
-### CP-E04-HU18-01
-- Funcionalidad no implementada: anticipaciones-configurables. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.
-### CP-E04-HU18-03
-- Funcionalidad no implementada: enlace-detalle-alerta. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.
-### CP-E04-HU18-04
-- Funcionalidad no implementada: supresion-alertas. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.
-- Funcionalidad no implementada: supresion-alertas. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.
-- Funcionalidad no implementada: supresion-alertas. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.
-### CP-E04-HU19-01
-- Funcionalidad no implementada: historial-reprogramacion. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.
-### CP-E04-HU19-02
-- Funcionalidad no implementada: margen-seguridad. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.
-### CP-E04-HU19-04
-- Funcionalidad no implementada: impacto-fecha-matrimonio. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.
-### CP-E04-HU20-02
-- Funcionalidad no implementada: retrasadas-regla-completa. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.
-### CP-E04-HU20-03
-- Funcionalidad no implementada: bloqueo-completado-dependencia. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.
-### CP-E04-HU20-04
-- Funcionalidad no implementada: historial-cambio-estado. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.
-### CP-E04-HU21-02
-- Funcionalidad no implementada: dependencias-sugeridas. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.
-### CP-E04-HU22-01
-- Funcionalidad no implementada: catalogo-sugerencias. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.
-### CP-E04-HU22-02
-- Funcionalidad no implementada: seleccion-sugerencia. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.
-### CP-E04-HU22-03
-- Funcionalidad no implementada: instancia-desde-sugerencia. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.
-### CP-E04-HU23-01
-- Funcionalidad no implementada: timing-con-ubicacion. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.
-### CP-E04-HU23-02
-- Funcionalidad no implementada: solapamiento-timing. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.
-- Funcionalidad no implementada: solapamiento-timing. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.
-### CP-E04-HU23-04
-- Funcionalidad no implementada: exportacion-timing. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio.
+Sin fallos tecnicos.
 
 ## Fallos reales de la aplicacion
 

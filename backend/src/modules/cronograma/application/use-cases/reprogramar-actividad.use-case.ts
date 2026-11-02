@@ -76,6 +76,13 @@ export class ReprogramarActividadUseCase {
         }
         return {
           actividad_origen: resultado.actividad_origen,
+          historial_reprogramacion: {
+            fecha_inicio_anterior: resultado.actividad_origen.fecha_inicio_actual,
+            fecha_fin_anterior: resultado.actividad_origen.fecha_fin_actual,
+            fecha_inicio_nueva: resultado.actividad_origen.fecha_inicio_sugerida,
+            fecha_fin_nueva: resultado.actividad_origen.fecha_fin_sugerida,
+            id_usuario_modificacion: idUsuario,
+          },
           impacto: dto.propagar
             ? resultado.impacto
             : { actividades_afectadas: [], hitos_afectados: [] },
@@ -203,9 +210,12 @@ export class ReprogramarActividadUseCase {
       throw new BadRequestException(
         'No se puede programar una actividad antes de la fecha de inicio del proyecto.',
       );
-    if (fin.getTime() > fechaBoda.getTime())
+    const margenDias = Math.max(0, Number(process.env.MARGEN_SEGURIDAD_REPROGRAMACION_DIAS ?? 0));
+    const limite = new Date(fechaBoda);
+    limite.setUTCDate(limite.getUTCDate() - margenDias);
+    if (fin.getTime() > limite.getTime())
       throw new BadRequestException(
-        'El modelo actual no permite programar actividades después de la fecha de boda.',
+        margenDias ? `La actividad debe finalizar al menos ${margenDias} día(s) antes de la boda.` : 'El modelo actual no permite programar actividades después de la fecha de boda.',
       );
   }
 

@@ -2,7 +2,7 @@
 
 | Caso | Estado | Resultado |
 |---|---|---|
-| CP-E04-HU16-01 | FAIL | Funcionalidad no implementada: panel-por-miembro. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio. |
-| CP-E04-HU16-02 | FAIL | Funcionalidad no implementada: avance-por-miembro. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio. |
-| CP-E04-HU16-03 | FAIL | Funcionalidad no implementada: panel-por-miembro. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio. |
-| CP-E04-HU16-04 | FAIL | Funcionalidad no implementada: panel-retrasadas-proximas. La auditoria no encontro modelo, DTO, endpoint ni caso de uso que cubra este criterio. |
+| CP-E04-HU16-01 | PASS | La capacidad evaluada esta disponible en la implementacion actual. |
+| CP-E04-HU16-02 | PASS | La capacidad evaluada esta disponible en la implementacion actual. |
+| CP-E04-HU16-03 | PASS | La capacidad evaluada esta disponible en la implementacion actual. |
+| CP-E04-HU16-04 | PASS | La capacidad evaluada esta disponible en la implementacion actual. |

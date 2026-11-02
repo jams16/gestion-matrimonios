@@ -123,6 +123,8 @@ export class CrearActividadDto {
   @IsString()
   @MaxLength(200)
   nombre!: string;
+  @ApiPropertyOptional({ maxLength: 100 }) @IsOptional() @IsString() @MaxLength(100)
+  categoria?: string | null;
   @ApiProperty({ example: '2027-01-10T00:00:00.000Z' })
   @IsDateString()
   fechaFin!: string;
@@ -146,20 +148,18 @@ export class CrearActividadDto {
   entregable?: string | null;
   @ApiPropertyOptional() @IsOptional() @IsDateString() fechaInicio?:
     string | null;
-  @ApiPropertyOptional({ enum: PrioridadActividadDto })
-  @IsOptional()
+  @ApiProperty({ enum: PrioridadActividadDto })
   @IsEnum(PrioridadActividadDto)
-  prioridad?: PrioridadActividadDto | null;
+  prioridad!: PrioridadActividadDto;
   @ApiPropertyOptional({ enum: EstadoActividadDto })
   @IsOptional()
   @IsEnum(EstadoActividadDto)
   estado?: EstadoActividadDto;
-  @ApiPropertyOptional()
+  @ApiProperty()
   @Type(() => Number)
-  @IsOptional()
   @IsInt()
   @Min(1)
-  idUsuarioResponsable?: number | null;
+  idUsuarioResponsable!: number;
   @ApiPropertyOptional({ maxLength: 150 })
   @Transform(emptyToNull)
   @IsOptional()
@@ -203,6 +203,8 @@ export class CrearTimingDto {
   @IsString()
   @MaxLength(200)
   actividad!: string;
+  @ApiPropertyOptional({ maxLength: 250 }) @IsOptional() @IsString() @MaxLength(250)
+  ubicacion?: string | null;
   @ApiProperty() @IsDateString() fechaHoraInicio!: string;
   @ApiProperty() @IsDateString() fechaHoraFin!: string;
   @ApiProperty({ minimum: 1 })
@@ -262,4 +264,19 @@ export class ConfirmarReprogramacionActividadDto extends PrevisualizarReprograma
   @Transform(booleano)
   @IsBoolean()
   propagar!: boolean;
+}
+
+export class CrearActividadDesdeSugerenciaDto {
+  @ApiProperty({ minimum: 1 }) @Type(() => Number) @IsInt() @Min(1)
+  idPlantillaActividad!: number;
+  @ApiProperty({ example: '2027-01-10T00:00:00.000Z' }) @IsDateString()
+  fechaFin!: string;
+  @ApiPropertyOptional() @IsOptional() @IsDateString() fechaInicio?: string;
+  @ApiPropertyOptional({ format: 'uuid' }) @IsOptional() @IsUUID() idHito?: string;
+  @ApiPropertyOptional() @Type(() => Number) @IsOptional() @IsInt() @Min(1)
+  idUsuarioResponsable?: number;
+  @ApiPropertyOptional({ maxLength: 150 }) @IsOptional() @IsString() @MaxLength(150)
+  responsableTexto?: string;
+  @ApiPropertyOptional({ maxLength: 200 }) @IsOptional() @IsString() @MaxLength(200)
+  nombre?: string;
 }

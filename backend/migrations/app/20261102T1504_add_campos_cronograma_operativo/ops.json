@@ -1,0 +1,86 @@
+[
+  {
+    "id": "column.public.cr_actividad.categoria",
+    "label": "Add column \"categoria\" to \"cr_actividad\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "categoria",
+        "table": "cr_actividad"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"categoria\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "cr_actividad",
+          "categoria"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"categoria\"",
+        "sql": "ALTER TABLE \"public\".\"cr_actividad\" ADD COLUMN \"categoria\" character varying(100)"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"categoria\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "cr_actividad",
+          "categoria"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.cr_timing.ubicacion",
+    "label": "Add column \"ubicacion\" to \"cr_timing\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "ubicacion",
+        "table": "cr_timing"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"ubicacion\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "cr_timing",
+          "ubicacion"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"ubicacion\"",
+        "sql": "ALTER TABLE \"public\".\"cr_timing\" ADD COLUMN \"ubicacion\" character varying(250)"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"ubicacion\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "cr_timing",
+          "ubicacion"
+        ]
+      }
+    ]
+  }
+]

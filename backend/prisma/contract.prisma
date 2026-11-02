@@ -490,6 +490,7 @@ model Actividad {
   idHito                  Uuid?                    @map("id_hito")
   idPlantillaActividad    Int?                     @map("id_plantilla_actividad")
   nombre                  VarChar(200)
+  categoria               VarChar(100)?
   descripcion             VarChar(1000)?
   listaVerificacion       Json?                    @map("lista_verificacion")
   entregable              VarChar(500)?
@@ -544,6 +545,7 @@ model Timing {
   idProyecto            Uuid                 @map("id_proyecto")
   idPlantillaTiming     Int?                 @map("id_plantilla_timing")
   actividad             VarChar(200)
+  ubicacion             VarChar(250)?
   fechaHoraInicio       DateTime             @map("fecha_hora_inicio")
   fechaHoraFin          DateTime             @map("fecha_hora_fin")
   duracionMinutos       Int                  @map("duracion_minutos")

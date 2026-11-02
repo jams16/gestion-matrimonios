@@ -14,6 +14,7 @@ import {
   CambiarEstadoHitoDto,
   CambiarEstadoTimingDto,
   CrearActividadDto,
+  CrearActividadDesdeSugerenciaDto,
   CrearDependenciaDto,
   CrearHitoDto,
   CrearTimingDto,
@@ -189,15 +190,24 @@ export class GestionarActividadesUseCase {
     dto: CambiarEstadoActividadDto,
     idUsuario: number,
   ) {
-    await validarProyecto(this.repository, idProyecto, idUsuario);
-    validarRegistro(
+    const proyecto = await validarProyectoOResponsable(this.repository, idProyecto, idActividad, idUsuario);
+    const actividad = validarRegistro(
       await this.repository.obtenerActividad(idActividad),
       idProyecto,
       'Actividad',
     );
-    return this.repository.actualizarActividad(idActividad, {
+    if (dto.estado === 'COMPLETADA') {
+      const pendientes = (await this.repository.listarDependencias(idProyecto)).filter((dependencia) =>
+        dependencia.idActividadSucesora === idActividad,
+      ).map((dependencia) => String(dependencia.idActividadPredecesora));
+      const predecesoras = await Promise.all(pendientes.map((id) => this.repository.obtenerActividad(id)));
+      if (predecesoras.some((item) => item?.estado !== 'COMPLETADA')) throw new ConflictException('No se puede completar la actividad mientras tenga dependencias pendientes.');
+    }
+    const actualizada = await this.repository.actualizarActividad(idActividad, {
       estado: dto.estado,
     });
+    if (dto.estado === 'COMPLETADA' && actividad.idHito) await actualizarHitoAutomatico(this.repository, idProyecto, String(actividad.idHito));
+    return { ...actualizada, autorizadoComo: proyecto.idPm === idUsuario ? 'PROJECT_MANAGER' : 'RESPONSABLE' };
   }
 
   async eliminar(idProyecto: string, idActividad: string, idUsuario: number) {
@@ -208,6 +218,34 @@ export class GestionarActividadesUseCase {
       'Actividad',
     );
     return this.repository.actualizarActividad(idActividad, { activo: false });
+  }
+
+  async misActividades(idProyecto: string, idUsuario: number, filtros: ListarActividadesDto) {
+    const proyecto = await this.repository.obtenerProyecto(idProyecto);
+    if (!proyecto) throw new NotFoundException('Proyecto no encontrado.');
+    return this.repository.listarActividades(idProyecto, { ...filtros, idUsuarioResponsable: idUsuario, activo: filtros.activo ?? true });
+  }
+
+  async resumenPorResponsable(idProyecto: string, idUsuario: number) {
+    await validarProyecto(this.repository, idProyecto, idUsuario);
+    const hoy = new Date();
+    const actividades = await this.repository.listarActividades(idProyecto, { activo: true });
+    const resumen = new Map<number, Record<string, unknown>>();
+    for (const actividad of actividades) {
+      const responsable = Number(actividad.idUsuarioResponsable);
+      if (!Number.isInteger(responsable)) continue;
+      const item = resumen.get(responsable) ?? { idUsuarioResponsable: responsable, total: 0, completadas: 0, pendientes: 0, retrasadas: 0, proximasAVencer: 0 };
+      item.total = Number(item.total) + 1;
+      if (actividad.estado === 'COMPLETADA') item.completadas = Number(item.completadas) + 1;
+      else {
+        item.pendientes = Number(item.pendientes) + 1;
+        const fecha = fechaComoDate(actividad.fechaFin);
+        if (fecha && fecha < hoy) item.retrasadas = Number(item.retrasadas) + 1;
+        if (fecha && fecha >= hoy && fecha.getTime() <= hoy.getTime() + 3 * 86_400_000) item.proximasAVencer = Number(item.proximasAVencer) + 1;
+      }
+      resumen.set(responsable, item);
+    }
+    return [...resumen.values()];
   }
 }
 
@@ -300,6 +338,7 @@ export class GestionarTimingUseCase {
   async crear(idProyecto: string, dto: CrearTimingDto, idUsuario: number) {
     await validarProyecto(this.repository, idProyecto, idUsuario);
     validarRango(dto.fechaHoraInicio, dto.fechaHoraFin);
+    await validarSolapamientoTiming(this.repository, idProyecto, dto);
     return this.repository.crearTimingManual({
       idProyecto,
       ...dto,
@@ -327,6 +366,7 @@ export class GestionarTimingUseCase {
       dto.fechaHoraInicio ?? fechaIso(actual.fechaHoraInicio),
       dto.fechaHoraFin ?? fechaIso(actual.fechaHoraFin),
     );
+    await validarSolapamientoTiming(this.repository, idProyecto, { ...actual, ...dto } as CrearTimingDto, idTiming);
     return this.repository.actualizarTiming(
       idTiming,
       normalizarFechas(
@@ -358,6 +398,27 @@ export class GestionarTimingUseCase {
       'Elemento de timing',
     );
     return this.repository.actualizarTiming(idTiming, { activo: false });
+  }
+}
+
+@Injectable()
+export class GestionarSugerenciasCronogramaUseCase {
+  constructor(private readonly repository: CronogramaCrudRepository) {}
+  async listar(idProyecto: string, idUsuario: number) {
+    await validarProyecto(this.repository, idProyecto, idUsuario);
+    return this.repository.listarPlantillasActividad();
+  }
+  async dependencias(idProyecto: string, idUsuario: number) {
+    await validarProyecto(this.repository, idProyecto, idUsuario);
+    return this.repository.listarPlantillasDependencia();
+  }
+  async crearDesdeSugerencia(idProyecto: string, dto: CrearActividadDesdeSugerenciaDto, idUsuario: number) {
+    await validarProyecto(this.repository, idProyecto, idUsuario);
+    const plantilla = (await this.repository.listarPlantillasActividad()).find((item) => Number(item.idPlantillaActividad) === dto.idPlantillaActividad && item.activo !== false);
+    if (!plantilla) throw new NotFoundException('La actividad sugerida no existe o está inactiva.');
+    validarRango(dto.fechaInicio, dto.fechaFin);
+    if (dto.idHito) validarRegistro(await this.repository.obtenerHito(dto.idHito), idProyecto, 'Hito');
+    return this.repository.crearActividadManual({ idProyecto, idPlantillaActividad: dto.idPlantillaActividad, idHito: dto.idHito ?? null, nombre: dto.nombre ?? plantilla.nombre, descripcion: null, listaVerificacion: plantilla.listaVerificacion ?? null, entregable: plantilla.entregable ?? null, fechaInicio: dto.fechaInicio ? new Date(dto.fechaInicio) : null, fechaFin: new Date(dto.fechaFin), prioridad: plantilla.prioridad ?? null, estado: 'PENDIENTE', idUsuarioResponsable: dto.idUsuarioResponsable ?? null, responsableTexto: dto.responsableTexto ?? plantilla.responsableSugerido ?? null, orden: Number(plantilla.orden ?? 0), modificadoManualmente: true, activo: true });
   }
 }
 
@@ -485,6 +546,41 @@ async function validarProyecto(
       'No tienes permiso para administrar el cronograma de este proyecto.',
     );
   return proyecto;
+}
+async function validarProyectoOResponsable(
+  repository: CronogramaCrudRepository,
+  idProyecto: string,
+  idActividad: string,
+  idUsuario: number,
+) {
+  const proyecto = await repository.obtenerProyecto(idProyecto);
+  if (!proyecto) throw new NotFoundException('Proyecto no encontrado.');
+  if (proyecto.idPm === idUsuario) return proyecto;
+  const actividad = await repository.obtenerActividad(idActividad);
+  if (actividad?.idProyecto === idProyecto && Number(actividad.idUsuarioResponsable) === idUsuario) return proyecto;
+  throw new ForbiddenException('Solo el Wedding Planner o el responsable asignado puede cambiar este estado.');
+}
+async function actualizarHitoAutomatico(repository: CronogramaCrudRepository, idProyecto: string, idHito: string) {
+  const actividades = await repository.listarActividades(idProyecto, { idHito, activo: true });
+  if (actividades.length && actividades.every((actividad) => actividad.estado === 'COMPLETADA')) await repository.actualizarHito(idHito, { estado: 'COMPLETADO' });
+}
+async function validarSolapamientoTiming(
+  repository: CronogramaCrudRepository,
+  idProyecto: string,
+  candidato: CrearTimingDto,
+  excluirId?: string,
+) {
+  const inicio = new Date(candidato.fechaHoraInicio);
+  const fin = new Date(candidato.fechaHoraFin);
+  const existentes = await repository.listarTiming(idProyecto, { activo: true });
+  const conflicto = existentes.some((item) => {
+    if (String(item.idTiming) === excluirId) return false;
+    if (!candidato.idUsuarioResponsable || Number(item.idUsuarioResponsable) !== candidato.idUsuarioResponsable) return false;
+    const inicioExistente = fechaComoDate(item.fechaHoraInicio);
+    const finExistente = fechaComoDate(item.fechaHoraFin);
+    return !!inicioExistente && !!finExistente && inicio < finExistente && fin > inicioExistente;
+  });
+  if (conflicto) throw new ConflictException('El responsable ya tiene un elemento de timing que se solapa en ese horario.');
 }
 function validarRegistro(
   registro: Record<string, unknown> | null,
