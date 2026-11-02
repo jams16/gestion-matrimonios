@@ -89,10 +89,25 @@ class InvitadosApi {
     '/matrimonios/$m/invitados/$i/rsvp/verificacion-manual-$numero',
     options: await _options(),
   );
+  Future<void> cancelarConfirmacion(String m, String i, int nivel) async =>
+      _dio.patch(
+        '/matrimonios/$m/invitados/$i/rsvp/cancelar-confirmacion',
+        data: {'nivel': nivel},
+        options: await _options(),
+      );
+  Future<void> crearAcompanante(
+    String matrimonio,
+    String titular,
+    Map<String, dynamic> data,
+  ) async => _dio.post(
+    '/matrimonios/$matrimonio/invitados/$titular/acompanantes',
+    data: data,
+    options: await _options(),
+  );
 
   Future<List<Map<String, dynamic>>> mesas(String idMatrimonio) async {
     final response = await _dio.get(
-      '/matrimonios/$idMatrimonio/mesas',
+      '/matrimonios/$idMatrimonio/mesas/representacion',
       options: await _options(),
     );
     return List<Object?>.from(

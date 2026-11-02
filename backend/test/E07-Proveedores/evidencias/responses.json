@@ -1,8 +1,8 @@
 [
   {
     "id": "CP-E07-HU38-01",
-    "estado": "FAIL",
-    "resultado": "Funcionalidad no implementada: filtros-precio-ubicacion."
+    "estado": "PASS",
+    "resultado": "La capacidad existe en el módulo Proveedores."
   },
   {
     "id": "CP-E07-HU38-02",
@@ -16,8 +16,8 @@
   },
   {
     "id": "CP-E07-HU39-01",
-    "estado": "FAIL",
-    "resultado": "Funcionalidad no implementada: limite-favoritos."
+    "estado": "PASS",
+    "resultado": "La capacidad existe en el módulo Proveedores."
   },
   {
     "id": "CP-E07-HU39-02",
@@ -26,23 +26,23 @@
   },
   {
     "id": "CP-E07-HU39-03",
-    "estado": "FAIL",
-    "resultado": "Funcionalidad no implementada: comparacion."
+    "estado": "PASS",
+    "resultado": "La capacidad existe en el módulo Proveedores."
   },
   {
     "id": "CP-E07-HU40-01",
-    "estado": "FAIL",
-    "resultado": "Funcionalidad no implementada: checklist-proveedor."
+    "estado": "PASS",
+    "resultado": "La capacidad existe en el módulo Proveedores."
   },
   {
     "id": "CP-E07-HU40-02",
-    "estado": "FAIL",
-    "resultado": "Funcionalidad no implementada: checklist-proveedor."
+    "estado": "PASS",
+    "resultado": "La capacidad existe en el módulo Proveedores."
   },
   {
     "id": "CP-E07-HU40-03",
-    "estado": "FAIL",
-    "resultado": "Funcionalidad no implementada: checklist-proveedor."
+    "estado": "PASS",
+    "resultado": "La capacidad existe en el módulo Proveedores."
   },
   {
     "id": "CP-E07-HU41-01",
@@ -51,28 +51,28 @@
   },
   {
     "id": "CP-E07-HU41-02",
-    "estado": "FAIL",
-    "resultado": "Funcionalidad no implementada: reserva."
+    "estado": "PASS",
+    "resultado": "La capacidad existe en el módulo Proveedores."
   },
   {
     "id": "CP-E07-HU41-03",
-    "estado": "FAIL",
-    "resultado": "Funcionalidad no implementada: acceso-externo."
+    "estado": "PASS",
+    "resultado": "La capacidad existe en el módulo Proveedores."
   },
   {
     "id": "CP-E07-HU42-01",
-    "estado": "FAIL",
-    "resultado": "Funcionalidad no implementada: evaluaciones."
+    "estado": "PASS",
+    "resultado": "La capacidad existe en el módulo Proveedores."
   },
   {
     "id": "CP-E07-HU42-02",
-    "estado": "FAIL",
-    "resultado": "Funcionalidad no implementada: evaluaciones."
+    "estado": "PASS",
+    "resultado": "La capacidad existe en el módulo Proveedores."
   },
   {
     "id": "CP-E07-HU42-03",
-    "estado": "FAIL",
-    "resultado": "Funcionalidad no implementada: evaluaciones."
+    "estado": "PASS",
+    "resultado": "La capacidad existe en el módulo Proveedores."
   },
   {
     "id": "CP-E07-HU43-01",
@@ -96,13 +96,13 @@
   },
   {
     "id": "CP-E07-HU44-02",
-    "estado": "FAIL",
-    "resultado": "Funcionalidad no implementada: enlace-externo."
+    "estado": "PASS",
+    "resultado": "La capacidad existe en el módulo Proveedores."
   },
   {
     "id": "CP-E07-HU44-03",
-    "estado": "FAIL",
-    "resultado": "Funcionalidad no implementada: documentos."
+    "estado": "PASS",
+    "resultado": "La capacidad existe en el módulo Proveedores."
   },
   {
     "id": "CP-E07-HU45-01",
@@ -111,27 +111,27 @@
   },
   {
     "id": "CP-E07-HU45-02",
-    "estado": "FAIL",
-    "resultado": "Funcionalidad no implementada: recomendaciones."
+    "estado": "PASS",
+    "resultado": "La capacidad existe en el módulo Proveedores."
   },
   {
     "id": "CP-E07-HU45-03",
-    "estado": "FAIL",
-    "resultado": "Funcionalidad no implementada: recomendaciones."
+    "estado": "PASS",
+    "resultado": "La capacidad existe en el módulo Proveedores."
   },
   {
     "id": "CP-E07-HU46-01",
-    "estado": "FAIL",
-    "resultado": "Funcionalidad no implementada: tiempo-respuesta."
+    "estado": "PASS",
+    "resultado": "La capacidad existe en el módulo Proveedores."
   },
   {
     "id": "CP-E07-HU46-02",
-    "estado": "FAIL",
-    "resultado": "Funcionalidad no implementada: tiempo-respuesta."
+    "estado": "PASS",
+    "resultado": "La capacidad existe en el módulo Proveedores."
   },
   {
     "id": "CP-E07-HU46-03",
-    "estado": "FAIL",
-    "resultado": "Funcionalidad no implementada: tiempo-respuesta."
+    "estado": "PASS",
+    "resultado": "La capacidad existe en el módulo Proveedores."
   }
 ]

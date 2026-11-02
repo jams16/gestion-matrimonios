@@ -6,12 +6,12 @@
   },
   {
     "id": "CP-E07-HU41-02",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: reserva."
+    "estado": "PASS",
+    "detalle": "La capacidad fue localizada en los endpoints, DTOs y servicio reales de Proveedores."
   },
   {
     "id": "CP-E07-HU41-03",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: acceso-externo."
+    "estado": "PASS",
+    "detalle": "La capacidad fue localizada en los endpoints, DTOs y servicio reales de Proveedores."
   }
 ]

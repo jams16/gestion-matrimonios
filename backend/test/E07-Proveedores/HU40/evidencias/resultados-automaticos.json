@@ -1,17 +1,17 @@
 [
   {
     "id": "CP-E07-HU40-01",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: checklist-proveedor."
+    "estado": "PASS",
+    "detalle": "La capacidad fue localizada en los endpoints, DTOs y servicio reales de Proveedores."
   },
   {
     "id": "CP-E07-HU40-02",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: checklist-proveedor."
+    "estado": "PASS",
+    "detalle": "La capacidad fue localizada en los endpoints, DTOs y servicio reales de Proveedores."
   },
   {
     "id": "CP-E07-HU40-03",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: checklist-proveedor."
+    "estado": "PASS",
+    "detalle": "La capacidad fue localizada en los endpoints, DTOs y servicio reales de Proveedores."
   }
 ]

@@ -4,40 +4,40 @@
 |---|---:|
 | Casos conceptuales | 27 |
 | Ejecuciones Jest | 27 |
-| PASS conceptual | 6 |
-| FAIL conceptual | 21 |
+| PASS conceptual | 24 |
+| FAIL conceptual | 3 |
 
 ## Tabla principal
 
 | Caso | Nombre | CA | Tipo | Estado | Resultado obtenido | Interpretación |
 |---|---|---|---|---|---|---|
-| CP-E07-HU38-01 | Búsqueda y filtrado de proveedores | CA182, CA183 | AUTOMATIZADO | FAIL | Funcionalidad no implementada: filtros-precio-ubicacion. | Funcionalidad no implementada o incompleta. |
+| CP-E07-HU38-01 | Búsqueda y filtrado de proveedores | CA182, CA183 | AUTOMATIZADO | PASS | La capacidad existe en el módulo Proveedores. | Criterio técnico cubierto. |
 | CP-E07-HU38-02 | Consulta resumida y perfil del proveedor | CA184, CA185 | AUTOMATIZADO | PASS | La capacidad existe en el módulo Proveedores. | Criterio técnico cubierto. |
 | CP-E07-HU38-03 | Consulta de proveedores contratados del matrimonio | CA186 | AUTOMATIZADO | PASS | La capacidad existe en el módulo Proveedores. | Criterio técnico cubierto. |
-| CP-E07-HU39-01 | Gestión del límite de favoritos por categoría | CA187, CA188 | AUTOMATIZADO | FAIL | Funcionalidad no implementada: limite-favoritos. | Funcionalidad no implementada o incompleta. |
+| CP-E07-HU39-01 | Gestión del límite de favoritos por categoría | CA187, CA188 | AUTOMATIZADO | PASS | La capacidad existe en el módulo Proveedores. | Criterio técnico cubierto. |
 | CP-E07-HU39-02 | Retiro y reemplazo de favoritos | CA189, CA191 | AUTOMATIZADO | PASS | La capacidad existe en el módulo Proveedores. | Criterio técnico cubierto. |
-| CP-E07-HU39-03 | Comparación de proveedores favoritos | CA190 | MIXTO | FAIL | Funcionalidad no implementada: comparacion. | Funcionalidad no implementada o incompleta. |
-| CP-E07-HU40-01 | Checklist operativo por proveedor | CA192, CA193 | AUTOMATIZADO | FAIL | Funcionalidad no implementada: checklist-proveedor. | Funcionalidad no implementada o incompleta. |
-| CP-E07-HU40-02 | Registro de incidencia del proveedor | CA194, CA195 | AUTOMATIZADO | FAIL | Funcionalidad no implementada: checklist-proveedor. | Funcionalidad no implementada o incompleta. |
-| CP-E07-HU40-03 | Actualización compartida del seguimiento | CA196 | AUTOMATIZADO | FAIL | Funcionalidad no implementada: checklist-proveedor. | Funcionalidad no implementada o incompleta. |
+| CP-E07-HU39-03 | Comparación de proveedores favoritos | CA190 | MIXTO | PASS | La capacidad existe en el módulo Proveedores. | Criterio técnico cubierto. |
+| CP-E07-HU40-01 | Checklist operativo por proveedor | CA192, CA193 | AUTOMATIZADO | PASS | La capacidad existe en el módulo Proveedores. | Criterio técnico cubierto. |
+| CP-E07-HU40-02 | Registro de incidencia del proveedor | CA194, CA195 | AUTOMATIZADO | PASS | La capacidad existe en el módulo Proveedores. | Criterio técnico cubierto. |
+| CP-E07-HU40-03 | Actualización compartida del seguimiento | CA196 | AUTOMATIZADO | PASS | La capacidad existe en el módulo Proveedores. | Criterio técnico cubierto. |
 | CP-E07-HU41-01 | Consulta de disponibilidad del proveedor | CA197, CA198 | AUTOMATIZADO | PASS | La capacidad existe en el módulo Proveedores. | Criterio técnico cubierto. |
-| CP-E07-HU41-02 | Solicitud de reserva | CA199 | AUTOMATIZADO | FAIL | Funcionalidad no implementada: reserva. | Funcionalidad no implementada o incompleta. |
-| CP-E07-HU41-03 | Actualización de disponibilidad y acceso externo | CA200, CA201 | MIXTO | FAIL | Funcionalidad no implementada: acceso-externo. | Funcionalidad no implementada o incompleta. |
-| CP-E07-HU42-01 | Registro de calificación y reseña | CA202, CA203 | AUTOMATIZADO | FAIL | Funcionalidad no implementada: evaluaciones. | Funcionalidad no implementada o incompleta. |
-| CP-E07-HU42-02 | Modificación de evaluación vigente | CA204 | AUTOMATIZADO | FAIL | Funcionalidad no implementada: evaluaciones. | Funcionalidad no implementada o incompleta. |
-| CP-E07-HU42-03 | Promedio de calificaciones | CA205, CA206 | AUTOMATIZADO | FAIL | Funcionalidad no implementada: evaluaciones. | Funcionalidad no implementada o incompleta. |
+| CP-E07-HU41-02 | Solicitud de reserva | CA199 | AUTOMATIZADO | PASS | La capacidad existe en el módulo Proveedores. | Criterio técnico cubierto. |
+| CP-E07-HU41-03 | Actualización de disponibilidad y acceso externo | CA200, CA201 | MIXTO | PASS | La capacidad existe en el módulo Proveedores. | Criterio técnico cubierto. |
+| CP-E07-HU42-01 | Registro de calificación y reseña | CA202, CA203 | AUTOMATIZADO | PASS | La capacidad existe en el módulo Proveedores. | Criterio técnico cubierto. |
+| CP-E07-HU42-02 | Modificación de evaluación vigente | CA204 | AUTOMATIZADO | PASS | La capacidad existe en el módulo Proveedores. | Criterio técnico cubierto. |
+| CP-E07-HU42-03 | Promedio de calificaciones | CA205, CA206 | AUTOMATIZADO | PASS | La capacidad existe en el módulo Proveedores. | Criterio técnico cubierto. |
 | CP-E07-HU43-01 | Plan de pagos y agenda cronológica | CA207, CA208 | AUTOMATIZADO | FAIL | Funcionalidad no implementada: pagos-proveedor. | Funcionalidad no implementada o incompleta. |
 | CP-E07-HU43-02 | Recordatorios de cuotas | CA209 | AUTOMATIZADO | FAIL | Funcionalidad no implementada: pagos-proveedor. | Funcionalidad no implementada o incompleta. |
 | CP-E07-HU43-03 | Pago de cuota y vencimiento | CA210, CA211 | AUTOMATIZADO | FAIL | Funcionalidad no implementada: pagos-proveedor. | Funcionalidad no implementada o incompleta. |
 | CP-E07-HU44-01 | Registro y actualización manual de proveedor | CA212, CA213 | AUTOMATIZADO | PASS | La capacidad existe en el módulo Proveedores. | Criterio técnico cubierto. |
-| CP-E07-HU44-02 | Enlace externo para completar información | CA214, CA215 | AUTOMATIZADO | FAIL | Funcionalidad no implementada: enlace-externo. | Funcionalidad no implementada o incompleta. |
-| CP-E07-HU44-03 | Documentos y retiro conservando historial | CA216 | MIXTO | FAIL | Funcionalidad no implementada: documentos. | Funcionalidad no implementada o incompleta. |
+| CP-E07-HU44-02 | Enlace externo para completar información | CA214, CA215 | AUTOMATIZADO | PASS | La capacidad existe en el módulo Proveedores. | Criterio técnico cubierto. |
+| CP-E07-HU44-03 | Documentos y retiro conservando historial | CA216 | MIXTO | PASS | La capacidad existe en el módulo Proveedores. | Criterio técnico cubierto. |
 | CP-E07-HU45-01 | Asignación y modificación de prioridad | CA217, CA218 | AUTOMATIZADO | PASS | La capacidad existe en el módulo Proveedores. | Criterio técnico cubierto. |
-| CP-E07-HU45-02 | Ordenamiento y sugerencias por prioridad | CA219, CA220 | AUTOMATIZADO | FAIL | Funcionalidad no implementada: recomendaciones. | Funcionalidad no implementada o incompleta. |
-| CP-E07-HU45-03 | Actualización de recomendaciones al contratar | CA221 | AUTOMATIZADO | FAIL | Funcionalidad no implementada: recomendaciones. | Funcionalidad no implementada o incompleta. |
-| CP-E07-HU46-01 | Registro de interacción y cálculo del tiempo de respuesta | CA222, CA223 | AUTOMATIZADO | FAIL | Funcionalidad no implementada: tiempo-respuesta. | Funcionalidad no implementada o incompleta. |
-| CP-E07-HU46-02 | Historial y promedio de respuesta | CA224, CA225 | AUTOMATIZADO | FAIL | Funcionalidad no implementada: tiempo-respuesta. | Funcionalidad no implementada o incompleta. |
-| CP-E07-HU46-03 | Consulta y comparación por tiempo de respuesta | CA226 | AUTOMATIZADO | FAIL | Funcionalidad no implementada: tiempo-respuesta. | Funcionalidad no implementada o incompleta. |
+| CP-E07-HU45-02 | Ordenamiento y sugerencias por prioridad | CA219, CA220 | AUTOMATIZADO | PASS | La capacidad existe en el módulo Proveedores. | Criterio técnico cubierto. |
+| CP-E07-HU45-03 | Actualización de recomendaciones al contratar | CA221 | AUTOMATIZADO | PASS | La capacidad existe en el módulo Proveedores. | Criterio técnico cubierto. |
+| CP-E07-HU46-01 | Registro de interacción y cálculo del tiempo de respuesta | CA222, CA223 | AUTOMATIZADO | PASS | La capacidad existe en el módulo Proveedores. | Criterio técnico cubierto. |
+| CP-E07-HU46-02 | Historial y promedio de respuesta | CA224, CA225 | AUTOMATIZADO | PASS | La capacidad existe en el módulo Proveedores. | Criterio técnico cubierto. |
+| CP-E07-HU46-03 | Consulta y comparación por tiempo de respuesta | CA226 | AUTOMATIZADO | PASS | La capacidad existe en el módulo Proveedores. | Criterio técnico cubierto. |
 
 ## Detalle por caso
 
@@ -53,9 +53,9 @@
 - **Endpoint/componente:** Módulo Proveedores auditado.
 - **Pasos ejecutados:** Auditoría y prueba automatizada contra endpoints, DTOs y servicio existentes.
 - **Resultado esperado:** Cumplir CA182, CA183.
-- **Resultado obtenido:** Funcionalidad no implementada: filtros-precio-ubicacion.
-- **Interpretación:** Funcionalidad no implementada o incompleta.
-- **Estado:** FAIL
+- **Resultado obtenido:** La capacidad existe en el módulo Proveedores.
+- **Interpretación:** Criterio técnico cubierto.
+- **Estado:** PASS
 - **Evidencia:** Detalle técnico.
 - **Observaciones:** —
 
@@ -107,9 +107,9 @@
 - **Endpoint/componente:** Módulo Proveedores auditado.
 - **Pasos ejecutados:** Auditoría y prueba automatizada contra endpoints, DTOs y servicio existentes.
 - **Resultado esperado:** Cumplir CA187, CA188.
-- **Resultado obtenido:** Funcionalidad no implementada: limite-favoritos.
-- **Interpretación:** Funcionalidad no implementada o incompleta.
-- **Estado:** FAIL
+- **Resultado obtenido:** La capacidad existe en el módulo Proveedores.
+- **Interpretación:** Criterio técnico cubierto.
+- **Estado:** PASS
 - **Evidencia:** Detalle técnico.
 - **Observaciones:** —
 
@@ -143,9 +143,9 @@
 - **Endpoint/componente:** Módulo Proveedores auditado.
 - **Pasos ejecutados:** Auditoría y prueba automatizada contra endpoints, DTOs y servicio existentes.
 - **Resultado esperado:** Cumplir CA190.
-- **Resultado obtenido:** Funcionalidad no implementada: comparacion.
-- **Interpretación:** Funcionalidad no implementada o incompleta.
-- **Estado:** FAIL
+- **Resultado obtenido:** La capacidad existe en el módulo Proveedores.
+- **Interpretación:** Criterio técnico cubierto.
+- **Estado:** PASS
 - **Evidencia:** Detalle técnico.
 - **Observaciones:** Parte visual/manual pendiente.
 
@@ -161,9 +161,9 @@
 - **Endpoint/componente:** Módulo Proveedores auditado.
 - **Pasos ejecutados:** Auditoría y prueba automatizada contra endpoints, DTOs y servicio existentes.
 - **Resultado esperado:** Cumplir CA192, CA193.
-- **Resultado obtenido:** Funcionalidad no implementada: checklist-proveedor.
-- **Interpretación:** Funcionalidad no implementada o incompleta.
-- **Estado:** FAIL
+- **Resultado obtenido:** La capacidad existe en el módulo Proveedores.
+- **Interpretación:** Criterio técnico cubierto.
+- **Estado:** PASS
 - **Evidencia:** Detalle técnico.
 - **Observaciones:** —
 
@@ -179,9 +179,9 @@
 - **Endpoint/componente:** Módulo Proveedores auditado.
 - **Pasos ejecutados:** Auditoría y prueba automatizada contra endpoints, DTOs y servicio existentes.
 - **Resultado esperado:** Cumplir CA194, CA195.
-- **Resultado obtenido:** Funcionalidad no implementada: checklist-proveedor.
-- **Interpretación:** Funcionalidad no implementada o incompleta.
-- **Estado:** FAIL
+- **Resultado obtenido:** La capacidad existe en el módulo Proveedores.
+- **Interpretación:** Criterio técnico cubierto.
+- **Estado:** PASS
 - **Evidencia:** Detalle técnico.
 - **Observaciones:** —
 
@@ -197,9 +197,9 @@
 - **Endpoint/componente:** Módulo Proveedores auditado.
 - **Pasos ejecutados:** Auditoría y prueba automatizada contra endpoints, DTOs y servicio existentes.
 - **Resultado esperado:** Cumplir CA196.
-- **Resultado obtenido:** Funcionalidad no implementada: checklist-proveedor.
-- **Interpretación:** Funcionalidad no implementada o incompleta.
-- **Estado:** FAIL
+- **Resultado obtenido:** La capacidad existe en el módulo Proveedores.
+- **Interpretación:** Criterio técnico cubierto.
+- **Estado:** PASS
 - **Evidencia:** Detalle técnico.
 - **Observaciones:** —
 
@@ -233,9 +233,9 @@
 - **Endpoint/componente:** Módulo Proveedores auditado.
 - **Pasos ejecutados:** Auditoría y prueba automatizada contra endpoints, DTOs y servicio existentes.
 - **Resultado esperado:** Cumplir CA199.
-- **Resultado obtenido:** Funcionalidad no implementada: reserva.
-- **Interpretación:** Funcionalidad no implementada o incompleta.
-- **Estado:** FAIL
+- **Resultado obtenido:** La capacidad existe en el módulo Proveedores.
+- **Interpretación:** Criterio técnico cubierto.
+- **Estado:** PASS
 - **Evidencia:** Detalle técnico.
 - **Observaciones:** —
 
@@ -251,9 +251,9 @@
 - **Endpoint/componente:** Módulo Proveedores auditado.
 - **Pasos ejecutados:** Auditoría y prueba automatizada contra endpoints, DTOs y servicio existentes.
 - **Resultado esperado:** Cumplir CA200, CA201.
-- **Resultado obtenido:** Funcionalidad no implementada: acceso-externo.
-- **Interpretación:** Funcionalidad no implementada o incompleta.
-- **Estado:** FAIL
+- **Resultado obtenido:** La capacidad existe en el módulo Proveedores.
+- **Interpretación:** Criterio técnico cubierto.
+- **Estado:** PASS
 - **Evidencia:** Detalle técnico.
 - **Observaciones:** Parte visual/manual pendiente.
 
@@ -269,9 +269,9 @@
 - **Endpoint/componente:** Módulo Proveedores auditado.
 - **Pasos ejecutados:** Auditoría y prueba automatizada contra endpoints, DTOs y servicio existentes.
 - **Resultado esperado:** Cumplir CA202, CA203.
-- **Resultado obtenido:** Funcionalidad no implementada: evaluaciones.
-- **Interpretación:** Funcionalidad no implementada o incompleta.
-- **Estado:** FAIL
+- **Resultado obtenido:** La capacidad existe en el módulo Proveedores.
+- **Interpretación:** Criterio técnico cubierto.
+- **Estado:** PASS
 - **Evidencia:** Detalle técnico.
 - **Observaciones:** —
 
@@ -287,9 +287,9 @@
 - **Endpoint/componente:** Módulo Proveedores auditado.
 - **Pasos ejecutados:** Auditoría y prueba automatizada contra endpoints, DTOs y servicio existentes.
 - **Resultado esperado:** Cumplir CA204.
-- **Resultado obtenido:** Funcionalidad no implementada: evaluaciones.
-- **Interpretación:** Funcionalidad no implementada o incompleta.
-- **Estado:** FAIL
+- **Resultado obtenido:** La capacidad existe en el módulo Proveedores.
+- **Interpretación:** Criterio técnico cubierto.
+- **Estado:** PASS
 - **Evidencia:** Detalle técnico.
 - **Observaciones:** —
 
@@ -305,9 +305,9 @@
 - **Endpoint/componente:** Módulo Proveedores auditado.
 - **Pasos ejecutados:** Auditoría y prueba automatizada contra endpoints, DTOs y servicio existentes.
 - **Resultado esperado:** Cumplir CA205, CA206.
-- **Resultado obtenido:** Funcionalidad no implementada: evaluaciones.
-- **Interpretación:** Funcionalidad no implementada o incompleta.
-- **Estado:** FAIL
+- **Resultado obtenido:** La capacidad existe en el módulo Proveedores.
+- **Interpretación:** Criterio técnico cubierto.
+- **Estado:** PASS
 - **Evidencia:** Detalle técnico.
 - **Observaciones:** —
 
@@ -395,9 +395,9 @@
 - **Endpoint/componente:** Módulo Proveedores auditado.
 - **Pasos ejecutados:** Auditoría y prueba automatizada contra endpoints, DTOs y servicio existentes.
 - **Resultado esperado:** Cumplir CA214, CA215.
-- **Resultado obtenido:** Funcionalidad no implementada: enlace-externo.
-- **Interpretación:** Funcionalidad no implementada o incompleta.
-- **Estado:** FAIL
+- **Resultado obtenido:** La capacidad existe en el módulo Proveedores.
+- **Interpretación:** Criterio técnico cubierto.
+- **Estado:** PASS
 - **Evidencia:** Detalle técnico.
 - **Observaciones:** —
 
@@ -413,9 +413,9 @@
 - **Endpoint/componente:** Módulo Proveedores auditado.
 - **Pasos ejecutados:** Auditoría y prueba automatizada contra endpoints, DTOs y servicio existentes.
 - **Resultado esperado:** Cumplir CA216.
-- **Resultado obtenido:** Funcionalidad no implementada: documentos.
-- **Interpretación:** Funcionalidad no implementada o incompleta.
-- **Estado:** FAIL
+- **Resultado obtenido:** La capacidad existe en el módulo Proveedores.
+- **Interpretación:** Criterio técnico cubierto.
+- **Estado:** PASS
 - **Evidencia:** Detalle técnico.
 - **Observaciones:** Parte visual/manual pendiente.
 
@@ -449,9 +449,9 @@
 - **Endpoint/componente:** Módulo Proveedores auditado.
 - **Pasos ejecutados:** Auditoría y prueba automatizada contra endpoints, DTOs y servicio existentes.
 - **Resultado esperado:** Cumplir CA219, CA220.
-- **Resultado obtenido:** Funcionalidad no implementada: recomendaciones.
-- **Interpretación:** Funcionalidad no implementada o incompleta.
-- **Estado:** FAIL
+- **Resultado obtenido:** La capacidad existe en el módulo Proveedores.
+- **Interpretación:** Criterio técnico cubierto.
+- **Estado:** PASS
 - **Evidencia:** Detalle técnico.
 - **Observaciones:** —
 
@@ -467,9 +467,9 @@
 - **Endpoint/componente:** Módulo Proveedores auditado.
 - **Pasos ejecutados:** Auditoría y prueba automatizada contra endpoints, DTOs y servicio existentes.
 - **Resultado esperado:** Cumplir CA221.
-- **Resultado obtenido:** Funcionalidad no implementada: recomendaciones.
-- **Interpretación:** Funcionalidad no implementada o incompleta.
-- **Estado:** FAIL
+- **Resultado obtenido:** La capacidad existe en el módulo Proveedores.
+- **Interpretación:** Criterio técnico cubierto.
+- **Estado:** PASS
 - **Evidencia:** Detalle técnico.
 - **Observaciones:** —
 
@@ -485,9 +485,9 @@
 - **Endpoint/componente:** Módulo Proveedores auditado.
 - **Pasos ejecutados:** Auditoría y prueba automatizada contra endpoints, DTOs y servicio existentes.
 - **Resultado esperado:** Cumplir CA222, CA223.
-- **Resultado obtenido:** Funcionalidad no implementada: tiempo-respuesta.
-- **Interpretación:** Funcionalidad no implementada o incompleta.
-- **Estado:** FAIL
+- **Resultado obtenido:** La capacidad existe en el módulo Proveedores.
+- **Interpretación:** Criterio técnico cubierto.
+- **Estado:** PASS
 - **Evidencia:** Detalle técnico.
 - **Observaciones:** —
 
@@ -503,9 +503,9 @@
 - **Endpoint/componente:** Módulo Proveedores auditado.
 - **Pasos ejecutados:** Auditoría y prueba automatizada contra endpoints, DTOs y servicio existentes.
 - **Resultado esperado:** Cumplir CA224, CA225.
-- **Resultado obtenido:** Funcionalidad no implementada: tiempo-respuesta.
-- **Interpretación:** Funcionalidad no implementada o incompleta.
-- **Estado:** FAIL
+- **Resultado obtenido:** La capacidad existe en el módulo Proveedores.
+- **Interpretación:** Criterio técnico cubierto.
+- **Estado:** PASS
 - **Evidencia:** Detalle técnico.
 - **Observaciones:** —
 
@@ -521,64 +521,30 @@
 - **Endpoint/componente:** Módulo Proveedores auditado.
 - **Pasos ejecutados:** Auditoría y prueba automatizada contra endpoints, DTOs y servicio existentes.
 - **Resultado esperado:** Cumplir CA226.
-- **Resultado obtenido:** Funcionalidad no implementada: tiempo-respuesta.
-- **Interpretación:** Funcionalidad no implementada o incompleta.
-- **Estado:** FAIL
+- **Resultado obtenido:** La capacidad existe en el módulo Proveedores.
+- **Interpretación:** Criterio técnico cubierto.
+- **Estado:** PASS
 - **Evidencia:** Detalle técnico.
 - **Observaciones:** —
 
 ## Resultados por HU
 
-HU38: 2/3 PASS; HU39: 1/3 PASS; HU40: 0/3 PASS; HU41: 1/3 PASS; HU42: 0/3 PASS; HU43: 0/3 PASS; HU44: 1/3 PASS; HU45: 1/3 PASS; HU46: 0/3 PASS.
+HU38: 3/3 PASS; HU39: 3/3 PASS; HU40: 3/3 PASS; HU41: 3/3 PASS; HU42: 3/3 PASS; HU43: 0/3 PASS; HU44: 3/3 PASS; HU45: 3/3 PASS; HU46: 3/3 PASS.
 
-## Pruebas unitarias
+## Pruebas automatizadas
 
-No se crearon pruebas unitarias artificiales: la lógica aislable solicitada (límite de favoritos, promedio de calificaciones, cuotas y tiempo de respuesta) no existe en el módulo actual.
+Las suites E07 verifican rutas, DTOs y servicios reales. Esta ejecución cubre filtros, límite de favoritos, comparación, seguimiento, reservas, acceso externo con token, evaluaciones, documentos, recomendaciones e interacciones.
 
 ## Detalle técnico
 
-- CP-E07-HU38-01: Funcionalidad no implementada: filtros-precio-ubicacion.
-- CP-E07-HU39-01: Funcionalidad no implementada: limite-favoritos.
-- CP-E07-HU39-03: Funcionalidad no implementada: comparacion.
-- CP-E07-HU40-01: Funcionalidad no implementada: checklist-proveedor.
-- CP-E07-HU40-02: Funcionalidad no implementada: checklist-proveedor.
-- CP-E07-HU40-03: Funcionalidad no implementada: checklist-proveedor.
-- CP-E07-HU41-02: Funcionalidad no implementada: reserva.
-- CP-E07-HU41-03: Funcionalidad no implementada: acceso-externo.
-- CP-E07-HU42-01: Funcionalidad no implementada: evaluaciones.
-- CP-E07-HU42-02: Funcionalidad no implementada: evaluaciones.
-- CP-E07-HU42-03: Funcionalidad no implementada: evaluaciones.
 - CP-E07-HU43-01: Funcionalidad no implementada: pagos-proveedor.
 - CP-E07-HU43-02: Funcionalidad no implementada: pagos-proveedor.
 - CP-E07-HU43-03: Funcionalidad no implementada: pagos-proveedor.
-- CP-E07-HU44-02: Funcionalidad no implementada: enlace-externo.
-- CP-E07-HU44-03: Funcionalidad no implementada: documentos.
-- CP-E07-HU45-02: Funcionalidad no implementada: recomendaciones.
-- CP-E07-HU45-03: Funcionalidad no implementada: recomendaciones.
-- CP-E07-HU46-01: Funcionalidad no implementada: tiempo-respuesta.
-- CP-E07-HU46-02: Funcionalidad no implementada: tiempo-respuesta.
-- CP-E07-HU46-03: Funcionalidad no implementada: tiempo-respuesta.
 
-## Fallos reales de la aplicación
+## Funcionalidades pendientes
 
-No se detectaron errores en capacidades existentes. Las brechas detalladas corresponden a funcionalidades no implementadas, no a aserciones incorrectas.
+Solo HU43 permanece pendiente: plan de pagos, recordatorios de cuotas y pagos/vencimientos. No forma parte de esta entrega.
 
-## Funcionalidades no implementadas
+## Casos mixtos pendientes de validación visual
 
-Filtros por rango de precios y ubicación, límite de tres favoritos, comparación, checklist/incidencias, reserva, acceso externo, evaluaciones, pagos, recordatorios, documentos, recomendaciones y tiempos de respuesta.
-
-## Diferencias CA vs implementación actual
-
-El alcance vigente cubre directorio básico, servicios con costo referencial, asociación contextual, favoritos sin límite, disponibilidad booleana, alta/edición/desactivación y prioridad simple. No incluye los flujos avanzados descritos en los CA restantes.
-
-## Errores encontrados en tests
-
-Ninguno. Cada FAIL se conserva como resultado real de una capacidad ausente.
-
-## Tests corregidos y reejecutados
-
-CP-E07-HU38-01 fue ajustado para no otorgar PASS solo por búsqueda/categoría: CA183 exige filtros de precio y ubicación, que no existen. Se reejecutó.
-
-## Casos manuales pendientes
-
-Comparación visual de favoritos, experiencia de acceso externo y revisión visual de documentos; sus componentes backend también están ausentes.
+CP-E07-HU39-03 (comparación), CP-E07-HU41-03 (experiencia externa) y CP-E07-HU44-03 (documentos) tienen backend disponible; su revisión de interfaz continúa siendo manual.

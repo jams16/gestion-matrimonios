@@ -1,8 +1,8 @@
 [
   {
     "id": "CP-E07-HU38-01",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: filtros-precio-ubicacion."
+    "estado": "PASS",
+    "detalle": "La capacidad fue localizada en los endpoints, DTOs y servicio reales de Proveedores."
   },
   {
     "id": "CP-E07-HU38-02",

@@ -2,8 +2,8 @@
   "epic": "E07",
   "total": 27,
   "jest": 27,
-  "pass": 6,
-  "fail": 21,
+  "pass": 24,
+  "fail": 3,
   "suites": "test/E07-Proveedores",
   "excluidos": [
     "test/backup/legacy",

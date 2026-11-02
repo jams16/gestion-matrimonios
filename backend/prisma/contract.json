@@ -140,6 +140,22 @@
       "model": "DisponibilidadProveedor",
       "namespace": "public"
     },
+    "pv_documento_proveedor": {
+      "model": "DocumentoProveedor",
+      "namespace": "public"
+    },
+    "pv_enlace_externo_proveedor": {
+      "model": "EnlaceExternoProveedor",
+      "namespace": "public"
+    },
+    "pv_evaluacion_proveedor": {
+      "model": "EvaluacionProveedor",
+      "namespace": "public"
+    },
+    "pv_interaccion_proveedor": {
+      "model": "InteraccionProveedor",
+      "namespace": "public"
+    },
     "pv_matrimonio_proveedor": {
       "model": "MatrimonioProveedor",
       "namespace": "public"
@@ -150,6 +166,14 @@
     },
     "pv_proveedor_servicio": {
       "model": "ProveedorServicio",
+      "namespace": "public"
+    },
+    "pv_reserva_proveedor": {
+      "model": "ReservaProveedor",
+      "namespace": "public"
+    },
+    "pv_seguimiento_proveedor": {
+      "model": "SeguimientoProveedor",
       "namespace": "public"
     }
   },
@@ -385,6 +409,23 @@
               }
             ]
           },
+          "pv_estado_reserva": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "SOLICITADA",
+                "value": "SOLICITADA"
+              },
+              {
+                "name": "CONFIRMADA",
+                "value": "CONFIRMADA"
+              },
+              {
+                "name": "CANCELADA",
+                "value": "CANCELADA"
+              }
+            ]
+          },
           "pv_estado_seleccion": {
             "codecId": "pg/text@1",
             "members": [
@@ -432,6 +473,19 @@
               }
             ]
           },
+          "pv_tipo_interaccion": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "CONSULTA",
+                "value": "CONSULTA"
+              },
+              {
+                "name": "RESPUESTA",
+                "value": "RESPUESTA"
+              }
+            ]
+          },
           "pv_tipo_proveedor": {
             "codecId": "pg/text@1",
             "members": [
@@ -442,6 +496,19 @@
               {
                 "name": "EMPRESA",
                 "value": "EMPRESA"
+              }
+            ]
+          },
+          "pv_tipo_seguimiento": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "CHECKLIST",
+                "value": "CHECKLIST"
+              },
+              {
+                "name": "INCIDENCIA",
+                "value": "INCIDENCIA"
               }
             ]
           }
@@ -1597,6 +1664,224 @@
               "table": "pv_disponibilidad_proveedor"
             }
           },
+          "DocumentoProveedor": {
+            "fields": {
+              "activo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "idDocumentoProveedor": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idMatrimonioProveedor": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "nombre": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 200
+                  }
+                }
+              },
+              "tipo": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 100
+                  }
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "url": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 500
+                  }
+                }
+              }
+            },
+            "relations": {
+              "matrimonioProveedor": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idMatrimonioProveedor"
+                  ],
+                  "targetFields": [
+                    "idMatrimonioProveedor"
+                  ]
+                },
+                "to": {
+                  "model": "MatrimonioProveedor",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "activo": {
+                  "column": "activo"
+                },
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "idDocumentoProveedor": {
+                  "column": "id_documento_proveedor"
+                },
+                "idMatrimonioProveedor": {
+                  "column": "id_matrimonio_proveedor"
+                },
+                "nombre": {
+                  "column": "nombre"
+                },
+                "tipo": {
+                  "column": "tipo"
+                },
+                "updatedAt": {
+                  "column": "updated_at"
+                },
+                "url": {
+                  "column": "url"
+                }
+              },
+              "namespaceId": "public",
+              "table": "pv_documento_proveedor"
+            }
+          },
+          "EnlaceExternoProveedor": {
+            "fields": {
+              "activo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "fechaExpiracion": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "idEnlaceExternoProveedor": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idProveedor": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "token": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 100
+                  }
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "proveedor": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idProveedor"
+                  ],
+                  "targetFields": [
+                    "idProveedor"
+                  ]
+                },
+                "to": {
+                  "model": "Proveedor",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "activo": {
+                  "column": "activo"
+                },
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "fechaExpiracion": {
+                  "column": "fecha_expiracion"
+                },
+                "idEnlaceExternoProveedor": {
+                  "column": "id_enlace_externo_proveedor"
+                },
+                "idProveedor": {
+                  "column": "id_proveedor"
+                },
+                "token": {
+                  "column": "token"
+                },
+                "updatedAt": {
+                  "column": "updated_at"
+                }
+              },
+              "namespaceId": "public",
+              "table": "pv_enlace_externo_proveedor"
+            }
+          },
           "Entidad": {
             "fields": {
               "codigoUbigeo": {
@@ -1813,6 +2098,107 @@
               },
               "namespaceId": "public",
               "table": "in_entidad"
+            }
+          },
+          "EvaluacionProveedor": {
+            "fields": {
+              "activo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "calificacion": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "idEvaluacionProveedor": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idMatrimonioProveedor": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "resena": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 1000
+                  }
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "matrimonioProveedor": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idMatrimonioProveedor"
+                  ],
+                  "targetFields": [
+                    "idMatrimonioProveedor"
+                  ]
+                },
+                "to": {
+                  "model": "MatrimonioProveedor",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "activo": {
+                  "column": "activo"
+                },
+                "calificacion": {
+                  "column": "calificacion"
+                },
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "idEvaluacionProveedor": {
+                  "column": "id_evaluacion_proveedor"
+                },
+                "idMatrimonioProveedor": {
+                  "column": "id_matrimonio_proveedor"
+                },
+                "resena": {
+                  "column": "resena"
+                },
+                "updatedAt": {
+                  "column": "updated_at"
+                }
+              },
+              "namespaceId": "public",
+              "table": "pv_evaluacion_proveedor"
             }
           },
           "FaseProyecto": {
@@ -2145,6 +2531,133 @@
               },
               "namespaceId": "public",
               "table": "cr_hito"
+            }
+          },
+          "InteraccionProveedor": {
+            "fields": {
+              "activo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "fechaEnvio": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "fechaRespuesta": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "idInteraccionProveedor": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idMatrimonioProveedor": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "observacion": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 1000
+                  }
+                }
+              },
+              "tipo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "pv_tipo_interaccion",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "matrimonioProveedor": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idMatrimonioProveedor"
+                  ],
+                  "targetFields": [
+                    "idMatrimonioProveedor"
+                  ]
+                },
+                "to": {
+                  "model": "MatrimonioProveedor",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "activo": {
+                  "column": "activo"
+                },
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "fechaEnvio": {
+                  "column": "fecha_envio"
+                },
+                "fechaRespuesta": {
+                  "column": "fecha_respuesta"
+                },
+                "idInteraccionProveedor": {
+                  "column": "id_interaccion_proveedor"
+                },
+                "idMatrimonioProveedor": {
+                  "column": "id_matrimonio_proveedor"
+                },
+                "observacion": {
+                  "column": "observacion"
+                },
+                "tipo": {
+                  "column": "tipo"
+                },
+                "updatedAt": {
+                  "column": "updated_at"
+                }
+              },
+              "namespaceId": "public",
+              "table": "pv_interaccion_proveedor"
             }
           },
           "Invitado": {
@@ -2882,6 +3395,51 @@
               }
             },
             "relations": {
+              "documentos": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idMatrimonioProveedor"
+                  ],
+                  "targetFields": [
+                    "idMatrimonioProveedor"
+                  ]
+                },
+                "to": {
+                  "model": "DocumentoProveedor",
+                  "namespace": "public"
+                }
+              },
+              "evaluaciones": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idMatrimonioProveedor"
+                  ],
+                  "targetFields": [
+                    "idMatrimonioProveedor"
+                  ]
+                },
+                "to": {
+                  "model": "EvaluacionProveedor",
+                  "namespace": "public"
+                }
+              },
+              "interacciones": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idMatrimonioProveedor"
+                  ],
+                  "targetFields": [
+                    "idMatrimonioProveedor"
+                  ]
+                },
+                "to": {
+                  "model": "InteraccionProveedor",
+                  "namespace": "public"
+                }
+              },
               "matrimonio": {
                 "cardinality": "N:1",
                 "nullable": false,
@@ -2911,6 +3469,36 @@
                 },
                 "to": {
                   "model": "Proveedor",
+                  "namespace": "public"
+                }
+              },
+              "reservas": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idMatrimonioProveedor"
+                  ],
+                  "targetFields": [
+                    "idMatrimonioProveedor"
+                  ]
+                },
+                "to": {
+                  "model": "ReservaProveedor",
+                  "namespace": "public"
+                }
+              },
+              "seguimientos": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idMatrimonioProveedor"
+                  ],
+                  "targetFields": [
+                    "idMatrimonioProveedor"
+                  ]
+                },
+                "to": {
+                  "model": "SeguimientoProveedor",
                   "namespace": "public"
                 }
               }
@@ -4801,6 +5389,21 @@
                   "namespace": "public"
                 }
               },
+              "enlaces": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idProveedor"
+                  ],
+                  "targetFields": [
+                    "idProveedor"
+                  ]
+                },
+                "to": {
+                  "model": "EnlaceExternoProveedor",
+                  "namespace": "public"
+                }
+              },
               "entidad": {
                 "cardinality": "N:1",
                 "nullable": true,
@@ -5063,6 +5666,21 @@
                 },
                 "to": {
                   "model": "Proveedor",
+                  "namespace": "public"
+                }
+              },
+              "reservas": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idProveedorServicio"
+                  ],
+                  "targetFields": [
+                    "idProveedorServicio"
+                  ]
+                },
+                "to": {
+                  "model": "ReservaProveedor",
                   "namespace": "public"
                 }
               }
@@ -5621,6 +6239,149 @@
               "table": "iv_requerimiento_alimentario"
             }
           },
+          "ReservaProveedor": {
+            "fields": {
+              "activo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "estado": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "pv_estado_reserva",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "fecha": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "idMatrimonioProveedor": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idProveedorServicio": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "idReservaProveedor": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "observacion": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 1000
+                  }
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "matrimonioProveedor": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idMatrimonioProveedor"
+                  ],
+                  "targetFields": [
+                    "idMatrimonioProveedor"
+                  ]
+                },
+                "to": {
+                  "model": "MatrimonioProveedor",
+                  "namespace": "public"
+                }
+              },
+              "proveedorServicio": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idProveedorServicio"
+                  ],
+                  "targetFields": [
+                    "idProveedorServicio"
+                  ]
+                },
+                "to": {
+                  "model": "ProveedorServicio",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "activo": {
+                  "column": "activo"
+                },
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "estado": {
+                  "column": "estado"
+                },
+                "fecha": {
+                  "column": "fecha"
+                },
+                "idMatrimonioProveedor": {
+                  "column": "id_matrimonio_proveedor"
+                },
+                "idProveedorServicio": {
+                  "column": "id_proveedor_servicio"
+                },
+                "idReservaProveedor": {
+                  "column": "id_reserva_proveedor"
+                },
+                "observacion": {
+                  "column": "observacion"
+                },
+                "updatedAt": {
+                  "column": "updated_at"
+                }
+              },
+              "namespaceId": "public",
+              "table": "pv_reserva_proveedor"
+            }
+          },
           "Rsvp": {
             "fields": {
               "cantidadAsistentesConfirmados": {
@@ -6005,6 +6766,146 @@
               },
               "namespaceId": "public",
               "table": "iv_rsvp_historial"
+            }
+          },
+          "SeguimientoProveedor": {
+            "fields": {
+              "activo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "completado": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "descripcion": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 1000
+                  }
+                }
+              },
+              "idMatrimonioProveedor": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idSeguimientoProveedor": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idUsuario": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "tipo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "pv_tipo_seguimiento",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "titulo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 200
+                  }
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "matrimonioProveedor": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idMatrimonioProveedor"
+                  ],
+                  "targetFields": [
+                    "idMatrimonioProveedor"
+                  ]
+                },
+                "to": {
+                  "model": "MatrimonioProveedor",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "activo": {
+                  "column": "activo"
+                },
+                "completado": {
+                  "column": "completado"
+                },
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "descripcion": {
+                  "column": "descripcion"
+                },
+                "idMatrimonioProveedor": {
+                  "column": "id_matrimonio_proveedor"
+                },
+                "idSeguimientoProveedor": {
+                  "column": "id_seguimiento_proveedor"
+                },
+                "idUsuario": {
+                  "column": "id_usuario"
+                },
+                "tipo": {
+                  "column": "tipo"
+                },
+                "titulo": {
+                  "column": "titulo"
+                },
+                "updatedAt": {
+                  "column": "updated_at"
+                }
+              },
+              "namespaceId": "public",
+              "table": "pv_seguimiento_proveedor"
             }
           },
           "Sesion": {
@@ -11714,6 +12615,383 @@
               },
               "uniques": []
             },
+            "pv_documento_proveedor": {
+              "columns": {
+                "activo": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "created_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "id_documento_proveedor": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_matrimonio_proveedor": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "nombre": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 200
+                  }
+                },
+                "tipo": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 100
+                  }
+                },
+                "updated_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "url": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 500
+                  }
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_matrimonio_proveedor"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pv_documento_proveedor"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_matrimonio_proveedor"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pv_matrimonio_proveedor"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "id_matrimonio_proveedor"
+                  ],
+                  "name": "pv_documento_proveedor_id_matrimonio_proveedor_idx_f776101f",
+                  "prefix": "pv_documento_proveedor_id_matrimonio_proveedor_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_documento_proveedor"
+                ]
+              },
+              "uniques": []
+            },
+            "pv_enlace_externo_proveedor": {
+              "columns": {
+                "activo": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "created_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "fecha_expiracion": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": true
+                },
+                "id_enlace_externo_proveedor": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_proveedor": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "token": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 100
+                  }
+                },
+                "updated_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_proveedor"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pv_enlace_externo_proveedor"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_proveedor"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pv_proveedor"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "id_proveedor"
+                  ],
+                  "name": "pv_enlace_externo_proveedor_id_proveedor_idx_4edef4d1",
+                  "prefix": "pv_enlace_externo_proveedor_id_proveedor_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_enlace_externo_proveedor"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "token"
+                  ]
+                }
+              ]
+            },
+            "pv_evaluacion_proveedor": {
+              "columns": {
+                "activo": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "calificacion": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "created_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "id_evaluacion_proveedor": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_matrimonio_proveedor": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "resena": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 1000
+                  }
+                },
+                "updated_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_matrimonio_proveedor"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pv_evaluacion_proveedor"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_matrimonio_proveedor"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pv_matrimonio_proveedor"
+                  }
+                }
+              ],
+              "indexes": [],
+              "primaryKey": {
+                "columns": [
+                  "id_evaluacion_proveedor"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "id_matrimonio_proveedor"
+                  ]
+                }
+              ]
+            },
+            "pv_interaccion_proveedor": {
+              "checks": [
+                {
+                  "expression": "\"tipo\" IN ('CONSULTA', 'RESPUESTA')",
+                  "name": "pv_interaccion_proveedor_tipo_check_d16a620a",
+                  "prefix": "pv_interaccion_proveedor_tipo_check"
+                }
+              ],
+              "columns": {
+                "activo": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "created_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "fecha_envio": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "fecha_respuesta": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": true
+                },
+                "id_interaccion_proveedor": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_matrimonio_proveedor": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "observacion": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 1000
+                  }
+                },
+                "tipo": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "pv_tipo_interaccion",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "updated_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_matrimonio_proveedor"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pv_interaccion_proveedor"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_matrimonio_proveedor"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pv_matrimonio_proveedor"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "id_matrimonio_proveedor"
+                  ],
+                  "name": "pv_interaccion_proveedor_id_matrimonio_proveedor_idx_f776101f",
+                  "prefix": "pv_interaccion_proveedor_id_matrimonio_proveedor_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_interaccion_proveedor"
+                ]
+              },
+              "uniques": []
+            },
             "pv_matrimonio_proveedor": {
               "checks": [
                 {
@@ -12265,6 +13543,279 @@
                   ]
                 }
               ]
+            },
+            "pv_reserva_proveedor": {
+              "checks": [
+                {
+                  "expression": "\"estado\" IN ('SOLICITADA', 'CONFIRMADA', 'CANCELADA')",
+                  "name": "pv_reserva_proveedor_estado_check_7ebb22f9",
+                  "prefix": "pv_reserva_proveedor_estado_check"
+                }
+              ],
+              "columns": {
+                "activo": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "created_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "estado": {
+                  "codecId": "pg/text@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": "SOLICITADA"
+                  },
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "pv_estado_reserva",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "fecha": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "id_matrimonio_proveedor": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_proveedor_servicio": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "id_reserva_proveedor": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "observacion": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 1000
+                  }
+                },
+                "updated_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_matrimonio_proveedor"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pv_reserva_proveedor"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_matrimonio_proveedor"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pv_matrimonio_proveedor"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_proveedor_servicio"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pv_reserva_proveedor"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_proveedor_servicio"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pv_proveedor_servicio"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "fecha"
+                  ],
+                  "name": "pv_reserva_proveedor_fecha_idx_04cb6962",
+                  "prefix": "pv_reserva_proveedor_fecha_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_matrimonio_proveedor"
+                  ],
+                  "name": "pv_reserva_proveedor_id_matrimonio_proveedor_idx_f776101f",
+                  "prefix": "pv_reserva_proveedor_id_matrimonio_proveedor_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_proveedor_servicio"
+                  ],
+                  "name": "pv_reserva_proveedor_id_proveedor_servicio_idx_00ef1a5c",
+                  "prefix": "pv_reserva_proveedor_id_proveedor_servicio_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_reserva_proveedor"
+                ]
+              },
+              "uniques": []
+            },
+            "pv_seguimiento_proveedor": {
+              "checks": [
+                {
+                  "expression": "\"tipo\" IN ('CHECKLIST', 'INCIDENCIA')",
+                  "name": "pv_seguimiento_proveedor_tipo_check_b5f160d3",
+                  "prefix": "pv_seguimiento_proveedor_tipo_check"
+                }
+              ],
+              "columns": {
+                "activo": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "completado": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": false
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "created_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "descripcion": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 1000
+                  }
+                },
+                "id_matrimonio_proveedor": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_seguimiento_proveedor": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_usuario": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "tipo": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "pv_tipo_seguimiento",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "titulo": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 200
+                  }
+                },
+                "updated_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_matrimonio_proveedor"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pv_seguimiento_proveedor"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_matrimonio_proveedor"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pv_matrimonio_proveedor"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "id_matrimonio_proveedor"
+                  ],
+                  "name": "pv_seguimiento_proveedor_id_matrimonio_proveedor_idx_f776101f",
+                  "prefix": "pv_seguimiento_proveedor_id_matrimonio_proveedor_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "tipo"
+                  ],
+                  "name": "pv_seguimiento_proveedor_tipo_idx_2cc2d1f4",
+                  "prefix": "pv_seguimiento_proveedor_tipo_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_seguimiento_proveedor"
+                ]
+              },
+              "uniques": []
             }
           },
           "valueSet": {
@@ -12370,6 +13921,14 @@
                 "HITO_VENCIDO"
               ]
             },
+            "pv_estado_reserva": {
+              "kind": "valueSet",
+              "values": [
+                "SOLICITADA",
+                "CONFIRMADA",
+                "CANCELADA"
+              ]
+            },
             "pv_estado_seleccion": {
               "kind": "valueSet",
               "values": [
@@ -12393,11 +13952,25 @@
                 "BAJA"
               ]
             },
+            "pv_tipo_interaccion": {
+              "kind": "valueSet",
+              "values": [
+                "CONSULTA",
+                "RESPUESTA"
+              ]
+            },
             "pv_tipo_proveedor": {
               "kind": "valueSet",
               "values": [
                 "PERSONA_NATURAL",
                 "EMPRESA"
+              ]
+            },
+            "pv_tipo_seguimiento": {
+              "kind": "valueSet",
+              "values": [
+                "CHECKLIST",
+                "INCIDENCIA"
               ]
             }
           }
@@ -12406,10 +13979,10 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "89f76cc6cfbd48930a151dcb6b8be89e921191172d5e8ac00692a5be7b237c8c"
+    "storageHash": "e1522deea1d0b78547ff8331bf9e3cfe3736c787d6a60900f952faff87450d09"
   },
   "execution": {
-    "executionHash": "c4397c95ca05ffe42278b60a4e598c390b4436ac57a876c28ba261c0e87c7963",
+    "executionHash": "a965c429ee0f1cc1896f3ef259f27f187f9d308d9c792aec667c9c43848b1197",
     "mutations": {
       "defaults": [
         {
@@ -12883,6 +14456,110 @@
             "kind": "generator"
           },
           "ref": {
+            "column": "id_documento_proveedor",
+            "namespace": "public",
+            "table": "pv_documento_proveedor"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updated_at",
+            "namespace": "public",
+            "table": "pv_documento_proveedor"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id_enlace_externo_proveedor",
+            "namespace": "public",
+            "table": "pv_enlace_externo_proveedor"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updated_at",
+            "namespace": "public",
+            "table": "pv_enlace_externo_proveedor"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id_evaluacion_proveedor",
+            "namespace": "public",
+            "table": "pv_evaluacion_proveedor"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updated_at",
+            "namespace": "public",
+            "table": "pv_evaluacion_proveedor"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id_interaccion_proveedor",
+            "namespace": "public",
+            "table": "pv_interaccion_proveedor"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updated_at",
+            "namespace": "public",
+            "table": "pv_interaccion_proveedor"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
             "column": "id_matrimonio_proveedor",
             "namespace": "public",
             "table": "pv_matrimonio_proveedor"
@@ -12942,6 +14619,58 @@
             "column": "updated_at",
             "namespace": "public",
             "table": "pv_proveedor_servicio"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id_reserva_proveedor",
+            "namespace": "public",
+            "table": "pv_reserva_proveedor"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updated_at",
+            "namespace": "public",
+            "table": "pv_reserva_proveedor"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id_seguimiento_proveedor",
+            "namespace": "public",
+            "table": "pv_seguimiento_proveedor"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updated_at",
+            "namespace": "public",
+            "table": "pv_seguimiento_proveedor"
           }
         }
       ]

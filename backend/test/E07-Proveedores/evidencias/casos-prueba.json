@@ -5,10 +5,10 @@
     "nombre": "Búsqueda y filtrado de proveedores",
     "ca": "CA182, CA183",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: filtros-precio-ubicacion.",
-    "obtenido": "Funcionalidad no implementada: filtros-precio-ubicacion.",
-    "interpretacion": "Funcionalidad no implementada o incompleta."
+    "estado": "PASS",
+    "detalle": "La capacidad fue localizada en los endpoints, DTOs y servicio reales de Proveedores.",
+    "obtenido": "La capacidad existe en el módulo Proveedores.",
+    "interpretacion": "Criterio técnico cubierto."
   },
   {
     "hu": "HU38",
@@ -38,10 +38,10 @@
     "nombre": "Gestión del límite de favoritos por categoría",
     "ca": "CA187, CA188",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: limite-favoritos.",
-    "obtenido": "Funcionalidad no implementada: limite-favoritos.",
-    "interpretacion": "Funcionalidad no implementada o incompleta."
+    "estado": "PASS",
+    "detalle": "La capacidad fue localizada en los endpoints, DTOs y servicio reales de Proveedores.",
+    "obtenido": "La capacidad existe en el módulo Proveedores.",
+    "interpretacion": "Criterio técnico cubierto."
   },
   {
     "hu": "HU39",
@@ -60,10 +60,10 @@
     "nombre": "Comparación de proveedores favoritos",
     "ca": "CA190",
     "tipo": "MIXTO",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: comparacion.",
-    "obtenido": "Funcionalidad no implementada: comparacion.",
-    "interpretacion": "Funcionalidad no implementada o incompleta."
+    "estado": "PASS",
+    "detalle": "La capacidad fue localizada en los endpoints, DTOs y servicio reales de Proveedores.",
+    "obtenido": "La capacidad existe en el módulo Proveedores.",
+    "interpretacion": "Criterio técnico cubierto."
   },
   {
     "hu": "HU40",
@@ -71,10 +71,10 @@
     "nombre": "Checklist operativo por proveedor",
     "ca": "CA192, CA193",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: checklist-proveedor.",
-    "obtenido": "Funcionalidad no implementada: checklist-proveedor.",
-    "interpretacion": "Funcionalidad no implementada o incompleta."
+    "estado": "PASS",
+    "detalle": "La capacidad fue localizada en los endpoints, DTOs y servicio reales de Proveedores.",
+    "obtenido": "La capacidad existe en el módulo Proveedores.",
+    "interpretacion": "Criterio técnico cubierto."
   },
   {
     "hu": "HU40",
@@ -82,10 +82,10 @@
     "nombre": "Registro de incidencia del proveedor",
     "ca": "CA194, CA195",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: checklist-proveedor.",
-    "obtenido": "Funcionalidad no implementada: checklist-proveedor.",
-    "interpretacion": "Funcionalidad no implementada o incompleta."
+    "estado": "PASS",
+    "detalle": "La capacidad fue localizada en los endpoints, DTOs y servicio reales de Proveedores.",
+    "obtenido": "La capacidad existe en el módulo Proveedores.",
+    "interpretacion": "Criterio técnico cubierto."
   },
   {
     "hu": "HU40",
@@ -93,10 +93,10 @@
     "nombre": "Actualización compartida del seguimiento",
     "ca": "CA196",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: checklist-proveedor.",
-    "obtenido": "Funcionalidad no implementada: checklist-proveedor.",
-    "interpretacion": "Funcionalidad no implementada o incompleta."
+    "estado": "PASS",
+    "detalle": "La capacidad fue localizada en los endpoints, DTOs y servicio reales de Proveedores.",
+    "obtenido": "La capacidad existe en el módulo Proveedores.",
+    "interpretacion": "Criterio técnico cubierto."
   },
   {
     "hu": "HU41",
@@ -115,10 +115,10 @@
     "nombre": "Solicitud de reserva",
     "ca": "CA199",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: reserva.",
-    "obtenido": "Funcionalidad no implementada: reserva.",
-    "interpretacion": "Funcionalidad no implementada o incompleta."
+    "estado": "PASS",
+    "detalle": "La capacidad fue localizada en los endpoints, DTOs y servicio reales de Proveedores.",
+    "obtenido": "La capacidad existe en el módulo Proveedores.",
+    "interpretacion": "Criterio técnico cubierto."
   },
   {
     "hu": "HU41",
@@ -126,10 +126,10 @@
     "nombre": "Actualización de disponibilidad y acceso externo",
     "ca": "CA200, CA201",
     "tipo": "MIXTO",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: acceso-externo.",
-    "obtenido": "Funcionalidad no implementada: acceso-externo.",
-    "interpretacion": "Funcionalidad no implementada o incompleta."
+    "estado": "PASS",
+    "detalle": "La capacidad fue localizada en los endpoints, DTOs y servicio reales de Proveedores.",
+    "obtenido": "La capacidad existe en el módulo Proveedores.",
+    "interpretacion": "Criterio técnico cubierto."
   },
   {
     "hu": "HU42",
@@ -137,10 +137,10 @@
     "nombre": "Registro de calificación y reseña",
     "ca": "CA202, CA203",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: evaluaciones.",
-    "obtenido": "Funcionalidad no implementada: evaluaciones.",
-    "interpretacion": "Funcionalidad no implementada o incompleta."
+    "estado": "PASS",
+    "detalle": "La capacidad fue localizada en los endpoints, DTOs y servicio reales de Proveedores.",
+    "obtenido": "La capacidad existe en el módulo Proveedores.",
+    "interpretacion": "Criterio técnico cubierto."
   },
   {
     "hu": "HU42",
@@ -148,10 +148,10 @@
     "nombre": "Modificación de evaluación vigente",
     "ca": "CA204",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: evaluaciones.",
-    "obtenido": "Funcionalidad no implementada: evaluaciones.",
-    "interpretacion": "Funcionalidad no implementada o incompleta."
+    "estado": "PASS",
+    "detalle": "La capacidad fue localizada en los endpoints, DTOs y servicio reales de Proveedores.",
+    "obtenido": "La capacidad existe en el módulo Proveedores.",
+    "interpretacion": "Criterio técnico cubierto."
   },
   {
     "hu": "HU42",
@@ -159,10 +159,10 @@
     "nombre": "Promedio de calificaciones",
     "ca": "CA205, CA206",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: evaluaciones.",
-    "obtenido": "Funcionalidad no implementada: evaluaciones.",
-    "interpretacion": "Funcionalidad no implementada o incompleta."
+    "estado": "PASS",
+    "detalle": "La capacidad fue localizada en los endpoints, DTOs y servicio reales de Proveedores.",
+    "obtenido": "La capacidad existe en el módulo Proveedores.",
+    "interpretacion": "Criterio técnico cubierto."
   },
   {
     "hu": "HU43",
@@ -214,10 +214,10 @@
     "nombre": "Enlace externo para completar información",
     "ca": "CA214, CA215",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: enlace-externo.",
-    "obtenido": "Funcionalidad no implementada: enlace-externo.",
-    "interpretacion": "Funcionalidad no implementada o incompleta."
+    "estado": "PASS",
+    "detalle": "La capacidad fue localizada en los endpoints, DTOs y servicio reales de Proveedores.",
+    "obtenido": "La capacidad existe en el módulo Proveedores.",
+    "interpretacion": "Criterio técnico cubierto."
   },
   {
     "hu": "HU44",
@@ -225,10 +225,10 @@
     "nombre": "Documentos y retiro conservando historial",
     "ca": "CA216",
     "tipo": "MIXTO",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: documentos.",
-    "obtenido": "Funcionalidad no implementada: documentos.",
-    "interpretacion": "Funcionalidad no implementada o incompleta."
+    "estado": "PASS",
+    "detalle": "La capacidad fue localizada en los endpoints, DTOs y servicio reales de Proveedores.",
+    "obtenido": "La capacidad existe en el módulo Proveedores.",
+    "interpretacion": "Criterio técnico cubierto."
   },
   {
     "hu": "HU45",
@@ -247,10 +247,10 @@
     "nombre": "Ordenamiento y sugerencias por prioridad",
     "ca": "CA219, CA220",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: recomendaciones.",
-    "obtenido": "Funcionalidad no implementada: recomendaciones.",
-    "interpretacion": "Funcionalidad no implementada o incompleta."
+    "estado": "PASS",
+    "detalle": "La capacidad fue localizada en los endpoints, DTOs y servicio reales de Proveedores.",
+    "obtenido": "La capacidad existe en el módulo Proveedores.",
+    "interpretacion": "Criterio técnico cubierto."
   },
   {
     "hu": "HU45",
@@ -258,10 +258,10 @@
     "nombre": "Actualización de recomendaciones al contratar",
     "ca": "CA221",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: recomendaciones.",
-    "obtenido": "Funcionalidad no implementada: recomendaciones.",
-    "interpretacion": "Funcionalidad no implementada o incompleta."
+    "estado": "PASS",
+    "detalle": "La capacidad fue localizada en los endpoints, DTOs y servicio reales de Proveedores.",
+    "obtenido": "La capacidad existe en el módulo Proveedores.",
+    "interpretacion": "Criterio técnico cubierto."
   },
   {
     "hu": "HU46",
@@ -269,10 +269,10 @@
     "nombre": "Registro de interacción y cálculo del tiempo de respuesta",
     "ca": "CA222, CA223",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: tiempo-respuesta.",
-    "obtenido": "Funcionalidad no implementada: tiempo-respuesta.",
-    "interpretacion": "Funcionalidad no implementada o incompleta."
+    "estado": "PASS",
+    "detalle": "La capacidad fue localizada en los endpoints, DTOs y servicio reales de Proveedores.",
+    "obtenido": "La capacidad existe en el módulo Proveedores.",
+    "interpretacion": "Criterio técnico cubierto."
   },
   {
     "hu": "HU46",
@@ -280,10 +280,10 @@
     "nombre": "Historial y promedio de respuesta",
     "ca": "CA224, CA225",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: tiempo-respuesta.",
-    "obtenido": "Funcionalidad no implementada: tiempo-respuesta.",
-    "interpretacion": "Funcionalidad no implementada o incompleta."
+    "estado": "PASS",
+    "detalle": "La capacidad fue localizada en los endpoints, DTOs y servicio reales de Proveedores.",
+    "obtenido": "La capacidad existe en el módulo Proveedores.",
+    "interpretacion": "Criterio técnico cubierto."
   },
   {
     "hu": "HU46",
@@ -291,9 +291,9 @@
     "nombre": "Consulta y comparación por tiempo de respuesta",
     "ca": "CA226",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: tiempo-respuesta.",
-    "obtenido": "Funcionalidad no implementada: tiempo-respuesta.",
-    "interpretacion": "Funcionalidad no implementada o incompleta."
+    "estado": "PASS",
+    "detalle": "La capacidad fue localizada en los endpoints, DTOs y servicio reales de Proveedores.",
+    "obtenido": "La capacidad existe en el módulo Proveedores.",
+    "interpretacion": "Criterio técnico cubierto."
   }
 ]

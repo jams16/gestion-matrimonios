@@ -204,12 +204,12 @@ class _ListaInvitadosPageState extends ConsumerState<ListaInvitadosPage> {
               ),
             ),
             Positioned(
-              right: AppSpacing.lg,
-              bottom: AppSpacing.lg,
-              child: AppButton(
-                label: 'Agregar',
-                icon: Icons.add_circle_outline,
+              right: 18,
+              bottom: 18,
+              child: FloatingActionButton.extended(
                 onPressed: () => _acciones(m.id),
+                icon: const Icon(Icons.person_add_alt_1_outlined),
+                label: const Text('Agregar'),
               ),
             ),
           ],
@@ -268,8 +268,9 @@ class _ListaInvitadosPageState extends ConsumerState<ListaInvitadosPage> {
 
   Future<void> _editar(
     String matrimonio,
-    Map<String, dynamic>? invitado,
-  ) async {
+    Map<String, dynamic>? invitado, {
+    String? idTitular,
+  }) async {
     final persona = Map<String, dynamic>.from(
       invitado?['personaNatural'] as Map? ?? const {},
     );
@@ -280,6 +281,12 @@ class _ListaInvitadosPageState extends ConsumerState<ListaInvitadosPage> {
       text: persona['apellidoPaterno']?.toString() ?? '',
     );
     final dni = TextEditingController(text: persona['dni']?.toString() ?? '');
+    final telefono = TextEditingController(
+      text: persona['telefono']?.toString() ?? '',
+    );
+    final correo = TextEditingController(
+      text: persona['correoElectronico']?.toString() ?? '',
+    );
     final pases = TextEditingController(
       text: '${invitado?['cantidadPases'] ?? 1}',
     );
@@ -319,6 +326,20 @@ class _ListaInvitadosPageState extends ConsumerState<ListaInvitadosPage> {
                   required: true,
                   keyboardType: TextInputType.number,
                   prefixIcon: const Icon(Icons.credit_card_outlined),
+                ),
+                const SizedBox(height: 16),
+                AppTextField(
+                  label: 'Teléfono',
+                  controller: telefono,
+                  keyboardType: TextInputType.phone,
+                  prefixIcon: const Icon(Icons.phone_outlined),
+                ),
+                const SizedBox(height: 16),
+                AppTextField(
+                  label: 'Correo electrónico',
+                  controller: correo,
+                  keyboardType: TextInputType.emailAddress,
+                  prefixIcon: const Icon(Icons.mail_outline),
                 ),
                 const SizedBox(height: 16),
                 DropdownButtonFormField<String>(
@@ -383,6 +404,9 @@ class _ListaInvitadosPageState extends ConsumerState<ListaInvitadosPage> {
         'nombres': nombres.text.trim(),
         'apellidoPaterno': paterno.text.trim(),
         'dni': dni.text.trim(),
+        if (telefono.text.trim().isNotEmpty) 'telefono': telefono.text.trim(),
+        if (correo.text.trim().isNotEmpty)
+          'correoElectronico': correo.text.trim(),
       },
       'cantidadPases': int.tryParse(pases.text) ?? 1,
       'ladoRelacion': lado,
@@ -390,7 +414,9 @@ class _ListaInvitadosPageState extends ConsumerState<ListaInvitadosPage> {
     };
     try {
       final api = ref.read(invitadosApiProvider);
-      if (invitado == null)
+      if (idTitular != null)
+        await api.crearAcompanante(matrimonio, idTitular, datos);
+      else if (invitado == null)
         await api.crear(matrimonio, datos);
       else
         await api.actualizar(
@@ -621,6 +647,7 @@ class _MesaCard extends ConsumerWidget {
     final ocupados = (mesa['ocupados'] as num?)?.toInt() ?? 0;
     final capacidad = (mesa['capacidad'] as num?)?.toInt() ?? 0;
     return AppCard(
+      onTap: () => _verInvitadosMesa(context),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -665,6 +692,58 @@ class _MesaCard extends ConsumerWidget {
       ),
     );
   }
+
+  Future<void> _verInvitadosMesa(
+    BuildContext context,
+  ) => showModalBottomSheet<void>(
+    context: context,
+    showDragHandle: true,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+    ),
+    builder: (sheet) {
+      final asignados = List<Map<String, dynamic>>.from(
+        mesa['invitados'] as List? ?? const [],
+      );
+      return SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(12, 4, 12, 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                mesa['nombre']?.toString() ?? 'Mesa',
+                style: Theme.of(
+                  sheet,
+                ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
+              ),
+              const SizedBox(height: 8),
+              if (asignados.isEmpty)
+                const Padding(
+                  padding: EdgeInsets.all(24),
+                  child: Text('Aún no hay invitados asignados a esta mesa.'),
+                ),
+              ...asignados.map((asignacion) {
+                final invitado = Map<String, dynamic>.from(
+                  asignacion['invitado'] as Map? ?? const {},
+                );
+                final persona = Map<String, dynamic>.from(
+                  invitado['personaNatural'] as Map? ?? const {},
+                );
+                return ListTile(
+                  leading: const Icon(Icons.person_outline),
+                  title: Text(
+                    '${persona['nombres'] ?? ''} ${persona['apellidoPaterno'] ?? ''}',
+                  ),
+                  subtitle: Text('${invitado['cantidadPases'] ?? 1} pase(s)'),
+                );
+              }),
+            ],
+          ),
+        ),
+      );
+    },
+  );
 
   Future<void> _accion(
     BuildContext context,
@@ -772,6 +851,235 @@ class _MesaCard extends ConsumerWidget {
 
 class _InvitadoCard extends ConsumerWidget {
   const _InvitadoCard({
+    required this.matrimonio,
+    required this.invitado,
+    required this.editar,
+    required this.refrescar,
+  });
+  final String matrimonio;
+  final Map<String, dynamic> invitado;
+  final VoidCallback editar;
+  final Future<void> Function() refrescar;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final persona = Map<String, dynamic>.from(
+      invitado['personaNatural'] as Map? ?? const {},
+    );
+    final rsvp = Map<String, dynamic>.from(
+      invitado['rsvp'] as Map? ?? const {},
+    );
+    final primera = rsvp['verificacionManual1'] == true;
+    final segunda = rsvp['verificacionManual2'] == true;
+    final estado = segunda
+        ? 'Confirmado · 2.ª confirmación'
+        : primera
+        ? 'Confirmado · 1.ª confirmación'
+        : 'Pendiente de confirmación';
+    final color = primera ? Colors.green : Colors.orange;
+    return AppCard(
+      onTap: editar,
+      elevated: true,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CircleAvatar(
+            radius: 24,
+            backgroundColor: AppColors.primary.withValues(alpha: .12),
+            child: const Icon(Icons.person_outline, color: AppColors.primary),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${persona['nombres'] ?? ''} ${persona['apellidoPaterno'] ?? ''}',
+                  style: const TextStyle(fontWeight: FontWeight.w800),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  '${invitado['cantidadPases'] ?? 1} pase(s) · ${invitado['ladoRelacion'] ?? 'AMBOS'}',
+                ),
+                if (invitado['idInvitadoTitular'] != null)
+                  const Padding(
+                    padding: EdgeInsets.only(top: 3),
+                    child: Text(
+                      'Acompañante vinculado',
+                      style: TextStyle(color: AppColors.textSecondary),
+                    ),
+                  ),
+                const SizedBox(height: 8),
+                Chip(
+                  avatar: Icon(
+                    primera
+                        ? Icons.check_circle_outline
+                        : Icons.schedule_outlined,
+                    color: color,
+                    size: 16,
+                  ),
+                  label: Text(estado),
+                  visualDensity: VisualDensity.compact,
+                  labelStyle: TextStyle(
+                    color: color,
+                    fontWeight: FontWeight.w700,
+                  ),
+                  backgroundColor: color.withValues(alpha: .1),
+                  side: BorderSide.none,
+                ),
+              ],
+            ),
+          ),
+          PopupMenuButton<String>(
+            onSelected: (accion) => _accion(context, ref, accion),
+            itemBuilder: (_) => _acciones(primera, segunda),
+          ),
+        ],
+      ),
+    );
+  }
+
+  List<PopupMenuEntry<String>> _acciones(bool primera, bool segunda) => [
+    const PopupMenuItem(value: 'editar', child: Text('Editar invitado')),
+    if (invitado['esTitular'] != false)
+      const PopupMenuItem(
+        value: 'pase',
+        child: Text('Agregar invitado por pase'),
+      ),
+    if (!primera)
+      const PopupMenuItem(
+        value: 'primera',
+        child: Text('Primera confirmación'),
+      ),
+    if (primera && !segunda) ...const [
+      PopupMenuItem(value: 'cancelar1', child: Text('Cancelar confirmación')),
+      PopupMenuItem(value: 'segunda', child: Text('Segunda confirmación')),
+    ],
+    if (segunda) ...const [
+      PopupMenuItem(value: 'cancelar2', child: Text('Cancelar confirmación')),
+    ],
+    const PopupMenuItem(value: 'eliminar', child: Text('Desactivar')),
+  ];
+
+  Future<void> _accion(
+    BuildContext context,
+    WidgetRef ref,
+    String accion,
+  ) async {
+    try {
+      final api = ref.read(invitadosApiProvider);
+      final id = invitado['idInvitado'].toString();
+      if (accion == 'editar') return editar();
+      if (accion == 'pase') return await _agregarPase(context, ref);
+      if (accion == 'primera') {
+        await api.actualizarRsvp(matrimonio, id, 'CONFIRMADO');
+        await api.verificarRsvp(matrimonio, id, 1);
+      }
+      if (accion == 'segunda') await api.verificarRsvp(matrimonio, id, 2);
+      if (accion == 'cancelar1')
+        await api.cancelarConfirmacion(matrimonio, id, 1);
+      if (accion == 'cancelar2')
+        await api.cancelarConfirmacion(matrimonio, id, 2);
+      if (accion == 'eliminar') {
+        final ok = await AppConfirmationDialog.show(
+          context,
+          title: 'Desactivar invitado',
+          message: 'El invitado dejará de estar activo en esta boda.',
+          confirmLabel: 'Desactivar',
+          type: AppConfirmationType.destructive,
+        );
+        if (ok) await api.desactivar(matrimonio, id);
+      }
+      await refrescar();
+    } catch (e) {
+      if (context.mounted)
+        AppSnackbar.show(
+          context,
+          message: 'No se pudo actualizar el invitado: ${_mensaje(e)}',
+          type: AppSnackbarType.error,
+        );
+    }
+  }
+
+  Future<void> _agregarPase(BuildContext context, WidgetRef ref) async {
+    final nombres = TextEditingController();
+    final paterno = TextEditingController();
+    final dni = TextEditingController();
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (d) => AlertDialog(
+        title: const Text('Agregar invitado por pase'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AppTextField(label: 'Nombres', controller: nombres, required: true),
+            const SizedBox(height: 16),
+            AppTextField(
+              label: 'Apellido paterno',
+              controller: paterno,
+              required: true,
+            ),
+            const SizedBox(height: 16),
+            AppTextField(
+              label: 'DNI',
+              controller: dni,
+              required: true,
+              keyboardType: TextInputType.number,
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(d, false),
+            child: const Text('Cancelar'),
+          ),
+          AppButton(label: 'Agregar', onPressed: () => Navigator.pop(d, true)),
+        ],
+      ),
+    );
+    if (ok != true || !context.mounted) return;
+    if (nombres.text.trim().isEmpty ||
+        paterno.text.trim().isEmpty ||
+        dni.text.trim().length != 8) {
+      AppSnackbar.show(
+        context,
+        message: 'Completa nombres, apellido paterno y DNI de 8 dígitos.',
+        type: AppSnackbarType.error,
+      );
+      return;
+    }
+    final persona = Map<String, dynamic>.from(
+      invitado['personaNatural'] as Map? ?? const {},
+    );
+    await ref.read(invitadosApiProvider).crearAcompanante(
+      matrimonio,
+      invitado['idInvitado'].toString(),
+      {
+        'persona': {
+          'nombres': nombres.text.trim(),
+          'apellidoPaterno': paterno.text.trim(),
+          'dni': dni.text.trim(),
+        },
+        'cantidadPases': 1,
+        'ladoRelacion': invitado['ladoRelacion'] ?? 'AMBOS',
+        'nombreCategoriaRelacion':
+            (invitado['categoriaRelacion'] as Map?)?['nombre'] ??
+            'Acompañante de ${persona['nombres'] ?? 'invitado'}',
+      },
+    );
+    await refrescar();
+    if (context.mounted)
+      AppSnackbar.show(
+        context,
+        message: 'Invitado por pase agregado.',
+        type: AppSnackbarType.success,
+      );
+  }
+}
+
+// ignore: unused_element
+class _InvitadoCardLegacy extends ConsumerWidget {
+  const _InvitadoCardLegacy({
     required this.matrimonio,
     required this.invitado,
     required this.editar,

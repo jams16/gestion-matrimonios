@@ -34,9 +34,9 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'89f76cc6cfbd48930a151dcb6b8be89e921191172d5e8ac00692a5be7b237c8c'>;
+  StorageHashBase<'e1522deea1d0b78547ff8331bf9e3cfe3736c787d6a60900f952faff87450d09'>;
 export type ExecutionHash =
-  ExecutionHashBase<'c4397c95ca05ffe42278b60a4e598c390b4436ac57a876c28ba261c0e87c7963'>;
+  ExecutionHashBase<'a965c429ee0f1cc1896f3ef259f27f187f9d308d9c792aec667c9c43848b1197'>;
 export type ProfileHash =
   ProfileHashBase<'3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2'>;
 
@@ -328,6 +328,25 @@ export type FieldOutputTypes = {
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     };
+    readonly DocumentoProveedor: {
+      readonly idDocumentoProveedor: CodecTypes['pg/uuid@1']['output'];
+      readonly idMatrimonioProveedor: CodecTypes['pg/uuid@1']['output'];
+      readonly nombre: Varchar<200>;
+      readonly url: Varchar<500>;
+      readonly tipo: Varchar<100> | null;
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly EnlaceExternoProveedor: {
+      readonly idEnlaceExternoProveedor: CodecTypes['pg/uuid@1']['output'];
+      readonly idProveedor: CodecTypes['pg/uuid@1']['output'];
+      readonly token: Varchar<100>;
+      readonly fechaExpiracion: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
     readonly Entidad: {
       readonly idEntidad: CodecTypes['pg/int4@1']['output'];
       readonly ruc: Varchar<11> | null;
@@ -342,6 +361,15 @@ export type FieldOutputTypes = {
       readonly esActivo: CodecTypes['pg/bool@1']['output'];
       readonly fechaCreacion: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly fechaModificacion: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly EvaluacionProveedor: {
+      readonly idEvaluacionProveedor: CodecTypes['pg/uuid@1']['output'];
+      readonly idMatrimonioProveedor: CodecTypes['pg/uuid@1']['output'];
+      readonly calificacion: CodecTypes['pg/int4@1']['output'];
+      readonly resena: Varchar<1000> | null;
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     };
     readonly FaseProyecto: {
       readonly idFaseProyecto: CodecTypes['pg/int4@1']['output'];
@@ -361,6 +389,17 @@ export type FieldOutputTypes = {
       readonly estado: 'PENDIENTE' | 'EN_PROGRESO' | 'COMPLETADO' | 'NO_APLICA';
       readonly orden: CodecTypes['pg/int4@1']['output'];
       readonly modificadoManualmente: CodecTypes['pg/bool@1']['output'];
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly InteraccionProveedor: {
+      readonly idInteraccionProveedor: CodecTypes['pg/uuid@1']['output'];
+      readonly idMatrimonioProveedor: CodecTypes['pg/uuid@1']['output'];
+      readonly tipo: 'CONSULTA' | 'RESPUESTA';
+      readonly fechaEnvio: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly fechaRespuesta: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+      readonly observacion: Varchar<1000> | null;
       readonly activo: CodecTypes['pg/bool@1']['output'];
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
@@ -607,6 +646,17 @@ export type FieldOutputTypes = {
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     };
+    readonly ReservaProveedor: {
+      readonly idReservaProveedor: CodecTypes['pg/uuid@1']['output'];
+      readonly idMatrimonioProveedor: CodecTypes['pg/uuid@1']['output'];
+      readonly idProveedorServicio: CodecTypes['pg/int4@1']['output'] | null;
+      readonly fecha: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly estado: 'SOLICITADA' | 'CONFIRMADA' | 'CANCELADA';
+      readonly observacion: Varchar<1000> | null;
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
     readonly Rsvp: {
       readonly idRsvp: CodecTypes['pg/uuid@1']['output'];
       readonly idInvitado: CodecTypes['pg/uuid@1']['output'];
@@ -634,6 +684,18 @@ export type FieldOutputTypes = {
       readonly idUsuario: CodecTypes['pg/int4@1']['output'] | null;
       readonly observacion: Varchar<1000> | null;
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly SeguimientoProveedor: {
+      readonly idSeguimientoProveedor: CodecTypes['pg/uuid@1']['output'];
+      readonly idMatrimonioProveedor: CodecTypes['pg/uuid@1']['output'];
+      readonly tipo: 'CHECKLIST' | 'INCIDENCIA';
+      readonly titulo: Varchar<200>;
+      readonly descripcion: Varchar<1000> | null;
+      readonly completado: CodecTypes['pg/bool@1']['output'];
+      readonly idUsuario: CodecTypes['pg/int4@1']['output'] | null;
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     };
     readonly Sesion: {
       readonly idSesion: CodecTypes['pg/int4@1']['output'];
@@ -787,6 +849,25 @@ export type FieldInputTypes = {
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
     };
+    readonly DocumentoProveedor: {
+      readonly idDocumentoProveedor: CodecTypes['pg/uuid@1']['input'];
+      readonly idMatrimonioProveedor: CodecTypes['pg/uuid@1']['input'];
+      readonly nombre: CodecTypes['sql/varchar@1']['input'];
+      readonly url: CodecTypes['sql/varchar@1']['input'];
+      readonly tipo: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly EnlaceExternoProveedor: {
+      readonly idEnlaceExternoProveedor: CodecTypes['pg/uuid@1']['input'];
+      readonly idProveedor: CodecTypes['pg/uuid@1']['input'];
+      readonly token: CodecTypes['sql/varchar@1']['input'];
+      readonly fechaExpiracion: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
     readonly Entidad: {
       readonly idEntidad: CodecTypes['pg/int4@1']['input'];
       readonly ruc: CodecTypes['sql/varchar@1']['input'] | null;
@@ -801,6 +882,15 @@ export type FieldInputTypes = {
       readonly esActivo: CodecTypes['pg/bool@1']['input'];
       readonly fechaCreacion: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly fechaModificacion: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly EvaluacionProveedor: {
+      readonly idEvaluacionProveedor: CodecTypes['pg/uuid@1']['input'];
+      readonly idMatrimonioProveedor: CodecTypes['pg/uuid@1']['input'];
+      readonly calificacion: CodecTypes['pg/int4@1']['input'];
+      readonly resena: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
     };
     readonly FaseProyecto: {
       readonly idFaseProyecto: CodecTypes['pg/int4@1']['input'];
@@ -820,6 +910,17 @@ export type FieldInputTypes = {
       readonly estado: 'PENDIENTE' | 'EN_PROGRESO' | 'COMPLETADO' | 'NO_APLICA';
       readonly orden: CodecTypes['pg/int4@1']['input'];
       readonly modificadoManualmente: CodecTypes['pg/bool@1']['input'];
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly InteraccionProveedor: {
+      readonly idInteraccionProveedor: CodecTypes['pg/uuid@1']['input'];
+      readonly idMatrimonioProveedor: CodecTypes['pg/uuid@1']['input'];
+      readonly tipo: 'CONSULTA' | 'RESPUESTA';
+      readonly fechaEnvio: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly fechaRespuesta: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
+      readonly observacion: CodecTypes['sql/varchar@1']['input'] | null;
       readonly activo: CodecTypes['pg/bool@1']['input'];
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
@@ -1066,6 +1167,17 @@ export type FieldInputTypes = {
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
     };
+    readonly ReservaProveedor: {
+      readonly idReservaProveedor: CodecTypes['pg/uuid@1']['input'];
+      readonly idMatrimonioProveedor: CodecTypes['pg/uuid@1']['input'];
+      readonly idProveedorServicio: CodecTypes['pg/int4@1']['input'] | null;
+      readonly fecha: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly estado: 'SOLICITADA' | 'CONFIRMADA' | 'CANCELADA';
+      readonly observacion: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
     readonly Rsvp: {
       readonly idRsvp: CodecTypes['pg/uuid@1']['input'];
       readonly idInvitado: CodecTypes['pg/uuid@1']['input'];
@@ -1093,6 +1205,18 @@ export type FieldInputTypes = {
       readonly idUsuario: CodecTypes['pg/int4@1']['input'] | null;
       readonly observacion: CodecTypes['sql/varchar@1']['input'] | null;
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly SeguimientoProveedor: {
+      readonly idSeguimientoProveedor: CodecTypes['pg/uuid@1']['input'];
+      readonly idMatrimonioProveedor: CodecTypes['pg/uuid@1']['input'];
+      readonly tipo: 'CHECKLIST' | 'INCIDENCIA';
+      readonly titulo: CodecTypes['sql/varchar@1']['input'];
+      readonly descripcion: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly completado: CodecTypes['pg/bool@1']['input'];
+      readonly idUsuario: CodecTypes['pg/int4@1']['input'] | null;
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
     };
     readonly Sesion: {
       readonly idSesion: CodecTypes['pg/int4@1']['input'];
@@ -1574,6 +1698,45 @@ export type StorageColumnTypes = {
       readonly observacion: Varchar<1000> | null;
       readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
     };
+    readonly pv_documento_proveedor: {
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly id_documento_proveedor: CodecTypes['pg/uuid@1']['output'];
+      readonly id_matrimonio_proveedor: CodecTypes['pg/uuid@1']['output'];
+      readonly nombre: Varchar<200>;
+      readonly tipo: Varchar<100> | null;
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly url: Varchar<500>;
+    };
+    readonly pv_enlace_externo_proveedor: {
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly fecha_expiracion: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+      readonly id_enlace_externo_proveedor: CodecTypes['pg/uuid@1']['output'];
+      readonly id_proveedor: CodecTypes['pg/uuid@1']['output'];
+      readonly token: Varchar<100>;
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly pv_evaluacion_proveedor: {
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly calificacion: CodecTypes['pg/int4@1']['output'];
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly id_evaluacion_proveedor: CodecTypes['pg/uuid@1']['output'];
+      readonly id_matrimonio_proveedor: CodecTypes['pg/uuid@1']['output'];
+      readonly resena: Varchar<1000> | null;
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly pv_interaccion_proveedor: {
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly fecha_envio: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly fecha_respuesta: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+      readonly id_interaccion_proveedor: CodecTypes['pg/uuid@1']['output'];
+      readonly id_matrimonio_proveedor: CodecTypes['pg/uuid@1']['output'];
+      readonly observacion: Varchar<1000> | null;
+      readonly tipo: 'CONSULTA' | 'RESPUESTA';
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
     readonly pv_matrimonio_proveedor: {
       readonly activo: CodecTypes['pg/bool@1']['output'];
       readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
@@ -1615,6 +1778,29 @@ export type StorageColumnTypes = {
       readonly moneda: 'PEN' | 'USD';
       readonly nombre: Varchar<200>;
       readonly unidad_precio: Varchar<50> | null;
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly pv_reserva_proveedor: {
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly estado: 'SOLICITADA' | 'CONFIRMADA' | 'CANCELADA';
+      readonly fecha: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly id_matrimonio_proveedor: CodecTypes['pg/uuid@1']['output'];
+      readonly id_proveedor_servicio: CodecTypes['pg/int4@1']['output'] | null;
+      readonly id_reserva_proveedor: CodecTypes['pg/uuid@1']['output'];
+      readonly observacion: Varchar<1000> | null;
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly pv_seguimiento_proveedor: {
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly completado: CodecTypes['pg/bool@1']['output'];
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly descripcion: Varchar<1000> | null;
+      readonly id_matrimonio_proveedor: CodecTypes['pg/uuid@1']['output'];
+      readonly id_seguimiento_proveedor: CodecTypes['pg/uuid@1']['output'];
+      readonly id_usuario: CodecTypes['pg/int4@1']['output'] | null;
+      readonly tipo: 'CHECKLIST' | 'INCIDENCIA';
+      readonly titulo: Varchar<200>;
       readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
     };
   };
@@ -2033,6 +2219,45 @@ export type StorageColumnInputTypes = {
       readonly observacion: CodecTypes['sql/varchar@1']['input'] | null;
       readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
     };
+    readonly pv_documento_proveedor: {
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly id_documento_proveedor: CodecTypes['pg/uuid@1']['input'];
+      readonly id_matrimonio_proveedor: CodecTypes['pg/uuid@1']['input'];
+      readonly nombre: CodecTypes['sql/varchar@1']['input'];
+      readonly tipo: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly url: CodecTypes['sql/varchar@1']['input'];
+    };
+    readonly pv_enlace_externo_proveedor: {
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly fecha_expiracion: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
+      readonly id_enlace_externo_proveedor: CodecTypes['pg/uuid@1']['input'];
+      readonly id_proveedor: CodecTypes['pg/uuid@1']['input'];
+      readonly token: CodecTypes['sql/varchar@1']['input'];
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly pv_evaluacion_proveedor: {
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly calificacion: CodecTypes['pg/int4@1']['input'];
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly id_evaluacion_proveedor: CodecTypes['pg/uuid@1']['input'];
+      readonly id_matrimonio_proveedor: CodecTypes['pg/uuid@1']['input'];
+      readonly resena: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly pv_interaccion_proveedor: {
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly fecha_envio: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly fecha_respuesta: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
+      readonly id_interaccion_proveedor: CodecTypes['pg/uuid@1']['input'];
+      readonly id_matrimonio_proveedor: CodecTypes['pg/uuid@1']['input'];
+      readonly observacion: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly tipo: 'CONSULTA' | 'RESPUESTA';
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
     readonly pv_matrimonio_proveedor: {
       readonly activo: CodecTypes['pg/bool@1']['input'];
       readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
@@ -2074,6 +2299,29 @@ export type StorageColumnInputTypes = {
       readonly moneda: 'PEN' | 'USD';
       readonly nombre: CodecTypes['sql/varchar@1']['input'];
       readonly unidad_precio: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly pv_reserva_proveedor: {
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly estado: 'SOLICITADA' | 'CONFIRMADA' | 'CANCELADA';
+      readonly fecha: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly id_matrimonio_proveedor: CodecTypes['pg/uuid@1']['input'];
+      readonly id_proveedor_servicio: CodecTypes['pg/int4@1']['input'] | null;
+      readonly id_reserva_proveedor: CodecTypes['pg/uuid@1']['input'];
+      readonly observacion: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly pv_seguimiento_proveedor: {
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly completado: CodecTypes['pg/bool@1']['input'];
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly descripcion: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly id_matrimonio_proveedor: CodecTypes['pg/uuid@1']['input'];
+      readonly id_seguimiento_proveedor: CodecTypes['pg/uuid@1']['input'];
+      readonly id_usuario: CodecTypes['pg/int4@1']['input'] | null;
+      readonly tipo: 'CHECKLIST' | 'INCIDENCIA';
+      readonly titulo: CodecTypes['sql/varchar@1']['input'];
       readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
     };
   };
@@ -2555,12 +2803,13 @@ export namespace Models {
     createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     disponibilidades: public_DisponibilidadProveedor[];
+    enlaces: public_EnlaceExternoProveedor[];
     entidad: public_Entidad | null;
     matrimonios: public_MatrimonioProveedor[];
     personaNatural: public_PersonaNatural | null;
     servicios: public_ProveedorServicio[];
     readonly [RelationKeys]?:
-      'disponibilidades' | 'entidad' | 'matrimonios' | 'personaNatural' | 'servicios';
+      'disponibilidades' | 'enlaces' | 'entidad' | 'matrimonios' | 'personaNatural' | 'servicios';
   };
   export type public_CategoriaServicio = {
     idCategoriaServicio: CodecTypes['pg/int4@1']['output'];
@@ -2589,7 +2838,8 @@ export namespace Models {
     categoriaServicio: public_CategoriaServicio;
     disponibilidades: public_DisponibilidadProveedor[];
     proveedor: public_Proveedor;
-    readonly [RelationKeys]?: 'categoriaServicio' | 'disponibilidades' | 'proveedor';
+    reservas: public_ReservaProveedor[];
+    readonly [RelationKeys]?: 'categoriaServicio' | 'disponibilidades' | 'proveedor' | 'reservas';
   };
   export type public_MatrimonioProveedor = {
     idMatrimonioProveedor: CodecTypes['pg/uuid@1']['output'];
@@ -2602,9 +2852,21 @@ export namespace Models {
     activo: CodecTypes['pg/bool@1']['output'];
     createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    documentos: public_DocumentoProveedor[];
+    evaluaciones: public_EvaluacionProveedor[];
+    interacciones: public_InteraccionProveedor[];
     matrimonio: public_Matrimonio;
     proveedor: public_Proveedor;
-    readonly [RelationKeys]?: 'matrimonio' | 'proveedor';
+    reservas: public_ReservaProveedor[];
+    seguimientos: public_SeguimientoProveedor[];
+    readonly [RelationKeys]?:
+      | 'documentos'
+      | 'evaluaciones'
+      | 'interacciones'
+      | 'matrimonio'
+      | 'proveedor'
+      | 'reservas'
+      | 'seguimientos';
   };
   export type public_DisponibilidadProveedor = {
     idDisponibilidadProveedor: CodecTypes['pg/uuid@1']['output'];
@@ -2621,6 +2883,81 @@ export namespace Models {
     proveedor: public_Proveedor;
     proveedorServicio: public_ProveedorServicio | null;
     readonly [RelationKeys]?: 'proveedor' | 'proveedorServicio';
+  };
+  export type public_SeguimientoProveedor = {
+    idSeguimientoProveedor: CodecTypes['pg/uuid@1']['output'];
+    idMatrimonioProveedor: CodecTypes['pg/uuid@1']['output'];
+    tipo: 'CHECKLIST' | 'INCIDENCIA';
+    titulo: Varchar<200>;
+    descripcion: Varchar<1000> | null;
+    completado: CodecTypes['pg/bool@1']['output'];
+    idUsuario: CodecTypes['pg/int4@1']['output'] | null;
+    activo: CodecTypes['pg/bool@1']['output'];
+    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    matrimonioProveedor: public_MatrimonioProveedor;
+    readonly [RelationKeys]?: 'matrimonioProveedor';
+  };
+  export type public_ReservaProveedor = {
+    idReservaProveedor: CodecTypes['pg/uuid@1']['output'];
+    idMatrimonioProveedor: CodecTypes['pg/uuid@1']['output'];
+    idProveedorServicio: CodecTypes['pg/int4@1']['output'] | null;
+    fecha: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    estado: 'SOLICITADA' | 'CONFIRMADA' | 'CANCELADA';
+    observacion: Varchar<1000> | null;
+    activo: CodecTypes['pg/bool@1']['output'];
+    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    matrimonioProveedor: public_MatrimonioProveedor;
+    proveedorServicio: public_ProveedorServicio | null;
+    readonly [RelationKeys]?: 'matrimonioProveedor' | 'proveedorServicio';
+  };
+  export type public_EvaluacionProveedor = {
+    idEvaluacionProveedor: CodecTypes['pg/uuid@1']['output'];
+    idMatrimonioProveedor: CodecTypes['pg/uuid@1']['output'];
+    calificacion: CodecTypes['pg/int4@1']['output'];
+    resena: Varchar<1000> | null;
+    activo: CodecTypes['pg/bool@1']['output'];
+    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    matrimonioProveedor: public_MatrimonioProveedor;
+    readonly [RelationKeys]?: 'matrimonioProveedor';
+  };
+  export type public_EnlaceExternoProveedor = {
+    idEnlaceExternoProveedor: CodecTypes['pg/uuid@1']['output'];
+    idProveedor: CodecTypes['pg/uuid@1']['output'];
+    token: Varchar<100>;
+    fechaExpiracion: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+    activo: CodecTypes['pg/bool@1']['output'];
+    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    proveedor: public_Proveedor;
+    readonly [RelationKeys]?: 'proveedor';
+  };
+  export type public_DocumentoProveedor = {
+    idDocumentoProveedor: CodecTypes['pg/uuid@1']['output'];
+    idMatrimonioProveedor: CodecTypes['pg/uuid@1']['output'];
+    nombre: Varchar<200>;
+    url: Varchar<500>;
+    tipo: Varchar<100> | null;
+    activo: CodecTypes['pg/bool@1']['output'];
+    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    matrimonioProveedor: public_MatrimonioProveedor;
+    readonly [RelationKeys]?: 'matrimonioProveedor';
+  };
+  export type public_InteraccionProveedor = {
+    idInteraccionProveedor: CodecTypes['pg/uuid@1']['output'];
+    idMatrimonioProveedor: CodecTypes['pg/uuid@1']['output'];
+    tipo: 'CONSULTA' | 'RESPUESTA';
+    fechaEnvio: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    fechaRespuesta: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+    observacion: Varchar<1000> | null;
+    activo: CodecTypes['pg/bool@1']['output'];
+    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    matrimonioProveedor: public_MatrimonioProveedor;
+    readonly [RelationKeys]?: 'matrimonioProveedor';
   };
   export type public_Ubigeo = {
     idUbigeo: Varchar<6>;
@@ -2781,6 +3118,12 @@ export declare const models: {
     ProveedorServicio: Models.public_ProveedorServicio;
     MatrimonioProveedor: Models.public_MatrimonioProveedor;
     DisponibilidadProveedor: Models.public_DisponibilidadProveedor;
+    SeguimientoProveedor: Models.public_SeguimientoProveedor;
+    ReservaProveedor: Models.public_ReservaProveedor;
+    EvaluacionProveedor: Models.public_EvaluacionProveedor;
+    EnlaceExternoProveedor: Models.public_EnlaceExternoProveedor;
+    DocumentoProveedor: Models.public_DocumentoProveedor;
+    InteraccionProveedor: Models.public_InteraccionProveedor;
     Ubigeo: Models.public_Ubigeo;
     PersonaNatural: Models.public_PersonaNatural;
     Entidad: Models.public_Entidad;
@@ -6323,6 +6666,292 @@ type ContractBase = Omit<
                 },
               ];
             };
+            readonly pv_documento_proveedor: {
+              columns: {
+                readonly id_documento_proveedor: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly id_matrimonio_proveedor: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly nombre: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly length: 200 };
+                };
+                readonly url: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly length: 500 };
+                };
+                readonly tipo: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly length: 100 };
+                };
+                readonly activo: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', true>;
+                  };
+                };
+                readonly created_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                };
+                readonly updated_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id_documento_proveedor'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'pv_documento_proveedor_id_matrimonio_proveedor_idx_f776101f';
+                  readonly prefix: 'pv_documento_proveedor_id_matrimonio_proveedor_idx';
+                  readonly columns: readonly ['id_matrimonio_proveedor'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'pv_documento_proveedor';
+                    readonly columns: readonly ['id_matrimonio_proveedor'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'pv_matrimonio_proveedor';
+                    readonly columns: readonly ['id_matrimonio_proveedor'];
+                  };
+                },
+              ];
+            };
+            readonly pv_enlace_externo_proveedor: {
+              columns: {
+                readonly id_enlace_externo_proveedor: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly id_proveedor: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly token: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly length: 100 };
+                };
+                readonly fecha_expiracion: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: true;
+                };
+                readonly activo: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', true>;
+                  };
+                };
+                readonly created_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                };
+                readonly updated_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id_enlace_externo_proveedor'] };
+              uniques: readonly [{ readonly columns: readonly ['token'] }];
+              indexes: readonly [
+                {
+                  readonly name: 'pv_enlace_externo_proveedor_id_proveedor_idx_4edef4d1';
+                  readonly prefix: 'pv_enlace_externo_proveedor_id_proveedor_idx';
+                  readonly columns: readonly ['id_proveedor'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'pv_enlace_externo_proveedor';
+                    readonly columns: readonly ['id_proveedor'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'pv_proveedor';
+                    readonly columns: readonly ['id_proveedor'];
+                  };
+                },
+              ];
+            };
+            readonly pv_evaluacion_proveedor: {
+              columns: {
+                readonly id_evaluacion_proveedor: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly id_matrimonio_proveedor: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly calificacion: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                };
+                readonly resena: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly length: 1000 };
+                };
+                readonly activo: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', true>;
+                  };
+                };
+                readonly created_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                };
+                readonly updated_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id_evaluacion_proveedor'] };
+              uniques: readonly [{ readonly columns: readonly ['id_matrimonio_proveedor'] }];
+              indexes: readonly [];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'pv_evaluacion_proveedor';
+                    readonly columns: readonly ['id_matrimonio_proveedor'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'pv_matrimonio_proveedor';
+                    readonly columns: readonly ['id_matrimonio_proveedor'];
+                  };
+                },
+              ];
+            };
+            readonly pv_interaccion_proveedor: {
+              columns: {
+                readonly id_interaccion_proveedor: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly id_matrimonio_proveedor: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly tipo: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+                readonly fecha_envio: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                };
+                readonly fecha_respuesta: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: true;
+                };
+                readonly observacion: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly length: 1000 };
+                };
+                readonly activo: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', true>;
+                  };
+                };
+                readonly created_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                };
+                readonly updated_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id_interaccion_proveedor'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'pv_interaccion_proveedor_id_matrimonio_proveedor_idx_f776101f';
+                  readonly prefix: 'pv_interaccion_proveedor_id_matrimonio_proveedor_idx';
+                  readonly columns: readonly ['id_matrimonio_proveedor'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'pv_interaccion_proveedor';
+                    readonly columns: readonly ['id_matrimonio_proveedor'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'pv_matrimonio_proveedor';
+                    readonly columns: readonly ['id_matrimonio_proveedor'];
+                  };
+                },
+              ];
+            };
             readonly pv_matrimonio_proveedor: {
               columns: {
                 readonly id_matrimonio_proveedor: {
@@ -6708,6 +7337,208 @@ type ContractBase = Omit<
                 },
               ];
             };
+            readonly pv_reserva_proveedor: {
+              columns: {
+                readonly id_reserva_proveedor: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly id_matrimonio_proveedor: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly id_proveedor_servicio: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: true;
+                };
+                readonly fecha: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                };
+                readonly estado: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/text@1', 'SOLICITADA'>;
+                  };
+                };
+                readonly observacion: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly length: 1000 };
+                };
+                readonly activo: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', true>;
+                  };
+                };
+                readonly created_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                };
+                readonly updated_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id_reserva_proveedor'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'pv_reserva_proveedor_id_matrimonio_proveedor_idx_f776101f';
+                  readonly prefix: 'pv_reserva_proveedor_id_matrimonio_proveedor_idx';
+                  readonly columns: readonly ['id_matrimonio_proveedor'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'pv_reserva_proveedor_fecha_idx_04cb6962';
+                  readonly prefix: 'pv_reserva_proveedor_fecha_idx';
+                  readonly columns: readonly ['fecha'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'pv_reserva_proveedor_id_proveedor_servicio_idx_00ef1a5c';
+                  readonly prefix: 'pv_reserva_proveedor_id_proveedor_servicio_idx';
+                  readonly columns: readonly ['id_proveedor_servicio'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'pv_reserva_proveedor';
+                    readonly columns: readonly ['id_matrimonio_proveedor'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'pv_matrimonio_proveedor';
+                    readonly columns: readonly ['id_matrimonio_proveedor'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'pv_reserva_proveedor';
+                    readonly columns: readonly ['id_proveedor_servicio'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'pv_proveedor_servicio';
+                    readonly columns: readonly ['id_proveedor_servicio'];
+                  };
+                },
+              ];
+            };
+            readonly pv_seguimiento_proveedor: {
+              columns: {
+                readonly id_seguimiento_proveedor: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly id_matrimonio_proveedor: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly tipo: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+                readonly titulo: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly length: 200 };
+                };
+                readonly descripcion: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly length: 1000 };
+                };
+                readonly completado: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', false>;
+                  };
+                };
+                readonly id_usuario: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: true;
+                };
+                readonly activo: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', true>;
+                  };
+                };
+                readonly created_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                };
+                readonly updated_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id_seguimiento_proveedor'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'pv_seguimiento_proveedor_id_matrimonio_proveedor_idx_f776101f';
+                  readonly prefix: 'pv_seguimiento_proveedor_id_matrimonio_proveedor_idx';
+                  readonly columns: readonly ['id_matrimonio_proveedor'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'pv_seguimiento_proveedor_tipo_idx_2cc2d1f4';
+                  readonly prefix: 'pv_seguimiento_proveedor_tipo_idx';
+                  readonly columns: readonly ['tipo'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'pv_seguimiento_proveedor';
+                    readonly columns: readonly ['id_matrimonio_proveedor'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'pv_matrimonio_proveedor';
+                    readonly columns: readonly ['id_matrimonio_proveedor'];
+                  };
+                },
+              ];
+            };
           };
           readonly valueSet: {
             readonly au_tipo_token_cuenta: {
@@ -6776,6 +7607,10 @@ type ContractBase = Omit<
                 'HITO_VENCIDO',
               ];
             };
+            readonly pv_estado_reserva: {
+              readonly kind: 'valueSet';
+              readonly values: readonly ['SOLICITADA', 'CONFIRMADA', 'CANCELADA'];
+            };
             readonly pv_estado_seleccion: {
               readonly kind: 'valueSet';
               readonly values: readonly ['CONSIDERADO', 'SELECCIONADO', 'DESCARTADO'];
@@ -6788,9 +7623,17 @@ type ContractBase = Omit<
               readonly kind: 'valueSet';
               readonly values: readonly ['ALTA', 'MEDIA', 'BAJA'];
             };
+            readonly pv_tipo_interaccion: {
+              readonly kind: 'valueSet';
+              readonly values: readonly ['CONSULTA', 'RESPUESTA'];
+            };
             readonly pv_tipo_proveedor: {
               readonly kind: 'valueSet';
               readonly values: readonly ['PERSONA_NATURAL', 'EMPRESA'];
+            };
+            readonly pv_tipo_seguimiento: {
+              readonly kind: 'valueSet';
+              readonly values: readonly ['CHECKLIST', 'INCIDENCIA'];
             };
           };
         };
@@ -6910,6 +7753,30 @@ type ContractBase = Omit<
     readonly pv_disponibilidad_proveedor: {
       readonly namespace: 'public' & NamespaceId;
       readonly model: 'DisponibilidadProveedor';
+    };
+    readonly pv_seguimiento_proveedor: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'SeguimientoProveedor';
+    };
+    readonly pv_reserva_proveedor: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'ReservaProveedor';
+    };
+    readonly pv_evaluacion_proveedor: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'EvaluacionProveedor';
+    };
+    readonly pv_enlace_externo_proveedor: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'EnlaceExternoProveedor';
+    };
+    readonly pv_documento_proveedor: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'DocumentoProveedor';
+    };
+    readonly pv_interaccion_proveedor: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'InteraccionProveedor';
     };
     readonly in_ubigeo: { readonly namespace: 'public' & NamespaceId; readonly model: 'Ubigeo' };
     readonly in_persona_natural: {
@@ -7697,6 +8564,162 @@ type ContractBase = Omit<
               };
             };
           };
+          readonly DocumentoProveedor: {
+            readonly fields: {
+              readonly idDocumentoProveedor: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly idMatrimonioProveedor: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly nombre: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 200 };
+                };
+              };
+              readonly url: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 500 };
+                };
+              };
+              readonly tipo: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 100 };
+                };
+              };
+              readonly activo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+            };
+            readonly relations: {
+              readonly matrimonioProveedor: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'MatrimonioProveedor';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['idMatrimonioProveedor'];
+                  readonly targetFields: readonly ['idMatrimonioProveedor'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'pv_documento_proveedor';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly idDocumentoProveedor: { readonly column: 'id_documento_proveedor' };
+                readonly idMatrimonioProveedor: { readonly column: 'id_matrimonio_proveedor' };
+                readonly nombre: { readonly column: 'nombre' };
+                readonly url: { readonly column: 'url' };
+                readonly tipo: { readonly column: 'tipo' };
+                readonly activo: { readonly column: 'activo' };
+                readonly createdAt: { readonly column: 'created_at' };
+                readonly updatedAt: { readonly column: 'updated_at' };
+              };
+            };
+          };
+          readonly EnlaceExternoProveedor: {
+            readonly fields: {
+              readonly idEnlaceExternoProveedor: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly idProveedor: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly token: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 100 };
+                };
+              };
+              readonly fechaExpiracion: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly activo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+            };
+            readonly relations: {
+              readonly proveedor: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Proveedor';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['idProveedor'];
+                  readonly targetFields: readonly ['idProveedor'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'pv_enlace_externo_proveedor';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly idEnlaceExternoProveedor: {
+                  readonly column: 'id_enlace_externo_proveedor';
+                };
+                readonly idProveedor: { readonly column: 'id_proveedor' };
+                readonly token: { readonly column: 'token' };
+                readonly fechaExpiracion: { readonly column: 'fecha_expiracion' };
+                readonly activo: { readonly column: 'activo' };
+                readonly createdAt: { readonly column: 'created_at' };
+                readonly updatedAt: { readonly column: 'updated_at' };
+              };
+            };
+          };
           readonly Entidad: {
             readonly fields: {
               readonly idEntidad: {
@@ -7843,6 +8866,75 @@ type ContractBase = Omit<
                 readonly esActivo: { readonly column: 'es_activo' };
                 readonly fechaCreacion: { readonly column: 'fecha_creacion' };
                 readonly fechaModificacion: { readonly column: 'fecha_modificacion' };
+              };
+            };
+          };
+          readonly EvaluacionProveedor: {
+            readonly fields: {
+              readonly idEvaluacionProveedor: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly idMatrimonioProveedor: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly calificacion: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly resena: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 1000 };
+                };
+              };
+              readonly activo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+            };
+            readonly relations: {
+              readonly matrimonioProveedor: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'MatrimonioProveedor';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['idMatrimonioProveedor'];
+                  readonly targetFields: readonly ['idMatrimonioProveedor'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'pv_evaluacion_proveedor';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly idEvaluacionProveedor: { readonly column: 'id_evaluacion_proveedor' };
+                readonly idMatrimonioProveedor: { readonly column: 'id_matrimonio_proveedor' };
+                readonly calificacion: { readonly column: 'calificacion' };
+                readonly resena: { readonly column: 'resena' };
+                readonly activo: { readonly column: 'activo' };
+                readonly createdAt: { readonly column: 'created_at' };
+                readonly updatedAt: { readonly column: 'updated_at' };
               };
             };
           };
@@ -8062,6 +9154,91 @@ type ContractBase = Omit<
                 readonly estado: { readonly column: 'estado' };
                 readonly orden: { readonly column: 'orden' };
                 readonly modificadoManualmente: { readonly column: 'modificado_manualmente' };
+                readonly activo: { readonly column: 'activo' };
+                readonly createdAt: { readonly column: 'created_at' };
+                readonly updatedAt: { readonly column: 'updated_at' };
+              };
+            };
+          };
+          readonly InteraccionProveedor: {
+            readonly fields: {
+              readonly idInteraccionProveedor: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly idMatrimonioProveedor: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly tipo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly fechaEnvio: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly fechaRespuesta: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly observacion: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 1000 };
+                };
+              };
+              readonly activo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+            };
+            readonly relations: {
+              readonly matrimonioProveedor: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'MatrimonioProveedor';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['idMatrimonioProveedor'];
+                  readonly targetFields: readonly ['idMatrimonioProveedor'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'pv_interaccion_proveedor';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly idInteraccionProveedor: { readonly column: 'id_interaccion_proveedor' };
+                readonly idMatrimonioProveedor: { readonly column: 'id_matrimonio_proveedor' };
+                readonly tipo: { readonly column: 'tipo' };
+                readonly fechaEnvio: { readonly column: 'fecha_envio' };
+                readonly fechaRespuesta: { readonly column: 'fecha_respuesta' };
+                readonly observacion: { readonly column: 'observacion' };
                 readonly activo: { readonly column: 'activo' };
                 readonly createdAt: { readonly column: 'created_at' };
                 readonly updatedAt: { readonly column: 'updated_at' };
@@ -8558,6 +9735,39 @@ type ContractBase = Omit<
               };
             };
             readonly relations: {
+              readonly documentos: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'DocumentoProveedor';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idMatrimonioProveedor'];
+                  readonly targetFields: readonly ['idMatrimonioProveedor'];
+                };
+              };
+              readonly evaluaciones: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'EvaluacionProveedor';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idMatrimonioProveedor'];
+                  readonly targetFields: readonly ['idMatrimonioProveedor'];
+                };
+              };
+              readonly interacciones: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'InteraccionProveedor';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idMatrimonioProveedor'];
+                  readonly targetFields: readonly ['idMatrimonioProveedor'];
+                };
+              };
               readonly matrimonio: {
                 readonly to: {
                   readonly namespace: 'public' & NamespaceId;
@@ -8580,6 +9790,28 @@ type ContractBase = Omit<
                 readonly on: {
                   readonly localFields: readonly ['idProveedor'];
                   readonly targetFields: readonly ['idProveedor'];
+                };
+              };
+              readonly reservas: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'ReservaProveedor';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idMatrimonioProveedor'];
+                  readonly targetFields: readonly ['idMatrimonioProveedor'];
+                };
+              };
+              readonly seguimientos: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'SeguimientoProveedor';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idMatrimonioProveedor'];
+                  readonly targetFields: readonly ['idMatrimonioProveedor'];
                 };
               };
             };
@@ -9837,6 +11069,17 @@ type ContractBase = Omit<
                   readonly targetFields: readonly ['idProveedor'];
                 };
               };
+              readonly enlaces: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'EnlaceExternoProveedor';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idProveedor'];
+                  readonly targetFields: readonly ['idProveedor'];
+                };
+              };
               readonly entidad: {
                 readonly to: {
                   readonly namespace: 'public' & NamespaceId;
@@ -10010,6 +11253,17 @@ type ContractBase = Omit<
                 readonly on: {
                   readonly localFields: readonly ['idProveedor'];
                   readonly targetFields: readonly ['idProveedor'];
+                };
+              };
+              readonly reservas: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'ReservaProveedor';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idProveedorServicio'];
+                  readonly targetFields: readonly ['idProveedorServicio'];
                 };
               };
             };
@@ -10398,6 +11652,100 @@ type ContractBase = Omit<
               };
             };
           };
+          readonly ReservaProveedor: {
+            readonly fields: {
+              readonly idReservaProveedor: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly idMatrimonioProveedor: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly idProveedorServicio: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly fecha: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly estado: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly observacion: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 1000 };
+                };
+              };
+              readonly activo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+            };
+            readonly relations: {
+              readonly matrimonioProveedor: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'MatrimonioProveedor';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['idMatrimonioProveedor'];
+                  readonly targetFields: readonly ['idMatrimonioProveedor'];
+                };
+              };
+              readonly proveedorServicio: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'ProveedorServicio';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['idProveedorServicio'];
+                  readonly targetFields: readonly ['idProveedorServicio'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'pv_reserva_proveedor';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly idReservaProveedor: { readonly column: 'id_reserva_proveedor' };
+                readonly idMatrimonioProveedor: { readonly column: 'id_matrimonio_proveedor' };
+                readonly idProveedorServicio: { readonly column: 'id_proveedor_servicio' };
+                readonly fecha: { readonly column: 'fecha' };
+                readonly estado: { readonly column: 'estado' };
+                readonly observacion: { readonly column: 'observacion' };
+                readonly activo: { readonly column: 'activo' };
+                readonly createdAt: { readonly column: 'created_at' };
+                readonly updatedAt: { readonly column: 'updated_at' };
+              };
+            };
+          };
           readonly Rsvp: {
             readonly fields: {
               readonly idRsvp: {
@@ -10647,6 +11995,94 @@ type ContractBase = Omit<
                 readonly idUsuario: { readonly column: 'id_usuario' };
                 readonly observacion: { readonly column: 'observacion' };
                 readonly createdAt: { readonly column: 'created_at' };
+              };
+            };
+          };
+          readonly SeguimientoProveedor: {
+            readonly fields: {
+              readonly idSeguimientoProveedor: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly idMatrimonioProveedor: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly tipo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly titulo: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 200 };
+                };
+              };
+              readonly descripcion: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 1000 };
+                };
+              };
+              readonly completado: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly idUsuario: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly activo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+            };
+            readonly relations: {
+              readonly matrimonioProveedor: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'MatrimonioProveedor';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['idMatrimonioProveedor'];
+                  readonly targetFields: readonly ['idMatrimonioProveedor'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'pv_seguimiento_proveedor';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly idSeguimientoProveedor: { readonly column: 'id_seguimiento_proveedor' };
+                readonly idMatrimonioProveedor: { readonly column: 'id_matrimonio_proveedor' };
+                readonly tipo: { readonly column: 'tipo' };
+                readonly titulo: { readonly column: 'titulo' };
+                readonly descripcion: { readonly column: 'descripcion' };
+                readonly completado: { readonly column: 'completado' };
+                readonly idUsuario: { readonly column: 'id_usuario' };
+                readonly activo: { readonly column: 'activo' };
+                readonly createdAt: { readonly column: 'created_at' };
+                readonly updatedAt: { readonly column: 'updated_at' };
               };
             };
           };
@@ -11399,6 +12835,28 @@ type ContractBase = Omit<
               { readonly name: 'BAJA'; readonly value: 'BAJA' },
             ];
           };
+          readonly pv_estado_reserva: {
+            readonly codecId: 'pg/text@1';
+            readonly members: readonly [
+              { readonly name: 'SOLICITADA'; readonly value: 'SOLICITADA' },
+              { readonly name: 'CONFIRMADA'; readonly value: 'CONFIRMADA' },
+              { readonly name: 'CANCELADA'; readonly value: 'CANCELADA' },
+            ];
+          };
+          readonly pv_tipo_seguimiento: {
+            readonly codecId: 'pg/text@1';
+            readonly members: readonly [
+              { readonly name: 'CHECKLIST'; readonly value: 'CHECKLIST' },
+              { readonly name: 'INCIDENCIA'; readonly value: 'INCIDENCIA' },
+            ];
+          };
+          readonly pv_tipo_interaccion: {
+            readonly codecId: 'pg/text@1';
+            readonly members: readonly [
+              { readonly name: 'CONSULTA'; readonly value: 'CONSULTA' },
+              { readonly name: 'RESPUESTA'; readonly value: 'RESPUESTA' },
+            ];
+          };
           readonly cr_prioridad_actividad: {
             readonly codecId: 'pg/text@1';
             readonly members: readonly [
@@ -11802,6 +13260,74 @@ type ContractBase = Omit<
         {
           readonly ref: {
             readonly namespace: 'public';
+            readonly table: 'pv_documento_proveedor';
+            readonly column: 'id_documento_proveedor';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'uuidv4' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'pv_documento_proveedor';
+            readonly column: 'updated_at';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+          readonly onUpdate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'pv_enlace_externo_proveedor';
+            readonly column: 'id_enlace_externo_proveedor';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'uuidv4' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'pv_enlace_externo_proveedor';
+            readonly column: 'updated_at';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+          readonly onUpdate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'pv_evaluacion_proveedor';
+            readonly column: 'id_evaluacion_proveedor';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'uuidv4' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'pv_evaluacion_proveedor';
+            readonly column: 'updated_at';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+          readonly onUpdate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'pv_interaccion_proveedor';
+            readonly column: 'id_interaccion_proveedor';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'uuidv4' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'pv_interaccion_proveedor';
+            readonly column: 'updated_at';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+          readonly onUpdate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
             readonly table: 'pv_matrimonio_proveedor';
             readonly column: 'id_matrimonio_proveedor';
           };
@@ -11837,6 +13363,40 @@ type ContractBase = Omit<
           readonly ref: {
             readonly namespace: 'public';
             readonly table: 'pv_proveedor_servicio';
+            readonly column: 'updated_at';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+          readonly onUpdate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'pv_reserva_proveedor';
+            readonly column: 'id_reserva_proveedor';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'uuidv4' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'pv_reserva_proveedor';
+            readonly column: 'updated_at';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+          readonly onUpdate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'pv_seguimiento_proveedor';
+            readonly column: 'id_seguimiento_proveedor';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'uuidv4' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'pv_seguimiento_proveedor';
             readonly column: 'updated_at';
           };
           readonly onCreate: { readonly kind: 'generator'; readonly id: 'instantNow' };

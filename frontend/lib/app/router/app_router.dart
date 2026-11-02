@@ -11,6 +11,7 @@ import '../../features/proyectos/presentation/pages/crear_matrimonio_page.dart';
 import '../../features/cronograma/presentation/pages/cronograma_page.dart';
 import '../../features/cronograma/presentation/pages/planificar_matrimonio_page.dart';
 import '../../features/invitados/presentation/gestion_invitados_pages.dart';
+import '../../features/proveedores/presentation/proveedores_page.dart';
 import '../../features/autenticacion/infrastructure/auth_session.dart';
 import 'route_names.dart';
 
@@ -70,7 +71,16 @@ final appRouter = GoRouter(
     ),
     GoRoute(
       path: '/proveedores',
-      builder: (context, state) => InicioPage(nombre: state.extra, seccion: 3),
+      builder: (context, state) {
+        final idProyecto = AuthSession.idProyectoActivo;
+        return InicioPage(
+          nombre: state.extra,
+          seccion: 3,
+          contenidoProveedores: idProyecto == null
+              ? null
+              : ProveedoresPage(idProyecto: idProyecto),
+        );
+      },
     ),
     GoRoute(
       path: RouteNames.bienvenida,

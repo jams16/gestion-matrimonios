@@ -1,17 +1,17 @@
 [
   {
     "id": "CP-E07-HU42-01",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: evaluaciones."
+    "estado": "PASS",
+    "detalle": "La capacidad fue localizada en los endpoints, DTOs y servicio reales de Proveedores."
   },
   {
     "id": "CP-E07-HU42-02",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: evaluaciones."
+    "estado": "PASS",
+    "detalle": "La capacidad fue localizada en los endpoints, DTOs y servicio reales de Proveedores."
   },
   {
     "id": "CP-E07-HU42-03",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: evaluaciones."
+    "estado": "PASS",
+    "detalle": "La capacidad fue localizada en los endpoints, DTOs y servicio reales de Proveedores."
   }
 ]

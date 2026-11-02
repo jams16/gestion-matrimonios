@@ -169,6 +169,22 @@ enum pv_prioridad {
   BAJA
 }
 
+enum pv_estado_reserva {
+  SOLICITADA
+  CONFIRMADA
+  CANCELADA
+}
+
+enum pv_tipo_seguimiento {
+  CHECKLIST
+  INCIDENCIA
+}
+
+enum pv_tipo_interaccion {
+  CONSULTA
+  RESPUESTA
+}
+
 model CategoriaRelacion {
   idCategoriaRelacion Int                  @id @default(autoincrement()) @map("id_categoria_relacion")
   codigo              VarChar(50)          @unique
@@ -637,6 +653,7 @@ model Proveedor {
   servicios        ProveedorServicio[]
   matrimonios      MatrimonioProveedor[]
   disponibilidades DisponibilidadProveedor[]
+  enlaces          EnlaceExternoProveedor[]
 
   @@index([activo])
   @@index([nombreComercial])
@@ -673,6 +690,7 @@ model ProveedorServicio {
   proveedor           Proveedor                 @relation(fields:[idProveedor], references:[idProveedor], onDelete: Restrict)
   categoriaServicio   CategoriaServicio         @relation(fields:[idCategoriaServicio], references:[idCategoriaServicio], onDelete: Restrict)
   disponibilidades    DisponibilidadProveedor[]
+  reservas            ReservaProveedor[]
 
   @@unique([idProveedor, idCategoriaServicio, nombre])
   @@index([idProveedor])
@@ -681,18 +699,23 @@ model ProveedorServicio {
 }
 
 model MatrimonioProveedor {
-  idMatrimonioProveedor Uuid                 @id @default(uuid()) @map("id_matrimonio_proveedor")
-  idMatrimonio          Uuid                 @map("id_matrimonio")
-  idProveedor           Uuid                 @map("id_proveedor")
-  favorito              Boolean              @default(false)
-  estadoSeleccion       pv_estado_seleccion  @default(CONSIDERADO) @map("estado_seleccion")
+  idMatrimonioProveedor Uuid                   @id @default(uuid()) @map("id_matrimonio_proveedor")
+  idMatrimonio          Uuid                   @map("id_matrimonio")
+  idProveedor           Uuid                   @map("id_proveedor")
+  favorito              Boolean                @default(false)
+  estadoSeleccion       pv_estado_seleccion    @default(CONSIDERADO) @map("estado_seleccion")
   prioridad             pv_prioridad?
   observaciones         VarChar(1000)?
-  activo                Boolean              @default(true)
-  createdAt             DateTime             @default(now()) @map("created_at")
-  updatedAt             temporal.updatedAt() @map("updated_at")
-  matrimonio            Matrimonio           @relation(fields:[idMatrimonio], references:[idMatrimonio], onDelete: Restrict)
-  proveedor             Proveedor            @relation(fields:[idProveedor], references:[idProveedor], onDelete: Restrict)
+  activo                Boolean                @default(true)
+  createdAt             DateTime               @default(now()) @map("created_at")
+  updatedAt             temporal.updatedAt()   @map("updated_at")
+  matrimonio            Matrimonio             @relation(fields:[idMatrimonio], references:[idMatrimonio], onDelete: Restrict)
+  proveedor             Proveedor              @relation(fields:[idProveedor], references:[idProveedor], onDelete: Restrict)
+  seguimientos          SeguimientoProveedor[]
+  reservas              ReservaProveedor[]
+  evaluaciones          EvaluacionProveedor[]
+  documentos            DocumentoProveedor[]
+  interacciones         InteraccionProveedor[]
 
   @@unique([idMatrimonio, idProveedor])
   @@index([idMatrimonio])
@@ -720,6 +743,100 @@ model DisponibilidadProveedor {
   @@index([idProveedor, fecha])
   @@index([idProveedorServicio, fecha], map: "pv_disp_serv_fecha_idx")
   @@map("pv_disponibilidad_proveedor")
+}
+
+model SeguimientoProveedor {
+  idSeguimientoProveedor Uuid                 @id @default(uuid()) @map("id_seguimiento_proveedor")
+  idMatrimonioProveedor  Uuid                 @map("id_matrimonio_proveedor")
+  tipo                   pv_tipo_seguimiento
+  titulo                 VarChar(200)
+  descripcion            VarChar(1000)?
+  completado             Boolean              @default(false)
+  idUsuario              Int?                 @map("id_usuario")
+  activo                 Boolean              @default(true)
+  createdAt              DateTime             @default(now()) @map("created_at")
+  updatedAt              temporal.updatedAt() @map("updated_at")
+  matrimonioProveedor    MatrimonioProveedor  @relation(fields:[idMatrimonioProveedor], references:[idMatrimonioProveedor], onDelete: Restrict)
+
+  @@index([idMatrimonioProveedor])
+  @@index([tipo])
+  @@map("pv_seguimiento_proveedor")
+}
+
+model ReservaProveedor {
+  idReservaProveedor    Uuid                 @id @default(uuid()) @map("id_reserva_proveedor")
+  idMatrimonioProveedor Uuid                 @map("id_matrimonio_proveedor")
+  idProveedorServicio   Int?                 @map("id_proveedor_servicio")
+  fecha                 DateTime
+  estado                pv_estado_reserva    @default(SOLICITADA)
+  observacion           VarChar(1000)?
+  activo                Boolean              @default(true)
+  createdAt             DateTime             @default(now()) @map("created_at")
+  updatedAt             temporal.updatedAt() @map("updated_at")
+  matrimonioProveedor   MatrimonioProveedor  @relation(fields:[idMatrimonioProveedor], references:[idMatrimonioProveedor], onDelete: Restrict)
+  proveedorServicio     ProveedorServicio?   @relation(fields:[idProveedorServicio], references:[idProveedorServicio], onDelete: Restrict)
+
+  @@index([idMatrimonioProveedor])
+  @@index([fecha])
+  @@map("pv_reserva_proveedor")
+}
+
+model EvaluacionProveedor {
+  idEvaluacionProveedor Uuid                 @id @default(uuid()) @map("id_evaluacion_proveedor")
+  idMatrimonioProveedor Uuid                 @unique @map("id_matrimonio_proveedor")
+  calificacion          Int
+  resena                VarChar(1000)?
+  activo                Boolean              @default(true)
+  createdAt             DateTime             @default(now()) @map("created_at")
+  updatedAt             temporal.updatedAt() @map("updated_at")
+  matrimonioProveedor   MatrimonioProveedor  @relation(fields:[idMatrimonioProveedor], references:[idMatrimonioProveedor], onDelete: Restrict)
+
+  @@map("pv_evaluacion_proveedor")
+}
+
+model EnlaceExternoProveedor {
+  idEnlaceExternoProveedor Uuid                 @id @default(uuid()) @map("id_enlace_externo_proveedor")
+  idProveedor              Uuid                 @map("id_proveedor")
+  token                    VarChar(100)         @unique
+  fechaExpiracion          DateTime?            @map("fecha_expiracion")
+  activo                   Boolean              @default(true)
+  createdAt                DateTime             @default(now()) @map("created_at")
+  updatedAt                temporal.updatedAt() @map("updated_at")
+  proveedor                Proveedor            @relation(fields:[idProveedor], references:[idProveedor], onDelete: Restrict)
+
+  @@index([idProveedor])
+  @@map("pv_enlace_externo_proveedor")
+}
+
+model DocumentoProveedor {
+  idDocumentoProveedor  Uuid                 @id @default(uuid()) @map("id_documento_proveedor")
+  idMatrimonioProveedor Uuid                 @map("id_matrimonio_proveedor")
+  nombre                VarChar(200)
+  url                   VarChar(500)
+  tipo                  VarChar(100)?
+  activo                Boolean              @default(true)
+  createdAt             DateTime             @default(now()) @map("created_at")
+  updatedAt             temporal.updatedAt() @map("updated_at")
+  matrimonioProveedor   MatrimonioProveedor  @relation(fields:[idMatrimonioProveedor], references:[idMatrimonioProveedor], onDelete: Restrict)
+
+  @@index([idMatrimonioProveedor])
+  @@map("pv_documento_proveedor")
+}
+
+model InteraccionProveedor {
+  idInteraccionProveedor Uuid                 @id @default(uuid()) @map("id_interaccion_proveedor")
+  idMatrimonioProveedor  Uuid                 @map("id_matrimonio_proveedor")
+  tipo                   pv_tipo_interaccion
+  fechaEnvio             DateTime             @map("fecha_envio")
+  fechaRespuesta         DateTime?            @map("fecha_respuesta")
+  observacion            VarChar(1000)?
+  activo                 Boolean              @default(true)
+  createdAt              DateTime             @default(now()) @map("created_at")
+  updatedAt              temporal.updatedAt() @map("updated_at")
+  matrimonioProveedor    MatrimonioProveedor  @relation(fields:[idMatrimonioProveedor], references:[idMatrimonioProveedor], onDelete: Restrict)
+
+  @@index([idMatrimonioProveedor])
+  @@map("pv_interaccion_proveedor")
 }
 
 model Ubigeo {

@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req, UseGuard
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtAccessGuard } from '../../autenticacion/presentation/guards/jwt-access.guard';
 import { InvitadosService } from '../application/invitados.service';
-import { ActualizarInvitadoDto, ActualizarMesaDto, ActualizarRsvpDto, CrearInvitadoDto, CrearMesaDto, InteraccionInvitacionDto, ListarInvitadosDto, PreferenciaOrdenDto, ReasignarMesaDto, RequerimientoDto } from '../application/dto/invitados.dto';
+import { ActualizarInvitadoDto, ActualizarMesaDto, ActualizarRsvpDto, CancelarConfirmacionRsvpDto, CrearInvitadoDto, CrearMesaDto, InteraccionInvitacionDto, ListarInvitadosDto, PreferenciaOrdenDto, ReasignarMesaDto, RequerimientoDto } from '../application/dto/invitados.dto';
 
 @ApiTags('Invitados')
 @ApiBearerAuth()
@@ -29,6 +29,7 @@ export class InvitadosController {
   @Get('matrimonios/:idMatrimonio/invitados/:idTitular/acompanantes') listarAcompanantes(@Param('idMatrimonio') m: string, @Param('idTitular') t: string, @Req() r: any) { return this.service.acompanantes(m, t, this.usuario(r)); }
   @Get('matrimonios/:idMatrimonio/invitados/:idInvitado/rsvp') obtenerRsvp(@Param('idMatrimonio') m: string, @Param('idInvitado') i: string, @Req() r: any) { return this.service.obtenerRsvp(m, i, this.usuario(r)); }
   @Patch('matrimonios/:idMatrimonio/invitados/:idInvitado/rsvp') actualizarRsvp(@Param('idMatrimonio') m: string, @Param('idInvitado') i: string, @Body() d: ActualizarRsvpDto, @Req() r: any) { return this.service.rsvp(m, i, d, this.usuario(r)); }
+  @Patch('matrimonios/:idMatrimonio/invitados/:idInvitado/rsvp/cancelar-confirmacion') cancelarConfirmacion(@Param('idMatrimonio') m: string, @Param('idInvitado') i: string, @Body() d: CancelarConfirmacionRsvpDto, @Req() r: any) { return this.service.cancelarConfirmacion(m, i, d.nivel, this.usuario(r)); }
   @Post('matrimonios/:idMatrimonio/invitados/:idInvitado/rsvp/verificacion-manual-1') verificar1(@Param('idMatrimonio') m: string, @Param('idInvitado') i: string, @Req() r: any) { return this.service.verificar(m, i, this.usuario(r), 1); }
   @Post('matrimonios/:idMatrimonio/invitados/:idInvitado/rsvp/verificacion-manual-2') verificar2(@Param('idMatrimonio') m: string, @Param('idInvitado') i: string, @Req() r: any) { return this.service.verificar(m, i, this.usuario(r), 2); }
   @Get('matrimonios/:idMatrimonio/invitados/:idInvitado/requerimientos-alimentarios') requerimientos(@Param('idMatrimonio') m: string, @Param('idInvitado') i: string, @Req() r: any) { return this.service.requerimientos(m, i, this.usuario(r)); }

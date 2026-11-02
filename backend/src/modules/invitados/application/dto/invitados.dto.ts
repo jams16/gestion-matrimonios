@@ -1,6 +1,6 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { Transform, Type } from 'class-transformer';
-import { IsBoolean, IsEmail, IsEnum, IsInt, IsNotEmpty, IsOptional, IsString, IsUUID, Length, MaxLength, Min, ValidateNested } from 'class-validator';
+import { IsBoolean, IsEmail, IsEnum, IsInt, IsNotEmpty, IsOptional, IsString, IsUUID, Length, Max, MaxLength, Min, ValidateNested } from 'class-validator';
 
 export enum LadoRelacionDto { NOVIA='NOVIA', NOVIO='NOVIO', AMBOS='AMBOS', OTRO='OTRO' }
 export enum EstadoRsvpDto { PENDIENTE='PENDIENTE', CONFIRMADO='CONFIRMADO', NO_ASISTE='NO_ASISTE' }
@@ -44,6 +44,7 @@ export class ActualizarRsvpDto {
   @IsOptional() @Type(() => Number) @IsInt() @Min(0) cantidadAsistentesConfirmados?: number;
   @IsOptional() @IsString() @MaxLength(1000) observacion?: string;
 }
+export class CancelarConfirmacionRsvpDto { @Type(() => Number) @IsInt() @Min(1) @Max(2) nivel!: 1 | 2; }
 export class RequerimientoDto { @Type(() => Number) @IsInt() @Min(1) idRequerimientoAlimentario!: number; @IsOptional() @IsString() @MaxLength(500) detalle?: string; }
 export class CrearMesaDto { @IsString() @MaxLength(100) nombre!: string; @Type(() => Number) @IsInt() @Min(1) capacidad!: number; @IsOptional() @Type(() => Number) @IsInt() numero?: number; @IsOptional() @IsString() @MaxLength(250) ubicacion?: string; @IsOptional() @IsString() @MaxLength(1000) observaciones?: string; }
 export class ActualizarMesaDto extends PartialType(CrearMesaDto) {}
