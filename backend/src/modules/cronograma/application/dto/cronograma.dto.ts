@@ -157,11 +157,12 @@ export class CrearActividadDto {
   @IsOptional()
   @IsEnum(EstadoActividadDto)
   estado?: EstadoActividadDto;
-  @ApiProperty()
+  @ApiPropertyOptional()
   @Type(() => Number)
+  @IsOptional()
   @IsInt()
   @Min(1)
-  idUsuarioResponsable!: number;
+  idUsuarioResponsable?: number | null;
   @ApiPropertyOptional({ maxLength: 150 })
   @Transform(emptyToNull)
   @IsOptional()

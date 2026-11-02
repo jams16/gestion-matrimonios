@@ -182,18 +182,6 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
       return Stack(
         children: [
           contenido,
-          if (puedeConfirmar)
-            Positioned(
-              top: 12,
-              right: 16,
-              child: AppButton(
-                label: 'PLANIFICADO',
-                icon: Icons.verified_outlined,
-                size: AppButtonSize.small,
-                loading: _procesando,
-                onPressed: _confirmarPlanificacion,
-              ),
-            ),
           if (botonFlotante != null)
             Positioned(right: 18, bottom: 18, child: botonFlotante),
         ],
@@ -235,6 +223,7 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
     final fase = _mapa(proyecto['faseProyecto']);
     final faseCodigo = (fase['codigo'] ?? proyecto['faseProyectoCodigo'] ?? '')
         .toString();
+    final puedeConfirmar = faseCodigo == 'INICIO';
     AuthSession.seleccionarProyecto(
       idProyecto: widget.idProyecto,
       planificacionConfirmada:
@@ -257,11 +246,21 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
     final fechaInicioProyecto = _fecha(proyecto['fechaInicio']);
     return Column(
       children: [
-        const Padding(
-          padding: EdgeInsets.fromLTRB(16, 14, 16, 0),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Text('Plan', style: TextStyle(fontWeight: FontWeight.w800)),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 14, 16, 0),
+          child: Row(
+            children: [
+              const Text('Plan', style: TextStyle(fontWeight: FontWeight.w800)),
+              const Spacer(),
+              if (puedeConfirmar)
+                AppButton(
+                  label: 'PLANIFICADO',
+                  icon: Icons.verified_outlined,
+                  size: AppButtonSize.small,
+                  loading: _procesando,
+                  onPressed: _confirmarPlanificacion,
+                ),
+            ],
           ),
         ),
         _CabeceraCronograma(
@@ -528,7 +527,7 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
                       prefixIcon: Icon(Icons.flag_outlined),
                     ),
                     items: [
-                      const DropdownMenuItem(
+                      const DropdownMenuItem<String>(
                         value: '0',
                         child: Text('Sin hito'),
                       ),
@@ -612,16 +611,6 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
           context,
           message:
               'La fecha de inicio no puede ser posterior a la fecha de fin.',
-          type: AppSnackbarType.warning,
-        );
-      }
-      return;
-    }
-    if (existente == null && idResponsable == null) {
-      if (mounted) {
-        AppSnackbar.show(
-          context,
-          message: 'Selecciona un responsable para la actividad.',
           type: AppSnackbarType.warning,
         );
       }
@@ -748,7 +737,9 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
             )['idActividad']
             .toString();
     final fijaPredecesora = predecesoraInicial != null;
-    final fijaSucesora = sucesoraInicial != null;
+    final actividadBase = predecesoraInicial;
+    String? predecesoraElegida;
+    String? sucesoraElegida;
     final desfase = TextEditingController(text: '0');
     final guardar = await showDialog<bool>(
       context: context,
@@ -759,41 +750,90 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (fijaPredecesora || fijaSucesora)
+                if (actividadBase != null)
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      fijaPredecesora
-                          ? 'Desde: ${etiquetaActividad(predecesoraInicial!)}'
-                          : 'Hacia: ${etiquetaActividad(sucesoraInicial!)}',
+                      'Actividad seleccionada: ${etiquetaActividad(actividadBase)}',
                       style: const TextStyle(fontWeight: FontWeight.w700),
                     ),
                   ),
-                if (fijaPredecesora || fijaSucesora) const SizedBox(height: 18),
-                DropdownButtonFormField<String>(
-                  initialValue: fijaPredecesora ? sucesora : predecesora,
-                  isExpanded: true,
-                  decoration: const InputDecoration(
-                    labelText: 'Actividad relacionada',
+                if (actividadBase != null) const SizedBox(height: 18),
+                if (actividadBase != null)
+                  DropdownButtonFormField<String>(
+                    initialValue: 'ninguna',
+                    isExpanded: true,
+                    decoration: const InputDecoration(
+                      labelText: 'Predecesora (opcional)',
+                    ),
+                    items: [
+                      const DropdownMenuItem<String>(
+                        value: 'ninguna',
+                        child: Text('Ninguna'),
+                      ),
+                      ...actividades
+                          .where(
+                            (a) =>
+                                a['idActividad']?.toString() !=
+                                actividadBase['idActividad']?.toString(),
+                          )
+                          .map(
+                            (a) => DropdownMenuItem(
+                              value: a['idActividad'].toString(),
+                              child: Text(
+                                etiquetaActividad(a),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ),
+                    ],
+                    onChanged: (value) => setDialogState(
+                      () => predecesoraElegida = value == 'ninguna'
+                          ? null
+                          : value,
+                    ),
                   ),
-                  items: actividades
-                      .where(
-                        (a) =>
-                            a['idActividad']?.toString() !=
-                            (fijaPredecesora ? predecesora : sucesora),
-                      )
-                      .map(
-                        (a) => DropdownMenuItem(
-                          value: a['idActividad'].toString(),
-                          child: Text(
-                            etiquetaActividad(a),
-                            overflow: TextOverflow.ellipsis,
+                if (actividadBase != null) const SizedBox(height: 18),
+                DropdownButtonFormField<String>(
+                  initialValue: actividadBase != null
+                      ? 'ninguna'
+                      : (fijaPredecesora ? sucesora : predecesora),
+                  isExpanded: true,
+                  decoration: InputDecoration(
+                    labelText: actividadBase != null
+                        ? 'Sucesora (opcional)'
+                        : 'Actividad relacionada',
+                  ),
+                  items: [
+                    if (actividadBase != null)
+                      const DropdownMenuItem<String>(
+                        value: 'ninguna',
+                        child: Text('Ninguna'),
+                      ),
+                    ...actividades
+                        .where(
+                          (a) =>
+                              a['idActividad']?.toString() !=
+                              (actividadBase ??
+                                      (fijaPredecesora
+                                          ? predecesoraInicial
+                                          : sucesoraInicial))?['idActividad']
+                                  ?.toString(),
+                        )
+                        .map(
+                          (a) => DropdownMenuItem(
+                            value: a['idActividad'].toString(),
+                            child: Text(
+                              etiquetaActividad(a),
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                         ),
-                      )
-                      .toList(),
+                  ],
                   onChanged: (v) => setDialogState(() {
-                    if (fijaPredecesora) {
+                    if (actividadBase != null) {
+                      sucesoraElegida = v == 'ninguna' ? null : v;
+                    } else if (fijaPredecesora) {
                       sucesora = v!;
                     } else {
                       predecesora = v!;
@@ -833,6 +873,37 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
       ),
     );
     if (guardar != true) return;
+    if (actividadBase != null) {
+      if (predecesoraElegida == null && sucesoraElegida == null) {
+        if (mounted)
+          AppSnackbar.show(
+            context,
+            message: 'Selecciona una actividad predecesora o sucesora.',
+            type: AppSnackbarType.info,
+          );
+        return;
+      }
+      await _ejecutar((api) async {
+        final desfaseValor = int.tryParse(desfase.text) ?? 0;
+        if (predecesoraElegida != null) {
+          await api.crearDependencia(widget.idProyecto, {
+            'idActividadPredecesora': predecesoraElegida,
+            'idActividadSucesora': actividadBase['idActividad'],
+            'tipoDependencia': 'FINISH_TO_START',
+            'diasDesfase': desfaseValor,
+          });
+        }
+        if (sucesoraElegida != null) {
+          await api.crearDependencia(widget.idProyecto, {
+            'idActividadPredecesora': actividadBase['idActividad'],
+            'idActividadSucesora': sucesoraElegida,
+            'tipoDependencia': 'FINISH_TO_START',
+            'diasDesfase': desfaseValor,
+          });
+        }
+      }, exito: 'Dependencia creada.');
+      return;
+    }
     await _ejecutar(
       (api) => api.crearDependencia(widget.idProyecto, {
         'idActividadPredecesora': predecesora,
@@ -1670,8 +1741,15 @@ class _ListaCronograma extends StatelessWidget {
       );
     final hitosOrdenados = [...hitos]
       ..sort((a, b) => _compararFecha(a['fechaObjetivo'], b['fechaObjetivo']));
+    int compararActividad(Map<String, dynamic> a, Map<String, dynamic> b) {
+      final porFecha = _compararFecha(a['fechaFin'], b['fechaFin']);
+      return porFecha != 0
+          ? porFecha
+          : _compararFecha(a['createdAt'], b['createdAt']);
+    }
+
     final sinHito = actividades.where((a) => a['idHito'] == null).toList()
-      ..sort((a, b) => _compararFecha(a['fechaFin'], b['fechaFin']));
+      ..sort(compararActividad);
     final nombresActividades = {
       for (final actividad in actividades)
         actividad['idActividad'].toString():
@@ -1699,9 +1777,7 @@ class _ListaCronograma extends StatelessWidget {
                           a['idHito']?.toString() == hito['idHito']?.toString(),
                     )
                     .toList()
-                  ..sort(
-                    (a, b) => _compararFecha(a['fechaFin'], b['fechaFin']),
-                  ),
+                  ..sort(compararActividad),
             alEditarHito: () => alEditarHito(hito),
             alEliminarHito: () => alEliminarHito(hito),
             alAgregarActividad: () => alAgregarActividadEnHito(hito),
@@ -1868,15 +1944,6 @@ class _HitoCard extends StatelessWidget {
                   : actividades[actividades.indexOf(a) + 1],
             ),
           ),
-          if (alAgregarActividad != null)
-            Align(
-              alignment: Alignment.centerRight,
-              child: TextButton.icon(
-                onPressed: alAgregarActividad,
-                icon: const Icon(Icons.add_task_outlined),
-                label: const Text('Agregar actividad'),
-              ),
-            ),
         ],
       ),
     ),
@@ -1973,14 +2040,6 @@ class _ActividadFila extends StatelessWidget {
                   ),
                 ],
               ),
-            ),
-          ),
-          Align(
-            alignment: Alignment.centerRight,
-            child: TextButton.icon(
-              onPressed: alAgregarDependencia,
-              icon: const Icon(Icons.add_link),
-              label: const Text('Agregar dependencia'),
             ),
           ),
         ],
