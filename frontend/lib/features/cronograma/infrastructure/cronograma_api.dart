@@ -112,6 +112,14 @@ class CronogramaApi {
   ) => _patch('/proyectos/$idProyecto/cronograma/timing/$idTiming', data);
   Future<void> eliminarTiming(String idProyecto, String idTiming) =>
       _delete('/proyectos/$idProyecto/cronograma/timing/$idTiming');
+  Future<void> intercambiarTiming(
+    String idProyecto,
+    String idTiming,
+    String idTimingVecino,
+  ) => _patch('/proyectos/$idProyecto/cronograma/timing/intercambiar', {
+    'idTiming': idTiming,
+    'idTimingVecino': idTimingVecino,
+  });
 
   Future<List<Map<String, dynamic>>> sugerenciasActividad(
     String idProyecto,
@@ -130,6 +138,30 @@ class CronogramaApi {
     String idProyecto,
     Map<String, dynamic> data,
   ) => _post('/proyectos/$idProyecto/cronograma/sugerencias/actividades', data);
+
+  Future<List<Map<String, dynamic>>> sugerenciasHito(String idProyecto) =>
+      _obtenerSugerencias(
+        '/proyectos/$idProyecto/cronograma/sugerencias/hitos',
+      );
+  Future<List<Map<String, dynamic>>> sugerenciasDependencia(
+    String idProyecto,
+  ) => _obtenerSugerencias(
+    '/proyectos/$idProyecto/cronograma/sugerencias/dependencias',
+  );
+  Future<List<Map<String, dynamic>>> sugerenciasTiming(String idProyecto) =>
+      _obtenerSugerencias(
+        '/proyectos/$idProyecto/cronograma/sugerencias/timing',
+      );
+
+  Future<List<Map<String, dynamic>>> _obtenerSugerencias(String path) async {
+    final response = await _dio.get<Map<String, dynamic>>(
+      path,
+      options: await _opciones(),
+    );
+    return List<Object?>.from(
+      response.data?['data'] as List? ?? const [],
+    ).map((item) => Map<String, dynamic>.from(item as Map)).toList();
+  }
 
   Future<void> _post(String path, Map<String, dynamic> data) async {
     await _dio.post<void>(path, data: data, options: await _opciones());

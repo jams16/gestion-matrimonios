@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
-enum AppSnackbarType { info, success, warning, error }
+/// Los avisos de la aplicación usan exclusivamente la paleta semántica
+/// información, éxito y error/peligro. `warning` se conserva como alias de
+/// compatibilidad para pantallas anteriores, pero visualmente es información.
+enum AppSnackbarType { info, success, warning, error, danger }
 
 abstract final class AppSnackbar {
   static void show(
@@ -25,10 +28,14 @@ abstract final class AppSnackbar {
         icon = Icons.check_circle_outline;
 
       case AppSnackbarType.warning:
-        backgroundColor = const Color(0xFFF9A825);
-        icon = Icons.warning_amber_outlined;
+        backgroundColor = scheme.primary;
+        icon = Icons.info_outline;
 
       case AppSnackbarType.error:
+        backgroundColor = scheme.error;
+        icon = Icons.error_outline;
+
+      case AppSnackbarType.danger:
         backgroundColor = scheme.error;
         icon = Icons.error_outline;
     }

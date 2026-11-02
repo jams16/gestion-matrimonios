@@ -35,6 +35,7 @@ import {
   CrearDependenciaDto,
   CrearHitoDto,
   CrearTimingDto,
+  IntercambiarTimingDto,
   ListarActividadesDto,
   ListarCronogramaDto,
   ListarHitosDto,
@@ -428,9 +429,28 @@ export class CronogramaController {
   @Get('sugerencias/dependencias')
   @ApiOperation({ summary: 'Listar dependencias sugeridas desde las plantillas' })
   async listarDependenciasSugeridas(@Param('idProyecto', ParseUUIDPipe) idProyecto: string, @Req() request: SolicitudAutenticada) { return { mensaje: 'Dependencias sugeridas obtenidas correctamente.', data: await this.sugerencias.dependencias(idProyecto, request.usuarioAutenticado.sub) }; }
+  @Get('sugerencias/hitos')
+  @ApiOperation({ summary: 'Listar hitos sugeridos desde las plantillas' })
+  async listarHitosSugeridos(@Param('idProyecto', ParseUUIDPipe) idProyecto: string, @Req() request: SolicitudAutenticada) { return { mensaje: 'Hitos sugeridos obtenidos correctamente.', data: await this.sugerencias.hitos(idProyecto, request.usuarioAutenticado.sub) }; }
+  @Get('sugerencias/timing')
+  @ApiOperation({ summary: 'Listar momentos de timing sugeridos desde las plantillas' })
+  async listarTimingSugerido(@Param('idProyecto', ParseUUIDPipe) idProyecto: string, @Req() request: SolicitudAutenticada) { return { mensaje: 'Timing sugerido obtenido correctamente.', data: await this.sugerencias.timing(idProyecto, request.usuarioAutenticado.sub) }; }
   @Post('sugerencias/actividades')
   @ApiOperation({ summary: 'Crear una actividad independiente desde una sugerencia' })
   async crearDesdeSugerencia(@Param('idProyecto', ParseUUIDPipe) idProyecto: string, @Body() dto: CrearActividadDesdeSugerenciaDto, @Req() request: SolicitudAutenticada) { return { mensaje: 'Actividad creada desde sugerencia correctamente.', data: await this.sugerencias.crearDesdeSugerencia(idProyecto, dto, request.usuarioAutenticado.sub) }; }
+
+  @Patch('timing/intercambiar')
+  @ApiOperation({ summary: 'Intercambiar en forma atómica el orden y horario de dos momentos' })
+  async intercambiarTiming(
+    @Param('idProyecto', ParseUUIDPipe) idProyecto: string,
+    @Body() dto: IntercambiarTimingDto,
+    @Req() request: SolicitudAutenticada,
+  ) {
+    return {
+      mensaje: 'Momentos de timing intercambiados correctamente.',
+      data: await this.timing.intercambiar(idProyecto, dto, request.usuarioAutenticado.sub),
+    };
+  }
 
   @Get('timing')
   @ApiOperation({ summary: 'Listar timing del día del evento' })

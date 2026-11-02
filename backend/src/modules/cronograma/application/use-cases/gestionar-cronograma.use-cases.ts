@@ -18,6 +18,7 @@ import {
   CrearDependenciaDto,
   CrearHitoDto,
   CrearTimingDto,
+  IntercambiarTimingDto,
   ListarActividadesDto,
   ListarHitosDto,
   ListarTimingDto,
@@ -350,6 +351,29 @@ export class GestionarTimingUseCase {
       activo: true,
     });
   }
+  async intercambiar(idProyecto: string, dto: IntercambiarTimingDto, idUsuario: number) {
+    if (dto.idTiming === dto.idTimingVecino) throw new BadRequestException('Selecciona dos momentos distintos.');
+    await validarProyecto(this.repository, idProyecto, idUsuario);
+    return this.repository.ejecutarEnTransaccionCrud(async (repositorio) => {
+      const actual = validarRegistro(await repositorio.obtenerTiming(dto.idTiming), idProyecto, 'Elemento de timing');
+      const vecino = validarRegistro(await repositorio.obtenerTiming(dto.idTimingVecino), idProyecto, 'Elemento de timing');
+      await repositorio.actualizarTiming(dto.idTiming, {
+        fechaHoraInicio: vecino.fechaHoraInicio,
+        fechaHoraFin: vecino.fechaHoraFin,
+        duracionMinutos: vecino.duracionMinutos,
+        orden: vecino.orden,
+        modificadoManualmente: true,
+      });
+      await repositorio.actualizarTiming(dto.idTimingVecino, {
+        fechaHoraInicio: actual.fechaHoraInicio,
+        fechaHoraFin: actual.fechaHoraFin,
+        duracionMinutos: actual.duracionMinutos,
+        orden: actual.orden,
+        modificadoManualmente: true,
+      });
+      return { idTiming: dto.idTiming, idTimingVecino: dto.idTimingVecino };
+    });
+  }
   async actualizar(
     idProyecto: string,
     idTiming: string,
@@ -411,6 +435,14 @@ export class GestionarSugerenciasCronogramaUseCase {
   async dependencias(idProyecto: string, idUsuario: number) {
     await validarProyecto(this.repository, idProyecto, idUsuario);
     return this.repository.listarPlantillasDependencia();
+  }
+  async hitos(idProyecto: string, idUsuario: number) {
+    await validarProyecto(this.repository, idProyecto, idUsuario);
+    return this.repository.listarPlantillasHito();
+  }
+  async timing(idProyecto: string, idUsuario: number) {
+    await validarProyecto(this.repository, idProyecto, idUsuario);
+    return this.repository.listarPlantillasTiming();
   }
   async crearDesdeSugerencia(idProyecto: string, dto: CrearActividadDesdeSugerenciaDto, idUsuario: number) {
     await validarProyecto(this.repository, idProyecto, idUsuario);

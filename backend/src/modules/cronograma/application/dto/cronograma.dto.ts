@@ -85,6 +85,8 @@ export class ListarCronogramaDto {
 }
 
 export class CrearHitoDto {
+  @ApiPropertyOptional({ minimum: 1 }) @Type(() => Number) @IsOptional() @IsInt() @Min(1)
+  idPlantillaHito?: number | null;
   @ApiProperty({ maxLength: 200 })
   @Transform(emptyToNull)
   @IsString()
@@ -198,6 +200,8 @@ export class CrearDependenciaDto {
 }
 
 export class CrearTimingDto {
+  @ApiPropertyOptional({ minimum: 1 }) @Type(() => Number) @IsOptional() @IsInt() @Min(1)
+  idPlantillaTiming?: number | null;
   @ApiProperty({ maxLength: 200 })
   @Transform(emptyToNull)
   @IsString()
@@ -244,6 +248,10 @@ export class CambiarEstadoTimingDto {
   @ApiProperty({ enum: EstadoActividadDto })
   @IsEnum(EstadoActividadDto)
   estado!: EstadoActividadDto;
+}
+export class IntercambiarTimingDto {
+  @ApiProperty({ format: 'uuid' }) @IsUUID() idTiming!: string;
+  @ApiProperty({ format: 'uuid' }) @IsUUID() idTimingVecino!: string;
 }
 
 export class PrevisualizarReprogramacionActividadDto {

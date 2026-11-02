@@ -471,6 +471,14 @@ export class PrismaCronogramaRepository
     return (await this.db.orm.public.PlantillaActividad.all()) as Array<Record<string, unknown>>;
   }
 
+  async listarPlantillasHito(): Promise<Record<string, unknown>[]> {
+    return (await this.db.orm.public.PlantillaHito.all()) as Array<Record<string, unknown>>;
+  }
+
+  async listarPlantillasTiming(): Promise<Record<string, unknown>[]> {
+    return (await this.db.orm.public.PlantillaTiming.all()) as Array<Record<string, unknown>>;
+  }
+
   async listarPlantillasDependencia(): Promise<Record<string, unknown>[]> {
     return (await this.db.orm.public.PlantillaDependencia.all()) as Array<Record<string, unknown>>;
   }
