@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:dio/dio.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../app/router/route_names.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_spacing.dart';
 import '../../../../core/widgets/buttons/app_button.dart';
@@ -79,15 +80,15 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
         for (final ubigeo in ubigeos) {
           final codigo = ubigeo['idUbigeo']?.toString();
           if (codigo == null) continue;
-          _nombresUbigeo[codigo] = [
-            ubigeo['distrito'],
-            ubigeo['provincia'],
-            ubigeo['departamento'],
-          ].whereType<String>().where((texto) => texto.trim().isNotEmpty).join(', ');
+          _nombresUbigeo[codigo] =
+              [ubigeo['distrito'], ubigeo['provincia'], ubigeo['departamento']]
+                  .whereType<String>()
+                  .where((texto) => texto.trim().isNotEmpty)
+                  .join(', ');
         }
       });
     } catch (_) {
-      // El código se conserva como respaldo si el catálogo no está disponible.
+      // El c�digo se conserva como respaldo si el cat�logo no est� disponible.
     }
   }
 
@@ -109,7 +110,7 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
         );
       });
     } catch (_) {
-      // El selector muestra el estado de catálogo no disponible sin bloquear el borrador.
+      // El selector muestra el estado de cat�logo no disponible sin bloquear el borrador.
     }
   }
 
@@ -203,7 +204,7 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
       _obligatorio(v) ??
       (RegExp(r'^\d{8}$').hasMatch(v!.trim())
           ? null
-          : 'Ingresa un DNI de 8 dígitos.');
+          : 'Ingresa un DNI de 8 d�gitos.');
   void _copiarDni(bool value) => setState(() {
     _usarDni = value;
     if (value) {
@@ -254,42 +255,44 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
 
   Map<String, dynamic> _payload({required bool iniciar}) {
     final payload = <String, dynamic>{
-    'pareja1': {
-      'nombres': _nombres1.text.trim(),
-      'apellidoPaterno': _apellido1.text.trim(),
-      'dni': _dni1.text.trim(),
-      'usuario': _usuario1.text.trim(),
-      'contrasena': _contrasena1.text,
-    },
-    'pareja2': {
-      'nombres': _nombres2.text.trim(),
-      'apellidoPaterno': _apellido2.text.trim(),
-      'dni': _dni2.text.trim(),
-      'usuario': _usuario2.text.trim(),
-      'contrasena': _contrasena2.text,
-    },
-    if (iniciar || _fecha.text.trim().isNotEmpty)
-      'fechaMatrimonio': _fecha.text.trim(),
-    if (iniciar || _presupuesto.text.trim().isNotEmpty)
-      'presupuesto': num.tryParse(_presupuesto.text.replaceAll(',', '.')) ?? 0,
-    if (iniciar || _invitados > 0) 'cantidadInvitados': _invitados,
-    if (_idTipoCeremonia != null) 'idTipoCeremonia': _idTipoCeremonia,
-    'ciudadUbicacion': _ubigeo,
-    'objetivos': _objetivos.text.trim(),
-    'necesidades': _necesidades.text.trim(),
-    'supuestos': _supuestos.text.trim(),
-    'restricciones': _restricciones.text.trim(),
-    'ideasMoonboard': _moonboard.text.trim(),
+      'pareja1': {
+        'nombres': _nombres1.text.trim(),
+        'apellidoPaterno': _apellido1.text.trim(),
+        'dni': _dni1.text.trim(),
+        'usuario': _usuario1.text.trim(),
+        'contrasena': _contrasena1.text,
+      },
+      'pareja2': {
+        'nombres': _nombres2.text.trim(),
+        'apellidoPaterno': _apellido2.text.trim(),
+        'dni': _dni2.text.trim(),
+        'usuario': _usuario2.text.trim(),
+        'contrasena': _contrasena2.text,
+      },
+      if (iniciar || _fecha.text.trim().isNotEmpty)
+        'fechaMatrimonio': _fecha.text.trim(),
+      if (iniciar || _presupuesto.text.trim().isNotEmpty)
+        'presupuesto':
+            num.tryParse(_presupuesto.text.replaceAll(',', '.')) ?? 0,
+      if (iniciar || _invitados > 0) 'cantidadInvitados': _invitados,
+      if (_idTipoCeremonia != null) 'idTipoCeremonia': _idTipoCeremonia,
+      'ciudadUbicacion': _ubigeo,
+      'objetivos': _objetivos.text.trim(),
+      'necesidades': _necesidades.text.trim(),
+      'supuestos': _supuestos.text.trim(),
+      'restricciones': _restricciones.text.trim(),
+      'ideasMoonboard': _moonboard.text.trim(),
     };
     return payload;
   }
+
   Future<void> _guardar(bool iniciar) async {
     if (_guardando) return;
     setState(() => _guardando = true);
     try {
       final datos = _payload(iniciar: iniciar);
       if (_idProyecto != null) datos['idProyecto'] = _idProyecto;
-      await MatrimoniosRemoteDataSource().guardarOnboarding(
+      final resultado = await MatrimoniosRemoteDataSource().guardarOnboarding(
         datos,
         iniciar: iniciar,
       );
@@ -301,7 +304,21 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
             : 'Borrador guardado correctamente.',
         type: AppSnackbarType.success,
       );
-      context.go(iniciar ? '/home' : '/matrimonios');
+      if (iniciar) {
+        final proyecto = Map<String, dynamic>.from(
+          resultado['proyecto'] as Map? ?? const <String, dynamic>{},
+        );
+        final idProyecto = proyecto['idProyecto']?.toString();
+        if (idProyecto == null || idProyecto.isEmpty) {
+          throw StateError('El servidor no devolvió el proyecto creado.');
+        }
+        context.go(
+          RouteNames.plan,
+          extra: PlanificacionCargaRouteData(idProyecto),
+        );
+      } else {
+        context.go(RouteNames.matrimonios);
+      }
     } on DioException catch (error) {
       final data = error.response?.data;
       final mensaje = data is Map ? data['mensaje']?.toString() : null;
@@ -471,7 +488,7 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       const Text(
-        'Información de la pareja 1',
+        'Informaci�n de la pareja 1',
         style: TextStyle(fontWeight: FontWeight.w700),
       ),
       const SizedBox(height: 12),
@@ -480,14 +497,14 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
       _campo('DNI de la pareja 1', _dni1, dni: true),
       _campo('Usuario de la pareja 1', _usuario1, enabled: !_usarDni),
       _campo(
-        'Contraseña de la pareja 1',
+        'Contrase�a de la pareja 1',
         _contrasena1,
         enabled: !_usarDni,
         password: true,
       ),
       const SizedBox(height: 8),
       const Text(
-        'Información de la pareja 2',
+        'Informaci�n de la pareja 2',
         style: TextStyle(fontWeight: FontWeight.w700),
       ),
       const SizedBox(height: 12),
@@ -496,13 +513,13 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
       _campo('DNI de la pareja 2', _dni2, dni: true),
       _campo('Usuario de la pareja 2', _usuario2, enabled: !_usarDni),
       _campo(
-        'Contraseña de la pareja 2',
+        'Contrase�a de la pareja 2',
         _contrasena2,
         enabled: !_usarDni,
         password: true,
       ),
       AppCheckbox(
-        label: 'Usar DNI como usuario y contraseña',
+        label: 'Usar DNI como usuario y contrase�a',
         value: _usarDni,
         onChanged: _copiarDni,
       ),
@@ -564,7 +581,7 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
         return const Text('No se pudieron cargar las ubicaciones.');
       final items = snapshot.data ?? const [];
       return AppSelectField<String>(
-        label: 'Ciudad / Ubicación',
+        label: 'Ciudad / Ubicaci�n',
         hintText: snapshot.hasData
             ? 'Busca distrito, provincia o departamento'
             : 'Cargando ubicaciones...',
@@ -614,7 +631,7 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
   Widget _selectorTipoCeremonia() {
     if (_tiposCeremonia.isEmpty) {
       return const Text(
-        'El catálogo de tipos de ceremonia aún no está disponible en el servidor.',
+        'El cat�logo de tipos de ceremonia a�n no est� disponible en el servidor.',
       );
     }
     return AppSelectField<int>(
@@ -701,12 +718,12 @@ class _InicioProyecto extends StatelessWidget {
               ),
               const SizedBox(height: 28),
               const Text(
-                'Comienza la planificación',
+                'Comienza la planificaci�n',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
               ),
               const SizedBox(height: 12),
               const Text(
-                'En esta fase se registran los datos básicos del matrimonio para iniciar la planificación del proyecto',
+                'En esta fase se registran los datos b�sicos del matrimonio para iniciar la planificaci�n del proyecto',
                 textAlign: TextAlign.center,
               ),
             ],
@@ -762,7 +779,7 @@ class _Informacion extends StatelessWidget {
       children: [
         Icon(Icons.info_outline, color: AppColors.primary),
         SizedBox(width: 12),
-        Text('Información'),
+        Text('Informaci�n'),
       ],
     ),
   );
@@ -866,9 +883,9 @@ class _DetallePareja extends StatelessWidget {
         if (lineas.length > 1)
           Text(
             lineas[1],
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              fontWeight: FontWeight.w700,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w700),
           ),
         ...lineas.skip(2).map((linea) => Text(linea)),
       ],

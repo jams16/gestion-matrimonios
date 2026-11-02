@@ -8,6 +8,9 @@ import '../../features/autenticacion/presentation/pages/recuperar_contrasena_pag
 import '../../features/autenticacion/presentation/pages/registrarse_page.dart';
 import '../../features/proyectos/presentation/pages/seleccionar_matrimonio_page.dart';
 import '../../features/proyectos/presentation/pages/crear_matrimonio_page.dart';
+import '../../features/cronograma/presentation/pages/cronograma_page.dart';
+import '../../features/cronograma/presentation/pages/planificar_matrimonio_page.dart';
+import '../../features/autenticacion/infrastructure/auth_session.dart';
 import 'route_names.dart';
 
 final appRouter = GoRouter(
@@ -20,7 +23,15 @@ final appRouter = GoRouter(
     ),
     GoRoute(
       path: '/plan',
-      builder: (context, state) => InicioPage(nombre: state.extra, seccion: 1),
+      builder: (context, state) {
+        final extra = state.extra;
+        if (extra is PlanificacionCargaRouteData) {
+          return PlanificarMatrimonioPage(idProyecto: extra.idProyecto);
+        }
+        final idProyecto = AuthSession.idProyectoActivo;
+        if (idProyecto != null) return CronogramaPage(idProyecto: idProyecto);
+        return InicioPage(nombre: extra, seccion: 1);
+      },
     ),
     GoRoute(
       path: '/gestion',
@@ -53,9 +64,8 @@ final appRouter = GoRouter(
     ),
     GoRoute(
       path: RouteNames.matrimonio,
-      builder: (context, state) => CrearMatrimonioPage(
-        idProyectoBorrador: state.extra as String?,
-      ),
+      builder: (context, state) =>
+          CrearMatrimonioPage(idProyectoBorrador: state.extra as String?),
     ),
     GoRoute(
       path: RouteNames.uiKit,

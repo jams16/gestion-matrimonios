@@ -40,10 +40,18 @@ class AppBottomNavigation extends StatelessWidget {
         destinations: items
             .map(
               (item) => NavigationDestination(
-                icon: Icon(item.icon),
-                selectedIcon: Icon(
-                  item.selectedIcon ?? item.icon,
-                  color: selectedForegroundColor,
+                icon: Opacity(
+                  opacity: item.disabled ? .42 : 1,
+                  child: Icon(item.disabled ? Icons.lock_outline : item.icon),
+                ),
+                selectedIcon: Opacity(
+                  opacity: item.disabled ? .42 : 1,
+                  child: Icon(
+                    item.disabled
+                        ? Icons.lock_outline
+                        : item.selectedIcon ?? item.icon,
+                    color: selectedForegroundColor,
+                  ),
                 ),
                 label: item.label,
               ),

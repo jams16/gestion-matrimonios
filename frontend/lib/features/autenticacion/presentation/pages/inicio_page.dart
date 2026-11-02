@@ -7,6 +7,7 @@ import '../../../../app/responsive/responsive_layout.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_spacing.dart';
 import '../../../../core/widgets/buttons/app_icon_button.dart';
+import '../../../../core/widgets/feedback/app_snackbar.dart';
 import '../../../../core/widgets/navigation/app_bottom_navigation.dart';
 import '../../../../core/widgets/navigation/app_navigation_item.dart';
 import '../../../../core/widgets/navigation/app_navigation_rail.dart';
@@ -31,7 +32,7 @@ class _InicioPageState extends State<InicioPage> {
   int _seccionActual = 0;
   String? _nombreSesion;
 
-  static const _items = [
+  static const _itemsBase = [
     AppNavigationItem(
       label: 'Home',
       icon: Icons.home_outlined,
@@ -43,7 +44,7 @@ class _InicioPageState extends State<InicioPage> {
       selectedIcon: Icons.auto_awesome_mosaic,
     ),
     AppNavigationItem(
-      label: 'Gestión',
+      label: 'Gesti�n',
       icon: Icons.account_tree_outlined,
       selectedIcon: Icons.account_tree,
     ),
@@ -53,7 +54,7 @@ class _InicioPageState extends State<InicioPage> {
       selectedIcon: Icons.storefront,
     ),
   ];
-  static const _titulos = ['Home', 'Plan', 'Gestión', 'Proveedores'];
+  static const _titulos = ['Home', 'Plan', 'Gesti�n', 'Proveedores'];
   static const _rutas = ['/home', '/plan', '/gestion', '/proveedores'];
 
   @override
@@ -61,6 +62,17 @@ class _InicioPageState extends State<InicioPage> {
     super.initState();
     _seccionActual = widget.seccion;
     _cargarNombreSesion();
+    if (widget.seccion != 1 && !AuthSession.planificacionConfirmada) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        final idProyecto = AuthSession.idProyectoActivo;
+        if (idProyecto != null) {
+          context.go(RouteNames.plan);
+        } else {
+          context.go(RouteNames.plan, extra: _nombreCompleto);
+        }
+      });
+    }
   }
 
   Future<void> _cargarNombreSesion() async {
@@ -76,10 +88,31 @@ class _InicioPageState extends State<InicioPage> {
   }
 
   void _seleccionar(int index) {
+    if (index != 1 && !AuthSession.planificacionConfirmada) {
+      AppSnackbar.show(
+        context,
+        message: 'Confirma primero la planificación del cronograma.',
+        type: AppSnackbarType.warning,
+      );
+      return;
+    }
     if (index != _seccionActual) {
       context.go(_rutas[index], extra: _nombreCompleto);
     }
   }
+
+  List<AppNavigationItem> get _items => _itemsBase
+      .asMap()
+      .entries
+      .map(
+        (entry) => AppNavigationItem(
+          label: entry.value.label,
+          icon: entry.value.icon,
+          selectedIcon: entry.value.selectedIcon,
+          disabled: entry.key != 1 && !AuthSession.planificacionConfirmada,
+        ),
+      )
+      .toList(growable: false);
 
   Future<void> _cerrarSesion() async {
     final refreshToken = await AuthSession.obtenerRefreshToken();
@@ -126,12 +159,12 @@ class _InicioPageState extends State<InicioPage> {
     final tarjeta = switch (_seccionActual) {
       0 => _tarjeta(
         'Vista general',
-        'Aquí verás los avances y recordatorios importantes de tu boda.',
+        'Aqu� ver�s los avances y recordatorios importantes de tu boda.',
         Icons.insights_outlined,
       ),
       1 => _tarjeta(
         'Por empezar',
-        'Aún no tienes actividades planificadas.',
+        'A�n no tienes actividades planificadas.',
         Icons.playlist_add_outlined,
       ),
       2 => _tarjeta(
@@ -140,8 +173,8 @@ class _InicioPageState extends State<InicioPage> {
         Icons.check_circle_outline,
       ),
       _ => _tarjeta(
-        'Directorio vacío',
-        'Añade proveedores cuando estés listo para comparar tus opciones.',
+        'Directorio vac�o',
+        'A�ade proveedores cuando est�s listo para comparar tus opciones.',
         Icons.store_outlined,
       ),
     };
@@ -201,7 +234,7 @@ class _InicioPageState extends State<InicioPage> {
       onPressed: () {},
     ),
     PopupMenuButton<_OpcionPerfil>(
-      tooltip: 'Menú de perfil',
+      tooltip: 'Men� de perfil',
       icon: const Icon(Icons.account_circle_outlined),
       offset: const Offset(-12, 8),
       constraints: const BoxConstraints(minWidth: 260, maxWidth: 300),
@@ -302,7 +335,7 @@ class _InicioPageState extends State<InicioPage> {
                 ),
               ),
               IconButton(
-                tooltip: 'Contraer menú',
+                tooltip: 'Contraer men�',
                 onPressed: () => setState(() => _sidebarContraido = true),
                 icon: const Icon(Icons.menu_open),
               ),
@@ -321,7 +354,7 @@ class _InicioPageState extends State<InicioPage> {
         selectedIndex: _seccionActual,
         onDestinationSelected: _seleccionar,
         leading: IconButton(
-          tooltip: 'Desplegar menú',
+          tooltip: 'Desplegar men�',
           onPressed: () => setState(() => _sidebarContraido = false),
           icon: const Icon(Icons.menu),
         ),
@@ -411,7 +444,7 @@ class _DangerProfileItemState extends State<_DangerProfileItem> {
         children: [
           Icon(Icons.logout, size: 20, color: AppColors.error),
           SizedBox(width: AppSpacing.md),
-          Text('Cerrar sesión', style: TextStyle(color: AppColors.error)),
+          Text('Cerrar sesi�n', style: TextStyle(color: AppColors.error)),
         ],
       ),
     ),

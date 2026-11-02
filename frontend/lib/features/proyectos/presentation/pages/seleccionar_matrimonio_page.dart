@@ -9,6 +9,7 @@ import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_spacing.dart';
 import '../../../../core/widgets/buttons/app_button.dart';
 import '../../../../core/widgets/page_states/app_page_loading.dart';
+import '../../../../app/router/route_names.dart';
 import '../../../autenticacion/infrastructure/auth_api.dart';
 import '../../../autenticacion/infrastructure/auth_session.dart';
 import '../../application/providers/matrimonios_provider.dart';
@@ -137,7 +138,17 @@ class _Layout extends StatelessWidget {
                                 extra: items[index].idProyecto,
                               );
                             } else {
-                              context.go('/home');
+                              AuthSession.seleccionarProyecto(
+                                idProyecto: items[index].idProyecto,
+                                planificacionConfirmada:
+                                    items[index].faseCodigo ==
+                                        'PLANIFICACION' ||
+                                    items[index].faseCodigo ==
+                                        'MONITOREO_Y_CONTROL' ||
+                                    items[index].faseCodigo == 'EJECUCION' ||
+                                    items[index].faseCodigo == 'CIERRE',
+                              );
+                              context.go(RouteNames.plan);
                             }
                           },
                         ),
@@ -165,14 +176,16 @@ class _ErrorState extends ConsumerWidget {
   final Object error;
 
   String get _mensaje {
-    if (error is StateError) return error.toString().replaceFirst('Bad state: ', '');
+    if (error is StateError)
+      return error.toString().replaceFirst('Bad state: ', '');
     if (error is DioException) {
       final respuesta = (error as DioException).response;
       final estado = respuesta?.statusCode;
       final data = respuesta?.data;
       final mensajeApi = data is Map ? data['mensaje']?.toString() : null;
       if (estado == 401 || estado == 403) {
-        return mensajeApi ?? 'Tu sesión ya no es válida. Inicia sesión nuevamente.';
+        return mensajeApi ??
+            'Tu sesión ya no es válida. Inicia sesión nuevamente.';
       }
       if (respuesta != null) {
         return mensajeApi ?? 'El servidor no pudo obtener tus matrimonios.';
@@ -196,10 +209,7 @@ class _ErrorState extends ConsumerWidget {
           ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
         ),
         const SizedBox(height: AppSpacing.xs),
-        Text(
-          _mensaje,
-          textAlign: TextAlign.center,
-        ),
+        Text(_mensaje, textAlign: TextAlign.center),
         const SizedBox(height: AppSpacing.lg),
         AppButton(
           label: 'Reintentar',
