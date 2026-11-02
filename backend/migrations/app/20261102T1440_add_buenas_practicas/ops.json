@@ -1,0 +1,443 @@
+[
+  {
+    "id": "table.gp_buena_practica",
+    "label": "Create table \"gp_buena_practica\"",
+    "summary": "Creates table \"gp_buena_practica\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "gp_buena_practica"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"gp_buena_practica\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"gp_buena_practica\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"gp_buena_practica\"",
+        "sql": "CREATE TABLE \"public\".\"gp_buena_practica\" (\n  \"anio_fuente\" int4,\n  \"aplicacion_matrimonios\" character varying(2000) NOT NULL,\n  \"area_gestion\" character varying(100) NOT NULL,\n  \"categoria\" character varying(100) NOT NULL,\n  \"codigo\" character varying(50) NOT NULL,\n  \"descripcion_resumida\" character varying(1000) NOT NULL,\n  \"ejemplo_practico\" character varying(2000) NOT NULL,\n  \"estado\" bool DEFAULT true NOT NULL,\n  \"fecha_creacion\" timestamptz DEFAULT (now()) NOT NULL,\n  \"fecha_fin_vigencia\" timestamptz,\n  \"fecha_modificacion\" timestamptz NOT NULL,\n  \"fecha_vigencia\" timestamptz,\n  \"fuente_metodologica\" character varying(250) NOT NULL,\n  \"id_buena_practica\" uuid NOT NULL,\n  \"id_fase_proyecto\" int4,\n  \"id_usuario_creacion\" int4 NOT NULL,\n  \"id_usuario_modificacion\" int4,\n  \"nombre\" character varying(200) NOT NULL,\n  \"orden_visualizacion\" int4 DEFAULT 0 NOT NULL,\n  \"recomendaciones\" character varying(2000),\n  \"referencia_especifica\" character varying(500),\n  \"version\" character varying(50),\n  PRIMARY KEY (\"id_buena_practica\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"gp_buena_practica\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"gp_buena_practica\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.gp_buena_practica.gp_buena_practica_codigo_key",
+    "label": "Add unique constraint on \"gp_buena_practica\" (codigo)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "gp_buena_practica_codigo_key",
+        "table": "gp_buena_practica"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"gp_buena_practica_codigo_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "gp_buena_practica_codigo_key",
+          "public",
+          "\"public\".\"gp_buena_practica\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"gp_buena_practica_codigo_key\"",
+        "sql": "ALTER TABLE \"public\".\"gp_buena_practica\" ADD CONSTRAINT \"gp_buena_practica_codigo_key\" UNIQUE (\"codigo\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"gp_buena_practica_codigo_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "gp_buena_practica_codigo_key",
+          "public",
+          "\"public\".\"gp_buena_practica\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.gp_buena_practica.gp_buena_practica_area_gestion_idx_7f56ec55",
+    "label": "Create index \"gp_buena_practica_area_gestion_idx_7f56ec55\" on \"gp_buena_practica\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "gp_buena_practica_area_gestion_idx_7f56ec55",
+        "table": "gp_buena_practica"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"gp_buena_practica_area_gestion_idx_7f56ec55\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"gp_buena_practica_area_gestion_idx_7f56ec55\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"gp_buena_practica_area_gestion_idx_7f56ec55\"",
+        "sql": "CREATE INDEX \"gp_buena_practica_area_gestion_idx_7f56ec55\" ON \"public\".\"gp_buena_practica\" (\"area_gestion\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"gp_buena_practica_area_gestion_idx_7f56ec55\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"gp_buena_practica_area_gestion_idx_7f56ec55\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.gp_buena_practica.gp_buena_practica_categoria_idx_06236822",
+    "label": "Create index \"gp_buena_practica_categoria_idx_06236822\" on \"gp_buena_practica\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "gp_buena_practica_categoria_idx_06236822",
+        "table": "gp_buena_practica"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"gp_buena_practica_categoria_idx_06236822\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"gp_buena_practica_categoria_idx_06236822\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"gp_buena_practica_categoria_idx_06236822\"",
+        "sql": "CREATE INDEX \"gp_buena_practica_categoria_idx_06236822\" ON \"public\".\"gp_buena_practica\" (\"categoria\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"gp_buena_practica_categoria_idx_06236822\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"gp_buena_practica_categoria_idx_06236822\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.gp_buena_practica.gp_buena_practica_estado_idx_c74e5888",
+    "label": "Create index \"gp_buena_practica_estado_idx_c74e5888\" on \"gp_buena_practica\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "gp_buena_practica_estado_idx_c74e5888",
+        "table": "gp_buena_practica"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"gp_buena_practica_estado_idx_c74e5888\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"gp_buena_practica_estado_idx_c74e5888\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"gp_buena_practica_estado_idx_c74e5888\"",
+        "sql": "CREATE INDEX \"gp_buena_practica_estado_idx_c74e5888\" ON \"public\".\"gp_buena_practica\" (\"estado\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"gp_buena_practica_estado_idx_c74e5888\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"gp_buena_practica_estado_idx_c74e5888\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.gp_buena_practica.gp_buena_practica_id_fase_proyecto_idx_0ca9d564",
+    "label": "Create index \"gp_buena_practica_id_fase_proyecto_idx_0ca9d564\" on \"gp_buena_practica\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "gp_buena_practica_id_fase_proyecto_idx_0ca9d564",
+        "table": "gp_buena_practica"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"gp_buena_practica_id_fase_proyecto_idx_0ca9d564\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"gp_buena_practica_id_fase_proyecto_idx_0ca9d564\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"gp_buena_practica_id_fase_proyecto_idx_0ca9d564\"",
+        "sql": "CREATE INDEX \"gp_buena_practica_id_fase_proyecto_idx_0ca9d564\" ON \"public\".\"gp_buena_practica\" (\"id_fase_proyecto\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"gp_buena_practica_id_fase_proyecto_idx_0ca9d564\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"gp_buena_practica_id_fase_proyecto_idx_0ca9d564\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.gp_buena_practica.gp_buena_practica_id_usuario_creacion_idx_b50e345c",
+    "label": "Create index \"gp_buena_practica_id_usuario_creacion_idx_b50e345c\" on \"gp_buena_practica\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "gp_buena_practica_id_usuario_creacion_idx_b50e345c",
+        "table": "gp_buena_practica"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"gp_buena_practica_id_usuario_creacion_idx_b50e345c\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"gp_buena_practica_id_usuario_creacion_idx_b50e345c\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"gp_buena_practica_id_usuario_creacion_idx_b50e345c\"",
+        "sql": "CREATE INDEX \"gp_buena_practica_id_usuario_creacion_idx_b50e345c\" ON \"public\".\"gp_buena_practica\" (\"id_usuario_creacion\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"gp_buena_practica_id_usuario_creacion_idx_b50e345c\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"gp_buena_practica_id_usuario_creacion_idx_b50e345c\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.gp_buena_practica.gp_buena_practica_id_usuario_modificacion_idx_38fa3453",
+    "label": "Create index \"gp_buena_practica_id_usuario_modificacion_idx_38fa3453\" on \"gp_buena_practica\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "gp_buena_practica_id_usuario_modificacion_idx_38fa3453",
+        "table": "gp_buena_practica"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"gp_buena_practica_id_usuario_modificacion_idx_38fa3453\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"gp_buena_practica_id_usuario_modificacion_idx_38fa3453\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"gp_buena_practica_id_usuario_modificacion_idx_38fa3453\"",
+        "sql": "CREATE INDEX \"gp_buena_practica_id_usuario_modificacion_idx_38fa3453\" ON \"public\".\"gp_buena_practica\" (\"id_usuario_modificacion\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"gp_buena_practica_id_usuario_modificacion_idx_38fa3453\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"gp_buena_practica_id_usuario_modificacion_idx_38fa3453\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.gp_buena_practica.gp_buena_practica_id_fase_proyecto_fkey",
+    "label": "Add foreign key \"gp_buena_practica_id_fase_proyecto_fkey\" on \"gp_buena_practica\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "gp_buena_practica_id_fase_proyecto_fkey",
+        "table": "gp_buena_practica"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"gp_buena_practica_id_fase_proyecto_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "gp_buena_practica_id_fase_proyecto_fkey",
+          "public",
+          "\"public\".\"gp_buena_practica\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"gp_buena_practica_id_fase_proyecto_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"gp_buena_practica\"\nADD CONSTRAINT \"gp_buena_practica_id_fase_proyecto_fkey\"\nFOREIGN KEY (\"id_fase_proyecto\")\nREFERENCES \"public\".\"gp_fase_proyecto\" (\"id_fase_proyecto\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"gp_buena_practica_id_fase_proyecto_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "gp_buena_practica_id_fase_proyecto_fkey",
+          "public",
+          "\"public\".\"gp_buena_practica\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.gp_buena_practica.gp_buena_practica_id_usuario_creacion_fkey",
+    "label": "Add foreign key \"gp_buena_practica_id_usuario_creacion_fkey\" on \"gp_buena_practica\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "gp_buena_practica_id_usuario_creacion_fkey",
+        "table": "gp_buena_practica"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"gp_buena_practica_id_usuario_creacion_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "gp_buena_practica_id_usuario_creacion_fkey",
+          "public",
+          "\"public\".\"gp_buena_practica\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"gp_buena_practica_id_usuario_creacion_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"gp_buena_practica\"\nADD CONSTRAINT \"gp_buena_practica_id_usuario_creacion_fkey\"\nFOREIGN KEY (\"id_usuario_creacion\")\nREFERENCES \"public\".\"au_usuario\" (\"id_usuario\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"gp_buena_practica_id_usuario_creacion_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "gp_buena_practica_id_usuario_creacion_fkey",
+          "public",
+          "\"public\".\"gp_buena_practica\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.gp_buena_practica.gp_buena_practica_id_usuario_modificacion_fkey",
+    "label": "Add foreign key \"gp_buena_practica_id_usuario_modificacion_fkey\" on \"gp_buena_practica\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "gp_buena_practica_id_usuario_modificacion_fkey",
+        "table": "gp_buena_practica"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"gp_buena_practica_id_usuario_modificacion_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "gp_buena_practica_id_usuario_modificacion_fkey",
+          "public",
+          "\"public\".\"gp_buena_practica\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"gp_buena_practica_id_usuario_modificacion_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"gp_buena_practica\"\nADD CONSTRAINT \"gp_buena_practica_id_usuario_modificacion_fkey\"\nFOREIGN KEY (\"id_usuario_modificacion\")\nREFERENCES \"public\".\"au_usuario\" (\"id_usuario\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"gp_buena_practica_id_usuario_modificacion_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "gp_buena_practica_id_usuario_modificacion_fkey",
+          "public",
+          "\"public\".\"gp_buena_practica\""
+        ]
+      }
+    ]
+  }
+]

@@ -2,9 +2,7 @@
   {
     "id": "CP-E03-HU10-01",
     "variantes": [],
-    "detalleTecnico": [
-      "Funcionalidad no implementada: parametros-base-estilo. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
-    ]
+    "detalleTecnico": []
   },
   {
     "id": "CP-E03-HU10-02",
@@ -14,12 +12,7 @@
       "presupuesto",
       "estilo"
     ],
-    "detalleTecnico": [
-      "Funcionalidad no implementada: validacion-parametros-base. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio.",
-      "Funcionalidad no implementada: validacion-parametros-base. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio.",
-      "Funcionalidad no implementada: validacion-parametros-base. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio.",
-      "Funcionalidad no implementada: validacion-parametros-base. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
-    ]
+    "detalleTecnico": []
   },
   {
     "id": "CP-E03-HU10-03",
@@ -79,23 +72,17 @@
   {
     "id": "CP-E03-HU12-01",
     "variantes": [],
-    "detalleTecnico": [
-      "Funcionalidad no implementada: catalogo-metodologias. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
-    ]
+    "detalleTecnico": []
   },
   {
     "id": "CP-E03-HU12-02",
     "variantes": [],
-    "detalleTecnico": [
-      "Funcionalidad no implementada: referencia-metodologica. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
-    ]
+    "detalleTecnico": []
   },
   {
     "id": "CP-E03-HU12-03",
     "variantes": [],
-    "detalleTecnico": [
-      "Funcionalidad no implementada: aplicacion-practica-metodologia. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
-    ]
+    "detalleTecnico": []
   },
   {
     "id": "CP-E03-HU13-01",

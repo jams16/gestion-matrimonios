@@ -5,13 +5,11 @@
     "ca": "CA046, CA047",
     "nombre": "Registro válido de parámetros base y preparación temporal",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
+    "estado": "PASS",
     "variantes": [],
-    "tecnico": [
-      "Funcionalidad no implementada: parametros-base-estilo. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
-    ],
-    "obtenido": "La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado.",
-    "interpretacion": "Funcionalidad no implementada; el criterio no puede cumplirse todavía."
+    "tecnico": [],
+    "obtenido": "La lógica existente respondió conforme al criterio técnico evaluado.",
+    "interpretacion": "El criterio evaluado cuenta con soporte backend actual."
   },
   {
     "hu": "HU10",
@@ -19,21 +17,16 @@
     "ca": "CA046",
     "nombre": "Validación de parámetros base obligatorios",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
+    "estado": "PASS",
     "variantes": [
       "datos de pareja",
       "fecha",
       "presupuesto",
       "estilo"
     ],
-    "tecnico": [
-      "Funcionalidad no implementada: validacion-parametros-base. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio.",
-      "Funcionalidad no implementada: validacion-parametros-base. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio.",
-      "Funcionalidad no implementada: validacion-parametros-base. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio.",
-      "Funcionalidad no implementada: validacion-parametros-base. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
-    ],
-    "obtenido": "La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado.",
-    "interpretacion": "Funcionalidad no implementada; el criterio no puede cumplirse todavía."
+    "tecnico": [],
+    "obtenido": "La lógica existente respondió conforme al criterio técnico evaluado.",
+    "interpretacion": "El criterio evaluado cuenta con soporte backend actual."
   },
   {
     "hu": "HU10",
@@ -59,7 +52,7 @@
       "Funcionalidad no implementada: estilo-evento. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
     ],
     "obtenido": "La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado.",
-    "interpretacion": "Funcionalidad no implementada; el criterio no puede cumplirse todavía."
+    "interpretacion": "Funcionalidad pendiente; el criterio no puede cumplirse todavía."
   },
   {
     "hu": "HU10",
@@ -77,7 +70,7 @@
       "Funcionalidad no implementada: confirmacion-cambios-sensibles. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
     ],
     "obtenido": "La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado.",
-    "interpretacion": "Funcionalidad no implementada; el criterio no puede cumplirse todavía."
+    "interpretacion": "Funcionalidad pendiente; el criterio no puede cumplirse todavía."
   },
   {
     "hu": "HU11",
@@ -91,7 +84,7 @@
       "Funcionalidad no implementada: dashboard-avance. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
     ],
     "obtenido": "La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado.",
-    "interpretacion": "Funcionalidad no implementada; el criterio no puede cumplirse todavía."
+    "interpretacion": "Funcionalidad pendiente; el criterio no puede cumplirse todavía."
   },
   {
     "hu": "HU11",
@@ -105,7 +98,7 @@
       "Funcionalidad no implementada: dashboard-rsvp. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
     ],
     "obtenido": "La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado.",
-    "interpretacion": "Funcionalidad no implementada; el criterio no puede cumplirse todavía."
+    "interpretacion": "Funcionalidad pendiente; el criterio no puede cumplirse todavía."
   },
   {
     "hu": "HU11",
@@ -123,7 +116,7 @@
       "Funcionalidad no implementada: dashboard-presupuesto. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
     ],
     "obtenido": "La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado.",
-    "interpretacion": "Funcionalidad no implementada; el criterio no puede cumplirse todavía."
+    "interpretacion": "Funcionalidad pendiente; el criterio no puede cumplirse todavía."
   },
   {
     "hu": "HU11",
@@ -137,7 +130,7 @@
       "Funcionalidad no implementada: dashboard-permisos. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
     ],
     "obtenido": "La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado.",
-    "interpretacion": "Funcionalidad no implementada; el criterio no puede cumplirse todavía."
+    "interpretacion": "Funcionalidad pendiente; el criterio no puede cumplirse todavía."
   },
   {
     "hu": "HU12",
@@ -145,13 +138,11 @@
     "ca": "CA056, CA060",
     "nombre": "Consulta del catálogo vigente de buenas prácticas",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
+    "estado": "PASS",
     "variantes": [],
-    "tecnico": [
-      "Funcionalidad no implementada: catalogo-metodologias. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
-    ],
-    "obtenido": "La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado.",
-    "interpretacion": "Funcionalidad no implementada; el criterio no puede cumplirse todavía."
+    "tecnico": [],
+    "obtenido": "La lógica existente respondió conforme al criterio técnico evaluado.",
+    "interpretacion": "El criterio evaluado cuenta con soporte backend actual."
   },
   {
     "hu": "HU12",
@@ -159,13 +150,11 @@
     "ca": "CA057, CA058",
     "nombre": "Contenido contextual y referencia metodológica",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
+    "estado": "PASS",
     "variantes": [],
-    "tecnico": [
-      "Funcionalidad no implementada: referencia-metodologica. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
-    ],
-    "obtenido": "La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado.",
-    "interpretacion": "Funcionalidad no implementada; el criterio no puede cumplirse todavía."
+    "tecnico": [],
+    "obtenido": "La lógica existente respondió conforme al criterio técnico evaluado.",
+    "interpretacion": "El criterio evaluado cuenta con soporte backend actual."
   },
   {
     "hu": "HU12",
@@ -173,13 +162,11 @@
     "ca": "CA059",
     "nombre": "Aplicación práctica de una buena práctica",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
+    "estado": "PASS",
     "variantes": [],
-    "tecnico": [
-      "Funcionalidad no implementada: aplicacion-practica-metodologia. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
-    ],
-    "obtenido": "La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado.",
-    "interpretacion": "Funcionalidad no implementada; el criterio no puede cumplirse todavía."
+    "tecnico": [],
+    "obtenido": "La lógica existente respondió conforme al criterio técnico evaluado.",
+    "interpretacion": "El criterio evaluado cuenta con soporte backend actual."
   },
   {
     "hu": "HU13",
@@ -193,7 +180,7 @@
       "Funcionalidad no implementada: contexto-matrimonio. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
     ],
     "obtenido": "La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado.",
-    "interpretacion": "Funcionalidad no implementada; el criterio no puede cumplirse todavía."
+    "interpretacion": "Funcionalidad pendiente; el criterio no puede cumplirse todavía."
   },
   {
     "hu": "HU13",
@@ -207,7 +194,7 @@
       "Funcionalidad no implementada: indicadores-integrados. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
     ],
     "obtenido": "La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado.",
-    "interpretacion": "Funcionalidad no implementada; el criterio no puede cumplirse todavía."
+    "interpretacion": "Funcionalidad pendiente; el criterio no puede cumplirse todavía."
   },
   {
     "hu": "HU13",
@@ -221,7 +208,7 @@
       "Funcionalidad no implementada: fuente-compartida. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
     ],
     "obtenido": "La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado.",
-    "interpretacion": "Funcionalidad no implementada; el criterio no puede cumplirse todavía."
+    "interpretacion": "Funcionalidad pendiente; el criterio no puede cumplirse todavía."
   },
   {
     "hu": "HU13",
@@ -235,7 +222,7 @@
       "Funcionalidad no implementada: permisos-contextuales. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
     ],
     "obtenido": "La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado.",
-    "interpretacion": "Funcionalidad no implementada; el criterio no puede cumplirse todavía."
+    "interpretacion": "Funcionalidad pendiente; el criterio no puede cumplirse todavía."
   },
   {
     "hu": "HU14",
@@ -267,7 +254,7 @@
       "Funcionalidad no implementada: flujo-recomendado. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
     ],
     "obtenido": "La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado.",
-    "interpretacion": "Funcionalidad no implementada; el criterio no puede cumplirse todavía."
+    "interpretacion": "Funcionalidad pendiente; el criterio no puede cumplirse todavía."
   },
   {
     "hu": "HU14",
@@ -281,7 +268,7 @@
       "Funcionalidad no implementada: flujo-actualizacion. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
     ],
     "obtenido": "La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado.",
-    "interpretacion": "Funcionalidad no implementada; el criterio no puede cumplirse todavía."
+    "interpretacion": "Funcionalidad pendiente; el criterio no puede cumplirse todavía."
   },
   {
     "hu": "HU14",

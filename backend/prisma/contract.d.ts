@@ -34,9 +34,9 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'a6db803d40d8f5a34f99afa2d2b798d41ee3c71637d6df3e0af554e898b906c2'>;
+  StorageHashBase<'2fcc7f5b53183e49386cf6d5af5200f04e1da662a34999689ba726bed81f2c00'>;
 export type ExecutionHash =
-  ExecutionHashBase<'01dfbaa6e4d06285dd24cf5beb33c4998e9b8820cd1d8bcde41d3860fa89beb1'>;
+  ExecutionHashBase<'c4397c95ca05ffe42278b60a4e598c390b4436ac57a876c28ba261c0e87c7963'>;
 export type ProfileHash =
   ProfileHashBase<'3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2'>;
 
@@ -262,6 +262,30 @@ export type FieldOutputTypes = {
       readonly activo: CodecTypes['pg/bool@1']['output'];
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly BuenaPractica: {
+      readonly idBuenaPractica: CodecTypes['pg/uuid@1']['output'];
+      readonly codigo: Varchar<50>;
+      readonly nombre: Varchar<200>;
+      readonly categoria: Varchar<100>;
+      readonly areaGestion: Varchar<100>;
+      readonly idFaseProyecto: CodecTypes['pg/int4@1']['output'] | null;
+      readonly descripcionResumida: Varchar<1000>;
+      readonly aplicacionMatrimonios: Varchar<2000>;
+      readonly ejemploPractico: Varchar<2000>;
+      readonly recomendaciones: Varchar<2000> | null;
+      readonly fuenteMetodologica: Varchar<250>;
+      readonly referenciaEspecifica: Varchar<500> | null;
+      readonly anioFuente: CodecTypes['pg/int4@1']['output'] | null;
+      readonly version: Varchar<50> | null;
+      readonly fechaVigencia: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+      readonly fechaFinVigencia: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+      readonly estado: CodecTypes['pg/bool@1']['output'];
+      readonly ordenVisualizacion: CodecTypes['pg/int4@1']['output'];
+      readonly fechaCreacion: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly fechaModificacion: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly idUsuarioCreacion: CodecTypes['pg/int4@1']['output'];
+      readonly idUsuarioModificacion: CodecTypes['pg/int4@1']['output'] | null;
     };
     readonly CategoriaRelacion: {
       readonly idCategoriaRelacion: CodecTypes['pg/int4@1']['output'];
@@ -695,6 +719,30 @@ export type FieldInputTypes = {
       readonly activo: CodecTypes['pg/bool@1']['input'];
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly BuenaPractica: {
+      readonly idBuenaPractica: CodecTypes['pg/uuid@1']['input'];
+      readonly codigo: CodecTypes['sql/varchar@1']['input'];
+      readonly nombre: CodecTypes['sql/varchar@1']['input'];
+      readonly categoria: CodecTypes['sql/varchar@1']['input'];
+      readonly areaGestion: CodecTypes['sql/varchar@1']['input'];
+      readonly idFaseProyecto: CodecTypes['pg/int4@1']['input'] | null;
+      readonly descripcionResumida: CodecTypes['sql/varchar@1']['input'];
+      readonly aplicacionMatrimonios: CodecTypes['sql/varchar@1']['input'];
+      readonly ejemploPractico: CodecTypes['sql/varchar@1']['input'];
+      readonly recomendaciones: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly fuenteMetodologica: CodecTypes['sql/varchar@1']['input'];
+      readonly referenciaEspecifica: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly anioFuente: CodecTypes['pg/int4@1']['input'] | null;
+      readonly version: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly fechaVigencia: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
+      readonly fechaFinVigencia: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
+      readonly estado: CodecTypes['pg/bool@1']['input'];
+      readonly ordenVisualizacion: CodecTypes['pg/int4@1']['input'];
+      readonly fechaCreacion: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly fechaModificacion: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly idUsuarioCreacion: CodecTypes['pg/int4@1']['input'];
+      readonly idUsuarioModificacion: CodecTypes['pg/int4@1']['input'] | null;
     };
     readonly CategoriaRelacion: {
       readonly idCategoriaRelacion: CodecTypes['pg/int4@1']['input'];
@@ -1271,6 +1319,30 @@ export type StorageColumnTypes = {
       readonly responsable_texto: Varchar<150> | null;
       readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
     };
+    readonly gp_buena_practica: {
+      readonly anio_fuente: CodecTypes['pg/int4@1']['output'] | null;
+      readonly aplicacion_matrimonios: Varchar<2000>;
+      readonly area_gestion: Varchar<100>;
+      readonly categoria: Varchar<100>;
+      readonly codigo: Varchar<50>;
+      readonly descripcion_resumida: Varchar<1000>;
+      readonly ejemplo_practico: Varchar<2000>;
+      readonly estado: CodecTypes['pg/bool@1']['output'];
+      readonly fecha_creacion: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly fecha_fin_vigencia: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+      readonly fecha_modificacion: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly fecha_vigencia: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+      readonly fuente_metodologica: Varchar<250>;
+      readonly id_buena_practica: CodecTypes['pg/uuid@1']['output'];
+      readonly id_fase_proyecto: CodecTypes['pg/int4@1']['output'] | null;
+      readonly id_usuario_creacion: CodecTypes['pg/int4@1']['output'];
+      readonly id_usuario_modificacion: CodecTypes['pg/int4@1']['output'] | null;
+      readonly nombre: Varchar<200>;
+      readonly orden_visualizacion: CodecTypes['pg/int4@1']['output'];
+      readonly recomendaciones: Varchar<2000> | null;
+      readonly referencia_especifica: Varchar<500> | null;
+      readonly version: Varchar<50> | null;
+    };
     readonly gp_fase_proyecto: {
       readonly activo: CodecTypes['pg/bool@1']['output'];
       readonly codigo: Varchar<50>;
@@ -1706,6 +1778,30 @@ export type StorageColumnInputTypes = {
       readonly responsable_texto: CodecTypes['sql/varchar@1']['input'] | null;
       readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
     };
+    readonly gp_buena_practica: {
+      readonly anio_fuente: CodecTypes['pg/int4@1']['input'] | null;
+      readonly aplicacion_matrimonios: CodecTypes['sql/varchar@1']['input'];
+      readonly area_gestion: CodecTypes['sql/varchar@1']['input'];
+      readonly categoria: CodecTypes['sql/varchar@1']['input'];
+      readonly codigo: CodecTypes['sql/varchar@1']['input'];
+      readonly descripcion_resumida: CodecTypes['sql/varchar@1']['input'];
+      readonly ejemplo_practico: CodecTypes['sql/varchar@1']['input'];
+      readonly estado: CodecTypes['pg/bool@1']['input'];
+      readonly fecha_creacion: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly fecha_fin_vigencia: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
+      readonly fecha_modificacion: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly fecha_vigencia: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
+      readonly fuente_metodologica: CodecTypes['sql/varchar@1']['input'];
+      readonly id_buena_practica: CodecTypes['pg/uuid@1']['input'];
+      readonly id_fase_proyecto: CodecTypes['pg/int4@1']['input'] | null;
+      readonly id_usuario_creacion: CodecTypes['pg/int4@1']['input'];
+      readonly id_usuario_modificacion: CodecTypes['pg/int4@1']['input'] | null;
+      readonly nombre: CodecTypes['sql/varchar@1']['input'];
+      readonly orden_visualizacion: CodecTypes['pg/int4@1']['input'];
+      readonly recomendaciones: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly referencia_especifica: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly version: CodecTypes['sql/varchar@1']['input'] | null;
+    };
     readonly gp_fase_proyecto: {
       readonly activo: CodecTypes['pg/bool@1']['input'];
       readonly codigo: CodecTypes['sql/varchar@1']['input'];
@@ -2056,8 +2152,37 @@ export namespace Models {
     orden: CodecTypes['pg/int4@1']['output'];
     activo: CodecTypes['pg/bool@1']['output'];
     actividadesPlantilla: public_PlantillaActividad[];
+    buenasPracticas: public_BuenaPractica[];
     proyectos: public_Proyecto[];
-    readonly [RelationKeys]?: 'actividadesPlantilla' | 'proyectos';
+    readonly [RelationKeys]?: 'actividadesPlantilla' | 'buenasPracticas' | 'proyectos';
+  };
+  export type public_BuenaPractica = {
+    idBuenaPractica: CodecTypes['pg/uuid@1']['output'];
+    codigo: Varchar<50>;
+    nombre: Varchar<200>;
+    categoria: Varchar<100>;
+    areaGestion: Varchar<100>;
+    idFaseProyecto: CodecTypes['pg/int4@1']['output'] | null;
+    descripcionResumida: Varchar<1000>;
+    aplicacionMatrimonios: Varchar<2000>;
+    ejemploPractico: Varchar<2000>;
+    recomendaciones: Varchar<2000> | null;
+    fuenteMetodologica: Varchar<250>;
+    referenciaEspecifica: Varchar<500> | null;
+    anioFuente: CodecTypes['pg/int4@1']['output'] | null;
+    version: Varchar<50> | null;
+    fechaVigencia: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+    fechaFinVigencia: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+    estado: CodecTypes['pg/bool@1']['output'];
+    ordenVisualizacion: CodecTypes['pg/int4@1']['output'];
+    fechaCreacion: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    fechaModificacion: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    idUsuarioCreacion: CodecTypes['pg/int4@1']['output'];
+    idUsuarioModificacion: CodecTypes['pg/int4@1']['output'] | null;
+    faseProyecto: public_FaseProyecto | null;
+    usuarioCreacion: public_Usuario;
+    usuarioModificacion: public_Usuario | null;
+    readonly [RelationKeys]?: 'faseProyecto' | 'usuarioCreacion' | 'usuarioModificacion';
   };
   export type public_CategoriaRelacion = {
     idCategoriaRelacion: CodecTypes['pg/int4@1']['output'];
@@ -2548,6 +2673,8 @@ export namespace Models {
     fechaCreacion: CodecTypes['pg/timestamptz-temporal@1']['output'];
     fechaModificacion: CodecTypes['pg/timestamptz-temporal@1']['output'];
     actividadesResponsable: public_Actividad[];
+    buenasPracticasCreadas: public_BuenaPractica[];
+    buenasPracticasModificadas: public_BuenaPractica[];
     entidad: public_Entidad | null;
     historialRsvp: public_RsvpHistorial[];
     matrimoniosNovio1: public_Matrimonio[];
@@ -2562,6 +2689,8 @@ export namespace Models {
     tokensCuenta: public_TokenCuenta[];
     readonly [RelationKeys]?:
       | 'actividadesResponsable'
+      | 'buenasPracticasCreadas'
+      | 'buenasPracticasModificadas'
       | 'entidad'
       | 'historialRsvp'
       | 'matrimoniosNovio1'
@@ -2616,6 +2745,7 @@ export declare const models: {
     Matrimonio: Models.public_Matrimonio;
     TipoCeremonia: Models.public_TipoCeremonia;
     FaseProyecto: Models.public_FaseProyecto;
+    BuenaPractica: Models.public_BuenaPractica;
     CategoriaRelacion: Models.public_CategoriaRelacion;
     Invitado: Models.public_Invitado;
     RequerimientoAlimentario: Models.public_RequerimientoAlimentario;
@@ -4099,6 +4229,218 @@ type ContractBase = Omit<
                     readonly namespaceId: 'public' & NamespaceId;
                     readonly tableName: 'cr_timing';
                     readonly columns: readonly ['id_usuario_responsable'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'au_usuario';
+                    readonly columns: readonly ['id_usuario'];
+                  };
+                },
+              ];
+            };
+            readonly gp_buena_practica: {
+              columns: {
+                readonly id_buena_practica: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly codigo: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly length: 50 };
+                };
+                readonly nombre: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly length: 200 };
+                };
+                readonly categoria: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly length: 100 };
+                };
+                readonly area_gestion: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly length: 100 };
+                };
+                readonly id_fase_proyecto: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: true;
+                };
+                readonly descripcion_resumida: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly length: 1000 };
+                };
+                readonly aplicacion_matrimonios: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly length: 2000 };
+                };
+                readonly ejemplo_practico: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly length: 2000 };
+                };
+                readonly recomendaciones: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly length: 2000 };
+                };
+                readonly fuente_metodologica: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly length: 250 };
+                };
+                readonly referencia_especifica: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly length: 500 };
+                };
+                readonly anio_fuente: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: true;
+                };
+                readonly version: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly length: 50 };
+                };
+                readonly fecha_vigencia: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: true;
+                };
+                readonly fecha_fin_vigencia: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: true;
+                };
+                readonly estado: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', true>;
+                  };
+                };
+                readonly orden_visualizacion: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/int4@1', 0>;
+                  };
+                };
+                readonly fecha_creacion: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                };
+                readonly fecha_modificacion: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                };
+                readonly id_usuario_creacion: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                };
+                readonly id_usuario_modificacion: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: true;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id_buena_practica'] };
+              uniques: readonly [{ readonly columns: readonly ['codigo'] }];
+              indexes: readonly [
+                {
+                  readonly name: 'gp_buena_practica_categoria_idx_06236822';
+                  readonly prefix: 'gp_buena_practica_categoria_idx';
+                  readonly columns: readonly ['categoria'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'gp_buena_practica_area_gestion_idx_7f56ec55';
+                  readonly prefix: 'gp_buena_practica_area_gestion_idx';
+                  readonly columns: readonly ['area_gestion'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'gp_buena_practica_id_fase_proyecto_idx_0ca9d564';
+                  readonly prefix: 'gp_buena_practica_id_fase_proyecto_idx';
+                  readonly columns: readonly ['id_fase_proyecto'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'gp_buena_practica_estado_idx_c74e5888';
+                  readonly prefix: 'gp_buena_practica_estado_idx';
+                  readonly columns: readonly ['estado'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'gp_buena_practica_id_usuario_creacion_idx_b50e345c';
+                  readonly prefix: 'gp_buena_practica_id_usuario_creacion_idx';
+                  readonly columns: readonly ['id_usuario_creacion'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'gp_buena_practica_id_usuario_modificacion_idx_38fa3453';
+                  readonly prefix: 'gp_buena_practica_id_usuario_modificacion_idx';
+                  readonly columns: readonly ['id_usuario_modificacion'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'gp_buena_practica';
+                    readonly columns: readonly ['id_fase_proyecto'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'gp_fase_proyecto';
+                    readonly columns: readonly ['id_fase_proyecto'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'gp_buena_practica';
+                    readonly columns: readonly ['id_usuario_creacion'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'au_usuario';
+                    readonly columns: readonly ['id_usuario'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'gp_buena_practica';
+                    readonly columns: readonly ['id_usuario_modificacion'];
                   };
                   readonly target: {
                     readonly namespaceId: 'public' & NamespaceId;
@@ -6455,6 +6797,10 @@ type ContractBase = Omit<
       readonly namespace: 'public' & NamespaceId;
       readonly model: 'FaseProyecto';
     };
+    readonly gp_buena_practica: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'BuenaPractica';
+    };
     readonly iv_categoria_relacion: {
       readonly namespace: 'public' & NamespaceId;
       readonly model: 'CategoriaRelacion';
@@ -6774,6 +7120,220 @@ type ContractBase = Omit<
                 readonly activo: { readonly column: 'activo' };
                 readonly createdAt: { readonly column: 'created_at' };
                 readonly updatedAt: { readonly column: 'updated_at' };
+              };
+            };
+          };
+          readonly BuenaPractica: {
+            readonly fields: {
+              readonly idBuenaPractica: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly codigo: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 50 };
+                };
+              };
+              readonly nombre: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 200 };
+                };
+              };
+              readonly categoria: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 100 };
+                };
+              };
+              readonly areaGestion: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 100 };
+                };
+              };
+              readonly idFaseProyecto: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly descripcionResumida: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 1000 };
+                };
+              };
+              readonly aplicacionMatrimonios: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 2000 };
+                };
+              };
+              readonly ejemploPractico: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 2000 };
+                };
+              };
+              readonly recomendaciones: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 2000 };
+                };
+              };
+              readonly fuenteMetodologica: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 250 };
+                };
+              };
+              readonly referenciaEspecifica: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 500 };
+                };
+              };
+              readonly anioFuente: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly version: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 50 };
+                };
+              };
+              readonly fechaVigencia: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly fechaFinVigencia: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly estado: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly ordenVisualizacion: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly fechaCreacion: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly fechaModificacion: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly idUsuarioCreacion: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly idUsuarioModificacion: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+            };
+            readonly relations: {
+              readonly faseProyecto: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'FaseProyecto';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['idFaseProyecto'];
+                  readonly targetFields: readonly ['idFaseProyecto'];
+                };
+              };
+              readonly usuarioCreacion: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Usuario';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['idUsuarioCreacion'];
+                  readonly targetFields: readonly ['idUsuario'];
+                };
+              };
+              readonly usuarioModificacion: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Usuario';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['idUsuarioModificacion'];
+                  readonly targetFields: readonly ['idUsuario'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'gp_buena_practica';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly idBuenaPractica: { readonly column: 'id_buena_practica' };
+                readonly codigo: { readonly column: 'codigo' };
+                readonly nombre: { readonly column: 'nombre' };
+                readonly categoria: { readonly column: 'categoria' };
+                readonly areaGestion: { readonly column: 'area_gestion' };
+                readonly idFaseProyecto: { readonly column: 'id_fase_proyecto' };
+                readonly descripcionResumida: { readonly column: 'descripcion_resumida' };
+                readonly aplicacionMatrimonios: { readonly column: 'aplicacion_matrimonios' };
+                readonly ejemploPractico: { readonly column: 'ejemplo_practico' };
+                readonly recomendaciones: { readonly column: 'recomendaciones' };
+                readonly fuenteMetodologica: { readonly column: 'fuente_metodologica' };
+                readonly referenciaEspecifica: { readonly column: 'referencia_especifica' };
+                readonly anioFuente: { readonly column: 'anio_fuente' };
+                readonly version: { readonly column: 'version' };
+                readonly fechaVigencia: { readonly column: 'fecha_vigencia' };
+                readonly fechaFinVigencia: { readonly column: 'fecha_fin_vigencia' };
+                readonly estado: { readonly column: 'estado' };
+                readonly ordenVisualizacion: { readonly column: 'orden_visualizacion' };
+                readonly fechaCreacion: { readonly column: 'fecha_creacion' };
+                readonly fechaModificacion: { readonly column: 'fecha_modificacion' };
+                readonly idUsuarioCreacion: { readonly column: 'id_usuario_creacion' };
+                readonly idUsuarioModificacion: { readonly column: 'id_usuario_modificacion' };
               };
             };
           };
@@ -7299,6 +7859,17 @@ type ContractBase = Omit<
                 readonly to: {
                   readonly namespace: 'public' & NamespaceId;
                   readonly model: 'PlantillaActividad';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idFaseProyecto'];
+                  readonly targetFields: readonly ['idFaseProyecto'];
+                };
+              };
+              readonly buenasPracticas: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'BuenaPractica';
                 };
                 readonly cardinality: '1:N';
                 readonly on: {
@@ -10552,6 +11123,28 @@ type ContractBase = Omit<
                   readonly targetFields: readonly ['idUsuarioResponsable'];
                 };
               };
+              readonly buenasPracticasCreadas: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'BuenaPractica';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idUsuario'];
+                  readonly targetFields: readonly ['idUsuarioCreacion'];
+                };
+              };
+              readonly buenasPracticasModificadas: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'BuenaPractica';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idUsuario'];
+                  readonly targetFields: readonly ['idUsuarioModificacion'];
+                };
+              };
               readonly entidad: {
                 readonly to: {
                   readonly namespace: 'public' & NamespaceId;
@@ -10960,6 +11553,23 @@ type ContractBase = Omit<
           };
           readonly onCreate: { readonly kind: 'generator'; readonly id: 'instantNow' };
           readonly onUpdate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'gp_buena_practica';
+            readonly column: 'fecha_modificacion';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+          readonly onUpdate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'gp_buena_practica';
+            readonly column: 'id_buena_practica';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'uuidv4' };
         },
         {
           readonly ref: {

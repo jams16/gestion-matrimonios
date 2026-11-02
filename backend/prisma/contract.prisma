@@ -80,8 +80,44 @@ model FaseProyecto {
   activo               Boolean              @default(true)
   proyectos            Proyecto[]
   actividadesPlantilla PlantillaActividad[]
+  buenasPracticas      BuenaPractica[]
 
   @@map("gp_fase_proyecto")
+}
+
+model BuenaPractica {
+  idBuenaPractica       Uuid                 @id @default(uuid()) @map("id_buena_practica")
+  codigo                VarChar(50)          @unique
+  nombre                VarChar(200)
+  categoria             VarChar(100)
+  areaGestion           VarChar(100)         @map("area_gestion")
+  idFaseProyecto        Int?                 @map("id_fase_proyecto")
+  descripcionResumida   VarChar(1000)        @map("descripcion_resumida")
+  aplicacionMatrimonios VarChar(2000)        @map("aplicacion_matrimonios")
+  ejemploPractico       VarChar(2000)        @map("ejemplo_practico")
+  recomendaciones       VarChar(2000)?
+  fuenteMetodologica    VarChar(250)         @map("fuente_metodologica")
+  referenciaEspecifica  VarChar(500)?        @map("referencia_especifica")
+  anioFuente            Int?                 @map("anio_fuente")
+  version               VarChar(50)?
+  fechaVigencia         DateTime?            @map("fecha_vigencia")
+  fechaFinVigencia      DateTime?            @map("fecha_fin_vigencia")
+  estado                Boolean              @default(true)
+  ordenVisualizacion    Int                  @default(0) @map("orden_visualizacion")
+  fechaCreacion         DateTime             @default(now()) @map("fecha_creacion")
+  fechaModificacion     temporal.updatedAt() @map("fecha_modificacion")
+  idUsuarioCreacion     Int                  @map("id_usuario_creacion")
+  idUsuarioModificacion Int?                 @map("id_usuario_modificacion")
+
+  faseProyecto          FaseProyecto?        @relation(fields:[idFaseProyecto], references:[idFaseProyecto], onDelete: Restrict)
+  usuarioCreacion       Usuario              @relation("buenas_practicas_creadas", fields:[idUsuarioCreacion], references:[idUsuario], onDelete: Restrict)
+  usuarioModificacion   Usuario?             @relation("buenas_practicas_modificadas", fields:[idUsuarioModificacion], references:[idUsuario], onDelete: Restrict)
+
+  @@index([categoria])
+  @@index([areaGestion])
+  @@index([idFaseProyecto])
+  @@index([estado])
+  @@map("gp_buena_practica")
 }
 
 enum cr_tipo_temporal {
@@ -761,31 +797,33 @@ enum au_tipo_token_cuenta {
 }
 
 model Usuario {
-  idUsuario                Int                  @id @default(autoincrement()) @map("id_usuario")
-  idPersonaNatural         Int                  @map("id_persona_natural")
-  idEntidad                Int?                 @map("id_entidad")
-  usuario                  VarChar(150)         @unique
-  tipoUsuario              au_tipo_usuario      @map("tipo_usuario")
-  contrasenaHash           VarChar(255)         @map("contrasena_hash")
-  correoVerificado         Boolean              @default(false) @map("correo_verificado")
-  esActivo                 Boolean              @default(true) @map("es_activo")
-  ultimoAcceso             DateTime             @map("ultimo_acceso")
-  fechaCreacion            DateTime             @default(now()) @map("fecha_creacion")
-  fechaModificacion        temporal.updatedAt() @map("fecha_modificacion")
+  idUsuario                  Int                  @id @default(autoincrement()) @map("id_usuario")
+  idPersonaNatural           Int                  @map("id_persona_natural")
+  idEntidad                  Int?                 @map("id_entidad")
+  usuario                    VarChar(150)         @unique
+  tipoUsuario                au_tipo_usuario      @map("tipo_usuario")
+  contrasenaHash             VarChar(255)         @map("contrasena_hash")
+  correoVerificado           Boolean              @default(false) @map("correo_verificado")
+  esActivo                   Boolean              @default(true) @map("es_activo")
+  ultimoAcceso               DateTime             @map("ultimo_acceso")
+  fechaCreacion              DateTime             @default(now()) @map("fecha_creacion")
+  fechaModificacion          temporal.updatedAt() @map("fecha_modificacion")
 
-  personaNatural           PersonaNatural       @relation(fields:[idPersonaNatural], references:[idPersonaNatural], onDelete: Restrict)
-  entidad                  Entidad?             @relation(fields:[idEntidad], references:[idEntidad], onDelete: Restrict)
-  sesiones                 Sesion[]
-  tokensCuenta             TokenCuenta[]
-  proyectosPm              Proyecto[]           @relation("proyectos_pm")
-  matrimoniosNovio1        Matrimonio[]         @relation("matrimonios_novio1")
-  matrimoniosNovio2        Matrimonio[]         @relation("matrimonios_novio2")
-  actividadesResponsable   Actividad[]          @relation("actividades_responsable")
-  timingsResponsable       Timing[]             @relation("timings_responsable")
-  notificacionesDestino    Notificacion[]       @relation("notificaciones_destino")
-  rsvpsVerificacionManual1 Rsvp[]               @relation("rsvp_verificacion_1")
-  rsvpsVerificacionManual2 Rsvp[]               @relation("rsvp_verificacion_2")
-  historialRsvp            RsvpHistorial[]      @relation("rsvp_historial_usuario")
+  personaNatural             PersonaNatural       @relation(fields:[idPersonaNatural], references:[idPersonaNatural], onDelete: Restrict)
+  entidad                    Entidad?             @relation(fields:[idEntidad], references:[idEntidad], onDelete: Restrict)
+  sesiones                   Sesion[]
+  tokensCuenta               TokenCuenta[]
+  proyectosPm                Proyecto[]           @relation("proyectos_pm")
+  matrimoniosNovio1          Matrimonio[]         @relation("matrimonios_novio1")
+  matrimoniosNovio2          Matrimonio[]         @relation("matrimonios_novio2")
+  actividadesResponsable     Actividad[]          @relation("actividades_responsable")
+  timingsResponsable         Timing[]             @relation("timings_responsable")
+  notificacionesDestino      Notificacion[]       @relation("notificaciones_destino")
+  rsvpsVerificacionManual1   Rsvp[]               @relation("rsvp_verificacion_1")
+  rsvpsVerificacionManual2   Rsvp[]               @relation("rsvp_verificacion_2")
+  historialRsvp              RsvpHistorial[]      @relation("rsvp_historial_usuario")
+  buenasPracticasCreadas     BuenaPractica[]      @relation("buenas_practicas_creadas")
+  buenasPracticasModificadas BuenaPractica[]      @relation("buenas_practicas_modificadas")
 
   @@index([idPersonaNatural])
   @@index([idEntidad])

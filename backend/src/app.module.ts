@@ -10,6 +10,7 @@ import { CronogramaModule } from './modules/cronograma/cronograma.module';
 import { NotificacionesModule } from './modules/notificaciones/notificaciones.module';
 import { InvitadosModule } from './modules/invitados/invitados.module';
 import { ProveedoresModule } from './modules/proveedores/proveedores.module';
+import { BuenasPracticasModule } from './modules/buenas-practicas/buenas-practicas.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { ProveedoresModule } from './modules/proveedores/proveedores.module';
     NotificacionesModule,
     InvitadosModule,
     ProveedoresModule,
+    BuenasPracticasModule,
   ],
 })
 export class AppModule {}

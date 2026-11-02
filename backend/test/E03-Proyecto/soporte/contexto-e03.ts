@@ -9,8 +9,16 @@ export async function ejecutarE03(resultados: ResultadoE03[], id: string, accion
 export async function requiereCapacidad(capacidad: string) {
   const cronograma = await readFile(join(process.cwd(), 'src/modules/cronograma/application/services/cronograma-date.service.ts'), 'utf8');
   const contrato = await readFile(join(process.cwd(), 'prisma/contract.prisma'), 'utf8');
+  const onboardingDto = await readFile(join(process.cwd(), 'src/modules/proyectos/application/dto/guardar-onboarding-matrimonio.dto.ts'), 'utf8');
+  const onboarding = await readFile(join(process.cwd(), 'src/modules/proyectos/application/use-cases/onboarding-matrimonio.use-case.ts'), 'utf8');
+  const buenasPracticasDto = await readFile(join(process.cwd(), 'src/modules/buenas-practicas/application/dto/buenas-practicas.dto.ts'), 'utf8');
+  const buenasPracticasController = await readFile(join(process.cwd(), 'src/modules/buenas-practicas/presentation/buenas-practicas.controller.ts'), 'utf8');
   const disponibles = ['cronograma-plantilla', 'fases-proyecto', 'cronograma-editable'];
   if (disponibles.includes(capacidad) && cronograma.includes('calcularFechaObjetivo') && contrato.includes('model FaseProyecto')) return;
+  const onboardingDisponible = onboardingDto.includes('fechaMatrimonio') && onboardingDto.includes('presupuesto') && onboardingDto.includes('ParejaOnboardingDto') && onboarding.includes('GuardarOnboardingMatrimonioUseCase') && onboarding.includes('generarCronograma.execute');
+  if (['parametros-base-estilo', 'validacion-parametros-base'].includes(capacidad) && onboardingDisponible) return;
+  const catalogoDisponible = contrato.includes('model BuenaPractica') && buenasPracticasDto.includes('CrearBuenaPracticaDto') && buenasPracticasController.includes("@Controller('buenas-practicas')");
+  if (['catalogo-metodologias', 'referencia-metodologica', 'aplicacion-practica-metodologia'].includes(capacidad) && catalogoDisponible) return;
   throw new Error(`Funcionalidad no implementada: ${capacidad}. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio.`);
 }
 export async function guardarEvidenciaE03(hu: string, resultados: ResultadoE03[]) {

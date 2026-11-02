@@ -60,6 +60,10 @@
       "model": "Timing",
       "namespace": "public"
     },
+    "gp_buena_practica": {
+      "model": "BuenaPractica",
+      "namespace": "public"
+    },
     "gp_fase_proyecto": {
       "model": "FaseProyecto",
       "namespace": "public"
@@ -776,6 +780,319 @@
               },
               "namespaceId": "public",
               "table": "cr_actividad"
+            }
+          },
+          "BuenaPractica": {
+            "fields": {
+              "anioFuente": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "aplicacionMatrimonios": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 2000
+                  }
+                }
+              },
+              "areaGestion": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 100
+                  }
+                }
+              },
+              "categoria": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 100
+                  }
+                }
+              },
+              "codigo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 50
+                  }
+                }
+              },
+              "descripcionResumida": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 1000
+                  }
+                }
+              },
+              "ejemploPractico": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 2000
+                  }
+                }
+              },
+              "estado": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "fechaCreacion": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "fechaFinVigencia": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "fechaModificacion": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "fechaVigencia": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "fuenteMetodologica": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 250
+                  }
+                }
+              },
+              "idBuenaPractica": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idFaseProyecto": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "idUsuarioCreacion": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "idUsuarioModificacion": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "nombre": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 200
+                  }
+                }
+              },
+              "ordenVisualizacion": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "recomendaciones": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 2000
+                  }
+                }
+              },
+              "referenciaEspecifica": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 500
+                  }
+                }
+              },
+              "version": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 50
+                  }
+                }
+              }
+            },
+            "relations": {
+              "faseProyecto": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idFaseProyecto"
+                  ],
+                  "targetFields": [
+                    "idFaseProyecto"
+                  ]
+                },
+                "to": {
+                  "model": "FaseProyecto",
+                  "namespace": "public"
+                }
+              },
+              "usuarioCreacion": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idUsuarioCreacion"
+                  ],
+                  "targetFields": [
+                    "idUsuario"
+                  ]
+                },
+                "to": {
+                  "model": "Usuario",
+                  "namespace": "public"
+                }
+              },
+              "usuarioModificacion": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idUsuarioModificacion"
+                  ],
+                  "targetFields": [
+                    "idUsuario"
+                  ]
+                },
+                "to": {
+                  "model": "Usuario",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "anioFuente": {
+                  "column": "anio_fuente"
+                },
+                "aplicacionMatrimonios": {
+                  "column": "aplicacion_matrimonios"
+                },
+                "areaGestion": {
+                  "column": "area_gestion"
+                },
+                "categoria": {
+                  "column": "categoria"
+                },
+                "codigo": {
+                  "column": "codigo"
+                },
+                "descripcionResumida": {
+                  "column": "descripcion_resumida"
+                },
+                "ejemploPractico": {
+                  "column": "ejemplo_practico"
+                },
+                "estado": {
+                  "column": "estado"
+                },
+                "fechaCreacion": {
+                  "column": "fecha_creacion"
+                },
+                "fechaFinVigencia": {
+                  "column": "fecha_fin_vigencia"
+                },
+                "fechaModificacion": {
+                  "column": "fecha_modificacion"
+                },
+                "fechaVigencia": {
+                  "column": "fecha_vigencia"
+                },
+                "fuenteMetodologica": {
+                  "column": "fuente_metodologica"
+                },
+                "idBuenaPractica": {
+                  "column": "id_buena_practica"
+                },
+                "idFaseProyecto": {
+                  "column": "id_fase_proyecto"
+                },
+                "idUsuarioCreacion": {
+                  "column": "id_usuario_creacion"
+                },
+                "idUsuarioModificacion": {
+                  "column": "id_usuario_modificacion"
+                },
+                "nombre": {
+                  "column": "nombre"
+                },
+                "ordenVisualizacion": {
+                  "column": "orden_visualizacion"
+                },
+                "recomendaciones": {
+                  "column": "recomendaciones"
+                },
+                "referenciaEspecifica": {
+                  "column": "referencia_especifica"
+                },
+                "version": {
+                  "column": "version"
+                }
+              },
+              "namespaceId": "public",
+              "table": "gp_buena_practica"
             }
           },
           "CategoriaRelacion": {
@@ -1552,6 +1869,21 @@
                 },
                 "to": {
                   "model": "PlantillaActividad",
+                  "namespace": "public"
+                }
+              },
+              "buenasPracticas": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idFaseProyecto"
+                  ],
+                  "targetFields": [
+                    "idFaseProyecto"
+                  ]
+                },
+                "to": {
+                  "model": "BuenaPractica",
                   "namespace": "public"
                 }
               },
@@ -6395,6 +6727,36 @@
                   "namespace": "public"
                 }
               },
+              "buenasPracticasCreadas": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idUsuario"
+                  ],
+                  "targetFields": [
+                    "idUsuarioCreacion"
+                  ]
+                },
+                "to": {
+                  "model": "BuenaPractica",
+                  "namespace": "public"
+                }
+              },
+              "buenasPracticasModificadas": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idUsuario"
+                  ],
+                  "targetFields": [
+                    "idUsuarioModificacion"
+                  ]
+                },
+                "to": {
+                  "model": "BuenaPractica",
+                  "namespace": "public"
+                }
+              },
               "entidad": {
                 "cardinality": "N:1",
                 "nullable": true,
@@ -8564,6 +8926,280 @@
                 ]
               },
               "uniques": []
+            },
+            "gp_buena_practica": {
+              "columns": {
+                "anio_fuente": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "aplicacion_matrimonios": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 2000
+                  }
+                },
+                "area_gestion": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 100
+                  }
+                },
+                "categoria": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 100
+                  }
+                },
+                "codigo": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 50
+                  }
+                },
+                "descripcion_resumida": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 1000
+                  }
+                },
+                "ejemplo_practico": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 2000
+                  }
+                },
+                "estado": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "fecha_creacion": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "fecha_fin_vigencia": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": true
+                },
+                "fecha_modificacion": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "fecha_vigencia": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": true
+                },
+                "fuente_metodologica": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 250
+                  }
+                },
+                "id_buena_practica": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_fase_proyecto": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "id_usuario_creacion": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "id_usuario_modificacion": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "nombre": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 200
+                  }
+                },
+                "orden_visualizacion": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": 0
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "recomendaciones": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 2000
+                  }
+                },
+                "referencia_especifica": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 500
+                  }
+                },
+                "version": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 50
+                  }
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_fase_proyecto"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_buena_practica"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_fase_proyecto"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_fase_proyecto"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_usuario_creacion"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_buena_practica"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_usuario"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "au_usuario"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_usuario_modificacion"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_buena_practica"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_usuario"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "au_usuario"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "area_gestion"
+                  ],
+                  "name": "gp_buena_practica_area_gestion_idx_7f56ec55",
+                  "prefix": "gp_buena_practica_area_gestion_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "categoria"
+                  ],
+                  "name": "gp_buena_practica_categoria_idx_06236822",
+                  "prefix": "gp_buena_practica_categoria_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "estado"
+                  ],
+                  "name": "gp_buena_practica_estado_idx_c74e5888",
+                  "prefix": "gp_buena_practica_estado_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_fase_proyecto"
+                  ],
+                  "name": "gp_buena_practica_id_fase_proyecto_idx_0ca9d564",
+                  "prefix": "gp_buena_practica_id_fase_proyecto_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_usuario_creacion"
+                  ],
+                  "name": "gp_buena_practica_id_usuario_creacion_idx_b50e345c",
+                  "prefix": "gp_buena_practica_id_usuario_creacion_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_usuario_modificacion"
+                  ],
+                  "name": "gp_buena_practica_id_usuario_modificacion_idx_38fa3453",
+                  "prefix": "gp_buena_practica_id_usuario_modificacion_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_buena_practica"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "codigo"
+                  ]
+                }
+              ]
             },
             "gp_fase_proyecto": {
               "columns": {
@@ -11728,10 +12364,10 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "a6db803d40d8f5a34f99afa2d2b798d41ee3c71637d6df3e0af554e898b906c2"
+    "storageHash": "2fcc7f5b53183e49386cf6d5af5200f04e1da662a34999689ba726bed81f2c00"
   },
   "execution": {
-    "executionHash": "01dfbaa6e4d06285dd24cf5beb33c4998e9b8820cd1d8bcde41d3860fa89beb1",
+    "executionHash": "c4397c95ca05ffe42278b60a4e598c390b4436ac57a876c28ba261c0e87c7963",
     "mutations": {
       "defaults": [
         {
@@ -11881,6 +12517,32 @@
             "column": "updated_at",
             "namespace": "public",
             "table": "cr_timing"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "fecha_modificacion",
+            "namespace": "public",
+            "table": "gp_buena_practica"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id_buena_practica",
+            "namespace": "public",
+            "table": "gp_buena_practica"
           }
         },
         {
