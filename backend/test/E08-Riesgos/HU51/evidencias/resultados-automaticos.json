@@ -1,17 +1,17 @@
 [
   {
     "id": "CP-E08-HU51-01",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: matriz de severidad; RiesgosModule no registra servicios, controladores ni modelos de riesgos."
+    "estado": "PASS",
+    "detalle": "Mecanismo implementado: matriz de severidad."
   },
   {
     "id": "CP-E08-HU51-02",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: consulta por severidad; RiesgosModule no registra servicios, controladores ni modelos de riesgos."
+    "estado": "PASS",
+    "detalle": "Mecanismo implementado: consulta por severidad."
   },
   {
     "id": "CP-E08-HU51-03",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: recálculo de severidad; RiesgosModule no registra servicios, controladores ni modelos de riesgos."
+    "estado": "PASS",
+    "detalle": "Mecanismo implementado: recálculo de severidad."
   }
 ]

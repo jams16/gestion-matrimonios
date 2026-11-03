@@ -1,3 +1,3 @@
-CP-E08-HU52-01 FAIL Funcionalidad no implementada: sugerencias de mitigación; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
-CP-E08-HU52-02 FAIL Funcionalidad no implementada: estados de mitigación; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
-CP-E08-HU52-03 FAIL Funcionalidad no implementada: historial de sugerencias; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
+CP-E08-HU52-01 FAIL FAIL real: no existe una seed o fixture reproducible con al menos 15 riesgos base, mitigaciones y planes predefinidos.
+CP-E08-HU52-02 FAIL FAIL real: no existe una seed o fixture reproducible con al menos 15 riesgos base, mitigaciones y planes predefinidos.
+CP-E08-HU52-03 FAIL FAIL real: no existe una seed o fixture reproducible con al menos 15 riesgos base, mitigaciones y planes predefinidos.

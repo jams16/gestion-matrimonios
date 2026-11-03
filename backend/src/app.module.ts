@@ -12,6 +12,7 @@ import { InvitadosModule } from './modules/invitados/invitados.module';
 import { ProveedoresModule } from './modules/proveedores/proveedores.module';
 import { BuenasPracticasModule } from './modules/buenas-practicas/buenas-practicas.module';
 import { PresupuestoModule } from './modules/presupuesto/presupuesto.module';
+import { RiesgosModule } from './modules/riesgos/riesgos.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { PresupuestoModule } from './modules/presupuesto/presupuesto.module';
     ProveedoresModule,
     BuenasPracticasModule,
     PresupuestoModule,
+    RiesgosModule,
   ],
 })
 export class AppModule {}

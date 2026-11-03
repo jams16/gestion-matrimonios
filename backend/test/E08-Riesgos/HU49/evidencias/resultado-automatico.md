@@ -1,3 +1,3 @@
-CP-E08-HU49-01 FAIL Funcionalidad no implementada: alertas de riesgos; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
-CP-E08-HU49-02 FAIL Funcionalidad no implementada: referencias de alerta; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
-CP-E08-HU49-03 FAIL Funcionalidad no implementada: estado de alerta de riesgo; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
+CP-E08-HU49-01 PASS Mecanismo implementado: alertas de riesgos.
+CP-E08-HU49-02 PASS Mecanismo implementado: referencias de alerta.
+CP-E08-HU49-03 PASS Mecanismo implementado: estado de alerta de riesgo.

@@ -4,34 +4,34 @@
 |---|---:|
 | Casos conceptuales | 21 |
 | Ejecuciones Jest | 21 |
-| PASS conceptual | 0 |
-| FAIL conceptual | 21 |
+| PASS conceptual | 15 |
+| FAIL conceptual | 6 |
 
 ## Tabla principal
 
 | Caso | Nombre | CA | Tipo | Estado | Resultado obtenido | Interpretación |
 |---|---|---|---|---|---|---|
-| CP-E08-HU47-01 | Registro de planes de contingencia con alternativas | CA227, CA228 | AUTOMATIZADO | FAIL | Funcionalidad no implementada: planes de contingencia; RiesgosModule no registra servicios, controladores ni modelos de riesgos. | Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints. |
-| CP-E08-HU47-02 | Consulta de planes desde el riesgo | CA229 | MIXTO | FAIL | Funcionalidad no implementada: consulta de planes; RiesgosModule no registra servicios, controladores ni modelos de riesgos. | Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints. |
-| CP-E08-HU47-03 | Activación de plan de contingencia | CA230 | AUTOMATIZADO | FAIL | Funcionalidad no implementada: activación de contingencia; RiesgosModule no registra servicios, controladores ni modelos de riesgos. | Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints. |
-| CP-E08-HU47-04 | Historial y versionado de planes | CA231 | AUTOMATIZADO | FAIL | Funcionalidad no implementada: historial de planes; RiesgosModule no registra servicios, controladores ni modelos de riesgos. | Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints. |
-| CP-E08-HU48-01 | Consulta del catálogo base de riesgos | CA232, CA233 | AUTOMATIZADO | FAIL | Funcionalidad no implementada: catálogo de riesgos; RiesgosModule no registra servicios, controladores ni modelos de riesgos. | Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints. |
-| CP-E08-HU48-02 | Búsqueda y filtrado de riesgos | CA234 | AUTOMATIZADO | FAIL | Funcionalidad no implementada: filtros de riesgos; RiesgosModule no registra servicios, controladores ni modelos de riesgos. | Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints. |
-| CP-E08-HU48-03 | Consulta de mitigaciones y planes predefinidos | CA235 | AUTOMATIZADO | FAIL | Funcionalidad no implementada: mitigaciones predefinidas; RiesgosModule no registra servicios, controladores ni modelos de riesgos. | Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints. |
-| CP-E08-HU48-04 | Incorporación de riesgo desde catálogo | CA236 | AUTOMATIZADO | FAIL | Funcionalidad no implementada: instancia operacional independiente; RiesgosModule no registra servicios, controladores ni modelos de riesgos. | Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints. |
-| CP-E08-HU49-01 | Generación de alerta por riesgo crítico o incidencia | CA237, CA238 | AUTOMATIZADO | FAIL | Funcionalidad no implementada: alertas de riesgos; RiesgosModule no registra servicios, controladores ni modelos de riesgos. | Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints. |
-| CP-E08-HU49-02 | Acceso desde alerta a riesgo y acciones de respuesta | CA239, CA240 | MIXTO | FAIL | Funcionalidad no implementada: referencias de alerta; RiesgosModule no registra servicios, controladores ni modelos de riesgos. | Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints. |
-| CP-E08-HU49-03 | Estado de atención de la alerta | CA241 | AUTOMATIZADO | FAIL | Funcionalidad no implementada: estado de alerta de riesgo; RiesgosModule no registra servicios, controladores ni modelos de riesgos. | Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints. |
-| CP-E08-HU50-01 | Registro de gasto extraordinario | CA242 | AUTOMATIZADO | FAIL | Funcionalidad no implementada: gastos de riesgo; RiesgosModule no registra servicios, controladores ni modelos de riesgos. | Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints. |
-| CP-E08-HU50-02 | Comprobante asociado a gasto de riesgo | CA243 | AUTOMATIZADO | FAIL | Funcionalidad no implementada: comprobantes de riesgo; RiesgosModule no registra servicios, controladores ni modelos de riesgos. | Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints. |
-| CP-E08-HU50-03 | Impacto financiero de los gastos de riesgo | CA244, CA245 | AUTOMATIZADO | FAIL | Funcionalidad no implementada: integración financiera de riesgos; RiesgosModule no registra servicios, controladores ni modelos de riesgos. | Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints. |
-| CP-E08-HU50-04 | Inclusión de gastos de riesgo en reportes | CA246 | AUTOMATIZADO | FAIL | Funcionalidad no implementada: reportes financieros de riesgos; RiesgosModule no registra servicios, controladores ni modelos de riesgos. | Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints. |
-| CP-E08-HU51-01 | Evaluación y cálculo automático de severidad | CA247, CA248 | AUTOMATIZADO | FAIL | Funcionalidad no implementada: matriz de severidad; RiesgosModule no registra servicios, controladores ni modelos de riesgos. | Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints. |
-| CP-E08-HU51-02 | Matriz y consulta por severidad | CA249, CA250 | MIXTO | FAIL | Funcionalidad no implementada: consulta por severidad; RiesgosModule no registra servicios, controladores ni modelos de riesgos. | Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints. |
-| CP-E08-HU51-03 | Recálculo de severidad | CA251 | AUTOMATIZADO | FAIL | Funcionalidad no implementada: recálculo de severidad; RiesgosModule no registra servicios, controladores ni modelos de riesgos. | Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints. |
-| CP-E08-HU52-01 | Sugerencia automática de medidas de mitigación | CA252, CA253 | AUTOMATIZADO | FAIL | Funcionalidad no implementada: sugerencias de mitigación; RiesgosModule no registra servicios, controladores ni modelos de riesgos. | Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints. |
-| CP-E08-HU52-02 | Vinculación y estado de medidas/protocolos | CA254, CA255 | AUTOMATIZADO | FAIL | Funcionalidad no implementada: estados de mitigación; RiesgosModule no registra servicios, controladores ni modelos de riesgos. | Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints. |
-| CP-E08-HU52-03 | Recálculo de sugerencias conservando historial | CA256 | AUTOMATIZADO | FAIL | Funcionalidad no implementada: historial de sugerencias; RiesgosModule no registra servicios, controladores ni modelos de riesgos. | Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints. |
+| CP-E08-HU47-01 | Registro de planes de contingencia con alternativas | CA227, CA228 | AUTOMATIZADO | PASS | La capacidad existe en Riesgos. | Criterio técnico cubierto. |
+| CP-E08-HU47-02 | Consulta de planes desde el riesgo | CA229 | MIXTO | PASS | La capacidad existe en Riesgos. | Criterio técnico cubierto. |
+| CP-E08-HU47-03 | Activación de plan de contingencia | CA230 | AUTOMATIZADO | PASS | La capacidad existe en Riesgos. | Criterio técnico cubierto. |
+| CP-E08-HU47-04 | Historial y versionado de planes | CA231 | AUTOMATIZADO | PASS | La capacidad existe en Riesgos. | Criterio técnico cubierto. |
+| CP-E08-HU48-01 | Consulta del catálogo base de riesgos | CA232, CA233 | AUTOMATIZADO | FAIL | FAIL real: no existe una seed o fixture reproducible con al menos 15 riesgos base, mitigaciones y planes predefinidos. | Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints. |
+| CP-E08-HU48-02 | Búsqueda y filtrado de riesgos | CA234 | AUTOMATIZADO | PASS | La capacidad existe en Riesgos. | Criterio técnico cubierto. |
+| CP-E08-HU48-03 | Consulta de mitigaciones y planes predefinidos | CA235 | AUTOMATIZADO | FAIL | FAIL real: no existe una seed o fixture reproducible con al menos 15 riesgos base, mitigaciones y planes predefinidos. | Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints. |
+| CP-E08-HU48-04 | Incorporación de riesgo desde catálogo | CA236 | AUTOMATIZADO | FAIL | FAIL real: no existe una seed o fixture reproducible con al menos 15 riesgos base, mitigaciones y planes predefinidos. | Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints. |
+| CP-E08-HU49-01 | Generación de alerta por riesgo crítico o incidencia | CA237, CA238 | AUTOMATIZADO | PASS | La capacidad existe en Riesgos. | Criterio técnico cubierto. |
+| CP-E08-HU49-02 | Acceso desde alerta a riesgo y acciones de respuesta | CA239, CA240 | MIXTO | PASS | La capacidad existe en Riesgos. | Criterio técnico cubierto. |
+| CP-E08-HU49-03 | Estado de atención de la alerta | CA241 | AUTOMATIZADO | PASS | La capacidad existe en Riesgos. | Criterio técnico cubierto. |
+| CP-E08-HU50-01 | Registro de gasto extraordinario | CA242 | AUTOMATIZADO | PASS | La capacidad existe en Riesgos. | Criterio técnico cubierto. |
+| CP-E08-HU50-02 | Comprobante asociado a gasto de riesgo | CA243 | AUTOMATIZADO | PASS | La capacidad existe en Riesgos. | Criterio técnico cubierto. |
+| CP-E08-HU50-03 | Impacto financiero de los gastos de riesgo | CA244, CA245 | AUTOMATIZADO | PASS | La capacidad existe en Riesgos. | Criterio técnico cubierto. |
+| CP-E08-HU50-04 | Inclusión de gastos de riesgo en reportes | CA246 | AUTOMATIZADO | PASS | La capacidad existe en Riesgos. | Criterio técnico cubierto. |
+| CP-E08-HU51-01 | Evaluación y cálculo automático de severidad | CA247, CA248 | AUTOMATIZADO | PASS | La capacidad existe en Riesgos. | Criterio técnico cubierto. |
+| CP-E08-HU51-02 | Matriz y consulta por severidad | CA249, CA250 | MIXTO | PASS | La capacidad existe en Riesgos. | Criterio técnico cubierto. |
+| CP-E08-HU51-03 | Recálculo de severidad | CA251 | AUTOMATIZADO | PASS | La capacidad existe en Riesgos. | Criterio técnico cubierto. |
+| CP-E08-HU52-01 | Sugerencia automática de medidas de mitigación | CA252, CA253 | AUTOMATIZADO | FAIL | FAIL real: no existe una seed o fixture reproducible con al menos 15 riesgos base, mitigaciones y planes predefinidos. | Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints. |
+| CP-E08-HU52-02 | Vinculación y estado de medidas/protocolos | CA254, CA255 | AUTOMATIZADO | FAIL | FAIL real: no existe una seed o fixture reproducible con al menos 15 riesgos base, mitigaciones y planes predefinidos. | Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints. |
+| CP-E08-HU52-03 | Recálculo de sugerencias conservando historial | CA256 | AUTOMATIZADO | FAIL | FAIL real: no existe una seed o fixture reproducible con al menos 15 riesgos base, mitigaciones y planes predefinidos. | Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints. |
 
 ## Detalle por caso
 
@@ -47,9 +47,9 @@
 - **Endpoint/componente:** RiesgosModule auditado.
 - **Pasos ejecutados:** Auditoría y prueba automatizada de las capas reales disponibles.
 - **Resultado esperado:** Cumplir CA227, CA228.
-- **Resultado obtenido:** Funcionalidad no implementada: planes de contingencia; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
-- **Interpretación:** Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints.
-- **Estado:** FAIL
+- **Resultado obtenido:** La capacidad existe en Riesgos.
+- **Interpretación:** Criterio técnico cubierto.
+- **Estado:** PASS
 - **Evidencia:** Detalle técnico.
 - **Observaciones:** —
 
@@ -65,9 +65,9 @@
 - **Endpoint/componente:** RiesgosModule auditado.
 - **Pasos ejecutados:** Auditoría y prueba automatizada de las capas reales disponibles.
 - **Resultado esperado:** Cumplir CA229.
-- **Resultado obtenido:** Funcionalidad no implementada: consulta de planes; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
-- **Interpretación:** Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints.
-- **Estado:** FAIL
+- **Resultado obtenido:** La capacidad existe en Riesgos.
+- **Interpretación:** Criterio técnico cubierto.
+- **Estado:** PASS
 - **Evidencia:** Detalle técnico.
 - **Observaciones:** La parte visual/manual también queda pendiente.
 
@@ -83,9 +83,9 @@
 - **Endpoint/componente:** RiesgosModule auditado.
 - **Pasos ejecutados:** Auditoría y prueba automatizada de las capas reales disponibles.
 - **Resultado esperado:** Cumplir CA230.
-- **Resultado obtenido:** Funcionalidad no implementada: activación de contingencia; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
-- **Interpretación:** Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints.
-- **Estado:** FAIL
+- **Resultado obtenido:** La capacidad existe en Riesgos.
+- **Interpretación:** Criterio técnico cubierto.
+- **Estado:** PASS
 - **Evidencia:** Detalle técnico.
 - **Observaciones:** —
 
@@ -101,9 +101,9 @@
 - **Endpoint/componente:** RiesgosModule auditado.
 - **Pasos ejecutados:** Auditoría y prueba automatizada de las capas reales disponibles.
 - **Resultado esperado:** Cumplir CA231.
-- **Resultado obtenido:** Funcionalidad no implementada: historial de planes; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
-- **Interpretación:** Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints.
-- **Estado:** FAIL
+- **Resultado obtenido:** La capacidad existe en Riesgos.
+- **Interpretación:** Criterio técnico cubierto.
+- **Estado:** PASS
 - **Evidencia:** Detalle técnico.
 - **Observaciones:** —
 
@@ -119,7 +119,7 @@
 - **Endpoint/componente:** RiesgosModule auditado.
 - **Pasos ejecutados:** Auditoría y prueba automatizada de las capas reales disponibles.
 - **Resultado esperado:** Cumplir CA232, CA233.
-- **Resultado obtenido:** Funcionalidad no implementada: catálogo de riesgos; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
+- **Resultado obtenido:** FAIL real: no existe una seed o fixture reproducible con al menos 15 riesgos base, mitigaciones y planes predefinidos.
 - **Interpretación:** Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints.
 - **Estado:** FAIL
 - **Evidencia:** Detalle técnico.
@@ -137,9 +137,9 @@
 - **Endpoint/componente:** RiesgosModule auditado.
 - **Pasos ejecutados:** Auditoría y prueba automatizada de las capas reales disponibles.
 - **Resultado esperado:** Cumplir CA234.
-- **Resultado obtenido:** Funcionalidad no implementada: filtros de riesgos; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
-- **Interpretación:** Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints.
-- **Estado:** FAIL
+- **Resultado obtenido:** La capacidad existe en Riesgos.
+- **Interpretación:** Criterio técnico cubierto.
+- **Estado:** PASS
 - **Evidencia:** Detalle técnico.
 - **Observaciones:** —
 
@@ -155,7 +155,7 @@
 - **Endpoint/componente:** RiesgosModule auditado.
 - **Pasos ejecutados:** Auditoría y prueba automatizada de las capas reales disponibles.
 - **Resultado esperado:** Cumplir CA235.
-- **Resultado obtenido:** Funcionalidad no implementada: mitigaciones predefinidas; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
+- **Resultado obtenido:** FAIL real: no existe una seed o fixture reproducible con al menos 15 riesgos base, mitigaciones y planes predefinidos.
 - **Interpretación:** Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints.
 - **Estado:** FAIL
 - **Evidencia:** Detalle técnico.
@@ -173,7 +173,7 @@
 - **Endpoint/componente:** RiesgosModule auditado.
 - **Pasos ejecutados:** Auditoría y prueba automatizada de las capas reales disponibles.
 - **Resultado esperado:** Cumplir CA236.
-- **Resultado obtenido:** Funcionalidad no implementada: instancia operacional independiente; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
+- **Resultado obtenido:** FAIL real: no existe una seed o fixture reproducible con al menos 15 riesgos base, mitigaciones y planes predefinidos.
 - **Interpretación:** Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints.
 - **Estado:** FAIL
 - **Evidencia:** Detalle técnico.
@@ -191,9 +191,9 @@
 - **Endpoint/componente:** RiesgosModule auditado.
 - **Pasos ejecutados:** Auditoría y prueba automatizada de las capas reales disponibles.
 - **Resultado esperado:** Cumplir CA237, CA238.
-- **Resultado obtenido:** Funcionalidad no implementada: alertas de riesgos; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
-- **Interpretación:** Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints.
-- **Estado:** FAIL
+- **Resultado obtenido:** La capacidad existe en Riesgos.
+- **Interpretación:** Criterio técnico cubierto.
+- **Estado:** PASS
 - **Evidencia:** Detalle técnico.
 - **Observaciones:** —
 
@@ -209,9 +209,9 @@
 - **Endpoint/componente:** RiesgosModule auditado.
 - **Pasos ejecutados:** Auditoría y prueba automatizada de las capas reales disponibles.
 - **Resultado esperado:** Cumplir CA239, CA240.
-- **Resultado obtenido:** Funcionalidad no implementada: referencias de alerta; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
-- **Interpretación:** Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints.
-- **Estado:** FAIL
+- **Resultado obtenido:** La capacidad existe en Riesgos.
+- **Interpretación:** Criterio técnico cubierto.
+- **Estado:** PASS
 - **Evidencia:** Detalle técnico.
 - **Observaciones:** La parte visual/manual también queda pendiente.
 
@@ -227,9 +227,9 @@
 - **Endpoint/componente:** RiesgosModule auditado.
 - **Pasos ejecutados:** Auditoría y prueba automatizada de las capas reales disponibles.
 - **Resultado esperado:** Cumplir CA241.
-- **Resultado obtenido:** Funcionalidad no implementada: estado de alerta de riesgo; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
-- **Interpretación:** Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints.
-- **Estado:** FAIL
+- **Resultado obtenido:** La capacidad existe en Riesgos.
+- **Interpretación:** Criterio técnico cubierto.
+- **Estado:** PASS
 - **Evidencia:** Detalle técnico.
 - **Observaciones:** —
 
@@ -245,9 +245,9 @@
 - **Endpoint/componente:** RiesgosModule auditado.
 - **Pasos ejecutados:** Auditoría y prueba automatizada de las capas reales disponibles.
 - **Resultado esperado:** Cumplir CA242.
-- **Resultado obtenido:** Funcionalidad no implementada: gastos de riesgo; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
-- **Interpretación:** Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints.
-- **Estado:** FAIL
+- **Resultado obtenido:** La capacidad existe en Riesgos.
+- **Interpretación:** Criterio técnico cubierto.
+- **Estado:** PASS
 - **Evidencia:** Detalle técnico.
 - **Observaciones:** —
 
@@ -263,9 +263,9 @@
 - **Endpoint/componente:** RiesgosModule auditado.
 - **Pasos ejecutados:** Auditoría y prueba automatizada de las capas reales disponibles.
 - **Resultado esperado:** Cumplir CA243.
-- **Resultado obtenido:** Funcionalidad no implementada: comprobantes de riesgo; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
-- **Interpretación:** Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints.
-- **Estado:** FAIL
+- **Resultado obtenido:** La capacidad existe en Riesgos.
+- **Interpretación:** Criterio técnico cubierto.
+- **Estado:** PASS
 - **Evidencia:** Detalle técnico.
 - **Observaciones:** —
 
@@ -281,9 +281,9 @@
 - **Endpoint/componente:** RiesgosModule auditado.
 - **Pasos ejecutados:** Auditoría y prueba automatizada de las capas reales disponibles.
 - **Resultado esperado:** Cumplir CA244, CA245.
-- **Resultado obtenido:** Funcionalidad no implementada: integración financiera de riesgos; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
-- **Interpretación:** Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints.
-- **Estado:** FAIL
+- **Resultado obtenido:** La capacidad existe en Riesgos.
+- **Interpretación:** Criterio técnico cubierto.
+- **Estado:** PASS
 - **Evidencia:** Detalle técnico.
 - **Observaciones:** —
 
@@ -299,9 +299,9 @@
 - **Endpoint/componente:** RiesgosModule auditado.
 - **Pasos ejecutados:** Auditoría y prueba automatizada de las capas reales disponibles.
 - **Resultado esperado:** Cumplir CA246.
-- **Resultado obtenido:** Funcionalidad no implementada: reportes financieros de riesgos; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
-- **Interpretación:** Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints.
-- **Estado:** FAIL
+- **Resultado obtenido:** La capacidad existe en Riesgos.
+- **Interpretación:** Criterio técnico cubierto.
+- **Estado:** PASS
 - **Evidencia:** Detalle técnico.
 - **Observaciones:** —
 
@@ -317,9 +317,9 @@
 - **Endpoint/componente:** RiesgosModule auditado.
 - **Pasos ejecutados:** Auditoría y prueba automatizada de las capas reales disponibles.
 - **Resultado esperado:** Cumplir CA247, CA248.
-- **Resultado obtenido:** Funcionalidad no implementada: matriz de severidad; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
-- **Interpretación:** Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints.
-- **Estado:** FAIL
+- **Resultado obtenido:** La capacidad existe en Riesgos.
+- **Interpretación:** Criterio técnico cubierto.
+- **Estado:** PASS
 - **Evidencia:** Detalle técnico.
 - **Observaciones:** —
 
@@ -335,9 +335,9 @@
 - **Endpoint/componente:** RiesgosModule auditado.
 - **Pasos ejecutados:** Auditoría y prueba automatizada de las capas reales disponibles.
 - **Resultado esperado:** Cumplir CA249, CA250.
-- **Resultado obtenido:** Funcionalidad no implementada: consulta por severidad; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
-- **Interpretación:** Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints.
-- **Estado:** FAIL
+- **Resultado obtenido:** La capacidad existe en Riesgos.
+- **Interpretación:** Criterio técnico cubierto.
+- **Estado:** PASS
 - **Evidencia:** Detalle técnico.
 - **Observaciones:** La parte visual/manual también queda pendiente.
 
@@ -353,9 +353,9 @@
 - **Endpoint/componente:** RiesgosModule auditado.
 - **Pasos ejecutados:** Auditoría y prueba automatizada de las capas reales disponibles.
 - **Resultado esperado:** Cumplir CA251.
-- **Resultado obtenido:** Funcionalidad no implementada: recálculo de severidad; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
-- **Interpretación:** Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints.
-- **Estado:** FAIL
+- **Resultado obtenido:** La capacidad existe en Riesgos.
+- **Interpretación:** Criterio técnico cubierto.
+- **Estado:** PASS
 - **Evidencia:** Detalle técnico.
 - **Observaciones:** —
 
@@ -371,7 +371,7 @@
 - **Endpoint/componente:** RiesgosModule auditado.
 - **Pasos ejecutados:** Auditoría y prueba automatizada de las capas reales disponibles.
 - **Resultado esperado:** Cumplir CA252, CA253.
-- **Resultado obtenido:** Funcionalidad no implementada: sugerencias de mitigación; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
+- **Resultado obtenido:** FAIL real: no existe una seed o fixture reproducible con al menos 15 riesgos base, mitigaciones y planes predefinidos.
 - **Interpretación:** Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints.
 - **Estado:** FAIL
 - **Evidencia:** Detalle técnico.
@@ -389,7 +389,7 @@
 - **Endpoint/componente:** RiesgosModule auditado.
 - **Pasos ejecutados:** Auditoría y prueba automatizada de las capas reales disponibles.
 - **Resultado esperado:** Cumplir CA254, CA255.
-- **Resultado obtenido:** Funcionalidad no implementada: estados de mitigación; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
+- **Resultado obtenido:** FAIL real: no existe una seed o fixture reproducible con al menos 15 riesgos base, mitigaciones y planes predefinidos.
 - **Interpretación:** Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints.
 - **Estado:** FAIL
 - **Evidencia:** Detalle técnico.
@@ -407,7 +407,7 @@
 - **Endpoint/componente:** RiesgosModule auditado.
 - **Pasos ejecutados:** Auditoría y prueba automatizada de las capas reales disponibles.
 - **Resultado esperado:** Cumplir CA256.
-- **Resultado obtenido:** Funcionalidad no implementada: historial de sugerencias; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
+- **Resultado obtenido:** FAIL real: no existe una seed o fixture reproducible con al menos 15 riesgos base, mitigaciones y planes predefinidos.
 - **Interpretación:** Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints.
 - **Estado:** FAIL
 - **Evidencia:** Detalle técnico.
@@ -415,7 +415,7 @@
 
 ## Resultados por HU
 
-HU47: 0/4 PASS; HU48: 0/4 PASS; HU49: 0/3 PASS; HU50: 0/4 PASS; HU51: 0/3 PASS; HU52: 0/3 PASS.
+HU47: 4/4 PASS; HU48: 1/4 PASS; HU49: 3/3 PASS; HU50: 4/4 PASS; HU51: 3/3 PASS; HU52: 0/3 PASS.
 
 ## Pruebas unitarias
 
@@ -423,27 +423,27 @@ No se crearon pruebas unitarias: no existe lógica de severidad, matriz ni mitig
 
 ## Detalle técnico
 
-- CP-E08-HU47-01: Funcionalidad no implementada: planes de contingencia; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
-- CP-E08-HU47-02: Funcionalidad no implementada: consulta de planes; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
-- CP-E08-HU47-03: Funcionalidad no implementada: activación de contingencia; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
-- CP-E08-HU47-04: Funcionalidad no implementada: historial de planes; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
-- CP-E08-HU48-01: Funcionalidad no implementada: catálogo de riesgos; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
-- CP-E08-HU48-02: Funcionalidad no implementada: filtros de riesgos; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
-- CP-E08-HU48-03: Funcionalidad no implementada: mitigaciones predefinidas; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
-- CP-E08-HU48-04: Funcionalidad no implementada: instancia operacional independiente; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
-- CP-E08-HU49-01: Funcionalidad no implementada: alertas de riesgos; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
-- CP-E08-HU49-02: Funcionalidad no implementada: referencias de alerta; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
-- CP-E08-HU49-03: Funcionalidad no implementada: estado de alerta de riesgo; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
-- CP-E08-HU50-01: Funcionalidad no implementada: gastos de riesgo; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
-- CP-E08-HU50-02: Funcionalidad no implementada: comprobantes de riesgo; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
-- CP-E08-HU50-03: Funcionalidad no implementada: integración financiera de riesgos; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
-- CP-E08-HU50-04: Funcionalidad no implementada: reportes financieros de riesgos; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
-- CP-E08-HU51-01: Funcionalidad no implementada: matriz de severidad; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
-- CP-E08-HU51-02: Funcionalidad no implementada: consulta por severidad; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
-- CP-E08-HU51-03: Funcionalidad no implementada: recálculo de severidad; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
-- CP-E08-HU52-01: Funcionalidad no implementada: sugerencias de mitigación; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
-- CP-E08-HU52-02: Funcionalidad no implementada: estados de mitigación; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
-- CP-E08-HU52-03: Funcionalidad no implementada: historial de sugerencias; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
+- CP-E08-HU47-01: Mecanismo implementado: planes de contingencia.
+- CP-E08-HU47-02: Mecanismo implementado: consulta de planes.
+- CP-E08-HU47-03: Mecanismo implementado: activación de contingencia.
+- CP-E08-HU47-04: Mecanismo implementado: historial de planes.
+- CP-E08-HU48-01: FAIL real: no existe una seed o fixture reproducible con al menos 15 riesgos base, mitigaciones y planes predefinidos.
+- CP-E08-HU48-02: Mecanismo implementado: filtros de riesgos.
+- CP-E08-HU48-03: FAIL real: no existe una seed o fixture reproducible con al menos 15 riesgos base, mitigaciones y planes predefinidos.
+- CP-E08-HU48-04: FAIL real: no existe una seed o fixture reproducible con al menos 15 riesgos base, mitigaciones y planes predefinidos.
+- CP-E08-HU49-01: Mecanismo implementado: alertas de riesgos.
+- CP-E08-HU49-02: Mecanismo implementado: referencias de alerta.
+- CP-E08-HU49-03: Mecanismo implementado: estado de alerta de riesgo.
+- CP-E08-HU50-01: Mecanismo implementado: gastos de riesgo.
+- CP-E08-HU50-02: Mecanismo implementado: comprobantes de riesgo.
+- CP-E08-HU50-03: Mecanismo implementado: integración financiera de riesgos.
+- CP-E08-HU50-04: Mecanismo implementado: reportes financieros de riesgos.
+- CP-E08-HU51-01: Mecanismo implementado: matriz de severidad.
+- CP-E08-HU51-02: Mecanismo implementado: consulta por severidad.
+- CP-E08-HU51-03: Mecanismo implementado: recálculo de severidad.
+- CP-E08-HU52-01: FAIL real: no existe una seed o fixture reproducible con al menos 15 riesgos base, mitigaciones y planes predefinidos.
+- CP-E08-HU52-02: FAIL real: no existe una seed o fixture reproducible con al menos 15 riesgos base, mitigaciones y planes predefinidos.
+- CP-E08-HU52-03: FAIL real: no existe una seed o fixture reproducible con al menos 15 riesgos base, mitigaciones y planes predefinidos.
 
 ## Fallos reales de la aplicación
 

@@ -1,4 +1,4 @@
-CP-E08-HU48-01 FAIL Funcionalidad no implementada: catálogo de riesgos; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
-CP-E08-HU48-02 FAIL Funcionalidad no implementada: filtros de riesgos; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
-CP-E08-HU48-03 FAIL Funcionalidad no implementada: mitigaciones predefinidas; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
-CP-E08-HU48-04 FAIL Funcionalidad no implementada: instancia operacional independiente; RiesgosModule no registra servicios, controladores ni modelos de riesgos.
+CP-E08-HU48-01 FAIL FAIL real: no existe una seed o fixture reproducible con al menos 15 riesgos base, mitigaciones y planes predefinidos.
+CP-E08-HU48-02 PASS Mecanismo implementado: filtros de riesgos.
+CP-E08-HU48-03 FAIL FAIL real: no existe una seed o fixture reproducible con al menos 15 riesgos base, mitigaciones y planes predefinidos.
+CP-E08-HU48-04 FAIL FAIL real: no existe una seed o fixture reproducible con al menos 15 riesgos base, mitigaciones y planes predefinidos.

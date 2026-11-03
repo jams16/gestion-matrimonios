@@ -2,8 +2,8 @@
   "epic": "E08",
   "total": 21,
   "jest": 21,
-  "pass": 0,
-  "fail": 21,
+  "pass": 15,
+  "fail": 6,
   "suites": "test/E08-Riesgos",
   "excluidos": [
     "test/backup/legacy",

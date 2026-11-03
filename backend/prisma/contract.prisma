@@ -23,6 +23,7 @@ model Proyecto {
   actividades       Actividad[]
   timings           Timing[]
   notificaciones    Notificacion[]
+  riesgos           Riesgo[]
 
   @@index([idPm])
   @@index([idFaseProyecto])
@@ -53,6 +54,7 @@ model Matrimonio {
   mesas             Mesa[]
   proveedores       MatrimonioProveedor[]
   presupuesto       Presupuesto?
+  riesgos           Riesgo[]
 
   @@index([idNovio1])
   @@index([idNovio2])
@@ -608,6 +610,7 @@ model Notificacion {
   proyecto         Proyecto?                @relation(fields:[idProyecto], references:[idProyecto], onDelete: Restrict)
   cronograma       NotificacionCronograma?
   presupuesto      NotificacionPresupuesto?
+  riesgo           NotificacionRiesgo?
 
   @@index([idUsuarioDestino])
   @@index([idProyecto])
@@ -996,6 +999,253 @@ model NotificacionPresupuesto {
   @@index([idCosto])
   @@index([tipoEventoPresupuesto], map: "nt_notif_pres_evento_idx")
   @@map("nt_notificacion_presupuesto")
+}
+
+model CategoriaRiesgo {
+  idCategoriaRiesgo Int                  @id @default(autoincrement()) @map("id_categoria_riesgo")
+  codigo            VarChar(50)          @unique
+  nombre            VarChar(100)
+  descripcion       VarChar(500)?
+  activo            Boolean              @default(true)
+  createdAt         DateTime             @default(now()) @map("created_at")
+  updatedAt         temporal.updatedAt() @map("updated_at")
+  plantillas        PlantillaRiesgo[]
+  riesgos           Riesgo[]
+
+  @@map("rg_categoria_riesgo")
+}
+
+model PlantillaRiesgo {
+  idPlantillaRiesgo Int                         @id @default(autoincrement()) @map("id_plantilla_riesgo")
+  idCategoriaRiesgo Int                         @map("id_categoria_riesgo")
+  codigo            VarChar(50)                 @unique
+  nombre            VarChar(200)
+  descripcion       VarChar(1000)
+  causaProbable     VarChar(1000)               @map("causa_probable")
+  efectoPotencial   VarChar(1000)               @map("efecto_potencial")
+  activo            Boolean                     @default(true)
+  createdAt         DateTime                    @default(now()) @map("created_at")
+  updatedAt         temporal.updatedAt()        @map("updated_at")
+  categoria         CategoriaRiesgo             @relation(fields:[idCategoriaRiesgo], references:[idCategoriaRiesgo], onDelete: Restrict)
+  mitigaciones      PlantillaMitigacionRiesgo[]
+  planes            PlantillaPlanRiesgo[]
+  riesgos           Riesgo[]
+
+  @@index([idCategoriaRiesgo])
+  @@map("rg_plantilla_riesgo")
+}
+
+model PlantillaMitigacionRiesgo {
+  idPlantillaMitigacion Int                  @id @default(autoincrement()) @map("id_plantilla_mitigacion")
+  idPlantillaRiesgo     Int                  @map("id_plantilla_riesgo")
+  severidadMinima       rg_severidad?
+  descripcion           VarChar(1000)
+  activo                Boolean              @default(true)
+  createdAt             DateTime             @default(now()) @map("created_at")
+  updatedAt             temporal.updatedAt() @map("updated_at")
+  plantillaRiesgo       PlantillaRiesgo      @relation(fields:[idPlantillaRiesgo], references:[idPlantillaRiesgo], onDelete: Restrict)
+  mitigacionesRiesgo    MitigacionRiesgo[]
+
+  @@index([idPlantillaRiesgo])
+  @@map("rg_plantilla_mitigacion")
+}
+
+model PlantillaPlanRiesgo {
+  idPlantillaPlan   Int                  @id @default(autoincrement()) @map("id_plantilla_plan")
+  idPlantillaRiesgo Int                  @map("id_plantilla_riesgo")
+  alternativa       rg_alternativa_plan
+  accion            VarChar(1000)
+  activo            Boolean              @default(true)
+  createdAt         DateTime             @default(now()) @map("created_at")
+  updatedAt         temporal.updatedAt() @map("updated_at")
+  plantillaRiesgo   PlantillaRiesgo      @relation(fields:[idPlantillaRiesgo], references:[idPlantillaRiesgo], onDelete: Restrict)
+
+  @@index([idPlantillaRiesgo])
+  @@map("rg_plantilla_plan")
+}
+
+model Riesgo {
+  idRiesgo             Uuid                     @id @default(uuid()) @map("id_riesgo")
+  idProyecto           Uuid                     @map("id_proyecto")
+  idMatrimonio         Uuid?                    @map("id_matrimonio")
+  idPlantillaRiesgo    Int?                     @map("id_plantilla_riesgo")
+  idCategoriaRiesgo    Int                      @map("id_categoria_riesgo")
+  idUsuarioResponsable Int?                     @map("id_usuario_responsable")
+  nombre               VarChar(200)
+  descripcion          VarChar(1000)?
+  causaProbable        VarChar(1000)?           @map("causa_probable")
+  efectoPotencial      VarChar(1000)?           @map("efecto_potencial")
+  probabilidad         Int
+  impacto              Int
+  severidad            rg_severidad
+  costoAsociado        Numeric(12, 2)?          @map("costo_asociado")
+  estado               rg_estado_riesgo         @default(IDENTIFICADO)
+  activo               Boolean                  @default(true)
+  createdAt            DateTime                 @default(now()) @map("created_at")
+  updatedAt            temporal.updatedAt()     @map("updated_at")
+  proyecto             Proyecto                 @relation(fields:[idProyecto], references:[idProyecto], onDelete: Restrict)
+  matrimonio           Matrimonio?              @relation(fields:[idMatrimonio], references:[idMatrimonio], onDelete: Restrict)
+  plantilla            PlantillaRiesgo?         @relation(fields:[idPlantillaRiesgo], references:[idPlantillaRiesgo], onDelete: Restrict)
+  categoria            CategoriaRiesgo          @relation(fields:[idCategoriaRiesgo], references:[idCategoriaRiesgo], onDelete: Restrict)
+  responsable          Usuario?                 @relation("riesgos_responsable", fields:[idUsuarioResponsable], references:[idUsuario], onDelete: Restrict)
+  planes               PlanContingenciaRiesgo[]
+  mitigaciones         MitigacionRiesgo[]
+  incidencias          IncidenciaRiesgo[]
+  costos               CostoRiesgo[]
+  notificaciones       NotificacionRiesgo[]
+
+  @@index([idProyecto])
+  @@index([idMatrimonio])
+  @@index([idCategoriaRiesgo])
+  @@index([severidad])
+  @@map("rg_riesgo")
+}
+
+model PlanContingenciaRiesgo {
+  idPlanContingencia   Uuid                   @id @default(uuid()) @map("id_plan_contingencia")
+  idRiesgo             Uuid                   @map("id_riesgo")
+  alternativa          rg_alternativa_plan
+  version              Int                    @default(1)
+  accion               VarChar(1000)
+  idUsuarioResponsable Int?                   @map("id_usuario_responsable")
+  activo               Boolean                @default(true)
+  createdAt            DateTime               @default(now()) @map("created_at")
+  updatedAt            temporal.updatedAt()   @map("updated_at")
+  riesgo               Riesgo                 @relation(fields:[idRiesgo], references:[idRiesgo], onDelete: Restrict)
+  responsable          Usuario?               @relation("planes_riesgo_responsable", fields:[idUsuarioResponsable], references:[idUsuario], onDelete: Restrict)
+  activaciones         ActivacionPlanRiesgo[]
+
+  @@index([idRiesgo])
+  @@unique([idRiesgo, alternativa, version])
+  @@map("rg_plan_contingencia")
+}
+
+model ActivacionPlanRiesgo {
+  idActivacionPlan   Uuid                   @id @default(uuid()) @map("id_activacion_plan")
+  idPlanContingencia Uuid                   @map("id_plan_contingencia")
+  idIncidencia       Uuid?                  @map("id_incidencia")
+  idUsuarioRegistro  Int                    @map("id_usuario_registro")
+  fechaActivacion    DateTime               @default(now()) @map("fecha_activacion")
+  observacion        VarChar(1000)?
+  plan               PlanContingenciaRiesgo @relation(fields:[idPlanContingencia], references:[idPlanContingencia], onDelete: Restrict)
+  incidencia         IncidenciaRiesgo?      @relation(fields:[idIncidencia], references:[idIncidencia], onDelete: Restrict)
+  usuarioRegistro    Usuario                @relation("activaciones_riesgo_usuario", fields:[idUsuarioRegistro], references:[idUsuario], onDelete: Restrict)
+
+  @@index([idPlanContingencia])
+  @@map("rg_activacion_plan")
+}
+
+model MitigacionRiesgo {
+  idMitigacionRiesgo    Uuid                       @id @default(uuid()) @map("id_mitigacion_riesgo")
+  idRiesgo              Uuid                       @map("id_riesgo")
+  idPlantillaMitigacion Int?                       @map("id_plantilla_mitigacion")
+  descripcion           VarChar(1000)
+  estado                rg_estado_mitigacion       @default(SUGERIDA)
+  activo                Boolean                    @default(true)
+  createdAt             DateTime                   @default(now()) @map("created_at")
+  updatedAt             temporal.updatedAt()       @map("updated_at")
+  riesgo                Riesgo                     @relation(fields:[idRiesgo], references:[idRiesgo], onDelete: Restrict)
+  plantilla             PlantillaMitigacionRiesgo? @relation(fields:[idPlantillaMitigacion], references:[idPlantillaMitigacion], onDelete: Restrict)
+
+  @@index([idRiesgo])
+  @@map("rg_mitigacion_riesgo")
+}
+
+model IncidenciaRiesgo {
+  idIncidencia    Uuid                   @id @default(uuid()) @map("id_incidencia")
+  idRiesgo        Uuid                   @map("id_riesgo")
+  descripcion     VarChar(1000)
+  critica         Boolean                @default(false)
+  atendida        Boolean                @default(false)
+  fechaIncidencia DateTime               @default(now()) @map("fecha_incidencia")
+  createdAt       DateTime               @default(now()) @map("created_at")
+  updatedAt       temporal.updatedAt()   @map("updated_at")
+  riesgo          Riesgo                 @relation(fields:[idRiesgo], references:[idRiesgo], onDelete: Restrict)
+  activaciones    ActivacionPlanRiesgo[]
+  costos          CostoRiesgo[]
+
+  @@index([idRiesgo])
+  @@map("rg_incidencia")
+}
+
+model CostoRiesgo {
+  idCostoRiesgo      Uuid                   @id @default(uuid()) @map("id_costo_riesgo")
+  idRiesgo           Uuid                   @map("id_riesgo")
+  idIncidencia       Uuid?                  @map("id_incidencia")
+  concepto           VarChar(200)
+  monto              Numeric(12, 2)
+  idCostoPresupuesto Uuid?                  @map("id_costo_presupuesto")
+  activo             Boolean                @default(true)
+  createdAt          DateTime               @default(now()) @map("created_at")
+  updatedAt          temporal.updatedAt()   @map("updated_at")
+  riesgo             Riesgo                 @relation(fields:[idRiesgo], references:[idRiesgo], onDelete: Restrict)
+  incidencia         IncidenciaRiesgo?      @relation(fields:[idIncidencia], references:[idIncidencia], onDelete: Restrict)
+  costoPresupuesto   CostoProveedor?        @relation(fields:[idCostoPresupuesto], references:[idCosto], onDelete: Restrict)
+  documentos         DocumentoCostoRiesgo[]
+
+  @@index([idRiesgo])
+  @@map("rg_costo_riesgo")
+}
+
+model DocumentoCostoRiesgo {
+  idDocumentoCostoRiesgo Uuid         @id @default(uuid()) @map("id_documento_costo_riesgo")
+  idCostoRiesgo          Uuid         @map("id_costo_riesgo")
+  nombre                 VarChar(200)
+  url                    VarChar(500)
+  tipo                   VarChar(20)
+  activo                 Boolean      @default(true)
+  createdAt              DateTime     @default(now()) @map("created_at")
+  costoRiesgo            CostoRiesgo  @relation(fields:[idCostoRiesgo], references:[idCostoRiesgo], onDelete: Restrict)
+
+  @@index([idCostoRiesgo])
+  @@map("rg_documento_costo")
+}
+
+model NotificacionRiesgo {
+  idNotificacion   Uuid                  @id @map("id_notificacion")
+  idRiesgo         Uuid?                 @map("id_riesgo")
+  idIncidencia     Uuid?                 @map("id_incidencia")
+  tipoEventoRiesgo nt_tipo_evento_riesgo @map("tipo_evento_riesgo")
+  severidad        rg_severidad?
+  atendida         Boolean               @default(false)
+  notificacion     Notificacion          @relation(fields:[idNotificacion], references:[idNotificacion], onDelete: Restrict)
+  riesgo           Riesgo?               @relation(fields:[idRiesgo], references:[idRiesgo], onDelete: Restrict)
+  incidencia       IncidenciaRiesgo?     @relation(fields:[idIncidencia], references:[idIncidencia], onDelete: Restrict)
+
+  @@index([idRiesgo])
+  @@index([idIncidencia])
+  @@map("nt_notificacion_riesgo")
+}
+
+enum rg_severidad {
+  BAJO
+  MEDIO
+  ALTO
+}
+
+enum rg_estado_riesgo {
+  IDENTIFICADO
+  EN_TRATAMIENTO
+  ACTIVO
+  CERRADO
+}
+
+enum rg_alternativa_plan {
+  PLAN_A
+  PLAN_B
+  PLAN_C
+}
+
+enum rg_estado_mitigacion {
+  SUGERIDA
+  APLICADA
+  DESCARTADA
+}
+
+enum nt_tipo_evento_riesgo {
+  RIESGO_CRITICO
+  INCIDENCIA_REGISTRADA
+  PLAN_ACTIVADO
 }
 
 model Ubigeo {

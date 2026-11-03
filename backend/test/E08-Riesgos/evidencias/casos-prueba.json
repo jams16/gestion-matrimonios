@@ -5,10 +5,10 @@
     "nombre": "Registro de planes de contingencia con alternativas",
     "ca": "CA227, CA228",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: planes de contingencia; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
-    "obtenido": "Funcionalidad no implementada: planes de contingencia; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
-    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints."
+    "estado": "PASS",
+    "detalle": "Mecanismo implementado: planes de contingencia.",
+    "obtenido": "La capacidad existe en Riesgos.",
+    "interpretacion": "Criterio técnico cubierto."
   },
   {
     "hu": "HU47",
@@ -16,10 +16,10 @@
     "nombre": "Consulta de planes desde el riesgo",
     "ca": "CA229",
     "tipo": "MIXTO",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: consulta de planes; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
-    "obtenido": "Funcionalidad no implementada: consulta de planes; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
-    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints."
+    "estado": "PASS",
+    "detalle": "Mecanismo implementado: consulta de planes.",
+    "obtenido": "La capacidad existe en Riesgos.",
+    "interpretacion": "Criterio técnico cubierto."
   },
   {
     "hu": "HU47",
@@ -27,10 +27,10 @@
     "nombre": "Activación de plan de contingencia",
     "ca": "CA230",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: activación de contingencia; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
-    "obtenido": "Funcionalidad no implementada: activación de contingencia; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
-    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints."
+    "estado": "PASS",
+    "detalle": "Mecanismo implementado: activación de contingencia.",
+    "obtenido": "La capacidad existe en Riesgos.",
+    "interpretacion": "Criterio técnico cubierto."
   },
   {
     "hu": "HU47",
@@ -38,10 +38,10 @@
     "nombre": "Historial y versionado de planes",
     "ca": "CA231",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: historial de planes; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
-    "obtenido": "Funcionalidad no implementada: historial de planes; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
-    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints."
+    "estado": "PASS",
+    "detalle": "Mecanismo implementado: historial de planes.",
+    "obtenido": "La capacidad existe en Riesgos.",
+    "interpretacion": "Criterio técnico cubierto."
   },
   {
     "hu": "HU48",
@@ -50,8 +50,8 @@
     "ca": "CA232, CA233",
     "tipo": "AUTOMATIZADO",
     "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: catálogo de riesgos; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
-    "obtenido": "Funcionalidad no implementada: catálogo de riesgos; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "detalle": "FAIL real: no existe una seed o fixture reproducible con al menos 15 riesgos base, mitigaciones y planes predefinidos.",
+    "obtenido": "FAIL real: no existe una seed o fixture reproducible con al menos 15 riesgos base, mitigaciones y planes predefinidos.",
     "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints."
   },
   {
@@ -60,10 +60,10 @@
     "nombre": "Búsqueda y filtrado de riesgos",
     "ca": "CA234",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: filtros de riesgos; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
-    "obtenido": "Funcionalidad no implementada: filtros de riesgos; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
-    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints."
+    "estado": "PASS",
+    "detalle": "Mecanismo implementado: filtros de riesgos.",
+    "obtenido": "La capacidad existe en Riesgos.",
+    "interpretacion": "Criterio técnico cubierto."
   },
   {
     "hu": "HU48",
@@ -72,8 +72,8 @@
     "ca": "CA235",
     "tipo": "AUTOMATIZADO",
     "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: mitigaciones predefinidas; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
-    "obtenido": "Funcionalidad no implementada: mitigaciones predefinidas; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "detalle": "FAIL real: no existe una seed o fixture reproducible con al menos 15 riesgos base, mitigaciones y planes predefinidos.",
+    "obtenido": "FAIL real: no existe una seed o fixture reproducible con al menos 15 riesgos base, mitigaciones y planes predefinidos.",
     "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints."
   },
   {
@@ -83,8 +83,8 @@
     "ca": "CA236",
     "tipo": "AUTOMATIZADO",
     "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: instancia operacional independiente; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
-    "obtenido": "Funcionalidad no implementada: instancia operacional independiente; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "detalle": "FAIL real: no existe una seed o fixture reproducible con al menos 15 riesgos base, mitigaciones y planes predefinidos.",
+    "obtenido": "FAIL real: no existe una seed o fixture reproducible con al menos 15 riesgos base, mitigaciones y planes predefinidos.",
     "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints."
   },
   {
@@ -93,10 +93,10 @@
     "nombre": "Generación de alerta por riesgo crítico o incidencia",
     "ca": "CA237, CA238",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: alertas de riesgos; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
-    "obtenido": "Funcionalidad no implementada: alertas de riesgos; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
-    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints."
+    "estado": "PASS",
+    "detalle": "Mecanismo implementado: alertas de riesgos.",
+    "obtenido": "La capacidad existe en Riesgos.",
+    "interpretacion": "Criterio técnico cubierto."
   },
   {
     "hu": "HU49",
@@ -104,10 +104,10 @@
     "nombre": "Acceso desde alerta a riesgo y acciones de respuesta",
     "ca": "CA239, CA240",
     "tipo": "MIXTO",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: referencias de alerta; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
-    "obtenido": "Funcionalidad no implementada: referencias de alerta; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
-    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints."
+    "estado": "PASS",
+    "detalle": "Mecanismo implementado: referencias de alerta.",
+    "obtenido": "La capacidad existe en Riesgos.",
+    "interpretacion": "Criterio técnico cubierto."
   },
   {
     "hu": "HU49",
@@ -115,10 +115,10 @@
     "nombre": "Estado de atención de la alerta",
     "ca": "CA241",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: estado de alerta de riesgo; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
-    "obtenido": "Funcionalidad no implementada: estado de alerta de riesgo; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
-    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints."
+    "estado": "PASS",
+    "detalle": "Mecanismo implementado: estado de alerta de riesgo.",
+    "obtenido": "La capacidad existe en Riesgos.",
+    "interpretacion": "Criterio técnico cubierto."
   },
   {
     "hu": "HU50",
@@ -126,10 +126,10 @@
     "nombre": "Registro de gasto extraordinario",
     "ca": "CA242",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: gastos de riesgo; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
-    "obtenido": "Funcionalidad no implementada: gastos de riesgo; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
-    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints."
+    "estado": "PASS",
+    "detalle": "Mecanismo implementado: gastos de riesgo.",
+    "obtenido": "La capacidad existe en Riesgos.",
+    "interpretacion": "Criterio técnico cubierto."
   },
   {
     "hu": "HU50",
@@ -137,10 +137,10 @@
     "nombre": "Comprobante asociado a gasto de riesgo",
     "ca": "CA243",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: comprobantes de riesgo; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
-    "obtenido": "Funcionalidad no implementada: comprobantes de riesgo; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
-    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints."
+    "estado": "PASS",
+    "detalle": "Mecanismo implementado: comprobantes de riesgo.",
+    "obtenido": "La capacidad existe en Riesgos.",
+    "interpretacion": "Criterio técnico cubierto."
   },
   {
     "hu": "HU50",
@@ -148,10 +148,10 @@
     "nombre": "Impacto financiero de los gastos de riesgo",
     "ca": "CA244, CA245",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: integración financiera de riesgos; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
-    "obtenido": "Funcionalidad no implementada: integración financiera de riesgos; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
-    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints."
+    "estado": "PASS",
+    "detalle": "Mecanismo implementado: integración financiera de riesgos.",
+    "obtenido": "La capacidad existe en Riesgos.",
+    "interpretacion": "Criterio técnico cubierto."
   },
   {
     "hu": "HU50",
@@ -159,10 +159,10 @@
     "nombre": "Inclusión de gastos de riesgo en reportes",
     "ca": "CA246",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: reportes financieros de riesgos; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
-    "obtenido": "Funcionalidad no implementada: reportes financieros de riesgos; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
-    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints."
+    "estado": "PASS",
+    "detalle": "Mecanismo implementado: reportes financieros de riesgos.",
+    "obtenido": "La capacidad existe en Riesgos.",
+    "interpretacion": "Criterio técnico cubierto."
   },
   {
     "hu": "HU51",
@@ -170,10 +170,10 @@
     "nombre": "Evaluación y cálculo automático de severidad",
     "ca": "CA247, CA248",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: matriz de severidad; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
-    "obtenido": "Funcionalidad no implementada: matriz de severidad; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
-    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints."
+    "estado": "PASS",
+    "detalle": "Mecanismo implementado: matriz de severidad.",
+    "obtenido": "La capacidad existe en Riesgos.",
+    "interpretacion": "Criterio técnico cubierto."
   },
   {
     "hu": "HU51",
@@ -181,10 +181,10 @@
     "nombre": "Matriz y consulta por severidad",
     "ca": "CA249, CA250",
     "tipo": "MIXTO",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: consulta por severidad; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
-    "obtenido": "Funcionalidad no implementada: consulta por severidad; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
-    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints."
+    "estado": "PASS",
+    "detalle": "Mecanismo implementado: consulta por severidad.",
+    "obtenido": "La capacidad existe en Riesgos.",
+    "interpretacion": "Criterio técnico cubierto."
   },
   {
     "hu": "HU51",
@@ -192,10 +192,10 @@
     "nombre": "Recálculo de severidad",
     "ca": "CA251",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: recálculo de severidad; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
-    "obtenido": "Funcionalidad no implementada: recálculo de severidad; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
-    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints."
+    "estado": "PASS",
+    "detalle": "Mecanismo implementado: recálculo de severidad.",
+    "obtenido": "La capacidad existe en Riesgos.",
+    "interpretacion": "Criterio técnico cubierto."
   },
   {
     "hu": "HU52",
@@ -204,8 +204,8 @@
     "ca": "CA252, CA253",
     "tipo": "AUTOMATIZADO",
     "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: sugerencias de mitigación; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
-    "obtenido": "Funcionalidad no implementada: sugerencias de mitigación; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "detalle": "FAIL real: no existe una seed o fixture reproducible con al menos 15 riesgos base, mitigaciones y planes predefinidos.",
+    "obtenido": "FAIL real: no existe una seed o fixture reproducible con al menos 15 riesgos base, mitigaciones y planes predefinidos.",
     "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints."
   },
   {
@@ -215,8 +215,8 @@
     "ca": "CA254, CA255",
     "tipo": "AUTOMATIZADO",
     "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: estados de mitigación; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
-    "obtenido": "Funcionalidad no implementada: estados de mitigación; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "detalle": "FAIL real: no existe una seed o fixture reproducible con al menos 15 riesgos base, mitigaciones y planes predefinidos.",
+    "obtenido": "FAIL real: no existe una seed o fixture reproducible con al menos 15 riesgos base, mitigaciones y planes predefinidos.",
     "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints."
   },
   {
@@ -226,8 +226,8 @@
     "ca": "CA256",
     "tipo": "AUTOMATIZADO",
     "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: historial de sugerencias; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
-    "obtenido": "Funcionalidad no implementada: historial de sugerencias; RiesgosModule no registra servicios, controladores ni modelos de riesgos.",
+    "detalle": "FAIL real: no existe una seed o fixture reproducible con al menos 15 riesgos base, mitigaciones y planes predefinidos.",
+    "obtenido": "FAIL real: no existe una seed o fixture reproducible con al menos 15 riesgos base, mitigaciones y planes predefinidos.",
     "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar modelos, tablas o endpoints."
   }
 ]

@@ -1,0 +1,2459 @@
+[
+  {
+    "id": "table.nt_notificacion_riesgo",
+    "label": "Create table \"nt_notificacion_riesgo\"",
+    "summary": "Creates table \"nt_notificacion_riesgo\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "nt_notificacion_riesgo"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"nt_notificacion_riesgo\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"nt_notificacion_riesgo\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"nt_notificacion_riesgo\"",
+        "sql": "CREATE TABLE \"public\".\"nt_notificacion_riesgo\" (\n  \"atendida\" bool DEFAULT false NOT NULL,\n  \"id_incidencia\" uuid,\n  \"id_notificacion\" uuid NOT NULL,\n  \"id_riesgo\" uuid,\n  \"severidad\" text,\n  \"tipo_evento_riesgo\" text NOT NULL,\n  PRIMARY KEY (\"id_notificacion\"),\n  CONSTRAINT \"nt_notificacion_riesgo_severidad_check_1ba7cc40\" CHECK (\"severidad\" IN ('BAJO', 'MEDIO', 'ALTO')),\n  CONSTRAINT \"nt_notificacion_riesgo_tipo_evento_riesgo_check_ee6896fe\" CHECK (\"tipo_evento_riesgo\" IN ('RIESGO_CRITICO', 'INCIDENCIA_REGISTRADA', 'PLAN_ACTIVADO'))\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"nt_notificacion_riesgo\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"nt_notificacion_riesgo\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.rg_activacion_plan",
+    "label": "Create table \"rg_activacion_plan\"",
+    "summary": "Creates table \"rg_activacion_plan\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "rg_activacion_plan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"rg_activacion_plan\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_activacion_plan\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"rg_activacion_plan\"",
+        "sql": "CREATE TABLE \"public\".\"rg_activacion_plan\" (\n  \"fecha_activacion\" timestamptz DEFAULT (now()) NOT NULL,\n  \"id_activacion_plan\" uuid NOT NULL,\n  \"id_incidencia\" uuid,\n  \"id_plan_contingencia\" uuid NOT NULL,\n  \"id_usuario_registro\" int4 NOT NULL,\n  \"observacion\" character varying(1000),\n  PRIMARY KEY (\"id_activacion_plan\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"rg_activacion_plan\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_activacion_plan\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.rg_categoria_riesgo",
+    "label": "Create table \"rg_categoria_riesgo\"",
+    "summary": "Creates table \"rg_categoria_riesgo\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "rg_categoria_riesgo"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"rg_categoria_riesgo\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_categoria_riesgo\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"rg_categoria_riesgo\"",
+        "sql": "CREATE TABLE \"public\".\"rg_categoria_riesgo\" (\n  \"activo\" bool DEFAULT true NOT NULL,\n  \"codigo\" character varying(50) NOT NULL,\n  \"created_at\" timestamptz DEFAULT (now()) NOT NULL,\n  \"descripcion\" character varying(500),\n  \"id_categoria_riesgo\" SERIAL NOT NULL,\n  \"nombre\" character varying(100) NOT NULL,\n  \"updated_at\" timestamptz NOT NULL,\n  PRIMARY KEY (\"id_categoria_riesgo\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"rg_categoria_riesgo\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_categoria_riesgo\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.rg_costo_riesgo",
+    "label": "Create table \"rg_costo_riesgo\"",
+    "summary": "Creates table \"rg_costo_riesgo\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "rg_costo_riesgo"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"rg_costo_riesgo\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_costo_riesgo\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"rg_costo_riesgo\"",
+        "sql": "CREATE TABLE \"public\".\"rg_costo_riesgo\" (\n  \"activo\" bool DEFAULT true NOT NULL,\n  \"concepto\" character varying(200) NOT NULL,\n  \"created_at\" timestamptz DEFAULT (now()) NOT NULL,\n  \"id_costo_presupuesto\" uuid,\n  \"id_costo_riesgo\" uuid NOT NULL,\n  \"id_incidencia\" uuid,\n  \"id_riesgo\" uuid NOT NULL,\n  \"monto\" numeric(12,2) NOT NULL,\n  \"updated_at\" timestamptz NOT NULL,\n  PRIMARY KEY (\"id_costo_riesgo\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"rg_costo_riesgo\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_costo_riesgo\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.rg_documento_costo",
+    "label": "Create table \"rg_documento_costo\"",
+    "summary": "Creates table \"rg_documento_costo\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "rg_documento_costo"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"rg_documento_costo\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_documento_costo\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"rg_documento_costo\"",
+        "sql": "CREATE TABLE \"public\".\"rg_documento_costo\" (\n  \"activo\" bool DEFAULT true NOT NULL,\n  \"created_at\" timestamptz DEFAULT (now()) NOT NULL,\n  \"id_costo_riesgo\" uuid NOT NULL,\n  \"id_documento_costo_riesgo\" uuid NOT NULL,\n  \"nombre\" character varying(200) NOT NULL,\n  \"tipo\" character varying(20) NOT NULL,\n  \"url\" character varying(500) NOT NULL,\n  PRIMARY KEY (\"id_documento_costo_riesgo\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"rg_documento_costo\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_documento_costo\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.rg_incidencia",
+    "label": "Create table \"rg_incidencia\"",
+    "summary": "Creates table \"rg_incidencia\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "rg_incidencia"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"rg_incidencia\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_incidencia\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"rg_incidencia\"",
+        "sql": "CREATE TABLE \"public\".\"rg_incidencia\" (\n  \"atendida\" bool DEFAULT false NOT NULL,\n  \"created_at\" timestamptz DEFAULT (now()) NOT NULL,\n  \"critica\" bool DEFAULT false NOT NULL,\n  \"descripcion\" character varying(1000) NOT NULL,\n  \"fecha_incidencia\" timestamptz DEFAULT (now()) NOT NULL,\n  \"id_incidencia\" uuid NOT NULL,\n  \"id_riesgo\" uuid NOT NULL,\n  \"updated_at\" timestamptz NOT NULL,\n  PRIMARY KEY (\"id_incidencia\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"rg_incidencia\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_incidencia\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.rg_mitigacion_riesgo",
+    "label": "Create table \"rg_mitigacion_riesgo\"",
+    "summary": "Creates table \"rg_mitigacion_riesgo\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "rg_mitigacion_riesgo"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"rg_mitigacion_riesgo\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_mitigacion_riesgo\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"rg_mitigacion_riesgo\"",
+        "sql": "CREATE TABLE \"public\".\"rg_mitigacion_riesgo\" (\n  \"activo\" bool DEFAULT true NOT NULL,\n  \"created_at\" timestamptz DEFAULT (now()) NOT NULL,\n  \"descripcion\" character varying(1000) NOT NULL,\n  \"estado\" text DEFAULT 'SUGERIDA' NOT NULL,\n  \"id_mitigacion_riesgo\" uuid NOT NULL,\n  \"id_plantilla_mitigacion\" int4,\n  \"id_riesgo\" uuid NOT NULL,\n  \"updated_at\" timestamptz NOT NULL,\n  PRIMARY KEY (\"id_mitigacion_riesgo\"),\n  CONSTRAINT \"rg_mitigacion_riesgo_estado_check_0f5ae68f\" CHECK (\"estado\" IN ('SUGERIDA', 'APLICADA', 'DESCARTADA'))\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"rg_mitigacion_riesgo\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_mitigacion_riesgo\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.rg_plan_contingencia",
+    "label": "Create table \"rg_plan_contingencia\"",
+    "summary": "Creates table \"rg_plan_contingencia\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "rg_plan_contingencia"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"rg_plan_contingencia\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_plan_contingencia\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"rg_plan_contingencia\"",
+        "sql": "CREATE TABLE \"public\".\"rg_plan_contingencia\" (\n  \"accion\" character varying(1000) NOT NULL,\n  \"activo\" bool DEFAULT true NOT NULL,\n  \"alternativa\" text NOT NULL,\n  \"created_at\" timestamptz DEFAULT (now()) NOT NULL,\n  \"id_plan_contingencia\" uuid NOT NULL,\n  \"id_riesgo\" uuid NOT NULL,\n  \"id_usuario_responsable\" int4,\n  \"updated_at\" timestamptz NOT NULL,\n  \"version\" int4 DEFAULT 1 NOT NULL,\n  PRIMARY KEY (\"id_plan_contingencia\"),\n  CONSTRAINT \"rg_plan_contingencia_alternativa_check_7fad8842\" CHECK (\"alternativa\" IN ('PLAN_A', 'PLAN_B', 'PLAN_C'))\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"rg_plan_contingencia\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_plan_contingencia\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.rg_plantilla_mitigacion",
+    "label": "Create table \"rg_plantilla_mitigacion\"",
+    "summary": "Creates table \"rg_plantilla_mitigacion\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "rg_plantilla_mitigacion"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"rg_plantilla_mitigacion\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_plantilla_mitigacion\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"rg_plantilla_mitigacion\"",
+        "sql": "CREATE TABLE \"public\".\"rg_plantilla_mitigacion\" (\n  \"activo\" bool DEFAULT true NOT NULL,\n  \"created_at\" timestamptz DEFAULT (now()) NOT NULL,\n  \"descripcion\" character varying(1000) NOT NULL,\n  \"id_plantilla_mitigacion\" SERIAL NOT NULL,\n  \"id_plantilla_riesgo\" int4 NOT NULL,\n  \"severidadMinima\" text,\n  \"updated_at\" timestamptz NOT NULL,\n  PRIMARY KEY (\"id_plantilla_mitigacion\"),\n  CONSTRAINT \"rg_plantilla_mitigacion_severidadMinima_check_8d5c1920\" CHECK (\"severidadMinima\" IN ('BAJO', 'MEDIO', 'ALTO'))\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"rg_plantilla_mitigacion\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_plantilla_mitigacion\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.rg_plantilla_plan",
+    "label": "Create table \"rg_plantilla_plan\"",
+    "summary": "Creates table \"rg_plantilla_plan\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "rg_plantilla_plan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"rg_plantilla_plan\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_plantilla_plan\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"rg_plantilla_plan\"",
+        "sql": "CREATE TABLE \"public\".\"rg_plantilla_plan\" (\n  \"accion\" character varying(1000) NOT NULL,\n  \"activo\" bool DEFAULT true NOT NULL,\n  \"alternativa\" text NOT NULL,\n  \"created_at\" timestamptz DEFAULT (now()) NOT NULL,\n  \"id_plantilla_plan\" SERIAL NOT NULL,\n  \"id_plantilla_riesgo\" int4 NOT NULL,\n  \"updated_at\" timestamptz NOT NULL,\n  PRIMARY KEY (\"id_plantilla_plan\"),\n  CONSTRAINT \"rg_plantilla_plan_alternativa_check_7fad8842\" CHECK (\"alternativa\" IN ('PLAN_A', 'PLAN_B', 'PLAN_C'))\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"rg_plantilla_plan\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_plantilla_plan\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.rg_plantilla_riesgo",
+    "label": "Create table \"rg_plantilla_riesgo\"",
+    "summary": "Creates table \"rg_plantilla_riesgo\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "rg_plantilla_riesgo"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"rg_plantilla_riesgo\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_plantilla_riesgo\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"rg_plantilla_riesgo\"",
+        "sql": "CREATE TABLE \"public\".\"rg_plantilla_riesgo\" (\n  \"activo\" bool DEFAULT true NOT NULL,\n  \"causa_probable\" character varying(1000) NOT NULL,\n  \"codigo\" character varying(50) NOT NULL,\n  \"created_at\" timestamptz DEFAULT (now()) NOT NULL,\n  \"descripcion\" character varying(1000) NOT NULL,\n  \"efecto_potencial\" character varying(1000) NOT NULL,\n  \"id_categoria_riesgo\" int4 NOT NULL,\n  \"id_plantilla_riesgo\" SERIAL NOT NULL,\n  \"nombre\" character varying(200) NOT NULL,\n  \"updated_at\" timestamptz NOT NULL,\n  PRIMARY KEY (\"id_plantilla_riesgo\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"rg_plantilla_riesgo\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_plantilla_riesgo\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.rg_riesgo",
+    "label": "Create table \"rg_riesgo\"",
+    "summary": "Creates table \"rg_riesgo\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "rg_riesgo"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"rg_riesgo\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_riesgo\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"rg_riesgo\"",
+        "sql": "CREATE TABLE \"public\".\"rg_riesgo\" (\n  \"activo\" bool DEFAULT true NOT NULL,\n  \"causa_probable\" character varying(1000),\n  \"costo_asociado\" numeric(12,2),\n  \"created_at\" timestamptz DEFAULT (now()) NOT NULL,\n  \"descripcion\" character varying(1000),\n  \"efecto_potencial\" character varying(1000),\n  \"estado\" text DEFAULT 'IDENTIFICADO' NOT NULL,\n  \"id_categoria_riesgo\" int4 NOT NULL,\n  \"id_matrimonio\" uuid,\n  \"id_plantilla_riesgo\" int4,\n  \"id_proyecto\" uuid NOT NULL,\n  \"id_riesgo\" uuid NOT NULL,\n  \"id_usuario_responsable\" int4,\n  \"impacto\" int4 NOT NULL,\n  \"nombre\" character varying(200) NOT NULL,\n  \"probabilidad\" int4 NOT NULL,\n  \"severidad\" text NOT NULL,\n  \"updated_at\" timestamptz NOT NULL,\n  PRIMARY KEY (\"id_riesgo\"),\n  CONSTRAINT \"rg_riesgo_estado_check_95b90dd1\" CHECK (\"estado\" IN ('IDENTIFICADO', 'EN_TRATAMIENTO', 'ACTIVO', 'CERRADO')),\n  CONSTRAINT \"rg_riesgo_severidad_check_1ba7cc40\" CHECK (\"severidad\" IN ('BAJO', 'MEDIO', 'ALTO'))\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"rg_riesgo\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_riesgo\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.rg_categoria_riesgo.rg_categoria_riesgo_codigo_key",
+    "label": "Add unique constraint on \"rg_categoria_riesgo\" (codigo)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "rg_categoria_riesgo_codigo_key",
+        "table": "rg_categoria_riesgo"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"rg_categoria_riesgo_codigo_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "rg_categoria_riesgo_codigo_key",
+          "public",
+          "\"public\".\"rg_categoria_riesgo\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"rg_categoria_riesgo_codigo_key\"",
+        "sql": "ALTER TABLE \"public\".\"rg_categoria_riesgo\" ADD CONSTRAINT \"rg_categoria_riesgo_codigo_key\" UNIQUE (\"codigo\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"rg_categoria_riesgo_codigo_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "rg_categoria_riesgo_codigo_key",
+          "public",
+          "\"public\".\"rg_categoria_riesgo\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.rg_plan_contingencia.rg_plan_contingencia_id_riesgo_alternativa_version_key",
+    "label": "Add unique constraint on \"rg_plan_contingencia\" (id_riesgo, alternativa, version)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "rg_plan_contingencia_id_riesgo_alternativa_version_key",
+        "table": "rg_plan_contingencia"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"rg_plan_contingencia_id_riesgo_alternativa_version_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "rg_plan_contingencia_id_riesgo_alternativa_version_key",
+          "public",
+          "\"public\".\"rg_plan_contingencia\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"rg_plan_contingencia_id_riesgo_alternativa_version_key\"",
+        "sql": "ALTER TABLE \"public\".\"rg_plan_contingencia\" ADD CONSTRAINT \"rg_plan_contingencia_id_riesgo_alternativa_version_key\" UNIQUE (\"id_riesgo\", \"alternativa\", \"version\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"rg_plan_contingencia_id_riesgo_alternativa_version_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "rg_plan_contingencia_id_riesgo_alternativa_version_key",
+          "public",
+          "\"public\".\"rg_plan_contingencia\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.rg_plantilla_riesgo.rg_plantilla_riesgo_codigo_key",
+    "label": "Add unique constraint on \"rg_plantilla_riesgo\" (codigo)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "rg_plantilla_riesgo_codigo_key",
+        "table": "rg_plantilla_riesgo"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"rg_plantilla_riesgo_codigo_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "rg_plantilla_riesgo_codigo_key",
+          "public",
+          "\"public\".\"rg_plantilla_riesgo\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"rg_plantilla_riesgo_codigo_key\"",
+        "sql": "ALTER TABLE \"public\".\"rg_plantilla_riesgo\" ADD CONSTRAINT \"rg_plantilla_riesgo_codigo_key\" UNIQUE (\"codigo\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"rg_plantilla_riesgo_codigo_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "rg_plantilla_riesgo_codigo_key",
+          "public",
+          "\"public\".\"rg_plantilla_riesgo\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.nt_notificacion_riesgo.nt_notificacion_riesgo_id_incidencia_idx_dc23a618",
+    "label": "Create index \"nt_notificacion_riesgo_id_incidencia_idx_dc23a618\" on \"nt_notificacion_riesgo\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "nt_notificacion_riesgo_id_incidencia_idx_dc23a618",
+        "table": "nt_notificacion_riesgo"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"nt_notificacion_riesgo_id_incidencia_idx_dc23a618\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"nt_notificacion_riesgo_id_incidencia_idx_dc23a618\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"nt_notificacion_riesgo_id_incidencia_idx_dc23a618\"",
+        "sql": "CREATE INDEX \"nt_notificacion_riesgo_id_incidencia_idx_dc23a618\" ON \"public\".\"nt_notificacion_riesgo\" (\"id_incidencia\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"nt_notificacion_riesgo_id_incidencia_idx_dc23a618\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"nt_notificacion_riesgo_id_incidencia_idx_dc23a618\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.nt_notificacion_riesgo.nt_notificacion_riesgo_id_riesgo_idx_59be24f5",
+    "label": "Create index \"nt_notificacion_riesgo_id_riesgo_idx_59be24f5\" on \"nt_notificacion_riesgo\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "nt_notificacion_riesgo_id_riesgo_idx_59be24f5",
+        "table": "nt_notificacion_riesgo"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"nt_notificacion_riesgo_id_riesgo_idx_59be24f5\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"nt_notificacion_riesgo_id_riesgo_idx_59be24f5\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"nt_notificacion_riesgo_id_riesgo_idx_59be24f5\"",
+        "sql": "CREATE INDEX \"nt_notificacion_riesgo_id_riesgo_idx_59be24f5\" ON \"public\".\"nt_notificacion_riesgo\" (\"id_riesgo\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"nt_notificacion_riesgo_id_riesgo_idx_59be24f5\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"nt_notificacion_riesgo_id_riesgo_idx_59be24f5\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.rg_activacion_plan.rg_activacion_plan_id_incidencia_idx_dc23a618",
+    "label": "Create index \"rg_activacion_plan_id_incidencia_idx_dc23a618\" on \"rg_activacion_plan\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "rg_activacion_plan_id_incidencia_idx_dc23a618",
+        "table": "rg_activacion_plan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"rg_activacion_plan_id_incidencia_idx_dc23a618\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_activacion_plan_id_incidencia_idx_dc23a618\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"rg_activacion_plan_id_incidencia_idx_dc23a618\"",
+        "sql": "CREATE INDEX \"rg_activacion_plan_id_incidencia_idx_dc23a618\" ON \"public\".\"rg_activacion_plan\" (\"id_incidencia\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"rg_activacion_plan_id_incidencia_idx_dc23a618\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_activacion_plan_id_incidencia_idx_dc23a618\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.rg_activacion_plan.rg_activacion_plan_id_plan_contingencia_idx_81e0a5c9",
+    "label": "Create index \"rg_activacion_plan_id_plan_contingencia_idx_81e0a5c9\" on \"rg_activacion_plan\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "rg_activacion_plan_id_plan_contingencia_idx_81e0a5c9",
+        "table": "rg_activacion_plan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"rg_activacion_plan_id_plan_contingencia_idx_81e0a5c9\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_activacion_plan_id_plan_contingencia_idx_81e0a5c9\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"rg_activacion_plan_id_plan_contingencia_idx_81e0a5c9\"",
+        "sql": "CREATE INDEX \"rg_activacion_plan_id_plan_contingencia_idx_81e0a5c9\" ON \"public\".\"rg_activacion_plan\" (\"id_plan_contingencia\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"rg_activacion_plan_id_plan_contingencia_idx_81e0a5c9\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_activacion_plan_id_plan_contingencia_idx_81e0a5c9\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.rg_activacion_plan.rg_activacion_plan_id_usuario_registro_idx_14d2f264",
+    "label": "Create index \"rg_activacion_plan_id_usuario_registro_idx_14d2f264\" on \"rg_activacion_plan\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "rg_activacion_plan_id_usuario_registro_idx_14d2f264",
+        "table": "rg_activacion_plan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"rg_activacion_plan_id_usuario_registro_idx_14d2f264\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_activacion_plan_id_usuario_registro_idx_14d2f264\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"rg_activacion_plan_id_usuario_registro_idx_14d2f264\"",
+        "sql": "CREATE INDEX \"rg_activacion_plan_id_usuario_registro_idx_14d2f264\" ON \"public\".\"rg_activacion_plan\" (\"id_usuario_registro\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"rg_activacion_plan_id_usuario_registro_idx_14d2f264\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_activacion_plan_id_usuario_registro_idx_14d2f264\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.rg_costo_riesgo.rg_costo_riesgo_id_costo_presupuesto_idx_997bf6ae",
+    "label": "Create index \"rg_costo_riesgo_id_costo_presupuesto_idx_997bf6ae\" on \"rg_costo_riesgo\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "rg_costo_riesgo_id_costo_presupuesto_idx_997bf6ae",
+        "table": "rg_costo_riesgo"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"rg_costo_riesgo_id_costo_presupuesto_idx_997bf6ae\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_costo_riesgo_id_costo_presupuesto_idx_997bf6ae\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"rg_costo_riesgo_id_costo_presupuesto_idx_997bf6ae\"",
+        "sql": "CREATE INDEX \"rg_costo_riesgo_id_costo_presupuesto_idx_997bf6ae\" ON \"public\".\"rg_costo_riesgo\" (\"id_costo_presupuesto\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"rg_costo_riesgo_id_costo_presupuesto_idx_997bf6ae\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_costo_riesgo_id_costo_presupuesto_idx_997bf6ae\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.rg_costo_riesgo.rg_costo_riesgo_id_incidencia_idx_dc23a618",
+    "label": "Create index \"rg_costo_riesgo_id_incidencia_idx_dc23a618\" on \"rg_costo_riesgo\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "rg_costo_riesgo_id_incidencia_idx_dc23a618",
+        "table": "rg_costo_riesgo"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"rg_costo_riesgo_id_incidencia_idx_dc23a618\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_costo_riesgo_id_incidencia_idx_dc23a618\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"rg_costo_riesgo_id_incidencia_idx_dc23a618\"",
+        "sql": "CREATE INDEX \"rg_costo_riesgo_id_incidencia_idx_dc23a618\" ON \"public\".\"rg_costo_riesgo\" (\"id_incidencia\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"rg_costo_riesgo_id_incidencia_idx_dc23a618\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_costo_riesgo_id_incidencia_idx_dc23a618\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.rg_costo_riesgo.rg_costo_riesgo_id_riesgo_idx_59be24f5",
+    "label": "Create index \"rg_costo_riesgo_id_riesgo_idx_59be24f5\" on \"rg_costo_riesgo\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "rg_costo_riesgo_id_riesgo_idx_59be24f5",
+        "table": "rg_costo_riesgo"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"rg_costo_riesgo_id_riesgo_idx_59be24f5\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_costo_riesgo_id_riesgo_idx_59be24f5\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"rg_costo_riesgo_id_riesgo_idx_59be24f5\"",
+        "sql": "CREATE INDEX \"rg_costo_riesgo_id_riesgo_idx_59be24f5\" ON \"public\".\"rg_costo_riesgo\" (\"id_riesgo\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"rg_costo_riesgo_id_riesgo_idx_59be24f5\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_costo_riesgo_id_riesgo_idx_59be24f5\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.rg_documento_costo.rg_documento_costo_id_costo_riesgo_idx_b9d12fb0",
+    "label": "Create index \"rg_documento_costo_id_costo_riesgo_idx_b9d12fb0\" on \"rg_documento_costo\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "rg_documento_costo_id_costo_riesgo_idx_b9d12fb0",
+        "table": "rg_documento_costo"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"rg_documento_costo_id_costo_riesgo_idx_b9d12fb0\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_documento_costo_id_costo_riesgo_idx_b9d12fb0\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"rg_documento_costo_id_costo_riesgo_idx_b9d12fb0\"",
+        "sql": "CREATE INDEX \"rg_documento_costo_id_costo_riesgo_idx_b9d12fb0\" ON \"public\".\"rg_documento_costo\" (\"id_costo_riesgo\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"rg_documento_costo_id_costo_riesgo_idx_b9d12fb0\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_documento_costo_id_costo_riesgo_idx_b9d12fb0\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.rg_incidencia.rg_incidencia_id_riesgo_idx_59be24f5",
+    "label": "Create index \"rg_incidencia_id_riesgo_idx_59be24f5\" on \"rg_incidencia\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "rg_incidencia_id_riesgo_idx_59be24f5",
+        "table": "rg_incidencia"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"rg_incidencia_id_riesgo_idx_59be24f5\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_incidencia_id_riesgo_idx_59be24f5\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"rg_incidencia_id_riesgo_idx_59be24f5\"",
+        "sql": "CREATE INDEX \"rg_incidencia_id_riesgo_idx_59be24f5\" ON \"public\".\"rg_incidencia\" (\"id_riesgo\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"rg_incidencia_id_riesgo_idx_59be24f5\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_incidencia_id_riesgo_idx_59be24f5\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.rg_mitigacion_riesgo.rg_mitigacion_riesgo_id_plantilla_mitigacion_idx_5bee1967",
+    "label": "Create index \"rg_mitigacion_riesgo_id_plantilla_mitigacion_idx_5bee1967\" on \"rg_mitigacion_riesgo\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "rg_mitigacion_riesgo_id_plantilla_mitigacion_idx_5bee1967",
+        "table": "rg_mitigacion_riesgo"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"rg_mitigacion_riesgo_id_plantilla_mitigacion_idx_5bee1967\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_mitigacion_riesgo_id_plantilla_mitigacion_idx_5bee1967\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"rg_mitigacion_riesgo_id_plantilla_mitigacion_idx_5bee1967\"",
+        "sql": "CREATE INDEX \"rg_mitigacion_riesgo_id_plantilla_mitigacion_idx_5bee1967\" ON \"public\".\"rg_mitigacion_riesgo\" (\"id_plantilla_mitigacion\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"rg_mitigacion_riesgo_id_plantilla_mitigacion_idx_5bee1967\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_mitigacion_riesgo_id_plantilla_mitigacion_idx_5bee1967\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.rg_mitigacion_riesgo.rg_mitigacion_riesgo_id_riesgo_idx_59be24f5",
+    "label": "Create index \"rg_mitigacion_riesgo_id_riesgo_idx_59be24f5\" on \"rg_mitigacion_riesgo\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "rg_mitigacion_riesgo_id_riesgo_idx_59be24f5",
+        "table": "rg_mitigacion_riesgo"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"rg_mitigacion_riesgo_id_riesgo_idx_59be24f5\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_mitigacion_riesgo_id_riesgo_idx_59be24f5\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"rg_mitigacion_riesgo_id_riesgo_idx_59be24f5\"",
+        "sql": "CREATE INDEX \"rg_mitigacion_riesgo_id_riesgo_idx_59be24f5\" ON \"public\".\"rg_mitigacion_riesgo\" (\"id_riesgo\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"rg_mitigacion_riesgo_id_riesgo_idx_59be24f5\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_mitigacion_riesgo_id_riesgo_idx_59be24f5\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.rg_plan_contingencia.rg_plan_contingencia_id_riesgo_idx_59be24f5",
+    "label": "Create index \"rg_plan_contingencia_id_riesgo_idx_59be24f5\" on \"rg_plan_contingencia\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "rg_plan_contingencia_id_riesgo_idx_59be24f5",
+        "table": "rg_plan_contingencia"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"rg_plan_contingencia_id_riesgo_idx_59be24f5\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_plan_contingencia_id_riesgo_idx_59be24f5\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"rg_plan_contingencia_id_riesgo_idx_59be24f5\"",
+        "sql": "CREATE INDEX \"rg_plan_contingencia_id_riesgo_idx_59be24f5\" ON \"public\".\"rg_plan_contingencia\" (\"id_riesgo\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"rg_plan_contingencia_id_riesgo_idx_59be24f5\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_plan_contingencia_id_riesgo_idx_59be24f5\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.rg_plan_contingencia.rg_plan_contingencia_id_usuario_responsable_idx_de19d98e",
+    "label": "Create index \"rg_plan_contingencia_id_usuario_responsable_idx_de19d98e\" on \"rg_plan_contingencia\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "rg_plan_contingencia_id_usuario_responsable_idx_de19d98e",
+        "table": "rg_plan_contingencia"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"rg_plan_contingencia_id_usuario_responsable_idx_de19d98e\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_plan_contingencia_id_usuario_responsable_idx_de19d98e\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"rg_plan_contingencia_id_usuario_responsable_idx_de19d98e\"",
+        "sql": "CREATE INDEX \"rg_plan_contingencia_id_usuario_responsable_idx_de19d98e\" ON \"public\".\"rg_plan_contingencia\" (\"id_usuario_responsable\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"rg_plan_contingencia_id_usuario_responsable_idx_de19d98e\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_plan_contingencia_id_usuario_responsable_idx_de19d98e\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.rg_plantilla_mitigacion.rg_plantilla_mitigacion_id_plantilla_riesgo_idx_684a00af",
+    "label": "Create index \"rg_plantilla_mitigacion_id_plantilla_riesgo_idx_684a00af\" on \"rg_plantilla_mitigacion\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "rg_plantilla_mitigacion_id_plantilla_riesgo_idx_684a00af",
+        "table": "rg_plantilla_mitigacion"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"rg_plantilla_mitigacion_id_plantilla_riesgo_idx_684a00af\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_plantilla_mitigacion_id_plantilla_riesgo_idx_684a00af\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"rg_plantilla_mitigacion_id_plantilla_riesgo_idx_684a00af\"",
+        "sql": "CREATE INDEX \"rg_plantilla_mitigacion_id_plantilla_riesgo_idx_684a00af\" ON \"public\".\"rg_plantilla_mitigacion\" (\"id_plantilla_riesgo\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"rg_plantilla_mitigacion_id_plantilla_riesgo_idx_684a00af\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_plantilla_mitigacion_id_plantilla_riesgo_idx_684a00af\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.rg_plantilla_plan.rg_plantilla_plan_id_plantilla_riesgo_idx_684a00af",
+    "label": "Create index \"rg_plantilla_plan_id_plantilla_riesgo_idx_684a00af\" on \"rg_plantilla_plan\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "rg_plantilla_plan_id_plantilla_riesgo_idx_684a00af",
+        "table": "rg_plantilla_plan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"rg_plantilla_plan_id_plantilla_riesgo_idx_684a00af\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_plantilla_plan_id_plantilla_riesgo_idx_684a00af\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"rg_plantilla_plan_id_plantilla_riesgo_idx_684a00af\"",
+        "sql": "CREATE INDEX \"rg_plantilla_plan_id_plantilla_riesgo_idx_684a00af\" ON \"public\".\"rg_plantilla_plan\" (\"id_plantilla_riesgo\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"rg_plantilla_plan_id_plantilla_riesgo_idx_684a00af\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_plantilla_plan_id_plantilla_riesgo_idx_684a00af\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.rg_plantilla_riesgo.rg_plantilla_riesgo_id_categoria_riesgo_idx_fa2eda0b",
+    "label": "Create index \"rg_plantilla_riesgo_id_categoria_riesgo_idx_fa2eda0b\" on \"rg_plantilla_riesgo\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "rg_plantilla_riesgo_id_categoria_riesgo_idx_fa2eda0b",
+        "table": "rg_plantilla_riesgo"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"rg_plantilla_riesgo_id_categoria_riesgo_idx_fa2eda0b\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_plantilla_riesgo_id_categoria_riesgo_idx_fa2eda0b\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"rg_plantilla_riesgo_id_categoria_riesgo_idx_fa2eda0b\"",
+        "sql": "CREATE INDEX \"rg_plantilla_riesgo_id_categoria_riesgo_idx_fa2eda0b\" ON \"public\".\"rg_plantilla_riesgo\" (\"id_categoria_riesgo\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"rg_plantilla_riesgo_id_categoria_riesgo_idx_fa2eda0b\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_plantilla_riesgo_id_categoria_riesgo_idx_fa2eda0b\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.rg_riesgo.rg_riesgo_id_categoria_riesgo_idx_fa2eda0b",
+    "label": "Create index \"rg_riesgo_id_categoria_riesgo_idx_fa2eda0b\" on \"rg_riesgo\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "rg_riesgo_id_categoria_riesgo_idx_fa2eda0b",
+        "table": "rg_riesgo"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"rg_riesgo_id_categoria_riesgo_idx_fa2eda0b\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_riesgo_id_categoria_riesgo_idx_fa2eda0b\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"rg_riesgo_id_categoria_riesgo_idx_fa2eda0b\"",
+        "sql": "CREATE INDEX \"rg_riesgo_id_categoria_riesgo_idx_fa2eda0b\" ON \"public\".\"rg_riesgo\" (\"id_categoria_riesgo\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"rg_riesgo_id_categoria_riesgo_idx_fa2eda0b\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_riesgo_id_categoria_riesgo_idx_fa2eda0b\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.rg_riesgo.rg_riesgo_id_matrimonio_idx_97ab526e",
+    "label": "Create index \"rg_riesgo_id_matrimonio_idx_97ab526e\" on \"rg_riesgo\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "rg_riesgo_id_matrimonio_idx_97ab526e",
+        "table": "rg_riesgo"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"rg_riesgo_id_matrimonio_idx_97ab526e\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_riesgo_id_matrimonio_idx_97ab526e\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"rg_riesgo_id_matrimonio_idx_97ab526e\"",
+        "sql": "CREATE INDEX \"rg_riesgo_id_matrimonio_idx_97ab526e\" ON \"public\".\"rg_riesgo\" (\"id_matrimonio\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"rg_riesgo_id_matrimonio_idx_97ab526e\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_riesgo_id_matrimonio_idx_97ab526e\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.rg_riesgo.rg_riesgo_id_plantilla_riesgo_idx_684a00af",
+    "label": "Create index \"rg_riesgo_id_plantilla_riesgo_idx_684a00af\" on \"rg_riesgo\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "rg_riesgo_id_plantilla_riesgo_idx_684a00af",
+        "table": "rg_riesgo"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"rg_riesgo_id_plantilla_riesgo_idx_684a00af\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_riesgo_id_plantilla_riesgo_idx_684a00af\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"rg_riesgo_id_plantilla_riesgo_idx_684a00af\"",
+        "sql": "CREATE INDEX \"rg_riesgo_id_plantilla_riesgo_idx_684a00af\" ON \"public\".\"rg_riesgo\" (\"id_plantilla_riesgo\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"rg_riesgo_id_plantilla_riesgo_idx_684a00af\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_riesgo_id_plantilla_riesgo_idx_684a00af\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.rg_riesgo.rg_riesgo_id_proyecto_idx_4279b0d1",
+    "label": "Create index \"rg_riesgo_id_proyecto_idx_4279b0d1\" on \"rg_riesgo\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "rg_riesgo_id_proyecto_idx_4279b0d1",
+        "table": "rg_riesgo"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"rg_riesgo_id_proyecto_idx_4279b0d1\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_riesgo_id_proyecto_idx_4279b0d1\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"rg_riesgo_id_proyecto_idx_4279b0d1\"",
+        "sql": "CREATE INDEX \"rg_riesgo_id_proyecto_idx_4279b0d1\" ON \"public\".\"rg_riesgo\" (\"id_proyecto\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"rg_riesgo_id_proyecto_idx_4279b0d1\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_riesgo_id_proyecto_idx_4279b0d1\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.rg_riesgo.rg_riesgo_id_usuario_responsable_idx_de19d98e",
+    "label": "Create index \"rg_riesgo_id_usuario_responsable_idx_de19d98e\" on \"rg_riesgo\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "rg_riesgo_id_usuario_responsable_idx_de19d98e",
+        "table": "rg_riesgo"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"rg_riesgo_id_usuario_responsable_idx_de19d98e\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_riesgo_id_usuario_responsable_idx_de19d98e\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"rg_riesgo_id_usuario_responsable_idx_de19d98e\"",
+        "sql": "CREATE INDEX \"rg_riesgo_id_usuario_responsable_idx_de19d98e\" ON \"public\".\"rg_riesgo\" (\"id_usuario_responsable\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"rg_riesgo_id_usuario_responsable_idx_de19d98e\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_riesgo_id_usuario_responsable_idx_de19d98e\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.rg_riesgo.rg_riesgo_severidad_idx_b0040f3e",
+    "label": "Create index \"rg_riesgo_severidad_idx_b0040f3e\" on \"rg_riesgo\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "rg_riesgo_severidad_idx_b0040f3e",
+        "table": "rg_riesgo"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"rg_riesgo_severidad_idx_b0040f3e\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_riesgo_severidad_idx_b0040f3e\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"rg_riesgo_severidad_idx_b0040f3e\"",
+        "sql": "CREATE INDEX \"rg_riesgo_severidad_idx_b0040f3e\" ON \"public\".\"rg_riesgo\" (\"severidad\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"rg_riesgo_severidad_idx_b0040f3e\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"rg_riesgo_severidad_idx_b0040f3e\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.nt_notificacion_riesgo.nt_notificacion_riesgo_id_notificacion_fkey",
+    "label": "Add foreign key \"nt_notificacion_riesgo_id_notificacion_fkey\" on \"nt_notificacion_riesgo\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "nt_notificacion_riesgo_id_notificacion_fkey",
+        "table": "nt_notificacion_riesgo"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"nt_notificacion_riesgo_id_notificacion_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "nt_notificacion_riesgo_id_notificacion_fkey",
+          "public",
+          "\"public\".\"nt_notificacion_riesgo\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"nt_notificacion_riesgo_id_notificacion_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"nt_notificacion_riesgo\"\nADD CONSTRAINT \"nt_notificacion_riesgo_id_notificacion_fkey\"\nFOREIGN KEY (\"id_notificacion\")\nREFERENCES \"public\".\"nt_notificacion\" (\"id_notificacion\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"nt_notificacion_riesgo_id_notificacion_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "nt_notificacion_riesgo_id_notificacion_fkey",
+          "public",
+          "\"public\".\"nt_notificacion_riesgo\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.nt_notificacion_riesgo.nt_notificacion_riesgo_id_riesgo_fkey",
+    "label": "Add foreign key \"nt_notificacion_riesgo_id_riesgo_fkey\" on \"nt_notificacion_riesgo\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "nt_notificacion_riesgo_id_riesgo_fkey",
+        "table": "nt_notificacion_riesgo"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"nt_notificacion_riesgo_id_riesgo_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "nt_notificacion_riesgo_id_riesgo_fkey",
+          "public",
+          "\"public\".\"nt_notificacion_riesgo\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"nt_notificacion_riesgo_id_riesgo_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"nt_notificacion_riesgo\"\nADD CONSTRAINT \"nt_notificacion_riesgo_id_riesgo_fkey\"\nFOREIGN KEY (\"id_riesgo\")\nREFERENCES \"public\".\"rg_riesgo\" (\"id_riesgo\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"nt_notificacion_riesgo_id_riesgo_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "nt_notificacion_riesgo_id_riesgo_fkey",
+          "public",
+          "\"public\".\"nt_notificacion_riesgo\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.nt_notificacion_riesgo.nt_notificacion_riesgo_id_incidencia_fkey",
+    "label": "Add foreign key \"nt_notificacion_riesgo_id_incidencia_fkey\" on \"nt_notificacion_riesgo\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "nt_notificacion_riesgo_id_incidencia_fkey",
+        "table": "nt_notificacion_riesgo"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"nt_notificacion_riesgo_id_incidencia_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "nt_notificacion_riesgo_id_incidencia_fkey",
+          "public",
+          "\"public\".\"nt_notificacion_riesgo\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"nt_notificacion_riesgo_id_incidencia_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"nt_notificacion_riesgo\"\nADD CONSTRAINT \"nt_notificacion_riesgo_id_incidencia_fkey\"\nFOREIGN KEY (\"id_incidencia\")\nREFERENCES \"public\".\"rg_incidencia\" (\"id_incidencia\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"nt_notificacion_riesgo_id_incidencia_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "nt_notificacion_riesgo_id_incidencia_fkey",
+          "public",
+          "\"public\".\"nt_notificacion_riesgo\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.rg_activacion_plan.rg_activacion_plan_id_plan_contingencia_fkey",
+    "label": "Add foreign key \"rg_activacion_plan_id_plan_contingencia_fkey\" on \"rg_activacion_plan\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "rg_activacion_plan_id_plan_contingencia_fkey",
+        "table": "rg_activacion_plan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"rg_activacion_plan_id_plan_contingencia_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "rg_activacion_plan_id_plan_contingencia_fkey",
+          "public",
+          "\"public\".\"rg_activacion_plan\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"rg_activacion_plan_id_plan_contingencia_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"rg_activacion_plan\"\nADD CONSTRAINT \"rg_activacion_plan_id_plan_contingencia_fkey\"\nFOREIGN KEY (\"id_plan_contingencia\")\nREFERENCES \"public\".\"rg_plan_contingencia\" (\"id_plan_contingencia\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"rg_activacion_plan_id_plan_contingencia_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "rg_activacion_plan_id_plan_contingencia_fkey",
+          "public",
+          "\"public\".\"rg_activacion_plan\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.rg_activacion_plan.rg_activacion_plan_id_incidencia_fkey",
+    "label": "Add foreign key \"rg_activacion_plan_id_incidencia_fkey\" on \"rg_activacion_plan\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "rg_activacion_plan_id_incidencia_fkey",
+        "table": "rg_activacion_plan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"rg_activacion_plan_id_incidencia_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "rg_activacion_plan_id_incidencia_fkey",
+          "public",
+          "\"public\".\"rg_activacion_plan\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"rg_activacion_plan_id_incidencia_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"rg_activacion_plan\"\nADD CONSTRAINT \"rg_activacion_plan_id_incidencia_fkey\"\nFOREIGN KEY (\"id_incidencia\")\nREFERENCES \"public\".\"rg_incidencia\" (\"id_incidencia\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"rg_activacion_plan_id_incidencia_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "rg_activacion_plan_id_incidencia_fkey",
+          "public",
+          "\"public\".\"rg_activacion_plan\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.rg_activacion_plan.rg_activacion_plan_id_usuario_registro_fkey",
+    "label": "Add foreign key \"rg_activacion_plan_id_usuario_registro_fkey\" on \"rg_activacion_plan\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "rg_activacion_plan_id_usuario_registro_fkey",
+        "table": "rg_activacion_plan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"rg_activacion_plan_id_usuario_registro_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "rg_activacion_plan_id_usuario_registro_fkey",
+          "public",
+          "\"public\".\"rg_activacion_plan\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"rg_activacion_plan_id_usuario_registro_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"rg_activacion_plan\"\nADD CONSTRAINT \"rg_activacion_plan_id_usuario_registro_fkey\"\nFOREIGN KEY (\"id_usuario_registro\")\nREFERENCES \"public\".\"au_usuario\" (\"id_usuario\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"rg_activacion_plan_id_usuario_registro_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "rg_activacion_plan_id_usuario_registro_fkey",
+          "public",
+          "\"public\".\"rg_activacion_plan\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.rg_costo_riesgo.rg_costo_riesgo_id_riesgo_fkey",
+    "label": "Add foreign key \"rg_costo_riesgo_id_riesgo_fkey\" on \"rg_costo_riesgo\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "rg_costo_riesgo_id_riesgo_fkey",
+        "table": "rg_costo_riesgo"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"rg_costo_riesgo_id_riesgo_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "rg_costo_riesgo_id_riesgo_fkey",
+          "public",
+          "\"public\".\"rg_costo_riesgo\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"rg_costo_riesgo_id_riesgo_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"rg_costo_riesgo\"\nADD CONSTRAINT \"rg_costo_riesgo_id_riesgo_fkey\"\nFOREIGN KEY (\"id_riesgo\")\nREFERENCES \"public\".\"rg_riesgo\" (\"id_riesgo\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"rg_costo_riesgo_id_riesgo_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "rg_costo_riesgo_id_riesgo_fkey",
+          "public",
+          "\"public\".\"rg_costo_riesgo\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.rg_costo_riesgo.rg_costo_riesgo_id_incidencia_fkey",
+    "label": "Add foreign key \"rg_costo_riesgo_id_incidencia_fkey\" on \"rg_costo_riesgo\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "rg_costo_riesgo_id_incidencia_fkey",
+        "table": "rg_costo_riesgo"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"rg_costo_riesgo_id_incidencia_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "rg_costo_riesgo_id_incidencia_fkey",
+          "public",
+          "\"public\".\"rg_costo_riesgo\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"rg_costo_riesgo_id_incidencia_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"rg_costo_riesgo\"\nADD CONSTRAINT \"rg_costo_riesgo_id_incidencia_fkey\"\nFOREIGN KEY (\"id_incidencia\")\nREFERENCES \"public\".\"rg_incidencia\" (\"id_incidencia\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"rg_costo_riesgo_id_incidencia_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "rg_costo_riesgo_id_incidencia_fkey",
+          "public",
+          "\"public\".\"rg_costo_riesgo\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.rg_costo_riesgo.rg_costo_riesgo_id_costo_presupuesto_fkey",
+    "label": "Add foreign key \"rg_costo_riesgo_id_costo_presupuesto_fkey\" on \"rg_costo_riesgo\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "rg_costo_riesgo_id_costo_presupuesto_fkey",
+        "table": "rg_costo_riesgo"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"rg_costo_riesgo_id_costo_presupuesto_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "rg_costo_riesgo_id_costo_presupuesto_fkey",
+          "public",
+          "\"public\".\"rg_costo_riesgo\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"rg_costo_riesgo_id_costo_presupuesto_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"rg_costo_riesgo\"\nADD CONSTRAINT \"rg_costo_riesgo_id_costo_presupuesto_fkey\"\nFOREIGN KEY (\"id_costo_presupuesto\")\nREFERENCES \"public\".\"pr_costo_proveedor\" (\"id_costo\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"rg_costo_riesgo_id_costo_presupuesto_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "rg_costo_riesgo_id_costo_presupuesto_fkey",
+          "public",
+          "\"public\".\"rg_costo_riesgo\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.rg_documento_costo.rg_documento_costo_id_costo_riesgo_fkey",
+    "label": "Add foreign key \"rg_documento_costo_id_costo_riesgo_fkey\" on \"rg_documento_costo\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "rg_documento_costo_id_costo_riesgo_fkey",
+        "table": "rg_documento_costo"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"rg_documento_costo_id_costo_riesgo_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "rg_documento_costo_id_costo_riesgo_fkey",
+          "public",
+          "\"public\".\"rg_documento_costo\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"rg_documento_costo_id_costo_riesgo_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"rg_documento_costo\"\nADD CONSTRAINT \"rg_documento_costo_id_costo_riesgo_fkey\"\nFOREIGN KEY (\"id_costo_riesgo\")\nREFERENCES \"public\".\"rg_costo_riesgo\" (\"id_costo_riesgo\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"rg_documento_costo_id_costo_riesgo_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "rg_documento_costo_id_costo_riesgo_fkey",
+          "public",
+          "\"public\".\"rg_documento_costo\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.rg_incidencia.rg_incidencia_id_riesgo_fkey",
+    "label": "Add foreign key \"rg_incidencia_id_riesgo_fkey\" on \"rg_incidencia\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "rg_incidencia_id_riesgo_fkey",
+        "table": "rg_incidencia"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"rg_incidencia_id_riesgo_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "rg_incidencia_id_riesgo_fkey",
+          "public",
+          "\"public\".\"rg_incidencia\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"rg_incidencia_id_riesgo_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"rg_incidencia\"\nADD CONSTRAINT \"rg_incidencia_id_riesgo_fkey\"\nFOREIGN KEY (\"id_riesgo\")\nREFERENCES \"public\".\"rg_riesgo\" (\"id_riesgo\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"rg_incidencia_id_riesgo_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "rg_incidencia_id_riesgo_fkey",
+          "public",
+          "\"public\".\"rg_incidencia\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.rg_mitigacion_riesgo.rg_mitigacion_riesgo_id_riesgo_fkey",
+    "label": "Add foreign key \"rg_mitigacion_riesgo_id_riesgo_fkey\" on \"rg_mitigacion_riesgo\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "rg_mitigacion_riesgo_id_riesgo_fkey",
+        "table": "rg_mitigacion_riesgo"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"rg_mitigacion_riesgo_id_riesgo_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "rg_mitigacion_riesgo_id_riesgo_fkey",
+          "public",
+          "\"public\".\"rg_mitigacion_riesgo\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"rg_mitigacion_riesgo_id_riesgo_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"rg_mitigacion_riesgo\"\nADD CONSTRAINT \"rg_mitigacion_riesgo_id_riesgo_fkey\"\nFOREIGN KEY (\"id_riesgo\")\nREFERENCES \"public\".\"rg_riesgo\" (\"id_riesgo\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"rg_mitigacion_riesgo_id_riesgo_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "rg_mitigacion_riesgo_id_riesgo_fkey",
+          "public",
+          "\"public\".\"rg_mitigacion_riesgo\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.rg_mitigacion_riesgo.rg_mitigacion_riesgo_id_plantilla_mitigacion_fkey",
+    "label": "Add foreign key \"rg_mitigacion_riesgo_id_plantilla_mitigacion_fkey\" on \"rg_mitigacion_riesgo\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "rg_mitigacion_riesgo_id_plantilla_mitigacion_fkey",
+        "table": "rg_mitigacion_riesgo"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"rg_mitigacion_riesgo_id_plantilla_mitigacion_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "rg_mitigacion_riesgo_id_plantilla_mitigacion_fkey",
+          "public",
+          "\"public\".\"rg_mitigacion_riesgo\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"rg_mitigacion_riesgo_id_plantilla_mitigacion_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"rg_mitigacion_riesgo\"\nADD CONSTRAINT \"rg_mitigacion_riesgo_id_plantilla_mitigacion_fkey\"\nFOREIGN KEY (\"id_plantilla_mitigacion\")\nREFERENCES \"public\".\"rg_plantilla_mitigacion\" (\"id_plantilla_mitigacion\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"rg_mitigacion_riesgo_id_plantilla_mitigacion_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "rg_mitigacion_riesgo_id_plantilla_mitigacion_fkey",
+          "public",
+          "\"public\".\"rg_mitigacion_riesgo\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.rg_plan_contingencia.rg_plan_contingencia_id_riesgo_fkey",
+    "label": "Add foreign key \"rg_plan_contingencia_id_riesgo_fkey\" on \"rg_plan_contingencia\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "rg_plan_contingencia_id_riesgo_fkey",
+        "table": "rg_plan_contingencia"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"rg_plan_contingencia_id_riesgo_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "rg_plan_contingencia_id_riesgo_fkey",
+          "public",
+          "\"public\".\"rg_plan_contingencia\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"rg_plan_contingencia_id_riesgo_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"rg_plan_contingencia\"\nADD CONSTRAINT \"rg_plan_contingencia_id_riesgo_fkey\"\nFOREIGN KEY (\"id_riesgo\")\nREFERENCES \"public\".\"rg_riesgo\" (\"id_riesgo\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"rg_plan_contingencia_id_riesgo_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "rg_plan_contingencia_id_riesgo_fkey",
+          "public",
+          "\"public\".\"rg_plan_contingencia\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.rg_plan_contingencia.rg_plan_contingencia_id_usuario_responsable_fkey",
+    "label": "Add foreign key \"rg_plan_contingencia_id_usuario_responsable_fkey\" on \"rg_plan_contingencia\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "rg_plan_contingencia_id_usuario_responsable_fkey",
+        "table": "rg_plan_contingencia"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"rg_plan_contingencia_id_usuario_responsable_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "rg_plan_contingencia_id_usuario_responsable_fkey",
+          "public",
+          "\"public\".\"rg_plan_contingencia\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"rg_plan_contingencia_id_usuario_responsable_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"rg_plan_contingencia\"\nADD CONSTRAINT \"rg_plan_contingencia_id_usuario_responsable_fkey\"\nFOREIGN KEY (\"id_usuario_responsable\")\nREFERENCES \"public\".\"au_usuario\" (\"id_usuario\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"rg_plan_contingencia_id_usuario_responsable_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "rg_plan_contingencia_id_usuario_responsable_fkey",
+          "public",
+          "\"public\".\"rg_plan_contingencia\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.rg_plantilla_mitigacion.rg_plantilla_mitigacion_id_plantilla_riesgo_fkey",
+    "label": "Add foreign key \"rg_plantilla_mitigacion_id_plantilla_riesgo_fkey\" on \"rg_plantilla_mitigacion\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "rg_plantilla_mitigacion_id_plantilla_riesgo_fkey",
+        "table": "rg_plantilla_mitigacion"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"rg_plantilla_mitigacion_id_plantilla_riesgo_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "rg_plantilla_mitigacion_id_plantilla_riesgo_fkey",
+          "public",
+          "\"public\".\"rg_plantilla_mitigacion\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"rg_plantilla_mitigacion_id_plantilla_riesgo_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"rg_plantilla_mitigacion\"\nADD CONSTRAINT \"rg_plantilla_mitigacion_id_plantilla_riesgo_fkey\"\nFOREIGN KEY (\"id_plantilla_riesgo\")\nREFERENCES \"public\".\"rg_plantilla_riesgo\" (\"id_plantilla_riesgo\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"rg_plantilla_mitigacion_id_plantilla_riesgo_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "rg_plantilla_mitigacion_id_plantilla_riesgo_fkey",
+          "public",
+          "\"public\".\"rg_plantilla_mitigacion\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.rg_plantilla_plan.rg_plantilla_plan_id_plantilla_riesgo_fkey",
+    "label": "Add foreign key \"rg_plantilla_plan_id_plantilla_riesgo_fkey\" on \"rg_plantilla_plan\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "rg_plantilla_plan_id_plantilla_riesgo_fkey",
+        "table": "rg_plantilla_plan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"rg_plantilla_plan_id_plantilla_riesgo_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "rg_plantilla_plan_id_plantilla_riesgo_fkey",
+          "public",
+          "\"public\".\"rg_plantilla_plan\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"rg_plantilla_plan_id_plantilla_riesgo_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"rg_plantilla_plan\"\nADD CONSTRAINT \"rg_plantilla_plan_id_plantilla_riesgo_fkey\"\nFOREIGN KEY (\"id_plantilla_riesgo\")\nREFERENCES \"public\".\"rg_plantilla_riesgo\" (\"id_plantilla_riesgo\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"rg_plantilla_plan_id_plantilla_riesgo_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "rg_plantilla_plan_id_plantilla_riesgo_fkey",
+          "public",
+          "\"public\".\"rg_plantilla_plan\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.rg_plantilla_riesgo.rg_plantilla_riesgo_id_categoria_riesgo_fkey",
+    "label": "Add foreign key \"rg_plantilla_riesgo_id_categoria_riesgo_fkey\" on \"rg_plantilla_riesgo\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "rg_plantilla_riesgo_id_categoria_riesgo_fkey",
+        "table": "rg_plantilla_riesgo"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"rg_plantilla_riesgo_id_categoria_riesgo_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "rg_plantilla_riesgo_id_categoria_riesgo_fkey",
+          "public",
+          "\"public\".\"rg_plantilla_riesgo\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"rg_plantilla_riesgo_id_categoria_riesgo_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"rg_plantilla_riesgo\"\nADD CONSTRAINT \"rg_plantilla_riesgo_id_categoria_riesgo_fkey\"\nFOREIGN KEY (\"id_categoria_riesgo\")\nREFERENCES \"public\".\"rg_categoria_riesgo\" (\"id_categoria_riesgo\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"rg_plantilla_riesgo_id_categoria_riesgo_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "rg_plantilla_riesgo_id_categoria_riesgo_fkey",
+          "public",
+          "\"public\".\"rg_plantilla_riesgo\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.rg_riesgo.rg_riesgo_id_proyecto_fkey",
+    "label": "Add foreign key \"rg_riesgo_id_proyecto_fkey\" on \"rg_riesgo\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "rg_riesgo_id_proyecto_fkey",
+        "table": "rg_riesgo"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"rg_riesgo_id_proyecto_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "rg_riesgo_id_proyecto_fkey",
+          "public",
+          "\"public\".\"rg_riesgo\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"rg_riesgo_id_proyecto_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"rg_riesgo\"\nADD CONSTRAINT \"rg_riesgo_id_proyecto_fkey\"\nFOREIGN KEY (\"id_proyecto\")\nREFERENCES \"public\".\"gp_proyecto\" (\"idProyecto\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"rg_riesgo_id_proyecto_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "rg_riesgo_id_proyecto_fkey",
+          "public",
+          "\"public\".\"rg_riesgo\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.rg_riesgo.rg_riesgo_id_matrimonio_fkey",
+    "label": "Add foreign key \"rg_riesgo_id_matrimonio_fkey\" on \"rg_riesgo\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "rg_riesgo_id_matrimonio_fkey",
+        "table": "rg_riesgo"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"rg_riesgo_id_matrimonio_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "rg_riesgo_id_matrimonio_fkey",
+          "public",
+          "\"public\".\"rg_riesgo\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"rg_riesgo_id_matrimonio_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"rg_riesgo\"\nADD CONSTRAINT \"rg_riesgo_id_matrimonio_fkey\"\nFOREIGN KEY (\"id_matrimonio\")\nREFERENCES \"public\".\"gp_matrimonio\" (\"id_matrimonio\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"rg_riesgo_id_matrimonio_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "rg_riesgo_id_matrimonio_fkey",
+          "public",
+          "\"public\".\"rg_riesgo\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.rg_riesgo.rg_riesgo_id_plantilla_riesgo_fkey",
+    "label": "Add foreign key \"rg_riesgo_id_plantilla_riesgo_fkey\" on \"rg_riesgo\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "rg_riesgo_id_plantilla_riesgo_fkey",
+        "table": "rg_riesgo"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"rg_riesgo_id_plantilla_riesgo_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "rg_riesgo_id_plantilla_riesgo_fkey",
+          "public",
+          "\"public\".\"rg_riesgo\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"rg_riesgo_id_plantilla_riesgo_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"rg_riesgo\"\nADD CONSTRAINT \"rg_riesgo_id_plantilla_riesgo_fkey\"\nFOREIGN KEY (\"id_plantilla_riesgo\")\nREFERENCES \"public\".\"rg_plantilla_riesgo\" (\"id_plantilla_riesgo\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"rg_riesgo_id_plantilla_riesgo_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "rg_riesgo_id_plantilla_riesgo_fkey",
+          "public",
+          "\"public\".\"rg_riesgo\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.rg_riesgo.rg_riesgo_id_categoria_riesgo_fkey",
+    "label": "Add foreign key \"rg_riesgo_id_categoria_riesgo_fkey\" on \"rg_riesgo\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "rg_riesgo_id_categoria_riesgo_fkey",
+        "table": "rg_riesgo"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"rg_riesgo_id_categoria_riesgo_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "rg_riesgo_id_categoria_riesgo_fkey",
+          "public",
+          "\"public\".\"rg_riesgo\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"rg_riesgo_id_categoria_riesgo_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"rg_riesgo\"\nADD CONSTRAINT \"rg_riesgo_id_categoria_riesgo_fkey\"\nFOREIGN KEY (\"id_categoria_riesgo\")\nREFERENCES \"public\".\"rg_categoria_riesgo\" (\"id_categoria_riesgo\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"rg_riesgo_id_categoria_riesgo_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "rg_riesgo_id_categoria_riesgo_fkey",
+          "public",
+          "\"public\".\"rg_riesgo\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.rg_riesgo.rg_riesgo_id_usuario_responsable_fkey",
+    "label": "Add foreign key \"rg_riesgo_id_usuario_responsable_fkey\" on \"rg_riesgo\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "rg_riesgo_id_usuario_responsable_fkey",
+        "table": "rg_riesgo"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"rg_riesgo_id_usuario_responsable_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "rg_riesgo_id_usuario_responsable_fkey",
+          "public",
+          "\"public\".\"rg_riesgo\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"rg_riesgo_id_usuario_responsable_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"rg_riesgo\"\nADD CONSTRAINT \"rg_riesgo_id_usuario_responsable_fkey\"\nFOREIGN KEY (\"id_usuario_responsable\")\nREFERENCES \"public\".\"au_usuario\" (\"id_usuario\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"rg_riesgo_id_usuario_responsable_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "rg_riesgo_id_usuario_responsable_fkey",
+          "public",
+          "\"public\".\"rg_riesgo\""
+        ]
+      }
+    ]
+  }
+]

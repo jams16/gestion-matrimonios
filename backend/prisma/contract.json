@@ -136,6 +136,10 @@
       "model": "NotificacionPresupuesto",
       "namespace": "public"
     },
+    "nt_notificacion_riesgo": {
+      "model": "NotificacionRiesgo",
+      "namespace": "public"
+    },
     "pr_categoria_presupuesto": {
       "model": "CategoriaPresupuesto",
       "namespace": "public"
@@ -206,6 +210,50 @@
     },
     "pv_seguimiento_proveedor": {
       "model": "SeguimientoProveedor",
+      "namespace": "public"
+    },
+    "rg_activacion_plan": {
+      "model": "ActivacionPlanRiesgo",
+      "namespace": "public"
+    },
+    "rg_categoria_riesgo": {
+      "model": "CategoriaRiesgo",
+      "namespace": "public"
+    },
+    "rg_costo_riesgo": {
+      "model": "CostoRiesgo",
+      "namespace": "public"
+    },
+    "rg_documento_costo": {
+      "model": "DocumentoCostoRiesgo",
+      "namespace": "public"
+    },
+    "rg_incidencia": {
+      "model": "IncidenciaRiesgo",
+      "namespace": "public"
+    },
+    "rg_mitigacion_riesgo": {
+      "model": "MitigacionRiesgo",
+      "namespace": "public"
+    },
+    "rg_plan_contingencia": {
+      "model": "PlanContingenciaRiesgo",
+      "namespace": "public"
+    },
+    "rg_plantilla_mitigacion": {
+      "model": "PlantillaMitigacionRiesgo",
+      "namespace": "public"
+    },
+    "rg_plantilla_plan": {
+      "model": "PlantillaPlanRiesgo",
+      "namespace": "public"
+    },
+    "rg_plantilla_riesgo": {
+      "model": "PlantillaRiesgo",
+      "namespace": "public"
+    },
+    "rg_riesgo": {
+      "model": "Riesgo",
       "namespace": "public"
     }
   },
@@ -462,6 +510,23 @@
               }
             ]
           },
+          "nt_tipo_evento_riesgo": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "RIESGO_CRITICO",
+                "value": "RIESGO_CRITICO"
+              },
+              {
+                "name": "INCIDENCIA_REGISTRADA",
+                "value": "INCIDENCIA_REGISTRADA"
+              },
+              {
+                "name": "PLAN_ACTIVADO",
+                "value": "PLAN_ACTIVADO"
+              }
+            ]
+          },
           "pr_estado_costo": {
             "codecId": "pg/text@1",
             "members": [
@@ -602,9 +667,204 @@
                 "value": "INCIDENCIA"
               }
             ]
+          },
+          "rg_alternativa_plan": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "PLAN_A",
+                "value": "PLAN_A"
+              },
+              {
+                "name": "PLAN_B",
+                "value": "PLAN_B"
+              },
+              {
+                "name": "PLAN_C",
+                "value": "PLAN_C"
+              }
+            ]
+          },
+          "rg_estado_mitigacion": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "SUGERIDA",
+                "value": "SUGERIDA"
+              },
+              {
+                "name": "APLICADA",
+                "value": "APLICADA"
+              },
+              {
+                "name": "DESCARTADA",
+                "value": "DESCARTADA"
+              }
+            ]
+          },
+          "rg_estado_riesgo": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "IDENTIFICADO",
+                "value": "IDENTIFICADO"
+              },
+              {
+                "name": "EN_TRATAMIENTO",
+                "value": "EN_TRATAMIENTO"
+              },
+              {
+                "name": "ACTIVO",
+                "value": "ACTIVO"
+              },
+              {
+                "name": "CERRADO",
+                "value": "CERRADO"
+              }
+            ]
+          },
+          "rg_severidad": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "BAJO",
+                "value": "BAJO"
+              },
+              {
+                "name": "MEDIO",
+                "value": "MEDIO"
+              },
+              {
+                "name": "ALTO",
+                "value": "ALTO"
+              }
+            ]
           }
         },
         "models": {
+          "ActivacionPlanRiesgo": {
+            "fields": {
+              "fechaActivacion": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "idActivacionPlan": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idIncidencia": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idPlanContingencia": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idUsuarioRegistro": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "observacion": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 1000
+                  }
+                }
+              }
+            },
+            "relations": {
+              "incidencia": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idIncidencia"
+                  ],
+                  "targetFields": [
+                    "idIncidencia"
+                  ]
+                },
+                "to": {
+                  "model": "IncidenciaRiesgo",
+                  "namespace": "public"
+                }
+              },
+              "plan": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idPlanContingencia"
+                  ],
+                  "targetFields": [
+                    "idPlanContingencia"
+                  ]
+                },
+                "to": {
+                  "model": "PlanContingenciaRiesgo",
+                  "namespace": "public"
+                }
+              },
+              "usuarioRegistro": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idUsuarioRegistro"
+                  ],
+                  "targetFields": [
+                    "idUsuario"
+                  ]
+                },
+                "to": {
+                  "model": "Usuario",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "fechaActivacion": {
+                  "column": "fecha_activacion"
+                },
+                "idActivacionPlan": {
+                  "column": "id_activacion_plan"
+                },
+                "idIncidencia": {
+                  "column": "id_incidencia"
+                },
+                "idPlanContingencia": {
+                  "column": "id_plan_contingencia"
+                },
+                "idUsuarioRegistro": {
+                  "column": "id_usuario_registro"
+                },
+                "observacion": {
+                  "column": "observacion"
+                }
+              },
+              "namespaceId": "public",
+              "table": "rg_activacion_plan"
+            }
+          },
           "Actividad": {
             "fields": {
               "activo": {
@@ -1556,6 +1816,127 @@
               "table": "iv_categoria_relacion"
             }
           },
+          "CategoriaRiesgo": {
+            "fields": {
+              "activo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "codigo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 50
+                  }
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "descripcion": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 500
+                  }
+                }
+              },
+              "idCategoriaRiesgo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "nombre": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 100
+                  }
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "plantillas": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idCategoriaRiesgo"
+                  ],
+                  "targetFields": [
+                    "idCategoriaRiesgo"
+                  ]
+                },
+                "to": {
+                  "model": "PlantillaRiesgo",
+                  "namespace": "public"
+                }
+              },
+              "riesgos": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idCategoriaRiesgo"
+                  ],
+                  "targetFields": [
+                    "idCategoriaRiesgo"
+                  ]
+                },
+                "to": {
+                  "model": "Riesgo",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "activo": {
+                  "column": "activo"
+                },
+                "codigo": {
+                  "column": "codigo"
+                },
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "descripcion": {
+                  "column": "descripcion"
+                },
+                "idCategoriaRiesgo": {
+                  "column": "id_categoria_riesgo"
+                },
+                "nombre": {
+                  "column": "nombre"
+                },
+                "updatedAt": {
+                  "column": "updated_at"
+                }
+              },
+              "namespaceId": "public",
+              "table": "rg_categoria_riesgo"
+            }
+          },
           "CategoriaServicio": {
             "fields": {
               "activo": {
@@ -2060,6 +2441,178 @@
               "table": "pr_costo_proveedor"
             }
           },
+          "CostoRiesgo": {
+            "fields": {
+              "activo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "concepto": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 200
+                  }
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "idCostoPresupuesto": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idCostoRiesgo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idIncidencia": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idRiesgo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "monto": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/numeric@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 12,
+                    "scale": 2
+                  }
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "costoPresupuesto": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idCostoPresupuesto"
+                  ],
+                  "targetFields": [
+                    "idCosto"
+                  ]
+                },
+                "to": {
+                  "model": "CostoProveedor",
+                  "namespace": "public"
+                }
+              },
+              "documentos": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idCostoRiesgo"
+                  ],
+                  "targetFields": [
+                    "idCostoRiesgo"
+                  ]
+                },
+                "to": {
+                  "model": "DocumentoCostoRiesgo",
+                  "namespace": "public"
+                }
+              },
+              "incidencia": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idIncidencia"
+                  ],
+                  "targetFields": [
+                    "idIncidencia"
+                  ]
+                },
+                "to": {
+                  "model": "IncidenciaRiesgo",
+                  "namespace": "public"
+                }
+              },
+              "riesgo": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idRiesgo"
+                  ],
+                  "targetFields": [
+                    "idRiesgo"
+                  ]
+                },
+                "to": {
+                  "model": "Riesgo",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "activo": {
+                  "column": "activo"
+                },
+                "concepto": {
+                  "column": "concepto"
+                },
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "idCostoPresupuesto": {
+                  "column": "id_costo_presupuesto"
+                },
+                "idCostoRiesgo": {
+                  "column": "id_costo_riesgo"
+                },
+                "idIncidencia": {
+                  "column": "id_incidencia"
+                },
+                "idRiesgo": {
+                  "column": "id_riesgo"
+                },
+                "monto": {
+                  "column": "monto"
+                },
+                "updatedAt": {
+                  "column": "updated_at"
+                }
+              },
+              "namespaceId": "public",
+              "table": "rg_costo_riesgo"
+            }
+          },
           "Dependencia": {
             "fields": {
               "diasDesfase": {
@@ -2315,6 +2868,113 @@
               },
               "namespaceId": "public",
               "table": "pv_disponibilidad_proveedor"
+            }
+          },
+          "DocumentoCostoRiesgo": {
+            "fields": {
+              "activo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "idCostoRiesgo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idDocumentoCostoRiesgo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "nombre": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 200
+                  }
+                }
+              },
+              "tipo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 20
+                  }
+                }
+              },
+              "url": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 500
+                  }
+                }
+              }
+            },
+            "relations": {
+              "costoRiesgo": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idCostoRiesgo"
+                  ],
+                  "targetFields": [
+                    "idCostoRiesgo"
+                  ]
+                },
+                "to": {
+                  "model": "CostoRiesgo",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "activo": {
+                  "column": "activo"
+                },
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "idCostoRiesgo": {
+                  "column": "id_costo_riesgo"
+                },
+                "idDocumentoCostoRiesgo": {
+                  "column": "id_documento_costo_riesgo"
+                },
+                "nombre": {
+                  "column": "nombre"
+                },
+                "tipo": {
+                  "column": "tipo"
+                },
+                "url": {
+                  "column": "url"
+                }
+              },
+              "namespaceId": "public",
+              "table": "rg_documento_costo"
             }
           },
           "DocumentoPago": {
@@ -3303,6 +3963,147 @@
               "table": "cr_hito"
             }
           },
+          "IncidenciaRiesgo": {
+            "fields": {
+              "atendida": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "critica": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "descripcion": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 1000
+                  }
+                }
+              },
+              "fechaIncidencia": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "idIncidencia": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idRiesgo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "activaciones": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idIncidencia"
+                  ],
+                  "targetFields": [
+                    "idIncidencia"
+                  ]
+                },
+                "to": {
+                  "model": "ActivacionPlanRiesgo",
+                  "namespace": "public"
+                }
+              },
+              "costos": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idIncidencia"
+                  ],
+                  "targetFields": [
+                    "idIncidencia"
+                  ]
+                },
+                "to": {
+                  "model": "CostoRiesgo",
+                  "namespace": "public"
+                }
+              },
+              "riesgo": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idRiesgo"
+                  ],
+                  "targetFields": [
+                    "idRiesgo"
+                  ]
+                },
+                "to": {
+                  "model": "Riesgo",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "atendida": {
+                  "column": "atendida"
+                },
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "critica": {
+                  "column": "critica"
+                },
+                "descripcion": {
+                  "column": "descripcion"
+                },
+                "fechaIncidencia": {
+                  "column": "fecha_incidencia"
+                },
+                "idIncidencia": {
+                  "column": "id_incidencia"
+                },
+                "idRiesgo": {
+                  "column": "id_riesgo"
+                },
+                "updatedAt": {
+                  "column": "updated_at"
+                }
+              },
+              "namespaceId": "public",
+              "table": "rg_incidencia"
+            }
+          },
           "InteraccionProveedor": {
             "fields": {
               "activo": {
@@ -4016,6 +4817,21 @@
                   "namespace": "public"
                 }
               },
+              "riesgos": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idMatrimonio"
+                  ],
+                  "targetFields": [
+                    "idMatrimonio"
+                  ]
+                },
+                "to": {
+                  "model": "Riesgo",
+                  "namespace": "public"
+                }
+              },
               "tipoCeremonia": {
                 "cardinality": "N:1",
                 "nullable": true,
@@ -4620,6 +5436,139 @@
               "table": "iv_mesa_invitado"
             }
           },
+          "MitigacionRiesgo": {
+            "fields": {
+              "activo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "descripcion": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 1000
+                  }
+                }
+              },
+              "estado": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "rg_estado_mitigacion",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "idMitigacionRiesgo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idPlantillaMitigacion": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "idRiesgo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "plantilla": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idPlantillaMitigacion"
+                  ],
+                  "targetFields": [
+                    "idPlantillaMitigacion"
+                  ]
+                },
+                "to": {
+                  "model": "PlantillaMitigacionRiesgo",
+                  "namespace": "public"
+                }
+              },
+              "riesgo": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idRiesgo"
+                  ],
+                  "targetFields": [
+                    "idRiesgo"
+                  ]
+                },
+                "to": {
+                  "model": "Riesgo",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "activo": {
+                  "column": "activo"
+                },
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "descripcion": {
+                  "column": "descripcion"
+                },
+                "estado": {
+                  "column": "estado"
+                },
+                "idMitigacionRiesgo": {
+                  "column": "id_mitigacion_riesgo"
+                },
+                "idPlantillaMitigacion": {
+                  "column": "id_plantilla_mitigacion"
+                },
+                "idRiesgo": {
+                  "column": "id_riesgo"
+                },
+                "updatedAt": {
+                  "column": "updated_at"
+                }
+              },
+              "namespaceId": "public",
+              "table": "rg_mitigacion_riesgo"
+            }
+          },
           "Notificacion": {
             "fields": {
               "activo": {
@@ -4769,6 +5718,22 @@
                 },
                 "to": {
                   "model": "Proyecto",
+                  "namespace": "public"
+                }
+              },
+              "riesgo": {
+                "cardinality": "1:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idNotificacion"
+                  ],
+                  "targetFields": [
+                    "idNotificacion"
+                  ]
+                },
+                "to": {
+                  "model": "NotificacionRiesgo",
                   "namespace": "public"
                 }
               },
@@ -5123,6 +6088,138 @@
               },
               "namespaceId": "public",
               "table": "nt_notificacion_presupuesto"
+            }
+          },
+          "NotificacionRiesgo": {
+            "fields": {
+              "atendida": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "idIncidencia": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idNotificacion": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idRiesgo": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "severidad": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "rg_severidad",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "tipoEventoRiesgo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "nt_tipo_evento_riesgo",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              }
+            },
+            "relations": {
+              "incidencia": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idIncidencia"
+                  ],
+                  "targetFields": [
+                    "idIncidencia"
+                  ]
+                },
+                "to": {
+                  "model": "IncidenciaRiesgo",
+                  "namespace": "public"
+                }
+              },
+              "notificacion": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idNotificacion"
+                  ],
+                  "targetFields": [
+                    "idNotificacion"
+                  ]
+                },
+                "to": {
+                  "model": "Notificacion",
+                  "namespace": "public"
+                }
+              },
+              "riesgo": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idRiesgo"
+                  ],
+                  "targetFields": [
+                    "idRiesgo"
+                  ]
+                },
+                "to": {
+                  "model": "Riesgo",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "atendida": {
+                  "column": "atendida"
+                },
+                "idIncidencia": {
+                  "column": "id_incidencia"
+                },
+                "idNotificacion": {
+                  "column": "id_notificacion"
+                },
+                "idRiesgo": {
+                  "column": "id_riesgo"
+                },
+                "severidad": {
+                  "column": "severidad"
+                },
+                "tipoEventoRiesgo": {
+                  "column": "tipo_evento_riesgo"
+                }
+              },
+              "namespaceId": "public",
+              "table": "nt_notificacion_riesgo"
             }
           },
           "PagoPresupuesto": {
@@ -5524,6 +6621,164 @@
               },
               "namespaceId": "public",
               "table": "in_persona_natural"
+            }
+          },
+          "PlanContingenciaRiesgo": {
+            "fields": {
+              "accion": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 1000
+                  }
+                }
+              },
+              "activo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "alternativa": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "rg_alternativa_plan",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "idPlanContingencia": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idRiesgo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idUsuarioResponsable": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "version": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "activaciones": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idPlanContingencia"
+                  ],
+                  "targetFields": [
+                    "idPlanContingencia"
+                  ]
+                },
+                "to": {
+                  "model": "ActivacionPlanRiesgo",
+                  "namespace": "public"
+                }
+              },
+              "responsable": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idUsuarioResponsable"
+                  ],
+                  "targetFields": [
+                    "idUsuario"
+                  ]
+                },
+                "to": {
+                  "model": "Usuario",
+                  "namespace": "public"
+                }
+              },
+              "riesgo": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idRiesgo"
+                  ],
+                  "targetFields": [
+                    "idRiesgo"
+                  ]
+                },
+                "to": {
+                  "model": "Riesgo",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "accion": {
+                  "column": "accion"
+                },
+                "activo": {
+                  "column": "activo"
+                },
+                "alternativa": {
+                  "column": "alternativa"
+                },
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "idPlanContingencia": {
+                  "column": "id_plan_contingencia"
+                },
+                "idRiesgo": {
+                  "column": "id_riesgo"
+                },
+                "idUsuarioResponsable": {
+                  "column": "id_usuario_responsable"
+                },
+                "updatedAt": {
+                  "column": "updated_at"
+                },
+                "version": {
+                  "column": "version"
+                }
+              },
+              "namespaceId": "public",
+              "table": "rg_plan_contingencia"
             }
           },
           "PlantillaActividad": {
@@ -6163,6 +7418,423 @@
               },
               "namespaceId": "public",
               "table": "cr_plantilla_hito"
+            }
+          },
+          "PlantillaMitigacionRiesgo": {
+            "fields": {
+              "activo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "descripcion": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 1000
+                  }
+                }
+              },
+              "idPlantillaMitigacion": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "idPlantillaRiesgo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "severidadMinima": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "rg_severidad",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "mitigacionesRiesgo": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idPlantillaMitigacion"
+                  ],
+                  "targetFields": [
+                    "idPlantillaMitigacion"
+                  ]
+                },
+                "to": {
+                  "model": "MitigacionRiesgo",
+                  "namespace": "public"
+                }
+              },
+              "plantillaRiesgo": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idPlantillaRiesgo"
+                  ],
+                  "targetFields": [
+                    "idPlantillaRiesgo"
+                  ]
+                },
+                "to": {
+                  "model": "PlantillaRiesgo",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "activo": {
+                  "column": "activo"
+                },
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "descripcion": {
+                  "column": "descripcion"
+                },
+                "idPlantillaMitigacion": {
+                  "column": "id_plantilla_mitigacion"
+                },
+                "idPlantillaRiesgo": {
+                  "column": "id_plantilla_riesgo"
+                },
+                "severidadMinima": {
+                  "column": "severidadMinima"
+                },
+                "updatedAt": {
+                  "column": "updated_at"
+                }
+              },
+              "namespaceId": "public",
+              "table": "rg_plantilla_mitigacion"
+            }
+          },
+          "PlantillaPlanRiesgo": {
+            "fields": {
+              "accion": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 1000
+                  }
+                }
+              },
+              "activo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "alternativa": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "rg_alternativa_plan",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "idPlantillaPlan": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "idPlantillaRiesgo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "plantillaRiesgo": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idPlantillaRiesgo"
+                  ],
+                  "targetFields": [
+                    "idPlantillaRiesgo"
+                  ]
+                },
+                "to": {
+                  "model": "PlantillaRiesgo",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "accion": {
+                  "column": "accion"
+                },
+                "activo": {
+                  "column": "activo"
+                },
+                "alternativa": {
+                  "column": "alternativa"
+                },
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "idPlantillaPlan": {
+                  "column": "id_plantilla_plan"
+                },
+                "idPlantillaRiesgo": {
+                  "column": "id_plantilla_riesgo"
+                },
+                "updatedAt": {
+                  "column": "updated_at"
+                }
+              },
+              "namespaceId": "public",
+              "table": "rg_plantilla_plan"
+            }
+          },
+          "PlantillaRiesgo": {
+            "fields": {
+              "activo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "causaProbable": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 1000
+                  }
+                }
+              },
+              "codigo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 50
+                  }
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "descripcion": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 1000
+                  }
+                }
+              },
+              "efectoPotencial": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 1000
+                  }
+                }
+              },
+              "idCategoriaRiesgo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "idPlantillaRiesgo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "nombre": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 200
+                  }
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "categoria": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idCategoriaRiesgo"
+                  ],
+                  "targetFields": [
+                    "idCategoriaRiesgo"
+                  ]
+                },
+                "to": {
+                  "model": "CategoriaRiesgo",
+                  "namespace": "public"
+                }
+              },
+              "mitigaciones": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idPlantillaRiesgo"
+                  ],
+                  "targetFields": [
+                    "idPlantillaRiesgo"
+                  ]
+                },
+                "to": {
+                  "model": "PlantillaMitigacionRiesgo",
+                  "namespace": "public"
+                }
+              },
+              "planes": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idPlantillaRiesgo"
+                  ],
+                  "targetFields": [
+                    "idPlantillaRiesgo"
+                  ]
+                },
+                "to": {
+                  "model": "PlantillaPlanRiesgo",
+                  "namespace": "public"
+                }
+              },
+              "riesgos": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idPlantillaRiesgo"
+                  ],
+                  "targetFields": [
+                    "idPlantillaRiesgo"
+                  ]
+                },
+                "to": {
+                  "model": "Riesgo",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "activo": {
+                  "column": "activo"
+                },
+                "causaProbable": {
+                  "column": "causa_probable"
+                },
+                "codigo": {
+                  "column": "codigo"
+                },
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "descripcion": {
+                  "column": "descripcion"
+                },
+                "efectoPotencial": {
+                  "column": "efecto_potencial"
+                },
+                "idCategoriaRiesgo": {
+                  "column": "id_categoria_riesgo"
+                },
+                "idPlantillaRiesgo": {
+                  "column": "id_plantilla_riesgo"
+                },
+                "nombre": {
+                  "column": "nombre"
+                },
+                "updatedAt": {
+                  "column": "updated_at"
+                }
+              },
+              "namespaceId": "public",
+              "table": "rg_plantilla_riesgo"
             }
           },
           "PlantillaTiming": {
@@ -7292,6 +8964,21 @@
                   "namespace": "public"
                 }
               },
+              "riesgos": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idProyecto"
+                  ],
+                  "targetFields": [
+                    "idProyecto"
+                  ]
+                },
+                "to": {
+                  "model": "Riesgo",
+                  "namespace": "public"
+                }
+              },
               "timings": {
                 "cardinality": "1:N",
                 "on": {
@@ -7723,6 +9410,381 @@
               },
               "namespaceId": "public",
               "table": "pv_reserva_proveedor"
+            }
+          },
+          "Riesgo": {
+            "fields": {
+              "activo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "causaProbable": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 1000
+                  }
+                }
+              },
+              "costoAsociado": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/numeric@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 12,
+                    "scale": 2
+                  }
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "descripcion": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 1000
+                  }
+                }
+              },
+              "efectoPotencial": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 1000
+                  }
+                }
+              },
+              "estado": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "rg_estado_riesgo",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "idCategoriaRiesgo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "idMatrimonio": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idPlantillaRiesgo": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "idProyecto": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idRiesgo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idUsuarioResponsable": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "impacto": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "nombre": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 200
+                  }
+                }
+              },
+              "probabilidad": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "severidad": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "rg_severidad",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "categoria": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idCategoriaRiesgo"
+                  ],
+                  "targetFields": [
+                    "idCategoriaRiesgo"
+                  ]
+                },
+                "to": {
+                  "model": "CategoriaRiesgo",
+                  "namespace": "public"
+                }
+              },
+              "costos": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idRiesgo"
+                  ],
+                  "targetFields": [
+                    "idRiesgo"
+                  ]
+                },
+                "to": {
+                  "model": "CostoRiesgo",
+                  "namespace": "public"
+                }
+              },
+              "incidencias": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idRiesgo"
+                  ],
+                  "targetFields": [
+                    "idRiesgo"
+                  ]
+                },
+                "to": {
+                  "model": "IncidenciaRiesgo",
+                  "namespace": "public"
+                }
+              },
+              "matrimonio": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idMatrimonio"
+                  ],
+                  "targetFields": [
+                    "idMatrimonio"
+                  ]
+                },
+                "to": {
+                  "model": "Matrimonio",
+                  "namespace": "public"
+                }
+              },
+              "mitigaciones": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idRiesgo"
+                  ],
+                  "targetFields": [
+                    "idRiesgo"
+                  ]
+                },
+                "to": {
+                  "model": "MitigacionRiesgo",
+                  "namespace": "public"
+                }
+              },
+              "notificaciones": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idRiesgo"
+                  ],
+                  "targetFields": [
+                    "idRiesgo"
+                  ]
+                },
+                "to": {
+                  "model": "NotificacionRiesgo",
+                  "namespace": "public"
+                }
+              },
+              "planes": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idRiesgo"
+                  ],
+                  "targetFields": [
+                    "idRiesgo"
+                  ]
+                },
+                "to": {
+                  "model": "PlanContingenciaRiesgo",
+                  "namespace": "public"
+                }
+              },
+              "plantilla": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idPlantillaRiesgo"
+                  ],
+                  "targetFields": [
+                    "idPlantillaRiesgo"
+                  ]
+                },
+                "to": {
+                  "model": "PlantillaRiesgo",
+                  "namespace": "public"
+                }
+              },
+              "proyecto": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idProyecto"
+                  ],
+                  "targetFields": [
+                    "idProyecto"
+                  ]
+                },
+                "to": {
+                  "model": "Proyecto",
+                  "namespace": "public"
+                }
+              },
+              "responsable": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idUsuarioResponsable"
+                  ],
+                  "targetFields": [
+                    "idUsuario"
+                  ]
+                },
+                "to": {
+                  "model": "Usuario",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "activo": {
+                  "column": "activo"
+                },
+                "causaProbable": {
+                  "column": "causa_probable"
+                },
+                "costoAsociado": {
+                  "column": "costo_asociado"
+                },
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "descripcion": {
+                  "column": "descripcion"
+                },
+                "efectoPotencial": {
+                  "column": "efecto_potencial"
+                },
+                "estado": {
+                  "column": "estado"
+                },
+                "idCategoriaRiesgo": {
+                  "column": "id_categoria_riesgo"
+                },
+                "idMatrimonio": {
+                  "column": "id_matrimonio"
+                },
+                "idPlantillaRiesgo": {
+                  "column": "id_plantilla_riesgo"
+                },
+                "idProyecto": {
+                  "column": "id_proyecto"
+                },
+                "idRiesgo": {
+                  "column": "id_riesgo"
+                },
+                "idUsuarioResponsable": {
+                  "column": "id_usuario_responsable"
+                },
+                "impacto": {
+                  "column": "impacto"
+                },
+                "nombre": {
+                  "column": "nombre"
+                },
+                "probabilidad": {
+                  "column": "probabilidad"
+                },
+                "severidad": {
+                  "column": "severidad"
+                },
+                "updatedAt": {
+                  "column": "updated_at"
+                }
+              },
+              "namespaceId": "public",
+              "table": "rg_riesgo"
             }
           },
           "Rsvp": {
@@ -14000,6 +16062,145 @@
               },
               "uniques": []
             },
+            "nt_notificacion_riesgo": {
+              "checks": [
+                {
+                  "expression": "\"severidad\" IN ('BAJO', 'MEDIO', 'ALTO')",
+                  "name": "nt_notificacion_riesgo_severidad_check_1ba7cc40",
+                  "prefix": "nt_notificacion_riesgo_severidad_check"
+                },
+                {
+                  "expression": "\"tipo_evento_riesgo\" IN ('RIESGO_CRITICO', 'INCIDENCIA_REGISTRADA', 'PLAN_ACTIVADO')",
+                  "name": "nt_notificacion_riesgo_tipo_evento_riesgo_check_ee6896fe",
+                  "prefix": "nt_notificacion_riesgo_tipo_evento_riesgo_check"
+                }
+              ],
+              "columns": {
+                "atendida": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": false
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "id_incidencia": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": true
+                },
+                "id_notificacion": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_riesgo": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": true
+                },
+                "severidad": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "rg_severidad",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "tipo_evento_riesgo": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "nt_tipo_evento_riesgo",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_notificacion"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "nt_notificacion_riesgo"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_notificacion"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "nt_notificacion"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_riesgo"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "nt_notificacion_riesgo"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_riesgo"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "rg_riesgo"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_incidencia"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "nt_notificacion_riesgo"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_incidencia"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "rg_incidencia"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "id_incidencia"
+                  ],
+                  "name": "nt_notificacion_riesgo_id_incidencia_idx_dc23a618",
+                  "prefix": "nt_notificacion_riesgo_id_incidencia_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_riesgo"
+                  ],
+                  "name": "nt_notificacion_riesgo_id_riesgo_idx_59be24f5",
+                  "prefix": "nt_notificacion_riesgo_id_riesgo_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_notificacion"
+                ]
+              },
+              "uniques": []
+            },
             "pr_categoria_presupuesto": {
               "columns": {
                 "activo": {
@@ -16319,6 +18520,1436 @@
                 ]
               },
               "uniques": []
+            },
+            "rg_activacion_plan": {
+              "columns": {
+                "fecha_activacion": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "id_activacion_plan": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_incidencia": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": true
+                },
+                "id_plan_contingencia": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_usuario_registro": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "observacion": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 1000
+                  }
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_plan_contingencia"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "rg_activacion_plan"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_plan_contingencia"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "rg_plan_contingencia"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_incidencia"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "rg_activacion_plan"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_incidencia"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "rg_incidencia"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_usuario_registro"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "rg_activacion_plan"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_usuario"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "au_usuario"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "id_incidencia"
+                  ],
+                  "name": "rg_activacion_plan_id_incidencia_idx_dc23a618",
+                  "prefix": "rg_activacion_plan_id_incidencia_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_plan_contingencia"
+                  ],
+                  "name": "rg_activacion_plan_id_plan_contingencia_idx_81e0a5c9",
+                  "prefix": "rg_activacion_plan_id_plan_contingencia_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_usuario_registro"
+                  ],
+                  "name": "rg_activacion_plan_id_usuario_registro_idx_14d2f264",
+                  "prefix": "rg_activacion_plan_id_usuario_registro_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_activacion_plan"
+                ]
+              },
+              "uniques": []
+            },
+            "rg_categoria_riesgo": {
+              "columns": {
+                "activo": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "codigo": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 50
+                  }
+                },
+                "created_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "descripcion": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 500
+                  }
+                },
+                "id_categoria_riesgo": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "expression": "autoincrement()",
+                    "kind": "function"
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "nombre": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 100
+                  }
+                },
+                "updated_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [],
+              "indexes": [],
+              "primaryKey": {
+                "columns": [
+                  "id_categoria_riesgo"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "codigo"
+                  ]
+                }
+              ]
+            },
+            "rg_costo_riesgo": {
+              "columns": {
+                "activo": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "concepto": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 200
+                  }
+                },
+                "created_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "id_costo_presupuesto": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": true
+                },
+                "id_costo_riesgo": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_incidencia": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": true
+                },
+                "id_riesgo": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "monto": {
+                  "codecId": "pg/numeric@1",
+                  "nativeType": "numeric",
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 12,
+                    "scale": 2
+                  }
+                },
+                "updated_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_riesgo"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "rg_costo_riesgo"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_riesgo"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "rg_riesgo"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_incidencia"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "rg_costo_riesgo"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_incidencia"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "rg_incidencia"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_costo_presupuesto"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "rg_costo_riesgo"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_costo"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pr_costo_proveedor"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "id_costo_presupuesto"
+                  ],
+                  "name": "rg_costo_riesgo_id_costo_presupuesto_idx_997bf6ae",
+                  "prefix": "rg_costo_riesgo_id_costo_presupuesto_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_incidencia"
+                  ],
+                  "name": "rg_costo_riesgo_id_incidencia_idx_dc23a618",
+                  "prefix": "rg_costo_riesgo_id_incidencia_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_riesgo"
+                  ],
+                  "name": "rg_costo_riesgo_id_riesgo_idx_59be24f5",
+                  "prefix": "rg_costo_riesgo_id_riesgo_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_costo_riesgo"
+                ]
+              },
+              "uniques": []
+            },
+            "rg_documento_costo": {
+              "columns": {
+                "activo": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "created_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "id_costo_riesgo": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_documento_costo_riesgo": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "nombre": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 200
+                  }
+                },
+                "tipo": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 20
+                  }
+                },
+                "url": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 500
+                  }
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_costo_riesgo"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "rg_documento_costo"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_costo_riesgo"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "rg_costo_riesgo"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "id_costo_riesgo"
+                  ],
+                  "name": "rg_documento_costo_id_costo_riesgo_idx_b9d12fb0",
+                  "prefix": "rg_documento_costo_id_costo_riesgo_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_documento_costo_riesgo"
+                ]
+              },
+              "uniques": []
+            },
+            "rg_incidencia": {
+              "columns": {
+                "atendida": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": false
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "created_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "critica": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": false
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "descripcion": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 1000
+                  }
+                },
+                "fecha_incidencia": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "id_incidencia": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_riesgo": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "updated_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_riesgo"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "rg_incidencia"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_riesgo"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "rg_riesgo"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "id_riesgo"
+                  ],
+                  "name": "rg_incidencia_id_riesgo_idx_59be24f5",
+                  "prefix": "rg_incidencia_id_riesgo_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_incidencia"
+                ]
+              },
+              "uniques": []
+            },
+            "rg_mitigacion_riesgo": {
+              "checks": [
+                {
+                  "expression": "\"estado\" IN ('SUGERIDA', 'APLICADA', 'DESCARTADA')",
+                  "name": "rg_mitigacion_riesgo_estado_check_0f5ae68f",
+                  "prefix": "rg_mitigacion_riesgo_estado_check"
+                }
+              ],
+              "columns": {
+                "activo": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "created_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "descripcion": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 1000
+                  }
+                },
+                "estado": {
+                  "codecId": "pg/text@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": "SUGERIDA"
+                  },
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "rg_estado_mitigacion",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "id_mitigacion_riesgo": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_plantilla_mitigacion": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "id_riesgo": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "updated_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_riesgo"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "rg_mitigacion_riesgo"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_riesgo"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "rg_riesgo"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_plantilla_mitigacion"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "rg_mitigacion_riesgo"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_plantilla_mitigacion"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "rg_plantilla_mitigacion"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "id_plantilla_mitigacion"
+                  ],
+                  "name": "rg_mitigacion_riesgo_id_plantilla_mitigacion_idx_5bee1967",
+                  "prefix": "rg_mitigacion_riesgo_id_plantilla_mitigacion_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_riesgo"
+                  ],
+                  "name": "rg_mitigacion_riesgo_id_riesgo_idx_59be24f5",
+                  "prefix": "rg_mitigacion_riesgo_id_riesgo_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_mitigacion_riesgo"
+                ]
+              },
+              "uniques": []
+            },
+            "rg_plan_contingencia": {
+              "checks": [
+                {
+                  "expression": "\"alternativa\" IN ('PLAN_A', 'PLAN_B', 'PLAN_C')",
+                  "name": "rg_plan_contingencia_alternativa_check_7fad8842",
+                  "prefix": "rg_plan_contingencia_alternativa_check"
+                }
+              ],
+              "columns": {
+                "accion": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 1000
+                  }
+                },
+                "activo": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "alternativa": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "rg_alternativa_plan",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "created_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "id_plan_contingencia": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_riesgo": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_usuario_responsable": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "updated_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "version": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": 1
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_riesgo"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "rg_plan_contingencia"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_riesgo"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "rg_riesgo"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_usuario_responsable"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "rg_plan_contingencia"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_usuario"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "au_usuario"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "id_riesgo"
+                  ],
+                  "name": "rg_plan_contingencia_id_riesgo_idx_59be24f5",
+                  "prefix": "rg_plan_contingencia_id_riesgo_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_usuario_responsable"
+                  ],
+                  "name": "rg_plan_contingencia_id_usuario_responsable_idx_de19d98e",
+                  "prefix": "rg_plan_contingencia_id_usuario_responsable_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_plan_contingencia"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "id_riesgo",
+                    "alternativa",
+                    "version"
+                  ]
+                }
+              ]
+            },
+            "rg_plantilla_mitigacion": {
+              "checks": [
+                {
+                  "expression": "\"severidadMinima\" IN ('BAJO', 'MEDIO', 'ALTO')",
+                  "name": "rg_plantilla_mitigacion_severidadMinima_check_8d5c1920",
+                  "prefix": "rg_plantilla_mitigacion_severidadMinima_check"
+                }
+              ],
+              "columns": {
+                "activo": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "created_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "descripcion": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 1000
+                  }
+                },
+                "id_plantilla_mitigacion": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "expression": "autoincrement()",
+                    "kind": "function"
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "id_plantilla_riesgo": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "severidadMinima": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "rg_severidad",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "updated_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_plantilla_riesgo"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "rg_plantilla_mitigacion"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_plantilla_riesgo"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "rg_plantilla_riesgo"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "id_plantilla_riesgo"
+                  ],
+                  "name": "rg_plantilla_mitigacion_id_plantilla_riesgo_idx_684a00af",
+                  "prefix": "rg_plantilla_mitigacion_id_plantilla_riesgo_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_plantilla_mitigacion"
+                ]
+              },
+              "uniques": []
+            },
+            "rg_plantilla_plan": {
+              "checks": [
+                {
+                  "expression": "\"alternativa\" IN ('PLAN_A', 'PLAN_B', 'PLAN_C')",
+                  "name": "rg_plantilla_plan_alternativa_check_7fad8842",
+                  "prefix": "rg_plantilla_plan_alternativa_check"
+                }
+              ],
+              "columns": {
+                "accion": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 1000
+                  }
+                },
+                "activo": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "alternativa": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "rg_alternativa_plan",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "created_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "id_plantilla_plan": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "expression": "autoincrement()",
+                    "kind": "function"
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "id_plantilla_riesgo": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "updated_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_plantilla_riesgo"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "rg_plantilla_plan"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_plantilla_riesgo"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "rg_plantilla_riesgo"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "id_plantilla_riesgo"
+                  ],
+                  "name": "rg_plantilla_plan_id_plantilla_riesgo_idx_684a00af",
+                  "prefix": "rg_plantilla_plan_id_plantilla_riesgo_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_plantilla_plan"
+                ]
+              },
+              "uniques": []
+            },
+            "rg_plantilla_riesgo": {
+              "columns": {
+                "activo": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "causa_probable": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 1000
+                  }
+                },
+                "codigo": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 50
+                  }
+                },
+                "created_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "descripcion": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 1000
+                  }
+                },
+                "efecto_potencial": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 1000
+                  }
+                },
+                "id_categoria_riesgo": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "id_plantilla_riesgo": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "expression": "autoincrement()",
+                    "kind": "function"
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "nombre": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 200
+                  }
+                },
+                "updated_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_categoria_riesgo"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "rg_plantilla_riesgo"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_categoria_riesgo"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "rg_categoria_riesgo"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "id_categoria_riesgo"
+                  ],
+                  "name": "rg_plantilla_riesgo_id_categoria_riesgo_idx_fa2eda0b",
+                  "prefix": "rg_plantilla_riesgo_id_categoria_riesgo_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_plantilla_riesgo"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "codigo"
+                  ]
+                }
+              ]
+            },
+            "rg_riesgo": {
+              "checks": [
+                {
+                  "expression": "\"estado\" IN ('IDENTIFICADO', 'EN_TRATAMIENTO', 'ACTIVO', 'CERRADO')",
+                  "name": "rg_riesgo_estado_check_95b90dd1",
+                  "prefix": "rg_riesgo_estado_check"
+                },
+                {
+                  "expression": "\"severidad\" IN ('BAJO', 'MEDIO', 'ALTO')",
+                  "name": "rg_riesgo_severidad_check_1ba7cc40",
+                  "prefix": "rg_riesgo_severidad_check"
+                }
+              ],
+              "columns": {
+                "activo": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "causa_probable": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 1000
+                  }
+                },
+                "costo_asociado": {
+                  "codecId": "pg/numeric@1",
+                  "nativeType": "numeric",
+                  "nullable": true,
+                  "typeParams": {
+                    "precision": 12,
+                    "scale": 2
+                  }
+                },
+                "created_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "descripcion": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 1000
+                  }
+                },
+                "efecto_potencial": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 1000
+                  }
+                },
+                "estado": {
+                  "codecId": "pg/text@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": "IDENTIFICADO"
+                  },
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "rg_estado_riesgo",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "id_categoria_riesgo": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "id_matrimonio": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": true
+                },
+                "id_plantilla_riesgo": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "id_proyecto": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_riesgo": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_usuario_responsable": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "impacto": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "nombre": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 200
+                  }
+                },
+                "probabilidad": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "severidad": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "rg_severidad",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "updated_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_proyecto"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "rg_riesgo"
+                  },
+                  "target": {
+                    "columns": [
+                      "idProyecto"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_proyecto"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_matrimonio"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "rg_riesgo"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_matrimonio"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_matrimonio"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_plantilla_riesgo"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "rg_riesgo"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_plantilla_riesgo"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "rg_plantilla_riesgo"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_categoria_riesgo"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "rg_riesgo"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_categoria_riesgo"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "rg_categoria_riesgo"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_usuario_responsable"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "rg_riesgo"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_usuario"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "au_usuario"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "id_categoria_riesgo"
+                  ],
+                  "name": "rg_riesgo_id_categoria_riesgo_idx_fa2eda0b",
+                  "prefix": "rg_riesgo_id_categoria_riesgo_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_matrimonio"
+                  ],
+                  "name": "rg_riesgo_id_matrimonio_idx_97ab526e",
+                  "prefix": "rg_riesgo_id_matrimonio_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_plantilla_riesgo"
+                  ],
+                  "name": "rg_riesgo_id_plantilla_riesgo_idx_684a00af",
+                  "prefix": "rg_riesgo_id_plantilla_riesgo_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_proyecto"
+                  ],
+                  "name": "rg_riesgo_id_proyecto_idx_4279b0d1",
+                  "prefix": "rg_riesgo_id_proyecto_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_usuario_responsable"
+                  ],
+                  "name": "rg_riesgo_id_usuario_responsable_idx_de19d98e",
+                  "prefix": "rg_riesgo_id_usuario_responsable_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "severidad"
+                  ],
+                  "name": "rg_riesgo_severidad_idx_b0040f3e",
+                  "prefix": "rg_riesgo_severidad_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_riesgo"
+                ]
+              },
+              "uniques": []
             }
           },
           "valueSet": {
@@ -16433,6 +20064,14 @@
                 "PAGO_VENCIDO"
               ]
             },
+            "nt_tipo_evento_riesgo": {
+              "kind": "valueSet",
+              "values": [
+                "RIESGO_CRITICO",
+                "INCIDENCIA_REGISTRADA",
+                "PLAN_ACTIVADO"
+              ]
+            },
             "pr_estado_costo": {
               "kind": "valueSet",
               "values": [
@@ -16501,6 +20140,39 @@
                 "CHECKLIST",
                 "INCIDENCIA"
               ]
+            },
+            "rg_alternativa_plan": {
+              "kind": "valueSet",
+              "values": [
+                "PLAN_A",
+                "PLAN_B",
+                "PLAN_C"
+              ]
+            },
+            "rg_estado_mitigacion": {
+              "kind": "valueSet",
+              "values": [
+                "SUGERIDA",
+                "APLICADA",
+                "DESCARTADA"
+              ]
+            },
+            "rg_estado_riesgo": {
+              "kind": "valueSet",
+              "values": [
+                "IDENTIFICADO",
+                "EN_TRATAMIENTO",
+                "ACTIVO",
+                "CERRADO"
+              ]
+            },
+            "rg_severidad": {
+              "kind": "valueSet",
+              "values": [
+                "BAJO",
+                "MEDIO",
+                "ALTO"
+              ]
             }
           }
         },
@@ -16508,10 +20180,10 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "d040238efa33e640ecad81edb12a0f5e57d2c422daef0a141c8ed171ed394143"
+    "storageHash": "34caed996da6433e1e4abeb70e489d15a6691b10c934d439e56edc12fc6183e5"
   },
   "execution": {
-    "executionHash": "d1ca212b765aa6484f916c98b96eea6d965af2b9ac840559cb97d9c020b9a35f",
+    "executionHash": "5e72e4074847f32c6187765e60e7fd37d90ef72788cfad43256a8d8776b67d47",
     "mutations": {
       "defaults": [
         {
@@ -17371,6 +21043,218 @@
             "column": "updated_at",
             "namespace": "public",
             "table": "pv_seguimiento_proveedor"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id_activacion_plan",
+            "namespace": "public",
+            "table": "rg_activacion_plan"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updated_at",
+            "namespace": "public",
+            "table": "rg_categoria_riesgo"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id_costo_riesgo",
+            "namespace": "public",
+            "table": "rg_costo_riesgo"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updated_at",
+            "namespace": "public",
+            "table": "rg_costo_riesgo"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id_documento_costo_riesgo",
+            "namespace": "public",
+            "table": "rg_documento_costo"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id_incidencia",
+            "namespace": "public",
+            "table": "rg_incidencia"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updated_at",
+            "namespace": "public",
+            "table": "rg_incidencia"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id_mitigacion_riesgo",
+            "namespace": "public",
+            "table": "rg_mitigacion_riesgo"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updated_at",
+            "namespace": "public",
+            "table": "rg_mitigacion_riesgo"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id_plan_contingencia",
+            "namespace": "public",
+            "table": "rg_plan_contingencia"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updated_at",
+            "namespace": "public",
+            "table": "rg_plan_contingencia"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updated_at",
+            "namespace": "public",
+            "table": "rg_plantilla_mitigacion"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updated_at",
+            "namespace": "public",
+            "table": "rg_plantilla_plan"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updated_at",
+            "namespace": "public",
+            "table": "rg_plantilla_riesgo"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id_riesgo",
+            "namespace": "public",
+            "table": "rg_riesgo"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updated_at",
+            "namespace": "public",
+            "table": "rg_riesgo"
           }
         }
       ]

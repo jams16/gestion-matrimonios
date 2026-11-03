@@ -34,9 +34,9 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'d040238efa33e640ecad81edb12a0f5e57d2c422daef0a141c8ed171ed394143'>;
+  StorageHashBase<'34caed996da6433e1e4abeb70e489d15a6691b10c934d439e56edc12fc6183e5'>;
 export type ExecutionHash =
-  ExecutionHashBase<'d1ca212b765aa6484f916c98b96eea6d965af2b9ac840559cb97d9c020b9a35f'>;
+  ExecutionHashBase<'5e72e4074847f32c6187765e60e7fd37d90ef72788cfad43256a8d8776b67d47'>;
 export type ProfileHash =
   ProfileHashBase<'3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2'>;
 
@@ -242,6 +242,14 @@ type DefaultLiteralValue<CodecId extends string, Encoded> = CodecId extends keyo
 
 export type FieldOutputTypes = {
   readonly public: {
+    readonly ActivacionPlanRiesgo: {
+      readonly idActivacionPlan: CodecTypes['pg/uuid@1']['output'];
+      readonly idPlanContingencia: CodecTypes['pg/uuid@1']['output'];
+      readonly idIncidencia: CodecTypes['pg/uuid@1']['output'] | null;
+      readonly idUsuarioRegistro: CodecTypes['pg/int4@1']['output'];
+      readonly fechaActivacion: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly observacion: Varchar<1000> | null;
+    };
     readonly Actividad: {
       readonly idActividad: CodecTypes['pg/uuid@1']['output'];
       readonly idProyecto: CodecTypes['pg/uuid@1']['output'];
@@ -309,6 +317,15 @@ export type FieldOutputTypes = {
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     };
+    readonly CategoriaRiesgo: {
+      readonly idCategoriaRiesgo: CodecTypes['pg/int4@1']['output'];
+      readonly codigo: Varchar<50>;
+      readonly nombre: Varchar<100>;
+      readonly descripcion: Varchar<500> | null;
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
     readonly CategoriaServicio: {
       readonly idCategoriaServicio: CodecTypes['pg/int4@1']['output'];
       readonly codigo: Varchar<50>;
@@ -343,6 +360,17 @@ export type FieldOutputTypes = {
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     };
+    readonly CostoRiesgo: {
+      readonly idCostoRiesgo: CodecTypes['pg/uuid@1']['output'];
+      readonly idRiesgo: CodecTypes['pg/uuid@1']['output'];
+      readonly idIncidencia: CodecTypes['pg/uuid@1']['output'] | null;
+      readonly concepto: Varchar<200>;
+      readonly monto: Numeric<12, 2>;
+      readonly idCostoPresupuesto: CodecTypes['pg/uuid@1']['output'] | null;
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
     readonly Dependencia: {
       readonly idDependencia: CodecTypes['pg/uuid@1']['output'];
       readonly idActividadPredecesora: CodecTypes['pg/uuid@1']['output'];
@@ -362,6 +390,15 @@ export type FieldOutputTypes = {
       readonly activo: CodecTypes['pg/bool@1']['output'];
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly DocumentoCostoRiesgo: {
+      readonly idDocumentoCostoRiesgo: CodecTypes['pg/uuid@1']['output'];
+      readonly idCostoRiesgo: CodecTypes['pg/uuid@1']['output'];
+      readonly nombre: Varchar<200>;
+      readonly url: Varchar<500>;
+      readonly tipo: Varchar<20>;
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     };
     readonly DocumentoPago: {
       readonly idDocumentoPago: CodecTypes['pg/uuid@1']['output'];
@@ -435,6 +472,16 @@ export type FieldOutputTypes = {
       readonly orden: CodecTypes['pg/int4@1']['output'];
       readonly modificadoManualmente: CodecTypes['pg/bool@1']['output'];
       readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly IncidenciaRiesgo: {
+      readonly idIncidencia: CodecTypes['pg/uuid@1']['output'];
+      readonly idRiesgo: CodecTypes['pg/uuid@1']['output'];
+      readonly descripcion: Varchar<1000>;
+      readonly critica: CodecTypes['pg/bool@1']['output'];
+      readonly atendida: CodecTypes['pg/bool@1']['output'];
+      readonly fechaIncidencia: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     };
@@ -520,6 +567,16 @@ export type FieldOutputTypes = {
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     };
+    readonly MitigacionRiesgo: {
+      readonly idMitigacionRiesgo: CodecTypes['pg/uuid@1']['output'];
+      readonly idRiesgo: CodecTypes['pg/uuid@1']['output'];
+      readonly idPlantillaMitigacion: CodecTypes['pg/int4@1']['output'] | null;
+      readonly descripcion: Varchar<1000>;
+      readonly estado: 'SUGERIDA' | 'APLICADA' | 'DESCARTADA';
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
     readonly Notificacion: {
       readonly idNotificacion: CodecTypes['pg/uuid@1']['output'];
       readonly idUsuarioDestino: CodecTypes['pg/int4@1']['output'];
@@ -561,6 +618,14 @@ export type FieldOutputTypes = {
       readonly montoActual: Numeric<12, 2> | null;
       readonly diferencia: Numeric<12, 2> | null;
     };
+    readonly NotificacionRiesgo: {
+      readonly idNotificacion: CodecTypes['pg/uuid@1']['output'];
+      readonly idRiesgo: CodecTypes['pg/uuid@1']['output'] | null;
+      readonly idIncidencia: CodecTypes['pg/uuid@1']['output'] | null;
+      readonly tipoEventoRiesgo: 'RIESGO_CRITICO' | 'INCIDENCIA_REGISTRADA' | 'PLAN_ACTIVADO';
+      readonly severidad: 'BAJO' | 'MEDIO' | 'ALTO' | null;
+      readonly atendida: CodecTypes['pg/bool@1']['output'];
+    };
     readonly PagoPresupuesto: {
       readonly idPago: CodecTypes['pg/uuid@1']['output'];
       readonly idCosto: CodecTypes['pg/uuid@1']['output'];
@@ -587,6 +652,17 @@ export type FieldOutputTypes = {
       readonly esActivo: CodecTypes['pg/bool@1']['output'];
       readonly fechaCreacion: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly fechaModificacion: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly PlanContingenciaRiesgo: {
+      readonly idPlanContingencia: CodecTypes['pg/uuid@1']['output'];
+      readonly idRiesgo: CodecTypes['pg/uuid@1']['output'];
+      readonly alternativa: 'PLAN_A' | 'PLAN_B' | 'PLAN_C';
+      readonly version: CodecTypes['pg/int4@1']['output'];
+      readonly accion: Varchar<1000>;
+      readonly idUsuarioResponsable: CodecTypes['pg/int4@1']['output'] | null;
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     };
     readonly PlantillaActividad: {
       readonly idPlantillaActividad: CodecTypes['pg/int4@1']['output'];
@@ -628,6 +704,36 @@ export type FieldOutputTypes = {
       readonly diasAntesBase: CodecTypes['pg/int4@1']['output'] | null;
       readonly diasAntesMinimo: CodecTypes['pg/int4@1']['output'] | null;
       readonly orden: CodecTypes['pg/int4@1']['output'];
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly PlantillaMitigacionRiesgo: {
+      readonly idPlantillaMitigacion: CodecTypes['pg/int4@1']['output'];
+      readonly idPlantillaRiesgo: CodecTypes['pg/int4@1']['output'];
+      readonly severidadMinima: 'BAJO' | 'MEDIO' | 'ALTO' | null;
+      readonly descripcion: Varchar<1000>;
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly PlantillaPlanRiesgo: {
+      readonly idPlantillaPlan: CodecTypes['pg/int4@1']['output'];
+      readonly idPlantillaRiesgo: CodecTypes['pg/int4@1']['output'];
+      readonly alternativa: 'PLAN_A' | 'PLAN_B' | 'PLAN_C';
+      readonly accion: Varchar<1000>;
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly PlantillaRiesgo: {
+      readonly idPlantillaRiesgo: CodecTypes['pg/int4@1']['output'];
+      readonly idCategoriaRiesgo: CodecTypes['pg/int4@1']['output'];
+      readonly codigo: Varchar<50>;
+      readonly nombre: Varchar<200>;
+      readonly descripcion: Varchar<1000>;
+      readonly causaProbable: Varchar<1000>;
+      readonly efectoPotencial: Varchar<1000>;
       readonly activo: CodecTypes['pg/bool@1']['output'];
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
@@ -734,6 +840,26 @@ export type FieldOutputTypes = {
       readonly fecha: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly estado: 'SOLICITADA' | 'CONFIRMADA' | 'CANCELADA';
       readonly observacion: Varchar<1000> | null;
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly Riesgo: {
+      readonly idRiesgo: CodecTypes['pg/uuid@1']['output'];
+      readonly idProyecto: CodecTypes['pg/uuid@1']['output'];
+      readonly idMatrimonio: CodecTypes['pg/uuid@1']['output'] | null;
+      readonly idPlantillaRiesgo: CodecTypes['pg/int4@1']['output'] | null;
+      readonly idCategoriaRiesgo: CodecTypes['pg/int4@1']['output'];
+      readonly idUsuarioResponsable: CodecTypes['pg/int4@1']['output'] | null;
+      readonly nombre: Varchar<200>;
+      readonly descripcion: Varchar<1000> | null;
+      readonly causaProbable: Varchar<1000> | null;
+      readonly efectoPotencial: Varchar<1000> | null;
+      readonly probabilidad: CodecTypes['pg/int4@1']['output'];
+      readonly impacto: CodecTypes['pg/int4@1']['output'];
+      readonly severidad: 'BAJO' | 'MEDIO' | 'ALTO';
+      readonly costoAsociado: Numeric<12, 2> | null;
+      readonly estado: 'IDENTIFICADO' | 'EN_TRATAMIENTO' | 'ACTIVO' | 'CERRADO';
       readonly activo: CodecTypes['pg/bool@1']['output'];
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
@@ -853,6 +979,14 @@ export type FieldOutputTypes = {
 };
 export type FieldInputTypes = {
   readonly public: {
+    readonly ActivacionPlanRiesgo: {
+      readonly idActivacionPlan: CodecTypes['pg/uuid@1']['input'];
+      readonly idPlanContingencia: CodecTypes['pg/uuid@1']['input'];
+      readonly idIncidencia: CodecTypes['pg/uuid@1']['input'] | null;
+      readonly idUsuarioRegistro: CodecTypes['pg/int4@1']['input'];
+      readonly fechaActivacion: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly observacion: CodecTypes['sql/varchar@1']['input'] | null;
+    };
     readonly Actividad: {
       readonly idActividad: CodecTypes['pg/uuid@1']['input'];
       readonly idProyecto: CodecTypes['pg/uuid@1']['input'];
@@ -920,6 +1054,15 @@ export type FieldInputTypes = {
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
     };
+    readonly CategoriaRiesgo: {
+      readonly idCategoriaRiesgo: CodecTypes['pg/int4@1']['input'];
+      readonly codigo: CodecTypes['sql/varchar@1']['input'];
+      readonly nombre: CodecTypes['sql/varchar@1']['input'];
+      readonly descripcion: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
     readonly CategoriaServicio: {
       readonly idCategoriaServicio: CodecTypes['pg/int4@1']['input'];
       readonly codigo: CodecTypes['sql/varchar@1']['input'];
@@ -954,6 +1097,17 @@ export type FieldInputTypes = {
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
     };
+    readonly CostoRiesgo: {
+      readonly idCostoRiesgo: CodecTypes['pg/uuid@1']['input'];
+      readonly idRiesgo: CodecTypes['pg/uuid@1']['input'];
+      readonly idIncidencia: CodecTypes['pg/uuid@1']['input'] | null;
+      readonly concepto: CodecTypes['sql/varchar@1']['input'];
+      readonly monto: CodecTypes['pg/numeric@1']['input'];
+      readonly idCostoPresupuesto: CodecTypes['pg/uuid@1']['input'] | null;
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
     readonly Dependencia: {
       readonly idDependencia: CodecTypes['pg/uuid@1']['input'];
       readonly idActividadPredecesora: CodecTypes['pg/uuid@1']['input'];
@@ -973,6 +1127,15 @@ export type FieldInputTypes = {
       readonly activo: CodecTypes['pg/bool@1']['input'];
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly DocumentoCostoRiesgo: {
+      readonly idDocumentoCostoRiesgo: CodecTypes['pg/uuid@1']['input'];
+      readonly idCostoRiesgo: CodecTypes['pg/uuid@1']['input'];
+      readonly nombre: CodecTypes['sql/varchar@1']['input'];
+      readonly url: CodecTypes['sql/varchar@1']['input'];
+      readonly tipo: CodecTypes['sql/varchar@1']['input'];
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
     };
     readonly DocumentoPago: {
       readonly idDocumentoPago: CodecTypes['pg/uuid@1']['input'];
@@ -1046,6 +1209,16 @@ export type FieldInputTypes = {
       readonly orden: CodecTypes['pg/int4@1']['input'];
       readonly modificadoManualmente: CodecTypes['pg/bool@1']['input'];
       readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly IncidenciaRiesgo: {
+      readonly idIncidencia: CodecTypes['pg/uuid@1']['input'];
+      readonly idRiesgo: CodecTypes['pg/uuid@1']['input'];
+      readonly descripcion: CodecTypes['sql/varchar@1']['input'];
+      readonly critica: CodecTypes['pg/bool@1']['input'];
+      readonly atendida: CodecTypes['pg/bool@1']['input'];
+      readonly fechaIncidencia: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
     };
@@ -1131,6 +1304,16 @@ export type FieldInputTypes = {
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
     };
+    readonly MitigacionRiesgo: {
+      readonly idMitigacionRiesgo: CodecTypes['pg/uuid@1']['input'];
+      readonly idRiesgo: CodecTypes['pg/uuid@1']['input'];
+      readonly idPlantillaMitigacion: CodecTypes['pg/int4@1']['input'] | null;
+      readonly descripcion: CodecTypes['sql/varchar@1']['input'];
+      readonly estado: 'SUGERIDA' | 'APLICADA' | 'DESCARTADA';
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
     readonly Notificacion: {
       readonly idNotificacion: CodecTypes['pg/uuid@1']['input'];
       readonly idUsuarioDestino: CodecTypes['pg/int4@1']['input'];
@@ -1172,6 +1355,14 @@ export type FieldInputTypes = {
       readonly montoActual: CodecTypes['pg/numeric@1']['input'] | null;
       readonly diferencia: CodecTypes['pg/numeric@1']['input'] | null;
     };
+    readonly NotificacionRiesgo: {
+      readonly idNotificacion: CodecTypes['pg/uuid@1']['input'];
+      readonly idRiesgo: CodecTypes['pg/uuid@1']['input'] | null;
+      readonly idIncidencia: CodecTypes['pg/uuid@1']['input'] | null;
+      readonly tipoEventoRiesgo: 'RIESGO_CRITICO' | 'INCIDENCIA_REGISTRADA' | 'PLAN_ACTIVADO';
+      readonly severidad: 'BAJO' | 'MEDIO' | 'ALTO' | null;
+      readonly atendida: CodecTypes['pg/bool@1']['input'];
+    };
     readonly PagoPresupuesto: {
       readonly idPago: CodecTypes['pg/uuid@1']['input'];
       readonly idCosto: CodecTypes['pg/uuid@1']['input'];
@@ -1198,6 +1389,17 @@ export type FieldInputTypes = {
       readonly esActivo: CodecTypes['pg/bool@1']['input'];
       readonly fechaCreacion: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly fechaModificacion: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly PlanContingenciaRiesgo: {
+      readonly idPlanContingencia: CodecTypes['pg/uuid@1']['input'];
+      readonly idRiesgo: CodecTypes['pg/uuid@1']['input'];
+      readonly alternativa: 'PLAN_A' | 'PLAN_B' | 'PLAN_C';
+      readonly version: CodecTypes['pg/int4@1']['input'];
+      readonly accion: CodecTypes['sql/varchar@1']['input'];
+      readonly idUsuarioResponsable: CodecTypes['pg/int4@1']['input'] | null;
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
     };
     readonly PlantillaActividad: {
       readonly idPlantillaActividad: CodecTypes['pg/int4@1']['input'];
@@ -1239,6 +1441,36 @@ export type FieldInputTypes = {
       readonly diasAntesBase: CodecTypes['pg/int4@1']['input'] | null;
       readonly diasAntesMinimo: CodecTypes['pg/int4@1']['input'] | null;
       readonly orden: CodecTypes['pg/int4@1']['input'];
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly PlantillaMitigacionRiesgo: {
+      readonly idPlantillaMitigacion: CodecTypes['pg/int4@1']['input'];
+      readonly idPlantillaRiesgo: CodecTypes['pg/int4@1']['input'];
+      readonly severidadMinima: 'BAJO' | 'MEDIO' | 'ALTO' | null;
+      readonly descripcion: CodecTypes['sql/varchar@1']['input'];
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly PlantillaPlanRiesgo: {
+      readonly idPlantillaPlan: CodecTypes['pg/int4@1']['input'];
+      readonly idPlantillaRiesgo: CodecTypes['pg/int4@1']['input'];
+      readonly alternativa: 'PLAN_A' | 'PLAN_B' | 'PLAN_C';
+      readonly accion: CodecTypes['sql/varchar@1']['input'];
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly PlantillaRiesgo: {
+      readonly idPlantillaRiesgo: CodecTypes['pg/int4@1']['input'];
+      readonly idCategoriaRiesgo: CodecTypes['pg/int4@1']['input'];
+      readonly codigo: CodecTypes['sql/varchar@1']['input'];
+      readonly nombre: CodecTypes['sql/varchar@1']['input'];
+      readonly descripcion: CodecTypes['sql/varchar@1']['input'];
+      readonly causaProbable: CodecTypes['sql/varchar@1']['input'];
+      readonly efectoPotencial: CodecTypes['sql/varchar@1']['input'];
       readonly activo: CodecTypes['pg/bool@1']['input'];
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
@@ -1345,6 +1577,26 @@ export type FieldInputTypes = {
       readonly fecha: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly estado: 'SOLICITADA' | 'CONFIRMADA' | 'CANCELADA';
       readonly observacion: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly Riesgo: {
+      readonly idRiesgo: CodecTypes['pg/uuid@1']['input'];
+      readonly idProyecto: CodecTypes['pg/uuid@1']['input'];
+      readonly idMatrimonio: CodecTypes['pg/uuid@1']['input'] | null;
+      readonly idPlantillaRiesgo: CodecTypes['pg/int4@1']['input'] | null;
+      readonly idCategoriaRiesgo: CodecTypes['pg/int4@1']['input'];
+      readonly idUsuarioResponsable: CodecTypes['pg/int4@1']['input'] | null;
+      readonly nombre: CodecTypes['sql/varchar@1']['input'];
+      readonly descripcion: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly causaProbable: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly efectoPotencial: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly probabilidad: CodecTypes['pg/int4@1']['input'];
+      readonly impacto: CodecTypes['pg/int4@1']['input'];
+      readonly severidad: 'BAJO' | 'MEDIO' | 'ALTO';
+      readonly costoAsociado: CodecTypes['pg/numeric@1']['input'] | null;
+      readonly estado: 'IDENTIFICADO' | 'EN_TRATAMIENTO' | 'ACTIVO' | 'CERRADO';
       readonly activo: CodecTypes['pg/bool@1']['input'];
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
@@ -1869,6 +2121,14 @@ export type StorageColumnTypes = {
         | 'PAGO_PROXIMO_VENCER'
         | 'PAGO_VENCIDO';
     };
+    readonly nt_notificacion_riesgo: {
+      readonly atendida: CodecTypes['pg/bool@1']['output'];
+      readonly id_incidencia: CodecTypes['pg/uuid@1']['output'] | null;
+      readonly id_notificacion: CodecTypes['pg/uuid@1']['output'];
+      readonly id_riesgo: CodecTypes['pg/uuid@1']['output'] | null;
+      readonly severidad: 'BAJO' | 'MEDIO' | 'ALTO' | null;
+      readonly tipo_evento_riesgo: 'RIESGO_CRITICO' | 'INCIDENCIA_REGISTRADA' | 'PLAN_ACTIVADO';
+    };
     readonly pr_categoria_presupuesto: {
       readonly activo: CodecTypes['pg/bool@1']['output'];
       readonly codigo: Varchar<50>;
@@ -2071,6 +2331,124 @@ export type StorageColumnTypes = {
       readonly id_usuario: CodecTypes['pg/int4@1']['output'] | null;
       readonly tipo: 'CHECKLIST' | 'INCIDENCIA';
       readonly titulo: Varchar<200>;
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly rg_activacion_plan: {
+      readonly fecha_activacion: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly id_activacion_plan: CodecTypes['pg/uuid@1']['output'];
+      readonly id_incidencia: CodecTypes['pg/uuid@1']['output'] | null;
+      readonly id_plan_contingencia: CodecTypes['pg/uuid@1']['output'];
+      readonly id_usuario_registro: CodecTypes['pg/int4@1']['output'];
+      readonly observacion: Varchar<1000> | null;
+    };
+    readonly rg_categoria_riesgo: {
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly codigo: Varchar<50>;
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly descripcion: Varchar<500> | null;
+      readonly id_categoria_riesgo: CodecTypes['pg/int4@1']['output'];
+      readonly nombre: Varchar<100>;
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly rg_costo_riesgo: {
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly concepto: Varchar<200>;
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly id_costo_presupuesto: CodecTypes['pg/uuid@1']['output'] | null;
+      readonly id_costo_riesgo: CodecTypes['pg/uuid@1']['output'];
+      readonly id_incidencia: CodecTypes['pg/uuid@1']['output'] | null;
+      readonly id_riesgo: CodecTypes['pg/uuid@1']['output'];
+      readonly monto: Numeric<12, 2>;
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly rg_documento_costo: {
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly id_costo_riesgo: CodecTypes['pg/uuid@1']['output'];
+      readonly id_documento_costo_riesgo: CodecTypes['pg/uuid@1']['output'];
+      readonly nombre: Varchar<200>;
+      readonly tipo: Varchar<20>;
+      readonly url: Varchar<500>;
+    };
+    readonly rg_incidencia: {
+      readonly atendida: CodecTypes['pg/bool@1']['output'];
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly critica: CodecTypes['pg/bool@1']['output'];
+      readonly descripcion: Varchar<1000>;
+      readonly fecha_incidencia: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly id_incidencia: CodecTypes['pg/uuid@1']['output'];
+      readonly id_riesgo: CodecTypes['pg/uuid@1']['output'];
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly rg_mitigacion_riesgo: {
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly descripcion: Varchar<1000>;
+      readonly estado: 'SUGERIDA' | 'APLICADA' | 'DESCARTADA';
+      readonly id_mitigacion_riesgo: CodecTypes['pg/uuid@1']['output'];
+      readonly id_plantilla_mitigacion: CodecTypes['pg/int4@1']['output'] | null;
+      readonly id_riesgo: CodecTypes['pg/uuid@1']['output'];
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly rg_plan_contingencia: {
+      readonly accion: Varchar<1000>;
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly alternativa: 'PLAN_A' | 'PLAN_B' | 'PLAN_C';
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly id_plan_contingencia: CodecTypes['pg/uuid@1']['output'];
+      readonly id_riesgo: CodecTypes['pg/uuid@1']['output'];
+      readonly id_usuario_responsable: CodecTypes['pg/int4@1']['output'] | null;
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly version: CodecTypes['pg/int4@1']['output'];
+    };
+    readonly rg_plantilla_mitigacion: {
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly descripcion: Varchar<1000>;
+      readonly id_plantilla_mitigacion: CodecTypes['pg/int4@1']['output'];
+      readonly id_plantilla_riesgo: CodecTypes['pg/int4@1']['output'];
+      readonly severidadMinima: 'BAJO' | 'MEDIO' | 'ALTO' | null;
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly rg_plantilla_plan: {
+      readonly accion: Varchar<1000>;
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly alternativa: 'PLAN_A' | 'PLAN_B' | 'PLAN_C';
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly id_plantilla_plan: CodecTypes['pg/int4@1']['output'];
+      readonly id_plantilla_riesgo: CodecTypes['pg/int4@1']['output'];
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly rg_plantilla_riesgo: {
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly causa_probable: Varchar<1000>;
+      readonly codigo: Varchar<50>;
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly descripcion: Varchar<1000>;
+      readonly efecto_potencial: Varchar<1000>;
+      readonly id_categoria_riesgo: CodecTypes['pg/int4@1']['output'];
+      readonly id_plantilla_riesgo: CodecTypes['pg/int4@1']['output'];
+      readonly nombre: Varchar<200>;
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly rg_riesgo: {
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly causa_probable: Varchar<1000> | null;
+      readonly costo_asociado: Numeric<12, 2> | null;
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly descripcion: Varchar<1000> | null;
+      readonly efecto_potencial: Varchar<1000> | null;
+      readonly estado: 'IDENTIFICADO' | 'EN_TRATAMIENTO' | 'ACTIVO' | 'CERRADO';
+      readonly id_categoria_riesgo: CodecTypes['pg/int4@1']['output'];
+      readonly id_matrimonio: CodecTypes['pg/uuid@1']['output'] | null;
+      readonly id_plantilla_riesgo: CodecTypes['pg/int4@1']['output'] | null;
+      readonly id_proyecto: CodecTypes['pg/uuid@1']['output'];
+      readonly id_riesgo: CodecTypes['pg/uuid@1']['output'];
+      readonly id_usuario_responsable: CodecTypes['pg/int4@1']['output'] | null;
+      readonly impacto: CodecTypes['pg/int4@1']['output'];
+      readonly nombre: Varchar<200>;
+      readonly probabilidad: CodecTypes['pg/int4@1']['output'];
+      readonly severidad: 'BAJO' | 'MEDIO' | 'ALTO';
       readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
     };
   };
@@ -2480,6 +2858,14 @@ export type StorageColumnInputTypes = {
         | 'PAGO_PROXIMO_VENCER'
         | 'PAGO_VENCIDO';
     };
+    readonly nt_notificacion_riesgo: {
+      readonly atendida: CodecTypes['pg/bool@1']['input'];
+      readonly id_incidencia: CodecTypes['pg/uuid@1']['input'] | null;
+      readonly id_notificacion: CodecTypes['pg/uuid@1']['input'];
+      readonly id_riesgo: CodecTypes['pg/uuid@1']['input'] | null;
+      readonly severidad: 'BAJO' | 'MEDIO' | 'ALTO' | null;
+      readonly tipo_evento_riesgo: 'RIESGO_CRITICO' | 'INCIDENCIA_REGISTRADA' | 'PLAN_ACTIVADO';
+    };
     readonly pr_categoria_presupuesto: {
       readonly activo: CodecTypes['pg/bool@1']['input'];
       readonly codigo: CodecTypes['sql/varchar@1']['input'];
@@ -2684,6 +3070,124 @@ export type StorageColumnInputTypes = {
       readonly titulo: CodecTypes['sql/varchar@1']['input'];
       readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
     };
+    readonly rg_activacion_plan: {
+      readonly fecha_activacion: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly id_activacion_plan: CodecTypes['pg/uuid@1']['input'];
+      readonly id_incidencia: CodecTypes['pg/uuid@1']['input'] | null;
+      readonly id_plan_contingencia: CodecTypes['pg/uuid@1']['input'];
+      readonly id_usuario_registro: CodecTypes['pg/int4@1']['input'];
+      readonly observacion: CodecTypes['sql/varchar@1']['input'] | null;
+    };
+    readonly rg_categoria_riesgo: {
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly codigo: CodecTypes['sql/varchar@1']['input'];
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly descripcion: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly id_categoria_riesgo: CodecTypes['pg/int4@1']['input'];
+      readonly nombre: CodecTypes['sql/varchar@1']['input'];
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly rg_costo_riesgo: {
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly concepto: CodecTypes['sql/varchar@1']['input'];
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly id_costo_presupuesto: CodecTypes['pg/uuid@1']['input'] | null;
+      readonly id_costo_riesgo: CodecTypes['pg/uuid@1']['input'];
+      readonly id_incidencia: CodecTypes['pg/uuid@1']['input'] | null;
+      readonly id_riesgo: CodecTypes['pg/uuid@1']['input'];
+      readonly monto: CodecTypes['pg/numeric@1']['input'];
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly rg_documento_costo: {
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly id_costo_riesgo: CodecTypes['pg/uuid@1']['input'];
+      readonly id_documento_costo_riesgo: CodecTypes['pg/uuid@1']['input'];
+      readonly nombre: CodecTypes['sql/varchar@1']['input'];
+      readonly tipo: CodecTypes['sql/varchar@1']['input'];
+      readonly url: CodecTypes['sql/varchar@1']['input'];
+    };
+    readonly rg_incidencia: {
+      readonly atendida: CodecTypes['pg/bool@1']['input'];
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly critica: CodecTypes['pg/bool@1']['input'];
+      readonly descripcion: CodecTypes['sql/varchar@1']['input'];
+      readonly fecha_incidencia: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly id_incidencia: CodecTypes['pg/uuid@1']['input'];
+      readonly id_riesgo: CodecTypes['pg/uuid@1']['input'];
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly rg_mitigacion_riesgo: {
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly descripcion: CodecTypes['sql/varchar@1']['input'];
+      readonly estado: 'SUGERIDA' | 'APLICADA' | 'DESCARTADA';
+      readonly id_mitigacion_riesgo: CodecTypes['pg/uuid@1']['input'];
+      readonly id_plantilla_mitigacion: CodecTypes['pg/int4@1']['input'] | null;
+      readonly id_riesgo: CodecTypes['pg/uuid@1']['input'];
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly rg_plan_contingencia: {
+      readonly accion: CodecTypes['sql/varchar@1']['input'];
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly alternativa: 'PLAN_A' | 'PLAN_B' | 'PLAN_C';
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly id_plan_contingencia: CodecTypes['pg/uuid@1']['input'];
+      readonly id_riesgo: CodecTypes['pg/uuid@1']['input'];
+      readonly id_usuario_responsable: CodecTypes['pg/int4@1']['input'] | null;
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly version: CodecTypes['pg/int4@1']['input'];
+    };
+    readonly rg_plantilla_mitigacion: {
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly descripcion: CodecTypes['sql/varchar@1']['input'];
+      readonly id_plantilla_mitigacion: CodecTypes['pg/int4@1']['input'];
+      readonly id_plantilla_riesgo: CodecTypes['pg/int4@1']['input'];
+      readonly severidadMinima: 'BAJO' | 'MEDIO' | 'ALTO' | null;
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly rg_plantilla_plan: {
+      readonly accion: CodecTypes['sql/varchar@1']['input'];
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly alternativa: 'PLAN_A' | 'PLAN_B' | 'PLAN_C';
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly id_plantilla_plan: CodecTypes['pg/int4@1']['input'];
+      readonly id_plantilla_riesgo: CodecTypes['pg/int4@1']['input'];
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly rg_plantilla_riesgo: {
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly causa_probable: CodecTypes['sql/varchar@1']['input'];
+      readonly codigo: CodecTypes['sql/varchar@1']['input'];
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly descripcion: CodecTypes['sql/varchar@1']['input'];
+      readonly efecto_potencial: CodecTypes['sql/varchar@1']['input'];
+      readonly id_categoria_riesgo: CodecTypes['pg/int4@1']['input'];
+      readonly id_plantilla_riesgo: CodecTypes['pg/int4@1']['input'];
+      readonly nombre: CodecTypes['sql/varchar@1']['input'];
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly rg_riesgo: {
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly causa_probable: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly costo_asociado: CodecTypes['pg/numeric@1']['input'] | null;
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly descripcion: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly efecto_potencial: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly estado: 'IDENTIFICADO' | 'EN_TRATAMIENTO' | 'ACTIVO' | 'CERRADO';
+      readonly id_categoria_riesgo: CodecTypes['pg/int4@1']['input'];
+      readonly id_matrimonio: CodecTypes['pg/uuid@1']['input'] | null;
+      readonly id_plantilla_riesgo: CodecTypes['pg/int4@1']['input'] | null;
+      readonly id_proyecto: CodecTypes['pg/uuid@1']['input'];
+      readonly id_riesgo: CodecTypes['pg/uuid@1']['input'];
+      readonly id_usuario_responsable: CodecTypes['pg/int4@1']['input'] | null;
+      readonly impacto: CodecTypes['pg/int4@1']['input'];
+      readonly nombre: CodecTypes['sql/varchar@1']['input'];
+      readonly probabilidad: CodecTypes['pg/int4@1']['input'];
+      readonly severidad: 'BAJO' | 'MEDIO' | 'ALTO';
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
   };
 };
 
@@ -2710,6 +3214,7 @@ export namespace Models {
     matrimonio: public_Matrimonio | null;
     notificaciones: public_Notificacion[];
     projectManager: public_Usuario | null;
+    riesgos: public_Riesgo[];
     timings: public_Timing[];
     readonly [RelationKeys]?:
       | 'actividades'
@@ -2718,6 +3223,7 @@ export namespace Models {
       | 'matrimonio'
       | 'notificaciones'
       | 'projectManager'
+      | 'riesgos'
       | 'timings';
   };
   export type public_Matrimonio = {
@@ -2740,6 +3246,7 @@ export namespace Models {
     presupuesto: public_Presupuesto | null;
     proveedores: public_MatrimonioProveedor[];
     proyecto: public_Proyecto;
+    riesgos: public_Riesgo[];
     tipoCeremonia: public_TipoCeremonia | null;
     ubigeo: public_Ubigeo | null;
     readonly [RelationKeys]?:
@@ -2750,6 +3257,7 @@ export namespace Models {
       | 'presupuesto'
       | 'proveedores'
       | 'proyecto'
+      | 'riesgos'
       | 'tipoCeremonia'
       | 'ubigeo';
   };
@@ -3129,8 +3637,10 @@ export namespace Models {
     cronograma: public_NotificacionCronograma | null;
     presupuesto: public_NotificacionPresupuesto | null;
     proyecto: public_Proyecto | null;
+    riesgo: public_NotificacionRiesgo | null;
     usuarioDestino: public_Usuario;
-    readonly [RelationKeys]?: 'cronograma' | 'presupuesto' | 'proyecto' | 'usuarioDestino';
+    readonly [RelationKeys]?:
+      'cronograma' | 'presupuesto' | 'proyecto' | 'riesgo' | 'usuarioDestino';
   };
   export type public_NotificacionCronograma = {
     idNotificacion: CodecTypes['pg/uuid@1']['output'];
@@ -3454,6 +3964,192 @@ export namespace Models {
     presupuesto: public_Presupuesto;
     readonly [RelationKeys]?: 'categoria' | 'costo' | 'notificacion' | 'presupuesto';
   };
+  export type public_CategoriaRiesgo = {
+    idCategoriaRiesgo: CodecTypes['pg/int4@1']['output'];
+    codigo: Varchar<50>;
+    nombre: Varchar<100>;
+    descripcion: Varchar<500> | null;
+    activo: CodecTypes['pg/bool@1']['output'];
+    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    plantillas: public_PlantillaRiesgo[];
+    riesgos: public_Riesgo[];
+    readonly [RelationKeys]?: 'plantillas' | 'riesgos';
+  };
+  export type public_PlantillaRiesgo = {
+    idPlantillaRiesgo: CodecTypes['pg/int4@1']['output'];
+    idCategoriaRiesgo: CodecTypes['pg/int4@1']['output'];
+    codigo: Varchar<50>;
+    nombre: Varchar<200>;
+    descripcion: Varchar<1000>;
+    causaProbable: Varchar<1000>;
+    efectoPotencial: Varchar<1000>;
+    activo: CodecTypes['pg/bool@1']['output'];
+    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    categoria: public_CategoriaRiesgo;
+    mitigaciones: public_PlantillaMitigacionRiesgo[];
+    planes: public_PlantillaPlanRiesgo[];
+    riesgos: public_Riesgo[];
+    readonly [RelationKeys]?: 'categoria' | 'mitigaciones' | 'planes' | 'riesgos';
+  };
+  export type public_PlantillaMitigacionRiesgo = {
+    idPlantillaMitigacion: CodecTypes['pg/int4@1']['output'];
+    idPlantillaRiesgo: CodecTypes['pg/int4@1']['output'];
+    severidadMinima: 'BAJO' | 'MEDIO' | 'ALTO' | null;
+    descripcion: Varchar<1000>;
+    activo: CodecTypes['pg/bool@1']['output'];
+    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    mitigacionesRiesgo: public_MitigacionRiesgo[];
+    plantillaRiesgo: public_PlantillaRiesgo;
+    readonly [RelationKeys]?: 'mitigacionesRiesgo' | 'plantillaRiesgo';
+  };
+  export type public_PlantillaPlanRiesgo = {
+    idPlantillaPlan: CodecTypes['pg/int4@1']['output'];
+    idPlantillaRiesgo: CodecTypes['pg/int4@1']['output'];
+    alternativa: 'PLAN_A' | 'PLAN_B' | 'PLAN_C';
+    accion: Varchar<1000>;
+    activo: CodecTypes['pg/bool@1']['output'];
+    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    plantillaRiesgo: public_PlantillaRiesgo;
+    readonly [RelationKeys]?: 'plantillaRiesgo';
+  };
+  export type public_Riesgo = {
+    idRiesgo: CodecTypes['pg/uuid@1']['output'];
+    idProyecto: CodecTypes['pg/uuid@1']['output'];
+    idMatrimonio: CodecTypes['pg/uuid@1']['output'] | null;
+    idPlantillaRiesgo: CodecTypes['pg/int4@1']['output'] | null;
+    idCategoriaRiesgo: CodecTypes['pg/int4@1']['output'];
+    idUsuarioResponsable: CodecTypes['pg/int4@1']['output'] | null;
+    nombre: Varchar<200>;
+    descripcion: Varchar<1000> | null;
+    causaProbable: Varchar<1000> | null;
+    efectoPotencial: Varchar<1000> | null;
+    probabilidad: CodecTypes['pg/int4@1']['output'];
+    impacto: CodecTypes['pg/int4@1']['output'];
+    severidad: 'BAJO' | 'MEDIO' | 'ALTO';
+    costoAsociado: Numeric<12, 2> | null;
+    estado: 'IDENTIFICADO' | 'EN_TRATAMIENTO' | 'ACTIVO' | 'CERRADO';
+    activo: CodecTypes['pg/bool@1']['output'];
+    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    categoria: public_CategoriaRiesgo;
+    costos: public_CostoRiesgo[];
+    incidencias: public_IncidenciaRiesgo[];
+    matrimonio: public_Matrimonio | null;
+    mitigaciones: public_MitigacionRiesgo[];
+    notificaciones: public_NotificacionRiesgo[];
+    planes: public_PlanContingenciaRiesgo[];
+    plantilla: public_PlantillaRiesgo | null;
+    proyecto: public_Proyecto;
+    responsable: public_Usuario | null;
+    readonly [RelationKeys]?:
+      | 'categoria'
+      | 'costos'
+      | 'incidencias'
+      | 'matrimonio'
+      | 'mitigaciones'
+      | 'notificaciones'
+      | 'planes'
+      | 'plantilla'
+      | 'proyecto'
+      | 'responsable';
+  };
+  export type public_PlanContingenciaRiesgo = {
+    idPlanContingencia: CodecTypes['pg/uuid@1']['output'];
+    idRiesgo: CodecTypes['pg/uuid@1']['output'];
+    alternativa: 'PLAN_A' | 'PLAN_B' | 'PLAN_C';
+    version: CodecTypes['pg/int4@1']['output'];
+    accion: Varchar<1000>;
+    idUsuarioResponsable: CodecTypes['pg/int4@1']['output'] | null;
+    activo: CodecTypes['pg/bool@1']['output'];
+    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    activaciones: public_ActivacionPlanRiesgo[];
+    responsable: public_Usuario | null;
+    riesgo: public_Riesgo;
+    readonly [RelationKeys]?: 'activaciones' | 'responsable' | 'riesgo';
+  };
+  export type public_ActivacionPlanRiesgo = {
+    idActivacionPlan: CodecTypes['pg/uuid@1']['output'];
+    idPlanContingencia: CodecTypes['pg/uuid@1']['output'];
+    idIncidencia: CodecTypes['pg/uuid@1']['output'] | null;
+    idUsuarioRegistro: CodecTypes['pg/int4@1']['output'];
+    fechaActivacion: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    observacion: Varchar<1000> | null;
+    incidencia: public_IncidenciaRiesgo | null;
+    plan: public_PlanContingenciaRiesgo;
+    usuarioRegistro: public_Usuario;
+    readonly [RelationKeys]?: 'incidencia' | 'plan' | 'usuarioRegistro';
+  };
+  export type public_MitigacionRiesgo = {
+    idMitigacionRiesgo: CodecTypes['pg/uuid@1']['output'];
+    idRiesgo: CodecTypes['pg/uuid@1']['output'];
+    idPlantillaMitigacion: CodecTypes['pg/int4@1']['output'] | null;
+    descripcion: Varchar<1000>;
+    estado: 'SUGERIDA' | 'APLICADA' | 'DESCARTADA';
+    activo: CodecTypes['pg/bool@1']['output'];
+    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    plantilla: public_PlantillaMitigacionRiesgo | null;
+    riesgo: public_Riesgo;
+    readonly [RelationKeys]?: 'plantilla' | 'riesgo';
+  };
+  export type public_IncidenciaRiesgo = {
+    idIncidencia: CodecTypes['pg/uuid@1']['output'];
+    idRiesgo: CodecTypes['pg/uuid@1']['output'];
+    descripcion: Varchar<1000>;
+    critica: CodecTypes['pg/bool@1']['output'];
+    atendida: CodecTypes['pg/bool@1']['output'];
+    fechaIncidencia: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    activaciones: public_ActivacionPlanRiesgo[];
+    costos: public_CostoRiesgo[];
+    riesgo: public_Riesgo;
+    readonly [RelationKeys]?: 'activaciones' | 'costos' | 'riesgo';
+  };
+  export type public_CostoRiesgo = {
+    idCostoRiesgo: CodecTypes['pg/uuid@1']['output'];
+    idRiesgo: CodecTypes['pg/uuid@1']['output'];
+    idIncidencia: CodecTypes['pg/uuid@1']['output'] | null;
+    concepto: Varchar<200>;
+    monto: Numeric<12, 2>;
+    idCostoPresupuesto: CodecTypes['pg/uuid@1']['output'] | null;
+    activo: CodecTypes['pg/bool@1']['output'];
+    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    costoPresupuesto: public_CostoProveedor | null;
+    documentos: public_DocumentoCostoRiesgo[];
+    incidencia: public_IncidenciaRiesgo | null;
+    riesgo: public_Riesgo;
+    readonly [RelationKeys]?: 'costoPresupuesto' | 'documentos' | 'incidencia' | 'riesgo';
+  };
+  export type public_DocumentoCostoRiesgo = {
+    idDocumentoCostoRiesgo: CodecTypes['pg/uuid@1']['output'];
+    idCostoRiesgo: CodecTypes['pg/uuid@1']['output'];
+    nombre: Varchar<200>;
+    url: Varchar<500>;
+    tipo: Varchar<20>;
+    activo: CodecTypes['pg/bool@1']['output'];
+    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    costoRiesgo: public_CostoRiesgo;
+    readonly [RelationKeys]?: 'costoRiesgo';
+  };
+  export type public_NotificacionRiesgo = {
+    idNotificacion: CodecTypes['pg/uuid@1']['output'];
+    idRiesgo: CodecTypes['pg/uuid@1']['output'] | null;
+    idIncidencia: CodecTypes['pg/uuid@1']['output'] | null;
+    tipoEventoRiesgo: 'RIESGO_CRITICO' | 'INCIDENCIA_REGISTRADA' | 'PLAN_ACTIVADO';
+    severidad: 'BAJO' | 'MEDIO' | 'ALTO' | null;
+    atendida: CodecTypes['pg/bool@1']['output'];
+    incidencia: public_IncidenciaRiesgo | null;
+    notificacion: public_Notificacion;
+    riesgo: public_Riesgo | null;
+    readonly [RelationKeys]?: 'incidencia' | 'notificacion' | 'riesgo';
+  };
   export type public_Ubigeo = {
     idUbigeo: Varchar<6>;
     departamento: Varchar<100>;
@@ -3627,6 +4323,18 @@ export declare const models: {
     CompromisoPago: Models.public_CompromisoPago;
     SeguimientoPago: Models.public_SeguimientoPago;
     NotificacionPresupuesto: Models.public_NotificacionPresupuesto;
+    CategoriaRiesgo: Models.public_CategoriaRiesgo;
+    PlantillaRiesgo: Models.public_PlantillaRiesgo;
+    PlantillaMitigacionRiesgo: Models.public_PlantillaMitigacionRiesgo;
+    PlantillaPlanRiesgo: Models.public_PlantillaPlanRiesgo;
+    Riesgo: Models.public_Riesgo;
+    PlanContingenciaRiesgo: Models.public_PlanContingenciaRiesgo;
+    ActivacionPlanRiesgo: Models.public_ActivacionPlanRiesgo;
+    MitigacionRiesgo: Models.public_MitigacionRiesgo;
+    IncidenciaRiesgo: Models.public_IncidenciaRiesgo;
+    CostoRiesgo: Models.public_CostoRiesgo;
+    DocumentoCostoRiesgo: Models.public_DocumentoCostoRiesgo;
+    NotificacionRiesgo: Models.public_NotificacionRiesgo;
     Ubigeo: Models.public_Ubigeo;
     PersonaNatural: Models.public_PersonaNatural;
     Entidad: Models.public_Entidad;
@@ -7103,6 +7811,98 @@ type ContractBase = Omit<
                 },
               ];
             };
+            readonly nt_notificacion_riesgo: {
+              columns: {
+                readonly id_notificacion: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly id_riesgo: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: true;
+                };
+                readonly id_incidencia: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: true;
+                };
+                readonly tipo_evento_riesgo: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+                readonly severidad: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+                readonly atendida: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', false>;
+                  };
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id_notificacion'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'nt_notificacion_riesgo_id_riesgo_idx_59be24f5';
+                  readonly prefix: 'nt_notificacion_riesgo_id_riesgo_idx';
+                  readonly columns: readonly ['id_riesgo'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'nt_notificacion_riesgo_id_incidencia_idx_dc23a618';
+                  readonly prefix: 'nt_notificacion_riesgo_id_incidencia_idx';
+                  readonly columns: readonly ['id_incidencia'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'nt_notificacion_riesgo';
+                    readonly columns: readonly ['id_notificacion'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'nt_notificacion';
+                    readonly columns: readonly ['id_notificacion'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'nt_notificacion_riesgo';
+                    readonly columns: readonly ['id_riesgo'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'rg_riesgo';
+                    readonly columns: readonly ['id_riesgo'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'nt_notificacion_riesgo';
+                    readonly columns: readonly ['id_incidencia'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'rg_incidencia';
+                    readonly columns: readonly ['id_incidencia'];
+                  };
+                },
+              ];
+            };
             readonly pr_categoria_presupuesto: {
               columns: {
                 readonly id_categoria_presupuesto: {
@@ -8822,6 +9622,1070 @@ type ContractBase = Omit<
                 },
               ];
             };
+            readonly rg_activacion_plan: {
+              columns: {
+                readonly id_activacion_plan: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly id_plan_contingencia: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly id_incidencia: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: true;
+                };
+                readonly id_usuario_registro: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                };
+                readonly fecha_activacion: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                };
+                readonly observacion: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly length: 1000 };
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id_activacion_plan'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'rg_activacion_plan_id_plan_contingencia_idx_81e0a5c9';
+                  readonly prefix: 'rg_activacion_plan_id_plan_contingencia_idx';
+                  readonly columns: readonly ['id_plan_contingencia'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'rg_activacion_plan_id_incidencia_idx_dc23a618';
+                  readonly prefix: 'rg_activacion_plan_id_incidencia_idx';
+                  readonly columns: readonly ['id_incidencia'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'rg_activacion_plan_id_usuario_registro_idx_14d2f264';
+                  readonly prefix: 'rg_activacion_plan_id_usuario_registro_idx';
+                  readonly columns: readonly ['id_usuario_registro'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'rg_activacion_plan';
+                    readonly columns: readonly ['id_plan_contingencia'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'rg_plan_contingencia';
+                    readonly columns: readonly ['id_plan_contingencia'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'rg_activacion_plan';
+                    readonly columns: readonly ['id_incidencia'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'rg_incidencia';
+                    readonly columns: readonly ['id_incidencia'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'rg_activacion_plan';
+                    readonly columns: readonly ['id_usuario_registro'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'au_usuario';
+                    readonly columns: readonly ['id_usuario'];
+                  };
+                },
+              ];
+            };
+            readonly rg_categoria_riesgo: {
+              columns: {
+                readonly id_categoria_riesgo: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'function';
+                    readonly expression: 'autoincrement()';
+                  };
+                };
+                readonly codigo: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly length: 50 };
+                };
+                readonly nombre: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly length: 100 };
+                };
+                readonly descripcion: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly length: 500 };
+                };
+                readonly activo: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', true>;
+                  };
+                };
+                readonly created_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                };
+                readonly updated_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id_categoria_riesgo'] };
+              uniques: readonly [{ readonly columns: readonly ['codigo'] }];
+              indexes: readonly [];
+              foreignKeys: readonly [];
+            };
+            readonly rg_costo_riesgo: {
+              columns: {
+                readonly id_costo_riesgo: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly id_riesgo: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly id_incidencia: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: true;
+                };
+                readonly concepto: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly length: 200 };
+                };
+                readonly monto: {
+                  readonly nativeType: 'numeric';
+                  readonly codecId: 'pg/numeric@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly precision: 12; readonly scale: 2 };
+                };
+                readonly id_costo_presupuesto: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: true;
+                };
+                readonly activo: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', true>;
+                  };
+                };
+                readonly created_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                };
+                readonly updated_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id_costo_riesgo'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'rg_costo_riesgo_id_riesgo_idx_59be24f5';
+                  readonly prefix: 'rg_costo_riesgo_id_riesgo_idx';
+                  readonly columns: readonly ['id_riesgo'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'rg_costo_riesgo_id_incidencia_idx_dc23a618';
+                  readonly prefix: 'rg_costo_riesgo_id_incidencia_idx';
+                  readonly columns: readonly ['id_incidencia'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'rg_costo_riesgo_id_costo_presupuesto_idx_997bf6ae';
+                  readonly prefix: 'rg_costo_riesgo_id_costo_presupuesto_idx';
+                  readonly columns: readonly ['id_costo_presupuesto'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'rg_costo_riesgo';
+                    readonly columns: readonly ['id_riesgo'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'rg_riesgo';
+                    readonly columns: readonly ['id_riesgo'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'rg_costo_riesgo';
+                    readonly columns: readonly ['id_incidencia'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'rg_incidencia';
+                    readonly columns: readonly ['id_incidencia'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'rg_costo_riesgo';
+                    readonly columns: readonly ['id_costo_presupuesto'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'pr_costo_proveedor';
+                    readonly columns: readonly ['id_costo'];
+                  };
+                },
+              ];
+            };
+            readonly rg_documento_costo: {
+              columns: {
+                readonly id_documento_costo_riesgo: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly id_costo_riesgo: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly nombre: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly length: 200 };
+                };
+                readonly url: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly length: 500 };
+                };
+                readonly tipo: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly length: 20 };
+                };
+                readonly activo: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', true>;
+                  };
+                };
+                readonly created_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id_documento_costo_riesgo'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'rg_documento_costo_id_costo_riesgo_idx_b9d12fb0';
+                  readonly prefix: 'rg_documento_costo_id_costo_riesgo_idx';
+                  readonly columns: readonly ['id_costo_riesgo'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'rg_documento_costo';
+                    readonly columns: readonly ['id_costo_riesgo'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'rg_costo_riesgo';
+                    readonly columns: readonly ['id_costo_riesgo'];
+                  };
+                },
+              ];
+            };
+            readonly rg_incidencia: {
+              columns: {
+                readonly id_incidencia: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly id_riesgo: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly descripcion: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly length: 1000 };
+                };
+                readonly critica: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', false>;
+                  };
+                };
+                readonly atendida: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', false>;
+                  };
+                };
+                readonly fecha_incidencia: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                };
+                readonly created_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                };
+                readonly updated_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id_incidencia'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'rg_incidencia_id_riesgo_idx_59be24f5';
+                  readonly prefix: 'rg_incidencia_id_riesgo_idx';
+                  readonly columns: readonly ['id_riesgo'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'rg_incidencia';
+                    readonly columns: readonly ['id_riesgo'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'rg_riesgo';
+                    readonly columns: readonly ['id_riesgo'];
+                  };
+                },
+              ];
+            };
+            readonly rg_mitigacion_riesgo: {
+              columns: {
+                readonly id_mitigacion_riesgo: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly id_riesgo: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly id_plantilla_mitigacion: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: true;
+                };
+                readonly descripcion: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly length: 1000 };
+                };
+                readonly estado: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/text@1', 'SUGERIDA'>;
+                  };
+                };
+                readonly activo: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', true>;
+                  };
+                };
+                readonly created_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                };
+                readonly updated_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id_mitigacion_riesgo'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'rg_mitigacion_riesgo_id_riesgo_idx_59be24f5';
+                  readonly prefix: 'rg_mitigacion_riesgo_id_riesgo_idx';
+                  readonly columns: readonly ['id_riesgo'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'rg_mitigacion_riesgo_id_plantilla_mitigacion_idx_5bee1967';
+                  readonly prefix: 'rg_mitigacion_riesgo_id_plantilla_mitigacion_idx';
+                  readonly columns: readonly ['id_plantilla_mitigacion'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'rg_mitigacion_riesgo';
+                    readonly columns: readonly ['id_riesgo'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'rg_riesgo';
+                    readonly columns: readonly ['id_riesgo'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'rg_mitigacion_riesgo';
+                    readonly columns: readonly ['id_plantilla_mitigacion'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'rg_plantilla_mitigacion';
+                    readonly columns: readonly ['id_plantilla_mitigacion'];
+                  };
+                },
+              ];
+            };
+            readonly rg_plan_contingencia: {
+              columns: {
+                readonly id_plan_contingencia: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly id_riesgo: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly alternativa: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+                readonly version: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/int4@1', 1>;
+                  };
+                };
+                readonly accion: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly length: 1000 };
+                };
+                readonly id_usuario_responsable: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: true;
+                };
+                readonly activo: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', true>;
+                  };
+                };
+                readonly created_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                };
+                readonly updated_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id_plan_contingencia'] };
+              uniques: readonly [
+                { readonly columns: readonly ['id_riesgo', 'alternativa', 'version'] },
+              ];
+              indexes: readonly [
+                {
+                  readonly name: 'rg_plan_contingencia_id_riesgo_idx_59be24f5';
+                  readonly prefix: 'rg_plan_contingencia_id_riesgo_idx';
+                  readonly columns: readonly ['id_riesgo'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'rg_plan_contingencia_id_usuario_responsable_idx_de19d98e';
+                  readonly prefix: 'rg_plan_contingencia_id_usuario_responsable_idx';
+                  readonly columns: readonly ['id_usuario_responsable'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'rg_plan_contingencia';
+                    readonly columns: readonly ['id_riesgo'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'rg_riesgo';
+                    readonly columns: readonly ['id_riesgo'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'rg_plan_contingencia';
+                    readonly columns: readonly ['id_usuario_responsable'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'au_usuario';
+                    readonly columns: readonly ['id_usuario'];
+                  };
+                },
+              ];
+            };
+            readonly rg_plantilla_mitigacion: {
+              columns: {
+                readonly id_plantilla_mitigacion: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'function';
+                    readonly expression: 'autoincrement()';
+                  };
+                };
+                readonly id_plantilla_riesgo: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                };
+                readonly severidadMinima: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+                readonly descripcion: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly length: 1000 };
+                };
+                readonly activo: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', true>;
+                  };
+                };
+                readonly created_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                };
+                readonly updated_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id_plantilla_mitigacion'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'rg_plantilla_mitigacion_id_plantilla_riesgo_idx_684a00af';
+                  readonly prefix: 'rg_plantilla_mitigacion_id_plantilla_riesgo_idx';
+                  readonly columns: readonly ['id_plantilla_riesgo'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'rg_plantilla_mitigacion';
+                    readonly columns: readonly ['id_plantilla_riesgo'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'rg_plantilla_riesgo';
+                    readonly columns: readonly ['id_plantilla_riesgo'];
+                  };
+                },
+              ];
+            };
+            readonly rg_plantilla_plan: {
+              columns: {
+                readonly id_plantilla_plan: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'function';
+                    readonly expression: 'autoincrement()';
+                  };
+                };
+                readonly id_plantilla_riesgo: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                };
+                readonly alternativa: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+                readonly accion: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly length: 1000 };
+                };
+                readonly activo: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', true>;
+                  };
+                };
+                readonly created_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                };
+                readonly updated_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id_plantilla_plan'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'rg_plantilla_plan_id_plantilla_riesgo_idx_684a00af';
+                  readonly prefix: 'rg_plantilla_plan_id_plantilla_riesgo_idx';
+                  readonly columns: readonly ['id_plantilla_riesgo'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'rg_plantilla_plan';
+                    readonly columns: readonly ['id_plantilla_riesgo'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'rg_plantilla_riesgo';
+                    readonly columns: readonly ['id_plantilla_riesgo'];
+                  };
+                },
+              ];
+            };
+            readonly rg_plantilla_riesgo: {
+              columns: {
+                readonly id_plantilla_riesgo: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'function';
+                    readonly expression: 'autoincrement()';
+                  };
+                };
+                readonly id_categoria_riesgo: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                };
+                readonly codigo: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly length: 50 };
+                };
+                readonly nombre: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly length: 200 };
+                };
+                readonly descripcion: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly length: 1000 };
+                };
+                readonly causa_probable: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly length: 1000 };
+                };
+                readonly efecto_potencial: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly length: 1000 };
+                };
+                readonly activo: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', true>;
+                  };
+                };
+                readonly created_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                };
+                readonly updated_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id_plantilla_riesgo'] };
+              uniques: readonly [{ readonly columns: readonly ['codigo'] }];
+              indexes: readonly [
+                {
+                  readonly name: 'rg_plantilla_riesgo_id_categoria_riesgo_idx_fa2eda0b';
+                  readonly prefix: 'rg_plantilla_riesgo_id_categoria_riesgo_idx';
+                  readonly columns: readonly ['id_categoria_riesgo'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'rg_plantilla_riesgo';
+                    readonly columns: readonly ['id_categoria_riesgo'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'rg_categoria_riesgo';
+                    readonly columns: readonly ['id_categoria_riesgo'];
+                  };
+                },
+              ];
+            };
+            readonly rg_riesgo: {
+              columns: {
+                readonly id_riesgo: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly id_proyecto: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly id_matrimonio: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: true;
+                };
+                readonly id_plantilla_riesgo: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: true;
+                };
+                readonly id_categoria_riesgo: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                };
+                readonly id_usuario_responsable: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: true;
+                };
+                readonly nombre: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly length: 200 };
+                };
+                readonly descripcion: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly length: 1000 };
+                };
+                readonly causa_probable: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly length: 1000 };
+                };
+                readonly efecto_potencial: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly length: 1000 };
+                };
+                readonly probabilidad: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                };
+                readonly impacto: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                };
+                readonly severidad: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+                readonly costo_asociado: {
+                  readonly nativeType: 'numeric';
+                  readonly codecId: 'pg/numeric@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly precision: 12; readonly scale: 2 };
+                };
+                readonly estado: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/text@1', 'IDENTIFICADO'>;
+                  };
+                };
+                readonly activo: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', true>;
+                  };
+                };
+                readonly created_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                };
+                readonly updated_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id_riesgo'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'rg_riesgo_id_proyecto_idx_4279b0d1';
+                  readonly prefix: 'rg_riesgo_id_proyecto_idx';
+                  readonly columns: readonly ['id_proyecto'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'rg_riesgo_id_matrimonio_idx_97ab526e';
+                  readonly prefix: 'rg_riesgo_id_matrimonio_idx';
+                  readonly columns: readonly ['id_matrimonio'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'rg_riesgo_id_categoria_riesgo_idx_fa2eda0b';
+                  readonly prefix: 'rg_riesgo_id_categoria_riesgo_idx';
+                  readonly columns: readonly ['id_categoria_riesgo'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'rg_riesgo_severidad_idx_b0040f3e';
+                  readonly prefix: 'rg_riesgo_severidad_idx';
+                  readonly columns: readonly ['severidad'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'rg_riesgo_id_plantilla_riesgo_idx_684a00af';
+                  readonly prefix: 'rg_riesgo_id_plantilla_riesgo_idx';
+                  readonly columns: readonly ['id_plantilla_riesgo'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'rg_riesgo_id_usuario_responsable_idx_de19d98e';
+                  readonly prefix: 'rg_riesgo_id_usuario_responsable_idx';
+                  readonly columns: readonly ['id_usuario_responsable'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'rg_riesgo';
+                    readonly columns: readonly ['id_proyecto'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'gp_proyecto';
+                    readonly columns: readonly ['idProyecto'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'rg_riesgo';
+                    readonly columns: readonly ['id_matrimonio'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'gp_matrimonio';
+                    readonly columns: readonly ['id_matrimonio'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'rg_riesgo';
+                    readonly columns: readonly ['id_plantilla_riesgo'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'rg_plantilla_riesgo';
+                    readonly columns: readonly ['id_plantilla_riesgo'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'rg_riesgo';
+                    readonly columns: readonly ['id_categoria_riesgo'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'rg_categoria_riesgo';
+                    readonly columns: readonly ['id_categoria_riesgo'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'rg_riesgo';
+                    readonly columns: readonly ['id_usuario_responsable'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'au_usuario';
+                    readonly columns: readonly ['id_usuario'];
+                  };
+                },
+              ];
+            };
           };
           readonly valueSet: {
             readonly au_tipo_token_cuenta: {
@@ -8899,6 +10763,14 @@ type ContractBase = Omit<
                 'PAGO_VENCIDO',
               ];
             };
+            readonly nt_tipo_evento_riesgo: {
+              readonly kind: 'valueSet';
+              readonly values: readonly [
+                'RIESGO_CRITICO',
+                'INCIDENCIA_REGISTRADA',
+                'PLAN_ACTIVADO',
+              ];
+            };
             readonly pr_estado_costo: {
               readonly kind: 'valueSet';
               readonly values: readonly ['PLANIFICADO', 'CONTRATADO', 'PAGADO', 'CANCELADO'];
@@ -8934,6 +10806,22 @@ type ContractBase = Omit<
             readonly pv_tipo_seguimiento: {
               readonly kind: 'valueSet';
               readonly values: readonly ['CHECKLIST', 'INCIDENCIA'];
+            };
+            readonly rg_alternativa_plan: {
+              readonly kind: 'valueSet';
+              readonly values: readonly ['PLAN_A', 'PLAN_B', 'PLAN_C'];
+            };
+            readonly rg_estado_mitigacion: {
+              readonly kind: 'valueSet';
+              readonly values: readonly ['SUGERIDA', 'APLICADA', 'DESCARTADA'];
+            };
+            readonly rg_estado_riesgo: {
+              readonly kind: 'valueSet';
+              readonly values: readonly ['IDENTIFICADO', 'EN_TRATAMIENTO', 'ACTIVO', 'CERRADO'];
+            };
+            readonly rg_severidad: {
+              readonly kind: 'valueSet';
+              readonly values: readonly ['BAJO', 'MEDIO', 'ALTO'];
             };
           };
         };
@@ -9110,6 +10998,51 @@ type ContractBase = Omit<
       readonly namespace: 'public' & NamespaceId;
       readonly model: 'NotificacionPresupuesto';
     };
+    readonly rg_categoria_riesgo: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'CategoriaRiesgo';
+    };
+    readonly rg_plantilla_riesgo: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'PlantillaRiesgo';
+    };
+    readonly rg_plantilla_mitigacion: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'PlantillaMitigacionRiesgo';
+    };
+    readonly rg_plantilla_plan: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'PlantillaPlanRiesgo';
+    };
+    readonly rg_riesgo: { readonly namespace: 'public' & NamespaceId; readonly model: 'Riesgo' };
+    readonly rg_plan_contingencia: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'PlanContingenciaRiesgo';
+    };
+    readonly rg_activacion_plan: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'ActivacionPlanRiesgo';
+    };
+    readonly rg_mitigacion_riesgo: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'MitigacionRiesgo';
+    };
+    readonly rg_incidencia: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'IncidenciaRiesgo';
+    };
+    readonly rg_costo_riesgo: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'CostoRiesgo';
+    };
+    readonly rg_documento_costo: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'DocumentoCostoRiesgo';
+    };
+    readonly nt_notificacion_riesgo: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'NotificacionRiesgo';
+    };
     readonly in_ubigeo: { readonly namespace: 'public' & NamespaceId; readonly model: 'Ubigeo' };
     readonly in_persona_natural: {
       readonly namespace: 'public' & NamespaceId;
@@ -9131,6 +11064,91 @@ type ContractBase = Omit<
     readonly namespaces: {
       readonly public: {
         readonly models: {
+          readonly ActivacionPlanRiesgo: {
+            readonly fields: {
+              readonly idActivacionPlan: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly idPlanContingencia: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly idIncidencia: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly idUsuarioRegistro: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly fechaActivacion: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly observacion: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 1000 };
+                };
+              };
+            };
+            readonly relations: {
+              readonly incidencia: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'IncidenciaRiesgo';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['idIncidencia'];
+                  readonly targetFields: readonly ['idIncidencia'];
+                };
+              };
+              readonly plan: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'PlanContingenciaRiesgo';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['idPlanContingencia'];
+                  readonly targetFields: readonly ['idPlanContingencia'];
+                };
+              };
+              readonly usuarioRegistro: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Usuario';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['idUsuarioRegistro'];
+                  readonly targetFields: readonly ['idUsuario'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'rg_activacion_plan';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly idActivacionPlan: { readonly column: 'id_activacion_plan' };
+                readonly idPlanContingencia: { readonly column: 'id_plan_contingencia' };
+                readonly idIncidencia: { readonly column: 'id_incidencia' };
+                readonly idUsuarioRegistro: { readonly column: 'id_usuario_registro' };
+                readonly fechaActivacion: { readonly column: 'fecha_activacion' };
+                readonly observacion: { readonly column: 'observacion' };
+              };
+            };
+          };
           readonly Actividad: {
             readonly fields: {
               readonly idActividad: {
@@ -9769,6 +11787,93 @@ type ContractBase = Omit<
               };
             };
           };
+          readonly CategoriaRiesgo: {
+            readonly fields: {
+              readonly idCategoriaRiesgo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly codigo: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 50 };
+                };
+              };
+              readonly nombre: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 100 };
+                };
+              };
+              readonly descripcion: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 500 };
+                };
+              };
+              readonly activo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+            };
+            readonly relations: {
+              readonly plantillas: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'PlantillaRiesgo';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idCategoriaRiesgo'];
+                  readonly targetFields: readonly ['idCategoriaRiesgo'];
+                };
+              };
+              readonly riesgos: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Riesgo';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idCategoriaRiesgo'];
+                  readonly targetFields: readonly ['idCategoriaRiesgo'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'rg_categoria_riesgo';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly idCategoriaRiesgo: { readonly column: 'id_categoria_riesgo' };
+                readonly codigo: { readonly column: 'codigo' };
+                readonly nombre: { readonly column: 'nombre' };
+                readonly descripcion: { readonly column: 'descripcion' };
+                readonly activo: { readonly column: 'activo' };
+                readonly createdAt: { readonly column: 'created_at' };
+                readonly updatedAt: { readonly column: 'updated_at' };
+              };
+            };
+          };
           readonly CategoriaServicio: {
             readonly fields: {
               readonly idCategoriaServicio: {
@@ -10113,6 +12218,124 @@ type ContractBase = Omit<
               };
             };
           };
+          readonly CostoRiesgo: {
+            readonly fields: {
+              readonly idCostoRiesgo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly idRiesgo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly idIncidencia: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly concepto: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 200 };
+                };
+              };
+              readonly monto: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/numeric@1';
+                  readonly typeParams: { readonly precision: 12; readonly scale: 2 };
+                };
+              };
+              readonly idCostoPresupuesto: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly activo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+            };
+            readonly relations: {
+              readonly costoPresupuesto: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'CostoProveedor';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['idCostoPresupuesto'];
+                  readonly targetFields: readonly ['idCosto'];
+                };
+              };
+              readonly documentos: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'DocumentoCostoRiesgo';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idCostoRiesgo'];
+                  readonly targetFields: readonly ['idCostoRiesgo'];
+                };
+              };
+              readonly incidencia: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'IncidenciaRiesgo';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['idIncidencia'];
+                  readonly targetFields: readonly ['idIncidencia'];
+                };
+              };
+              readonly riesgo: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Riesgo';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['idRiesgo'];
+                  readonly targetFields: readonly ['idRiesgo'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'rg_costo_riesgo';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly idCostoRiesgo: { readonly column: 'id_costo_riesgo' };
+                readonly idRiesgo: { readonly column: 'id_riesgo' };
+                readonly idIncidencia: { readonly column: 'id_incidencia' };
+                readonly concepto: { readonly column: 'concepto' };
+                readonly monto: { readonly column: 'monto' };
+                readonly idCostoPresupuesto: { readonly column: 'id_costo_presupuesto' };
+                readonly activo: { readonly column: 'activo' };
+                readonly createdAt: { readonly column: 'created_at' };
+                readonly updatedAt: { readonly column: 'updated_at' };
+              };
+            };
+          };
           readonly Dependencia: {
             readonly fields: {
               readonly idDependencia: {
@@ -10277,6 +12500,80 @@ type ContractBase = Omit<
                 readonly activo: { readonly column: 'activo' };
                 readonly createdAt: { readonly column: 'created_at' };
                 readonly updatedAt: { readonly column: 'updated_at' };
+              };
+            };
+          };
+          readonly DocumentoCostoRiesgo: {
+            readonly fields: {
+              readonly idDocumentoCostoRiesgo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly idCostoRiesgo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly nombre: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 200 };
+                };
+              };
+              readonly url: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 500 };
+                };
+              };
+              readonly tipo: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 20 };
+                };
+              };
+              readonly activo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+            };
+            readonly relations: {
+              readonly costoRiesgo: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'CostoRiesgo';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['idCostoRiesgo'];
+                  readonly targetFields: readonly ['idCostoRiesgo'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'rg_documento_costo';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly idDocumentoCostoRiesgo: { readonly column: 'id_documento_costo_riesgo' };
+                readonly idCostoRiesgo: { readonly column: 'id_costo_riesgo' };
+                readonly nombre: { readonly column: 'nombre' };
+                readonly url: { readonly column: 'url' };
+                readonly tipo: { readonly column: 'tipo' };
+                readonly activo: { readonly column: 'activo' };
+                readonly createdAt: { readonly column: 'created_at' };
               };
             };
           };
@@ -10958,6 +13255,105 @@ type ContractBase = Omit<
               };
             };
           };
+          readonly IncidenciaRiesgo: {
+            readonly fields: {
+              readonly idIncidencia: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly idRiesgo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly descripcion: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 1000 };
+                };
+              };
+              readonly critica: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly atendida: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly fechaIncidencia: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+            };
+            readonly relations: {
+              readonly activaciones: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'ActivacionPlanRiesgo';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idIncidencia'];
+                  readonly targetFields: readonly ['idIncidencia'];
+                };
+              };
+              readonly costos: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'CostoRiesgo';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idIncidencia'];
+                  readonly targetFields: readonly ['idIncidencia'];
+                };
+              };
+              readonly riesgo: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Riesgo';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['idRiesgo'];
+                  readonly targetFields: readonly ['idRiesgo'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'rg_incidencia';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly idIncidencia: { readonly column: 'id_incidencia' };
+                readonly idRiesgo: { readonly column: 'id_riesgo' };
+                readonly descripcion: { readonly column: 'descripcion' };
+                readonly critica: { readonly column: 'critica' };
+                readonly atendida: { readonly column: 'atendida' };
+                readonly fechaIncidencia: { readonly column: 'fecha_incidencia' };
+                readonly createdAt: { readonly column: 'created_at' };
+                readonly updatedAt: { readonly column: 'updated_at' };
+              };
+            };
+          };
           readonly InteraccionProveedor: {
             readonly fields: {
               readonly idInteraccionProveedor: {
@@ -11447,6 +13843,17 @@ type ContractBase = Omit<
                   readonly targetFields: readonly ['idProyecto'];
                 };
               };
+              readonly riesgos: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Riesgo';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idMatrimonio'];
+                  readonly targetFields: readonly ['idMatrimonio'];
+                };
+              };
               readonly tipoCeremonia: {
                 readonly to: {
                   readonly namespace: 'public' & NamespaceId;
@@ -11839,6 +14246,92 @@ type ContractBase = Omit<
               };
             };
           };
+          readonly MitigacionRiesgo: {
+            readonly fields: {
+              readonly idMitigacionRiesgo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly idRiesgo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly idPlantillaMitigacion: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly descripcion: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 1000 };
+                };
+              };
+              readonly estado: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly activo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+            };
+            readonly relations: {
+              readonly plantilla: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'PlantillaMitigacionRiesgo';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['idPlantillaMitigacion'];
+                  readonly targetFields: readonly ['idPlantillaMitigacion'];
+                };
+              };
+              readonly riesgo: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Riesgo';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['idRiesgo'];
+                  readonly targetFields: readonly ['idRiesgo'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'rg_mitigacion_riesgo';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly idMitigacionRiesgo: { readonly column: 'id_mitigacion_riesgo' };
+                readonly idRiesgo: { readonly column: 'id_riesgo' };
+                readonly idPlantillaMitigacion: { readonly column: 'id_plantilla_mitigacion' };
+                readonly descripcion: { readonly column: 'descripcion' };
+                readonly estado: { readonly column: 'estado' };
+                readonly activo: { readonly column: 'activo' };
+                readonly createdAt: { readonly column: 'created_at' };
+                readonly updatedAt: { readonly column: 'updated_at' };
+              };
+            };
+          };
           readonly Notificacion: {
             readonly fields: {
               readonly idNotificacion: {
@@ -11953,6 +14446,18 @@ type ContractBase = Omit<
                 readonly on: {
                   readonly localFields: readonly ['idProyecto'];
                   readonly targetFields: readonly ['idProyecto'];
+                };
+              };
+              readonly riesgo: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'NotificacionRiesgo';
+                };
+                readonly cardinality: '1:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['idNotificacion'];
+                  readonly targetFields: readonly ['idNotificacion'];
                 };
               };
               readonly usuarioDestino: {
@@ -12170,6 +14675,84 @@ type ContractBase = Omit<
                 readonly montoPlanificado: { readonly column: 'monto_planificado' };
                 readonly montoActual: { readonly column: 'monto_actual' };
                 readonly diferencia: { readonly column: 'diferencia' };
+              };
+            };
+          };
+          readonly NotificacionRiesgo: {
+            readonly fields: {
+              readonly idNotificacion: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly idRiesgo: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly idIncidencia: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly tipoEventoRiesgo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly severidad: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly atendida: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+            };
+            readonly relations: {
+              readonly incidencia: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'IncidenciaRiesgo';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['idIncidencia'];
+                  readonly targetFields: readonly ['idIncidencia'];
+                };
+              };
+              readonly notificacion: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Notificacion';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['idNotificacion'];
+                  readonly targetFields: readonly ['idNotificacion'];
+                };
+              };
+              readonly riesgo: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Riesgo';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['idRiesgo'];
+                  readonly targetFields: readonly ['idRiesgo'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'nt_notificacion_riesgo';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly idNotificacion: { readonly column: 'id_notificacion' };
+                readonly idRiesgo: { readonly column: 'id_riesgo' };
+                readonly idIncidencia: { readonly column: 'id_incidencia' };
+                readonly tipoEventoRiesgo: { readonly column: 'tipo_evento_riesgo' };
+                readonly severidad: { readonly column: 'severidad' };
+                readonly atendida: { readonly column: 'atendida' };
               };
             };
           };
@@ -12447,6 +15030,108 @@ type ContractBase = Omit<
                 readonly esActivo: { readonly column: 'es_activo' };
                 readonly fechaCreacion: { readonly column: 'fecha_creacion' };
                 readonly fechaModificacion: { readonly column: 'fecha_modificacion' };
+              };
+            };
+          };
+          readonly PlanContingenciaRiesgo: {
+            readonly fields: {
+              readonly idPlanContingencia: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly idRiesgo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly alternativa: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly version: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly accion: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 1000 };
+                };
+              };
+              readonly idUsuarioResponsable: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly activo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+            };
+            readonly relations: {
+              readonly activaciones: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'ActivacionPlanRiesgo';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idPlanContingencia'];
+                  readonly targetFields: readonly ['idPlanContingencia'];
+                };
+              };
+              readonly responsable: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Usuario';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['idUsuarioResponsable'];
+                  readonly targetFields: readonly ['idUsuario'];
+                };
+              };
+              readonly riesgo: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Riesgo';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['idRiesgo'];
+                  readonly targetFields: readonly ['idRiesgo'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'rg_plan_contingencia';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly idPlanContingencia: { readonly column: 'id_plan_contingencia' };
+                readonly idRiesgo: { readonly column: 'id_riesgo' };
+                readonly alternativa: { readonly column: 'alternativa' };
+                readonly version: { readonly column: 'version' };
+                readonly accion: { readonly column: 'accion' };
+                readonly idUsuarioResponsable: { readonly column: 'id_usuario_responsable' };
+                readonly activo: { readonly column: 'activo' };
+                readonly createdAt: { readonly column: 'created_at' };
+                readonly updatedAt: { readonly column: 'updated_at' };
               };
             };
           };
@@ -12849,6 +15534,288 @@ type ContractBase = Omit<
                 readonly diasAntesBase: { readonly column: 'dias_antes_base' };
                 readonly diasAntesMinimo: { readonly column: 'dias_antes_minimo' };
                 readonly orden: { readonly column: 'orden' };
+                readonly activo: { readonly column: 'activo' };
+                readonly createdAt: { readonly column: 'created_at' };
+                readonly updatedAt: { readonly column: 'updated_at' };
+              };
+            };
+          };
+          readonly PlantillaMitigacionRiesgo: {
+            readonly fields: {
+              readonly idPlantillaMitigacion: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly idPlantillaRiesgo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly severidadMinima: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly descripcion: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 1000 };
+                };
+              };
+              readonly activo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+            };
+            readonly relations: {
+              readonly mitigacionesRiesgo: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'MitigacionRiesgo';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idPlantillaMitigacion'];
+                  readonly targetFields: readonly ['idPlantillaMitigacion'];
+                };
+              };
+              readonly plantillaRiesgo: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'PlantillaRiesgo';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['idPlantillaRiesgo'];
+                  readonly targetFields: readonly ['idPlantillaRiesgo'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'rg_plantilla_mitigacion';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly idPlantillaMitigacion: { readonly column: 'id_plantilla_mitigacion' };
+                readonly idPlantillaRiesgo: { readonly column: 'id_plantilla_riesgo' };
+                readonly severidadMinima: { readonly column: 'severidadMinima' };
+                readonly descripcion: { readonly column: 'descripcion' };
+                readonly activo: { readonly column: 'activo' };
+                readonly createdAt: { readonly column: 'created_at' };
+                readonly updatedAt: { readonly column: 'updated_at' };
+              };
+            };
+          };
+          readonly PlantillaPlanRiesgo: {
+            readonly fields: {
+              readonly idPlantillaPlan: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly idPlantillaRiesgo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly alternativa: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly accion: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 1000 };
+                };
+              };
+              readonly activo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+            };
+            readonly relations: {
+              readonly plantillaRiesgo: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'PlantillaRiesgo';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['idPlantillaRiesgo'];
+                  readonly targetFields: readonly ['idPlantillaRiesgo'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'rg_plantilla_plan';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly idPlantillaPlan: { readonly column: 'id_plantilla_plan' };
+                readonly idPlantillaRiesgo: { readonly column: 'id_plantilla_riesgo' };
+                readonly alternativa: { readonly column: 'alternativa' };
+                readonly accion: { readonly column: 'accion' };
+                readonly activo: { readonly column: 'activo' };
+                readonly createdAt: { readonly column: 'created_at' };
+                readonly updatedAt: { readonly column: 'updated_at' };
+              };
+            };
+          };
+          readonly PlantillaRiesgo: {
+            readonly fields: {
+              readonly idPlantillaRiesgo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly idCategoriaRiesgo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly codigo: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 50 };
+                };
+              };
+              readonly nombre: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 200 };
+                };
+              };
+              readonly descripcion: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 1000 };
+                };
+              };
+              readonly causaProbable: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 1000 };
+                };
+              };
+              readonly efectoPotencial: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 1000 };
+                };
+              };
+              readonly activo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+            };
+            readonly relations: {
+              readonly categoria: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'CategoriaRiesgo';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['idCategoriaRiesgo'];
+                  readonly targetFields: readonly ['idCategoriaRiesgo'];
+                };
+              };
+              readonly mitigaciones: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'PlantillaMitigacionRiesgo';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idPlantillaRiesgo'];
+                  readonly targetFields: readonly ['idPlantillaRiesgo'];
+                };
+              };
+              readonly planes: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'PlantillaPlanRiesgo';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idPlantillaRiesgo'];
+                  readonly targetFields: readonly ['idPlantillaRiesgo'];
+                };
+              };
+              readonly riesgos: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Riesgo';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idPlantillaRiesgo'];
+                  readonly targetFields: readonly ['idPlantillaRiesgo'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'rg_plantilla_riesgo';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly idPlantillaRiesgo: { readonly column: 'id_plantilla_riesgo' };
+                readonly idCategoriaRiesgo: { readonly column: 'id_categoria_riesgo' };
+                readonly codigo: { readonly column: 'codigo' };
+                readonly nombre: { readonly column: 'nombre' };
+                readonly descripcion: { readonly column: 'descripcion' };
+                readonly causaProbable: { readonly column: 'causa_probable' };
+                readonly efectoPotencial: { readonly column: 'efecto_potencial' };
                 readonly activo: { readonly column: 'activo' };
                 readonly createdAt: { readonly column: 'created_at' };
                 readonly updatedAt: { readonly column: 'updated_at' };
@@ -13635,6 +16602,17 @@ type ContractBase = Omit<
                   readonly targetFields: readonly ['idUsuario'];
                 };
               };
+              readonly riesgos: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Riesgo';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idProyecto'];
+                  readonly targetFields: readonly ['idProyecto'];
+                };
+              };
               readonly timings: {
                 readonly to: {
                   readonly namespace: 'public' & NamespaceId;
@@ -13920,6 +16898,249 @@ type ContractBase = Omit<
                 readonly fecha: { readonly column: 'fecha' };
                 readonly estado: { readonly column: 'estado' };
                 readonly observacion: { readonly column: 'observacion' };
+                readonly activo: { readonly column: 'activo' };
+                readonly createdAt: { readonly column: 'created_at' };
+                readonly updatedAt: { readonly column: 'updated_at' };
+              };
+            };
+          };
+          readonly Riesgo: {
+            readonly fields: {
+              readonly idRiesgo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly idProyecto: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly idMatrimonio: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly idPlantillaRiesgo: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly idCategoriaRiesgo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly idUsuarioResponsable: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly nombre: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 200 };
+                };
+              };
+              readonly descripcion: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 1000 };
+                };
+              };
+              readonly causaProbable: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 1000 };
+                };
+              };
+              readonly efectoPotencial: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 1000 };
+                };
+              };
+              readonly probabilidad: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly impacto: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly severidad: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly costoAsociado: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/numeric@1';
+                  readonly typeParams: { readonly precision: 12; readonly scale: 2 };
+                };
+              };
+              readonly estado: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly activo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+            };
+            readonly relations: {
+              readonly categoria: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'CategoriaRiesgo';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['idCategoriaRiesgo'];
+                  readonly targetFields: readonly ['idCategoriaRiesgo'];
+                };
+              };
+              readonly costos: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'CostoRiesgo';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idRiesgo'];
+                  readonly targetFields: readonly ['idRiesgo'];
+                };
+              };
+              readonly incidencias: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'IncidenciaRiesgo';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idRiesgo'];
+                  readonly targetFields: readonly ['idRiesgo'];
+                };
+              };
+              readonly matrimonio: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Matrimonio';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['idMatrimonio'];
+                  readonly targetFields: readonly ['idMatrimonio'];
+                };
+              };
+              readonly mitigaciones: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'MitigacionRiesgo';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idRiesgo'];
+                  readonly targetFields: readonly ['idRiesgo'];
+                };
+              };
+              readonly notificaciones: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'NotificacionRiesgo';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idRiesgo'];
+                  readonly targetFields: readonly ['idRiesgo'];
+                };
+              };
+              readonly planes: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'PlanContingenciaRiesgo';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idRiesgo'];
+                  readonly targetFields: readonly ['idRiesgo'];
+                };
+              };
+              readonly plantilla: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'PlantillaRiesgo';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['idPlantillaRiesgo'];
+                  readonly targetFields: readonly ['idPlantillaRiesgo'];
+                };
+              };
+              readonly proyecto: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Proyecto';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['idProyecto'];
+                  readonly targetFields: readonly ['idProyecto'];
+                };
+              };
+              readonly responsable: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Usuario';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['idUsuarioResponsable'];
+                  readonly targetFields: readonly ['idUsuario'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'rg_riesgo';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly idRiesgo: { readonly column: 'id_riesgo' };
+                readonly idProyecto: { readonly column: 'id_proyecto' };
+                readonly idMatrimonio: { readonly column: 'id_matrimonio' };
+                readonly idPlantillaRiesgo: { readonly column: 'id_plantilla_riesgo' };
+                readonly idCategoriaRiesgo: { readonly column: 'id_categoria_riesgo' };
+                readonly idUsuarioResponsable: { readonly column: 'id_usuario_responsable' };
+                readonly nombre: { readonly column: 'nombre' };
+                readonly descripcion: { readonly column: 'descripcion' };
+                readonly causaProbable: { readonly column: 'causa_probable' };
+                readonly efectoPotencial: { readonly column: 'efecto_potencial' };
+                readonly probabilidad: { readonly column: 'probabilidad' };
+                readonly impacto: { readonly column: 'impacto' };
+                readonly severidad: { readonly column: 'severidad' };
+                readonly costoAsociado: { readonly column: 'costo_asociado' };
+                readonly estado: { readonly column: 'estado' };
                 readonly activo: { readonly column: 'activo' };
                 readonly createdAt: { readonly column: 'created_at' };
                 readonly updatedAt: { readonly column: 'updated_at' };
@@ -15157,6 +18378,47 @@ type ContractBase = Omit<
               { readonly name: 'HITO_VENCIDO'; readonly value: 'HITO_VENCIDO' },
             ];
           };
+          readonly rg_severidad: {
+            readonly codecId: 'pg/text@1';
+            readonly members: readonly [
+              { readonly name: 'BAJO'; readonly value: 'BAJO' },
+              { readonly name: 'MEDIO'; readonly value: 'MEDIO' },
+              { readonly name: 'ALTO'; readonly value: 'ALTO' },
+            ];
+          };
+          readonly rg_estado_riesgo: {
+            readonly codecId: 'pg/text@1';
+            readonly members: readonly [
+              { readonly name: 'IDENTIFICADO'; readonly value: 'IDENTIFICADO' },
+              { readonly name: 'EN_TRATAMIENTO'; readonly value: 'EN_TRATAMIENTO' },
+              { readonly name: 'ACTIVO'; readonly value: 'ACTIVO' },
+              { readonly name: 'CERRADO'; readonly value: 'CERRADO' },
+            ];
+          };
+          readonly rg_alternativa_plan: {
+            readonly codecId: 'pg/text@1';
+            readonly members: readonly [
+              { readonly name: 'PLAN_A'; readonly value: 'PLAN_A' },
+              { readonly name: 'PLAN_B'; readonly value: 'PLAN_B' },
+              { readonly name: 'PLAN_C'; readonly value: 'PLAN_C' },
+            ];
+          };
+          readonly rg_estado_mitigacion: {
+            readonly codecId: 'pg/text@1';
+            readonly members: readonly [
+              { readonly name: 'SUGERIDA'; readonly value: 'SUGERIDA' },
+              { readonly name: 'APLICADA'; readonly value: 'APLICADA' },
+              { readonly name: 'DESCARTADA'; readonly value: 'DESCARTADA' },
+            ];
+          };
+          readonly nt_tipo_evento_riesgo: {
+            readonly codecId: 'pg/text@1';
+            readonly members: readonly [
+              { readonly name: 'RIESGO_CRITICO'; readonly value: 'RIESGO_CRITICO' },
+              { readonly name: 'INCIDENCIA_REGISTRADA'; readonly value: 'INCIDENCIA_REGISTRADA' },
+              { readonly name: 'PLAN_ACTIVADO'; readonly value: 'PLAN_ACTIVADO' },
+            ];
+          };
           readonly in_tipo_entidad: {
             readonly codecId: 'pg/text@1';
             readonly members: readonly [
@@ -15790,6 +19052,143 @@ type ContractBase = Omit<
           readonly ref: {
             readonly namespace: 'public';
             readonly table: 'pv_seguimiento_proveedor';
+            readonly column: 'updated_at';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+          readonly onUpdate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'rg_activacion_plan';
+            readonly column: 'id_activacion_plan';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'uuidv4' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'rg_categoria_riesgo';
+            readonly column: 'updated_at';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+          readonly onUpdate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'rg_costo_riesgo';
+            readonly column: 'id_costo_riesgo';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'uuidv4' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'rg_costo_riesgo';
+            readonly column: 'updated_at';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+          readonly onUpdate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'rg_documento_costo';
+            readonly column: 'id_documento_costo_riesgo';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'uuidv4' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'rg_incidencia';
+            readonly column: 'id_incidencia';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'uuidv4' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'rg_incidencia';
+            readonly column: 'updated_at';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+          readonly onUpdate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'rg_mitigacion_riesgo';
+            readonly column: 'id_mitigacion_riesgo';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'uuidv4' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'rg_mitigacion_riesgo';
+            readonly column: 'updated_at';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+          readonly onUpdate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'rg_plan_contingencia';
+            readonly column: 'id_plan_contingencia';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'uuidv4' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'rg_plan_contingencia';
+            readonly column: 'updated_at';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+          readonly onUpdate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'rg_plantilla_mitigacion';
+            readonly column: 'updated_at';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+          readonly onUpdate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'rg_plantilla_plan';
+            readonly column: 'updated_at';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+          readonly onUpdate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'rg_plantilla_riesgo';
+            readonly column: 'updated_at';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+          readonly onUpdate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'rg_riesgo';
+            readonly column: 'id_riesgo';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'uuidv4' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'rg_riesgo';
             readonly column: 'updated_at';
           };
           readonly onCreate: { readonly kind: 'generator'; readonly id: 'instantNow' };
