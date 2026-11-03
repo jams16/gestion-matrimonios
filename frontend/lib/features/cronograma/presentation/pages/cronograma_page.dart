@@ -46,7 +46,9 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
   }
 
   void _redibujarTab() {
-    if (mounted && !_tabs.indexIsChanging) setState(() {});
+    if (mounted && !_tabs.indexIsChanging) {
+      setState(() {});
+    }
   }
 
   @override
@@ -70,7 +72,9 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
     Map<String, dynamic>? existente, {
     required String nombre,
   }) {
-    if (existente == null || nombre.trim().isEmpty) return;
+    if (existente == null || nombre.trim().isEmpty) {
+      return;
+    }
     _autoguardadoPendiente?.cancel();
     _autoguardadoPendiente = Timer(const Duration(milliseconds: 700), () async {
       try {
@@ -103,7 +107,9 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
     Future<void> Function(CronogramaApi api) accion, {
     required String exito,
   }) async {
-    if (_procesando) return;
+    if (_procesando) {
+      return;
+    }
     setState(() => _procesando = true);
     try {
       await accion(ref.read(cronogramaApiProvider));
@@ -124,7 +130,9 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
         );
       }
     } finally {
-      if (mounted) setState(() => _procesando = false);
+      if (mounted) {
+        setState(() => _procesando = false);
+      }
     }
   }
 
@@ -137,13 +145,17 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
       cancelLabel: 'Volver',
       confirmLabel: 'Confirmar',
     );
-    if (!confirmar) return;
+    if (!confirmar) {
+      return;
+    }
     await _ejecutar(
       (api) => api.confirmarPlanificacion(widget.idProyecto),
       exito: 'Cronograma planificado correctamente.',
     );
     AuthSession.actualizarPlanificacionConfirmada(true);
-    if (mounted) context.go('/home');
+    if (mounted) {
+      context.go('/home');
+    }
   }
 
   @override
@@ -374,7 +386,9 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
         ),
       ),
     );
-    if (!mounted || accion == null) return;
+    if (!mounted || accion == null) {
+      return;
+    }
     switch (accion) {
       case 'hito':
         await _editarHito(null);
@@ -435,7 +449,9 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
         ),
       ],
     );
-    if (!guardar || !form.currentState!.validate() || fecha == null) return;
+    if (!guardar || !form.currentState!.validate() || fecha == null) {
+      return;
+    }
     final data = <String, dynamic>{
       'nombre': nombre.text.trim(),
       'fechaObjetivo': fecha!.toIso8601String(),
@@ -594,7 +610,9 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
       ),
     );
     _autoguardadoPendiente?.cancel();
-    if (guardar != true) return;
+    if (guardar != true) {
+      return;
+    }
     if (fin == null) {
       if (mounted) {
         AppSnackbar.show(
@@ -666,7 +684,9 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
       );
       final impacto = _mapa(vista['impacto']);
       final afectadas = _lista(impacto['actividadesAfectadas']).length;
-      if (!mounted) return;
+      if (!mounted) {
+        return;
+      }
       final propagar = await AppConfirmationDialog.show(
         context,
         title: 'Reprogramar actividad',
@@ -676,7 +696,9 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
         confirmLabel: afectadas == 0 ? 'Guardar' : 'Propagar y guardar',
         cancelLabel: 'Volver',
       );
-      if (!propagar) return;
+      if (!propagar) {
+        return;
+      }
       await _ejecutar(
         (api) => api.confirmarReprogramacion(
           widget.idProyecto,
@@ -872,7 +894,9 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
         ),
       ),
     );
-    if (guardar != true) return;
+    if (guardar != true) {
+      return;
+    }
     if (actividadBase != null) {
       if (predecesoraElegida == null && sucesoraElegida == null) {
         if (mounted)
@@ -1043,7 +1067,9 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
         ),
       ),
     );
-    if (guardar != true || !form.currentState!.validate()) return;
+    if (guardar != true || !form.currentState!.validate()) {
+      return;
+    }
     if (fechaInicio == null ||
         fechaFin == null ||
         horaInicio == null ||
@@ -1119,7 +1145,9 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
     final finActividad = _fecha(actividad['fechaFin']);
     final inicioVecino = _fecha(vecino['fechaInicio']);
     final finVecino = _fecha(vecino['fechaFin']);
-    if (finActividad == null || finVecino == null) return;
+    if (finActividad == null || finVecino == null) {
+      return;
+    }
     await _ejecutar((api) async {
       await api.actualizarActividad(
         widget.idProyecto,
@@ -1149,7 +1177,9 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
   ) async {
     final fechaHito = _fecha(hito['fechaObjetivo']);
     final fechaVecino = _fecha(vecino['fechaObjetivo']);
-    if (fechaHito == null || fechaVecino == null) return;
+    if (fechaHito == null || fechaVecino == null) {
+      return;
+    }
     DateTime desplazar(DateTime valor, int dias) =>
         valor.add(Duration(days: dias));
     final deltaHito = fechaVecino.difference(fechaHito).inDays;
@@ -1174,7 +1204,9 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
             actividad['idHito']?.toString() == hito['idHito']?.toString();
         final inicio = _fecha(actividad['fechaInicio']);
         final fin = _fecha(actividad['fechaFin']);
-        if (fin == null) continue;
+        if (fin == null) {
+          continue;
+        }
         final dias = esPrimerHito ? deltaHito : deltaVecino;
         await api.actualizarActividad(
           widget.idProyecto,
@@ -1194,7 +1226,9 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
     try {
       final api = ref.read(cronogramaApiProvider);
       final tipo = await _seleccionarTipoPlantilla();
-      if (tipo == null || !mounted) return;
+      if (tipo == null || !mounted) {
+        return;
+      }
       final cronograma = _mapa(data['cronograma']);
       final hitos = _lista(cronograma['hitos']);
       final actividadesActuales = _lista(cronograma['actividades']);
@@ -1210,7 +1244,9 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
               .where((x) => !usados.contains(x['idPlantillaHito']?.toString()))
               .toList(),
         );
-        if (elegido != null) await _editarHito(null, plantilla: elegido);
+        if (elegido != null) {
+          await _editarHito(null, plantilla: elegido);
+        }
         return;
       }
       if (tipo == 'timing') {
@@ -1296,12 +1332,16 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
             (s) => !existentes.contains(s['idPlantillaActividad']?.toString()),
           )
           .toList();
-      if (!mounted) return;
+      if (!mounted) {
+        return;
+      }
       final elegido = await _elegirPlantilla(
         'Actividades disponibles',
         disponibles,
       );
-      if (elegido == null || !mounted) return;
+      if (elegido == null || !mounted) {
+        return;
+      }
       await _incorporarSugerencia(elegido, _responsablesDe(data));
     } catch (error) {
       if (mounted)
@@ -1433,7 +1473,9 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
         ),
       ],
     );
-    if (!guardar || !form.currentState!.validate() || fecha == null) return;
+    if (!guardar || !form.currentState!.validate() || fecha == null) {
+      return;
+    }
     await _ejecutar(
       (api) => api.incorporarSugerencia(widget.idProyecto, {
         'idPlantillaActividad': int.parse(
@@ -1529,7 +1571,9 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
       confirmLabel: 'Completar',
       cancelLabel: 'Volver',
     );
-    if (!confirmar) return;
+    if (!confirmar) {
+      return;
+    }
     await _ejecutar(
       (api) => api.cambiarEstadoActividad(
         widget.idProyecto,
@@ -1575,7 +1619,9 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
       confirmLabel: 'Eliminar',
       cancelLabel: 'Volver',
     );
-    if (aceptar) await _ejecutar(accion, exito: exito);
+    if (aceptar) {
+      await _ejecutar(accion, exito: exito);
+    }
   }
 
   Future<bool> _formulario({
@@ -1893,7 +1939,9 @@ class _HitoCard extends StatelessWidget {
                     ),
                     PopupMenuButton<String>(
                       onSelected: (v) {
-                        if (v == 'editar') return alEditarHito!();
+                        if (v == 'editar') {
+                          return alEditarHito!();
+                        }
                         if (v == 'agregarActividad')
                           return alAgregarActividad!();
                         return alEliminarHito!();
@@ -2050,9 +2098,13 @@ class _ActividadFila extends StatelessWidget {
         if (v == 'editar') {
           alEditar();
         } else if (v == 'subir') {
-          if (anterior != null) alMover(anterior!);
+          if (anterior != null) {
+            alMover(anterior!);
+          }
         } else if (v == 'bajar') {
-          if (siguiente != null) alMover(siguiente!);
+          if (siguiente != null) {
+            alMover(siguiente!);
+          }
         } else if (v == 'dependencia') {
           alAgregarDependencia();
         } else if (v == 'completar') {
@@ -2294,9 +2346,15 @@ DateTime? _fecha(Object? value) =>
 int _compararFecha(Object? a, Object? b) {
   final fechaA = _fecha(a);
   final fechaB = _fecha(b);
-  if (fechaA == null && fechaB == null) return 0;
-  if (fechaA == null) return 1;
-  if (fechaB == null) return -1;
+  if (fechaA == null && fechaB == null) {
+    return 0;
+  }
+  if (fechaA == null) {
+    return 1;
+  }
+  if (fechaB == null) {
+    return -1;
+  }
   return fechaA.compareTo(fechaB);
 }
 
@@ -2308,7 +2366,9 @@ String _hora(DateTime? value) => value == null
     : '${value.hour.toString().padLeft(2, '0')}:${value.minute.toString().padLeft(2, '0')}';
 TimeOfDay? _horaDePlantilla(Object? value) {
   final partes = value?.toString().split(':') ?? const <String>[];
-  if (partes.length < 2) return null;
+  if (partes.length < 2) {
+    return null;
+  }
   final hora = int.tryParse(partes[0]);
   final minuto = int.tryParse(partes[1]);
   return hora == null || minuto == null
@@ -2370,7 +2430,9 @@ String _textoSeguro(String texto) => texto
 List<Widget> _separar(List<Widget> items) {
   final salida = <Widget>[];
   for (final item in items) {
-    if (salida.isNotEmpty) salida.add(const SizedBox(height: 18));
+    if (salida.isNotEmpty) {
+      salida.add(const SizedBox(height: 18));
+    }
     salida.add(item);
   }
   return salida;
