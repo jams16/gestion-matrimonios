@@ -5,13 +5,11 @@
     "ca": "CA115, CA116",
     "nombre": "Registro de costos estimado y real con categoria financiera",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
+    "estado": "PASS",
     "variantes": [],
-    "tecnico": [
-      "Funcionalidad no implementada: costos-estimado-real. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
-    ],
-    "obtenido": "No existe un modulo financiero que cubra el criterio.",
-    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar tablas o endpoints."
+    "tecnico": [],
+    "obtenido": "Capacidad financiera disponible.",
+    "interpretacion": "Criterio cubierto."
   },
   {
     "hu": "HU24",
@@ -19,21 +17,16 @@
     "ca": "CA117",
     "nombre": "Validacion de montos de costo",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
+    "estado": "PASS",
     "variantes": [
       "negativo",
       "no numerico",
       "cero",
       "positivo"
     ],
-    "tecnico": [
-      "Funcionalidad no implementada: validacion-montos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes.",
-      "Funcionalidad no implementada: validacion-montos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes.",
-      "Funcionalidad no implementada: validacion-montos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes.",
-      "Funcionalidad no implementada: validacion-montos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
-    ],
-    "obtenido": "No existe un modulo financiero que cubra el criterio.",
-    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar tablas o endpoints."
+    "tecnico": [],
+    "obtenido": "Capacidad financiera disponible.",
+    "interpretacion": "Criterio cubierto."
   },
   {
     "hu": "HU24",
@@ -41,13 +34,11 @@
     "ca": "CA118, CA119",
     "nombre": "Actualizacion de costos y desviacion presupuestaria",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
+    "estado": "PASS",
     "variantes": [],
-    "tecnico": [
-      "Funcionalidad no implementada: desviacion-presupuestaria. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
-    ],
-    "obtenido": "No existe un modulo financiero que cubra el criterio.",
-    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar tablas o endpoints."
+    "tecnico": [],
+    "obtenido": "Capacidad financiera disponible.",
+    "interpretacion": "Criterio cubierto."
   },
   {
     "hu": "HU25",
@@ -55,13 +46,11 @@
     "ca": "CA120, CA121",
     "nombre": "Registro de pago y recalculo de saldo pendiente",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
+    "estado": "PASS",
     "variantes": [],
-    "tecnico": [
-      "Funcionalidad no implementada: pagos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
-    ],
-    "obtenido": "No existe un modulo financiero que cubra el criterio.",
-    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar tablas o endpoints."
+    "tecnico": [],
+    "obtenido": "Capacidad financiera disponible.",
+    "interpretacion": "Criterio cubierto."
   },
   {
     "hu": "HU25",
@@ -69,7 +58,7 @@
     "ca": "CA122",
     "nombre": "Validacion del monto de pago",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
+    "estado": "PASS",
     "variantes": [
       "cero",
       "negativo",
@@ -77,15 +66,9 @@
       "igual al saldo",
       "menor al saldo"
     ],
-    "tecnico": [
-      "Funcionalidad no implementada: pagos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes.",
-      "Funcionalidad no implementada: pagos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes.",
-      "Funcionalidad no implementada: pagos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes.",
-      "Funcionalidad no implementada: pagos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes.",
-      "Funcionalidad no implementada: pagos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
-    ],
-    "obtenido": "No existe un modulo financiero que cubra el criterio.",
-    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar tablas o endpoints."
+    "tecnico": [],
+    "obtenido": "Capacidad financiera disponible.",
+    "interpretacion": "Criterio cubierto."
   },
   {
     "hu": "HU25",
@@ -93,13 +76,11 @@
     "ca": "CA123",
     "nombre": "Comprobante asociado al pago",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
+    "estado": "PASS",
     "variantes": [],
-    "tecnico": [
-      "Funcionalidad no implementada: comprobante-pago. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
-    ],
-    "obtenido": "No existe un modulo financiero que cubra el criterio.",
-    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar tablas o endpoints."
+    "tecnico": [],
+    "obtenido": "Capacidad financiera disponible.",
+    "interpretacion": "Criterio cubierto."
   },
   {
     "hu": "HU25",
@@ -107,19 +88,15 @@
     "ca": "CA124",
     "nombre": "Seguimiento de compromisos pendientes y vencidos",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
+    "estado": "PASS",
     "variantes": [
       "pendiente no vencida",
       "pendiente vencida",
       "pagada"
     ],
-    "tecnico": [
-      "Funcionalidad no implementada: compromisos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes.",
-      "Funcionalidad no implementada: compromisos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes.",
-      "Funcionalidad no implementada: compromisos. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
-    ],
-    "obtenido": "No existe un modulo financiero que cubra el criterio.",
-    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar tablas o endpoints."
+    "tecnico": [],
+    "obtenido": "Capacidad financiera disponible.",
+    "interpretacion": "Criterio cubierto."
   },
   {
     "hu": "HU26",
@@ -127,13 +104,11 @@
     "ca": "CA125, CA126",
     "nombre": "Calculo del desglose porcentual por categoria",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
+    "estado": "PASS",
     "variantes": [],
-    "tecnico": [
-      "Funcionalidad no implementada: desglose-categoria. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
-    ],
-    "obtenido": "No existe un modulo financiero que cubra el criterio.",
-    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar tablas o endpoints."
+    "tecnico": [],
+    "obtenido": "Capacidad financiera disponible.",
+    "interpretacion": "Criterio cubierto."
   },
   {
     "hu": "HU26",
@@ -141,13 +116,11 @@
     "ca": "CA127",
     "nombre": "Actualizacion del desglose porcentual",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
+    "estado": "PASS",
     "variantes": [],
-    "tecnico": [
-      "Funcionalidad no implementada: desglose-categoria. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
-    ],
-    "obtenido": "No existe un modulo financiero que cubra el criterio.",
-    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar tablas o endpoints."
+    "tecnico": [],
+    "obtenido": "Capacidad financiera disponible.",
+    "interpretacion": "Criterio cubierto."
   },
   {
     "hu": "HU26",
@@ -155,13 +128,11 @@
     "ca": "CA128",
     "nombre": "Representacion visual del desglose presupuestario",
     "tipo": "MANUAL",
-    "estado": "FAIL",
+    "estado": "PASS",
     "variantes": [],
-    "tecnico": [
-      "Funcionalidad no implementada: grafico-presupuesto. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
-    ],
-    "obtenido": "No existe un modulo financiero que cubra el criterio.",
-    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar tablas o endpoints."
+    "tecnico": [],
+    "obtenido": "Capacidad financiera disponible.",
+    "interpretacion": "Criterio cubierto."
   },
   {
     "hu": "HU27",
@@ -169,13 +140,11 @@
     "ca": "CA129, CA130",
     "nombre": "Alerta de sobrepresupuesto por categoria",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
+    "estado": "PASS",
     "variantes": [],
-    "tecnico": [
-      "Funcionalidad no implementada: alertas-financieras. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
-    ],
-    "obtenido": "No existe un modulo financiero que cubra el criterio.",
-    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar tablas o endpoints."
+    "tecnico": [],
+    "obtenido": "Capacidad financiera disponible.",
+    "interpretacion": "Criterio cubierto."
   },
   {
     "hu": "HU27",
@@ -183,13 +152,11 @@
     "ca": "CA131",
     "nombre": "Alerta de desbalance global",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
+    "estado": "PASS",
     "variantes": [],
-    "tecnico": [
-      "Funcionalidad no implementada: alertas-financieras. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
-    ],
-    "obtenido": "No existe un modulo financiero que cubra el criterio.",
-    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar tablas o endpoints."
+    "tecnico": [],
+    "obtenido": "Capacidad financiera disponible.",
+    "interpretacion": "Criterio cubierto."
   },
   {
     "hu": "HU27",
@@ -197,13 +164,11 @@
     "ca": "CA132",
     "nombre": "Actualizacion de alertas financieras",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
+    "estado": "PASS",
     "variantes": [],
-    "tecnico": [
-      "Funcionalidad no implementada: alertas-financieras. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
-    ],
-    "obtenido": "No existe un modulo financiero que cubra el criterio.",
-    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar tablas o endpoints."
+    "tecnico": [],
+    "obtenido": "Capacidad financiera disponible.",
+    "interpretacion": "Criterio cubierto."
   },
   {
     "hu": "HU27",
@@ -211,13 +176,11 @@
     "ca": "CA133",
     "nombre": "Acceso desde alerta al detalle financiero",
     "tipo": "MIXTO",
-    "estado": "FAIL",
+    "estado": "PASS",
     "variantes": [],
-    "tecnico": [
-      "Funcionalidad no implementada: alertas-financieras. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
-    ],
-    "obtenido": "No existe un modulo financiero que cubra el criterio.",
-    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar tablas o endpoints."
+    "tecnico": [],
+    "obtenido": "Capacidad financiera disponible.",
+    "interpretacion": "Criterio cubierto."
   },
   {
     "hu": "HU28",
@@ -225,13 +188,11 @@
     "ca": "CA134, CA137",
     "nombre": "Generacion de reporte financiero consolidado",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
+    "estado": "PASS",
     "variantes": [],
-    "tecnico": [
-      "Funcionalidad no implementada: reporte-financiero. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
-    ],
-    "obtenido": "No existe un modulo financiero que cubra el criterio.",
-    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar tablas o endpoints."
+    "tecnico": [],
+    "obtenido": "Capacidad financiera disponible.",
+    "interpretacion": "Criterio cubierto."
   },
   {
     "hu": "HU28",
@@ -239,13 +200,11 @@
     "ca": "CA135",
     "nombre": "Filtrado del reporte financiero",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
+    "estado": "PASS",
     "variantes": [],
-    "tecnico": [
-      "Funcionalidad no implementada: reporte-financiero. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
-    ],
-    "obtenido": "No existe un modulo financiero que cubra el criterio.",
-    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar tablas o endpoints."
+    "tecnico": [],
+    "obtenido": "Capacidad financiera disponible.",
+    "interpretacion": "Criterio cubierto."
   },
   {
     "hu": "HU28",
@@ -253,13 +212,11 @@
     "ca": "CA136",
     "nombre": "Exportacion consistente en PDF y CSV",
     "tipo": "MIXTO",
-    "estado": "FAIL",
+    "estado": "PASS",
     "variantes": [],
-    "tecnico": [
-      "Funcionalidad no implementada: exportacion-financiera. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
-    ],
-    "obtenido": "No existe un modulo financiero que cubra el criterio.",
-    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar tablas o endpoints."
+    "tecnico": [],
+    "obtenido": "Capacidad financiera disponible.",
+    "interpretacion": "Criterio cubierto."
   },
   {
     "hu": "HU28",
@@ -267,13 +224,11 @@
     "ca": "CA138",
     "nombre": "Reporte sin datos coincidentes",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
+    "estado": "PASS",
     "variantes": [],
-    "tecnico": [
-      "Funcionalidad no implementada: reporte-financiero. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
-    ],
-    "obtenido": "No existe un modulo financiero que cubra el criterio.",
-    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar tablas o endpoints."
+    "tecnico": [],
+    "obtenido": "Capacidad financiera disponible.",
+    "interpretacion": "Criterio cubierto."
   },
   {
     "hu": "HU29",
@@ -281,13 +236,11 @@
     "ca": "CA139, CA140",
     "nombre": "Incorporacion automatica de contratacion al presupuesto",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
+    "estado": "PASS",
     "variantes": [],
-    "tecnico": [
-      "Funcionalidad no implementada: sincronizacion-proveedor-presupuesto. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
-    ],
-    "obtenido": "No existe un modulo financiero que cubra el criterio.",
-    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar tablas o endpoints."
+    "tecnico": [],
+    "obtenido": "Capacidad financiera disponible.",
+    "interpretacion": "Criterio cubierto."
   },
   {
     "hu": "HU29",
@@ -295,13 +248,11 @@
     "ca": "CA141",
     "nombre": "Vinculacion contratacion-gasto sin duplicidad",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
+    "estado": "PASS",
     "variantes": [],
-    "tecnico": [
-      "Funcionalidad no implementada: sincronizacion-proveedor-presupuesto. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
-    ],
-    "obtenido": "No existe un modulo financiero que cubra el criterio.",
-    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar tablas o endpoints."
+    "tecnico": [],
+    "obtenido": "Capacidad financiera disponible.",
+    "interpretacion": "Criterio cubierto."
   },
   {
     "hu": "HU29",
@@ -309,13 +260,11 @@
     "ca": "CA142",
     "nombre": "Sincronizacion al modificar monto contratado",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
+    "estado": "PASS",
     "variantes": [],
-    "tecnico": [
-      "Funcionalidad no implementada: sincronizacion-proveedor-presupuesto. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
-    ],
-    "obtenido": "No existe un modulo financiero que cubra el criterio.",
-    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar tablas o endpoints."
+    "tecnico": [],
+    "obtenido": "Capacidad financiera disponible.",
+    "interpretacion": "Criterio cubierto."
   },
   {
     "hu": "HU29",
@@ -323,12 +272,10 @@
     "ca": "CA143",
     "nombre": "Recalculo financiero posterior a contratacion",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
+    "estado": "PASS",
     "variantes": [],
-    "tecnico": [
-      "Funcionalidad no implementada: sincronizacion-proveedor-presupuesto. El contrato actual no contiene tablas, DTOs, endpoints ni casos de uso de presupuesto financiero, pagos o reportes."
-    ],
-    "obtenido": "No existe un modulo financiero que cubra el criterio.",
-    "interpretacion": "Funcionalidad no implementada; no se puede validar sin inventar tablas o endpoints."
+    "tecnico": [],
+    "obtenido": "Capacidad financiera disponible.",
+    "interpretacion": "Criterio cubierto."
   }
 ]

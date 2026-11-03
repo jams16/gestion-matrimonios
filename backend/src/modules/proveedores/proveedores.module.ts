@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AutenticacionModule } from '../autenticacion/autenticacion.module';
+import { PresupuestoModule } from '../presupuesto/presupuesto.module';
 import { ProveedoresService } from './application/proveedores.service';
 import {
   ProveedoresController,
@@ -10,7 +11,7 @@ import { PrismaProveedoresRepository } from './infrastructure/persistence/reposi
 import * as UseCases from './application/use-cases/proveedores.use-cases';
 
 @Module({
-  imports: [AutenticacionModule],
+  imports: [AutenticacionModule, PresupuestoModule],
   controllers: [ProveedoresController, ProveedoresPublicosController],
   providers: [
     ProveedoresService,

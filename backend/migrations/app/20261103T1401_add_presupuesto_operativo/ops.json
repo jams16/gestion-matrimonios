@@ -1,0 +1,1691 @@
+[
+  {
+    "id": "table.nt_notificacion_presupuesto",
+    "label": "Create table \"nt_notificacion_presupuesto\"",
+    "summary": "Creates table \"nt_notificacion_presupuesto\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "nt_notificacion_presupuesto"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"nt_notificacion_presupuesto\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"nt_notificacion_presupuesto\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"nt_notificacion_presupuesto\"",
+        "sql": "CREATE TABLE \"public\".\"nt_notificacion_presupuesto\" (\n  \"diferencia\" numeric(12,2),\n  \"id_categoria_presupuesto\" int4,\n  \"id_costo\" uuid,\n  \"id_notificacion\" uuid NOT NULL,\n  \"id_presupuesto\" uuid NOT NULL,\n  \"monto_actual\" numeric(12,2),\n  \"monto_planificado\" numeric(12,2),\n  \"tipo_evento_presupuesto\" text NOT NULL,\n  PRIMARY KEY (\"id_notificacion\"),\n  CONSTRAINT \"nt_notificacion_presupuesto_tipo_evento_presupuesto_ch_2246bebc\" CHECK (\"tipo_evento_presupuesto\" IN ('SOBREPRESUPUESTO_CATEGORIA', 'DESBALANCE_GENERAL', 'PAGO_PROXIMO_VENCER', 'PAGO_VENCIDO'))\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"nt_notificacion_presupuesto\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"nt_notificacion_presupuesto\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.pr_categoria_presupuesto",
+    "label": "Create table \"pr_categoria_presupuesto\"",
+    "summary": "Creates table \"pr_categoria_presupuesto\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "pr_categoria_presupuesto"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"pr_categoria_presupuesto\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pr_categoria_presupuesto\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"pr_categoria_presupuesto\"",
+        "sql": "CREATE TABLE \"public\".\"pr_categoria_presupuesto\" (\n  \"activo\" bool DEFAULT true NOT NULL,\n  \"codigo\" character varying(50) NOT NULL,\n  \"created_at\" timestamptz DEFAULT (now()) NOT NULL,\n  \"id_categoria_presupuesto\" SERIAL NOT NULL,\n  \"id_categoria_servicio\" int4,\n  \"id_presupuesto\" uuid NOT NULL,\n  \"monto_asignado\" numeric(12,2) NOT NULL,\n  \"nombre\" character varying(100) NOT NULL,\n  \"updated_at\" timestamptz NOT NULL,\n  PRIMARY KEY (\"id_categoria_presupuesto\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"pr_categoria_presupuesto\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pr_categoria_presupuesto\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.pr_compromiso_pago",
+    "label": "Create table \"pr_compromiso_pago\"",
+    "summary": "Creates table \"pr_compromiso_pago\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "pr_compromiso_pago"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"pr_compromiso_pago\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pr_compromiso_pago\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"pr_compromiso_pago\"",
+        "sql": "CREATE TABLE \"public\".\"pr_compromiso_pago\" (\n  \"activo\" bool DEFAULT true NOT NULL,\n  \"concepto\" character varying(200) NOT NULL,\n  \"created_at\" timestamptz DEFAULT (now()) NOT NULL,\n  \"fecha_vencimiento\" timestamptz NOT NULL,\n  \"id_compromiso\" uuid NOT NULL,\n  \"id_costo\" uuid NOT NULL,\n  \"monto_programado\" numeric(12,2) NOT NULL,\n  \"updated_at\" timestamptz NOT NULL,\n  PRIMARY KEY (\"id_compromiso\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"pr_compromiso_pago\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pr_compromiso_pago\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.pr_costo_proveedor",
+    "label": "Create table \"pr_costo_proveedor\"",
+    "summary": "Creates table \"pr_costo_proveedor\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "pr_costo_proveedor"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"pr_costo_proveedor\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pr_costo_proveedor\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"pr_costo_proveedor\"",
+        "sql": "CREATE TABLE \"public\".\"pr_costo_proveedor\" (\n  \"activo\" bool DEFAULT true NOT NULL,\n  \"concepto\" character varying(200) NOT NULL,\n  \"created_at\" timestamptz DEFAULT (now()) NOT NULL,\n  \"estado\" text DEFAULT 'PLANIFICADO' NOT NULL,\n  \"id_categoria_presupuesto\" int4 NOT NULL,\n  \"id_costo\" uuid NOT NULL,\n  \"id_matrimonio_proveedor\" uuid,\n  \"id_presupuesto\" uuid NOT NULL,\n  \"id_proveedor_servicio\" int4,\n  \"monto_estimado\" numeric(12,2) NOT NULL,\n  \"monto_real\" numeric(12,2) NOT NULL,\n  \"updated_at\" timestamptz NOT NULL,\n  PRIMARY KEY (\"id_costo\"),\n  CONSTRAINT \"pr_costo_proveedor_estado_check_dca93239\" CHECK (\"estado\" IN ('PLANIFICADO', 'CONTRATADO', 'PAGADO', 'CANCELADO'))\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"pr_costo_proveedor\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pr_costo_proveedor\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.pr_documento_pago",
+    "label": "Create table \"pr_documento_pago\"",
+    "summary": "Creates table \"pr_documento_pago\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "pr_documento_pago"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"pr_documento_pago\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pr_documento_pago\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"pr_documento_pago\"",
+        "sql": "CREATE TABLE \"public\".\"pr_documento_pago\" (\n  \"activo\" bool DEFAULT true NOT NULL,\n  \"created_at\" timestamptz DEFAULT (now()) NOT NULL,\n  \"id_documento_pago\" uuid NOT NULL,\n  \"id_pago\" uuid NOT NULL,\n  \"nombre\" character varying(200) NOT NULL,\n  \"tipo\" character varying(100),\n  \"updated_at\" timestamptz NOT NULL,\n  \"url\" character varying(500) NOT NULL,\n  PRIMARY KEY (\"id_documento_pago\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"pr_documento_pago\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pr_documento_pago\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.pr_pago",
+    "label": "Create table \"pr_pago\"",
+    "summary": "Creates table \"pr_pago\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "pr_pago"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"pr_pago\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pr_pago\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"pr_pago\"",
+        "sql": "CREATE TABLE \"public\".\"pr_pago\" (\n  \"activo\" bool DEFAULT true NOT NULL,\n  \"concepto\" character varying(200) NOT NULL,\n  \"created_at\" timestamptz DEFAULT (now()) NOT NULL,\n  \"fecha_pago\" timestamptz NOT NULL,\n  \"id_costo\" uuid NOT NULL,\n  \"id_pago\" uuid NOT NULL,\n  \"monto\" numeric(12,2) NOT NULL,\n  \"numero_cuota\" int4,\n  \"observacion\" character varying(1000),\n  \"tipo\" text DEFAULT 'CUOTA' NOT NULL,\n  \"updated_at\" timestamptz NOT NULL,\n  PRIMARY KEY (\"id_pago\"),\n  CONSTRAINT \"pr_pago_tipo_check_fdf46176\" CHECK (\"tipo\" IN ('PAGO_INICIAL', 'CUOTA', 'PAGO_FINAL'))\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"pr_pago\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pr_pago\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.pr_presupuesto",
+    "label": "Create table \"pr_presupuesto\"",
+    "summary": "Creates table \"pr_presupuesto\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "pr_presupuesto"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"pr_presupuesto\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pr_presupuesto\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"pr_presupuesto\"",
+        "sql": "CREATE TABLE \"public\".\"pr_presupuesto\" (\n  \"activo\" bool DEFAULT true NOT NULL,\n  \"created_at\" timestamptz DEFAULT (now()) NOT NULL,\n  \"id_matrimonio\" uuid NOT NULL,\n  \"id_presupuesto\" uuid NOT NULL,\n  \"moneda\" text DEFAULT 'PEN' NOT NULL,\n  \"monto_total\" numeric(12,2) NOT NULL,\n  \"updated_at\" timestamptz NOT NULL,\n  PRIMARY KEY (\"id_presupuesto\"),\n  CONSTRAINT \"pr_presupuesto_moneda_check_5b6558d3\" CHECK (\"moneda\" IN ('PEN', 'USD'))\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"pr_presupuesto\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pr_presupuesto\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.pr_seguimiento_pago",
+    "label": "Create table \"pr_seguimiento_pago\"",
+    "summary": "Creates table \"pr_seguimiento_pago\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "pr_seguimiento_pago"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"pr_seguimiento_pago\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pr_seguimiento_pago\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"pr_seguimiento_pago\"",
+        "sql": "CREATE TABLE \"public\".\"pr_seguimiento_pago\" (\n  \"activo\" bool DEFAULT true NOT NULL,\n  \"created_at\" timestamptz DEFAULT (now()) NOT NULL,\n  \"detalle\" character varying(1000),\n  \"id_pago\" uuid NOT NULL,\n  \"id_seguimiento_pago\" uuid NOT NULL,\n  \"tipo\" character varying(50) NOT NULL,\n  \"updated_at\" timestamptz NOT NULL,\n  PRIMARY KEY (\"id_seguimiento_pago\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"pr_seguimiento_pago\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pr_seguimiento_pago\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.pr_categoria_presupuesto.pr_categoria_presupuesto_id_presupuesto_codigo_key",
+    "label": "Add unique constraint on \"pr_categoria_presupuesto\" (id_presupuesto, codigo)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "pr_categoria_presupuesto_id_presupuesto_codigo_key",
+        "table": "pr_categoria_presupuesto"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"pr_categoria_presupuesto_id_presupuesto_codigo_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pr_categoria_presupuesto_id_presupuesto_codigo_key",
+          "public",
+          "\"public\".\"pr_categoria_presupuesto\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"pr_categoria_presupuesto_id_presupuesto_codigo_key\"",
+        "sql": "ALTER TABLE \"public\".\"pr_categoria_presupuesto\" ADD CONSTRAINT \"pr_categoria_presupuesto_id_presupuesto_codigo_key\" UNIQUE (\"id_presupuesto\", \"codigo\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"pr_categoria_presupuesto_id_presupuesto_codigo_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pr_categoria_presupuesto_id_presupuesto_codigo_key",
+          "public",
+          "\"public\".\"pr_categoria_presupuesto\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.pr_presupuesto.pr_presupuesto_id_matrimonio_key",
+    "label": "Add unique constraint on \"pr_presupuesto\" (id_matrimonio)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "pr_presupuesto_id_matrimonio_key",
+        "table": "pr_presupuesto"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"pr_presupuesto_id_matrimonio_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pr_presupuesto_id_matrimonio_key",
+          "public",
+          "\"public\".\"pr_presupuesto\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"pr_presupuesto_id_matrimonio_key\"",
+        "sql": "ALTER TABLE \"public\".\"pr_presupuesto\" ADD CONSTRAINT \"pr_presupuesto_id_matrimonio_key\" UNIQUE (\"id_matrimonio\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"pr_presupuesto_id_matrimonio_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pr_presupuesto_id_matrimonio_key",
+          "public",
+          "\"public\".\"pr_presupuesto\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.nt_notificacion_presupuesto.nt_notif_pres_categoria_idx",
+    "label": "Create index \"nt_notif_pres_categoria_idx\" on \"nt_notificacion_presupuesto\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "nt_notif_pres_categoria_idx",
+        "table": "nt_notificacion_presupuesto"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"nt_notif_pres_categoria_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"nt_notif_pres_categoria_idx\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"nt_notif_pres_categoria_idx\"",
+        "sql": "CREATE INDEX \"nt_notif_pres_categoria_idx\" ON \"public\".\"nt_notificacion_presupuesto\" (\"id_categoria_presupuesto\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"nt_notif_pres_categoria_idx\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"nt_notif_pres_categoria_idx\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.nt_notificacion_presupuesto.nt_notif_pres_evento_idx",
+    "label": "Create index \"nt_notif_pres_evento_idx\" on \"nt_notificacion_presupuesto\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "nt_notif_pres_evento_idx",
+        "table": "nt_notificacion_presupuesto"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"nt_notif_pres_evento_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"nt_notif_pres_evento_idx\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"nt_notif_pres_evento_idx\"",
+        "sql": "CREATE INDEX \"nt_notif_pres_evento_idx\" ON \"public\".\"nt_notificacion_presupuesto\" (\"tipo_evento_presupuesto\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"nt_notif_pres_evento_idx\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"nt_notif_pres_evento_idx\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.nt_notificacion_presupuesto.nt_notificacion_presupuesto_id_costo_idx_731f3b2c",
+    "label": "Create index \"nt_notificacion_presupuesto_id_costo_idx_731f3b2c\" on \"nt_notificacion_presupuesto\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "nt_notificacion_presupuesto_id_costo_idx_731f3b2c",
+        "table": "nt_notificacion_presupuesto"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"nt_notificacion_presupuesto_id_costo_idx_731f3b2c\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"nt_notificacion_presupuesto_id_costo_idx_731f3b2c\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"nt_notificacion_presupuesto_id_costo_idx_731f3b2c\"",
+        "sql": "CREATE INDEX \"nt_notificacion_presupuesto_id_costo_idx_731f3b2c\" ON \"public\".\"nt_notificacion_presupuesto\" (\"id_costo\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"nt_notificacion_presupuesto_id_costo_idx_731f3b2c\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"nt_notificacion_presupuesto_id_costo_idx_731f3b2c\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.nt_notificacion_presupuesto.nt_notificacion_presupuesto_id_presupuesto_idx_c44c4c50",
+    "label": "Create index \"nt_notificacion_presupuesto_id_presupuesto_idx_c44c4c50\" on \"nt_notificacion_presupuesto\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "nt_notificacion_presupuesto_id_presupuesto_idx_c44c4c50",
+        "table": "nt_notificacion_presupuesto"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"nt_notificacion_presupuesto_id_presupuesto_idx_c44c4c50\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"nt_notificacion_presupuesto_id_presupuesto_idx_c44c4c50\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"nt_notificacion_presupuesto_id_presupuesto_idx_c44c4c50\"",
+        "sql": "CREATE INDEX \"nt_notificacion_presupuesto_id_presupuesto_idx_c44c4c50\" ON \"public\".\"nt_notificacion_presupuesto\" (\"id_presupuesto\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"nt_notificacion_presupuesto_id_presupuesto_idx_c44c4c50\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"nt_notificacion_presupuesto_id_presupuesto_idx_c44c4c50\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.pr_categoria_presupuesto.pr_categoria_presupuesto_id_categoria_servicio_idx_1a4a76bb",
+    "label": "Create index \"pr_categoria_presupuesto_id_categoria_servicio_idx_1a4a76bb\" on \"pr_categoria_presupuesto\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "pr_categoria_presupuesto_id_categoria_servicio_idx_1a4a76bb",
+        "table": "pr_categoria_presupuesto"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"pr_categoria_presupuesto_id_categoria_servicio_idx_1a4a76bb\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pr_categoria_presupuesto_id_categoria_servicio_idx_1a4a76bb\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"pr_categoria_presupuesto_id_categoria_servicio_idx_1a4a76bb\"",
+        "sql": "CREATE INDEX \"pr_categoria_presupuesto_id_categoria_servicio_idx_1a4a76bb\" ON \"public\".\"pr_categoria_presupuesto\" (\"id_categoria_servicio\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"pr_categoria_presupuesto_id_categoria_servicio_idx_1a4a76bb\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pr_categoria_presupuesto_id_categoria_servicio_idx_1a4a76bb\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.pr_categoria_presupuesto.pr_categoria_presupuesto_id_presupuesto_idx_c44c4c50",
+    "label": "Create index \"pr_categoria_presupuesto_id_presupuesto_idx_c44c4c50\" on \"pr_categoria_presupuesto\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "pr_categoria_presupuesto_id_presupuesto_idx_c44c4c50",
+        "table": "pr_categoria_presupuesto"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"pr_categoria_presupuesto_id_presupuesto_idx_c44c4c50\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pr_categoria_presupuesto_id_presupuesto_idx_c44c4c50\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"pr_categoria_presupuesto_id_presupuesto_idx_c44c4c50\"",
+        "sql": "CREATE INDEX \"pr_categoria_presupuesto_id_presupuesto_idx_c44c4c50\" ON \"public\".\"pr_categoria_presupuesto\" (\"id_presupuesto\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"pr_categoria_presupuesto_id_presupuesto_idx_c44c4c50\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pr_categoria_presupuesto_id_presupuesto_idx_c44c4c50\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.pr_compromiso_pago.pr_compromiso_pago_fecha_vencimiento_idx_e6b83cdf",
+    "label": "Create index \"pr_compromiso_pago_fecha_vencimiento_idx_e6b83cdf\" on \"pr_compromiso_pago\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "pr_compromiso_pago_fecha_vencimiento_idx_e6b83cdf",
+        "table": "pr_compromiso_pago"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"pr_compromiso_pago_fecha_vencimiento_idx_e6b83cdf\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pr_compromiso_pago_fecha_vencimiento_idx_e6b83cdf\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"pr_compromiso_pago_fecha_vencimiento_idx_e6b83cdf\"",
+        "sql": "CREATE INDEX \"pr_compromiso_pago_fecha_vencimiento_idx_e6b83cdf\" ON \"public\".\"pr_compromiso_pago\" (\"fecha_vencimiento\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"pr_compromiso_pago_fecha_vencimiento_idx_e6b83cdf\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pr_compromiso_pago_fecha_vencimiento_idx_e6b83cdf\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.pr_compromiso_pago.pr_compromiso_pago_id_costo_idx_731f3b2c",
+    "label": "Create index \"pr_compromiso_pago_id_costo_idx_731f3b2c\" on \"pr_compromiso_pago\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "pr_compromiso_pago_id_costo_idx_731f3b2c",
+        "table": "pr_compromiso_pago"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"pr_compromiso_pago_id_costo_idx_731f3b2c\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pr_compromiso_pago_id_costo_idx_731f3b2c\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"pr_compromiso_pago_id_costo_idx_731f3b2c\"",
+        "sql": "CREATE INDEX \"pr_compromiso_pago_id_costo_idx_731f3b2c\" ON \"public\".\"pr_compromiso_pago\" (\"id_costo\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"pr_compromiso_pago_id_costo_idx_731f3b2c\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pr_compromiso_pago_id_costo_idx_731f3b2c\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.pr_costo_proveedor.pr_costo_categoria_idx",
+    "label": "Create index \"pr_costo_categoria_idx\" on \"pr_costo_proveedor\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "pr_costo_categoria_idx",
+        "table": "pr_costo_proveedor"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"pr_costo_categoria_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pr_costo_categoria_idx\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"pr_costo_categoria_idx\"",
+        "sql": "CREATE INDEX \"pr_costo_categoria_idx\" ON \"public\".\"pr_costo_proveedor\" (\"id_categoria_presupuesto\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"pr_costo_categoria_idx\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pr_costo_categoria_idx\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.pr_costo_proveedor.pr_costo_proveedor_id_matrimonio_proveedor_idx_f776101f",
+    "label": "Create index \"pr_costo_proveedor_id_matrimonio_proveedor_idx_f776101f\" on \"pr_costo_proveedor\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "pr_costo_proveedor_id_matrimonio_proveedor_idx_f776101f",
+        "table": "pr_costo_proveedor"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"pr_costo_proveedor_id_matrimonio_proveedor_idx_f776101f\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pr_costo_proveedor_id_matrimonio_proveedor_idx_f776101f\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"pr_costo_proveedor_id_matrimonio_proveedor_idx_f776101f\"",
+        "sql": "CREATE INDEX \"pr_costo_proveedor_id_matrimonio_proveedor_idx_f776101f\" ON \"public\".\"pr_costo_proveedor\" (\"id_matrimonio_proveedor\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"pr_costo_proveedor_id_matrimonio_proveedor_idx_f776101f\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pr_costo_proveedor_id_matrimonio_proveedor_idx_f776101f\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.pr_costo_proveedor.pr_costo_proveedor_id_presupuesto_idx_c44c4c50",
+    "label": "Create index \"pr_costo_proveedor_id_presupuesto_idx_c44c4c50\" on \"pr_costo_proveedor\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "pr_costo_proveedor_id_presupuesto_idx_c44c4c50",
+        "table": "pr_costo_proveedor"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"pr_costo_proveedor_id_presupuesto_idx_c44c4c50\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pr_costo_proveedor_id_presupuesto_idx_c44c4c50\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"pr_costo_proveedor_id_presupuesto_idx_c44c4c50\"",
+        "sql": "CREATE INDEX \"pr_costo_proveedor_id_presupuesto_idx_c44c4c50\" ON \"public\".\"pr_costo_proveedor\" (\"id_presupuesto\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"pr_costo_proveedor_id_presupuesto_idx_c44c4c50\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pr_costo_proveedor_id_presupuesto_idx_c44c4c50\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.pr_costo_proveedor.pr_costo_proveedor_id_proveedor_servicio_idx_00ef1a5c",
+    "label": "Create index \"pr_costo_proveedor_id_proveedor_servicio_idx_00ef1a5c\" on \"pr_costo_proveedor\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "pr_costo_proveedor_id_proveedor_servicio_idx_00ef1a5c",
+        "table": "pr_costo_proveedor"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"pr_costo_proveedor_id_proveedor_servicio_idx_00ef1a5c\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pr_costo_proveedor_id_proveedor_servicio_idx_00ef1a5c\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"pr_costo_proveedor_id_proveedor_servicio_idx_00ef1a5c\"",
+        "sql": "CREATE INDEX \"pr_costo_proveedor_id_proveedor_servicio_idx_00ef1a5c\" ON \"public\".\"pr_costo_proveedor\" (\"id_proveedor_servicio\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"pr_costo_proveedor_id_proveedor_servicio_idx_00ef1a5c\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pr_costo_proveedor_id_proveedor_servicio_idx_00ef1a5c\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.pr_documento_pago.pr_documento_pago_id_pago_idx_b7132fb9",
+    "label": "Create index \"pr_documento_pago_id_pago_idx_b7132fb9\" on \"pr_documento_pago\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "pr_documento_pago_id_pago_idx_b7132fb9",
+        "table": "pr_documento_pago"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"pr_documento_pago_id_pago_idx_b7132fb9\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pr_documento_pago_id_pago_idx_b7132fb9\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"pr_documento_pago_id_pago_idx_b7132fb9\"",
+        "sql": "CREATE INDEX \"pr_documento_pago_id_pago_idx_b7132fb9\" ON \"public\".\"pr_documento_pago\" (\"id_pago\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"pr_documento_pago_id_pago_idx_b7132fb9\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pr_documento_pago_id_pago_idx_b7132fb9\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.pr_pago.pr_pago_fecha_pago_idx_469590e1",
+    "label": "Create index \"pr_pago_fecha_pago_idx_469590e1\" on \"pr_pago\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "pr_pago_fecha_pago_idx_469590e1",
+        "table": "pr_pago"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"pr_pago_fecha_pago_idx_469590e1\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pr_pago_fecha_pago_idx_469590e1\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"pr_pago_fecha_pago_idx_469590e1\"",
+        "sql": "CREATE INDEX \"pr_pago_fecha_pago_idx_469590e1\" ON \"public\".\"pr_pago\" (\"fecha_pago\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"pr_pago_fecha_pago_idx_469590e1\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pr_pago_fecha_pago_idx_469590e1\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.pr_pago.pr_pago_id_costo_idx_731f3b2c",
+    "label": "Create index \"pr_pago_id_costo_idx_731f3b2c\" on \"pr_pago\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "pr_pago_id_costo_idx_731f3b2c",
+        "table": "pr_pago"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"pr_pago_id_costo_idx_731f3b2c\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pr_pago_id_costo_idx_731f3b2c\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"pr_pago_id_costo_idx_731f3b2c\"",
+        "sql": "CREATE INDEX \"pr_pago_id_costo_idx_731f3b2c\" ON \"public\".\"pr_pago\" (\"id_costo\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"pr_pago_id_costo_idx_731f3b2c\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pr_pago_id_costo_idx_731f3b2c\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.pr_presupuesto.pr_presupuesto_id_matrimonio_idx_97ab526e",
+    "label": "Create index \"pr_presupuesto_id_matrimonio_idx_97ab526e\" on \"pr_presupuesto\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "pr_presupuesto_id_matrimonio_idx_97ab526e",
+        "table": "pr_presupuesto"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"pr_presupuesto_id_matrimonio_idx_97ab526e\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pr_presupuesto_id_matrimonio_idx_97ab526e\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"pr_presupuesto_id_matrimonio_idx_97ab526e\"",
+        "sql": "CREATE INDEX \"pr_presupuesto_id_matrimonio_idx_97ab526e\" ON \"public\".\"pr_presupuesto\" (\"id_matrimonio\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"pr_presupuesto_id_matrimonio_idx_97ab526e\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pr_presupuesto_id_matrimonio_idx_97ab526e\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.pr_seguimiento_pago.pr_seguimiento_pago_id_pago_idx_b7132fb9",
+    "label": "Create index \"pr_seguimiento_pago_id_pago_idx_b7132fb9\" on \"pr_seguimiento_pago\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "pr_seguimiento_pago_id_pago_idx_b7132fb9",
+        "table": "pr_seguimiento_pago"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"pr_seguimiento_pago_id_pago_idx_b7132fb9\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pr_seguimiento_pago_id_pago_idx_b7132fb9\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"pr_seguimiento_pago_id_pago_idx_b7132fb9\"",
+        "sql": "CREATE INDEX \"pr_seguimiento_pago_id_pago_idx_b7132fb9\" ON \"public\".\"pr_seguimiento_pago\" (\"id_pago\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"pr_seguimiento_pago_id_pago_idx_b7132fb9\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pr_seguimiento_pago_id_pago_idx_b7132fb9\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.nt_notificacion_presupuesto.nt_notificacion_presupuesto_id_notificacion_fkey",
+    "label": "Add foreign key \"nt_notificacion_presupuesto_id_notificacion_fkey\" on \"nt_notificacion_presupuesto\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "nt_notificacion_presupuesto_id_notificacion_fkey",
+        "table": "nt_notificacion_presupuesto"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"nt_notificacion_presupuesto_id_notificacion_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "nt_notificacion_presupuesto_id_notificacion_fkey",
+          "public",
+          "\"public\".\"nt_notificacion_presupuesto\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"nt_notificacion_presupuesto_id_notificacion_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"nt_notificacion_presupuesto\"\nADD CONSTRAINT \"nt_notificacion_presupuesto_id_notificacion_fkey\"\nFOREIGN KEY (\"id_notificacion\")\nREFERENCES \"public\".\"nt_notificacion\" (\"id_notificacion\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"nt_notificacion_presupuesto_id_notificacion_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "nt_notificacion_presupuesto_id_notificacion_fkey",
+          "public",
+          "\"public\".\"nt_notificacion_presupuesto\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.nt_notificacion_presupuesto.nt_notificacion_presupuesto_id_presupuesto_fkey",
+    "label": "Add foreign key \"nt_notificacion_presupuesto_id_presupuesto_fkey\" on \"nt_notificacion_presupuesto\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "nt_notificacion_presupuesto_id_presupuesto_fkey",
+        "table": "nt_notificacion_presupuesto"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"nt_notificacion_presupuesto_id_presupuesto_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "nt_notificacion_presupuesto_id_presupuesto_fkey",
+          "public",
+          "\"public\".\"nt_notificacion_presupuesto\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"nt_notificacion_presupuesto_id_presupuesto_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"nt_notificacion_presupuesto\"\nADD CONSTRAINT \"nt_notificacion_presupuesto_id_presupuesto_fkey\"\nFOREIGN KEY (\"id_presupuesto\")\nREFERENCES \"public\".\"pr_presupuesto\" (\"id_presupuesto\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"nt_notificacion_presupuesto_id_presupuesto_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "nt_notificacion_presupuesto_id_presupuesto_fkey",
+          "public",
+          "\"public\".\"nt_notificacion_presupuesto\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.nt_notificacion_presupuesto.nt_notificacion_presupuesto_id_categoria_presupuesto_fkey",
+    "label": "Add foreign key \"nt_notificacion_presupuesto_id_categoria_presupuesto_fkey\" on \"nt_notificacion_presupuesto\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "nt_notificacion_presupuesto_id_categoria_presupuesto_fkey",
+        "table": "nt_notificacion_presupuesto"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"nt_notificacion_presupuesto_id_categoria_presupuesto_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "nt_notificacion_presupuesto_id_categoria_presupuesto_fkey",
+          "public",
+          "\"public\".\"nt_notificacion_presupuesto\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"nt_notificacion_presupuesto_id_categoria_presupuesto_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"nt_notificacion_presupuesto\"\nADD CONSTRAINT \"nt_notificacion_presupuesto_id_categoria_presupuesto_fkey\"\nFOREIGN KEY (\"id_categoria_presupuesto\")\nREFERENCES \"public\".\"pr_categoria_presupuesto\" (\"id_categoria_presupuesto\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"nt_notificacion_presupuesto_id_categoria_presupuesto_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "nt_notificacion_presupuesto_id_categoria_presupuesto_fkey",
+          "public",
+          "\"public\".\"nt_notificacion_presupuesto\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.nt_notificacion_presupuesto.nt_notificacion_presupuesto_id_costo_fkey",
+    "label": "Add foreign key \"nt_notificacion_presupuesto_id_costo_fkey\" on \"nt_notificacion_presupuesto\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "nt_notificacion_presupuesto_id_costo_fkey",
+        "table": "nt_notificacion_presupuesto"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"nt_notificacion_presupuesto_id_costo_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "nt_notificacion_presupuesto_id_costo_fkey",
+          "public",
+          "\"public\".\"nt_notificacion_presupuesto\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"nt_notificacion_presupuesto_id_costo_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"nt_notificacion_presupuesto\"\nADD CONSTRAINT \"nt_notificacion_presupuesto_id_costo_fkey\"\nFOREIGN KEY (\"id_costo\")\nREFERENCES \"public\".\"pr_costo_proveedor\" (\"id_costo\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"nt_notificacion_presupuesto_id_costo_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "nt_notificacion_presupuesto_id_costo_fkey",
+          "public",
+          "\"public\".\"nt_notificacion_presupuesto\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.pr_categoria_presupuesto.pr_categoria_presupuesto_id_presupuesto_fkey",
+    "label": "Add foreign key \"pr_categoria_presupuesto_id_presupuesto_fkey\" on \"pr_categoria_presupuesto\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "pr_categoria_presupuesto_id_presupuesto_fkey",
+        "table": "pr_categoria_presupuesto"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"pr_categoria_presupuesto_id_presupuesto_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pr_categoria_presupuesto_id_presupuesto_fkey",
+          "public",
+          "\"public\".\"pr_categoria_presupuesto\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"pr_categoria_presupuesto_id_presupuesto_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"pr_categoria_presupuesto\"\nADD CONSTRAINT \"pr_categoria_presupuesto_id_presupuesto_fkey\"\nFOREIGN KEY (\"id_presupuesto\")\nREFERENCES \"public\".\"pr_presupuesto\" (\"id_presupuesto\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"pr_categoria_presupuesto_id_presupuesto_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pr_categoria_presupuesto_id_presupuesto_fkey",
+          "public",
+          "\"public\".\"pr_categoria_presupuesto\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.pr_categoria_presupuesto.pr_categoria_presupuesto_id_categoria_servicio_fkey",
+    "label": "Add foreign key \"pr_categoria_presupuesto_id_categoria_servicio_fkey\" on \"pr_categoria_presupuesto\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "pr_categoria_presupuesto_id_categoria_servicio_fkey",
+        "table": "pr_categoria_presupuesto"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"pr_categoria_presupuesto_id_categoria_servicio_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pr_categoria_presupuesto_id_categoria_servicio_fkey",
+          "public",
+          "\"public\".\"pr_categoria_presupuesto\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"pr_categoria_presupuesto_id_categoria_servicio_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"pr_categoria_presupuesto\"\nADD CONSTRAINT \"pr_categoria_presupuesto_id_categoria_servicio_fkey\"\nFOREIGN KEY (\"id_categoria_servicio\")\nREFERENCES \"public\".\"pv_categoria_servicio\" (\"id_categoria_servicio\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"pr_categoria_presupuesto_id_categoria_servicio_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pr_categoria_presupuesto_id_categoria_servicio_fkey",
+          "public",
+          "\"public\".\"pr_categoria_presupuesto\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.pr_compromiso_pago.pr_compromiso_pago_id_costo_fkey",
+    "label": "Add foreign key \"pr_compromiso_pago_id_costo_fkey\" on \"pr_compromiso_pago\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "pr_compromiso_pago_id_costo_fkey",
+        "table": "pr_compromiso_pago"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"pr_compromiso_pago_id_costo_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pr_compromiso_pago_id_costo_fkey",
+          "public",
+          "\"public\".\"pr_compromiso_pago\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"pr_compromiso_pago_id_costo_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"pr_compromiso_pago\"\nADD CONSTRAINT \"pr_compromiso_pago_id_costo_fkey\"\nFOREIGN KEY (\"id_costo\")\nREFERENCES \"public\".\"pr_costo_proveedor\" (\"id_costo\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"pr_compromiso_pago_id_costo_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pr_compromiso_pago_id_costo_fkey",
+          "public",
+          "\"public\".\"pr_compromiso_pago\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.pr_costo_proveedor.pr_costo_proveedor_id_presupuesto_fkey",
+    "label": "Add foreign key \"pr_costo_proveedor_id_presupuesto_fkey\" on \"pr_costo_proveedor\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "pr_costo_proveedor_id_presupuesto_fkey",
+        "table": "pr_costo_proveedor"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"pr_costo_proveedor_id_presupuesto_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pr_costo_proveedor_id_presupuesto_fkey",
+          "public",
+          "\"public\".\"pr_costo_proveedor\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"pr_costo_proveedor_id_presupuesto_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"pr_costo_proveedor\"\nADD CONSTRAINT \"pr_costo_proveedor_id_presupuesto_fkey\"\nFOREIGN KEY (\"id_presupuesto\")\nREFERENCES \"public\".\"pr_presupuesto\" (\"id_presupuesto\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"pr_costo_proveedor_id_presupuesto_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pr_costo_proveedor_id_presupuesto_fkey",
+          "public",
+          "\"public\".\"pr_costo_proveedor\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.pr_costo_proveedor.pr_costo_proveedor_id_categoria_presupuesto_fkey",
+    "label": "Add foreign key \"pr_costo_proveedor_id_categoria_presupuesto_fkey\" on \"pr_costo_proveedor\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "pr_costo_proveedor_id_categoria_presupuesto_fkey",
+        "table": "pr_costo_proveedor"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"pr_costo_proveedor_id_categoria_presupuesto_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pr_costo_proveedor_id_categoria_presupuesto_fkey",
+          "public",
+          "\"public\".\"pr_costo_proveedor\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"pr_costo_proveedor_id_categoria_presupuesto_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"pr_costo_proveedor\"\nADD CONSTRAINT \"pr_costo_proveedor_id_categoria_presupuesto_fkey\"\nFOREIGN KEY (\"id_categoria_presupuesto\")\nREFERENCES \"public\".\"pr_categoria_presupuesto\" (\"id_categoria_presupuesto\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"pr_costo_proveedor_id_categoria_presupuesto_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pr_costo_proveedor_id_categoria_presupuesto_fkey",
+          "public",
+          "\"public\".\"pr_costo_proveedor\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.pr_costo_proveedor.pr_costo_proveedor_id_matrimonio_proveedor_fkey",
+    "label": "Add foreign key \"pr_costo_proveedor_id_matrimonio_proveedor_fkey\" on \"pr_costo_proveedor\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "pr_costo_proveedor_id_matrimonio_proveedor_fkey",
+        "table": "pr_costo_proveedor"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"pr_costo_proveedor_id_matrimonio_proveedor_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pr_costo_proveedor_id_matrimonio_proveedor_fkey",
+          "public",
+          "\"public\".\"pr_costo_proveedor\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"pr_costo_proveedor_id_matrimonio_proveedor_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"pr_costo_proveedor\"\nADD CONSTRAINT \"pr_costo_proveedor_id_matrimonio_proveedor_fkey\"\nFOREIGN KEY (\"id_matrimonio_proveedor\")\nREFERENCES \"public\".\"pv_matrimonio_proveedor\" (\"id_matrimonio_proveedor\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"pr_costo_proveedor_id_matrimonio_proveedor_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pr_costo_proveedor_id_matrimonio_proveedor_fkey",
+          "public",
+          "\"public\".\"pr_costo_proveedor\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.pr_costo_proveedor.pr_costo_proveedor_id_proveedor_servicio_fkey",
+    "label": "Add foreign key \"pr_costo_proveedor_id_proveedor_servicio_fkey\" on \"pr_costo_proveedor\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "pr_costo_proveedor_id_proveedor_servicio_fkey",
+        "table": "pr_costo_proveedor"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"pr_costo_proveedor_id_proveedor_servicio_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pr_costo_proveedor_id_proveedor_servicio_fkey",
+          "public",
+          "\"public\".\"pr_costo_proveedor\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"pr_costo_proveedor_id_proveedor_servicio_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"pr_costo_proveedor\"\nADD CONSTRAINT \"pr_costo_proveedor_id_proveedor_servicio_fkey\"\nFOREIGN KEY (\"id_proveedor_servicio\")\nREFERENCES \"public\".\"pv_proveedor_servicio\" (\"id_proveedor_servicio\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"pr_costo_proveedor_id_proveedor_servicio_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pr_costo_proveedor_id_proveedor_servicio_fkey",
+          "public",
+          "\"public\".\"pr_costo_proveedor\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.pr_documento_pago.pr_documento_pago_id_pago_fkey",
+    "label": "Add foreign key \"pr_documento_pago_id_pago_fkey\" on \"pr_documento_pago\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "pr_documento_pago_id_pago_fkey",
+        "table": "pr_documento_pago"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"pr_documento_pago_id_pago_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pr_documento_pago_id_pago_fkey",
+          "public",
+          "\"public\".\"pr_documento_pago\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"pr_documento_pago_id_pago_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"pr_documento_pago\"\nADD CONSTRAINT \"pr_documento_pago_id_pago_fkey\"\nFOREIGN KEY (\"id_pago\")\nREFERENCES \"public\".\"pr_pago\" (\"id_pago\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"pr_documento_pago_id_pago_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pr_documento_pago_id_pago_fkey",
+          "public",
+          "\"public\".\"pr_documento_pago\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.pr_pago.pr_pago_id_costo_fkey",
+    "label": "Add foreign key \"pr_pago_id_costo_fkey\" on \"pr_pago\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "pr_pago_id_costo_fkey",
+        "table": "pr_pago"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"pr_pago_id_costo_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pr_pago_id_costo_fkey",
+          "public",
+          "\"public\".\"pr_pago\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"pr_pago_id_costo_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"pr_pago\"\nADD CONSTRAINT \"pr_pago_id_costo_fkey\"\nFOREIGN KEY (\"id_costo\")\nREFERENCES \"public\".\"pr_costo_proveedor\" (\"id_costo\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"pr_pago_id_costo_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pr_pago_id_costo_fkey",
+          "public",
+          "\"public\".\"pr_pago\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.pr_presupuesto.pr_presupuesto_id_matrimonio_fkey",
+    "label": "Add foreign key \"pr_presupuesto_id_matrimonio_fkey\" on \"pr_presupuesto\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "pr_presupuesto_id_matrimonio_fkey",
+        "table": "pr_presupuesto"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"pr_presupuesto_id_matrimonio_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pr_presupuesto_id_matrimonio_fkey",
+          "public",
+          "\"public\".\"pr_presupuesto\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"pr_presupuesto_id_matrimonio_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"pr_presupuesto\"\nADD CONSTRAINT \"pr_presupuesto_id_matrimonio_fkey\"\nFOREIGN KEY (\"id_matrimonio\")\nREFERENCES \"public\".\"gp_matrimonio\" (\"id_matrimonio\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"pr_presupuesto_id_matrimonio_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pr_presupuesto_id_matrimonio_fkey",
+          "public",
+          "\"public\".\"pr_presupuesto\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.pr_seguimiento_pago.pr_seguimiento_pago_id_pago_fkey",
+    "label": "Add foreign key \"pr_seguimiento_pago_id_pago_fkey\" on \"pr_seguimiento_pago\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "pr_seguimiento_pago_id_pago_fkey",
+        "table": "pr_seguimiento_pago"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"pr_seguimiento_pago_id_pago_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pr_seguimiento_pago_id_pago_fkey",
+          "public",
+          "\"public\".\"pr_seguimiento_pago\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"pr_seguimiento_pago_id_pago_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"pr_seguimiento_pago\"\nADD CONSTRAINT \"pr_seguimiento_pago_id_pago_fkey\"\nFOREIGN KEY (\"id_pago\")\nREFERENCES \"public\".\"pr_pago\" (\"id_pago\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"pr_seguimiento_pago_id_pago_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pr_seguimiento_pago_id_pago_fkey",
+          "public",
+          "\"public\".\"pr_seguimiento_pago\""
+        ]
+      }
+    ]
+  }
+]

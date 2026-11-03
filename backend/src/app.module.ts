@@ -11,6 +11,7 @@ import { NotificacionesModule } from './modules/notificaciones/notificaciones.mo
 import { InvitadosModule } from './modules/invitados/invitados.module';
 import { ProveedoresModule } from './modules/proveedores/proveedores.module';
 import { BuenasPracticasModule } from './modules/buenas-practicas/buenas-practicas.module';
+import { PresupuestoModule } from './modules/presupuesto/presupuesto.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { BuenasPracticasModule } from './modules/buenas-practicas/buenas-practic
     InvitadosModule,
     ProveedoresModule,
     BuenasPracticasModule,
+    PresupuestoModule,
   ],
 })
 export class AppModule {}

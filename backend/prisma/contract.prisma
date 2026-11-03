@@ -52,6 +52,7 @@ model Matrimonio {
   invitados         Invitado[]
   mesas             Mesa[]
   proveedores       MatrimonioProveedor[]
+  presupuesto       Presupuesto?
 
   @@index([idNovio1])
   @@index([idNovio2])
@@ -589,23 +590,24 @@ model Timing {
 }
 
 model Notificacion {
-  idNotificacion   Uuid                    @id @default(uuid()) @map("id_notificacion")
-  idUsuarioDestino Int                     @map("id_usuario_destino")
-  idProyecto       Uuid?                   @map("id_proyecto")
+  idNotificacion   Uuid                     @id @default(uuid()) @map("id_notificacion")
+  idUsuarioDestino Int                      @map("id_usuario_destino")
+  idProyecto       Uuid?                    @map("id_proyecto")
   tipo             VarChar(50)
   titulo           VarChar(200)
   mensaje          VarChar(1000)
-  fechaGeneracion  DateTime                @default(now()) @map("fecha_generacion")
-  fechaProgramada  DateTime?               @map("fecha_programada")
-  leida            Boolean                 @default(false)
-  enviadaPush      Boolean                 @default(false) @map("enviada_push")
-  activo           Boolean                 @default(true)
-  createdAt        DateTime                @default(now()) @map("created_at")
-  updatedAt        temporal.updatedAt()    @map("updated_at")
+  fechaGeneracion  DateTime                 @default(now()) @map("fecha_generacion")
+  fechaProgramada  DateTime?                @map("fecha_programada")
+  leida            Boolean                  @default(false)
+  enviadaPush      Boolean                  @default(false) @map("enviada_push")
+  activo           Boolean                  @default(true)
+  createdAt        DateTime                 @default(now()) @map("created_at")
+  updatedAt        temporal.updatedAt()     @map("updated_at")
 
-  usuarioDestino   Usuario                 @relation("notificaciones_destino", fields:[idUsuarioDestino], references:[idUsuario], onDelete: Restrict)
-  proyecto         Proyecto?               @relation(fields:[idProyecto], references:[idProyecto], onDelete: Restrict)
+  usuarioDestino   Usuario                  @relation("notificaciones_destino", fields:[idUsuarioDestino], references:[idUsuario], onDelete: Restrict)
+  proyecto         Proyecto?                @relation(fields:[idProyecto], references:[idProyecto], onDelete: Restrict)
   cronograma       NotificacionCronograma?
+  presupuesto      NotificacionPresupuesto?
 
   @@index([idUsuarioDestino])
   @@index([idProyecto])
@@ -661,15 +663,16 @@ model Proveedor {
 }
 
 model CategoriaServicio {
-  idCategoriaServicio Int                  @id @default(autoincrement()) @map("id_categoria_servicio")
-  codigo              VarChar(50)          @unique
-  nombre              VarChar(100)
-  descripcion         VarChar(500)?
-  orden               Int
-  activo              Boolean              @default(true)
-  createdAt           DateTime             @default(now()) @map("created_at")
-  updatedAt           temporal.updatedAt() @map("updated_at")
-  servicios           ProveedorServicio[]
+  idCategoriaServicio   Int                    @id @default(autoincrement()) @map("id_categoria_servicio")
+  codigo                VarChar(50)            @unique
+  nombre                VarChar(100)
+  descripcion           VarChar(500)?
+  orden                 Int
+  activo                Boolean                @default(true)
+  createdAt             DateTime               @default(now()) @map("created_at")
+  updatedAt             temporal.updatedAt()   @map("updated_at")
+  servicios             ProveedorServicio[]
+  categoriasPresupuesto CategoriaPresupuesto[]
 
   @@index([activo])
   @@map("pv_categoria_servicio")
@@ -691,6 +694,7 @@ model ProveedorServicio {
   categoriaServicio   CategoriaServicio         @relation(fields:[idCategoriaServicio], references:[idCategoriaServicio], onDelete: Restrict)
   disponibilidades    DisponibilidadProveedor[]
   reservas            ReservaProveedor[]
+  costos              CostoProveedor[]
 
   @@unique([idProveedor, idCategoriaServicio, nombre])
   @@index([idProveedor])
@@ -716,6 +720,7 @@ model MatrimonioProveedor {
   evaluaciones          EvaluacionProveedor[]
   documentos            DocumentoProveedor[]
   interacciones         InteraccionProveedor[]
+  costos                CostoProveedor[]
 
   @@unique([idMatrimonio, idProveedor])
   @@index([idMatrimonio])
@@ -839,6 +844,160 @@ model InteraccionProveedor {
   @@map("pv_interaccion_proveedor")
 }
 
+model Presupuesto {
+  idPresupuesto  Uuid                      @id @default(uuid()) @map("id_presupuesto")
+  idMatrimonio   Uuid                      @unique @map("id_matrimonio")
+  montoTotal     Numeric(12, 2)            @map("monto_total")
+  moneda         pv_moneda                 @default(PEN)
+  activo         Boolean                   @default(true)
+  createdAt      DateTime                  @default(now()) @map("created_at")
+  updatedAt      temporal.updatedAt()      @map("updated_at")
+  matrimonio     Matrimonio                @relation(fields:[idMatrimonio], references:[idMatrimonio], onDelete: Restrict)
+  categorias     CategoriaPresupuesto[]
+  costos         CostoProveedor[]
+  notificaciones NotificacionPresupuesto[]
+
+  @@index([idMatrimonio])
+  @@map("pr_presupuesto")
+}
+
+model CategoriaPresupuesto {
+  idCategoriaPresupuesto Int                       @id @default(autoincrement()) @map("id_categoria_presupuesto")
+  idPresupuesto          Uuid                      @map("id_presupuesto")
+  idCategoriaServicio    Int?                      @map("id_categoria_servicio")
+  codigo                 VarChar(50)
+  nombre                 VarChar(100)
+  montoAsignado          Numeric(12, 2)            @map("monto_asignado")
+  activo                 Boolean                   @default(true)
+  createdAt              DateTime                  @default(now()) @map("created_at")
+  updatedAt              temporal.updatedAt()      @map("updated_at")
+  presupuesto            Presupuesto               @relation(fields:[idPresupuesto], references:[idPresupuesto], onDelete: Restrict)
+  categoriaServicio      CategoriaServicio?        @relation(fields:[idCategoriaServicio], references:[idCategoriaServicio], onDelete: Restrict)
+  costos                 CostoProveedor[]
+  notificaciones         NotificacionPresupuesto[]
+
+  @@unique([idPresupuesto, codigo])
+  @@index([idPresupuesto])
+  @@index([idCategoriaServicio])
+  @@map("pr_categoria_presupuesto")
+}
+
+model CostoProveedor {
+  idCosto                Uuid                      @id @default(uuid()) @map("id_costo")
+  idPresupuesto          Uuid                      @map("id_presupuesto")
+  idCategoriaPresupuesto Int                       @map("id_categoria_presupuesto")
+  idMatrimonioProveedor  Uuid?                     @map("id_matrimonio_proveedor")
+  idProveedorServicio    Int?                      @map("id_proveedor_servicio")
+  concepto               VarChar(200)
+  montoEstimado          Numeric(12, 2)            @map("monto_estimado")
+  montoReal              Numeric(12, 2)            @map("monto_real")
+  estado                 pr_estado_costo           @default(PLANIFICADO)
+  activo                 Boolean                   @default(true)
+  createdAt              DateTime                  @default(now()) @map("created_at")
+  updatedAt              temporal.updatedAt()      @map("updated_at")
+  presupuesto            Presupuesto               @relation(fields:[idPresupuesto], references:[idPresupuesto], onDelete: Restrict)
+  categoria              CategoriaPresupuesto      @relation(fields:[idCategoriaPresupuesto], references:[idCategoriaPresupuesto], onDelete: Restrict)
+  matrimonioProveedor    MatrimonioProveedor?      @relation(fields:[idMatrimonioProveedor], references:[idMatrimonioProveedor], onDelete: Restrict)
+  proveedorServicio      ProveedorServicio?        @relation(fields:[idProveedorServicio], references:[idProveedorServicio], onDelete: Restrict)
+  pagos                  PagoPresupuesto[]
+  compromisos            CompromisoPago[]
+  notificaciones         NotificacionPresupuesto[]
+
+  @@index([idPresupuesto])
+  @@index([idCategoriaPresupuesto], map: "pr_costo_categoria_idx")
+  @@index([idMatrimonioProveedor])
+  @@index([idProveedorServicio])
+  @@map("pr_costo_proveedor")
+}
+
+model PagoPresupuesto {
+  idPago       Uuid                 @id @default(uuid()) @map("id_pago")
+  idCosto      Uuid                 @map("id_costo")
+  monto        Numeric(12, 2)
+  fechaPago    DateTime             @map("fecha_pago")
+  concepto     VarChar(200)
+  tipo         pr_tipo_pago         @default(CUOTA)
+  numeroCuota  Int?                 @map("numero_cuota")
+  observacion  VarChar(1000)?
+  activo       Boolean              @default(true)
+  createdAt    DateTime             @default(now()) @map("created_at")
+  updatedAt    temporal.updatedAt() @map("updated_at")
+  costo        CostoProveedor       @relation(fields:[idCosto], references:[idCosto], onDelete: Restrict)
+  documentos   DocumentoPago[]
+  seguimientos SeguimientoPago[]
+
+  @@index([idCosto])
+  @@index([fechaPago])
+  @@map("pr_pago")
+}
+
+model DocumentoPago {
+  idDocumentoPago Uuid                 @id @default(uuid()) @map("id_documento_pago")
+  idPago          Uuid                 @map("id_pago")
+  nombre          VarChar(200)
+  url             VarChar(500)
+  tipo            VarChar(100)?
+  activo          Boolean              @default(true)
+  createdAt       DateTime             @default(now()) @map("created_at")
+  updatedAt       temporal.updatedAt() @map("updated_at")
+  pago            PagoPresupuesto      @relation(fields:[idPago], references:[idPago], onDelete: Restrict)
+
+  @@index([idPago])
+  @@map("pr_documento_pago")
+}
+
+model CompromisoPago {
+  idCompromiso     Uuid                 @id @default(uuid()) @map("id_compromiso")
+  idCosto          Uuid                 @map("id_costo")
+  montoProgramado  Numeric(12, 2)       @map("monto_programado")
+  fechaVencimiento DateTime             @map("fecha_vencimiento")
+  concepto         VarChar(200)
+  activo           Boolean              @default(true)
+  createdAt        DateTime             @default(now()) @map("created_at")
+  updatedAt        temporal.updatedAt() @map("updated_at")
+  costo            CostoProveedor       @relation(fields:[idCosto], references:[idCosto], onDelete: Restrict)
+
+  @@index([idCosto])
+  @@index([fechaVencimiento])
+  @@map("pr_compromiso_pago")
+}
+
+model SeguimientoPago {
+  idSeguimientoPago Uuid                 @id @default(uuid()) @map("id_seguimiento_pago")
+  idPago            Uuid                 @map("id_pago")
+  tipo              VarChar(50)
+  detalle           VarChar(1000)?
+  activo            Boolean              @default(true)
+  createdAt         DateTime             @default(now()) @map("created_at")
+  updatedAt         temporal.updatedAt() @map("updated_at")
+  pago              PagoPresupuesto      @relation(fields:[idPago], references:[idPago], onDelete: Restrict)
+
+  @@index([idPago])
+  @@map("pr_seguimiento_pago")
+}
+
+model NotificacionPresupuesto {
+  idNotificacion         Uuid                       @id @map("id_notificacion")
+  idPresupuesto          Uuid                       @map("id_presupuesto")
+  idCategoriaPresupuesto Int?                       @map("id_categoria_presupuesto")
+  idCosto                Uuid?                      @map("id_costo")
+  tipoEventoPresupuesto  nt_tipo_evento_presupuesto @map("tipo_evento_presupuesto")
+  montoPlanificado       Numeric(12, 2)?            @map("monto_planificado")
+  montoActual            Numeric(12, 2)?            @map("monto_actual")
+  diferencia             Numeric(12, 2)?            @map("diferencia")
+
+  notificacion           Notificacion               @relation(fields:[idNotificacion], references:[idNotificacion], onDelete: Restrict)
+  presupuesto            Presupuesto                @relation(fields:[idPresupuesto], references:[idPresupuesto], onDelete: Restrict)
+  categoria              CategoriaPresupuesto?      @relation(fields:[idCategoriaPresupuesto], references:[idCategoriaPresupuesto], onDelete: Restrict)
+  costo                  CostoProveedor?            @relation(fields:[idCosto], references:[idCosto], onDelete: Restrict)
+
+  @@index([idPresupuesto])
+  @@index([idCategoriaPresupuesto], map: "nt_notif_pres_categoria_idx")
+  @@index([idCosto])
+  @@index([tipoEventoPresupuesto], map: "nt_notif_pres_evento_idx")
+  @@map("nt_notificacion_presupuesto")
+}
+
 model Ubigeo {
   idUbigeo     VarChar(6)       @id @map("id_ubigeo")
   departamento VarChar(100)
@@ -913,6 +1072,26 @@ enum au_tipo_usuario {
 enum au_tipo_token_cuenta {
   VERIFICACION_CORREO = "VERIFICACION_CORREO"
   RECUPERACION_CONTRASENA = "RECUPERACION_CONTRASENA"
+}
+
+enum pr_estado_costo {
+  PLANIFICADO = "PLANIFICADO"
+  CONTRATADO = "CONTRATADO"
+  PAGADO = "PAGADO"
+  CANCELADO = "CANCELADO"
+}
+
+enum pr_tipo_pago {
+  PAGO_INICIAL = "PAGO_INICIAL"
+  CUOTA = "CUOTA"
+  PAGO_FINAL = "PAGO_FINAL"
+}
+
+enum nt_tipo_evento_presupuesto {
+  SOBREPRESUPUESTO_CATEGORIA = "SOBREPRESUPUESTO_CATEGORIA"
+  DESBALANCE_GENERAL = "DESBALANCE_GENERAL"
+  PAGO_PROXIMO_VENCER = "PAGO_PROXIMO_VENCER"
+  PAGO_VENCIDO = "PAGO_VENCIDO"
 }
 
 model Usuario {

@@ -6,6 +6,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Temporal } from 'temporal-polyfill';
+import { PresupuestoService } from '../../presupuesto/application/presupuesto.service';
 import { ProveedoresRepository } from '../domain/repositories/proveedores.repository';
 import {
   ActualizarDisponibilidadProveedorDto,
@@ -32,7 +33,10 @@ import {
 
 @Injectable()
 export class ProveedoresService {
-  constructor(private readonly repository: ProveedoresRepository) {}
+  constructor(
+    private readonly repository: ProveedoresRepository,
+    private readonly presupuesto: PresupuestoService,
+  ) {}
   private get db(): any {
     return this.repository.orm();
   }
@@ -255,12 +259,14 @@ export class ProveedoresService {
     );
     if (existe)
       throw new ConflictException('El servicio ya existe para este proveedor.');
-    return this.db.ProveedorServicio.create({
+    const creado = await this.db.ProveedorServicio.create({
       ...d,
       idProveedor: p,
       moneda: d.moneda ?? 'PEN',
       activo: true,
     } as never);
+    await this.presupuesto.sincronizarServiciosProveedor(p);
+    return creado;
   }
   async actualizarServicio(
     p: string,
@@ -275,9 +281,11 @@ export class ProveedoresService {
       }))
     )
       throw new NotFoundException('Categoría de servicio no encontrada.');
-    return this.db.ProveedorServicio.where({
+    const actualizado = await this.db.ProveedorServicio.where({
       idProveedorServicio: Number(s) as never,
     }).update(d as never);
+    await this.presupuesto.sincronizarServiciosProveedor(p);
+    return actualizado;
   }
   async desactivarServicio(p: string, s: string) {
     await this.servicio(p, s);
@@ -412,7 +420,7 @@ export class ProveedoresService {
     d: AsociarProveedorMatrimonioDto,
     u: number,
   ) {
-    return this.prisma.client.transaction(async (tx: any) => {
+    const relacion = await this.prisma.client.transaction(async (tx: any) => {
       const db = tx.orm.public;
       await this.acceso(m, u, db);
       const proveedor = await this.proveedor(p, db);
@@ -439,6 +447,9 @@ export class ProveedoresService {
             activo: true,
           } as never);
     });
+    if (relacion.estadoSeleccion === 'SELECCIONADO')
+      await this.presupuesto.sincronizarContratacion(m, p, u);
+    return relacion;
   }
   async actualizarRelacion(
     m: string,
@@ -478,9 +489,12 @@ export class ProveedoresService {
             'Solo se permiten hasta 3 proveedores favoritos por categoría.',
           );
     }
-    return this.db.MatrimonioProveedor.where({
+    const actualizada = await this.db.MatrimonioProveedor.where({
       idMatrimonioProveedor: x.idMatrimonioProveedor as never,
     }).update(d as never);
+    if (actualizada.estadoSeleccion === 'SELECCIONADO')
+      await this.presupuesto.sincronizarContratacion(m, p, u);
+    return actualizada;
   }
   async retirar(m: string, p: string, u: number) {
     await this.acceso(m, u);

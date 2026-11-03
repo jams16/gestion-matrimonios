@@ -132,6 +132,38 @@
       "model": "NotificacionCronograma",
       "namespace": "public"
     },
+    "nt_notificacion_presupuesto": {
+      "model": "NotificacionPresupuesto",
+      "namespace": "public"
+    },
+    "pr_categoria_presupuesto": {
+      "model": "CategoriaPresupuesto",
+      "namespace": "public"
+    },
+    "pr_compromiso_pago": {
+      "model": "CompromisoPago",
+      "namespace": "public"
+    },
+    "pr_costo_proveedor": {
+      "model": "CostoProveedor",
+      "namespace": "public"
+    },
+    "pr_documento_pago": {
+      "model": "DocumentoPago",
+      "namespace": "public"
+    },
+    "pr_pago": {
+      "model": "PagoPresupuesto",
+      "namespace": "public"
+    },
+    "pr_presupuesto": {
+      "model": "Presupuesto",
+      "namespace": "public"
+    },
+    "pr_seguimiento_pago": {
+      "model": "SeguimientoPago",
+      "namespace": "public"
+    },
     "pv_categoria_servicio": {
       "model": "CategoriaServicio",
       "namespace": "public"
@@ -406,6 +438,65 @@
               {
                 "name": "HITO_VENCIDO",
                 "value": "HITO_VENCIDO"
+              }
+            ]
+          },
+          "nt_tipo_evento_presupuesto": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "SOBREPRESUPUESTO_CATEGORIA",
+                "value": "SOBREPRESUPUESTO_CATEGORIA"
+              },
+              {
+                "name": "DESBALANCE_GENERAL",
+                "value": "DESBALANCE_GENERAL"
+              },
+              {
+                "name": "PAGO_PROXIMO_VENCER",
+                "value": "PAGO_PROXIMO_VENCER"
+              },
+              {
+                "name": "PAGO_VENCIDO",
+                "value": "PAGO_VENCIDO"
+              }
+            ]
+          },
+          "pr_estado_costo": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "PLANIFICADO",
+                "value": "PLANIFICADO"
+              },
+              {
+                "name": "CONTRATADO",
+                "value": "CONTRATADO"
+              },
+              {
+                "name": "PAGADO",
+                "value": "PAGADO"
+              },
+              {
+                "name": "CANCELADO",
+                "value": "CANCELADO"
+              }
+            ]
+          },
+          "pr_tipo_pago": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "PAGO_INICIAL",
+                "value": "PAGO_INICIAL"
+              },
+              {
+                "name": "CUOTA",
+                "value": "CUOTA"
+              },
+              {
+                "name": "PAGO_FINAL",
+                "value": "PAGO_FINAL"
               }
             ]
           },
@@ -1175,6 +1266,180 @@
               "table": "gp_buena_practica"
             }
           },
+          "CategoriaPresupuesto": {
+            "fields": {
+              "activo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "codigo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 50
+                  }
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "idCategoriaPresupuesto": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "idCategoriaServicio": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "idPresupuesto": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "montoAsignado": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/numeric@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 12,
+                    "scale": 2
+                  }
+                }
+              },
+              "nombre": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 100
+                  }
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "categoriaServicio": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idCategoriaServicio"
+                  ],
+                  "targetFields": [
+                    "idCategoriaServicio"
+                  ]
+                },
+                "to": {
+                  "model": "CategoriaServicio",
+                  "namespace": "public"
+                }
+              },
+              "costos": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idCategoriaPresupuesto"
+                  ],
+                  "targetFields": [
+                    "idCategoriaPresupuesto"
+                  ]
+                },
+                "to": {
+                  "model": "CostoProveedor",
+                  "namespace": "public"
+                }
+              },
+              "notificaciones": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idCategoriaPresupuesto"
+                  ],
+                  "targetFields": [
+                    "idCategoriaPresupuesto"
+                  ]
+                },
+                "to": {
+                  "model": "NotificacionPresupuesto",
+                  "namespace": "public"
+                }
+              },
+              "presupuesto": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idPresupuesto"
+                  ],
+                  "targetFields": [
+                    "idPresupuesto"
+                  ]
+                },
+                "to": {
+                  "model": "Presupuesto",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "activo": {
+                  "column": "activo"
+                },
+                "codigo": {
+                  "column": "codigo"
+                },
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "idCategoriaPresupuesto": {
+                  "column": "id_categoria_presupuesto"
+                },
+                "idCategoriaServicio": {
+                  "column": "id_categoria_servicio"
+                },
+                "idPresupuesto": {
+                  "column": "id_presupuesto"
+                },
+                "montoAsignado": {
+                  "column": "monto_asignado"
+                },
+                "nombre": {
+                  "column": "nombre"
+                },
+                "updatedAt": {
+                  "column": "updated_at"
+                }
+              },
+              "namespaceId": "public",
+              "table": "pr_categoria_presupuesto"
+            }
+          },
           "CategoriaRelacion": {
             "fields": {
               "activo": {
@@ -1360,6 +1625,21 @@
               }
             },
             "relations": {
+              "categoriasPresupuesto": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idCategoriaServicio"
+                  ],
+                  "targetFields": [
+                    "idCategoriaServicio"
+                  ]
+                },
+                "to": {
+                  "model": "CategoriaPresupuesto",
+                  "namespace": "public"
+                }
+              },
               "servicios": {
                 "cardinality": "1:N",
                 "on": {
@@ -1405,6 +1685,379 @@
               },
               "namespaceId": "public",
               "table": "pv_categoria_servicio"
+            }
+          },
+          "CompromisoPago": {
+            "fields": {
+              "activo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "concepto": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 200
+                  }
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "fechaVencimiento": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "idCompromiso": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idCosto": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "montoProgramado": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/numeric@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 12,
+                    "scale": 2
+                  }
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "costo": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idCosto"
+                  ],
+                  "targetFields": [
+                    "idCosto"
+                  ]
+                },
+                "to": {
+                  "model": "CostoProveedor",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "activo": {
+                  "column": "activo"
+                },
+                "concepto": {
+                  "column": "concepto"
+                },
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "fechaVencimiento": {
+                  "column": "fecha_vencimiento"
+                },
+                "idCompromiso": {
+                  "column": "id_compromiso"
+                },
+                "idCosto": {
+                  "column": "id_costo"
+                },
+                "montoProgramado": {
+                  "column": "monto_programado"
+                },
+                "updatedAt": {
+                  "column": "updated_at"
+                }
+              },
+              "namespaceId": "public",
+              "table": "pr_compromiso_pago"
+            }
+          },
+          "CostoProveedor": {
+            "fields": {
+              "activo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "concepto": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 200
+                  }
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "estado": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "pr_estado_costo",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "idCategoriaPresupuesto": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "idCosto": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idMatrimonioProveedor": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idPresupuesto": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idProveedorServicio": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "montoEstimado": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/numeric@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 12,
+                    "scale": 2
+                  }
+                }
+              },
+              "montoReal": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/numeric@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 12,
+                    "scale": 2
+                  }
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "categoria": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idCategoriaPresupuesto"
+                  ],
+                  "targetFields": [
+                    "idCategoriaPresupuesto"
+                  ]
+                },
+                "to": {
+                  "model": "CategoriaPresupuesto",
+                  "namespace": "public"
+                }
+              },
+              "compromisos": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idCosto"
+                  ],
+                  "targetFields": [
+                    "idCosto"
+                  ]
+                },
+                "to": {
+                  "model": "CompromisoPago",
+                  "namespace": "public"
+                }
+              },
+              "matrimonioProveedor": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idMatrimonioProveedor"
+                  ],
+                  "targetFields": [
+                    "idMatrimonioProveedor"
+                  ]
+                },
+                "to": {
+                  "model": "MatrimonioProveedor",
+                  "namespace": "public"
+                }
+              },
+              "notificaciones": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idCosto"
+                  ],
+                  "targetFields": [
+                    "idCosto"
+                  ]
+                },
+                "to": {
+                  "model": "NotificacionPresupuesto",
+                  "namespace": "public"
+                }
+              },
+              "pagos": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idCosto"
+                  ],
+                  "targetFields": [
+                    "idCosto"
+                  ]
+                },
+                "to": {
+                  "model": "PagoPresupuesto",
+                  "namespace": "public"
+                }
+              },
+              "presupuesto": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idPresupuesto"
+                  ],
+                  "targetFields": [
+                    "idPresupuesto"
+                  ]
+                },
+                "to": {
+                  "model": "Presupuesto",
+                  "namespace": "public"
+                }
+              },
+              "proveedorServicio": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idProveedorServicio"
+                  ],
+                  "targetFields": [
+                    "idProveedorServicio"
+                  ]
+                },
+                "to": {
+                  "model": "ProveedorServicio",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "activo": {
+                  "column": "activo"
+                },
+                "concepto": {
+                  "column": "concepto"
+                },
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "estado": {
+                  "column": "estado"
+                },
+                "idCategoriaPresupuesto": {
+                  "column": "id_categoria_presupuesto"
+                },
+                "idCosto": {
+                  "column": "id_costo"
+                },
+                "idMatrimonioProveedor": {
+                  "column": "id_matrimonio_proveedor"
+                },
+                "idPresupuesto": {
+                  "column": "id_presupuesto"
+                },
+                "idProveedorServicio": {
+                  "column": "id_proveedor_servicio"
+                },
+                "montoEstimado": {
+                  "column": "monto_estimado"
+                },
+                "montoReal": {
+                  "column": "monto_real"
+                },
+                "updatedAt": {
+                  "column": "updated_at"
+                }
+              },
+              "namespaceId": "public",
+              "table": "pr_costo_proveedor"
             }
           },
           "Dependencia": {
@@ -1662,6 +2315,123 @@
               },
               "namespaceId": "public",
               "table": "pv_disponibilidad_proveedor"
+            }
+          },
+          "DocumentoPago": {
+            "fields": {
+              "activo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "idDocumentoPago": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idPago": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "nombre": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 200
+                  }
+                }
+              },
+              "tipo": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 100
+                  }
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "url": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 500
+                  }
+                }
+              }
+            },
+            "relations": {
+              "pago": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idPago"
+                  ],
+                  "targetFields": [
+                    "idPago"
+                  ]
+                },
+                "to": {
+                  "model": "PagoPresupuesto",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "activo": {
+                  "column": "activo"
+                },
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "idDocumentoPago": {
+                  "column": "id_documento_pago"
+                },
+                "idPago": {
+                  "column": "id_pago"
+                },
+                "nombre": {
+                  "column": "nombre"
+                },
+                "tipo": {
+                  "column": "tipo"
+                },
+                "updatedAt": {
+                  "column": "updated_at"
+                },
+                "url": {
+                  "column": "url"
+                }
+              },
+              "namespaceId": "public",
+              "table": "pr_documento_pago"
             }
           },
           "DocumentoProveedor": {
@@ -3199,6 +3969,22 @@
                   "namespace": "public"
                 }
               },
+              "presupuesto": {
+                "cardinality": "1:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idMatrimonio"
+                  ],
+                  "targetFields": [
+                    "idMatrimonio"
+                  ]
+                },
+                "to": {
+                  "model": "Presupuesto",
+                  "namespace": "public"
+                }
+              },
               "proveedores": {
                 "cardinality": "1:N",
                 "on": {
@@ -3395,6 +4181,21 @@
               }
             },
             "relations": {
+              "costos": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idMatrimonioProveedor"
+                  ],
+                  "targetFields": [
+                    "idMatrimonioProveedor"
+                  ]
+                },
+                "to": {
+                  "model": "CostoProveedor",
+                  "namespace": "public"
+                }
+              },
               "documentos": {
                 "cardinality": "1:N",
                 "on": {
@@ -3939,6 +4740,22 @@
                   "namespace": "public"
                 }
               },
+              "presupuesto": {
+                "cardinality": "1:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idNotificacion"
+                  ],
+                  "targetFields": [
+                    "idNotificacion"
+                  ]
+                },
+                "to": {
+                  "model": "NotificacionPresupuesto",
+                  "namespace": "public"
+                }
+              },
               "proyecto": {
                 "cardinality": "N:1",
                 "nullable": true,
@@ -4132,6 +4949,364 @@
               },
               "namespaceId": "public",
               "table": "nt_notificacion_cronograma"
+            }
+          },
+          "NotificacionPresupuesto": {
+            "fields": {
+              "diferencia": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/numeric@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 12,
+                    "scale": 2
+                  }
+                }
+              },
+              "idCategoriaPresupuesto": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "idCosto": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idNotificacion": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idPresupuesto": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "montoActual": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/numeric@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 12,
+                    "scale": 2
+                  }
+                }
+              },
+              "montoPlanificado": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/numeric@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 12,
+                    "scale": 2
+                  }
+                }
+              },
+              "tipoEventoPresupuesto": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "nt_tipo_evento_presupuesto",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              }
+            },
+            "relations": {
+              "categoria": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idCategoriaPresupuesto"
+                  ],
+                  "targetFields": [
+                    "idCategoriaPresupuesto"
+                  ]
+                },
+                "to": {
+                  "model": "CategoriaPresupuesto",
+                  "namespace": "public"
+                }
+              },
+              "costo": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idCosto"
+                  ],
+                  "targetFields": [
+                    "idCosto"
+                  ]
+                },
+                "to": {
+                  "model": "CostoProveedor",
+                  "namespace": "public"
+                }
+              },
+              "notificacion": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idNotificacion"
+                  ],
+                  "targetFields": [
+                    "idNotificacion"
+                  ]
+                },
+                "to": {
+                  "model": "Notificacion",
+                  "namespace": "public"
+                }
+              },
+              "presupuesto": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idPresupuesto"
+                  ],
+                  "targetFields": [
+                    "idPresupuesto"
+                  ]
+                },
+                "to": {
+                  "model": "Presupuesto",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "diferencia": {
+                  "column": "diferencia"
+                },
+                "idCategoriaPresupuesto": {
+                  "column": "id_categoria_presupuesto"
+                },
+                "idCosto": {
+                  "column": "id_costo"
+                },
+                "idNotificacion": {
+                  "column": "id_notificacion"
+                },
+                "idPresupuesto": {
+                  "column": "id_presupuesto"
+                },
+                "montoActual": {
+                  "column": "monto_actual"
+                },
+                "montoPlanificado": {
+                  "column": "monto_planificado"
+                },
+                "tipoEventoPresupuesto": {
+                  "column": "tipo_evento_presupuesto"
+                }
+              },
+              "namespaceId": "public",
+              "table": "nt_notificacion_presupuesto"
+            }
+          },
+          "PagoPresupuesto": {
+            "fields": {
+              "activo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "concepto": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 200
+                  }
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "fechaPago": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "idCosto": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idPago": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "monto": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/numeric@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 12,
+                    "scale": 2
+                  }
+                }
+              },
+              "numeroCuota": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "observacion": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 1000
+                  }
+                }
+              },
+              "tipo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "pr_tipo_pago",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "costo": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idCosto"
+                  ],
+                  "targetFields": [
+                    "idCosto"
+                  ]
+                },
+                "to": {
+                  "model": "CostoProveedor",
+                  "namespace": "public"
+                }
+              },
+              "documentos": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idPago"
+                  ],
+                  "targetFields": [
+                    "idPago"
+                  ]
+                },
+                "to": {
+                  "model": "DocumentoPago",
+                  "namespace": "public"
+                }
+              },
+              "seguimientos": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idPago"
+                  ],
+                  "targetFields": [
+                    "idPago"
+                  ]
+                },
+                "to": {
+                  "model": "SeguimientoPago",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "activo": {
+                  "column": "activo"
+                },
+                "concepto": {
+                  "column": "concepto"
+                },
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "fechaPago": {
+                  "column": "fecha_pago"
+                },
+                "idCosto": {
+                  "column": "id_costo"
+                },
+                "idPago": {
+                  "column": "id_pago"
+                },
+                "monto": {
+                  "column": "monto"
+                },
+                "numeroCuota": {
+                  "column": "numero_cuota"
+                },
+                "observacion": {
+                  "column": "observacion"
+                },
+                "tipo": {
+                  "column": "tipo"
+                },
+                "updatedAt": {
+                  "column": "updated_at"
+                }
+              },
+              "namespaceId": "public",
+              "table": "pr_pago"
             }
           },
           "PersonaNatural": {
@@ -5225,6 +6400,159 @@
               "table": "cr_plantilla_timing_tipo_ceremonia"
             }
           },
+          "Presupuesto": {
+            "fields": {
+              "activo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "idMatrimonio": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idPresupuesto": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "moneda": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "pv_moneda",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "montoTotal": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/numeric@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 12,
+                    "scale": 2
+                  }
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "categorias": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idPresupuesto"
+                  ],
+                  "targetFields": [
+                    "idPresupuesto"
+                  ]
+                },
+                "to": {
+                  "model": "CategoriaPresupuesto",
+                  "namespace": "public"
+                }
+              },
+              "costos": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idPresupuesto"
+                  ],
+                  "targetFields": [
+                    "idPresupuesto"
+                  ]
+                },
+                "to": {
+                  "model": "CostoProveedor",
+                  "namespace": "public"
+                }
+              },
+              "matrimonio": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idMatrimonio"
+                  ],
+                  "targetFields": [
+                    "idMatrimonio"
+                  ]
+                },
+                "to": {
+                  "model": "Matrimonio",
+                  "namespace": "public"
+                }
+              },
+              "notificaciones": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idPresupuesto"
+                  ],
+                  "targetFields": [
+                    "idPresupuesto"
+                  ]
+                },
+                "to": {
+                  "model": "NotificacionPresupuesto",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "activo": {
+                  "column": "activo"
+                },
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "idMatrimonio": {
+                  "column": "id_matrimonio"
+                },
+                "idPresupuesto": {
+                  "column": "id_presupuesto"
+                },
+                "moneda": {
+                  "column": "moneda"
+                },
+                "montoTotal": {
+                  "column": "monto_total"
+                },
+                "updatedAt": {
+                  "column": "updated_at"
+                }
+              },
+              "namespaceId": "public",
+              "table": "pr_presupuesto"
+            }
+          },
           "Proveedor": {
             "fields": {
               "activo": {
@@ -5635,6 +6963,21 @@
                 },
                 "to": {
                   "model": "CategoriaServicio",
+                  "namespace": "public"
+                }
+              },
+              "costos": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idProveedorServicio"
+                  ],
+                  "targetFields": [
+                    "idProveedorServicio"
+                  ]
+                },
+                "to": {
+                  "model": "CostoProveedor",
                   "namespace": "public"
                 }
               },
@@ -6766,6 +8109,110 @@
               },
               "namespaceId": "public",
               "table": "iv_rsvp_historial"
+            }
+          },
+          "SeguimientoPago": {
+            "fields": {
+              "activo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "detalle": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 1000
+                  }
+                }
+              },
+              "idPago": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idSeguimientoPago": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "tipo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 50
+                  }
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "pago": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idPago"
+                  ],
+                  "targetFields": [
+                    "idPago"
+                  ]
+                },
+                "to": {
+                  "model": "PagoPresupuesto",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "activo": {
+                  "column": "activo"
+                },
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "detalle": {
+                  "column": "detalle"
+                },
+                "idPago": {
+                  "column": "id_pago"
+                },
+                "idSeguimientoPago": {
+                  "column": "id_seguimiento_pago"
+                },
+                "tipo": {
+                  "column": "tipo"
+                },
+                "updatedAt": {
+                  "column": "updated_at"
+                }
+              },
+              "namespaceId": "public",
+              "table": "pr_seguimiento_pago"
             }
           },
           "SeguimientoProveedor": {
@@ -12376,6 +13823,1062 @@
               },
               "uniques": []
             },
+            "nt_notificacion_presupuesto": {
+              "checks": [
+                {
+                  "expression": "\"tipo_evento_presupuesto\" IN ('SOBREPRESUPUESTO_CATEGORIA', 'DESBALANCE_GENERAL', 'PAGO_PROXIMO_VENCER', 'PAGO_VENCIDO')",
+                  "name": "nt_notificacion_presupuesto_tipo_evento_presupuesto_ch_2246bebc",
+                  "prefix": "nt_notificacion_presupuesto_tipo_evento_presupuesto_ch"
+                }
+              ],
+              "columns": {
+                "diferencia": {
+                  "codecId": "pg/numeric@1",
+                  "nativeType": "numeric",
+                  "nullable": true,
+                  "typeParams": {
+                    "precision": 12,
+                    "scale": 2
+                  }
+                },
+                "id_categoria_presupuesto": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "id_costo": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": true
+                },
+                "id_notificacion": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_presupuesto": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "monto_actual": {
+                  "codecId": "pg/numeric@1",
+                  "nativeType": "numeric",
+                  "nullable": true,
+                  "typeParams": {
+                    "precision": 12,
+                    "scale": 2
+                  }
+                },
+                "monto_planificado": {
+                  "codecId": "pg/numeric@1",
+                  "nativeType": "numeric",
+                  "nullable": true,
+                  "typeParams": {
+                    "precision": 12,
+                    "scale": 2
+                  }
+                },
+                "tipo_evento_presupuesto": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "nt_tipo_evento_presupuesto",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_notificacion"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "nt_notificacion_presupuesto"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_notificacion"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "nt_notificacion"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_presupuesto"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "nt_notificacion_presupuesto"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_presupuesto"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pr_presupuesto"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_categoria_presupuesto"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "nt_notificacion_presupuesto"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_categoria_presupuesto"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pr_categoria_presupuesto"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_costo"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "nt_notificacion_presupuesto"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_costo"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pr_costo_proveedor"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "id_categoria_presupuesto"
+                  ],
+                  "name": "nt_notif_pres_categoria_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "tipo_evento_presupuesto"
+                  ],
+                  "name": "nt_notif_pres_evento_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_costo"
+                  ],
+                  "name": "nt_notificacion_presupuesto_id_costo_idx_731f3b2c",
+                  "prefix": "nt_notificacion_presupuesto_id_costo_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_presupuesto"
+                  ],
+                  "name": "nt_notificacion_presupuesto_id_presupuesto_idx_c44c4c50",
+                  "prefix": "nt_notificacion_presupuesto_id_presupuesto_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_notificacion"
+                ]
+              },
+              "uniques": []
+            },
+            "pr_categoria_presupuesto": {
+              "columns": {
+                "activo": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "codigo": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 50
+                  }
+                },
+                "created_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "id_categoria_presupuesto": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "expression": "autoincrement()",
+                    "kind": "function"
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "id_categoria_servicio": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "id_presupuesto": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "monto_asignado": {
+                  "codecId": "pg/numeric@1",
+                  "nativeType": "numeric",
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 12,
+                    "scale": 2
+                  }
+                },
+                "nombre": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 100
+                  }
+                },
+                "updated_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_presupuesto"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pr_categoria_presupuesto"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_presupuesto"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pr_presupuesto"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_categoria_servicio"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pr_categoria_presupuesto"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_categoria_servicio"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pv_categoria_servicio"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "id_categoria_servicio"
+                  ],
+                  "name": "pr_categoria_presupuesto_id_categoria_servicio_idx_1a4a76bb",
+                  "prefix": "pr_categoria_presupuesto_id_categoria_servicio_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_presupuesto"
+                  ],
+                  "name": "pr_categoria_presupuesto_id_presupuesto_idx_c44c4c50",
+                  "prefix": "pr_categoria_presupuesto_id_presupuesto_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_categoria_presupuesto"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "id_presupuesto",
+                    "codigo"
+                  ]
+                }
+              ]
+            },
+            "pr_compromiso_pago": {
+              "columns": {
+                "activo": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "concepto": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 200
+                  }
+                },
+                "created_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "fecha_vencimiento": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "id_compromiso": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_costo": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "monto_programado": {
+                  "codecId": "pg/numeric@1",
+                  "nativeType": "numeric",
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 12,
+                    "scale": 2
+                  }
+                },
+                "updated_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_costo"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pr_compromiso_pago"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_costo"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pr_costo_proveedor"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "fecha_vencimiento"
+                  ],
+                  "name": "pr_compromiso_pago_fecha_vencimiento_idx_e6b83cdf",
+                  "prefix": "pr_compromiso_pago_fecha_vencimiento_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_costo"
+                  ],
+                  "name": "pr_compromiso_pago_id_costo_idx_731f3b2c",
+                  "prefix": "pr_compromiso_pago_id_costo_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_compromiso"
+                ]
+              },
+              "uniques": []
+            },
+            "pr_costo_proveedor": {
+              "checks": [
+                {
+                  "expression": "\"estado\" IN ('PLANIFICADO', 'CONTRATADO', 'PAGADO', 'CANCELADO')",
+                  "name": "pr_costo_proveedor_estado_check_dca93239",
+                  "prefix": "pr_costo_proveedor_estado_check"
+                }
+              ],
+              "columns": {
+                "activo": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "concepto": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 200
+                  }
+                },
+                "created_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "estado": {
+                  "codecId": "pg/text@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": "PLANIFICADO"
+                  },
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "pr_estado_costo",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "id_categoria_presupuesto": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "id_costo": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_matrimonio_proveedor": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": true
+                },
+                "id_presupuesto": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_proveedor_servicio": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "monto_estimado": {
+                  "codecId": "pg/numeric@1",
+                  "nativeType": "numeric",
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 12,
+                    "scale": 2
+                  }
+                },
+                "monto_real": {
+                  "codecId": "pg/numeric@1",
+                  "nativeType": "numeric",
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 12,
+                    "scale": 2
+                  }
+                },
+                "updated_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_presupuesto"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pr_costo_proveedor"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_presupuesto"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pr_presupuesto"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_categoria_presupuesto"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pr_costo_proveedor"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_categoria_presupuesto"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pr_categoria_presupuesto"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_matrimonio_proveedor"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pr_costo_proveedor"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_matrimonio_proveedor"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pv_matrimonio_proveedor"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_proveedor_servicio"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pr_costo_proveedor"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_proveedor_servicio"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pv_proveedor_servicio"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "id_categoria_presupuesto"
+                  ],
+                  "name": "pr_costo_categoria_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_matrimonio_proveedor"
+                  ],
+                  "name": "pr_costo_proveedor_id_matrimonio_proveedor_idx_f776101f",
+                  "prefix": "pr_costo_proveedor_id_matrimonio_proveedor_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_presupuesto"
+                  ],
+                  "name": "pr_costo_proveedor_id_presupuesto_idx_c44c4c50",
+                  "prefix": "pr_costo_proveedor_id_presupuesto_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_proveedor_servicio"
+                  ],
+                  "name": "pr_costo_proveedor_id_proveedor_servicio_idx_00ef1a5c",
+                  "prefix": "pr_costo_proveedor_id_proveedor_servicio_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_costo"
+                ]
+              },
+              "uniques": []
+            },
+            "pr_documento_pago": {
+              "columns": {
+                "activo": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "created_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "id_documento_pago": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_pago": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "nombre": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 200
+                  }
+                },
+                "tipo": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 100
+                  }
+                },
+                "updated_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "url": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 500
+                  }
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_pago"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pr_documento_pago"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_pago"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pr_pago"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "id_pago"
+                  ],
+                  "name": "pr_documento_pago_id_pago_idx_b7132fb9",
+                  "prefix": "pr_documento_pago_id_pago_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_documento_pago"
+                ]
+              },
+              "uniques": []
+            },
+            "pr_pago": {
+              "checks": [
+                {
+                  "expression": "\"tipo\" IN ('PAGO_INICIAL', 'CUOTA', 'PAGO_FINAL')",
+                  "name": "pr_pago_tipo_check_fdf46176",
+                  "prefix": "pr_pago_tipo_check"
+                }
+              ],
+              "columns": {
+                "activo": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "concepto": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 200
+                  }
+                },
+                "created_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "fecha_pago": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "id_costo": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_pago": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "monto": {
+                  "codecId": "pg/numeric@1",
+                  "nativeType": "numeric",
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 12,
+                    "scale": 2
+                  }
+                },
+                "numero_cuota": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "observacion": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 1000
+                  }
+                },
+                "tipo": {
+                  "codecId": "pg/text@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": "CUOTA"
+                  },
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "pr_tipo_pago",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "updated_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_costo"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pr_pago"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_costo"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pr_costo_proveedor"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "fecha_pago"
+                  ],
+                  "name": "pr_pago_fecha_pago_idx_469590e1",
+                  "prefix": "pr_pago_fecha_pago_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_costo"
+                  ],
+                  "name": "pr_pago_id_costo_idx_731f3b2c",
+                  "prefix": "pr_pago_id_costo_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_pago"
+                ]
+              },
+              "uniques": []
+            },
+            "pr_presupuesto": {
+              "checks": [
+                {
+                  "expression": "\"moneda\" IN ('PEN', 'USD')",
+                  "name": "pr_presupuesto_moneda_check_5b6558d3",
+                  "prefix": "pr_presupuesto_moneda_check"
+                }
+              ],
+              "columns": {
+                "activo": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "created_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "id_matrimonio": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_presupuesto": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "moneda": {
+                  "codecId": "pg/text@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": "PEN"
+                  },
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "pv_moneda",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "monto_total": {
+                  "codecId": "pg/numeric@1",
+                  "nativeType": "numeric",
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 12,
+                    "scale": 2
+                  }
+                },
+                "updated_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_matrimonio"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pr_presupuesto"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_matrimonio"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_matrimonio"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "id_matrimonio"
+                  ],
+                  "name": "pr_presupuesto_id_matrimonio_idx_97ab526e",
+                  "prefix": "pr_presupuesto_id_matrimonio_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_presupuesto"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "id_matrimonio"
+                  ]
+                }
+              ]
+            },
+            "pr_seguimiento_pago": {
+              "columns": {
+                "activo": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "created_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "detalle": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 1000
+                  }
+                },
+                "id_pago": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_seguimiento_pago": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "tipo": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 50
+                  }
+                },
+                "updated_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_pago"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pr_seguimiento_pago"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_pago"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pr_pago"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "id_pago"
+                  ],
+                  "name": "pr_seguimiento_pago_id_pago_idx_b7132fb9",
+                  "prefix": "pr_seguimiento_pago_id_pago_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_seguimiento_pago"
+                ]
+              },
+              "uniques": []
+            },
             "pv_categoria_servicio": {
               "columns": {
                 "activo": {
@@ -13921,6 +16424,32 @@
                 "HITO_VENCIDO"
               ]
             },
+            "nt_tipo_evento_presupuesto": {
+              "kind": "valueSet",
+              "values": [
+                "SOBREPRESUPUESTO_CATEGORIA",
+                "DESBALANCE_GENERAL",
+                "PAGO_PROXIMO_VENCER",
+                "PAGO_VENCIDO"
+              ]
+            },
+            "pr_estado_costo": {
+              "kind": "valueSet",
+              "values": [
+                "PLANIFICADO",
+                "CONTRATADO",
+                "PAGADO",
+                "CANCELADO"
+              ]
+            },
+            "pr_tipo_pago": {
+              "kind": "valueSet",
+              "values": [
+                "PAGO_INICIAL",
+                "CUOTA",
+                "PAGO_FINAL"
+              ]
+            },
             "pv_estado_reserva": {
               "kind": "valueSet",
               "values": [
@@ -13979,10 +16508,10 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "e1522deea1d0b78547ff8331bf9e3cfe3736c787d6a60900f952faff87450d09"
+    "storageHash": "d040238efa33e640ecad81edb12a0f5e57d2c422daef0a141c8ed171ed394143"
   },
   "execution": {
-    "executionHash": "a965c429ee0f1cc1896f3ef259f27f187f9d308d9c792aec667c9c43848b1197",
+    "executionHash": "d1ca212b765aa6484f916c98b96eea6d965af2b9ac840559cb97d9c020b9a35f",
     "mutations": {
       "defaults": [
         {
@@ -14407,6 +16936,177 @@
             "column": "updated_at",
             "namespace": "public",
             "table": "nt_notificacion"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updated_at",
+            "namespace": "public",
+            "table": "pr_categoria_presupuesto"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id_compromiso",
+            "namespace": "public",
+            "table": "pr_compromiso_pago"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updated_at",
+            "namespace": "public",
+            "table": "pr_compromiso_pago"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id_costo",
+            "namespace": "public",
+            "table": "pr_costo_proveedor"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updated_at",
+            "namespace": "public",
+            "table": "pr_costo_proveedor"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id_documento_pago",
+            "namespace": "public",
+            "table": "pr_documento_pago"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updated_at",
+            "namespace": "public",
+            "table": "pr_documento_pago"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id_pago",
+            "namespace": "public",
+            "table": "pr_pago"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updated_at",
+            "namespace": "public",
+            "table": "pr_pago"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id_presupuesto",
+            "namespace": "public",
+            "table": "pr_presupuesto"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updated_at",
+            "namespace": "public",
+            "table": "pr_presupuesto"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id_seguimiento_pago",
+            "namespace": "public",
+            "table": "pr_seguimiento_pago"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updated_at",
+            "namespace": "public",
+            "table": "pr_seguimiento_pago"
           }
         },
         {
