@@ -8,6 +8,7 @@ import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_spacing.dart';
 import '../../../../core/widgets/buttons/app_icon_button.dart';
 import '../../../../core/widgets/feedback/app_snackbar.dart';
+import '../../../../core/widgets/overlays/app_bottom_sheet.dart';
 import '../../../../core/widgets/navigation/app_bottom_navigation.dart';
 import '../../../../core/widgets/navigation/app_navigation_item.dart';
 import '../../../../core/widgets/navigation/app_navigation_rail.dart';
@@ -16,6 +17,8 @@ import '../../../../core/widgets/navigation/app_top_bar.dart';
 import '../../../../app/router/route_names.dart';
 import '../../infrastructure/auth_api.dart';
 import '../../infrastructure/auth_session.dart';
+import '../../../cronograma/infrastructure/cronograma_api.dart';
+import '../../../presupuesto/infrastructure/presupuesto_api.dart';
 
 class InicioPage extends StatefulWidget {
   const InicioPage({
@@ -45,6 +48,7 @@ class _InicioPageState extends State<InicioPage> {
   static bool _sidebarContraido = false;
   int _seccionActual = 0;
   String? _nombreSesion;
+  List<Map<String, dynamic>> _notificacionesPresupuesto = const [];
 
   static const _itemsBase = [
     AppNavigationItem(
@@ -75,6 +79,7 @@ class _InicioPageState extends State<InicioPage> {
     super.initState();
     _seccionActual = widget.seccion;
     _cargarNombreSesion();
+    _cargarNotificaciones();
     if (widget.contenidoExtra == null &&
         widget.seccion != 1 &&
         !AuthSession.planificacionConfirmada) {
@@ -95,6 +100,90 @@ class _InicioPageState extends State<InicioPage> {
     if (mounted && nombre != null && nombre.trim().isNotEmpty) {
       setState(() => _nombreSesion = nombre.trim());
     }
+  }
+
+  Future<void> _cargarNotificaciones() async {
+    final proyecto = AuthSession.idProyectoActivo;
+    if (proyecto == null) return;
+    try {
+      final raw = await CronogramaApi().obtenerMatrimonio(proyecto);
+      final matrimonio = raw['matrimonio'] is Map
+          ? Map<String, dynamic>.from(raw['matrimonio'] as Map)
+          : raw;
+      final id = (matrimonio['idMatrimonio'] ?? matrimonio['id_matrimonio'])
+          ?.toString();
+      if (id == null || id.isEmpty) return;
+      final items = await PresupuestoApi().notificaciones(id);
+      if (mounted) setState(() => _notificacionesPresupuesto = items);
+    } catch (_) {
+      // Las alertas no deben impedir navegar si la conexion esta temporalmente
+      // indisponible; el panel permite volver a intentarlo.
+    }
+  }
+
+  Future<void> _abrirNotificaciones() async {
+    await _cargarNotificaciones();
+    if (!mounted) return;
+    final pendientes = _notificacionesPresupuesto
+        .where((item) => item['leida'] != true)
+        .toList();
+    await AppBottomSheet.show<void>(
+      context,
+      title: 'Notificaciones',
+      description: pendientes.isEmpty
+          ? 'No tienes alertas financieras pendientes.'
+          : '${pendientes.length} alerta(s) pendiente(s).',
+      child: _notificacionesPresupuesto.isEmpty
+          ? const Padding(
+              padding: EdgeInsets.symmetric(vertical: 24),
+              child: Center(child: Text('No hay notificaciones por mostrar.')),
+            )
+          : Column(
+              children: _notificacionesPresupuesto.map((item) {
+                final leida = item['leida'] == true;
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 8),
+                  decoration: BoxDecoration(
+                    color: leida ? null : const Color(0xFFF4F0FB),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: ListTile(
+                    leading: Icon(
+                      leida
+                          ? Icons.notifications_none_outlined
+                          : Icons.notifications_active_outlined,
+                      color: AppColors.primary,
+                    ),
+                    title: Text(item['titulo']?.toString() ?? 'Alerta'),
+                    subtitle: Text(item['mensaje']?.toString() ?? ''),
+                    trailing: leida
+                        ? null
+                        : TextButton(
+                            onPressed: () async {
+                              final proyecto = AuthSession.idProyectoActivo;
+                              if (proyecto == null) return;
+                              final raw = await CronogramaApi().obtenerMatrimonio(proyecto);
+                              final matrimonio = raw['matrimonio'] is Map
+                                  ? Map<String, dynamic>.from(raw['matrimonio'] as Map)
+                                  : raw;
+                              final id = (matrimonio['idMatrimonio'] ??
+                                      matrimonio['id_matrimonio'])
+                                  ?.toString();
+                              if (id == null) return;
+                              await PresupuestoApi().leerNotificacion(
+                                id,
+                                item['idNotificacion'].toString(),
+                              );
+                              await _cargarNotificaciones();
+                              if (mounted) Navigator.pop(context);
+                            },
+                            child: const Text('Leida'),
+                          ),
+                  ),
+                );
+              }).toList(),
+            ),
+    );
   }
 
   String get _nombreCompleto {
@@ -255,10 +344,28 @@ class _InicioPageState extends State<InicioPage> {
   );
 
   List<Widget> _accionesAppBar() => [
-    AppIconButton(
-      icon: Icons.notifications_none_outlined,
-      tooltip: 'Notificaciones',
-      onPressed: () {},
+    Stack(
+      clipBehavior: Clip.none,
+      children: [
+        AppIconButton(
+          icon: Icons.notifications_none_outlined,
+          tooltip: 'Notificaciones',
+          onPressed: _abrirNotificaciones,
+        ),
+        if (_notificacionesPresupuesto.any((item) => item['leida'] != true))
+          Positioned(
+            top: 7,
+            right: 7,
+            child: Container(
+              width: 8,
+              height: 8,
+              decoration: const BoxDecoration(
+                color: AppColors.error,
+                shape: BoxShape.circle,
+              ),
+            ),
+          ),
+      ],
     ),
     PopupMenuButton<_OpcionPerfil>(
       tooltip: 'Menu de perfil',

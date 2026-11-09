@@ -8,13 +8,17 @@ import {
 import { Temporal } from 'temporal-polyfill';
 
 import { PrismaService } from '../../../infrastructure/database/prisma/prisma.service';
+import { GestionarActividadesUseCase } from '../../cronograma/application/use-cases/gestionar-cronograma.use-cases';
 import * as D from './dto/presupuesto.dto';
 
 type Db = any;
 
 @Injectable()
 export class PresupuestoService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly actividades: GestionarActividadesUseCase,
+  ) {}
   private get db(): Db {
     return this.prisma.client.orm.public;
   }
@@ -486,15 +490,32 @@ export class PresupuestoService {
     dto: D.CrearCompromisoPagoDto,
     idUsuario: number,
   ) {
-    await this.contexto(idMatrimonio, idUsuario);
+    const { proyecto } = await this.contexto(idMatrimonio, idUsuario);
     const presupuesto = await this.presupuesto(idMatrimonio);
     await this.costo(idCosto, presupuesto.idPresupuesto);
-    return this.db.CompromisoPago.create({
+    const compromiso = await this.db.CompromisoPago.create({
       ...dto,
       fechaVencimiento: this.fecha(dto.fechaVencimiento),
       idCosto,
       activo: true,
     } as never);
+    // Un vencimiento financiero es una actividad operativa del proyecto, sin
+    // requerir un hito. El cronograma conserva su propia instancia editable.
+    await this.actividades.crear(
+      proyecto.idProyecto,
+      {
+        nombre: `Pago: ${dto.concepto}`,
+        categoria: 'PRESUPUESTO',
+        descripcion: `Compromiso de pago ${compromiso.idCompromiso}.`,
+        fechaInicio: dto.fechaVencimiento,
+        fechaFin: dto.fechaVencimiento,
+        prioridad: 'MEDIA' as never,
+        estado: 'PENDIENTE' as never,
+        orden: 0,
+      },
+      idUsuario,
+    );
+    return compromiso;
   }
   async compromisos(
     idMatrimonio: string,
@@ -1004,7 +1025,27 @@ export class PresupuestoService {
           }).update({ activo: false } as never);
         continue;
       }
-      if (previas.length) continue;
+      if (previas.length) {
+        // La alerta representa el estado vigente, no un historial congelado.
+        // Si el monto cambia, se actualiza la misma alerta activa.
+        for (const previa of previas) {
+          await this.db.Notificacion.where({
+            idNotificacion: previa.idNotificacion as never,
+          }).update({
+            titulo: datos.titulo,
+            mensaje: datos.mensaje,
+            leida: false,
+          } as never);
+          await this.db.NotificacionPresupuesto.where({
+            idNotificacion: previa.idNotificacion as never,
+          }).update({
+            montoPlanificado: datos.montoPlanificado,
+            montoActual: datos.montoActual,
+            diferencia: datos.diferencia,
+          } as never);
+        }
+        continue;
+      }
       const n = await this.db.Notificacion.create({
         idUsuarioDestino,
         idProyecto,

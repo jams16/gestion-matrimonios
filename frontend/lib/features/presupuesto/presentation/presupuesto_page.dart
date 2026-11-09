@@ -29,7 +29,7 @@ class _PresupuestoPageState extends ConsumerState<PresupuestoPage>
   @override
   void initState() {
     super.initState();
-    _tabs = TabController(length: 5, vsync: this)..addListener(() {
+    _tabs = TabController(length: 4, vsync: this)..addListener(() {
       if (mounted && _tab != _tabs.index) setState(() => _tab = _tabs.index);
     });
   }
@@ -74,11 +74,10 @@ class _PresupuestoPageState extends ConsumerState<PresupuestoPage>
             const SizedBox(height: AppSpacing.md),
             _Resumen(resumen: ref.watch(presupuestoResumenProvider(m))),
             const SizedBox(height: AppSpacing.lg),
-            AppTabs(controller: _tabs, isScrollable: true, tabs: const [
+            AppTabs(controller: _tabs, tabs: const [
               AppTabItem(label: 'Costos', icon: Icons.receipt_long_outlined),
               AppTabItem(label: 'Categorias', icon: Icons.category_outlined),
               AppTabItem(label: 'Pagos', icon: Icons.event_note_outlined),
-              AppTabItem(label: 'Alertas', icon: Icons.notifications_outlined),
               AppTabItem(label: 'Reportes', icon: Icons.assessment_outlined),
             ]),
             const Divider(height: 1, thickness: 1, color: Color(0xFF29252F)),
@@ -89,7 +88,6 @@ class _PresupuestoPageState extends ConsumerState<PresupuestoPage>
                 0 => _Costos(matrimonio: m, refresh: () => _refresh(m), run: _run),
                 1 => _Categorias(matrimonio: m, refresh: () => _refresh(m), run: _run),
                 2 => _Pagos(matrimonio: m, refresh: () => _refresh(m), run: _run),
-                3 => _Alertas(matrimonio: m, refresh: () => _refresh(m), run: _run),
                 _ => _Reportes(matrimonio: m, run: _run),
               },
             ),

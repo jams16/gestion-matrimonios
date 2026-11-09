@@ -37,6 +37,10 @@ import { CronogramaController } from './presentation/controllers/cronograma.cont
     ConfirmarPlanificacionCronogramaUseCase,
     ReprogramarActividadUseCase,
   ],
-  exports: [CronogramaDateService, GenerarCronogramaDesdePlantillaUseCase],
+  exports: [
+    CronogramaDateService,
+    GenerarCronogramaDesdePlantillaUseCase,
+    GestionarActividadesUseCase,
+  ],
 })
 export class CronogramaModule {}
