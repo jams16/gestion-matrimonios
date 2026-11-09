@@ -70,7 +70,7 @@ class GestionPage extends ConsumerWidget {
             elevated: true,
             backgroundColor: AppColors.surface,
             borderColor: AppColors.primary.withValues(alpha: 0.28),
-            onTap: () {},
+            onTap: () => context.go('/presupuesto'),
             child: const Row(
               children: [
                 CircleAvatar(

@@ -14,6 +14,7 @@ import '../../features/cronograma/presentation/pages/planificar_matrimonio_page.
 import '../../features/invitados/presentation/gestion_invitados_pages.dart';
 import '../../features/proveedores/presentation/proveedores_page.dart';
 import '../../features/riesgos/presentation/riesgos_page.dart';
+import '../../features/presupuesto/presentation/presupuesto_page.dart';
 import '../../features/autenticacion/infrastructure/auth_session.dart';
 import 'route_names.dart';
 
@@ -68,6 +69,19 @@ final appRouter = GoRouter(
           contenidoGestion: idProyecto == null
               ? null
               : ListaInvitadosPage(idProyecto: idProyecto),
+        );
+      },
+    ),
+    GoRoute(
+      path: '/presupuesto',
+      builder: (context, state) {
+        final idProyecto = AuthSession.idProyectoActivo;
+        return InicioPage(
+          nombre: state.extra,
+          seccion: 2,
+          contenidoGestion: idProyecto == null
+              ? const Center(child: Text('Selecciona un matrimonio para ver el presupuesto.'))
+              : PresupuestoPage(idProyecto: idProyecto),
         );
       },
     ),
