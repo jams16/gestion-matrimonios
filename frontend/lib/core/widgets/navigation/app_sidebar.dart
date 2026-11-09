@@ -14,6 +14,7 @@ class AppSidebar extends StatelessWidget {
     this.backgroundColor,
     this.indicatorColor,
     this.selectedForegroundColor,
+    this.sinSeleccion = false,
   });
 
   final List<AppNavigationItem> items;
@@ -28,6 +29,7 @@ class AppSidebar extends StatelessWidget {
   final Color? backgroundColor;
   final Color? indicatorColor;
   final Color? selectedForegroundColor;
+  final bool sinSeleccion;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +38,7 @@ class AppSidebar extends StatelessWidget {
       child: NavigationDrawer(
         backgroundColor: backgroundColor,
         indicatorColor: indicatorColor,
-        selectedIndex: selectedIndex,
+        selectedIndex: sinSeleccion ? null : selectedIndex,
         onDestinationSelected: onDestinationSelected,
         children: [
           if (header != null)
@@ -47,7 +49,7 @@ class AppSidebar extends StatelessWidget {
 
           ...items.asMap().entries.map((entry) {
             final item = entry.value;
-            final isSelected = entry.key == selectedIndex;
+            final isSelected = !sinSeleccion && entry.key == selectedIndex;
             final color = isSelected ? selectedForegroundColor : null;
             // NavigationDrawerDestination must stay a direct child of
             // NavigationDrawer. Wrapping it in Opacity breaks the inherited

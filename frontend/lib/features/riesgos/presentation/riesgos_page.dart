@@ -164,7 +164,7 @@ class _RiesgosPageState extends ConsumerState<RiesgosPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFDFBFF),
+      backgroundColor: AppColors.surface,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _guardarRiesgo(),
         icon: const Icon(Icons.add_alert_outlined),

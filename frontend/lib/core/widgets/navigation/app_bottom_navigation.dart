@@ -12,6 +12,7 @@ class AppBottomNavigation extends StatelessWidget {
     this.indicatorColor,
     this.selectedForegroundColor,
     this.selectedLabelColor,
+    this.sinSeleccion = false,
   });
 
   final List<AppNavigationItem> items;
@@ -22,6 +23,7 @@ class AppBottomNavigation extends StatelessWidget {
   final Color? indicatorColor;
   final Color? selectedForegroundColor;
   final Color? selectedLabelColor;
+  final bool sinSeleccion;
 
   @override
   Widget build(BuildContext context) {
@@ -34,9 +36,11 @@ class AppBottomNavigation extends StatelessWidget {
       child: NavigationBar(
         selectedIndex: selectedIndex,
         onDestinationSelected: onDestinationSelected,
-        labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+        labelBehavior: sinSeleccion
+            ? NavigationDestinationLabelBehavior.alwaysHide
+            : NavigationDestinationLabelBehavior.onlyShowSelected,
         backgroundColor: backgroundColor,
-        indicatorColor: indicatorColor,
+        indicatorColor: sinSeleccion ? Colors.transparent : indicatorColor,
         destinations: items
             .map(
               (item) => NavigationDestination(
@@ -44,7 +48,12 @@ class AppBottomNavigation extends StatelessWidget {
                   opacity: item.disabled ? .42 : 1,
                   child: Icon(item.disabled ? Icons.lock_outline : item.icon),
                 ),
-                selectedIcon: Opacity(
+                selectedIcon: sinSeleccion
+                    ? Opacity(
+                        opacity: item.disabled ? .42 : 1,
+                        child: Icon(item.disabled ? Icons.lock_outline : item.icon),
+                      )
+                    : Opacity(
                   opacity: item.disabled ? .42 : 1,
                   child: Icon(
                     item.disabled

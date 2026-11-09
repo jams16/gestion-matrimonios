@@ -26,6 +26,7 @@ class InicioPage extends StatefulWidget {
     this.contenidoGestion,
     this.contenidoProveedores,
     this.contenidoExtra,
+    this.sinSeleccionNavegacion = false,
   });
 
   final Object? nombre;
@@ -34,6 +35,7 @@ class InicioPage extends StatefulWidget {
   final Widget? contenidoGestion;
   final Widget? contenidoProveedores;
   final Widget? contenidoExtra;
+  final bool sinSeleccionNavegacion;
 
   @override
   State<InicioPage> createState() => _InicioPageState();
@@ -353,6 +355,7 @@ class _InicioPageState extends State<InicioPage> {
           selectedForegroundColor: Colors.white,
           items: _items,
           selectedIndex: _seccionActual,
+          sinSeleccion: widget.sinSeleccionNavegacion,
           onDestinationSelected: _seleccionar,
           header: Row(
             children: [
@@ -380,6 +383,7 @@ class _InicioPageState extends State<InicioPage> {
         selectedLabelColor: AppColors.textPrimary,
         items: _items,
         selectedIndex: _seccionActual,
+        sinSeleccion: widget.sinSeleccionNavegacion,
         onDestinationSelected: _seleccionar,
         leading: IconButton(
           tooltip: 'Desplegar menu',
@@ -413,6 +417,7 @@ class _InicioPageState extends State<InicioPage> {
                 selectedLabelColor: AppColors.textPrimary,
                 items: _items,
                 selectedIndex: _seccionActual,
+                sinSeleccion: widget.sinSeleccionNavegacion,
                 onDestinationSelected: _seleccionar,
               ),
             ),
@@ -435,6 +440,7 @@ class _InicioPageState extends State<InicioPage> {
               selectedLabelColor: AppColors.textPrimary,
               items: _items,
               selectedIndex: _seccionActual,
+              sinSeleccion: widget.sinSeleccionNavegacion,
               onDestinationSelected: _seleccionar,
             )
           : null,

@@ -1043,7 +1043,14 @@ class _ProveedorForm {
             AppButton(
               label: 'Guardar',
               onPressed: () {
-                if (nombre.text.trim().isEmpty) return;
+                if (nombre.text.trim().isEmpty) {
+                  AppSnackbar.show(
+                    context,
+                    message: 'Ingresa el nombre comercial del proveedor.',
+                    type: AppSnackbarType.info,
+                  );
+                  return;
+                }
                 final idVinculado = int.tryParse(identificador.text.trim());
                 final costo = num.tryParse(costoServicio.text.trim());
                 final tieneServicio =
@@ -1054,6 +1061,12 @@ class _ProveedorForm {
                     (categoriaInicial == null ||
                         servicio.text.trim().isEmpty ||
                         costo == null)) {
+                  AppSnackbar.show(
+                    context,
+                    message:
+                        'Completa categoría, servicio y costo; o deja los tres campos vacíos.',
+                    type: AppSnackbarType.info,
+                  );
                   return;
                 }
                 Navigator.pop(dialog, {

@@ -15,6 +15,7 @@ class AppNavigationRail extends StatelessWidget {
     this.indicatorColor,
     this.selectedForegroundColor,
     this.selectedLabelColor,
+    this.sinSeleccion = false,
   });
 
   final List<AppNavigationItem> items;
@@ -30,11 +31,12 @@ class AppNavigationRail extends StatelessWidget {
   final Color? indicatorColor;
   final Color? selectedForegroundColor;
   final Color? selectedLabelColor;
+  final bool sinSeleccion;
 
   @override
   Widget build(BuildContext context) {
     return NavigationRail(
-      selectedIndex: selectedIndex,
+      selectedIndex: sinSeleccion ? null : selectedIndex,
       onDestinationSelected: onDestinationSelected,
       extended: extended,
       leading: leading,

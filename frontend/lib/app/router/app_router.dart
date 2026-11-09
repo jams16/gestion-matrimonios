@@ -89,6 +89,7 @@ final appRouter = GoRouter(
       builder: (context, state) {
         final idProyecto = AuthSession.idProyectoActivo;
         return InicioPage(
+          sinSeleccionNavegacion: true,
           contenidoExtra: idProyecto == null
               ? const Center(child: Text('Selecciona un matrimonio para ver sus riesgos.'))
               : RiesgosPage(idProyecto: idProyecto),
