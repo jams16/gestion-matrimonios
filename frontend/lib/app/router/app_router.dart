@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../ui_kit/ui_kit_page.dart';
@@ -12,6 +13,7 @@ import '../../features/cronograma/presentation/pages/cronograma_page.dart';
 import '../../features/cronograma/presentation/pages/planificar_matrimonio_page.dart';
 import '../../features/invitados/presentation/gestion_invitados_pages.dart';
 import '../../features/proveedores/presentation/proveedores_page.dart';
+import '../../features/riesgos/presentation/riesgos_page.dart';
 import '../../features/autenticacion/infrastructure/auth_session.dart';
 import 'route_names.dart';
 
@@ -79,6 +81,17 @@ final appRouter = GoRouter(
           contenidoProveedores: idProyecto == null
               ? null
               : ProveedoresPage(idProyecto: idProyecto),
+        );
+      },
+    ),
+    GoRoute(
+      path: '/riesgos',
+      builder: (context, state) {
+        final idProyecto = AuthSession.idProyectoActivo;
+        return InicioPage(
+          contenidoExtra: idProyecto == null
+              ? const Center(child: Text('Selecciona un matrimonio para ver sus riesgos.'))
+              : RiesgosPage(idProyecto: idProyecto),
         );
       },
     ),

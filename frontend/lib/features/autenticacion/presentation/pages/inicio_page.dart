@@ -25,6 +25,7 @@ class InicioPage extends StatefulWidget {
     this.contenidoPlan,
     this.contenidoGestion,
     this.contenidoProveedores,
+    this.contenidoExtra,
   });
 
   final Object? nombre;
@@ -32,6 +33,7 @@ class InicioPage extends StatefulWidget {
   final Widget? contenidoPlan;
   final Widget? contenidoGestion;
   final Widget? contenidoProveedores;
+  final Widget? contenidoExtra;
 
   @override
   State<InicioPage> createState() => _InicioPageState();
@@ -64,7 +66,6 @@ class _InicioPageState extends State<InicioPage> {
       selectedIcon: Icons.storefront,
     ),
   ];
-  static const _titulos = ['Home', 'Plan', 'Gestion', 'Proveedores'];
   static const _rutas = ['/home', '/plan', '/gestion', '/proveedores'];
 
   @override
@@ -72,7 +73,9 @@ class _InicioPageState extends State<InicioPage> {
     super.initState();
     _seccionActual = widget.seccion;
     _cargarNombreSesion();
-    if (widget.seccion != 1 && !AuthSession.planificacionConfirmada) {
+    if (widget.contenidoExtra == null &&
+        widget.seccion != 1 &&
+        !AuthSession.planificacionConfirmada) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
         final idProyecto = AuthSession.idProyectoActivo;
@@ -166,6 +169,9 @@ class _InicioPageState extends State<InicioPage> {
   }
 
   Widget _contenido() {
+    if (widget.contenidoExtra != null) {
+      return widget.contenidoExtra!;
+    }
     if (_seccionActual == 1 && widget.contenidoPlan != null) {
       return widget.contenidoPlan!;
     }
@@ -265,6 +271,9 @@ class _InicioPageState extends State<InicioPage> {
         if (opcion == _OpcionPerfil.cerrarSesion) _cerrarSesion();
         if (opcion == _OpcionPerfil.misBodas) {
           context.go(RouteNames.matrimonios, extra: true);
+        }
+        if (opcion == _OpcionPerfil.riesgos) {
+          context.go('/riesgos');
         }
       },
       itemBuilder: (context) => [
@@ -387,7 +396,7 @@ class _InicioPageState extends State<InicioPage> {
     return Scaffold(
       backgroundColor: AppColors.surface,
       appBar: AppTopBar(
-        title: _titulos[_seccionActual],
+        title: AuthSession.nombreProyectoActivo ?? 'WeddingApp',
         backgroundColor: AppColors.primary,
         foregroundColor: Colors.white,
         actions: _accionesAppBar(),

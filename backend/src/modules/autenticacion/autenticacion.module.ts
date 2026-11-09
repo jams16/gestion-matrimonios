@@ -29,7 +29,7 @@ import { JwtAccessGuard } from './presentation/guards/jwt-access.guard';
         secret: config.getOrThrow<string>('JWT_ACCESS_SECRET'),
         signOptions: {
           expiresIn: (config.get<string>('JWT_ACCESS_EXPIRATION') ??
-            '15m') as never,
+            '1h') as never,
         },
       }),
     }),

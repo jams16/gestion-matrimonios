@@ -10,7 +10,7 @@ const _apiBaseUrl = String.fromEnvironment(
 /// Adaptador REST del cronograma. Todas las reglas de precedencia, fechas y
 /// conflictos siguen perteneciendo al backend.
 class CronogramaApi {
-  CronogramaApi() : _dio = Dio(BaseOptions(baseUrl: _apiBaseUrl));
+  CronogramaApi() : _dio = AuthSession.crearClienteAutenticado(baseUrl: _apiBaseUrl);
 
   final Dio _dio;
 

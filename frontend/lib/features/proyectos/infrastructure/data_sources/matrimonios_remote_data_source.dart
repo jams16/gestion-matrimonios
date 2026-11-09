@@ -7,7 +7,8 @@ const _apiBaseUrl = String.fromEnvironment(
 );
 
 class MatrimoniosRemoteDataSource {
-  MatrimoniosRemoteDataSource() : _dio = Dio(BaseOptions(baseUrl: _apiBaseUrl));
+  MatrimoniosRemoteDataSource()
+    : _dio = AuthSession.crearClienteAutenticado(baseUrl: _apiBaseUrl);
 
   final Dio _dio;
 

@@ -8,15 +8,25 @@ class AppTabItem {
 }
 
 class AppTabs extends StatelessWidget {
-  const AppTabs({super.key, required this.tabs, this.isScrollable = false});
+  const AppTabs({
+    super.key,
+    required this.tabs,
+    this.isScrollable = false,
+    this.controller,
+    this.onTap,
+  });
 
   final List<AppTabItem> tabs;
 
   final bool isScrollable;
+  final TabController? controller;
+  final ValueChanged<int>? onTap;
 
   @override
   Widget build(BuildContext context) {
     return TabBar(
+      controller: controller,
+      onTap: onTap,
       isScrollable: isScrollable,
       tabAlignment: isScrollable ? TabAlignment.start : TabAlignment.fill,
       tabs: tabs

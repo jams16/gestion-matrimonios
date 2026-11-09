@@ -45,8 +45,8 @@ export class JwtAccessGuard implements CanActivate {
       const usuario = await this.repository.obtenerUsuario(payload.sub);
       const ahora = Temporal.Now.instant();
       const inactividad = milisegundos(
-        this.config.get<string>('SESSION_INACTIVITY_TIMEOUT') ?? '30m',
-        30 * 60e3,
+        this.config.get<string>('SESSION_INACTIVITY_TIMEOUT') ?? '1h',
+        60 * 60e3,
       );
       if (
         !sesion ||

@@ -140,6 +140,7 @@ class _Layout extends StatelessWidget {
                             } else {
                               AuthSession.seleccionarProyecto(
                                 idProyecto: items[index].idProyecto,
+                                nombreProyecto: items[index].nombreProyecto,
                                 planificacionConfirmada:
                                     items[index].faseCodigo ==
                                         'PLANIFICACION' ||

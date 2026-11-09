@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -492,12 +493,17 @@ class _ResumenProveedores extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppCard(
+    return Container(
+      width: double.infinity,
       padding: const EdgeInsets.all(AppSpacing.lg),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF4F0FB),
+        borderRadius: BorderRadius.circular(16),
+      ),
       child: proveedores.when(
-        loading: () => const SizedBox(
-          height: 54,
-          child: Center(child: LinearProgressIndicator()),
+        loading: () => const LinearProgressIndicator(
+          color: AppColors.primary,
+          backgroundColor: Colors.white,
         ),
         error: (_, _) =>
             const Text('No se pudo calcular el resumen de proveedores.'),
@@ -510,16 +516,18 @@ class _ResumenProveedores extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'Proveedores del matrimonio',
+                'Proveedores',
                 style: TextStyle(fontWeight: FontWeight.w800),
               ),
-              const SizedBox(height: AppSpacing.sm),
+              const SizedBox(height: 12),
               LinearProgressIndicator(
                 value: progreso,
                 minHeight: 8,
                 borderRadius: BorderRadius.circular(99),
+                color: AppColors.primary,
+                backgroundColor: Colors.white,
               ),
-              const SizedBox(height: AppSpacing.sm),
+              const SizedBox(height: 8),
               Text('$contratados de ${items.length} proveedores contratados'),
               if (items.isNotEmpty)
                 Text(
@@ -582,16 +590,28 @@ class _Filtros extends StatelessWidget {
     return SizedBox(
       height: 40,
       child: ScrollConfiguration(
-        behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
-        child: ListView.separated(
+        behavior: ScrollConfiguration.of(context).copyWith(
+          scrollbars: false,
+          dragDevices: const {
+            PointerDeviceKind.touch,
+            PointerDeviceKind.mouse,
+            PointerDeviceKind.trackpad,
+            PointerDeviceKind.stylus,
+          },
+        ),
+        child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
-          primary: false,
           physics: const AlwaysScrollableScrollPhysics(
             parent: BouncingScrollPhysics(),
           ),
-          itemCount: chips.length,
-          separatorBuilder: (_, _) => const SizedBox(width: AppSpacing.sm),
-          itemBuilder: (_, index) => chips[index],
+          child: Row(
+            children: [
+              for (var index = 0; index < chips.length; index++) ...[
+                if (index > 0) const SizedBox(width: AppSpacing.sm),
+                chips[index],
+              ],
+            ],
+          ),
         ),
       ),
     );

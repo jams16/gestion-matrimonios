@@ -273,18 +273,22 @@ export class RefrescarSesionUseCase {
       throw new UnauthorizedException('Refresh token inválido.');
     }
     const sesion = await this.repository.obtenerSesion(payload.sid);
+    const usuario = await this.repository.obtenerUsuario(payload.sub);
+    const inactividad = expiracionMs(
+      this.config.get<string>('SESSION_INACTIVITY_TIMEOUT') ?? '1h',
+      60 * 60e3,
+    );
     if (
       !sesion ||
       sesion.idUsuario !== payload.sub ||
       sesion.fechaRevocacion ||
       expiro(sesion.fechaExpiracion) ||
-      !(await argon2.verify(sesion.refreshTokenHash, payload.token))
+      !(await argon2.verify(sesion.refreshTokenHash, payload.token)) ||
+      !usuario?.esActivo ||
+      expiro(usuario.ultimoAcceso.add({ milliseconds: inactividad }))
     )
       throw new UnauthorizedException('Refresh token inválido o expirado.');
     await this.repository.revocarSesion(sesion.idSesion, ahora());
-    const usuario = await this.repository.obtenerUsuario(payload.sub);
-    if (!usuario?.esActivo)
-      throw new UnauthorizedException('Usuario no disponible.');
     const tokenAleatorio = tokenSeguro();
     const nuevaSesion = await this.repository.crearSesion({
       idUsuario: usuario.idUsuario,
@@ -297,6 +301,9 @@ export class RefrescarSesionUseCase {
           7 * 864e5,
         ),
       ),
+    });
+    await this.repository.actualizarUsuario(usuario.idUsuario, {
+      ultimoAcceso: ahora(),
     });
     return {
       accessToken: await this.jwt.signAsync({

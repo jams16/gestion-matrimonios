@@ -8,7 +8,7 @@ const _baseUrl = String.fromEnvironment(
 );
 
 class ProveedoresApi {
-  ProveedoresApi() : _dio = Dio(BaseOptions(baseUrl: _baseUrl));
+  ProveedoresApi() : _dio = AuthSession.crearClienteAutenticado(baseUrl: _baseUrl);
 
   final Dio _dio;
 

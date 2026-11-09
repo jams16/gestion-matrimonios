@@ -8,7 +8,7 @@ const _baseUrl = String.fromEnvironment(
 );
 
 class InvitadosApi {
-  InvitadosApi() : _dio = Dio(BaseOptions(baseUrl: _baseUrl));
+  InvitadosApi() : _dio = AuthSession.crearClienteAutenticado(baseUrl: _baseUrl);
   final Dio _dio;
 
   Future<Options> _options() async {

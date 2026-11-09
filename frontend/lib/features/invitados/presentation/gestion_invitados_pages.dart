@@ -10,6 +10,7 @@ import '../../../core/widgets/feedback/app_snackbar.dart';
 import '../../../core/widgets/inputs/app_search_field.dart';
 import '../../../core/widgets/inputs/app_text_field.dart';
 import '../../../core/widgets/overlays/app_confirmation_dialog.dart';
+import '../../../core/widgets/navigation/app_tabs.dart';
 import '../../cronograma/application/providers/cronograma_provider.dart';
 import '../application/invitados_provider.dart';
 
@@ -36,6 +37,8 @@ class GestionPage extends ConsumerWidget {
           const SizedBox(height: AppSpacing.lg),
           AppCard(
             elevated: true,
+            backgroundColor: AppColors.surface,
+            borderColor: AppColors.primary.withValues(alpha: 0.28),
             onTap: () => context.go('/gestion/invitados'),
             child: const Row(
               children: [
@@ -62,6 +65,40 @@ class GestionPage extends ConsumerWidget {
               ],
             ),
           ),
+          const SizedBox(height: AppSpacing.md),
+          AppCard(
+            elevated: true,
+            backgroundColor: AppColors.surface,
+            borderColor: AppColors.primary.withValues(alpha: 0.28),
+            onTap: () {},
+            child: const Row(
+              children: [
+                CircleAvatar(
+                  radius: 26,
+                  backgroundColor: Color(0xFFE9E1F7),
+                  child: Icon(
+                    Icons.account_balance_wallet_outlined,
+                    color: AppColors.primary,
+                  ),
+                ),
+                SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'PRESUPUESTO',
+                        style: TextStyle(fontWeight: FontWeight.w800),
+                      ),
+                      SizedBox(height: 4),
+                      Text('Costos, pagos y avance financiero de la boda.'),
+                    ],
+                  ),
+                ),
+                Icon(Icons.chevron_right),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -75,10 +112,32 @@ class ListaInvitadosPage extends ConsumerStatefulWidget {
   ConsumerState<ListaInvitadosPage> createState() => _ListaInvitadosPageState();
 }
 
-class _ListaInvitadosPageState extends ConsumerState<ListaInvitadosPage> {
+class _ListaInvitadosPageState extends ConsumerState<ListaInvitadosPage>
+    with SingleTickerProviderStateMixin {
   int _tab = 0;
+  late final TabController _tabs;
   String _buscar = '';
   String? _lado;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabs = TabController(length: 2, vsync: this)..addListener(_actualizarTab);
+  }
+
+  void _actualizarTab() {
+    if (mounted && _tab != _tabs.index) {
+      setState(() => _tab = _tabs.index);
+    }
+  }
+
+  @override
+  void dispose() {
+    _tabs
+      ..removeListener(_actualizarTab)
+      ..dispose();
+    super.dispose();
+  }
 
   Future<void> _refrescar(String matrimonio) async {
     ref.invalidate(invitadosListaProvider(matrimonio));
@@ -121,8 +180,7 @@ class _ListaInvitadosPageState extends ConsumerState<ListaInvitadosPage> {
                   _Resumen(resumen: ref.watch(invitadosResumenProvider(m.id))),
                   const SizedBox(height: AppSpacing.lg),
                   _Tabs(
-                    tab: _tab,
-                    onChanged: (tab) => setState(() => _tab = tab),
+                    controller: _tabs,
                   ),
                   const Divider(
                     height: 1,
@@ -130,7 +188,21 @@ class _ListaInvitadosPageState extends ConsumerState<ListaInvitadosPage> {
                     color: Color(0xFF29252F),
                   ),
                   const SizedBox(height: AppSpacing.sm),
-                  if (_tab == 0) ...[
+                  AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 240),
+                    switchInCurve: Curves.easeOutCubic,
+                    switchOutCurve: Curves.easeInCubic,
+                    transitionBuilder: (child, animation) => SlideTransition(
+                      position: Tween<Offset>(
+                        begin: const Offset(0.04, 0),
+                        end: Offset.zero,
+                      ).animate(animation),
+                      child: FadeTransition(opacity: animation, child: child),
+                    ),
+                    child: _tab == 0
+                        ? Column(
+                            key: const ValueKey('invitados'),
+                            children: [
                     AppSearchField(
                       label: null,
                       hintText: 'Buscar invitado',
@@ -197,8 +269,16 @@ class _ListaInvitadosPageState extends ConsumerState<ListaInvitadosPage> {
                         );
                       },
                     ),
-                  ] else
-                    _Mesas(matrimonio: m.id, refrescar: () => _refrescar(m.id)),
+                            ],
+                          )
+                        : KeyedSubtree(
+                            key: const ValueKey('mesas'),
+                            child: _Mesas(
+                              matrimonio: m.id,
+                              refrescar: () => _refrescar(m.id),
+                            ),
+                          ),
+                  ),
                   const SizedBox(height: 96),
                 ],
               ),
@@ -547,48 +627,17 @@ class _Resumen extends StatelessWidget {
 }
 
 class _Tabs extends StatelessWidget {
-  const _Tabs({required this.tab, required this.onChanged});
-  final int tab;
-  final ValueChanged<int> onChanged;
+  const _Tabs({required this.controller});
+  final TabController controller;
+
   @override
-  Widget build(BuildContext context) => Row(
-    children: [
-      Expanded(child: _item(0, Icons.groups_outlined, 'Invitados')),
-      Expanded(child: _item(1, Icons.table_restaurant_outlined, 'Mesas')),
+  Widget build(BuildContext context) => AppTabs(
+    controller: controller,
+    tabs: const [
+      AppTabItem(label: 'Invitados', icon: Icons.groups_outlined),
+      AppTabItem(label: 'Mesas', icon: Icons.table_restaurant_outlined),
     ],
   );
-  Widget _item(int id, IconData icono, String titulo) {
-    final seleccionado = id == tab;
-    return InkWell(
-      onTap: () => onChanged(id),
-      child: Padding(
-        padding: const EdgeInsets.only(top: 10),
-        child: Column(
-          children: [
-            Icon(
-              icono,
-              color: seleccionado ? AppColors.primary : AppColors.textSecondary,
-            ),
-            const SizedBox(height: 4),
-            Text(
-              titulo,
-              style: TextStyle(
-                color: seleccionado
-                    ? AppColors.primary
-                    : AppColors.textSecondary,
-                fontWeight: seleccionado ? FontWeight.w700 : null,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Container(
-              height: 3,
-              color: seleccionado ? AppColors.primary : Colors.transparent,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 }
 
 class _Mesas extends ConsumerWidget {

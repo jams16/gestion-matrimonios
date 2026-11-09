@@ -238,6 +238,7 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
     final puedeConfirmar = faseCodigo == 'INICIO';
     AuthSession.seleccionarProyecto(
       idProyecto: widget.idProyecto,
+      nombreProyecto: proyecto['nombre']?.toString(),
       planificacionConfirmada:
           faseCodigo == 'PLANIFICACION' ||
           faseCodigo == 'MONITOREO_Y_CONTROL' ||
