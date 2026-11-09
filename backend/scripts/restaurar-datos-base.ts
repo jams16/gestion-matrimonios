@@ -2,6 +2,7 @@ import 'dotenv/config';
 
 import datosBase from './datos-base/catalogos-y-plantillas-base.json';
 import ubigeosBase from './datos-base/ubigeos-base.json';
+import riesgosComunesBase from './datos-base/riesgos-comunes-base';
 
 type Fila = Record<string, unknown>;
 type Resumen = { existentes: number; restaurados: number; errores: string[] };
@@ -174,6 +175,48 @@ async function dependencias(c: ClienteSql, r: Resumen, actividadesReales: Map<nu
   }
 }
 
+async function catalogoRiesgos(c: ClienteSql, categorias: Resumen, plantillas: Resumen, mitigaciones: Resumen, planes: Resumen) {
+  categorias.existentes = await contar(c, 'rg_categoria_riesgo');
+  plantillas.existentes = await contar(c, 'rg_plantilla_riesgo');
+  mitigaciones.existentes = await contar(c, 'rg_plantilla_mitigacion');
+  planes.existentes = await contar(c, 'rg_plantilla_plan');
+  const categoriasActuales = new Map<string, number>((await c.query('SELECT id_categoria_riesgo, codigo FROM public.rg_categoria_riesgo')).rows.map((x) => [String(x.codigo), Number(x.id_categoria_riesgo)]));
+  const riesgosActuales = new Map<string, number>((await c.query('SELECT id_plantilla_riesgo, codigo FROM public.rg_plantilla_riesgo')).rows.map((x) => [String(x.codigo), Number(x.id_plantilla_riesgo)]));
+  for (const riesgo of riesgosComunesBase) {
+    const codigoCategoria = riesgo.categoria.toUpperCase().replaceAll(/[^A-Z0-9]+/g, '_').replace(/^_|_$/g, '');
+    try {
+      let idCategoria = categoriasActuales.get(codigoCategoria);
+      if (!idCategoria) {
+        await c.query('INSERT INTO public.rg_categoria_riesgo (codigo, nombre, activo, updated_at) VALUES ($1, $2, true, now()) ON CONFLICT (codigo) DO NOTHING', [codigoCategoria, riesgo.categoria]);
+        idCategoria = Number((await c.query('SELECT id_categoria_riesgo FROM public.rg_categoria_riesgo WHERE codigo = $1', [codigoCategoria])).rows[0].id_categoria_riesgo);
+        categoriasActuales.set(codigoCategoria, idCategoria);
+        categorias.restaurados += 1;
+      }
+      let idRiesgo = riesgosActuales.get(riesgo.codigo);
+      if (!idRiesgo) {
+        await c.query('INSERT INTO public.rg_plantilla_riesgo (id_categoria_riesgo, codigo, nombre, descripcion, causa_probable, efecto_potencial, activo, updated_at) VALUES ($1, $2, $3, $4, $5, $6, true, now()) ON CONFLICT (codigo) DO NOTHING', [idCategoria, riesgo.codigo, riesgo.nombre, riesgo.nombre, riesgo.causa, riesgo.efecto]);
+        idRiesgo = Number((await c.query('SELECT id_plantilla_riesgo FROM public.rg_plantilla_riesgo WHERE codigo = $1', [riesgo.codigo])).rows[0].id_plantilla_riesgo);
+        riesgosActuales.set(riesgo.codigo, idRiesgo);
+        plantillas.restaurados += 1;
+      }
+      if (!(await c.query('SELECT 1 FROM public.rg_plantilla_mitigacion WHERE id_plantilla_riesgo = $1 AND descripcion = $2', [idRiesgo, riesgo.mitigacion])).rowCount) {
+        await c.query('INSERT INTO public.rg_plantilla_mitigacion (id_plantilla_riesgo, descripcion, activo, updated_at) VALUES ($1, $2, true, now())', [idRiesgo, riesgo.mitigacion]);
+        mitigaciones.restaurados += 1;
+      }
+      const alternativas: Array<[string, string]> = [['PLAN_A', riesgo.planA], ...(riesgo.planB ? [['PLAN_B', riesgo.planB] as [string, string]] : [])];
+      for (const [alternativa, accion] of alternativas) {
+        if ((await c.query('SELECT 1 FROM public.rg_plantilla_plan WHERE id_plantilla_riesgo = $1 AND alternativa = $2', [idRiesgo, alternativa])).rowCount) continue;
+        await c.query('INSERT INTO public.rg_plantilla_plan (id_plantilla_riesgo, alternativa, accion, activo, updated_at) VALUES ($1, $2, $3, true, now())', [idRiesgo, alternativa, accion]);
+        planes.restaurados += 1;
+      }
+    } catch (error) {
+      // En una ejecucion parcial las plantillas pueden existir y fallar solo
+      // sus planes. El error se informa en la seccion que corresponde.
+      planes.errores.push(`${riesgo.codigo}: ${errorTexto(error)}`);
+    }
+  }
+}
+
 async function secuencias(c: ClienteSql) {
   const pares = [['gp_tipo_ceremonia', 'id_tipo_ceremonia'], ['gp_fase_proyecto', 'id_fase_proyecto'], ['cr_plantilla_hito', 'id_plantilla_hito'], ['cr_plantilla_actividad', 'id_plantilla_actividad'], ['cr_plantilla_actividad_tipo_ceremonia', 'id_plantilla_actividad_tipo_ceremonia'], ['cr_plantilla_dependencia', 'id_plantilla_dependencia'], ['cr_plantilla_timing', 'id_plantilla_timing'], ['cr_plantilla_timing_tipo_ceremonia', 'id_plantilla_timing_tipo_ceremonia']];
   for (const [tabla, columna] of pares) await c.query(`SELECT setval(pg_get_serial_sequence('public.${tabla}', '${columna}'), COALESCE((SELECT MAX(${columna}) FROM public.${tabla}), 1), true)`);
@@ -181,13 +224,13 @@ async function secuencias(c: ClienteSql) {
 
 async function ejecutar() {
   const c = new Client({ connectionString: process.env.DATABASE_URL });
-  const r = { ubigeos: vacio(), categoriasProveedor: vacio(), tipos: vacio(), fases: vacio(), hitos: vacio(), actividades: vacio(), dependencias: vacio(), timing: vacio(), actividadTipo: vacio(), timingTipo: vacio() };
+  const r = { ubigeos: vacio(), categoriasProveedor: vacio(), tipos: vacio(), fases: vacio(), hitos: vacio(), actividades: vacio(), dependencias: vacio(), timing: vacio(), actividadTipo: vacio(), timingTipo: vacio(), categoriasRiesgo: vacio(), plantillasRiesgo: vacio(), mitigacionesRiesgo: vacio(), planesRiesgo: vacio() };
   await c.connect();
   try {
-    await ubigeos(c, r.ubigeos); await categoriasProveedor(c, r.categoriasProveedor); const tipos = await catalogo(c, r.tipos, 'gp_tipo_ceremonia', datos.gp_tipo_ceremonia); const fases = await catalogo(c, r.fases, 'gp_fase_proyecto', datos.gp_fase_proyecto); const hitosReales = await hitos(c, r.hitos); const actividadesReales = await actividades(c, r.actividades, hitosReales, fases); await dependencias(c, r.dependencias, actividadesReales); const timingsReales = await timings(c, r.timing); await relaciones(c, r.actividadTipo, 'cr_plantilla_actividad_tipo_ceremonia', datos.cr_plantilla_actividad_tipo_ceremonia, actividadesReales, tipos); await relaciones(c, r.timingTipo, 'cr_plantilla_timing_tipo_ceremonia', datos.cr_plantilla_timing_tipo_ceremonia, timingsReales, tipos); await secuencias(c);
+    await ubigeos(c, r.ubigeos); await categoriasProveedor(c, r.categoriasProveedor); const tipos = await catalogo(c, r.tipos, 'gp_tipo_ceremonia', datos.gp_tipo_ceremonia); const fases = await catalogo(c, r.fases, 'gp_fase_proyecto', datos.gp_fase_proyecto); const hitosReales = await hitos(c, r.hitos); const actividadesReales = await actividades(c, r.actividades, hitosReales, fases); await dependencias(c, r.dependencias, actividadesReales); const timingsReales = await timings(c, r.timing); await relaciones(c, r.actividadTipo, 'cr_plantilla_actividad_tipo_ceremonia', datos.cr_plantilla_actividad_tipo_ceremonia, actividadesReales, tipos); await relaciones(c, r.timingTipo, 'cr_plantilla_timing_tipo_ceremonia', datos.cr_plantilla_timing_tipo_ceremonia, timingsReales, tipos); await catalogoRiesgos(c, r.categoriasRiesgo, r.plantillasRiesgo, r.mitigacionesRiesgo, r.planesRiesgo); await secuencias(c);
   } finally { await c.end(); }
   console.log('Restauración de datos base');
-  const etiquetas: Array<[string, Resumen]> = [['Ubigeos', r.ubigeos], ['Categorías de proveedor', r.categoriasProveedor], ['Tipos de ceremonia', r.tipos], ['Fases de proyecto', r.fases], ['Hitos de plantilla', r.hitos], ['Actividades de plantilla', r.actividades], ['Dependencias de plantilla', r.dependencias], ['Timing de plantilla', r.timing], ['Relaciones actividad/tipo de ceremonia', r.actividadTipo], ['Relaciones timing/tipo de ceremonia', r.timingTipo]];
+  const etiquetas: Array<[string, Resumen]> = [['Ubigeos', r.ubigeos], ['Categorías de proveedor', r.categoriasProveedor], ['Tipos de ceremonia', r.tipos], ['Fases de proyecto', r.fases], ['Hitos de plantilla', r.hitos], ['Actividades de plantilla', r.actividades], ['Dependencias de plantilla', r.dependencias], ['Timing de plantilla', r.timing], ['Relaciones actividad/tipo de ceremonia', r.actividadTipo], ['Relaciones timing/tipo de ceremonia', r.timingTipo], ['Categorías de riesgo', r.categoriasRiesgo], ['Plantillas de riesgo', r.plantillasRiesgo], ['Mitigaciones de riesgo', r.mitigacionesRiesgo], ['Planes de riesgo', r.planesRiesgo]];
   etiquetas.forEach(([nombre, resumen]) => console.log(`${nombre}: ${resumen.restaurados} restaurados | ${resumen.existentes} ya existentes | ${resumen.errores.length} errores`));
   const tablas = etiquetas.map(([, resumen]) => resumen); const totalNuevos = tablas.reduce((n, x) => n + x.restaurados, 0); const totalExistentes = tablas.reduce((n, x) => n + x.existentes, 0); const errores = tablas.flatMap((x) => x.errores);
   console.log(`Total: ${totalNuevos} restaurados | ${totalExistentes} ya existentes | ${errores.length} errores`);
