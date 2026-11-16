@@ -64,6 +64,26 @@
       "model": "BuenaPractica",
       "namespace": "public"
     },
+    "gp_edt_elemento": {
+      "model": "EdtElemento",
+      "namespace": "public"
+    },
+    "gp_edt_matrimonio": {
+      "model": "EdtMatrimonio",
+      "namespace": "public"
+    },
+    "gp_edt_matrimonio_elemento": {
+      "model": "EdtMatrimonioElemento",
+      "namespace": "public"
+    },
+    "gp_edt_plantilla": {
+      "model": "EdtPlantilla",
+      "namespace": "public"
+    },
+    "gp_edt_plantilla_elemento": {
+      "model": "EdtPlantillaElemento",
+      "namespace": "public"
+    },
     "gp_fase_proyecto": {
       "model": "FaseProyecto",
       "namespace": "public"
@@ -385,6 +405,19 @@
               {
                 "name": "POST_EVENTO",
                 "value": "POST_EVENTO"
+              }
+            ]
+          },
+          "gp_edt_tipo_plantilla": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "GLOBAL",
+                "value": "GLOBAL"
+              },
+              {
+                "name": "WP",
+                "value": "WP"
               }
             ]
           },
@@ -1927,6 +1960,36 @@
                   "namespace": "public"
                 }
               },
+              "elementosEdt": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idCategoriaServicio"
+                  ],
+                  "targetFields": [
+                    "idCategoriaServicio"
+                  ]
+                },
+                "to": {
+                  "model": "EdtElemento",
+                  "namespace": "public"
+                }
+              },
+              "elementosEdtMatrimonio": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idCategoriaServicio"
+                  ],
+                  "targetFields": [
+                    "idCategoriaServicio"
+                  ]
+                },
+                "to": {
+                  "model": "EdtMatrimonioElemento",
+                  "namespace": "public"
+                }
+              },
               "servicios": {
                 "cardinality": "1:N",
                 "on": {
@@ -3115,6 +3178,764 @@
               },
               "namespaceId": "public",
               "table": "pv_documento_proveedor"
+            }
+          },
+          "EdtElemento": {
+            "fields": {
+              "activo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "descripcion": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 1000
+                  }
+                }
+              },
+              "idCategoriaServicio": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "idEdtElemento": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "nombre": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 200
+                  }
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "categoriaServicio": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idCategoriaServicio"
+                  ],
+                  "targetFields": [
+                    "idCategoriaServicio"
+                  ]
+                },
+                "to": {
+                  "model": "CategoriaServicio",
+                  "namespace": "public"
+                }
+              },
+              "elementosMatrimonio": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idEdtElemento"
+                  ],
+                  "targetFields": [
+                    "idEdtElementoOrigen"
+                  ]
+                },
+                "to": {
+                  "model": "EdtMatrimonioElemento",
+                  "namespace": "public"
+                }
+              },
+              "elementosPlantilla": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idEdtElemento"
+                  ],
+                  "targetFields": [
+                    "idEdtElemento"
+                  ]
+                },
+                "to": {
+                  "model": "EdtPlantillaElemento",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "activo": {
+                  "column": "activo"
+                },
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "descripcion": {
+                  "column": "descripcion"
+                },
+                "idCategoriaServicio": {
+                  "column": "id_categoria_servicio"
+                },
+                "idEdtElemento": {
+                  "column": "id_edt_elemento"
+                },
+                "nombre": {
+                  "column": "nombre"
+                },
+                "updatedAt": {
+                  "column": "updated_at"
+                }
+              },
+              "namespaceId": "public",
+              "table": "gp_edt_elemento"
+            }
+          },
+          "EdtMatrimonio": {
+            "fields": {
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "estado": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "idEdtMatrimonio": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idMatrimonio": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idPlantillaOrigen": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "nombre": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 200
+                  }
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "elementos": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idEdtMatrimonio"
+                  ],
+                  "targetFields": [
+                    "idEdtMatrimonio"
+                  ]
+                },
+                "to": {
+                  "model": "EdtMatrimonioElemento",
+                  "namespace": "public"
+                }
+              },
+              "matrimonio": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idMatrimonio"
+                  ],
+                  "targetFields": [
+                    "idMatrimonio"
+                  ]
+                },
+                "to": {
+                  "model": "Matrimonio",
+                  "namespace": "public"
+                }
+              },
+              "plantillaOrigen": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idPlantillaOrigen"
+                  ],
+                  "targetFields": [
+                    "idEdtPlantilla"
+                  ]
+                },
+                "to": {
+                  "model": "EdtPlantilla",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "estado": {
+                  "column": "estado"
+                },
+                "idEdtMatrimonio": {
+                  "column": "id_edt_matrimonio"
+                },
+                "idMatrimonio": {
+                  "column": "id_matrimonio"
+                },
+                "idPlantillaOrigen": {
+                  "column": "id_plantilla_origen"
+                },
+                "nombre": {
+                  "column": "nombre"
+                },
+                "updatedAt": {
+                  "column": "updated_at"
+                }
+              },
+              "namespaceId": "public",
+              "table": "gp_edt_matrimonio"
+            }
+          },
+          "EdtMatrimonioElemento": {
+            "fields": {
+              "activo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "descripcion": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 1000
+                  }
+                }
+              },
+              "idCategoriaServicio": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "idEdtElementoOrigen": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idEdtMatrimonio": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idEdtMatrimonioElemento": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idEdtMatrimonioElementoPadre": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "nombre": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 200
+                  }
+                }
+              },
+              "orden": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "categoriaServicio": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idCategoriaServicio"
+                  ],
+                  "targetFields": [
+                    "idCategoriaServicio"
+                  ]
+                },
+                "to": {
+                  "model": "CategoriaServicio",
+                  "namespace": "public"
+                }
+              },
+              "edtMatrimonio": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idEdtMatrimonio"
+                  ],
+                  "targetFields": [
+                    "idEdtMatrimonio"
+                  ]
+                },
+                "to": {
+                  "model": "EdtMatrimonio",
+                  "namespace": "public"
+                }
+              },
+              "elementoOrigen": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idEdtElementoOrigen"
+                  ],
+                  "targetFields": [
+                    "idEdtElemento"
+                  ]
+                },
+                "to": {
+                  "model": "EdtElemento",
+                  "namespace": "public"
+                }
+              },
+              "hijos": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idEdtMatrimonioElemento"
+                  ],
+                  "targetFields": [
+                    "idEdtMatrimonioElementoPadre"
+                  ]
+                },
+                "to": {
+                  "model": "EdtMatrimonioElemento",
+                  "namespace": "public"
+                }
+              },
+              "padre": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idEdtMatrimonioElementoPadre"
+                  ],
+                  "targetFields": [
+                    "idEdtMatrimonioElemento"
+                  ]
+                },
+                "to": {
+                  "model": "EdtMatrimonioElemento",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "activo": {
+                  "column": "activo"
+                },
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "descripcion": {
+                  "column": "descripcion"
+                },
+                "idCategoriaServicio": {
+                  "column": "id_categoria_servicio"
+                },
+                "idEdtElementoOrigen": {
+                  "column": "id_edt_elemento_origen"
+                },
+                "idEdtMatrimonio": {
+                  "column": "id_edt_matrimonio"
+                },
+                "idEdtMatrimonioElemento": {
+                  "column": "id_edt_matrimonio_elemento"
+                },
+                "idEdtMatrimonioElementoPadre": {
+                  "column": "id_edt_matrimonio_elemento_padre"
+                },
+                "nombre": {
+                  "column": "nombre"
+                },
+                "orden": {
+                  "column": "orden"
+                },
+                "updatedAt": {
+                  "column": "updated_at"
+                }
+              },
+              "namespaceId": "public",
+              "table": "gp_edt_matrimonio_elemento"
+            }
+          },
+          "EdtPlantilla": {
+            "fields": {
+              "activo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "descripcion": {
+                "nullable": true,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 1000
+                  }
+                }
+              },
+              "idEdtPlantilla": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idUsuario": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "nombre": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 200
+                  }
+                }
+              },
+              "tipo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "gp_edt_tipo_plantilla",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "edtsMatrimonioOrigen": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idEdtPlantilla"
+                  ],
+                  "targetFields": [
+                    "idPlantillaOrigen"
+                  ]
+                },
+                "to": {
+                  "model": "EdtMatrimonio",
+                  "namespace": "public"
+                }
+              },
+              "elementos": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idEdtPlantilla"
+                  ],
+                  "targetFields": [
+                    "idEdtPlantilla"
+                  ]
+                },
+                "to": {
+                  "model": "EdtPlantillaElemento",
+                  "namespace": "public"
+                }
+              },
+              "usuario": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idUsuario"
+                  ],
+                  "targetFields": [
+                    "idUsuario"
+                  ]
+                },
+                "to": {
+                  "model": "Usuario",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "activo": {
+                  "column": "activo"
+                },
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "descripcion": {
+                  "column": "descripcion"
+                },
+                "idEdtPlantilla": {
+                  "column": "id_edt_plantilla"
+                },
+                "idUsuario": {
+                  "column": "id_usuario"
+                },
+                "nombre": {
+                  "column": "nombre"
+                },
+                "tipo": {
+                  "column": "tipo"
+                },
+                "updatedAt": {
+                  "column": "updated_at"
+                }
+              },
+              "namespaceId": "public",
+              "table": "gp_edt_plantilla"
+            }
+          },
+          "EdtPlantillaElemento": {
+            "fields": {
+              "activo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "idEdtElemento": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idEdtPlantilla": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idEdtPlantillaElemento": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idEdtPlantillaElementoPadre": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "orden": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "elemento": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idEdtElemento"
+                  ],
+                  "targetFields": [
+                    "idEdtElemento"
+                  ]
+                },
+                "to": {
+                  "model": "EdtElemento",
+                  "namespace": "public"
+                }
+              },
+              "hijos": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idEdtPlantillaElemento"
+                  ],
+                  "targetFields": [
+                    "idEdtPlantillaElementoPadre"
+                  ]
+                },
+                "to": {
+                  "model": "EdtPlantillaElemento",
+                  "namespace": "public"
+                }
+              },
+              "padre": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idEdtPlantillaElementoPadre"
+                  ],
+                  "targetFields": [
+                    "idEdtPlantillaElemento"
+                  ]
+                },
+                "to": {
+                  "model": "EdtPlantillaElemento",
+                  "namespace": "public"
+                }
+              },
+              "plantilla": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idEdtPlantilla"
+                  ],
+                  "targetFields": [
+                    "idEdtPlantilla"
+                  ]
+                },
+                "to": {
+                  "model": "EdtPlantilla",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "activo": {
+                  "column": "activo"
+                },
+                "idEdtElemento": {
+                  "column": "id_edt_elemento"
+                },
+                "idEdtPlantilla": {
+                  "column": "id_edt_plantilla"
+                },
+                "idEdtPlantillaElemento": {
+                  "column": "id_edt_plantilla_elemento"
+                },
+                "idEdtPlantillaElementoPadre": {
+                  "column": "id_edt_plantilla_elemento_padre"
+                },
+                "orden": {
+                  "column": "orden"
+                }
+              },
+              "namespaceId": "public",
+              "table": "gp_edt_plantilla_elemento"
             }
           },
           "EnlaceExternoProveedor": {
@@ -4599,6 +5420,21 @@
               }
             },
             "relations": {
+              "edts": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idMatrimonio"
+                  ],
+                  "targetFields": [
+                    "idMatrimonio"
+                  ]
+                },
+                "to": {
+                  "model": "EdtMatrimonio",
+                  "namespace": "public"
+                }
+              },
               "invitados": {
                 "cardinality": "1:N",
                 "on": {
@@ -11162,6 +11998,21 @@
                   "namespace": "public"
                 }
               },
+              "plantillasEdt": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idUsuario"
+                  ],
+                  "targetFields": [
+                    "idUsuario"
+                  ]
+                },
+                "to": {
+                  "model": "EdtPlantilla",
+                  "namespace": "public"
+                }
+              },
               "proyectosPm": {
                 "cardinality": "1:N",
                 "on": {
@@ -13419,6 +14270,672 @@
                   ]
                 }
               ]
+            },
+            "gp_edt_elemento": {
+              "columns": {
+                "activo": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "created_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "descripcion": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 1000
+                  }
+                },
+                "id_categoria_servicio": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "id_edt_elemento": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "nombre": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 200
+                  }
+                },
+                "updated_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "name": "gp_edt_elemento_categoria_fk",
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_categoria_servicio"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_edt_elemento"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_categoria_servicio"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pv_categoria_servicio"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "activo"
+                  ],
+                  "name": "gp_edt_elemento_activo_idx_4c0f2ecc",
+                  "prefix": "gp_edt_elemento_activo_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_categoria_servicio"
+                  ],
+                  "name": "gp_edt_elemento_id_categoria_servicio_idx_1a4a76bb",
+                  "prefix": "gp_edt_elemento_id_categoria_servicio_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_edt_elemento"
+                ]
+              },
+              "uniques": []
+            },
+            "gp_edt_matrimonio": {
+              "columns": {
+                "created_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "estado": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "id_edt_matrimonio": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_matrimonio": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_plantilla_origen": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": true
+                },
+                "nombre": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 200
+                  }
+                },
+                "updated_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "name": "gp_edt_matrimonio_fk",
+                  "onDelete": "cascade",
+                  "source": {
+                    "columns": [
+                      "id_matrimonio"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_edt_matrimonio"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_matrimonio"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_matrimonio"
+                  }
+                },
+                {
+                  "name": "gp_edt_matrimonio_plantilla_fk",
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_plantilla_origen"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_edt_matrimonio"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_edt_plantilla"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_edt_plantilla"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "id_matrimonio",
+                    "estado"
+                  ],
+                  "name": "gp_edt_matrimonio_id_matrimonio_estado_idx_26a97345",
+                  "prefix": "gp_edt_matrimonio_id_matrimonio_estado_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_matrimonio"
+                  ],
+                  "name": "gp_edt_matrimonio_id_matrimonio_idx_97ab526e",
+                  "prefix": "gp_edt_matrimonio_id_matrimonio_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_plantilla_origen"
+                  ],
+                  "name": "gp_edt_matrimonio_id_plantilla_origen_idx_e4cc0c49",
+                  "prefix": "gp_edt_matrimonio_id_plantilla_origen_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_edt_matrimonio"
+                ]
+              },
+              "uniques": []
+            },
+            "gp_edt_matrimonio_elemento": {
+              "columns": {
+                "activo": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "created_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "descripcion": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 1000
+                  }
+                },
+                "id_categoria_servicio": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "id_edt_elemento_origen": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": true
+                },
+                "id_edt_matrimonio": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_edt_matrimonio_elemento": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_edt_matrimonio_elemento_padre": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": true
+                },
+                "nombre": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 200
+                  }
+                },
+                "orden": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": 0
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "updated_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "name": "gp_edt_me_matrimonio_fk",
+                  "onDelete": "cascade",
+                  "source": {
+                    "columns": [
+                      "id_edt_matrimonio"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_edt_matrimonio_elemento"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_edt_matrimonio"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_edt_matrimonio"
+                  }
+                },
+                {
+                  "name": "gp_edt_me_origen_fk",
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_edt_elemento_origen"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_edt_matrimonio_elemento"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_edt_elemento"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_edt_elemento"
+                  }
+                },
+                {
+                  "name": "gp_edt_me_categoria_fk",
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_categoria_servicio"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_edt_matrimonio_elemento"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_categoria_servicio"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "pv_categoria_servicio"
+                  }
+                },
+                {
+                  "name": "gp_edt_me_padre_fk",
+                  "onDelete": "cascade",
+                  "source": {
+                    "columns": [
+                      "id_edt_matrimonio_elemento_padre"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_edt_matrimonio_elemento"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_edt_matrimonio_elemento"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_edt_matrimonio_elemento"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "id_edt_matrimonio"
+                  ],
+                  "name": "gp_edt_matrimonio_elemento_id_edt_matrimonio_idx_ab0ec48b",
+                  "prefix": "gp_edt_matrimonio_elemento_id_edt_matrimonio_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_categoria_servicio"
+                  ],
+                  "name": "gp_edt_me_categoria_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_edt_matrimonio",
+                    "orden"
+                  ],
+                  "name": "gp_edt_me_matrimonio_orden_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_edt_elemento_origen"
+                  ],
+                  "name": "gp_edt_me_origen_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_edt_matrimonio_elemento_padre"
+                  ],
+                  "name": "gp_edt_me_padre_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_edt_matrimonio_elemento"
+                ]
+              },
+              "uniques": []
+            },
+            "gp_edt_plantilla": {
+              "checks": [
+                {
+                  "expression": "\"tipo\" IN ('GLOBAL', 'WP')",
+                  "name": "gp_edt_plantilla_tipo_check_25efc272",
+                  "prefix": "gp_edt_plantilla_tipo_check"
+                }
+              ],
+              "columns": {
+                "activo": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "created_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "descripcion": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 1000
+                  }
+                },
+                "id_edt_plantilla": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_usuario": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "nombre": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 200
+                  }
+                },
+                "tipo": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "gp_edt_tipo_plantilla",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "updated_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "name": "gp_edt_plantilla_usuario_fk",
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_usuario"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_edt_plantilla"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_usuario"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "au_usuario"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "id_usuario"
+                  ],
+                  "name": "gp_edt_plantilla_id_usuario_idx_00d592a0",
+                  "prefix": "gp_edt_plantilla_id_usuario_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "tipo",
+                    "activo"
+                  ],
+                  "name": "gp_edt_plantilla_tipo_activo_idx_5ba56ff7",
+                  "prefix": "gp_edt_plantilla_tipo_activo_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_edt_plantilla"
+                ]
+              },
+              "uniques": []
+            },
+            "gp_edt_plantilla_elemento": {
+              "columns": {
+                "activo": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "id_edt_elemento": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_edt_plantilla": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_edt_plantilla_elemento": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_edt_plantilla_elemento_padre": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": true
+                },
+                "orden": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": 0
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "name": "gp_edt_pe_plantilla_fk",
+                  "onDelete": "cascade",
+                  "source": {
+                    "columns": [
+                      "id_edt_plantilla"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_edt_plantilla_elemento"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_edt_plantilla"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_edt_plantilla"
+                  }
+                },
+                {
+                  "name": "gp_edt_pe_elemento_fk",
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_edt_elemento"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_edt_plantilla_elemento"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_edt_elemento"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_edt_elemento"
+                  }
+                },
+                {
+                  "name": "gp_edt_pe_padre_fk",
+                  "onDelete": "cascade",
+                  "source": {
+                    "columns": [
+                      "id_edt_plantilla_elemento_padre"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_edt_plantilla_elemento"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_edt_plantilla_elemento"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_edt_plantilla_elemento"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "id_edt_elemento"
+                  ],
+                  "name": "gp_edt_pe_elemento_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_edt_plantilla_elemento_padre"
+                  ],
+                  "name": "gp_edt_pe_padre_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_edt_plantilla",
+                    "orden"
+                  ],
+                  "name": "gp_edt_pe_plantilla_orden_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_edt_plantilla"
+                  ],
+                  "name": "gp_edt_plantilla_elemento_id_edt_plantilla_idx_986c3286",
+                  "prefix": "gp_edt_plantilla_elemento_id_edt_plantilla_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_edt_plantilla_elemento"
+                ]
+              },
+              "uniques": []
             },
             "gp_fase_proyecto": {
               "columns": {
@@ -19800,6 +21317,13 @@
                 "POST_EVENTO"
               ]
             },
+            "gp_edt_tipo_plantilla": {
+              "kind": "valueSet",
+              "values": [
+                "GLOBAL",
+                "WP"
+              ]
+            },
             "gp_moneda": {
               "kind": "valueSet",
               "values": [
@@ -19976,10 +21500,10 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "7812dac0ea90013ba36bf72a60eed3ee3644e08293753b570b2d545cbbacc8e1"
+    "storageHash": "1a724624771bf0631e79ada564a249236ceeb1f558042ce767cf535a8bacbd80"
   },
   "execution": {
-    "executionHash": "11cb76e12d4e5683c1beb2ec34cb04d226138df6a98fdad43d394a253d5a8fa3",
+    "executionHash": "168fe7ac0bf302bbbbf28be43a84b9f47f8a2efc3f3b8ecce0bd66b630809ac0",
     "mutations": {
       "defaults": [
         {
@@ -20129,6 +21653,121 @@
             "column": "updated_at",
             "namespace": "public",
             "table": "cr_timing"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id_edt_elemento",
+            "namespace": "public",
+            "table": "gp_edt_elemento"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updated_at",
+            "namespace": "public",
+            "table": "gp_edt_elemento"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id_edt_matrimonio",
+            "namespace": "public",
+            "table": "gp_edt_matrimonio"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updated_at",
+            "namespace": "public",
+            "table": "gp_edt_matrimonio"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id_edt_matrimonio_elemento",
+            "namespace": "public",
+            "table": "gp_edt_matrimonio_elemento"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updated_at",
+            "namespace": "public",
+            "table": "gp_edt_matrimonio_elemento"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id_edt_plantilla",
+            "namespace": "public",
+            "table": "gp_edt_plantilla"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updated_at",
+            "namespace": "public",
+            "table": "gp_edt_plantilla"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id_edt_plantilla_elemento",
+            "namespace": "public",
+            "table": "gp_edt_plantilla_elemento"
           }
         },
         {

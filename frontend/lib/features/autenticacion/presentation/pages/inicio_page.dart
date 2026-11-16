@@ -30,6 +30,7 @@ class InicioPage extends StatefulWidget {
     this.contenidoProveedores,
     this.contenidoExtra,
     this.sinSeleccionNavegacion = false,
+    this.ocultarNavegacion = false,
   });
 
   final Object? nombre;
@@ -39,6 +40,7 @@ class InicioPage extends StatefulWidget {
   final Widget? contenidoProveedores;
   final Widget? contenidoExtra;
   final bool sinSeleccionNavegacion;
+  final bool ocultarNavegacion;
 
   @override
   State<InicioPage> createState() => _InicioPageState();
@@ -391,6 +393,9 @@ class _InicioPageState extends State<InicioPage> {
         if (opcion == _OpcionPerfil.riesgos) {
           context.go('/riesgos');
         }
+        if (opcion == _OpcionPerfil.misPlantillas) {
+          context.go('/plantillas-edt');
+        }
       },
       itemBuilder: (context) => [
         PopupMenuItem<_OpcionPerfil>(
@@ -432,6 +437,11 @@ class _InicioPageState extends State<InicioPage> {
           'Riesgos',
         ),
         _itemPerfil(_OpcionPerfil.misBodas, Icons.favorite_border, 'Mis bodas'),
+        _itemPerfil(
+          _OpcionPerfil.misPlantillas,
+          Icons.account_tree_outlined,
+          'Mis plantillas',
+        ),
         _itemPerfil(
           _OpcionPerfil.configuraciones,
           Icons.settings_outlined,
@@ -521,32 +531,37 @@ class _InicioPageState extends State<InicioPage> {
       ),
       body: ResponsiveLayout(
         mobile: _contenido(),
-        tablet: Row(
-          children: [
-            _navegacionConSombra(
-              AppNavigationRail(
-                backgroundColor: fondoNavegacion,
-                indicatorColor: AppColors.primary,
-                selectedForegroundColor: Colors.white,
-                selectedLabelColor: AppColors.textPrimary,
-                items: _items,
-                selectedIndex: _seccionActual,
-                sinSeleccion: widget.sinSeleccionNavegacion,
-                onDestinationSelected: _seleccionar,
+        tablet: widget.ocultarNavegacion
+            ? _contenido()
+            : Row(
+                children: [
+                  _navegacionConSombra(
+                    AppNavigationRail(
+                      backgroundColor: fondoNavegacion,
+                      indicatorColor: AppColors.primary,
+                      selectedForegroundColor: Colors.white,
+                      selectedLabelColor: AppColors.textPrimary,
+                      items: _items,
+                      selectedIndex: _seccionActual,
+                      sinSeleccion: widget.sinSeleccionNavegacion,
+                      onDestinationSelected: _seleccionar,
+                    ),
+                  ),
+                  Expanded(child: _contenido()),
+                ],
               ),
-            ),
-            Expanded(child: _contenido()),
-          ],
-        ),
-        desktop: Row(
-          children: [
-            _navegacionDesktop(fondoNavegacion, AppColors.primary),
-            Expanded(child: _contenido()),
-          ],
-        ),
+        desktop: widget.ocultarNavegacion
+            ? _contenido()
+            : Row(
+                children: [
+                  _navegacionDesktop(fondoNavegacion, AppColors.primary),
+                  Expanded(child: _contenido()),
+                ],
+              ),
       ),
       bottomNavigationBar:
-          MediaQuery.sizeOf(context).width < AppBreakpoints.mobile
+          !widget.ocultarNavegacion &&
+              MediaQuery.sizeOf(context).width < AppBreakpoints.mobile
           ? AppBottomNavigation(
               backgroundColor: fondoNavegacion,
               indicatorColor: AppColors.primary,
@@ -604,6 +619,7 @@ enum _OpcionPerfil {
   miStaff,
   riesgos,
   misBodas,
+  misPlantillas,
   configuraciones,
   cerrarSesion,
 }

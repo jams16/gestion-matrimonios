@@ -34,9 +34,9 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'7812dac0ea90013ba36bf72a60eed3ee3644e08293753b570b2d545cbbacc8e1'>;
+  StorageHashBase<'1a724624771bf0631e79ada564a249236ceeb1f558042ce767cf535a8bacbd80'>;
 export type ExecutionHash =
-  ExecutionHashBase<'11cb76e12d4e5683c1beb2ec34cb04d226138df6a98fdad43d394a253d5a8fa3'>;
+  ExecutionHashBase<'168fe7ac0bf302bbbbf28be43a84b9f47f8a2efc3f3b8ecce0bd66b630809ac0'>;
 export type ProfileHash =
   ProfileHashBase<'3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2'>;
 
@@ -415,6 +415,55 @@ export type FieldOutputTypes = {
       readonly activo: CodecTypes['pg/bool@1']['output'];
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly EdtElemento: {
+      readonly idEdtElemento: CodecTypes['pg/uuid@1']['output'];
+      readonly nombre: Varchar<200>;
+      readonly descripcion: Varchar<1000> | null;
+      readonly idCategoriaServicio: CodecTypes['pg/int4@1']['output'] | null;
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly EdtMatrimonio: {
+      readonly idEdtMatrimonio: CodecTypes['pg/uuid@1']['output'];
+      readonly idMatrimonio: CodecTypes['pg/uuid@1']['output'];
+      readonly idPlantillaOrigen: CodecTypes['pg/uuid@1']['output'] | null;
+      readonly nombre: Varchar<200>;
+      readonly estado: CodecTypes['pg/bool@1']['output'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly EdtMatrimonioElemento: {
+      readonly idEdtMatrimonioElemento: CodecTypes['pg/uuid@1']['output'];
+      readonly idEdtMatrimonio: CodecTypes['pg/uuid@1']['output'];
+      readonly idEdtElementoOrigen: CodecTypes['pg/uuid@1']['output'] | null;
+      readonly idEdtMatrimonioElementoPadre: CodecTypes['pg/uuid@1']['output'] | null;
+      readonly nombre: Varchar<200>;
+      readonly descripcion: Varchar<1000> | null;
+      readonly idCategoriaServicio: CodecTypes['pg/int4@1']['output'] | null;
+      readonly orden: CodecTypes['pg/int4@1']['output'];
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly EdtPlantilla: {
+      readonly idEdtPlantilla: CodecTypes['pg/uuid@1']['output'];
+      readonly nombre: Varchar<200>;
+      readonly descripcion: Varchar<1000> | null;
+      readonly tipo: 'GLOBAL' | 'WP';
+      readonly idUsuario: CodecTypes['pg/int4@1']['output'] | null;
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly EdtPlantillaElemento: {
+      readonly idEdtPlantillaElemento: CodecTypes['pg/uuid@1']['output'];
+      readonly idEdtPlantilla: CodecTypes['pg/uuid@1']['output'];
+      readonly idEdtElemento: CodecTypes['pg/uuid@1']['output'];
+      readonly idEdtPlantillaElementoPadre: CodecTypes['pg/uuid@1']['output'] | null;
+      readonly orden: CodecTypes['pg/int4@1']['output'];
+      readonly activo: CodecTypes['pg/bool@1']['output'];
     };
     readonly EnlaceExternoProveedor: {
       readonly idEnlaceExternoProveedor: CodecTypes['pg/uuid@1']['output'];
@@ -1149,6 +1198,55 @@ export type FieldInputTypes = {
       readonly activo: CodecTypes['pg/bool@1']['input'];
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly EdtElemento: {
+      readonly idEdtElemento: CodecTypes['pg/uuid@1']['input'];
+      readonly nombre: CodecTypes['sql/varchar@1']['input'];
+      readonly descripcion: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly idCategoriaServicio: CodecTypes['pg/int4@1']['input'] | null;
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly EdtMatrimonio: {
+      readonly idEdtMatrimonio: CodecTypes['pg/uuid@1']['input'];
+      readonly idMatrimonio: CodecTypes['pg/uuid@1']['input'];
+      readonly idPlantillaOrigen: CodecTypes['pg/uuid@1']['input'] | null;
+      readonly nombre: CodecTypes['sql/varchar@1']['input'];
+      readonly estado: CodecTypes['pg/bool@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly EdtMatrimonioElemento: {
+      readonly idEdtMatrimonioElemento: CodecTypes['pg/uuid@1']['input'];
+      readonly idEdtMatrimonio: CodecTypes['pg/uuid@1']['input'];
+      readonly idEdtElementoOrigen: CodecTypes['pg/uuid@1']['input'] | null;
+      readonly idEdtMatrimonioElementoPadre: CodecTypes['pg/uuid@1']['input'] | null;
+      readonly nombre: CodecTypes['sql/varchar@1']['input'];
+      readonly descripcion: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly idCategoriaServicio: CodecTypes['pg/int4@1']['input'] | null;
+      readonly orden: CodecTypes['pg/int4@1']['input'];
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly EdtPlantilla: {
+      readonly idEdtPlantilla: CodecTypes['pg/uuid@1']['input'];
+      readonly nombre: CodecTypes['sql/varchar@1']['input'];
+      readonly descripcion: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly tipo: 'GLOBAL' | 'WP';
+      readonly idUsuario: CodecTypes['pg/int4@1']['input'] | null;
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly EdtPlantillaElemento: {
+      readonly idEdtPlantillaElemento: CodecTypes['pg/uuid@1']['input'];
+      readonly idEdtPlantilla: CodecTypes['pg/uuid@1']['input'];
+      readonly idEdtElemento: CodecTypes['pg/uuid@1']['input'];
+      readonly idEdtPlantillaElementoPadre: CodecTypes['pg/uuid@1']['input'] | null;
+      readonly orden: CodecTypes['pg/int4@1']['input'];
+      readonly activo: CodecTypes['pg/bool@1']['input'];
     };
     readonly EnlaceExternoProveedor: {
       readonly idEnlaceExternoProveedor: CodecTypes['pg/uuid@1']['input'];
@@ -1895,6 +1993,55 @@ export type StorageColumnTypes = {
       readonly referencia_especifica: CodecTypes['pg/text@1']['output'] | null;
       readonly version: CodecTypes['pg/int4@1']['output'];
     };
+    readonly gp_edt_elemento: {
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly descripcion: Varchar<1000> | null;
+      readonly id_categoria_servicio: CodecTypes['pg/int4@1']['output'] | null;
+      readonly id_edt_elemento: CodecTypes['pg/uuid@1']['output'];
+      readonly nombre: Varchar<200>;
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly gp_edt_matrimonio: {
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly estado: CodecTypes['pg/bool@1']['output'];
+      readonly id_edt_matrimonio: CodecTypes['pg/uuid@1']['output'];
+      readonly id_matrimonio: CodecTypes['pg/uuid@1']['output'];
+      readonly id_plantilla_origen: CodecTypes['pg/uuid@1']['output'] | null;
+      readonly nombre: Varchar<200>;
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly gp_edt_matrimonio_elemento: {
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly descripcion: Varchar<1000> | null;
+      readonly id_categoria_servicio: CodecTypes['pg/int4@1']['output'] | null;
+      readonly id_edt_elemento_origen: CodecTypes['pg/uuid@1']['output'] | null;
+      readonly id_edt_matrimonio: CodecTypes['pg/uuid@1']['output'];
+      readonly id_edt_matrimonio_elemento: CodecTypes['pg/uuid@1']['output'];
+      readonly id_edt_matrimonio_elemento_padre: CodecTypes['pg/uuid@1']['output'] | null;
+      readonly nombre: Varchar<200>;
+      readonly orden: CodecTypes['pg/int4@1']['output'];
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly gp_edt_plantilla: {
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly descripcion: Varchar<1000> | null;
+      readonly id_edt_plantilla: CodecTypes['pg/uuid@1']['output'];
+      readonly id_usuario: CodecTypes['pg/int4@1']['output'] | null;
+      readonly nombre: Varchar<200>;
+      readonly tipo: 'GLOBAL' | 'WP';
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly gp_edt_plantilla_elemento: {
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly id_edt_elemento: CodecTypes['pg/uuid@1']['output'];
+      readonly id_edt_plantilla: CodecTypes['pg/uuid@1']['output'];
+      readonly id_edt_plantilla_elemento: CodecTypes['pg/uuid@1']['output'];
+      readonly id_edt_plantilla_elemento_padre: CodecTypes['pg/uuid@1']['output'] | null;
+      readonly orden: CodecTypes['pg/int4@1']['output'];
+    };
     readonly gp_fase_proyecto: {
       readonly activo: CodecTypes['pg/bool@1']['output'];
       readonly codigo: Varchar<50>;
@@ -2631,6 +2778,55 @@ export type StorageColumnInputTypes = {
       readonly referencia_especifica: CodecTypes['pg/text@1']['input'] | null;
       readonly version: CodecTypes['pg/int4@1']['input'];
     };
+    readonly gp_edt_elemento: {
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly descripcion: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly id_categoria_servicio: CodecTypes['pg/int4@1']['input'] | null;
+      readonly id_edt_elemento: CodecTypes['pg/uuid@1']['input'];
+      readonly nombre: CodecTypes['sql/varchar@1']['input'];
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly gp_edt_matrimonio: {
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly estado: CodecTypes['pg/bool@1']['input'];
+      readonly id_edt_matrimonio: CodecTypes['pg/uuid@1']['input'];
+      readonly id_matrimonio: CodecTypes['pg/uuid@1']['input'];
+      readonly id_plantilla_origen: CodecTypes['pg/uuid@1']['input'] | null;
+      readonly nombre: CodecTypes['sql/varchar@1']['input'];
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly gp_edt_matrimonio_elemento: {
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly descripcion: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly id_categoria_servicio: CodecTypes['pg/int4@1']['input'] | null;
+      readonly id_edt_elemento_origen: CodecTypes['pg/uuid@1']['input'] | null;
+      readonly id_edt_matrimonio: CodecTypes['pg/uuid@1']['input'];
+      readonly id_edt_matrimonio_elemento: CodecTypes['pg/uuid@1']['input'];
+      readonly id_edt_matrimonio_elemento_padre: CodecTypes['pg/uuid@1']['input'] | null;
+      readonly nombre: CodecTypes['sql/varchar@1']['input'];
+      readonly orden: CodecTypes['pg/int4@1']['input'];
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly gp_edt_plantilla: {
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly descripcion: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly id_edt_plantilla: CodecTypes['pg/uuid@1']['input'];
+      readonly id_usuario: CodecTypes['pg/int4@1']['input'] | null;
+      readonly nombre: CodecTypes['sql/varchar@1']['input'];
+      readonly tipo: 'GLOBAL' | 'WP';
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly gp_edt_plantilla_elemento: {
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly id_edt_elemento: CodecTypes['pg/uuid@1']['input'];
+      readonly id_edt_plantilla: CodecTypes['pg/uuid@1']['input'];
+      readonly id_edt_plantilla_elemento: CodecTypes['pg/uuid@1']['input'];
+      readonly id_edt_plantilla_elemento_padre: CodecTypes['pg/uuid@1']['input'] | null;
+      readonly orden: CodecTypes['pg/int4@1']['input'];
+    };
     readonly gp_fase_proyecto: {
       readonly activo: CodecTypes['pg/bool@1']['input'];
       readonly codigo: CodecTypes['sql/varchar@1']['input'];
@@ -3228,6 +3424,7 @@ export namespace Models {
     estado: CodecTypes['pg/bool@1']['output'] | null;
     fechaCreacion: CodecTypes['pg/timestamptz-temporal@1']['output'];
     fechaModificacion: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+    edts: public_EdtMatrimonio[];
     invitados: public_Invitado[];
     mesas: public_Mesa[];
     novio1: public_Usuario | null;
@@ -3239,6 +3436,7 @@ export namespace Models {
     tipoCeremonia: public_TipoCeremonia | null;
     ubigeo: public_Ubigeo | null;
     readonly [RelationKeys]?:
+      | 'edts'
       | 'invitados'
       | 'mesas'
       | 'novio1'
@@ -3269,6 +3467,79 @@ export namespace Models {
     actividadesPlantilla: public_PlantillaActividad[];
     proyectos: public_Proyecto[];
     readonly [RelationKeys]?: 'actividadesPlantilla' | 'proyectos';
+  };
+  export type public_EdtElemento = {
+    idEdtElemento: CodecTypes['pg/uuid@1']['output'];
+    nombre: Varchar<200>;
+    descripcion: Varchar<1000> | null;
+    idCategoriaServicio: CodecTypes['pg/int4@1']['output'] | null;
+    activo: CodecTypes['pg/bool@1']['output'];
+    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    categoriaServicio: public_CategoriaServicio | null;
+    elementosMatrimonio: public_EdtMatrimonioElemento[];
+    elementosPlantilla: public_EdtPlantillaElemento[];
+    readonly [RelationKeys]?: 'categoriaServicio' | 'elementosMatrimonio' | 'elementosPlantilla';
+  };
+  export type public_EdtPlantilla = {
+    idEdtPlantilla: CodecTypes['pg/uuid@1']['output'];
+    nombre: Varchar<200>;
+    descripcion: Varchar<1000> | null;
+    tipo: 'GLOBAL' | 'WP';
+    idUsuario: CodecTypes['pg/int4@1']['output'] | null;
+    activo: CodecTypes['pg/bool@1']['output'];
+    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    edtsMatrimonioOrigen: public_EdtMatrimonio[];
+    elementos: public_EdtPlantillaElemento[];
+    usuario: public_Usuario | null;
+    readonly [RelationKeys]?: 'edtsMatrimonioOrigen' | 'elementos' | 'usuario';
+  };
+  export type public_EdtPlantillaElemento = {
+    idEdtPlantillaElemento: CodecTypes['pg/uuid@1']['output'];
+    idEdtPlantilla: CodecTypes['pg/uuid@1']['output'];
+    idEdtElemento: CodecTypes['pg/uuid@1']['output'];
+    idEdtPlantillaElementoPadre: CodecTypes['pg/uuid@1']['output'] | null;
+    orden: CodecTypes['pg/int4@1']['output'];
+    activo: CodecTypes['pg/bool@1']['output'];
+    elemento: public_EdtElemento;
+    hijos: public_EdtPlantillaElemento[];
+    padre: public_EdtPlantillaElemento | null;
+    plantilla: public_EdtPlantilla;
+    readonly [RelationKeys]?: 'elemento' | 'hijos' | 'padre' | 'plantilla';
+  };
+  export type public_EdtMatrimonio = {
+    idEdtMatrimonio: CodecTypes['pg/uuid@1']['output'];
+    idMatrimonio: CodecTypes['pg/uuid@1']['output'];
+    idPlantillaOrigen: CodecTypes['pg/uuid@1']['output'] | null;
+    nombre: Varchar<200>;
+    estado: CodecTypes['pg/bool@1']['output'];
+    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    elementos: public_EdtMatrimonioElemento[];
+    matrimonio: public_Matrimonio;
+    plantillaOrigen: public_EdtPlantilla | null;
+    readonly [RelationKeys]?: 'elementos' | 'matrimonio' | 'plantillaOrigen';
+  };
+  export type public_EdtMatrimonioElemento = {
+    idEdtMatrimonioElemento: CodecTypes['pg/uuid@1']['output'];
+    idEdtMatrimonio: CodecTypes['pg/uuid@1']['output'];
+    idEdtElementoOrigen: CodecTypes['pg/uuid@1']['output'] | null;
+    idEdtMatrimonioElementoPadre: CodecTypes['pg/uuid@1']['output'] | null;
+    nombre: Varchar<200>;
+    descripcion: Varchar<1000> | null;
+    idCategoriaServicio: CodecTypes['pg/int4@1']['output'] | null;
+    orden: CodecTypes['pg/int4@1']['output'];
+    activo: CodecTypes['pg/bool@1']['output'];
+    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    categoriaServicio: public_CategoriaServicio | null;
+    edtMatrimonio: public_EdtMatrimonio;
+    elementoOrigen: public_EdtElemento | null;
+    hijos: public_EdtMatrimonioElemento[];
+    padre: public_EdtMatrimonioElemento | null;
+    readonly [RelationKeys]?:
+      'categoriaServicio' | 'edtMatrimonio' | 'elementoOrigen' | 'hijos' | 'padre';
   };
   export type public_BuenaPractica = {
     idBuenaPractica: CodecTypes['pg/int8@1']['output'];
@@ -3675,8 +3946,11 @@ export namespace Models {
     createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     categoriasPresupuesto: public_CategoriaPresupuesto[];
+    elementosEdt: public_EdtElemento[];
+    elementosEdtMatrimonio: public_EdtMatrimonioElemento[];
     servicios: public_ProveedorServicio[];
-    readonly [RelationKeys]?: 'categoriasPresupuesto' | 'servicios';
+    readonly [RelationKeys]?:
+      'categoriasPresupuesto' | 'elementosEdt' | 'elementosEdtMatrimonio' | 'servicios';
   };
   export type public_ProveedorServicio = {
     idProveedorServicio: CodecTypes['pg/int4@1']['output'];
@@ -4198,6 +4472,7 @@ export namespace Models {
     matrimoniosNovio2: public_Matrimonio[];
     notificacionesDestino: public_Notificacion[];
     personaNatural: public_PersonaNatural;
+    plantillasEdt: public_EdtPlantilla[];
     proyectosPm: public_Proyecto[];
     rsvpsVerificacionManual1: public_Rsvp[];
     rsvpsVerificacionManual2: public_Rsvp[];
@@ -4212,6 +4487,7 @@ export namespace Models {
       | 'matrimoniosNovio2'
       | 'notificacionesDestino'
       | 'personaNatural'
+      | 'plantillasEdt'
       | 'proyectosPm'
       | 'rsvpsVerificacionManual1'
       | 'rsvpsVerificacionManual2'
@@ -4260,6 +4536,11 @@ export declare const models: {
     Matrimonio: Models.public_Matrimonio;
     TipoCeremonia: Models.public_TipoCeremonia;
     FaseProyecto: Models.public_FaseProyecto;
+    EdtElemento: Models.public_EdtElemento;
+    EdtPlantilla: Models.public_EdtPlantilla;
+    EdtPlantillaElemento: Models.public_EdtPlantillaElemento;
+    EdtMatrimonio: Models.public_EdtMatrimonio;
+    EdtMatrimonioElemento: Models.public_EdtMatrimonioElemento;
     BuenaPractica: Models.public_BuenaPractica;
     CategoriaRelacion: Models.public_CategoriaRelacion;
     Invitado: Models.public_Invitado;
@@ -5925,6 +6206,522 @@ type ContractBase = Omit<
                 },
               ];
               foreignKeys: readonly [];
+            };
+            readonly gp_edt_elemento: {
+              columns: {
+                readonly id_edt_elemento: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly nombre: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly length: 200 };
+                };
+                readonly descripcion: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly length: 1000 };
+                };
+                readonly id_categoria_servicio: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: true;
+                };
+                readonly activo: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', true>;
+                  };
+                };
+                readonly created_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                };
+                readonly updated_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id_edt_elemento'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'gp_edt_elemento_id_categoria_servicio_idx_1a4a76bb';
+                  readonly prefix: 'gp_edt_elemento_id_categoria_servicio_idx';
+                  readonly columns: readonly ['id_categoria_servicio'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'gp_edt_elemento_activo_idx_4c0f2ecc';
+                  readonly prefix: 'gp_edt_elemento_activo_idx';
+                  readonly columns: readonly ['activo'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'gp_edt_elemento';
+                    readonly columns: readonly ['id_categoria_servicio'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'pv_categoria_servicio';
+                    readonly columns: readonly ['id_categoria_servicio'];
+                  };
+                  readonly name: 'gp_edt_elemento_categoria_fk';
+                },
+              ];
+            };
+            readonly gp_edt_matrimonio: {
+              columns: {
+                readonly id_edt_matrimonio: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly id_matrimonio: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly id_plantilla_origen: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: true;
+                };
+                readonly nombre: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly length: 200 };
+                };
+                readonly estado: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', true>;
+                  };
+                };
+                readonly created_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                };
+                readonly updated_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id_edt_matrimonio'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'gp_edt_matrimonio_id_matrimonio_estado_idx_26a97345';
+                  readonly prefix: 'gp_edt_matrimonio_id_matrimonio_estado_idx';
+                  readonly columns: readonly ['id_matrimonio', 'estado'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'gp_edt_matrimonio_id_plantilla_origen_idx_e4cc0c49';
+                  readonly prefix: 'gp_edt_matrimonio_id_plantilla_origen_idx';
+                  readonly columns: readonly ['id_plantilla_origen'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'gp_edt_matrimonio_id_matrimonio_idx_97ab526e';
+                  readonly prefix: 'gp_edt_matrimonio_id_matrimonio_idx';
+                  readonly columns: readonly ['id_matrimonio'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'gp_edt_matrimonio';
+                    readonly columns: readonly ['id_matrimonio'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'gp_matrimonio';
+                    readonly columns: readonly ['id_matrimonio'];
+                  };
+                  readonly name: 'gp_edt_matrimonio_fk';
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'gp_edt_matrimonio';
+                    readonly columns: readonly ['id_plantilla_origen'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'gp_edt_plantilla';
+                    readonly columns: readonly ['id_edt_plantilla'];
+                  };
+                  readonly name: 'gp_edt_matrimonio_plantilla_fk';
+                },
+              ];
+            };
+            readonly gp_edt_matrimonio_elemento: {
+              columns: {
+                readonly id_edt_matrimonio_elemento: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly id_edt_matrimonio: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly id_edt_elemento_origen: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: true;
+                };
+                readonly id_edt_matrimonio_elemento_padre: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: true;
+                };
+                readonly nombre: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly length: 200 };
+                };
+                readonly descripcion: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly length: 1000 };
+                };
+                readonly id_categoria_servicio: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: true;
+                };
+                readonly orden: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/int4@1', 0>;
+                  };
+                };
+                readonly activo: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', true>;
+                  };
+                };
+                readonly created_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                };
+                readonly updated_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id_edt_matrimonio_elemento'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'gp_edt_me_matrimonio_orden_idx';
+                  readonly columns: readonly ['id_edt_matrimonio', 'orden'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'gp_edt_me_origen_idx';
+                  readonly columns: readonly ['id_edt_elemento_origen'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'gp_edt_me_padre_idx';
+                  readonly columns: readonly ['id_edt_matrimonio_elemento_padre'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'gp_edt_me_categoria_idx';
+                  readonly columns: readonly ['id_categoria_servicio'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'gp_edt_matrimonio_elemento_id_edt_matrimonio_idx_ab0ec48b';
+                  readonly prefix: 'gp_edt_matrimonio_elemento_id_edt_matrimonio_idx';
+                  readonly columns: readonly ['id_edt_matrimonio'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'gp_edt_matrimonio_elemento';
+                    readonly columns: readonly ['id_edt_matrimonio'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'gp_edt_matrimonio';
+                    readonly columns: readonly ['id_edt_matrimonio'];
+                  };
+                  readonly name: 'gp_edt_me_matrimonio_fk';
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'gp_edt_matrimonio_elemento';
+                    readonly columns: readonly ['id_edt_elemento_origen'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'gp_edt_elemento';
+                    readonly columns: readonly ['id_edt_elemento'];
+                  };
+                  readonly name: 'gp_edt_me_origen_fk';
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'gp_edt_matrimonio_elemento';
+                    readonly columns: readonly ['id_categoria_servicio'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'pv_categoria_servicio';
+                    readonly columns: readonly ['id_categoria_servicio'];
+                  };
+                  readonly name: 'gp_edt_me_categoria_fk';
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'gp_edt_matrimonio_elemento';
+                    readonly columns: readonly ['id_edt_matrimonio_elemento_padre'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'gp_edt_matrimonio_elemento';
+                    readonly columns: readonly ['id_edt_matrimonio_elemento'];
+                  };
+                  readonly name: 'gp_edt_me_padre_fk';
+                },
+              ];
+            };
+            readonly gp_edt_plantilla: {
+              columns: {
+                readonly id_edt_plantilla: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly nombre: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly length: 200 };
+                };
+                readonly descripcion: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly length: 1000 };
+                };
+                readonly tipo: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+                readonly id_usuario: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: true;
+                };
+                readonly activo: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', true>;
+                  };
+                };
+                readonly created_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                };
+                readonly updated_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id_edt_plantilla'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'gp_edt_plantilla_id_usuario_idx_00d592a0';
+                  readonly prefix: 'gp_edt_plantilla_id_usuario_idx';
+                  readonly columns: readonly ['id_usuario'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'gp_edt_plantilla_tipo_activo_idx_5ba56ff7';
+                  readonly prefix: 'gp_edt_plantilla_tipo_activo_idx';
+                  readonly columns: readonly ['tipo', 'activo'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'gp_edt_plantilla';
+                    readonly columns: readonly ['id_usuario'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'au_usuario';
+                    readonly columns: readonly ['id_usuario'];
+                  };
+                  readonly name: 'gp_edt_plantilla_usuario_fk';
+                },
+              ];
+            };
+            readonly gp_edt_plantilla_elemento: {
+              columns: {
+                readonly id_edt_plantilla_elemento: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly id_edt_plantilla: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly id_edt_elemento: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly id_edt_plantilla_elemento_padre: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: true;
+                };
+                readonly orden: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/int4@1', 0>;
+                  };
+                };
+                readonly activo: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', true>;
+                  };
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id_edt_plantilla_elemento'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'gp_edt_pe_plantilla_orden_idx';
+                  readonly columns: readonly ['id_edt_plantilla', 'orden'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'gp_edt_pe_elemento_idx';
+                  readonly columns: readonly ['id_edt_elemento'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'gp_edt_pe_padre_idx';
+                  readonly columns: readonly ['id_edt_plantilla_elemento_padre'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'gp_edt_plantilla_elemento_id_edt_plantilla_idx_986c3286';
+                  readonly prefix: 'gp_edt_plantilla_elemento_id_edt_plantilla_idx';
+                  readonly columns: readonly ['id_edt_plantilla'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'gp_edt_plantilla_elemento';
+                    readonly columns: readonly ['id_edt_plantilla'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'gp_edt_plantilla';
+                    readonly columns: readonly ['id_edt_plantilla'];
+                  };
+                  readonly name: 'gp_edt_pe_plantilla_fk';
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'gp_edt_plantilla_elemento';
+                    readonly columns: readonly ['id_edt_elemento'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'gp_edt_elemento';
+                    readonly columns: readonly ['id_edt_elemento'];
+                  };
+                  readonly name: 'gp_edt_pe_elemento_fk';
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'gp_edt_plantilla_elemento';
+                    readonly columns: readonly ['id_edt_plantilla_elemento_padre'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'gp_edt_plantilla_elemento';
+                    readonly columns: readonly ['id_edt_plantilla_elemento'];
+                  };
+                  readonly name: 'gp_edt_pe_padre_fk';
+                },
+              ];
             };
             readonly gp_fase_proyecto: {
               columns: {
@@ -10637,6 +11434,10 @@ type ContractBase = Omit<
                 'POST_EVENTO',
               ];
             };
+            readonly gp_edt_tipo_plantilla: {
+              readonly kind: 'valueSet';
+              readonly values: readonly ['GLOBAL', 'WP'];
+            };
             readonly gp_moneda: {
               readonly kind: 'valueSet';
               readonly values: readonly ['SOLES', 'DOLARES'];
@@ -10762,6 +11563,26 @@ type ContractBase = Omit<
     readonly gp_fase_proyecto: {
       readonly namespace: 'public' & NamespaceId;
       readonly model: 'FaseProyecto';
+    };
+    readonly gp_edt_elemento: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'EdtElemento';
+    };
+    readonly gp_edt_plantilla: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'EdtPlantilla';
+    };
+    readonly gp_edt_plantilla_elemento: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'EdtPlantillaElemento';
+    };
+    readonly gp_edt_matrimonio: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'EdtMatrimonio';
+    };
+    readonly gp_edt_matrimonio_elemento: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'EdtMatrimonioElemento';
     };
     readonly gp_buena_practica: {
       readonly namespace: 'public' & NamespaceId;
@@ -11765,6 +12586,28 @@ type ContractBase = Omit<
                   readonly targetFields: readonly ['idCategoriaServicio'];
                 };
               };
+              readonly elementosEdt: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'EdtElemento';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idCategoriaServicio'];
+                  readonly targetFields: readonly ['idCategoriaServicio'];
+                };
+              };
+              readonly elementosEdtMatrimonio: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'EdtMatrimonioElemento';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idCategoriaServicio'];
+                  readonly targetFields: readonly ['idCategoriaServicio'];
+                };
+              };
               readonly servicios: {
                 readonly to: {
                   readonly namespace: 'public' & NamespaceId;
@@ -12564,6 +13407,526 @@ type ContractBase = Omit<
                 readonly activo: { readonly column: 'activo' };
                 readonly createdAt: { readonly column: 'created_at' };
                 readonly updatedAt: { readonly column: 'updated_at' };
+              };
+            };
+          };
+          readonly EdtElemento: {
+            readonly fields: {
+              readonly idEdtElemento: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly nombre: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 200 };
+                };
+              };
+              readonly descripcion: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 1000 };
+                };
+              };
+              readonly idCategoriaServicio: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly activo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+            };
+            readonly relations: {
+              readonly categoriaServicio: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'CategoriaServicio';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['idCategoriaServicio'];
+                  readonly targetFields: readonly ['idCategoriaServicio'];
+                };
+              };
+              readonly elementosMatrimonio: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'EdtMatrimonioElemento';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idEdtElemento'];
+                  readonly targetFields: readonly ['idEdtElementoOrigen'];
+                };
+              };
+              readonly elementosPlantilla: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'EdtPlantillaElemento';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idEdtElemento'];
+                  readonly targetFields: readonly ['idEdtElemento'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'gp_edt_elemento';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly idEdtElemento: { readonly column: 'id_edt_elemento' };
+                readonly nombre: { readonly column: 'nombre' };
+                readonly descripcion: { readonly column: 'descripcion' };
+                readonly idCategoriaServicio: { readonly column: 'id_categoria_servicio' };
+                readonly activo: { readonly column: 'activo' };
+                readonly createdAt: { readonly column: 'created_at' };
+                readonly updatedAt: { readonly column: 'updated_at' };
+              };
+            };
+          };
+          readonly EdtMatrimonio: {
+            readonly fields: {
+              readonly idEdtMatrimonio: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly idMatrimonio: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly idPlantillaOrigen: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly nombre: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 200 };
+                };
+              };
+              readonly estado: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+            };
+            readonly relations: {
+              readonly elementos: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'EdtMatrimonioElemento';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idEdtMatrimonio'];
+                  readonly targetFields: readonly ['idEdtMatrimonio'];
+                };
+              };
+              readonly matrimonio: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Matrimonio';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['idMatrimonio'];
+                  readonly targetFields: readonly ['idMatrimonio'];
+                };
+              };
+              readonly plantillaOrigen: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'EdtPlantilla';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['idPlantillaOrigen'];
+                  readonly targetFields: readonly ['idEdtPlantilla'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'gp_edt_matrimonio';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly idEdtMatrimonio: { readonly column: 'id_edt_matrimonio' };
+                readonly idMatrimonio: { readonly column: 'id_matrimonio' };
+                readonly idPlantillaOrigen: { readonly column: 'id_plantilla_origen' };
+                readonly nombre: { readonly column: 'nombre' };
+                readonly estado: { readonly column: 'estado' };
+                readonly createdAt: { readonly column: 'created_at' };
+                readonly updatedAt: { readonly column: 'updated_at' };
+              };
+            };
+          };
+          readonly EdtMatrimonioElemento: {
+            readonly fields: {
+              readonly idEdtMatrimonioElemento: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly idEdtMatrimonio: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly idEdtElementoOrigen: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly idEdtMatrimonioElementoPadre: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly nombre: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 200 };
+                };
+              };
+              readonly descripcion: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 1000 };
+                };
+              };
+              readonly idCategoriaServicio: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly orden: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly activo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+            };
+            readonly relations: {
+              readonly categoriaServicio: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'CategoriaServicio';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['idCategoriaServicio'];
+                  readonly targetFields: readonly ['idCategoriaServicio'];
+                };
+              };
+              readonly edtMatrimonio: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'EdtMatrimonio';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['idEdtMatrimonio'];
+                  readonly targetFields: readonly ['idEdtMatrimonio'];
+                };
+              };
+              readonly elementoOrigen: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'EdtElemento';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['idEdtElementoOrigen'];
+                  readonly targetFields: readonly ['idEdtElemento'];
+                };
+              };
+              readonly hijos: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'EdtMatrimonioElemento';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idEdtMatrimonioElemento'];
+                  readonly targetFields: readonly ['idEdtMatrimonioElementoPadre'];
+                };
+              };
+              readonly padre: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'EdtMatrimonioElemento';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['idEdtMatrimonioElementoPadre'];
+                  readonly targetFields: readonly ['idEdtMatrimonioElemento'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'gp_edt_matrimonio_elemento';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly idEdtMatrimonioElemento: { readonly column: 'id_edt_matrimonio_elemento' };
+                readonly idEdtMatrimonio: { readonly column: 'id_edt_matrimonio' };
+                readonly idEdtElementoOrigen: { readonly column: 'id_edt_elemento_origen' };
+                readonly idEdtMatrimonioElementoPadre: {
+                  readonly column: 'id_edt_matrimonio_elemento_padre';
+                };
+                readonly nombre: { readonly column: 'nombre' };
+                readonly descripcion: { readonly column: 'descripcion' };
+                readonly idCategoriaServicio: { readonly column: 'id_categoria_servicio' };
+                readonly orden: { readonly column: 'orden' };
+                readonly activo: { readonly column: 'activo' };
+                readonly createdAt: { readonly column: 'created_at' };
+                readonly updatedAt: { readonly column: 'updated_at' };
+              };
+            };
+          };
+          readonly EdtPlantilla: {
+            readonly fields: {
+              readonly idEdtPlantilla: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly nombre: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 200 };
+                };
+              };
+              readonly descripcion: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 1000 };
+                };
+              };
+              readonly tipo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly idUsuario: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly activo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+            };
+            readonly relations: {
+              readonly edtsMatrimonioOrigen: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'EdtMatrimonio';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idEdtPlantilla'];
+                  readonly targetFields: readonly ['idPlantillaOrigen'];
+                };
+              };
+              readonly elementos: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'EdtPlantillaElemento';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idEdtPlantilla'];
+                  readonly targetFields: readonly ['idEdtPlantilla'];
+                };
+              };
+              readonly usuario: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Usuario';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['idUsuario'];
+                  readonly targetFields: readonly ['idUsuario'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'gp_edt_plantilla';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly idEdtPlantilla: { readonly column: 'id_edt_plantilla' };
+                readonly nombre: { readonly column: 'nombre' };
+                readonly descripcion: { readonly column: 'descripcion' };
+                readonly tipo: { readonly column: 'tipo' };
+                readonly idUsuario: { readonly column: 'id_usuario' };
+                readonly activo: { readonly column: 'activo' };
+                readonly createdAt: { readonly column: 'created_at' };
+                readonly updatedAt: { readonly column: 'updated_at' };
+              };
+            };
+          };
+          readonly EdtPlantillaElemento: {
+            readonly fields: {
+              readonly idEdtPlantillaElemento: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly idEdtPlantilla: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly idEdtElemento: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly idEdtPlantillaElementoPadre: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly orden: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly activo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+            };
+            readonly relations: {
+              readonly elemento: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'EdtElemento';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['idEdtElemento'];
+                  readonly targetFields: readonly ['idEdtElemento'];
+                };
+              };
+              readonly hijos: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'EdtPlantillaElemento';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idEdtPlantillaElemento'];
+                  readonly targetFields: readonly ['idEdtPlantillaElementoPadre'];
+                };
+              };
+              readonly padre: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'EdtPlantillaElemento';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['idEdtPlantillaElementoPadre'];
+                  readonly targetFields: readonly ['idEdtPlantillaElemento'];
+                };
+              };
+              readonly plantilla: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'EdtPlantilla';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['idEdtPlantilla'];
+                  readonly targetFields: readonly ['idEdtPlantilla'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'gp_edt_plantilla_elemento';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly idEdtPlantillaElemento: { readonly column: 'id_edt_plantilla_elemento' };
+                readonly idEdtPlantilla: { readonly column: 'id_edt_plantilla' };
+                readonly idEdtElemento: { readonly column: 'id_edt_elemento' };
+                readonly idEdtPlantillaElementoPadre: {
+                  readonly column: 'id_edt_plantilla_elemento_padre';
+                };
+                readonly orden: { readonly column: 'orden' };
+                readonly activo: { readonly column: 'activo' };
               };
             };
           };
@@ -13580,6 +14943,17 @@ type ContractBase = Omit<
               };
             };
             readonly relations: {
+              readonly edts: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'EdtMatrimonio';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idMatrimonio'];
+                  readonly targetFields: readonly ['idMatrimonio'];
+                };
+              };
               readonly invitados: {
                 readonly to: {
                   readonly namespace: 'public' & NamespaceId;
@@ -17961,6 +19335,17 @@ type ContractBase = Omit<
                   readonly targetFields: readonly ['idPersonaNatural'];
                 };
               };
+              readonly plantillasEdt: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'EdtPlantilla';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idUsuario'];
+                  readonly targetFields: readonly ['idUsuario'];
+                };
+              };
               readonly proyectosPm: {
                 readonly to: {
                   readonly namespace: 'public' & NamespaceId;
@@ -18042,6 +19427,13 @@ type ContractBase = Omit<
           };
         };
         readonly enum: {
+          readonly gp_edt_tipo_plantilla: {
+            readonly codecId: 'pg/text@1';
+            readonly members: readonly [
+              { readonly name: 'GLOBAL'; readonly value: 'GLOBAL' },
+              { readonly name: 'WP'; readonly value: 'WP' },
+            ];
+          };
           readonly cr_tipo_temporal: {
             readonly codecId: 'pg/text@1';
             readonly members: readonly [
@@ -18400,6 +19792,82 @@ type ContractBase = Omit<
           };
           readonly onCreate: { readonly kind: 'generator'; readonly id: 'instantNow' };
           readonly onUpdate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'gp_edt_elemento';
+            readonly column: 'id_edt_elemento';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'uuidv4' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'gp_edt_elemento';
+            readonly column: 'updated_at';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+          readonly onUpdate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'gp_edt_matrimonio';
+            readonly column: 'id_edt_matrimonio';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'uuidv4' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'gp_edt_matrimonio';
+            readonly column: 'updated_at';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+          readonly onUpdate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'gp_edt_matrimonio_elemento';
+            readonly column: 'id_edt_matrimonio_elemento';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'uuidv4' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'gp_edt_matrimonio_elemento';
+            readonly column: 'updated_at';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+          readonly onUpdate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'gp_edt_plantilla';
+            readonly column: 'id_edt_plantilla';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'uuidv4' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'gp_edt_plantilla';
+            readonly column: 'updated_at';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+          readonly onUpdate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'gp_edt_plantilla_elemento';
+            readonly column: 'id_edt_plantilla_elemento';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'uuidv4' };
         },
         {
           readonly ref: {

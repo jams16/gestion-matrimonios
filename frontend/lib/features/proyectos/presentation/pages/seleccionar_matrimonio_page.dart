@@ -123,6 +123,9 @@ class _Layout extends StatelessWidget {
                         ),
                       ),
                       onSelected: (opcion) {
+                        if (opcion == _OpcionPerfilMatrimonios.misPlantillas) {
+                          context.go('/plantillas-edt');
+                        }
                         if (opcion == _OpcionPerfilMatrimonios.cerrarSesion) {
                           _cerrarSesion(context);
                         }

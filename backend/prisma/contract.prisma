@@ -56,6 +56,7 @@ model Matrimonio {
   proveedores       MatrimonioProveedor[]
   presupuesto       Presupuesto?
   riesgos           Riesgo[]
+  edts              EdtMatrimonio[]
 
   @@index([idNovio1])
   @@index([idNovio2])
@@ -86,6 +87,111 @@ model FaseProyecto {
   actividadesPlantilla PlantillaActividad[]
 
   @@map("gp_fase_proyecto")
+}
+
+enum gp_edt_tipo_plantilla {
+  GLOBAL
+  WP
+}
+
+model EdtElemento {
+  idEdtElemento       Uuid                    @id @default(uuid()) @map("id_edt_elemento")
+  nombre              VarChar(200)
+  descripcion         VarChar(1000)?
+  idCategoriaServicio Int?                    @map("id_categoria_servicio")
+  activo              Boolean                 @default(true)
+  createdAt           DateTime                @default(now()) @map("created_at")
+  updatedAt           temporal.updatedAt()    @map("updated_at")
+
+  categoriaServicio   CategoriaServicio?      @relation("edt_elementos_categoria", fields:[idCategoriaServicio], references:[idCategoriaServicio], onDelete: Restrict, map: "gp_edt_elemento_categoria_fk")
+  elementosPlantilla  EdtPlantillaElemento[]
+  elementosMatrimonio EdtMatrimonioElemento[] @relation("edt_matrimonio_elemento_origen")
+
+  @@index([idCategoriaServicio])
+  @@index([activo])
+  @@map("gp_edt_elemento")
+}
+
+model EdtPlantilla {
+  idEdtPlantilla       Uuid                   @id @default(uuid()) @map("id_edt_plantilla")
+  nombre               VarChar(200)
+  descripcion          VarChar(1000)?
+  tipo                 gp_edt_tipo_plantilla
+  idUsuario            Int?                   @map("id_usuario")
+  activo               Boolean                @default(true)
+  createdAt            DateTime               @default(now()) @map("created_at")
+  updatedAt            temporal.updatedAt()   @map("updated_at")
+
+  usuario              Usuario?               @relation("edt_plantillas_usuario", fields:[idUsuario], references:[idUsuario], onDelete: Restrict, map: "gp_edt_plantilla_usuario_fk")
+  elementos            EdtPlantillaElemento[]
+  edtsMatrimonioOrigen EdtMatrimonio[]        @relation("edt_matrimonio_plantilla_origen")
+
+  @@index([idUsuario])
+  @@index([tipo, activo])
+  @@map("gp_edt_plantilla")
+}
+
+model EdtPlantillaElemento {
+  idEdtPlantillaElemento      Uuid                   @id @default(uuid()) @map("id_edt_plantilla_elemento")
+  idEdtPlantilla              Uuid                   @map("id_edt_plantilla")
+  idEdtElemento               Uuid                   @map("id_edt_elemento")
+  idEdtPlantillaElementoPadre Uuid?                  @map("id_edt_plantilla_elemento_padre")
+  orden                       Int                    @default(0)
+  activo                      Boolean                @default(true)
+
+  plantilla                   EdtPlantilla           @relation(fields:[idEdtPlantilla], references:[idEdtPlantilla], onDelete: Cascade, map: "gp_edt_pe_plantilla_fk")
+  elemento                    EdtElemento            @relation(fields:[idEdtElemento], references:[idEdtElemento], onDelete: Restrict, map: "gp_edt_pe_elemento_fk")
+  padre                       EdtPlantillaElemento?  @relation("edt_plantilla_elemento_arbol", fields:[idEdtPlantillaElementoPadre], references:[idEdtPlantillaElemento], onDelete: Cascade, map: "gp_edt_pe_padre_fk")
+  hijos                       EdtPlantillaElemento[] @relation("edt_plantilla_elemento_arbol")
+
+  @@index([idEdtPlantilla, orden], map: "gp_edt_pe_plantilla_orden_idx")
+  @@index([idEdtElemento], map: "gp_edt_pe_elemento_idx")
+  @@index([idEdtPlantillaElementoPadre], map: "gp_edt_pe_padre_idx")
+  @@map("gp_edt_plantilla_elemento")
+}
+
+model EdtMatrimonio {
+  idEdtMatrimonio   Uuid                    @id @default(uuid()) @map("id_edt_matrimonio")
+  idMatrimonio      Uuid                    @map("id_matrimonio")
+  idPlantillaOrigen Uuid?                   @map("id_plantilla_origen")
+  nombre            VarChar(200)
+  estado            Boolean                 @default(true)
+  createdAt         DateTime                @default(now()) @map("created_at")
+  updatedAt         temporal.updatedAt()    @map("updated_at")
+
+  matrimonio        Matrimonio              @relation(fields:[idMatrimonio], references:[idMatrimonio], onDelete: Cascade, map: "gp_edt_matrimonio_fk")
+  plantillaOrigen   EdtPlantilla?           @relation("edt_matrimonio_plantilla_origen", fields:[idPlantillaOrigen], references:[idEdtPlantilla], onDelete: Restrict, map: "gp_edt_matrimonio_plantilla_fk")
+  elementos         EdtMatrimonioElemento[]
+
+  @@index([idMatrimonio, estado])
+  @@index([idPlantillaOrigen])
+  @@map("gp_edt_matrimonio")
+}
+
+model EdtMatrimonioElemento {
+  idEdtMatrimonioElemento      Uuid                    @id @default(uuid()) @map("id_edt_matrimonio_elemento")
+  idEdtMatrimonio              Uuid                    @map("id_edt_matrimonio")
+  idEdtElementoOrigen          Uuid?                   @map("id_edt_elemento_origen")
+  idEdtMatrimonioElementoPadre Uuid?                   @map("id_edt_matrimonio_elemento_padre")
+  nombre                       VarChar(200)
+  descripcion                  VarChar(1000)?
+  idCategoriaServicio          Int?                    @map("id_categoria_servicio")
+  orden                        Int                     @default(0)
+  activo                       Boolean                 @default(true)
+  createdAt                    DateTime                @default(now()) @map("created_at")
+  updatedAt                    temporal.updatedAt()    @map("updated_at")
+
+  edtMatrimonio                EdtMatrimonio           @relation(fields:[idEdtMatrimonio], references:[idEdtMatrimonio], onDelete: Cascade, map: "gp_edt_me_matrimonio_fk")
+  elementoOrigen               EdtElemento?            @relation("edt_matrimonio_elemento_origen", fields:[idEdtElementoOrigen], references:[idEdtElemento], onDelete: Restrict, map: "gp_edt_me_origen_fk")
+  categoriaServicio            CategoriaServicio?      @relation("edt_matrimonio_elementos_categoria", fields:[idCategoriaServicio], references:[idCategoriaServicio], onDelete: Restrict, map: "gp_edt_me_categoria_fk")
+  padre                        EdtMatrimonioElemento?  @relation("edt_matrimonio_elemento_arbol", fields:[idEdtMatrimonioElementoPadre], references:[idEdtMatrimonioElemento], onDelete: Cascade, map: "gp_edt_me_padre_fk")
+  hijos                        EdtMatrimonioElemento[] @relation("edt_matrimonio_elemento_arbol")
+
+  @@index([idEdtMatrimonio, orden], map: "gp_edt_me_matrimonio_orden_idx")
+  @@index([idEdtElementoOrigen], map: "gp_edt_me_origen_idx")
+  @@index([idEdtMatrimonioElementoPadre], map: "gp_edt_me_padre_idx")
+  @@index([idCategoriaServicio], map: "gp_edt_me_categoria_idx")
+  @@map("gp_edt_matrimonio_elemento")
 }
 
 model BuenaPractica {
@@ -662,16 +768,18 @@ model Proveedor {
 }
 
 model CategoriaServicio {
-  idCategoriaServicio   Int                    @id @default(autoincrement()) @map("id_categoria_servicio")
-  codigo                VarChar(50)            @unique
-  nombre                VarChar(100)
-  descripcion           VarChar(500)?
-  orden                 Int
-  activo                Boolean                @default(true)
-  createdAt             DateTime               @default(now()) @map("created_at")
-  updatedAt             temporal.updatedAt()   @map("updated_at")
-  servicios             ProveedorServicio[]
-  categoriasPresupuesto CategoriaPresupuesto[]
+  idCategoriaServicio    Int                     @id @default(autoincrement()) @map("id_categoria_servicio")
+  codigo                 VarChar(50)             @unique
+  nombre                 VarChar(100)
+  descripcion            VarChar(500)?
+  orden                  Int
+  activo                 Boolean                 @default(true)
+  createdAt              DateTime                @default(now()) @map("created_at")
+  updatedAt              temporal.updatedAt()    @map("updated_at")
+  servicios              ProveedorServicio[]
+  categoriasPresupuesto  CategoriaPresupuesto[]
+  elementosEdt           EdtElemento[]           @relation("edt_elementos_categoria")
+  elementosEdtMatrimonio EdtMatrimonioElemento[] @relation("edt_matrimonio_elementos_categoria")
 
   @@index([activo])
   @@map("pv_categoria_servicio")
@@ -1366,6 +1474,7 @@ model Usuario {
   rsvpsVerificacionManual1 Rsvp[]               @relation("rsvp_verificacion_1")
   rsvpsVerificacionManual2 Rsvp[]               @relation("rsvp_verificacion_2")
   historialRsvp            RsvpHistorial[]      @relation("rsvp_historial_usuario")
+  plantillasEdt            EdtPlantilla[]       @relation("edt_plantillas_usuario")
 
   @@index([idPersonaNatural])
   @@index([idEntidad])

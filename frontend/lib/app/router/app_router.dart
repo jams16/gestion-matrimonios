@@ -16,6 +16,8 @@ import '../../features/invitados/presentation/gestion_invitados_pages.dart';
 import '../../features/proveedores/presentation/proveedores_page.dart';
 import '../../features/riesgos/presentation/riesgos_page.dart';
 import '../../features/presupuesto/presentation/presupuesto_page.dart';
+import '../../features/edt/presentation/plantillas_edt_page.dart';
+import '../../features/edt/presentation/plantilla_edt_editor_page.dart';
 import '../../features/autenticacion/infrastructure/auth_session.dart';
 import 'route_names.dart';
 
@@ -81,7 +83,11 @@ final appRouter = GoRouter(
           nombre: state.extra,
           seccion: 2,
           contenidoGestion: idProyecto == null
-              ? const Center(child: Text('Selecciona un matrimonio para ver el presupuesto.'))
+              ? const Center(
+                  child: Text(
+                    'Selecciona un matrimonio para ver el presupuesto.',
+                  ),
+                )
               : PresupuestoPage(idProyecto: idProyecto),
         );
       },
@@ -105,9 +111,34 @@ final appRouter = GoRouter(
         final idProyecto = AuthSession.idProyectoActivo;
         return InicioPage(
           sinSeleccionNavegacion: true,
+          ocultarNavegacion: true,
           contenidoExtra: idProyecto == null
-              ? const Center(child: Text('Selecciona un matrimonio para ver sus riesgos.'))
+              ? const Center(
+                  child: Text('Selecciona un matrimonio para ver sus riesgos.'),
+                )
               : RiesgosPage(idProyecto: idProyecto),
+        );
+      },
+    ),
+    GoRoute(
+      path: '/plantillas-edt',
+      builder: (context, state) => const InicioPage(
+        sinSeleccionNavegacion: true,
+        ocultarNavegacion: true,
+        contenidoExtra: PlantillasEdtPage(),
+      ),
+    ),
+    GoRoute(
+      path: '/plantillas-edt/editor',
+      builder: (context, state) {
+        final plantilla = Map<String, dynamic>.from(state.extra as Map);
+        return InicioPage(
+          sinSeleccionNavegacion: true,
+          ocultarNavegacion: true,
+          contenidoExtra: PlantillaEdtEditorPage(
+            idPlantilla: plantilla['idEdtPlantilla'].toString(),
+            nombrePlantilla: plantilla['nombre']?.toString() ?? 'Plantilla EDT',
+          ),
         );
       },
     ),
@@ -125,9 +156,8 @@ final appRouter = GoRouter(
     ),
     GoRoute(
       path: RouteNames.registroExitoso,
-      builder: (context, state) => RegistroExitosoPage(
-        nombre: state.extra as String?,
-      ),
+      builder: (context, state) =>
+          RegistroExitosoPage(nombre: state.extra as String?),
     ),
     GoRoute(
       path: RouteNames.recuperarContrasena,
