@@ -5,6 +5,7 @@ import {
   NestInterceptor,
 } from '@nestjs/common';
 import { Observable, map } from 'rxjs';
+import { Temporal } from 'temporal-polyfill';
 
 import { ApiResponse } from '../types/api-response.type';
 
@@ -45,6 +46,7 @@ export class ApiResponseInterceptor<T> implements NestInterceptor<
 /// como texto para evitar pérdida de precisión en clientes JavaScript/Flutter.
 function serializarBigInt(valor: unknown): unknown {
   if (typeof valor === 'bigint') return valor.toString();
+  if (valor instanceof Temporal.Instant) return valor.toString();
   if (valor instanceof Date || valor === null || typeof valor !== 'object') {
     return valor;
   }

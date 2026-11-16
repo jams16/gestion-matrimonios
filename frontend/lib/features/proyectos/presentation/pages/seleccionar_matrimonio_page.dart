@@ -89,22 +89,65 @@ class _Layout extends StatelessWidget {
           children: [
             Align(
               alignment: Alignment.centerLeft,
-              child: TextButton.icon(
-                onPressed: () async {
-                  if (desdeHome) {
-                    context.go('/home');
-                    return;
-                  }
-                  final token = await AuthSession.obtenerRefreshToken();
-                  try {
-                    if (token != null) await AuthApi().cerrarSesion(token);
-                  } finally {
-                    await AuthSession.limpiar();
-                    if (context.mounted) context.go('/bienvenida');
-                  }
-                },
-                icon: const Icon(Icons.arrow_back),
-                label: Text(desdeHome ? 'Volver' : 'Cerrar sesión'),
+              child: SizedBox(
+                width: double.infinity,
+                child: Row(
+                  children: [
+                    TextButton.icon(
+                      onPressed: () {
+                        if (desdeHome) {
+                          context.go('/home');
+                        } else {
+                          _cerrarSesion(context);
+                        }
+                      },
+                      icon: const Icon(Icons.arrow_back),
+                      label: Text(desdeHome ? 'Volver' : 'Cerrar sesión'),
+                    ),
+                    const Spacer(),
+                    PopupMenuButton<_OpcionPerfilMatrimonios>(
+                      tooltip: 'Menu de perfil',
+                      icon: const Icon(Icons.account_circle_outlined),
+                      position: PopupMenuPosition.under,
+                      offset: const Offset(0, 8),
+                      constraints: const BoxConstraints(
+                        minWidth: 260,
+                        maxWidth: 300,
+                      ),
+                      elevation: 6,
+                      color: AppColors.surface,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        side: BorderSide(
+                          color: AppColors.border.withValues(alpha: 0.45),
+                        ),
+                      ),
+                      onSelected: (opcion) {
+                        if (opcion == _OpcionPerfilMatrimonios.cerrarSesion) {
+                          _cerrarSesion(context);
+                        }
+                      },
+                      itemBuilder: (_) => const [
+                        PopupMenuItem(
+                          value: _OpcionPerfilMatrimonios.misPlantillas,
+                          child: _ItemMenuPerfil(
+                            icono: Icons.layers_outlined,
+                            texto: 'Mis plantillas',
+                          ),
+                        ),
+                        PopupMenuDivider(),
+                        PopupMenuItem(
+                          value: _OpcionPerfilMatrimonios.cerrarSesion,
+                          child: _ItemMenuPerfil(
+                            icono: Icons.logout,
+                            texto: 'Cerrar sesión',
+                            danger: true,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
             const SizedBox(height: AppSpacing.xl),
@@ -178,6 +221,46 @@ class _Layout extends StatelessWidget {
       ),
     ),
   );
+
+  Future<void> _cerrarSesion(BuildContext context) async {
+    final token = await AuthSession.obtenerRefreshToken();
+    try {
+      if (token != null) {
+        await AuthApi().cerrarSesion(token);
+      }
+    } finally {
+      await AuthSession.limpiar();
+      if (context.mounted) {
+        context.go('/bienvenida');
+      }
+    }
+  }
+}
+
+enum _OpcionPerfilMatrimonios { misPlantillas, cerrarSesion }
+
+class _ItemMenuPerfil extends StatelessWidget {
+  const _ItemMenuPerfil({
+    required this.icono,
+    required this.texto,
+    this.danger = false,
+  });
+
+  final IconData icono;
+  final String texto;
+  final bool danger;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = danger ? AppColors.error : AppColors.textPrimary;
+    return Row(
+      children: [
+        Icon(icono, size: 20, color: color),
+        const SizedBox(width: AppSpacing.md),
+        Text(texto, style: TextStyle(color: color)),
+      ],
+    );
+  }
 }
 
 class _ConsejoCicloVida extends StatelessWidget {
@@ -188,11 +271,14 @@ class _ConsejoCicloVida extends StatelessWidget {
   @override
   Widget build(BuildContext context) => practica.when(
     loading: () => const AppInformationCard(texto: 'Cargando recomendacion...'),
-    error: (_, __) => const SizedBox.shrink(),
+    error: (_, _) => const SizedBox.shrink(),
     data: (item) {
-      final texto = item?['aplicacionMatrimonios']?.toString() ??
+      final texto =
+          item?['aplicacionMatrimonios']?.toString() ??
           item?['aplicacion_matrimonios']?.toString();
-      if (texto == null || texto.trim().isEmpty) return const SizedBox.shrink();
+      if (texto == null || texto.trim().isEmpty) {
+        return const SizedBox.shrink();
+      }
       return AppInformationCard(
         texto: texto,
         detalle: texto,
@@ -208,8 +294,9 @@ class _ErrorState extends ConsumerWidget {
   final Object error;
 
   String get _mensaje {
-    if (error is StateError)
+    if (error is StateError) {
       return error.toString().replaceFirst('Bad state: ', '');
+    }
     if (error is DioException) {
       final respuesta = (error as DioException).response;
       final estado = respuesta?.statusCode;

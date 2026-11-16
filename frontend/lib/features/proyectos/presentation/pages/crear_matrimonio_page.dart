@@ -151,7 +151,9 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
         _apellido2.text = p2['apellidoPaterno']?.toString() ?? '';
         _dni2.text = p2['dni']?.toString() ?? '';
         _usuario2.text = p2['usuario']?.toString() ?? '';
-        _fechaSeleccionada = _fechaDesdeApi(matrimonio['fechaMatrimonio']);
+        _fechaSeleccionada = _fechaDesdeApi(
+          matrimonio['fechaMatrimonio'] ?? matrimonio['fecha_matrimonio'],
+        );
         _fecha.text = _fechaSeleccionada == null
             ? ''
             : _fechaVisible(_fechaSeleccionada!);

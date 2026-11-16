@@ -162,13 +162,17 @@ class _InicioPageState extends State<InicioPage> {
                             onPressed: () async {
                               final proyecto = AuthSession.idProyectoActivo;
                               if (proyecto == null) return;
-                              final raw = await CronogramaApi().obtenerMatrimonio(proyecto);
+                              final raw = await CronogramaApi()
+                                  .obtenerMatrimonio(proyecto);
                               final matrimonio = raw['matrimonio'] is Map
-                                  ? Map<String, dynamic>.from(raw['matrimonio'] as Map)
+                                  ? Map<String, dynamic>.from(
+                                      raw['matrimonio'] as Map,
+                                    )
                                   : raw;
-                              final id = (matrimonio['idMatrimonio'] ??
-                                      matrimonio['id_matrimonio'])
-                                  ?.toString();
+                              final id =
+                                  (matrimonio['idMatrimonio'] ??
+                                          matrimonio['id_matrimonio'])
+                                      ?.toString();
                               if (id == null) return;
                               await PresupuestoApi().leerNotificacion(
                                 id,
@@ -370,8 +374,11 @@ class _InicioPageState extends State<InicioPage> {
     PopupMenuButton<_OpcionPerfil>(
       tooltip: 'Menu de perfil',
       icon: const Icon(Icons.account_circle_outlined),
-      offset: const Offset(-12, 8),
+      position: PopupMenuPosition.under,
+      offset: const Offset(0, 8),
       constraints: const BoxConstraints(minWidth: 260, maxWidth: 300),
+      elevation: 6,
+      color: AppColors.surface,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
         side: BorderSide(color: AppColors.border.withValues(alpha: 0.45)),

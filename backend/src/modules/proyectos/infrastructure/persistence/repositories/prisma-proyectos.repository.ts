@@ -654,7 +654,12 @@ export class PrismaProyectosRepository implements ProyectosRepository {
     ].filter((responsable) => responsable !== null);
     return {
       proyecto,
-      matrimonio,
+      // Temporal.Instant no se debe exponer como objeto: Flutter requiere una
+      // fecha ISO para reconstruir el selector al retomar un borrador.
+      matrimonio: {
+        ...matrimonio,
+        fechaMatrimonio: matrimonio.fechaMatrimonio?.toString() ?? null,
+      },
       pareja1:
         persona1 && usuario1
           ? { ...persona1, usuario: usuario1.usuario }
