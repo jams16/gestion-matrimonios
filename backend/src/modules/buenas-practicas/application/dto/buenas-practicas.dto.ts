@@ -1,36 +1,31 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { Transform, Type } from 'class-transformer';
-import { IsBoolean, IsDateString, IsInt, IsOptional, IsString, MaxLength, Min } from 'class-validator';
+import { IsBoolean, IsInt, IsOptional, IsString, MaxLength, Min } from 'class-validator';
 
 const booleano = ({ value }: { value: unknown }) => value === 'true' ? true : value === 'false' ? false : value;
 
 export class CrearBuenaPracticaDto {
-  @IsString() @MaxLength(50) codigo!: string;
+  @IsString() @MaxLength(10) codigo!: string;
   @IsString() @MaxLength(200) nombre!: string;
-  @IsString() @MaxLength(100) categoria!: string;
-  @IsString() @MaxLength(100) areaGestion!: string;
-  @IsOptional() @Type(() => Number) @IsInt() @Min(1) idFaseProyecto?: number;
-  @IsString() @MaxLength(1000) descripcionResumida!: string;
-  @IsString() @MaxLength(2000) aplicacionMatrimonios!: string;
-  @IsString() @MaxLength(2000) ejemploPractico!: string;
-  @IsOptional() @IsString() @MaxLength(2000) recomendaciones?: string;
-  @IsString() @MaxLength(250) fuenteMetodologica!: string;
-  @IsOptional() @IsString() @MaxLength(500) referenciaEspecifica?: string;
-  @IsOptional() @Type(() => Number) @IsInt() @Min(0) anioFuente?: number;
-  @IsOptional() @IsString() @MaxLength(50) version?: string;
-  @IsOptional() @IsDateString() fechaVigencia?: string;
-  @IsOptional() @IsDateString() fechaFinVigencia?: string;
+  @IsString() descripcion!: string;
+  @IsString() aplicacionMatrimonios!: string;
+  @IsString() @MaxLength(150) areaGestion!: string;
+  @IsOptional() @IsString() @MaxLength(250) fuenteMetodologica?: string;
+  @IsOptional() @IsString() @MaxLength(100) anioFuente?: string;
+  @IsOptional() @IsString() referenciaEspecifica?: string;
+  @IsOptional() @Transform(({ value }) => value === undefined || value === null || value === '' ? undefined : BigInt(value)) idFaseProyecto?: bigint;
+  @IsOptional() @IsString() ejemploPractico?: string;
+  @IsOptional() @IsString() recomendaciones?: string;
   @IsOptional() @Transform(booleano) @IsBoolean() estado?: boolean;
-  @IsOptional() @Type(() => Number) @IsInt() @Min(0) ordenVisualizacion?: number;
+  @IsOptional() @Type(() => Number) @IsInt() @Min(1) version?: number;
 }
 
 export class ActualizarBuenaPracticaDto extends PartialType(CrearBuenaPracticaDto) {}
 
 export class ListarBuenasPracticasDto {
   @IsOptional() @IsString() buscar?: string;
-  @IsOptional() @IsString() @MaxLength(100) categoria?: string;
-  @IsOptional() @IsString() @MaxLength(100) areaGestion?: string;
-  @IsOptional() @Type(() => Number) @IsInt() @Min(1) idFaseProyecto?: number;
+  @IsOptional() @IsString() @MaxLength(150) areaGestion?: string;
+  @IsOptional() @Transform(({ value }) => value === undefined || value === null || value === '' ? undefined : BigInt(value)) idFaseProyecto?: bigint;
   @IsOptional() @Transform(booleano) @IsBoolean() estado?: boolean;
   @IsOptional() @Transform(booleano) @IsBoolean() mostrarTodos?: boolean;
 }

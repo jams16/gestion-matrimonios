@@ -1,22 +1,18 @@
 export interface BuenaPractica {
-  idBuenaPractica: string;
+  idBuenaPractica: bigint;
   codigo: string;
   nombre: string;
-  categoria: string;
-  areaGestion: string;
-  idFaseProyecto: number | null;
-  descripcionResumida: string;
+  descripcion: string;
   aplicacionMatrimonios: string;
-  ejemploPractico: string;
-  recomendaciones: string | null;
-  fuenteMetodologica: string;
+  areaGestion: string;
+  fuenteMetodologica: string | null;
+  anioFuente: string | null;
   referenciaEspecifica: string | null;
-  anioFuente: number | null;
-  version: string | null;
-  fechaVigencia: unknown | null;
-  fechaFinVigencia: unknown | null;
+  idFaseProyecto: bigint | null;
+  ejemploPractico: string | null;
+  recomendaciones: string | null;
   estado: boolean;
-  ordenVisualizacion: number;
-  idUsuarioCreacion: number;
-  idUsuarioModificacion: number | null;
+  version: number;
+  idUsuarioCreacion: bigint | null;
+  idUsuarioModificacion: bigint | null;
 }

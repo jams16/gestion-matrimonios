@@ -16,6 +16,7 @@ class AppWizardPagePattern extends StatelessWidget {
     required this.content,
     required this.onPrevious,
     required this.onNext,
+    this.footer,
     this.description,
     this.nextLabel = 'Siguiente',
     this.previousLabel = 'Anterior',
@@ -30,6 +31,7 @@ class AppWizardPagePattern extends StatelessWidget {
   final int currentStep;
 
   final Widget content;
+  final Widget? footer;
 
   final VoidCallback? onPrevious;
   final VoidCallback? onNext;
@@ -82,6 +84,11 @@ class AppWizardPagePattern extends StatelessWidget {
             );
           }),
         ),
+
+        if (footer != null) ...[
+          const SizedBox(height: 8),
+          footer!,
+        ],
 
         const SizedBox(height: 24),
 

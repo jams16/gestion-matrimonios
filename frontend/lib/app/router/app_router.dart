@@ -7,6 +7,7 @@ import '../../features/autenticacion/presentation/pages/iniciar_sesion_page.dart
 import '../../features/autenticacion/presentation/pages/inicio_page.dart';
 import '../../features/autenticacion/presentation/pages/recuperar_contrasena_page.dart';
 import '../../features/autenticacion/presentation/pages/registrarse_page.dart';
+import '../../features/autenticacion/presentation/pages/registro_exitoso_page.dart';
 import '../../features/proyectos/presentation/pages/seleccionar_matrimonio_page.dart';
 import '../../features/proyectos/presentation/pages/crear_matrimonio_page.dart';
 import '../../features/cronograma/presentation/pages/cronograma_page.dart';
@@ -121,6 +122,12 @@ final appRouter = GoRouter(
     GoRoute(
       path: RouteNames.registrarse,
       builder: (context, state) => const RegistrarsePage(),
+    ),
+    GoRoute(
+      path: RouteNames.registroExitoso,
+      builder: (context, state) => RegistroExitosoPage(
+        nombre: state.extra as String?,
+      ),
     ),
     GoRoute(
       path: RouteNames.recuperarContrasena,

@@ -3,6 +3,7 @@ import 'dotenv/config';
 import datosBase from './datos-base/catalogos-y-plantillas-base.json';
 import ubigeosBase from './datos-base/ubigeos-base.json';
 import riesgosComunesBase from './datos-base/riesgos-comunes-base';
+import buenasPracticasBase from './datos-base/buenas-practicas-base';
 
 type Fila = Record<string, unknown>;
 type Resumen = { existentes: number; restaurados: number; errores: string[] };
@@ -217,20 +218,54 @@ async function catalogoRiesgos(c: ClienteSql, categorias: Resumen, plantillas: R
   }
 }
 
+async function buenasPracticas(c: ClienteSql, r: Resumen) {
+  r.existentes = await contar(c, 'gp_buena_practica');
+  for (const practica of buenasPracticasBase) {
+    try {
+      const resultado = await c.query(
+        `INSERT INTO public.gp_buena_practica (
+          codigo, nombre, descripcion, aplicacion_matrimonios, area_gestion,
+          fuente_metodologica, anio_fuente, referencia_especifica,
+          id_fase_proyecto, ejemplo_practico, recomendaciones, estado, version
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, true, 1)
+        ON CONFLICT (codigo) DO UPDATE SET
+          nombre = EXCLUDED.nombre, descripcion = EXCLUDED.descripcion,
+          aplicacion_matrimonios = EXCLUDED.aplicacion_matrimonios,
+          area_gestion = EXCLUDED.area_gestion,
+          fuente_metodologica = EXCLUDED.fuente_metodologica,
+          anio_fuente = EXCLUDED.anio_fuente,
+          referencia_especifica = EXCLUDED.referencia_especifica,
+          id_fase_proyecto = EXCLUDED.id_fase_proyecto,
+          ejemplo_practico = EXCLUDED.ejemplo_practico,
+          recomendaciones = EXCLUDED.recomendaciones,
+          estado = EXCLUDED.estado, version = EXCLUDED.version,
+          fecha_modificacion = CURRENT_TIMESTAMP
+        RETURNING (xmax = 0) AS insertado`,
+        [practica.codigo, practica.nombre, practica.descripcion, practica.aplicacionMatrimonios,
+          practica.areaGestion, practica.fuenteMetodologica, practica.anioFuente,
+          practica.referenciaEspecifica, practica.idFaseProyecto, practica.ejemploPractico,
+          practica.recomendaciones],
+      );
+      if (resultado.rows[0]?.insertado) r.restaurados += 1;
+      else r.existentes += 1;
+    } catch (error) { r.errores.push(`${practica.codigo}: ${errorTexto(error)}`); }
+  }
+}
+
 async function secuencias(c: ClienteSql) {
-  const pares = [['gp_tipo_ceremonia', 'id_tipo_ceremonia'], ['gp_fase_proyecto', 'id_fase_proyecto'], ['cr_plantilla_hito', 'id_plantilla_hito'], ['cr_plantilla_actividad', 'id_plantilla_actividad'], ['cr_plantilla_actividad_tipo_ceremonia', 'id_plantilla_actividad_tipo_ceremonia'], ['cr_plantilla_dependencia', 'id_plantilla_dependencia'], ['cr_plantilla_timing', 'id_plantilla_timing'], ['cr_plantilla_timing_tipo_ceremonia', 'id_plantilla_timing_tipo_ceremonia']];
+  const pares = [['gp_tipo_ceremonia', 'id_tipo_ceremonia'], ['gp_fase_proyecto', 'id_fase_proyecto'], ['gp_buena_practica', 'id_buena_practica'], ['cr_plantilla_hito', 'id_plantilla_hito'], ['cr_plantilla_actividad', 'id_plantilla_actividad'], ['cr_plantilla_actividad_tipo_ceremonia', 'id_plantilla_actividad_tipo_ceremonia'], ['cr_plantilla_dependencia', 'id_plantilla_dependencia'], ['cr_plantilla_timing', 'id_plantilla_timing'], ['cr_plantilla_timing_tipo_ceremonia', 'id_plantilla_timing_tipo_ceremonia']];
   for (const [tabla, columna] of pares) await c.query(`SELECT setval(pg_get_serial_sequence('public.${tabla}', '${columna}'), COALESCE((SELECT MAX(${columna}) FROM public.${tabla}), 1), true)`);
 }
 
 async function ejecutar() {
   const c = new Client({ connectionString: process.env.DATABASE_URL });
-  const r = { ubigeos: vacio(), categoriasProveedor: vacio(), tipos: vacio(), fases: vacio(), hitos: vacio(), actividades: vacio(), dependencias: vacio(), timing: vacio(), actividadTipo: vacio(), timingTipo: vacio(), categoriasRiesgo: vacio(), plantillasRiesgo: vacio(), mitigacionesRiesgo: vacio(), planesRiesgo: vacio() };
+  const r = { ubigeos: vacio(), categoriasProveedor: vacio(), tipos: vacio(), fases: vacio(), buenasPracticas: vacio(), hitos: vacio(), actividades: vacio(), dependencias: vacio(), timing: vacio(), actividadTipo: vacio(), timingTipo: vacio(), categoriasRiesgo: vacio(), plantillasRiesgo: vacio(), mitigacionesRiesgo: vacio(), planesRiesgo: vacio() };
   await c.connect();
   try {
-    await ubigeos(c, r.ubigeos); await categoriasProveedor(c, r.categoriasProveedor); const tipos = await catalogo(c, r.tipos, 'gp_tipo_ceremonia', datos.gp_tipo_ceremonia); const fases = await catalogo(c, r.fases, 'gp_fase_proyecto', datos.gp_fase_proyecto); const hitosReales = await hitos(c, r.hitos); const actividadesReales = await actividades(c, r.actividades, hitosReales, fases); await dependencias(c, r.dependencias, actividadesReales); const timingsReales = await timings(c, r.timing); await relaciones(c, r.actividadTipo, 'cr_plantilla_actividad_tipo_ceremonia', datos.cr_plantilla_actividad_tipo_ceremonia, actividadesReales, tipos); await relaciones(c, r.timingTipo, 'cr_plantilla_timing_tipo_ceremonia', datos.cr_plantilla_timing_tipo_ceremonia, timingsReales, tipos); await catalogoRiesgos(c, r.categoriasRiesgo, r.plantillasRiesgo, r.mitigacionesRiesgo, r.planesRiesgo); await secuencias(c);
+    await ubigeos(c, r.ubigeos); await categoriasProveedor(c, r.categoriasProveedor); const tipos = await catalogo(c, r.tipos, 'gp_tipo_ceremonia', datos.gp_tipo_ceremonia); const fases = await catalogo(c, r.fases, 'gp_fase_proyecto', datos.gp_fase_proyecto); await buenasPracticas(c, r.buenasPracticas); const hitosReales = await hitos(c, r.hitos); const actividadesReales = await actividades(c, r.actividades, hitosReales, fases); await dependencias(c, r.dependencias, actividadesReales); const timingsReales = await timings(c, r.timing); await relaciones(c, r.actividadTipo, 'cr_plantilla_actividad_tipo_ceremonia', datos.cr_plantilla_actividad_tipo_ceremonia, actividadesReales, tipos); await relaciones(c, r.timingTipo, 'cr_plantilla_timing_tipo_ceremonia', datos.cr_plantilla_timing_tipo_ceremonia, timingsReales, tipos); await catalogoRiesgos(c, r.categoriasRiesgo, r.plantillasRiesgo, r.mitigacionesRiesgo, r.planesRiesgo); await secuencias(c);
   } finally { await c.end(); }
   console.log('Restauración de datos base');
-  const etiquetas: Array<[string, Resumen]> = [['Ubigeos', r.ubigeos], ['Categorías de proveedor', r.categoriasProveedor], ['Tipos de ceremonia', r.tipos], ['Fases de proyecto', r.fases], ['Hitos de plantilla', r.hitos], ['Actividades de plantilla', r.actividades], ['Dependencias de plantilla', r.dependencias], ['Timing de plantilla', r.timing], ['Relaciones actividad/tipo de ceremonia', r.actividadTipo], ['Relaciones timing/tipo de ceremonia', r.timingTipo], ['Categorías de riesgo', r.categoriasRiesgo], ['Plantillas de riesgo', r.plantillasRiesgo], ['Mitigaciones de riesgo', r.mitigacionesRiesgo], ['Planes de riesgo', r.planesRiesgo]];
+  const etiquetas: Array<[string, Resumen]> = [['Ubigeos', r.ubigeos], ['Categorías de proveedor', r.categoriasProveedor], ['Tipos de ceremonia', r.tipos], ['Fases de proyecto', r.fases], ['Buenas prácticas', r.buenasPracticas], ['Hitos de plantilla', r.hitos], ['Actividades de plantilla', r.actividades], ['Dependencias de plantilla', r.dependencias], ['Timing de plantilla', r.timing], ['Relaciones actividad/tipo de ceremonia', r.actividadTipo], ['Relaciones timing/tipo de ceremonia', r.timingTipo], ['Categorías de riesgo', r.categoriasRiesgo], ['Plantillas de riesgo', r.plantillasRiesgo], ['Mitigaciones de riesgo', r.mitigacionesRiesgo], ['Planes de riesgo', r.planesRiesgo]];
   etiquetas.forEach(([nombre, resumen]) => console.log(`${nombre}: ${resumen.restaurados} restaurados | ${resumen.existentes} ya existentes | ${resumen.errores.length} errores`));
   const tablas = etiquetas.map(([, resumen]) => resumen); const totalNuevos = tablas.reduce((n, x) => n + x.restaurados, 0); const totalExistentes = tablas.reduce((n, x) => n + x.existentes, 0); const errores = tablas.flatMap((x) => x.errores);
   console.log(`Total: ${totalNuevos} restaurados | ${totalExistentes} ya existentes | ${errores.length} errores`);

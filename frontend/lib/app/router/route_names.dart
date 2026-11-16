@@ -3,6 +3,7 @@ abstract final class RouteNames {
   static const bienvenida = '/bienvenida';
   static const iniciarSesion = '/iniciar-sesion';
   static const registrarse = '/registrarse';
+  static const registroExitoso = '/registro-exitoso';
   static const recuperarContrasena = '/recuperar-contrasena';
   static const matrimonios = '/matrimonios';
   static const matrimonio = '/matrimonio';
