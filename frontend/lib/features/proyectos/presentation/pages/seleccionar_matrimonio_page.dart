@@ -8,6 +8,7 @@ import '../../../../app/responsive/responsive_layout.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_spacing.dart';
 import '../../../../core/widgets/buttons/app_button.dart';
+import '../../../../core/widgets/feedback/app_information_card.dart';
 import '../../../../core/widgets/page_states/app_page_loading.dart';
 import '../../../../app/router/route_names.dart';
 import '../../../autenticacion/infrastructure/auth_api.dart';
@@ -24,6 +25,7 @@ class SeleccionarMatrimonioPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final matrimonios = ref.watch(matrimoniosResumenProvider);
+    final practica = ref.watch(buenaPracticaProvider('GP05'));
 
     return Scaffold(
       backgroundColor: const Color(0xFFFDFBFF),
@@ -33,18 +35,21 @@ class SeleccionarMatrimonioPage extends ConsumerWidget {
             horizontalPadding: AppLayout.mobilePagePadding,
             maxWidth: AppLayout.maxFormWidth,
             matrimonios: matrimonios,
+            practica: practica,
             desdeHome: desdeHome,
           ),
           tablet: _Layout(
             horizontalPadding: AppLayout.tabletPagePadding,
             maxWidth: AppLayout.maxMediumWidth,
             matrimonios: matrimonios,
+            practica: practica,
             desdeHome: desdeHome,
           ),
           desktop: _Layout(
             horizontalPadding: AppLayout.desktopPagePadding,
             maxWidth: AppLayout.maxMediumWidth,
             matrimonios: matrimonios,
+            practica: practica,
             desdeHome: desdeHome,
           ),
         ),
@@ -58,12 +63,14 @@ class _Layout extends StatelessWidget {
     required this.horizontalPadding,
     required this.maxWidth,
     required this.matrimonios,
+    required this.practica,
     required this.desdeHome,
   });
 
   final double horizontalPadding;
   final double maxWidth;
   final AsyncValue<List<MatrimonioResumen>> matrimonios;
+  final AsyncValue<Map<String, dynamic>?> practica;
   final bool desdeHome;
 
   @override
@@ -116,6 +123,8 @@ class _Layout extends StatelessWidget {
                 context,
               ).textTheme.bodyLarge?.copyWith(color: AppColors.textSecondary),
             ),
+            const SizedBox(height: AppSpacing.md),
+            _ConsejoCicloVida(practica: practica),
             const SizedBox(height: AppSpacing.xl),
             Expanded(
               child: matrimonios.when(
@@ -168,6 +177,28 @@ class _Layout extends StatelessWidget {
         ),
       ),
     ),
+  );
+}
+
+class _ConsejoCicloVida extends StatelessWidget {
+  const _ConsejoCicloVida({required this.practica});
+
+  final AsyncValue<Map<String, dynamic>?> practica;
+
+  @override
+  Widget build(BuildContext context) => practica.when(
+    loading: () => const AppInformationCard(texto: 'Cargando recomendacion...'),
+    error: (_, __) => const SizedBox.shrink(),
+    data: (item) {
+      final texto = item?['aplicacionMatrimonios']?.toString() ??
+          item?['aplicacion_matrimonios']?.toString();
+      if (texto == null || texto.trim().isEmpty) return const SizedBox.shrink();
+      return AppInformationCard(
+        texto: texto,
+        detalle: texto,
+        etiquetaDetalle: 'Ver recomendacion completa',
+      );
+    },
   );
 }
 

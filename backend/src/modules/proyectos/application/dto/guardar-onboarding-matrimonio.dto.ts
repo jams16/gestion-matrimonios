@@ -52,6 +52,10 @@ export class GuardarOnboardingMatrimonioDto {
   @Type(() => Number)
   @Min(0)
   presupuesto?: number;
+  @ApiPropertyOptional({ enum: ['SOLES', 'DOLARES'] })
+  @IsOptional()
+  @IsString()
+  moneda?: 'SOLES' | 'DOLARES';
   @ApiPropertyOptional({
     minimum: 1,
     description: 'ID del catálogo gp_tipo_ceremonia.',

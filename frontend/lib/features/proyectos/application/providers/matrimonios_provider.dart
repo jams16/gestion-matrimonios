@@ -19,3 +19,10 @@ final matrimoniosResumenProvider =
     FutureProvider.autoDispose<List<MatrimonioResumen>>((ref) {
       return ref.watch(matrimoniosRepositoryProvider).listarResumenes();
     });
+
+final buenaPracticaProvider =
+    FutureProvider.autoDispose.family<Map<String, dynamic>?, String>(
+      (ref, codigo) => ref
+          .watch(matrimoniosRemoteDataSourceProvider)
+          .obtenerBuenaPracticaPorCodigo(codigo),
+    );

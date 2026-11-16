@@ -34,7 +34,7 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'4dbdb1ff7d66f5b07f7d54ef8970368d4f1223bd6015f10b1818b3a71fc4b510'>;
+  StorageHashBase<'7812dac0ea90013ba36bf72a60eed3ee3644e08293753b570b2d545cbbacc8e1'>;
 export type ExecutionHash =
   ExecutionHashBase<'11cb76e12d4e5683c1beb2ec34cb04d226138df6a98fdad43d394a253d5a8fa3'>;
 export type ProfileHash =
@@ -799,6 +799,7 @@ export type FieldOutputTypes = {
       readonly fechaInicio: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
       readonly fechaFin: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
       readonly presupuesto: Numeric<12, 2> | null;
+      readonly moneda: 'SOLES' | 'DOLARES';
       readonly objetivos: Varchar<1000> | null;
       readonly necesidades: Varchar<1000> | null;
       readonly supuestos: Varchar<1000> | null;
@@ -1532,6 +1533,7 @@ export type FieldInputTypes = {
       readonly fechaInicio: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
       readonly fechaFin: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
       readonly presupuesto: CodecTypes['pg/numeric@1']['input'] | null;
+      readonly moneda: 'SOLES' | 'DOLARES';
       readonly objetivos: CodecTypes['sql/varchar@1']['input'] | null;
       readonly necesidades: CodecTypes['sql/varchar@1']['input'] | null;
       readonly supuestos: CodecTypes['sql/varchar@1']['input'] | null;
@@ -1925,6 +1927,7 @@ export type StorageColumnTypes = {
       readonly id_fase_proyecto: CodecTypes['pg/int4@1']['output'] | null;
       readonly id_pm: CodecTypes['pg/int4@1']['output'] | null;
       readonly idProyecto: CodecTypes['pg/uuid@1']['output'];
+      readonly moneda: 'SOLES' | 'DOLARES';
       readonly necesidades: Varchar<1000> | null;
       readonly nombre: Varchar<150> | null;
       readonly objetivos: Varchar<1000> | null;
@@ -2660,6 +2663,7 @@ export type StorageColumnInputTypes = {
       readonly id_fase_proyecto: CodecTypes['pg/int4@1']['input'] | null;
       readonly id_pm: CodecTypes['pg/int4@1']['input'] | null;
       readonly idProyecto: CodecTypes['pg/uuid@1']['input'];
+      readonly moneda: 'SOLES' | 'DOLARES';
       readonly necesidades: CodecTypes['sql/varchar@1']['input'] | null;
       readonly nombre: CodecTypes['sql/varchar@1']['input'] | null;
       readonly objetivos: CodecTypes['sql/varchar@1']['input'] | null;
@@ -3183,6 +3187,7 @@ export namespace Models {
     fechaInicio: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
     fechaFin: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
     presupuesto: Numeric<12, 2> | null;
+    moneda: 'SOLES' | 'DOLARES';
     objetivos: Varchar<1000> | null;
     necesidades: Varchar<1000> | null;
     supuestos: Varchar<1000> | null;
@@ -6160,6 +6165,15 @@ type ContractBase = Omit<
                   readonly codecId: 'pg/numeric@1';
                   readonly nullable: true;
                   readonly typeParams: { readonly precision: 12; readonly scale: 2 };
+                };
+                readonly moneda: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/text@1', 'SOLES'>;
+                  };
                 };
                 readonly objetivos: {
                   readonly nativeType: 'character varying';
@@ -10622,6 +10636,10 @@ type ContractBase = Omit<
                 'DIA_EVENTO',
                 'POST_EVENTO',
               ];
+            };
+            readonly gp_moneda: {
+              readonly kind: 'valueSet';
+              readonly values: readonly ['SOLES', 'DOLARES'];
             };
             readonly in_tipo_entidad: {
               readonly kind: 'valueSet';
@@ -16269,6 +16287,10 @@ type ContractBase = Omit<
                   readonly typeParams: { readonly precision: 12; readonly scale: 2 };
                 };
               };
+              readonly moneda: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
               readonly objetivos: {
                 readonly nullable: true;
                 readonly type: {
@@ -16432,6 +16454,7 @@ type ContractBase = Omit<
                 readonly fechaInicio: { readonly column: 'fecha_inicio' };
                 readonly fechaFin: { readonly column: 'fecha_fin' };
                 readonly presupuesto: { readonly column: 'presupuesto' };
+                readonly moneda: { readonly column: 'moneda' };
                 readonly objetivos: { readonly column: 'objetivos' };
                 readonly necesidades: { readonly column: 'necesidades' };
                 readonly supuestos: { readonly column: 'supuestos' };
@@ -18066,6 +18089,13 @@ type ContractBase = Omit<
             readonly members: readonly [
               { readonly name: 'PEN'; readonly value: 'PEN' },
               { readonly name: 'USD'; readonly value: 'USD' },
+            ];
+          };
+          readonly gp_moneda: {
+            readonly codecId: 'pg/text@1';
+            readonly members: readonly [
+              { readonly name: 'SOLES'; readonly value: 'SOLES' },
+              { readonly name: 'DOLARES'; readonly value: 'DOLARES' },
             ];
           };
           readonly pv_estado_seleccion: {

@@ -6,6 +6,7 @@ model Proyecto {
   fechaInicio       DateTime?       @map("fecha_inicio")
   fechaFin          DateTime?       @map("fecha_fin")
   presupuesto       Numeric(12, 2)?
+  moneda            gp_moneda       @default(SOLES)
   objetivos         VarChar(1000)?
   necesidades       VarChar(1000)?
   supuestos         VarChar(1000)?
@@ -148,6 +149,11 @@ enum pv_tipo_proveedor {
 enum pv_moneda {
   PEN
   USD
+}
+
+enum gp_moneda {
+  SOLES
+  DOLARES
 }
 
 enum pv_estado_seleccion {

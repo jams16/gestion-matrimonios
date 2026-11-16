@@ -1,0 +1,86 @@
+[
+  {
+    "id": "column.public.gp_proyecto.moneda",
+    "label": "Add column \"moneda\" to \"gp_proyecto\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "moneda",
+        "table": "gp_proyecto"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"moneda\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "gp_proyecto",
+          "moneda"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"moneda\"",
+        "sql": "ALTER TABLE \"public\".\"gp_proyecto\" ADD COLUMN \"moneda\" text DEFAULT 'SOLES' NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"moneda\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "gp_proyecto",
+          "moneda"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "checkConstraint.gp_proyecto.gp_proyecto_moneda_check_ecffa0f2",
+    "label": "Add check constraint \"gp_proyecto_moneda_check_ecffa0f2\" on \"gp_proyecto\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "checkConstraint",
+        "name": "gp_proyecto_moneda_check_ecffa0f2",
+        "table": "gp_proyecto"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"gp_proyecto_moneda_check_ecffa0f2\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "gp_proyecto_moneda_check_ecffa0f2",
+          "public",
+          "\"public\".\"gp_proyecto\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add check constraint \"gp_proyecto_moneda_check_ecffa0f2\"",
+        "sql": "ALTER TABLE \"public\".\"gp_proyecto\" ADD CONSTRAINT \"gp_proyecto_moneda_check_ecffa0f2\" CHECK (\"moneda\" IN ('SOLES', 'DOLARES'))"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"gp_proyecto_moneda_check_ecffa0f2\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "gp_proyecto_moneda_check_ecffa0f2",
+          "public",
+          "\"public\".\"gp_proyecto\""
+        ]
+      }
+    ]
+  }
+]

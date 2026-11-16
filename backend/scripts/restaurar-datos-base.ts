@@ -3,7 +3,7 @@ import 'dotenv/config';
 import datosBase from './datos-base/catalogos-y-plantillas-base.json';
 import ubigeosBase from './datos-base/ubigeos-base.json';
 import riesgosComunesBase from './datos-base/riesgos-comunes-base';
-import buenasPracticasBase from './datos-base/buenas-practicas-base';
+import { valoresBuenasPracticasBase } from './datos-base/buenas-practicas-base';
 
 type Fila = Record<string, unknown>;
 type Resumen = { existentes: number; restaurados: number; errores: string[] };
@@ -26,7 +26,13 @@ const { Client } = require('pg') as { Client: ConstructorClienteSql };
 const datos = datosBase as Datos;
 const categoriasProveedorBase = ['LOCAL', 'CATERING', 'FOTOGRAFIA', 'VIDEO', 'MUSICA', 'DJ', 'ORQUESTA', 'DECORACION', 'FLORES', 'MAQUILLAJE', 'PEINADO', 'VESTIDO', 'TRAJE', 'TRANSPORTE', 'AUTO_NUPCIAL', 'HOTEL', 'INVITACIONES', 'TORTA', 'POSTRES', 'BAR', 'SEGURIDAD', 'LIMPIEZA', 'PHOTOBOOTH', 'ENTRETENIMIENTO', 'CORO', 'CEREMONIA', 'MOBILIARIO', 'ILUMINACION', 'SONIDO', 'RECUERDOS', 'OTROS'];
 const vacio = (): Resumen => ({ existentes: 0, restaurados: 0, errores: [] });
-const errorTexto = (error: unknown) => error instanceof Error ? error.message : String(error);
+const errorTexto = (error: unknown) => {
+  if (!(error instanceof Error)) return String(error);
+  const pg = error as Error & { detail?: string; hint?: string; position?: string };
+  return [pg.message, pg.detail, pg.hint, pg.position ? `posicion ${pg.position}` : null]
+    .filter(Boolean)
+    .join(' | ');
+};
 
 async function contar(c: ClienteSql, tabla: string) {
   return Number((await c.query(`SELECT count(*)::int AS total FROM public.${tabla}`)).rows[0].total);
@@ -220,35 +226,44 @@ async function catalogoRiesgos(c: ClienteSql, categorias: Resumen, plantillas: R
 
 async function buenasPracticas(c: ClienteSql, r: Resumen) {
   r.existentes = await contar(c, 'gp_buena_practica');
-  for (const practica of buenasPracticasBase) {
-    try {
-      const resultado = await c.query(
-        `INSERT INTO public.gp_buena_practica (
-          codigo, nombre, descripcion, aplicacion_matrimonios, area_gestion,
-          fuente_metodologica, anio_fuente, referencia_especifica,
-          id_fase_proyecto, ejemplo_practico, recomendaciones, estado, version
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, true, 1)
-        ON CONFLICT (codigo) DO UPDATE SET
-          nombre = EXCLUDED.nombre, descripcion = EXCLUDED.descripcion,
-          aplicacion_matrimonios = EXCLUDED.aplicacion_matrimonios,
-          area_gestion = EXCLUDED.area_gestion,
-          fuente_metodologica = EXCLUDED.fuente_metodologica,
-          anio_fuente = EXCLUDED.anio_fuente,
-          referencia_especifica = EXCLUDED.referencia_especifica,
-          id_fase_proyecto = EXCLUDED.id_fase_proyecto,
-          ejemplo_practico = EXCLUDED.ejemplo_practico,
-          recomendaciones = EXCLUDED.recomendaciones,
-          estado = EXCLUDED.estado, version = EXCLUDED.version,
-          fecha_modificacion = CURRENT_TIMESTAMP
-        RETURNING (xmax = 0) AS insertado`,
-        [practica.codigo, practica.nombre, practica.descripcion, practica.aplicacionMatrimonios,
-          practica.areaGestion, practica.fuenteMetodologica, practica.anioFuente,
-          practica.referenciaEspecifica, practica.idFaseProyecto, practica.ejemploPractico,
-          practica.recomendaciones],
-      );
-      if (resultado.rows[0]?.insertado) r.restaurados += 1;
-      else r.existentes += 1;
-    } catch (error) { r.errores.push(`${practica.codigo}: ${errorTexto(error)}`); }
+  try {
+    const resultado = await c.query(`
+      INSERT INTO public.gp_buena_practica (
+        codigo, nombre, descripcion, aplicacion_matrimonios, area_gestion,
+        fuente_metodologica, anio_fuente, referencia_especifica,
+        id_fase_proyecto, ejemplo_practico, recomendaciones, estado, version
+      )
+      SELECT
+        v.codigo, v.nombre, v.descripcion, v.aplicacion_matrimonios,
+        v.area_gestion, v.fuente_metodologica, v.anio_fuente,
+        v.referencia_especifica, NULL, NULL, NULL, TRUE, 1
+      FROM (VALUES ${valoresBuenasPracticasBase()}) AS v(
+        codigo, nombre, descripcion, aplicacion_matrimonios, area_gestion,
+        fuente_metodologica, anio_fuente, referencia_especifica
+      )
+      ON CONFLICT (codigo) DO UPDATE SET
+        nombre = EXCLUDED.nombre,
+        descripcion = EXCLUDED.descripcion,
+        aplicacion_matrimonios = EXCLUDED.aplicacion_matrimonios,
+        area_gestion = EXCLUDED.area_gestion,
+        fuente_metodologica = EXCLUDED.fuente_metodologica,
+        anio_fuente = EXCLUDED.anio_fuente,
+        referencia_especifica = EXCLUDED.referencia_especifica,
+        id_fase_proyecto = NULL,
+        ejemplo_practico = NULL,
+        recomendaciones = NULL,
+        estado = TRUE,
+        version = 1,
+        fecha_modificacion = CURRENT_TIMESTAMP
+      RETURNING (xmax = 0) AS insertado;
+    `);
+    for (const fila of resultado.rows) {
+      if (fila.insertado) {
+        r.restaurados += 1;
+      }
+    }
+  } catch (error) {
+    r.errores.push(errorTexto(error));
   }
 }
 
@@ -269,6 +284,10 @@ async function ejecutar() {
   etiquetas.forEach(([nombre, resumen]) => console.log(`${nombre}: ${resumen.restaurados} restaurados | ${resumen.existentes} ya existentes | ${resumen.errores.length} errores`));
   const tablas = etiquetas.map(([, resumen]) => resumen); const totalNuevos = tablas.reduce((n, x) => n + x.restaurados, 0); const totalExistentes = tablas.reduce((n, x) => n + x.existentes, 0); const errores = tablas.flatMap((x) => x.errores);
   console.log(`Total: ${totalNuevos} restaurados | ${totalExistentes} ya existentes | ${errores.length} errores`);
+  if (errores.length) {
+    console.error('Detalle de errores:');
+    for (const error of errores) console.error(`- ${error}`);
+  }
   if (errores.length) process.exitCode = 1;
 }
 

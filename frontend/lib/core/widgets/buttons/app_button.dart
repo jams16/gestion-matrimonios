@@ -15,6 +15,7 @@ class AppButton extends StatelessWidget {
     this.variant = AppButtonVariant.primary,
     this.size = AppButtonSize.medium,
     this.icon,
+    this.iconAfter = false,
     this.loading = false,
     this.expanded = false,
   });
@@ -27,6 +28,7 @@ class AppButton extends StatelessWidget {
   final AppButtonSize size;
 
   final IconData? icon;
+  final bool iconAfter;
 
   final bool loading;
   final bool expanded;
@@ -135,9 +137,13 @@ class AppButton extends StatelessWidget {
       return Text(label);
     }
 
+    final iconWidget = Icon(icon, size: 18);
+    final labelWidget = Text(label);
     return Row(
       mainAxisSize: MainAxisSize.min,
-      children: [Icon(icon, size: 18), const SizedBox(width: 8), Text(label)],
+      children: iconAfter
+          ? [labelWidget, const SizedBox(width: 8), iconWidget]
+          : [iconWidget, const SizedBox(width: 8), labelWidget],
     );
   }
 

@@ -20,7 +20,7 @@ export class ApiResponseInterceptor<T> implements NestInterceptor<
     const response = context.switchToHttp().getResponse();
     return next.handle().pipe(
       map((result) => {
-        const value = result as { mensaje?: string; data?: T };
+        const value = serializarBigInt(result) as { mensaje?: string; data?: T };
         if (
           value &&
           typeof value === 'object' &&
@@ -34,9 +34,25 @@ export class ApiResponseInterceptor<T> implements NestInterceptor<
             response.statusCode === 201
               ? 'Registro creado.'
               : 'Operación exitosa.',
-          data: result,
+          data: value as T,
         };
       }),
     );
   }
+}
+
+/// JSON.stringify no admite bigint. Los IDs BIGINT del contrato se exponen
+/// como texto para evitar pérdida de precisión en clientes JavaScript/Flutter.
+function serializarBigInt(valor: unknown): unknown {
+  if (typeof valor === 'bigint') return valor.toString();
+  if (valor instanceof Date || valor === null || typeof valor !== 'object') {
+    return valor;
+  }
+  if (Array.isArray(valor)) return valor.map(serializarBigInt);
+  return Object.fromEntries(
+    Object.entries(valor).map(([clave, contenido]) => [
+      clave,
+      serializarBigInt(contenido),
+    ]),
+  );
 }

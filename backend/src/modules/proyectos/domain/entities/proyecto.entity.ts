@@ -7,6 +7,7 @@ export interface Proyecto {
   fechaInicio: Temporal.Instant | null;
   fechaFin: Temporal.Instant | null;
   presupuesto: unknown;
+  moneda: 'SOLES' | 'DOLARES';
   objetivos: string | null;
   necesidades: string | null;
   supuestos: string | null;

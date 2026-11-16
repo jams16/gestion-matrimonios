@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../app/router/route_names.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_spacing.dart';
+import '../../../../core/widgets/feedback/app_information_card.dart';
 import '../../../../core/widgets/buttons/app_button.dart';
 import '../../../../core/widgets/feedback/app_snackbar.dart';
 import '../../../../core/widgets/inputs/app_number_field.dart';
@@ -47,17 +48,24 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
   int _segundosRestantes = 5;
   int _paso = 1, _invitados = 1;
   String? _ubigeo;
+  String _moneda = 'SOLES';
+  DateTime? _fechaSeleccionada;
   int? _idTipoCeremonia;
   final List<_TipoCeremoniaOpcion> _tiposCeremonia = [];
   String? _idProyecto;
   bool _guardando = false;
   late final Future<List<Map<String, dynamic>>> _ubigeos;
+  late final Future<Map<String, dynamic>?> _gp01;
+  late final Future<Map<String, dynamic>?> _gp02;
   final Map<String, String> _nombresUbigeo = {};
   @override
   void initState() {
     super.initState();
     _idProyecto = widget.idProyectoBorrador;
-    _ubigeos = MatrimoniosRemoteDataSource().listarUbigeos();
+    final dataSource = MatrimoniosRemoteDataSource();
+    _ubigeos = dataSource.listarUbigeos();
+    _gp01 = dataSource.obtenerBuenaPracticaPorCodigo('GP01');
+    _gp02 = dataSource.obtenerBuenaPracticaPorCodigo('GP02');
     _cargarNombresUbigeo();
     _cargarTiposCeremonia();
     if (widget.idProyectoBorrador != null) _cargarBorrador();
@@ -143,18 +151,23 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
         _apellido2.text = p2['apellidoPaterno']?.toString() ?? '';
         _dni2.text = p2['dni']?.toString() ?? '';
         _usuario2.text = p2['usuario']?.toString() ?? '';
-        _fecha.text =
-            matrimonio['fechaMatrimonio']?.toString().split('T').first ?? '';
+        _fechaSeleccionada = _fechaDesdeApi(matrimonio['fechaMatrimonio']);
+        _fecha.text = _fechaSeleccionada == null
+            ? ''
+            : _fechaVisible(_fechaSeleccionada!);
         _presupuesto.text = proyecto['presupuesto']?.toString() ?? '';
+        final moneda = proyecto['moneda']?.toString();
+        _moneda = moneda == 'DOLARES' ? 'DOLARES' : 'SOLES';
         _invitados =
             int.tryParse(matrimonio['cantidadInvitados']?.toString() ?? '') ??
             1;
         _ubigeo = matrimonio['ciudadUbicacion']?.toString();
         _idTipoCeremonia = idTipo;
-        if (idTipo != null && nombreTipo != null && nombreTipo.isNotEmpty)
+        if (idTipo != null && nombreTipo != null && nombreTipo.isNotEmpty) {
           _tiposCeremonia.add(
             _TipoCeremoniaOpcion(id: idTipo, nombre: nombreTipo),
           );
+        }
         _objetivos.text = proyecto['objetivos']?.toString() ?? '';
         _necesidades.text = proyecto['necesidades']?.toString() ?? '';
         _supuestos.text = proyecto['supuestos']?.toString() ?? '';
@@ -162,12 +175,13 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
         _moonboard.text = matrimonio['ideasMoonboard']?.toString() ?? '';
       });
     } catch (_) {
-      if (mounted)
+      if (mounted) {
         AppSnackbar.show(
           context,
           message: 'No se pudo cargar el borrador.',
           type: AppSnackbarType.error,
         );
+      }
     }
   }
 
@@ -226,17 +240,20 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
   }
 
   void _volver() {
-    if (_paso == 1)
+    if (_paso == 1) {
       context.go('/matrimonios');
-    else
+    } else {
       setState(() => _paso--);
+    }
   }
 
   void _siguiente() {
-    if (_paso < 4 && !_form.currentState!.validate()) return;
+    if (_paso < 4 && !_form.currentState!.validate()) {
+      return;
+    }
     if (_paso == 2 &&
         (_idTipoCeremonia == null ||
-            _fecha.text.isEmpty ||
+            _fechaSeleccionada == null ||
             _presupuesto.text.isEmpty ||
             _invitados < 1)) {
       AppSnackbar.show(
@@ -269,11 +286,11 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
         'usuario': _usuario2.text.trim(),
         'contrasena': _contrasena2.text,
       },
-      if (iniciar || _fecha.text.trim().isNotEmpty)
-        'fechaMatrimonio': _fecha.text.trim(),
+      if (iniciar || _fechaSeleccionada != null) 'fechaMatrimonio': _fechaApi,
       if (iniciar || _presupuesto.text.trim().isNotEmpty)
         'presupuesto':
             num.tryParse(_presupuesto.text.replaceAll(',', '.')) ?? 0,
+      'moneda': _moneda,
       if (iniciar || _invitados > 0) 'cantidadInvitados': _invitados,
       if (_idTipoCeremonia != null) 'idTipoCeremonia': _idTipoCeremonia,
       'ciudadUbicacion': _ubigeo,
@@ -322,7 +339,7 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
     } on DioException catch (error) {
       final data = error.response?.data;
       final mensaje = data is Map ? data['mensaje']?.toString() : null;
-      if (mounted)
+      if (mounted) {
         AppSnackbar.show(
           context,
           message:
@@ -332,20 +349,23 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
                   : 'No se pudo guardar el matrimonio.'),
           type: AppSnackbarType.error,
         );
+      }
     } on StateError catch (error) {
-      if (mounted)
+      if (mounted) {
         AppSnackbar.show(
           context,
           message: error.message.toString(),
           type: AppSnackbarType.warning,
         );
+      }
     } catch (error) {
-      if (mounted)
+      if (mounted) {
         AppSnackbar.show(
           context,
           message: error.toString(),
           type: AppSnackbarType.error,
         );
+      }
     } finally {
       if (mounted) setState(() => _guardando = false);
     }
@@ -375,7 +395,7 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
       _nombresUbigeo[_ubigeo] ?? _ubigeo ?? 'Sin definir';
   @override
   Widget build(BuildContext context) {
-    if (_mostrandoIntro)
+    if (_mostrandoIntro) {
       return Stack(
         children: [
           const _InicioProyecto(),
@@ -404,6 +424,7 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
           ),
         ],
       );
+    }
     return Scaffold(
       backgroundColor: const Color(0xFFFDFBFF),
       body: SafeArea(
@@ -443,30 +464,23 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
                       ),
                     ),
                     const SizedBox(height: AppSpacing.lg),
-                    _IndicadorPasos(actual: _paso),
+                    _IndicadorPasos(
+                      actual: _paso,
+                      onPasoSeleccionado: (paso) =>
+                          setState(() => _paso = paso),
+                    ),
                     const SizedBox(height: AppSpacing.lg),
-                    const _Informacion(),
+                    _Informacion(
+                      practica: _paso == 1
+                          ? _gp01
+                          : _paso == 2
+                          ? _gp02
+                          : null,
+                    ),
                     const SizedBox(height: AppSpacing.lg),
                     _contenidoPaso(),
                     const SizedBox(height: AppSpacing.xl),
-                    Row(
-                      children: [
-                        if (_paso > 1)
-                          AppButton(
-                            label: 'Guardar borrador',
-                            variant: AppButtonVariant.tertiary,
-                            loading: _guardando,
-                            onPressed: () => _guardar(false),
-                          ),
-                        const Spacer(),
-                        AppButton(
-                          label: _paso == 4 ? 'Comenzar' : 'Siguiente',
-                          icon: Icons.arrow_forward,
-                          loading: _guardando,
-                          onPressed: _siguiente,
-                        ),
-                      ],
-                    ),
+                    _accionesPaso(),
                   ],
                 ),
               ),
@@ -502,7 +516,14 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
         enabled: !_usarDni,
         password: true,
       ),
-      const SizedBox(height: 8),
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Divider(
+          height: 1,
+          thickness: 1,
+          color: AppColors.border.withValues(alpha: .7),
+        ),
+      ),
       const Text(
         'Informacion de la pareja 2',
         style: TextStyle(fontWeight: FontWeight.w700),
@@ -519,18 +540,70 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
         password: true,
       ),
       AppCheckbox(
-        label: 'Usar DNI como usuario y contrasena',
+        label: 'Usar DNI como usuario y contraseña',
         value: _usarDni,
         onChanged: _copiarDni,
       ),
     ],
   );
+
+  Widget _accionesPaso() => LayoutBuilder(
+    builder: (context, constraints) {
+      final anterior = AppButton(
+        label: 'Anterior',
+        variant: AppButtonVariant.secondary,
+        icon: Icons.arrow_back,
+        onPressed: _volver,
+      );
+      final guardar = AppButton(
+        label: 'Guardar borrador',
+        variant: AppButtonVariant.tertiary,
+        loading: _guardando,
+        onPressed: () => _guardar(false),
+      );
+      final siguiente = AppButton(
+        label: _paso == 4 ? 'Comenzar' : 'Siguiente',
+        icon: Icons.arrow_forward,
+        iconAfter: true,
+        loading: _guardando,
+        onPressed: _siguiente,
+      );
+
+      if (constraints.maxWidth < 430) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            if (_paso > 1) ...[
+              Center(child: guardar),
+              const SizedBox(height: AppSpacing.sm),
+            ],
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [anterior, siguiente],
+            ),
+          ],
+        );
+      }
+      return Row(
+        children: [
+          anterior,
+          const Spacer(),
+          if (_paso > 1) guardar,
+          const Spacer(),
+          siguiente,
+        ],
+      );
+    },
+  );
+
   Widget _campo(
     String label,
     TextEditingController c, {
     bool dni = false,
     bool enabled = true,
     bool password = false,
+    TextInputType? keyboardType,
+    IconData? icon,
   }) => Padding(
     padding: const EdgeInsets.only(bottom: 16),
     child: AppTextField(
@@ -540,15 +613,14 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
       enabled: enabled,
       obscureText: password,
       prefixIcon: Icon(
-        password
-            ? Icons.lock_outline
-            : dni
-            ? Icons.badge_outlined
-            : label.startsWith('Usuario')
-            ? Icons.person_outline
-            : Icons.person_outline,
+        icon ??
+            (password
+                ? Icons.lock_outline
+                : dni
+                ? Icons.badge_outlined
+                : Icons.person_outline),
       ),
-      keyboardType: dni ? TextInputType.number : null,
+      keyboardType: keyboardType ?? (dni ? TextInputType.number : null),
       inputFormatters: dni
           ? [
               FilteringTextInputFormatter.digitsOnly,
@@ -567,18 +639,20 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
       lastDate: DateTime(hoy.year + 20),
       initialDate: DateTime(hoy.year, hoy.month, hoy.day + 1),
     );
-    if (fecha != null)
-      setState(
-        () => _fecha.text =
-            '${fecha.year}-${fecha.month.toString().padLeft(2, '0')}-${fecha.day.toString().padLeft(2, '0')}',
-      );
+    if (fecha != null) {
+      setState(() {
+        _fechaSeleccionada = fecha;
+        _fecha.text = _fechaVisible(fecha);
+      });
+    }
   }
 
   Widget _selectorUbigeo() => FutureBuilder<List<Map<String, dynamic>>>(
     future: _ubigeos,
     builder: (context, snapshot) {
-      if (snapshot.hasError)
+      if (snapshot.hasError) {
         return const Text('No se pudieron cargar las ubicaciones.');
+      }
       final items = snapshot.data ?? const [];
       return AppSelectField<String>(
         label: 'Ciudad / Ubicacion',
@@ -586,6 +660,7 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
             ? 'Busca distrito, provincia o departamento'
             : 'Cargando ubicaciones...',
         initialValue: _ubigeo,
+        searchable: true,
         options: items
             .map(
               (item) => AppSelectOption(
@@ -614,9 +689,43 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
         validator: _obligatorio,
       ),
       const SizedBox(height: 16),
-      _campo('Presupuesto estimado (S/.)', _presupuesto),
+      Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 142,
+            child: AppSelectField<String>(
+              label: 'Moneda',
+              required: true,
+              initialValue: _moneda,
+              options: const [
+                AppSelectOption(value: 'SOLES', label: 'S/. (SOLES)'),
+                AppSelectOption(value: 'DOLARES', label: 'US\$ (DOLARES)'),
+              ],
+              onChanged: (value) {
+                if (value != null) setState(() => _moneda = value);
+              },
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: AppTextField(
+              label: 'Presupuesto estimado',
+              controller: _presupuesto,
+              required: true,
+              prefixIcon: const Icon(Icons.payments_outlined),
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
+              validator: _obligatorio,
+            ),
+          ),
+        ],
+      ),
+      const SizedBox(height: 16),
       AppNumberField(
         label: 'Cantidad estimada de invitados',
+        required: true,
         min: 1,
         initialValue: _invitados,
         onChanged: (v) => _invitados = v.toInt(),
@@ -636,6 +745,7 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
     }
     return AppSelectField<int>(
       label: 'Tipo de ceremonia',
+      required: true,
       initialValue: _idTipoCeremonia,
       options: _tiposCeremonia
           .map((tipo) => AppSelectOption(value: tipo.id, label: tipo.nombre))
@@ -652,6 +762,37 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
       : value is num
       ? value.toInt()
       : int.tryParse(value?.toString() ?? '');
+  static DateTime? _fechaDesdeApi(Object? value) {
+    final texto = value?.toString();
+    return texto == null || texto.isEmpty ? null : DateTime.tryParse(texto);
+  }
+
+  static String _fechaVisible(DateTime fecha) {
+    const meses = [
+      'Enero',
+      'Febrero',
+      'Marzo',
+      'Abril',
+      'Mayo',
+      'Junio',
+      'Julio',
+      'Agosto',
+      'Septiembre',
+      'Octubre',
+      'Noviembre',
+      'Diciembre',
+    ];
+    return '${fecha.day} de ${meses[fecha.month - 1]} del ${fecha.year}';
+  }
+
+  String? get _fechaApi {
+    final fecha = _fechaSeleccionada;
+    if (fecha == null) return null;
+    final mes = fecha.month.toString().padLeft(2, '0');
+    final dia = fecha.day.toString().padLeft(2, '0');
+    return '${fecha.year}-$mes-$dia';
+  }
+
   Widget _area(String label, TextEditingController c) => Padding(
     padding: const EdgeInsets.only(bottom: 16),
     child: AppTextField(label: label, controller: c, maxLines: 4),
@@ -679,7 +820,7 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
         icon: Icons.favorite_outline,
         title: 'Datos del matrimonio',
         texto:
-            'Fecha: ${fecha.text}\nPresupuesto: S/. ${presupuesto.text}\nInvitados: $_invitados\nLugar: $_lugarResumen',
+            'Fecha: ${fecha.text}\nPresupuesto: ${_moneda == 'DOLARES' ? 'US\$' : 'S/.'} ${presupuesto.text}\nInvitados: $_invitados\nLugar: $_lugarResumen',
         onEdit: () => setState(() => _paso = 2),
       ),
       const SizedBox(height: 12),
@@ -735,22 +876,36 @@ class _InicioProyecto extends StatelessWidget {
 }
 
 class _IndicadorPasos extends StatelessWidget {
-  const _IndicadorPasos({required this.actual});
+  const _IndicadorPasos({
+    required this.actual,
+    required this.onPasoSeleccionado,
+  });
+
   final int actual;
+  final ValueChanged<int> onPasoSeleccionado;
+
   @override
-  Widget build(BuildContext context) => Row(
-    children: List.generate(4, (i) {
-      final n = i + 1, activo = n <= actual;
-      return Expanded(
-        child: Row(
-          children: [
-            CircleAvatar(
-              radius: 15,
-              backgroundColor: activo
-                  ? AppColors.primary
-                  : AppColors.disabledBackground,
-              foregroundColor: activo ? Colors.white : AppColors.textSecondary,
-              child: Text('$n'),
+  Widget build(BuildContext context) => Center(
+    child: ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 440),
+      child: Row(
+        children: List.generate(4, (i) {
+          final n = i + 1;
+          final activo = n <= actual;
+          return [
+            InkWell(
+              borderRadius: BorderRadius.circular(24),
+              onTap: () => onPasoSeleccionado(n),
+              child: CircleAvatar(
+                radius: 15,
+                backgroundColor: activo
+                    ? AppColors.primary
+                    : AppColors.disabledBackground,
+                foregroundColor: activo
+                    ? Colors.white
+                    : AppColors.textSecondary,
+                child: Text('$n'),
+              ),
             ),
             if (n < 4)
               Expanded(
@@ -759,30 +914,41 @@ class _IndicadorPasos extends StatelessWidget {
                   color: n < actual ? AppColors.primary : AppColors.border,
                 ),
               ),
-          ],
-        ),
-      );
-    }),
+          ];
+        }).expand((widgets) => widgets).toList(),
+      ),
+    ),
   );
 }
 
 class _Informacion extends StatelessWidget {
-  const _Informacion();
+  const _Informacion({this.practica});
+
+  final Future<Map<String, dynamic>?>? practica;
+
   @override
-  Widget build(BuildContext context) => Container(
-    padding: const EdgeInsets.all(16),
-    decoration: BoxDecoration(
-      color: const Color(0xFFF4F0FB),
-      borderRadius: BorderRadius.circular(12),
-    ),
-    child: const Row(
-      children: [
-        Icon(Icons.info_outline, color: AppColors.primary),
-        SizedBox(width: 12),
-        Text('Informacion'),
-      ],
-    ),
-  );
+  Widget build(BuildContext context) {
+    if (practica == null) {
+      return const AppInformationCard(texto: 'Informacion');
+    }
+    return FutureBuilder<Map<String, dynamic>?>(
+      future: practica,
+      builder: (context, snapshot) {
+        final data = snapshot.data;
+        final detalle =
+            data?['aplicacionMatrimonios']?.toString() ??
+            data?['aplicacion_matrimonios']?.toString();
+        if (detalle == null || detalle.trim().isEmpty) {
+          return const AppInformationCard(texto: 'Informacion');
+        }
+        return AppInformationCard(
+          texto: detalle,
+          detalle: detalle,
+          etiquetaDetalle: 'Ver recomendacion completa',
+        );
+      },
+    );
+  }
 }
 
 class _TipoCeremoniaOpcion {

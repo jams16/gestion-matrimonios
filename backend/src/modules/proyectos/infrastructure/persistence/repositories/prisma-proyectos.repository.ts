@@ -368,6 +368,7 @@ export class PrismaProyectosRepository implements ProyectosRepository {
         idProyecto: data.idProyecto as never,
       }).update(this.omitirIndefinidos({
         presupuesto: data.presupuesto,
+        moneda: data.moneda,
         objetivos: data.objetivos,
         necesidades: data.necesidades,
         supuestos: data.supuestos,
@@ -551,6 +552,7 @@ export class PrismaProyectosRepository implements ProyectosRepository {
       nombre: `Matrimonio de ${data.pareja1.nombres} & ${data.pareja2.nombres}`,
       idPm,
       presupuesto: data.presupuesto,
+      moneda: data.moneda ?? 'SOLES',
       objetivos: data.objetivos ?? null,
       necesidades: data.necesidades ?? null,
       supuestos: data.supuestos ?? null,
@@ -675,6 +677,7 @@ export class PrismaProyectosRepository implements ProyectosRepository {
       fechaInicio: this.instantONulo(data.fechaInicio, parcial),
       fechaFin: this.instantONulo(data.fechaFin, parcial),
       presupuesto: data.presupuesto ?? (parcial ? undefined : null),
+      moneda: data.moneda ?? (parcial ? undefined : 'SOLES'),
       objetivos: data.objetivos ?? (parcial ? undefined : null),
       necesidades: data.necesidades ?? (parcial ? undefined : null),
       supuestos: data.supuestos ?? (parcial ? undefined : null),

@@ -2,6 +2,7 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
 import {
   IsBoolean,
+  IsIn,
   IsISO8601,
   IsInt,
   IsNumber,
@@ -46,6 +47,12 @@ export class CrearProyectoDto {
   @IsNumber({ maxDecimalPlaces: 2 })
   @Min(0)
   presupuesto?: number | null;
+
+  @ApiPropertyOptional({ enum: ['SOLES', 'DOLARES'], default: 'SOLES' })
+  @IsOptional()
+  @IsString()
+  @IsIn(['SOLES', 'DOLARES'])
+  moneda?: 'SOLES' | 'DOLARES';
 
   @ApiPropertyOptional({ maxLength: 1000 })
   @Transform(emptyToNull)

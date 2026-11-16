@@ -11,6 +11,7 @@ class AppNumberField extends StatefulWidget {
     this.helperText,
     this.errorText,
     this.onChanged,
+    this.required = false,
   });
 
   final String label;
@@ -24,6 +25,7 @@ class AppNumberField extends StatefulWidget {
   final String? errorText;
 
   final ValueChanged<num>? onChanged;
+  final bool required;
 
   @override
   State<AppNumberField> createState() => _AppNumberFieldState();
@@ -102,11 +104,24 @@ class _AppNumberFieldState extends State<AppNumberField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          widget.label,
-          style: Theme.of(
-            context,
-          ).textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w500),
+        Text.rich(
+          TextSpan(
+            text: widget.label,
+            style: Theme.of(
+              context,
+            ).textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w500),
+            children: widget.required
+                ? const [
+                    TextSpan(
+                      text: ' *',
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ]
+                : const [],
+          ),
         ),
 
         const SizedBox(height: 7),

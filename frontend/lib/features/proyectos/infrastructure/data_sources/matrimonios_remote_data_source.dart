@@ -62,6 +62,23 @@ class MatrimoniosRemoteDataSource {
     return items.map((item) => Map<String, dynamic>.from(item as Map)).toList();
   }
 
+  Future<Map<String, dynamic>?> obtenerBuenaPracticaPorCodigo(
+    String codigo,
+  ) async {
+    final response = await _dio.get<Map<String, dynamic>>(
+      '/buenas-practicas',
+      queryParameters: {'buscar': codigo},
+    );
+    final items = List<Object?>.from(
+      response.data?['data'] as List? ?? const [],
+    );
+    for (final item in items) {
+      final practica = Map<String, dynamic>.from(item as Map);
+      if (practica['codigo']?.toString() == codigo) return practica;
+    }
+    return null;
+  }
+
   Future<Map<String, dynamic>> obtenerBorrador(String idProyecto) async {
     final token = await AuthSession.obtenerAccessToken();
     if (token == null) throw StateError('Tu sesión expiró. Inicia sesión nuevamente.');

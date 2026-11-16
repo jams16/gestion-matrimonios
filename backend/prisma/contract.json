@@ -388,6 +388,19 @@
               }
             ]
           },
+          "gp_moneda": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "SOLES",
+                "value": "SOLES"
+              },
+              {
+                "name": "DOLARES",
+                "value": "DOLARES"
+              }
+            ]
+          },
           "in_tipo_entidad": {
             "codecId": "pg/text@1",
             "members": [
@@ -8686,6 +8699,19 @@
                   "kind": "scalar"
                 }
               },
+              "moneda": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "gp_moneda",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
               "necesidades": {
                 "nullable": true,
                 "type": {
@@ -8901,6 +8927,9 @@
                 },
                 "idProyecto": {
                   "column": "idProyecto"
+                },
+                "moneda": {
+                  "column": "moneda"
                 },
                 "necesidades": {
                   "column": "necesidades"
@@ -13664,6 +13693,13 @@
               ]
             },
             "gp_proyecto": {
+              "checks": [
+                {
+                  "expression": "\"moneda\" IN ('SOLES', 'DOLARES')",
+                  "name": "gp_proyecto_moneda_check_ecffa0f2",
+                  "prefix": "gp_proyecto_moneda_check"
+                }
+              ],
               "columns": {
                 "alcance": {
                   "codecId": "sql/varchar@1",
@@ -13720,6 +13756,21 @@
                   "codecId": "pg/int4@1",
                   "nativeType": "int4",
                   "nullable": true
+                },
+                "moneda": {
+                  "codecId": "pg/text@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": "SOLES"
+                  },
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "gp_moneda",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
                 },
                 "necesidades": {
                   "codecId": "sql/varchar@1",
@@ -19749,6 +19800,13 @@
                 "POST_EVENTO"
               ]
             },
+            "gp_moneda": {
+              "kind": "valueSet",
+              "values": [
+                "SOLES",
+                "DOLARES"
+              ]
+            },
             "in_tipo_entidad": {
               "kind": "valueSet",
               "values": [
@@ -19918,7 +19976,7 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "4dbdb1ff7d66f5b07f7d54ef8970368d4f1223bd6015f10b1818b3a71fc4b510"
+    "storageHash": "7812dac0ea90013ba36bf72a60eed3ee3644e08293753b570b2d545cbbacc8e1"
   },
   "execution": {
     "executionHash": "11cb76e12d4e5683c1beb2ec34cb04d226138df6a98fdad43d394a253d5a8fa3",
