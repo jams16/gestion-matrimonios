@@ -70,6 +70,14 @@ export class GuardarOnboardingMatrimonioDto {
   @IsString()
   @Length(6, 6)
   ciudadUbicacion?: string | null;
+  @ApiPropertyOptional({
+    description:
+      'Códigos de categorías de servicio incluidos, separados por punto y coma.',
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(1000)
+  alcance?: string | null;
   @ApiPropertyOptional() @IsOptional() @IsString() @MaxLength(1000) objetivos?:
     string | null;
   @ApiPropertyOptional()

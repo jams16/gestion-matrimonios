@@ -42,6 +42,8 @@ export class ReordenarElementosPlantillaEdtDto {
 export class CrearEdtMatrimonioDto {
   @IsUUID() idPlantilla!: string;
   @IsOptional() @IsString() @MaxLength(200) nombre?: string;
+  @IsOptional() @IsArray() @IsUUID('4', { each: true })
+  elementosSeleccionados?: string[];
 }
 export class CrearElementoEdtMatrimonioDto {
   @IsString() @IsNotEmpty() @MaxLength(200) nombre!: string;

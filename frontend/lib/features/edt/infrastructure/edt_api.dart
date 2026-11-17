@@ -86,4 +86,27 @@ class EdtApi {
 
   Future<void> eliminarPlantilla(String idPlantilla) =>
       _dio.delete('/edt/plantillas/$idPlantilla');
+
+  Future<Map<String, dynamic>> crearEdtMatrimonio(
+    String idMatrimonio,
+    Map<String, dynamic> data,
+  ) async => Map<String, dynamic>.from(
+    _data(await _dio.post('/matrimonios/$idMatrimonio/edt', data: data)) as Map,
+  );
+
+  Future<void> agregarElementoMatrimonio(
+    String idMatrimonio,
+    Map<String, dynamic> data,
+  ) => _dio.post('/matrimonios/$idMatrimonio/edt/elementos', data: data);
+
+  Future<Map<String, dynamic>> obtenerEdtMatrimonio(String idMatrimonio) async =>
+      Map<String, dynamic>.from(
+        _data(await _dio.get('/matrimonios/$idMatrimonio/edt')) as Map,
+      );
+
+  Future<void> actualizarElementoMatrimonio(
+    String idMatrimonio,
+    String idElemento,
+    Map<String, dynamic> data,
+  ) => _dio.patch('/matrimonios/$idMatrimonio/edt/elementos/$idElemento', data: data);
 }

@@ -369,6 +369,7 @@ export class PrismaProyectosRepository implements ProyectosRepository {
       }).update(this.omitirIndefinidos({
         presupuesto: data.presupuesto,
         moneda: data.moneda,
+        alcance: data.alcance,
         objetivos: data.objetivos,
         necesidades: data.necesidades,
         supuestos: data.supuestos,
@@ -557,6 +558,7 @@ export class PrismaProyectosRepository implements ProyectosRepository {
       necesidades: data.necesidades ?? null,
       supuestos: data.supuestos ?? null,
       restricciones: data.restricciones ?? null,
+      alcance: data.alcance ?? null,
       fechaInicio: ahora,
       idFaseProyecto: fase.idFaseProyecto,
       estado: true,

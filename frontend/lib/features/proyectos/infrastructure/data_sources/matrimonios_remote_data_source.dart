@@ -62,6 +62,18 @@ class MatrimoniosRemoteDataSource {
     return items.map((item) => Map<String, dynamic>.from(item as Map)).toList();
   }
 
+  /// Catálogo reutilizado por el alcance del proyecto durante el onboarding.
+  /// El backend entrega el código estable que se persiste en `gp_proyecto.alcance`.
+  Future<List<Map<String, dynamic>>> listarCategoriasServicio() async {
+    final response = await _dio.get<Map<String, dynamic>>(
+      '/proveedores/catalogos/categorias-servicio',
+    );
+    final items = List<Object?>.from(
+      response.data?['data'] as List? ?? const [],
+    );
+    return items.map((item) => Map<String, dynamic>.from(item as Map)).toList();
+  }
+
   Future<Map<String, dynamic>?> obtenerBuenaPracticaPorCodigo(
     String codigo,
   ) async {

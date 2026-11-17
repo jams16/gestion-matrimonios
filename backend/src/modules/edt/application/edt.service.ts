@@ -209,7 +209,14 @@ export class EdtService {
       if (existente) throw new ConflictException('El matrimonio ya tiene una EDT activa.');
       const edt = await db.EdtMatrimonio.create({ idMatrimonio, idPlantillaOrigen: plantilla.idEdtPlantilla, nombre: dto.nombre?.trim() || `EDT de ${matrimonio.idMatrimonio}`, estado: true } as never);
       const [relaciones, catalogo] = await Promise.all([db.EdtPlantillaElemento.all(), db.EdtElemento.all()]); const elementos = new Map<string, any>(catalogo.map((x: any) => [String(x.idEdtElemento), x]));
-      const origenes = relaciones.filter((x: any) => x.idEdtPlantilla === plantilla.idEdtPlantilla && x.activo).sort((a: any, b: any) => a.orden - b.orden); const mapa = new Map<string, string>();
+      const origenesBase = relaciones.filter((x: any) => x.idEdtPlantilla === plantilla.idEdtPlantilla && x.activo).sort((a: any, b: any) => a.orden - b.orden);
+      const seleccionados = dto.elementosSeleccionados === undefined
+        ? undefined
+        : new Set(dto.elementosSeleccionados);
+      const origenes = seleccionados === undefined
+        ? origenesBase
+        : origenesBase.filter((origen: any) => seleccionados.has(String(origen.idEdtPlantillaElemento)));
+      const mapa = new Map<string, string>();
       for (const origen of origenes) { const base = elementos.get(String(origen.idEdtElemento)); if (!base) continue; const nuevo = await db.EdtMatrimonioElemento.create({ idEdtMatrimonio: edt.idEdtMatrimonio, idEdtElementoOrigen: origen.idEdtElemento, nombre: base.nombre, descripcion: base.descripcion, idCategoriaServicio: base.idCategoriaServicio, orden: origen.orden, activo: true } as never); mapa.set(String(origen.idEdtPlantillaElemento), String(nuevo.idEdtMatrimonioElemento)); }
       for (const origen of origenes) if (origen.idEdtPlantillaElementoPadre && mapa.has(String(origen.idEdtPlantillaElemento))) await db.EdtMatrimonioElemento.where({ idEdtMatrimonioElemento: mapa.get(String(origen.idEdtPlantillaElemento)) as never }).update({ idEdtMatrimonioElementoPadre: mapa.get(String(origen.idEdtPlantillaElementoPadre)) } as never);
       return edt;
