@@ -9,6 +9,7 @@ import '../../../../app/theme/app_spacing.dart';
 import '../../../../core/widgets/buttons/app_icon_button.dart';
 import '../../../../core/widgets/feedback/app_snackbar.dart';
 import '../../../../core/widgets/overlays/app_bottom_sheet.dart';
+import '../../../../core/widgets/overlays/app_profile_menu.dart';
 import '../../../../core/widgets/navigation/app_bottom_navigation.dart';
 import '../../../../core/widgets/navigation/app_navigation_item.dart';
 import '../../../../core/widgets/navigation/app_navigation_rail.dart';
@@ -31,6 +32,7 @@ class InicioPage extends StatefulWidget {
     this.contenidoExtra,
     this.sinSeleccionNavegacion = false,
     this.ocultarNavegacion = false,
+    this.ocultarVolverHeader = false,
   });
 
   final Object? nombre;
@@ -41,6 +43,7 @@ class InicioPage extends StatefulWidget {
   final Widget? contenidoExtra;
   final bool sinSeleccionNavegacion;
   final bool ocultarNavegacion;
+  final bool ocultarVolverHeader;
 
   @override
   State<InicioPage> createState() => _InicioPageState();
@@ -327,28 +330,6 @@ class _InicioPageState extends State<InicioPage> {
     );
   }
 
-  PopupMenuItem<_OpcionPerfil> _separadorPerfil() => PopupMenuItem(
-    enabled: false,
-    height: 12,
-    padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-    child: Divider(height: 1, color: AppColors.border.withValues(alpha: 0.55)),
-  );
-
-  PopupMenuItem<_OpcionPerfil> _itemPerfil(
-    _OpcionPerfil opcion,
-    IconData icono,
-    String texto,
-  ) => PopupMenuItem(
-    value: opcion,
-    child: Row(
-      children: [
-        Icon(icono, size: 20, color: AppColors.textPrimary),
-        const SizedBox(width: AppSpacing.md),
-        Text(texto),
-      ],
-    ),
-  );
-
   List<Widget> _accionesAppBar() => [
     Stack(
       clipBehavior: Clip.none,
@@ -373,89 +354,22 @@ class _InicioPageState extends State<InicioPage> {
           ),
       ],
     ),
-    PopupMenuButton<_OpcionPerfil>(
-      tooltip: 'Menu de perfil',
-      icon: const Icon(Icons.account_circle_outlined),
-      position: PopupMenuPosition.under,
-      offset: const Offset(0, 8),
-      constraints: const BoxConstraints(minWidth: 260, maxWidth: 300),
-      elevation: 6,
-      color: AppColors.surface,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-        side: BorderSide(color: AppColors.border.withValues(alpha: 0.45)),
-      ),
-      onSelected: (opcion) {
-        if (opcion == _OpcionPerfil.cerrarSesion) _cerrarSesion();
-        if (opcion == _OpcionPerfil.misBodas) {
-          context.go(RouteNames.matrimonios, extra: true);
-        }
-        if (opcion == _OpcionPerfil.riesgos) {
-          context.go('/riesgos');
-        }
-        if (opcion == _OpcionPerfil.misPlantillas) {
-          context.go('/plantillas-edt');
-        }
-      },
-      itemBuilder: (context) => [
-        PopupMenuItem<_OpcionPerfil>(
-          enabled: false,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  const Icon(
-                    Icons.account_circle_outlined,
-                    color: AppColors.primary,
-                  ),
-                  const SizedBox(width: AppSpacing.sm),
-                  Expanded(
-                    child: Text(
-                      _nombreCompleto,
-                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 2),
-              Text(
-                'Wedding Planner',
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-            ],
-          ),
-        ),
-        _separadorPerfil(),
-        _itemPerfil(_OpcionPerfil.miPerfil, Icons.person_outline, 'Mi Perfil'),
-        _itemPerfil(_OpcionPerfil.miStaff, Icons.groups_outlined, 'Mi Staff'),
-        _itemPerfil(
-          _OpcionPerfil.riesgos,
-          Icons.warning_amber_outlined,
-          'Riesgos',
-        ),
-        _itemPerfil(_OpcionPerfil.misBodas, Icons.favorite_border, 'Mis bodas'),
-        _itemPerfil(
-          _OpcionPerfil.misPlantillas,
-          Icons.account_tree_outlined,
-          'Mis plantillas',
-        ),
-        _itemPerfil(
-          _OpcionPerfil.configuraciones,
-          Icons.settings_outlined,
-          'Configuraciones',
-        ),
-        _separadorPerfil(),
-        PopupMenuItem(
-          value: _OpcionPerfil.cerrarSesion,
-          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
-          child: const _DangerProfileItem(),
-        ),
-      ],
+    AppProfileMenu(
+      nombreCompleto: _nombreCompleto,
+      onSelected: _seleccionarMenuPerfil,
     ),
   ];
+
+  void _seleccionarMenuPerfil(AppProfileMenuAction opcion) {
+    if (opcion == AppProfileMenuAction.cerrarSesion) _cerrarSesion();
+    if (opcion == AppProfileMenuAction.misBodas) {
+      context.go(RouteNames.matrimonios, extra: true);
+    }
+    if (opcion == AppProfileMenuAction.riesgos) context.go('/riesgos');
+    if (opcion == AppProfileMenuAction.misPlantillas) {
+      context.go('/plantillas-edt');
+    }
+  }
 
   Widget _navegacionConSombra(Widget child) => Container(
     decoration: BoxDecoration(
@@ -527,6 +441,7 @@ class _InicioPageState extends State<InicioPage> {
         title: AuthSession.nombreProyectoActivo ?? 'WeddingApp',
         backgroundColor: AppColors.primary,
         foregroundColor: Colors.white,
+        automaticallyImplyLeading: !widget.ocultarVolverHeader,
         actions: _accionesAppBar(),
       ),
       body: ResponsiveLayout(
@@ -575,51 +490,4 @@ class _InicioPageState extends State<InicioPage> {
           : null,
     );
   }
-}
-
-class _DangerProfileItem extends StatefulWidget {
-  const _DangerProfileItem();
-
-  @override
-  State<_DangerProfileItem> createState() => _DangerProfileItemState();
-}
-
-class _DangerProfileItemState extends State<_DangerProfileItem> {
-  bool _hover = false;
-
-  @override
-  Widget build(BuildContext context) => MouseRegion(
-    onEnter: (_) => setState(() => _hover = true),
-    onExit: (_) => setState(() => _hover = false),
-    child: AnimatedContainer(
-      duration: const Duration(milliseconds: 140),
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.md,
-        vertical: AppSpacing.sm,
-      ),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: _hover
-            ? AppColors.error.withValues(alpha: 0.16)
-            : Colors.transparent,
-      ),
-      child: const Row(
-        children: [
-          Icon(Icons.logout, size: 20, color: AppColors.error),
-          SizedBox(width: AppSpacing.md),
-          Text('Cerrar sesion', style: TextStyle(color: AppColors.error)),
-        ],
-      ),
-    ),
-  );
-}
-
-enum _OpcionPerfil {
-  miPerfil,
-  miStaff,
-  riesgos,
-  misBodas,
-  misPlantillas,
-  configuraciones,
-  cerrarSesion,
 }

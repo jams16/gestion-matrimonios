@@ -9,6 +9,22 @@ export class EdtService {
   constructor(private readonly prisma: PrismaService) {}
   private get db(): any { return this.prisma.client.orm.public; }
 
+  private fechaIso(valor: any) {
+    return valor == null ? null : String(valor);
+  }
+
+  private serializarPlantilla(plantilla: any) {
+    return {
+      ...plantilla,
+      createdAt: this.fechaIso(plantilla.createdAt),
+      updatedAt: this.fechaIso(plantilla.updatedAt),
+    };
+  }
+
+  private async tocarPlantilla(idPlantilla: string, db = this.db) {
+    await db.EdtPlantilla.where({ idEdtPlantilla: idPlantilla as never }).update({ activo: true } as never);
+  }
+
   private arbol(items: any[], idCampo: string, padreCampo: string): Nodo[] {
     const porId = new Map<string, Nodo>();
     for (const item of items) porId.set(String(item[idCampo]), { ...item, hijos: [] });
@@ -86,7 +102,10 @@ export class EdtService {
   async desactivarElemento(id: string) { const actual = await this.db.EdtElemento.first({ idEdtElemento: id as never }); if (!actual) throw new NotFoundException('Elemento EDT no encontrado.'); return this.db.EdtElemento.where({ idEdtElemento: id as never }).update({ activo: false } as never); }
 
   async listarPlantillas(usuario: number) {
-    return (await this.db.EdtPlantilla.all()).filter((x: any) => x.activo && (x.tipo === 'GLOBAL' || x.idUsuario === usuario)).sort((a: any, b: any) => (a.tipo === 'GLOBAL' ? -1 : 1) || a.nombre.localeCompare(b.nombre));
+    return (await this.db.EdtPlantilla.all())
+      .filter((x: any) => x.activo && (x.tipo === 'GLOBAL' || x.idUsuario === usuario))
+      .sort((a: any, b: any) => (a.tipo === 'GLOBAL' ? -1 : 1) || a.nombre.localeCompare(b.nombre))
+      .map((plantilla: any) => this.serializarPlantilla(plantilla));
   }
   async crearPlantilla(dto: D.CrearPlantillaEdtDto, usuario: number) { await this.usuarioExiste(usuario); return this.db.EdtPlantilla.create({ ...dto, tipo: 'WP', idUsuario: usuario, activo: true } as never); }
   async actualizarPlantilla(id: string, dto: D.ActualizarPlantillaEdtDto, usuario: number) { await this.plantillaEditable(id, usuario); return this.db.EdtPlantilla.where({ idEdtPlantilla: id as never }).update(dto as never); }
@@ -115,7 +134,9 @@ export class EdtService {
   async agregarElementoPlantilla(id: string, dto: D.AgregarElementoPlantillaEdtDto, usuario: number) {
     await this.plantillaEditable(id, usuario); const elemento = await this.db.EdtElemento.first({ idEdtElemento: dto.idElemento as never }); if (!elemento?.activo) throw new NotFoundException('Elemento EDT no encontrado.');
     const items = await this.db.EdtPlantillaElemento.all(); await this.validarPadre(items, '__nuevo__', dto.idPlantillaElementoPadre, 'idEdtPlantillaElemento', 'idEdtPlantillaElementoPadre', 'idEdtPlantilla', id);
-    return this.db.EdtPlantillaElemento.create({ idEdtPlantilla: id, idEdtElemento: dto.idElemento, idEdtPlantillaElementoPadre: dto.idPlantillaElementoPadre, orden: dto.orden ?? 0, activo: true } as never);
+    const creado = await this.db.EdtPlantillaElemento.create({ idEdtPlantilla: id, idEdtElemento: dto.idElemento, idEdtPlantillaElementoPadre: dto.idPlantillaElementoPadre, orden: dto.orden ?? 0, activo: true } as never);
+    await this.tocarPlantilla(id);
+    return creado;
   }
   async actualizarElementoPlantilla(id: string, idElemento: string, dto: D.ActualizarElementoPlantillaEdtDto, usuario: number) {
     await this.plantillaEditable(id, usuario);
@@ -147,11 +168,38 @@ export class EdtService {
       actualizacion.idEdtElemento = copia.idEdtElemento;
     }
 
-    return this.db.EdtPlantillaElemento.where({ idEdtPlantillaElemento: idElemento as never }).update(actualizacion as never);
+    const actualizado = await this.db.EdtPlantillaElemento.where({ idEdtPlantillaElemento: idElemento as never }).update(actualizacion as never);
+    await this.tocarPlantilla(id);
+    return actualizado;
+  }
+
+  async reordenarElementosPlantilla(id: string, dto: D.ReordenarElementosPlantillaEdtDto, usuario: number) {
+    await this.plantillaEditable(id, usuario);
+    const ids = dto.ordenes.map((item) => item.idElementoPlantilla);
+    if (ids.length < 2 || new Set(ids).size !== ids.length) {
+      throw new BadRequestException('Debes indicar al menos dos elementos diferentes para reordenar.');
+    }
+    const items = await this.db.EdtPlantillaElemento.all();
+    const elementos = items.filter((item: any) => item.idEdtPlantilla === id && item.activo && ids.includes(String(item.idEdtPlantillaElemento)));
+    if (elementos.length !== ids.length) {
+      throw new NotFoundException('Uno o más elementos no pertenecen a esta plantilla.');
+    }
+    const padres = new Set(elementos.map((item: any) => String(item.idEdtPlantillaElementoPadre ?? '')));
+    if (padres.size !== 1) {
+      throw new BadRequestException('Solo puedes reordenar secciones del mismo nivel.');
+    }
+    await this.prisma.client.transaction(async (tx: any) => {
+      const db = tx.orm.public;
+      for (const item of dto.ordenes) {
+        await db.EdtPlantillaElemento.where({ idEdtPlantillaElemento: item.idElementoPlantilla as never }).update({ orden: item.orden } as never);
+      }
+      await this.tocarPlantilla(id, db);
+    });
+    return { actualizados: dto.ordenes.length };
   }
   async eliminarElementoPlantilla(id: string, idElemento: string, usuario: number) {
     await this.plantillaEditable(id, usuario); const items = await this.db.EdtPlantillaElemento.all(); const actual = items.find((x: any) => x.idEdtPlantillaElemento === idElemento && x.idEdtPlantilla === id); if (!actual) throw new NotFoundException('Elemento de plantilla no encontrado.');
-    const ids = this.descendientes(items, idElemento, 'idEdtPlantillaElemento', 'idEdtPlantillaElementoPadre'); for (const itemId of ids) await this.db.EdtPlantillaElemento.where({ idEdtPlantillaElemento: itemId as never }).update({ activo: false } as never); return { eliminados: ids.length };
+    const ids = this.descendientes(items, idElemento, 'idEdtPlantillaElemento', 'idEdtPlantillaElementoPadre'); for (const itemId of ids) await this.db.EdtPlantillaElemento.where({ idEdtPlantillaElemento: itemId as never }).update({ activo: false } as never); await this.tocarPlantilla(id); return { eliminados: ids.length };
   }
 
   async crearEdtMatrimonio(idMatrimonio: string, dto: D.CrearEdtMatrimonioDto, usuario: number) {

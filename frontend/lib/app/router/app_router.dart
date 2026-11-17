@@ -135,6 +135,7 @@ final appRouter = GoRouter(
         return InicioPage(
           sinSeleccionNavegacion: true,
           ocultarNavegacion: true,
+          ocultarVolverHeader: true,
           contenidoExtra: PlantillaEdtEditorPage(
             idPlantilla: plantilla['idEdtPlantilla'].toString(),
             nombrePlantilla: plantilla['nombre']?.toString() ?? 'Plantilla EDT',

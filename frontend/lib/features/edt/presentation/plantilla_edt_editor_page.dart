@@ -31,6 +31,7 @@ class _PlantillaEdtEditorPageState
     extends ConsumerState<PlantillaEdtEditorPage> {
   late Future<Map<String, dynamic>> _carga;
   bool _procesando = false;
+  final Map<String, int> _ordenesLocales = {};
 
   @override
   void initState() {
@@ -41,18 +42,30 @@ class _PlantillaEdtEditorPageState
   dynamic get _api => ref.read(edtApiProvider);
 
   Future<void> _recargar() async {
-    setState(() => _carga = _api.arbol(widget.idPlantilla));
+    setState(() {
+      _ordenesLocales.clear();
+      _carga = _api.arbol(widget.idPlantilla);
+    });
     await _carga;
   }
 
-  Future<void> _ejecutar(Future<void> Function() accion, String mensaje) async {
+  Future<void> _ejecutar(
+    Future<void> Function() accion,
+    String mensaje, {
+    bool recargar = true,
+    VoidCallback? alCompletar,
+  }) async {
     if (_procesando) {
       return;
     }
     setState(() => _procesando = true);
     try {
       await accion();
-      await _recargar();
+      if (recargar) {
+        await _recargar();
+      } else {
+        alCompletar?.call();
+      }
       if (mounted) {
         AppSnackbar.show(
           context,
@@ -79,22 +92,30 @@ class _PlantillaEdtEditorPageState
     final resultado = <_NodoEdt>[];
     void recorrer(Map<String, dynamic> nodo, int nivel) {
       resultado.add(_NodoEdt(nodo: nodo, nivel: nivel));
-      final hijos = List<Object?>.from(
-        nodo['hijos'] as List? ?? const [],
-      ).map((item) => Map<String, dynamic>.from(item as Map)).toList();
+      final hijos =
+          List<Object?>.from(
+              nodo['hijos'] as List? ?? const [],
+            ).map((item) => Map<String, dynamic>.from(item as Map)).toList()
+            ..sort((a, b) => _orden(a).compareTo(_orden(b)));
       for (final hijo in hijos) {
         recorrer(hijo, nivel + 1);
       }
     }
 
-    for (final item in elementos) {
-      recorrer(Map<String, dynamic>.from(item as Map), 0);
+    final raices =
+        elementos.map((item) => Map<String, dynamic>.from(item as Map)).toList()
+          ..sort((a, b) => _orden(a).compareTo(_orden(b)));
+    for (final item in raices) {
+      recorrer(item, 0);
     }
     return resultado;
   }
 
   String _id(Map<String, dynamic> nodo) =>
       nodo['idEdtPlantillaElemento']?.toString() ?? '';
+
+  int _orden(Map<String, dynamic> nodo) =>
+      _ordenesLocales[_id(nodo)] ?? (nodo['orden'] as num? ?? 0).toInt();
 
   String? _padre(Map<String, dynamic> nodo) =>
       nodo['idEdtPlantillaElementoPadre']?.toString();
@@ -111,11 +132,7 @@ class _PlantillaEdtEditorPageState
   ) async {
     final hermanos =
         todos.where((item) => _padre(item.nodo) == _padre(nodo.nodo)).toList()
-          ..sort(
-            (a, b) => (a.nodo['orden'] as num? ?? 0).compareTo(
-              b.nodo['orden'] as num? ?? 0,
-            ),
-          );
+          ..sort((a, b) => _orden(a.nodo).compareTo(_orden(b.nodo)));
     final indice = hermanos.indexWhere(
       (item) => _id(item.nodo) == _id(nodo.nodo),
     );
@@ -123,21 +140,58 @@ class _PlantillaEdtEditorPageState
     if (indice < 0 || destino < 0 || destino >= hermanos.length) {
       return;
     }
-    final otro = hermanos[destino];
-    final ordenActual = nodo.nodo['orden'] as num? ?? 0;
-    final ordenOtro = otro.nodo['orden'] as num? ?? 0;
-    await _ejecutar(() async {
-      await _api.actualizarElementoPlantilla(
-        widget.idPlantilla,
-        _id(nodo.nodo),
-        {'orden': ordenOtro},
-      );
-      await _api.actualizarElementoPlantilla(
-        widget.idPlantilla,
-        _id(otro.nodo),
-        {'orden': ordenActual},
-      );
-    }, 'Orden de elementos actualizado.');
+    final reordenados = [...hermanos];
+    final movido = reordenados.removeAt(indice);
+    reordenados.insert(destino, movido);
+    await _guardarOrden(reordenados);
+  }
+
+  Future<void> _soltarSobre(
+    _NodoEdt origen,
+    _NodoEdt destino,
+    List<_NodoEdt> todos,
+  ) async {
+    if (_padre(origen.nodo) != _padre(destino.nodo)) {
+      return;
+    }
+    final hermanos =
+        todos.where((item) => _padre(item.nodo) == _padre(origen.nodo)).toList()
+          ..sort((a, b) => _orden(a.nodo).compareTo(_orden(b.nodo)));
+    final indiceOrigen = hermanos.indexWhere(
+      (item) => _id(item.nodo) == _id(origen.nodo),
+    );
+    final indiceDestino = hermanos.indexWhere(
+      (item) => _id(item.nodo) == _id(destino.nodo),
+    );
+    if (indiceOrigen < 0 ||
+        indiceDestino < 0 ||
+        indiceOrigen == indiceDestino) {
+      return;
+    }
+    final movido = hermanos.removeAt(indiceOrigen);
+    hermanos.insert(indiceDestino, movido);
+    await _guardarOrden(hermanos);
+  }
+
+  Future<void> _guardarOrden(List<_NodoEdt> hermanos) {
+    final ordenes = [
+      for (var indice = 0; indice < hermanos.length; indice++)
+        {
+          'idElementoPlantilla': _id(hermanos[indice].nodo),
+          'orden': indice + 1,
+        },
+    ];
+    return _ejecutar(
+      () => _api.reordenarElementosPlantilla(widget.idPlantilla, ordenes),
+      'Orden de elementos actualizado.',
+      recargar: false,
+      alCompletar: () {
+        for (var indice = 0; indice < hermanos.length; indice++) {
+          _ordenesLocales[_id(hermanos[indice].nodo)] = indice + 1;
+        }
+        setState(() {});
+      },
+    );
   }
 
   Future<void> _editarElemento(_NodoEdt nodo) async {
@@ -391,7 +445,7 @@ class _PlantillaEdtEditorPageState
                   SizedBox(width: AppSpacing.sm),
                   Expanded(
                     child: Text(
-                      'Usa las flechas para ordenar las secciones dentro de su mismo nivel.',
+                      'Arrastra o usa las flechas para ordenar secciones del mismo nivel.',
                     ),
                   ),
                 ],
@@ -407,6 +461,10 @@ class _PlantillaEdtEditorPageState
               ),
             ),
             const SizedBox(height: AppSpacing.md),
+            if (_procesando) ...[
+              const LinearProgressIndicator(),
+              const SizedBox(height: AppSpacing.md),
+            ],
             if (todos.isEmpty)
               const _EdtVacio()
             else
@@ -418,6 +476,7 @@ class _PlantillaEdtEditorPageState
                   puedeBajar: _puedeMover(nodo, todos, 1),
                   onSubir: () => _mover(nodo, todos, -1),
                   onBajar: () => _mover(nodo, todos, 1),
+                  onSoltarEncima: (origen) => _soltarSobre(origen, nodo, todos),
                   onEditar: () => _editarElemento(nodo),
                   onEliminar: () => _eliminarElemento(nodo),
                 ),
@@ -431,11 +490,7 @@ class _PlantillaEdtEditorPageState
   bool _puedeMover(_NodoEdt nodo, List<_NodoEdt> todos, int direccion) {
     final hermanos =
         todos.where((item) => _padre(item.nodo) == _padre(nodo.nodo)).toList()
-          ..sort(
-            (a, b) => (a.nodo['orden'] as num? ?? 0).compareTo(
-              b.nodo['orden'] as num? ?? 0,
-            ),
-          );
+          ..sort((a, b) => _orden(a.nodo).compareTo(_orden(b.nodo)));
     final indice = hermanos.indexWhere(
       (item) => _id(item.nodo) == _id(nodo.nodo),
     );
@@ -467,6 +522,7 @@ class _ElementoEdtCard extends StatelessWidget {
     required this.puedeBajar,
     required this.onSubir,
     required this.onBajar,
+    required this.onSoltarEncima,
     required this.onEditar,
     required this.onEliminar,
   });
@@ -477,6 +533,7 @@ class _ElementoEdtCard extends StatelessWidget {
   final bool puedeBajar;
   final VoidCallback onSubir;
   final VoidCallback onBajar;
+  final ValueChanged<_NodoEdt> onSoltarEncima;
   final VoidCallback onEditar;
   final VoidCallback onEliminar;
 
@@ -487,70 +544,102 @@ class _ElementoEdtCard extends StatelessWidget {
         : const <String, dynamic>{};
     return Padding(
       padding: EdgeInsets.only(left: nodo.nivel * 12.0, bottom: AppSpacing.sm),
-      child: AppCard(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Padding(
-              padding: EdgeInsets.only(top: 8),
-              child: Icon(Icons.drag_indicator, color: AppColors.primary),
-            ),
-            const SizedBox(width: AppSpacing.xs),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    elemento['nombre']?.toString() ?? 'Elemento EDT',
-                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      fontWeight: FontWeight.w800,
+      child: DragTarget<_NodoEdt>(
+        onWillAcceptWithDetails: (detalle) =>
+            !procesando &&
+            detalle.data != nodo &&
+            detalle.data.nodo['idEdtPlantillaElementoPadre'] ==
+                nodo.nodo['idEdtPlantillaElementoPadre'],
+        onAcceptWithDetails: (detalle) => onSoltarEncima(detalle.data),
+        builder: (context, candidatos, rechazados) => AppCard(
+          borderColor: candidatos.isEmpty
+              ? null
+              : AppColors.primary.withValues(alpha: 0.75),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Draggable<_NodoEdt>(
+                  data: nodo,
+                  feedback: Material(
+                    color: Colors.transparent,
+                    child: Icon(
+                      Icons.drag_indicator,
+                      size: 28,
+                      color: AppColors.primary.withValues(alpha: 0.85),
                     ),
                   ),
-                  if ((elemento['descripcion']?.toString().trim().isNotEmpty ??
-                      false)) ...[
-                    const SizedBox(height: 3),
-                    Text(
-                      elemento['descripcion'].toString(),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppColors.textSecondary,
-                      ),
-                    ),
-                  ],
-                ],
-              ),
-            ),
-            IconButton(
-              tooltip: 'Subir',
-              onPressed: procesando || !puedeSubir ? null : onSubir,
-              icon: const Icon(Icons.keyboard_arrow_up),
-            ),
-            IconButton(
-              tooltip: 'Bajar',
-              onPressed: procesando || !puedeBajar ? null : onBajar,
-              icon: const Icon(Icons.keyboard_arrow_down),
-            ),
-            PopupMenuButton<String>(
-              onSelected: (valor) {
-                if (valor == 'editar') {
-                  onEditar();
-                } else {
-                  onEliminar();
-                }
-              },
-              itemBuilder: (_) => const [
-                PopupMenuItem(value: 'editar', child: Text('Editar')),
-                PopupMenuItem(
-                  value: 'eliminar',
-                  child: Text(
-                    'Eliminar',
-                    style: TextStyle(color: AppColors.error),
+                  childWhenDragging: const Opacity(
+                    opacity: 0.35,
+                    child: Icon(Icons.drag_indicator, color: AppColors.primary),
+                  ),
+                  child: const Tooltip(
+                    message: 'Arrastra para reordenar dentro del mismo nivel',
+                    child: Icon(Icons.drag_indicator, color: AppColors.primary),
                   ),
                 ),
-              ],
-            ),
-          ],
+              ),
+              const SizedBox(width: AppSpacing.xs),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      elemento['nombre']?.toString() ?? 'Elemento EDT',
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    if ((elemento['descripcion']
+                            ?.toString()
+                            .trim()
+                            .isNotEmpty ??
+                        false)) ...[
+                      const SizedBox(height: 3),
+                      Text(
+                        elemento['descripcion'].toString(),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+              IconButton(
+                tooltip: 'Subir',
+                onPressed: procesando || !puedeSubir ? null : onSubir,
+                icon: const Icon(Icons.keyboard_arrow_up),
+              ),
+              IconButton(
+                tooltip: 'Bajar',
+                onPressed: procesando || !puedeBajar ? null : onBajar,
+                icon: const Icon(Icons.keyboard_arrow_down),
+              ),
+              PopupMenuButton<String>(
+                onSelected: (valor) {
+                  if (valor == 'editar') {
+                    onEditar();
+                  } else {
+                    onEliminar();
+                  }
+                },
+                itemBuilder: (_) => const [
+                  PopupMenuItem(value: 'editar', child: Text('Editar')),
+                  PopupMenuItem(
+                    value: 'eliminar',
+                    child: Text(
+                      'Eliminar',
+                      style: TextStyle(color: AppColors.error),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

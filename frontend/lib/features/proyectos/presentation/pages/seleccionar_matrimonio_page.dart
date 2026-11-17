@@ -9,6 +9,7 @@ import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_spacing.dart';
 import '../../../../core/widgets/buttons/app_button.dart';
 import '../../../../core/widgets/feedback/app_information_card.dart';
+import '../../../../core/widgets/overlays/app_profile_menu.dart';
 import '../../../../core/widgets/page_states/app_page_loading.dart';
 import '../../../../app/router/route_names.dart';
 import '../../../autenticacion/infrastructure/auth_api.dart';
@@ -105,49 +106,28 @@ class _Layout extends StatelessWidget {
                       label: Text(desdeHome ? 'Volver' : 'Cerrar sesión'),
                     ),
                     const Spacer(),
-                    PopupMenuButton<_OpcionPerfilMatrimonios>(
-                      tooltip: 'Menu de perfil',
-                      icon: const Icon(Icons.account_circle_outlined),
-                      position: PopupMenuPosition.under,
-                      offset: const Offset(0, 8),
-                      constraints: const BoxConstraints(
-                        minWidth: 260,
-                        maxWidth: 300,
+                    FutureBuilder<String?>(
+                      future: AuthSession.obtenerNombreCompleto(),
+                      builder: (context, snapshot) => AppProfileMenu(
+                        nombreCompleto:
+                            snapshot.data?.trim().isNotEmpty == true
+                            ? snapshot.data!.trim()
+                            : 'Wedding Planner',
+                        onSelected: (opcion) {
+                          if (opcion == AppProfileMenuAction.cerrarSesion) {
+                            _cerrarSesion(context);
+                          }
+                          if (opcion == AppProfileMenuAction.misBodas) {
+                            context.go(RouteNames.matrimonios);
+                          }
+                          if (opcion == AppProfileMenuAction.riesgos) {
+                            context.go('/riesgos');
+                          }
+                          if (opcion == AppProfileMenuAction.misPlantillas) {
+                            context.go('/plantillas-edt');
+                          }
+                        },
                       ),
-                      elevation: 6,
-                      color: AppColors.surface,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                        side: BorderSide(
-                          color: AppColors.border.withValues(alpha: 0.45),
-                        ),
-                      ),
-                      onSelected: (opcion) {
-                        if (opcion == _OpcionPerfilMatrimonios.misPlantillas) {
-                          context.go('/plantillas-edt');
-                        }
-                        if (opcion == _OpcionPerfilMatrimonios.cerrarSesion) {
-                          _cerrarSesion(context);
-                        }
-                      },
-                      itemBuilder: (_) => const [
-                        PopupMenuItem(
-                          value: _OpcionPerfilMatrimonios.misPlantillas,
-                          child: _ItemMenuPerfil(
-                            icono: Icons.layers_outlined,
-                            texto: 'Mis plantillas',
-                          ),
-                        ),
-                        PopupMenuDivider(),
-                        PopupMenuItem(
-                          value: _OpcionPerfilMatrimonios.cerrarSesion,
-                          child: _ItemMenuPerfil(
-                            icono: Icons.logout,
-                            texto: 'Cerrar sesión',
-                            danger: true,
-                          ),
-                        ),
-                      ],
                     ),
                   ],
                 ),
@@ -237,32 +217,6 @@ class _Layout extends StatelessWidget {
         context.go('/bienvenida');
       }
     }
-  }
-}
-
-enum _OpcionPerfilMatrimonios { misPlantillas, cerrarSesion }
-
-class _ItemMenuPerfil extends StatelessWidget {
-  const _ItemMenuPerfil({
-    required this.icono,
-    required this.texto,
-    this.danger = false,
-  });
-
-  final IconData icono;
-  final String texto;
-  final bool danger;
-
-  @override
-  Widget build(BuildContext context) {
-    final color = danger ? AppColors.error : AppColors.textPrimary;
-    return Row(
-      children: [
-        Icon(icono, size: 20, color: color),
-        const SizedBox(width: AppSpacing.md),
-        Text(texto, style: TextStyle(color: color)),
-      ],
-    );
   }
 }
 

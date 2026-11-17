@@ -8,6 +8,7 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
     this.leading,
     this.actions = const [],
     this.centerTitle = false,
+    this.automaticallyImplyLeading = true,
     this.backgroundColor,
     this.foregroundColor,
     this.horizontalPadding = 32,
@@ -20,6 +21,7 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget> actions;
 
   final bool centerTitle;
+  final bool automaticallyImplyLeading;
   final Color? backgroundColor;
   final Color? foregroundColor;
   final double horizontalPadding;
@@ -33,6 +35,7 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
       toolbarHeight: preferredSize.height,
       centerTitle: centerTitle,
       leading: leading,
+      automaticallyImplyLeading: automaticallyImplyLeading,
       backgroundColor: backgroundColor,
       foregroundColor: foregroundColor,
       titleSpacing: horizontalPadding,

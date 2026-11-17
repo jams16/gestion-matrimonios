@@ -31,9 +31,9 @@ class EdtApi {
 
   Future<List<Map<String, dynamic>>> listarElementos() async {
     final data = _data(await _dio.get('/edt/elementos'));
-    return List<Object?>.from(data as List? ?? const [])
-        .map((item) => Map<String, dynamic>.from(item as Map))
-        .toList();
+    return List<Object?>.from(
+      data as List? ?? const [],
+    ).map((item) => Map<String, dynamic>.from(item as Map)).toList();
   }
 
   Future<Map<String, dynamic>> crearElemento(Map<String, dynamic> data) async =>
@@ -55,10 +55,20 @@ class EdtApi {
     data: data,
   );
 
+  Future<void> reordenarElementosPlantilla(
+    String idPlantilla,
+    List<Map<String, dynamic>> ordenes,
+  ) => _dio.patch(
+    '/edt/plantillas/$idPlantilla/elementos/ordenar',
+    data: {'ordenes': ordenes},
+  );
+
   Future<void> eliminarElementoPlantilla(
     String idPlantilla,
     String idElementoPlantilla,
-  ) => _dio.delete('/edt/plantillas/$idPlantilla/elementos/$idElementoPlantilla');
+  ) => _dio.delete(
+    '/edt/plantillas/$idPlantilla/elementos/$idElementoPlantilla',
+  );
 
   Future<void> crearPlantilla(Map<String, dynamic> data) =>
       _dio.post('/edt/plantillas', data: data);

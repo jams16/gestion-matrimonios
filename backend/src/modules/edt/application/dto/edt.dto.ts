@@ -1,6 +1,6 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { Type } from 'class-transformer';
-import { IsBoolean, IsInt, IsNotEmpty, IsOptional, IsString, IsUUID, MaxLength, Min } from 'class-validator';
+import { IsArray, IsBoolean, IsInt, IsNotEmpty, IsOptional, IsString, IsUUID, MaxLength, Min, ValidateNested } from 'class-validator';
 
 export class CrearElementoEdtDto {
   @IsString() @IsNotEmpty() @MaxLength(200) nombre!: string;
@@ -27,6 +27,16 @@ export class ActualizarElementoPlantillaEdtDto {
   @IsOptional() @IsUUID() idPlantillaElementoPadre?: string | null;
   @IsOptional() @Type(() => Number) @IsInt() @Min(0) orden?: number;
   @IsOptional() @IsBoolean() activo?: boolean;
+}
+
+class OrdenElementoPlantillaEdtDto {
+  @IsUUID() idElementoPlantilla!: string;
+  @Type(() => Number) @IsInt() @Min(0) orden!: number;
+}
+
+export class ReordenarElementosPlantillaEdtDto {
+  @IsArray() @ValidateNested({ each: true }) @Type(() => OrdenElementoPlantillaEdtDto)
+  ordenes!: OrdenElementoPlantillaEdtDto[];
 }
 
 export class CrearEdtMatrimonioDto {

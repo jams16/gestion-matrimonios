@@ -21,6 +21,7 @@ export class EdtController {
   @Patch('plantillas/:idPlantilla') actualizarPlantilla(@Param('idPlantilla') id: string, @Body() dto: D.ActualizarPlantillaEdtDto, @Req() req: any) { return this.service.actualizarPlantilla(id, dto, this.u(req)); }
   @Delete('plantillas/:idPlantilla') eliminarPlantilla(@Param('idPlantilla') id: string, @Req() req: any) { return this.service.eliminarPlantilla(id, this.u(req)); }
   @Post('plantillas/:idPlantilla/elementos') agregarElemento(@Param('idPlantilla') id: string, @Body() dto: D.AgregarElementoPlantillaEdtDto, @Req() req: any) { return this.service.agregarElementoPlantilla(id, dto, this.u(req)); }
+  @Patch('plantillas/:idPlantilla/elementos/ordenar') reordenarElementosPlantilla(@Param('idPlantilla') id: string, @Body() dto: D.ReordenarElementosPlantillaEdtDto, @Req() req: any) { return this.service.reordenarElementosPlantilla(id, dto, this.u(req)); }
   @Patch('plantillas/:idPlantilla/elementos/:idElementoPlantilla') actualizarElementoPlantilla(@Param('idPlantilla') id: string, @Param('idElementoPlantilla') elemento: string, @Body() dto: D.ActualizarElementoPlantillaEdtDto, @Req() req: any) { return this.service.actualizarElementoPlantilla(id, elemento, dto, this.u(req)); }
   @Delete('plantillas/:idPlantilla/elementos/:idElementoPlantilla') eliminarElementoPlantilla(@Param('idPlantilla') id: string, @Param('idElementoPlantilla') elemento: string, @Req() req: any) { return this.service.eliminarElementoPlantilla(id, elemento, this.u(req)); }
 }

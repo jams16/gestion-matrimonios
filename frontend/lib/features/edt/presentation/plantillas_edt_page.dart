@@ -252,7 +252,7 @@ class _PlantillasEdtPageState extends ConsumerState<PlantillasEdtPage> {
   @override
   Widget build(BuildContext context) {
     final plantillas = ref.watch(plantillasEdtProvider);
-    final practica = ref.watch(buenaPracticaProvider('GP03'));
+    final practica = ref.watch(buenaPracticaProvider('GP19'));
     return RefreshIndicator(
       onRefresh: _recargar,
       child: ListView(
@@ -272,7 +272,7 @@ class _PlantillasEdtPageState extends ConsumerState<PlantillasEdtPage> {
             ).textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary),
           ),
           const SizedBox(height: AppSpacing.md),
-          _InformacionGp03(practica: practica),
+          _InformacionGP19(practica: practica),
           const SizedBox(height: AppSpacing.lg),
           const _SelectorPlantillas(),
           const SizedBox(height: AppSpacing.xl),
@@ -345,8 +345,13 @@ class _PlantillasEdtPageState extends ConsumerState<PlantillasEdtPage> {
               child: _PlantillaPropiaCard(
                 plantilla: plantilla,
                 alVer: () => _verArbol(plantilla),
-                alEditarElementos: () =>
-                    context.push('/plantillas-edt/editor', extra: plantilla),
+                alEditarElementos: () async {
+                  await context.push(
+                    '/plantillas-edt/editor',
+                    extra: plantilla,
+                  );
+                  await _recargar();
+                },
                 alEditar: () => _formPlantilla(actual: plantilla),
                 alDuplicar: () => _duplicar(plantilla),
                 alEliminar: () => _eliminar(plantilla),
@@ -378,8 +383,8 @@ class _SelectorPlantillas extends StatelessWidget {
   );
 }
 
-class _InformacionGp03 extends StatelessWidget {
-  const _InformacionGp03({required this.practica});
+class _InformacionGP19 extends StatelessWidget {
+  const _InformacionGP19({required this.practica});
   final AsyncValue<Map<String, dynamic>?> practica;
   @override
   Widget build(BuildContext context) => practica.when(
@@ -496,9 +501,9 @@ class _PlantillaPropiaCard extends StatelessWidget {
   final VoidCallback alEliminar;
   @override
   Widget build(BuildContext context) {
-    final fecha =
-        plantilla['updatedAt']?.toString() ??
-        plantilla['updated_at']?.toString();
+    final fecha = _fechaModificacion(
+      plantilla['updatedAt'] ?? plantilla['updated_at'],
+    );
     return AppCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -614,6 +619,35 @@ class _PlantillaPropiaCard extends StatelessWidget {
       ),
     );
   }
+}
+
+String? _fechaModificacion(Object? valor) {
+  if (valor == null || valor is Map) {
+    return null;
+  }
+  final fecha = DateTime.tryParse(valor.toString())?.toLocal();
+  if (fecha == null) {
+    return null;
+  }
+  const meses = [
+    'ene.',
+    'feb.',
+    'mar.',
+    'abr.',
+    'may.',
+    'jun.',
+    'jul.',
+    'ago.',
+    'set.',
+    'oct.',
+    'nov.',
+    'dic.',
+  ];
+  final hora12 = fecha.hour % 12 == 0 ? 12 : fecha.hour % 12;
+  final minuto = fecha.minute.toString().padLeft(2, '0');
+  final meridiano = fecha.hour < 12 ? 'am' : 'pm';
+  return '${fecha.day} de ${meses[fecha.month - 1]} del ${fecha.year} '
+      '${hora12.toString().padLeft(2, '0')}:$minuto $meridiano';
 }
 
 class _EstadoVacio extends StatelessWidget {
