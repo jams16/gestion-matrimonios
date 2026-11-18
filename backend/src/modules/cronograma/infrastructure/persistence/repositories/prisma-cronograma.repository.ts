@@ -469,7 +469,10 @@ export class PrismaCronogramaRepository
   async listarChecklistActividad(idActividad: string): Promise<Record<string, unknown>[]> {
     const items = await this.db.orm.public.ActividadChecklist.all();
     return (items as Array<Record<string, unknown>>)
-      .filter((item) => String(item.idActividad) === idActividad)
+      .filter(
+        (item) =>
+          String(item.idActividad) === idActividad && item.activo !== false,
+      )
       .sort((a, b) => Number(a.orden) - Number(b.orden));
   }
 

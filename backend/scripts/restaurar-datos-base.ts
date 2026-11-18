@@ -211,6 +211,13 @@ async function checklistPlantilla(c: ClienteSql, r: Resumen) {
   r.existentes = await contar(c, 'cr_plantilla_actividad_checklist');
   const filas = await c.query('SELECT id_plantilla_actividad, lista_verificacion FROM public.cr_plantilla_actividad WHERE lista_verificacion IS NOT NULL');
   for (const fila of filas.rows) {
+    // Sin borrados: los registros de plantilla sobrantes quedan inactivos y
+    // las instancias operativas conservan su estado de completado y cambios
+    // manuales. Es seguro volver a ejecutar el restaurador.
+    await c.query(
+      'UPDATE public.cr_plantilla_actividad_checklist SET activo=false, updated_at=now() WHERE id_plantilla_actividad=$1',
+      [fila.id_plantilla_actividad],
+    );
     const bruto = fila.lista_verificacion;
     const valores = Array.isArray(bruto) ? bruto : [bruto];
     const textos = valores.flatMap((valor) => typeof valor === 'string'
@@ -218,11 +225,28 @@ async function checklistPlantilla(c: ClienteSql, r: Resumen) {
       : Object.values((valor ?? {}) as Fila).map(String))
       .map((valor) => String(valor).trim()).filter(Boolean);
     for (const [indice, descripcion] of textos.entries()) try {
-      const existe = await c.query('SELECT 1 FROM public.cr_plantilla_actividad_checklist WHERE id_plantilla_actividad = $1 AND descripcion = $2', [fila.id_plantilla_actividad, descripcion]);
-      if (existe.rowCount) continue;
-      await c.query('INSERT INTO public.cr_plantilla_actividad_checklist (id_plantilla_actividad, descripcion, orden, obligatorio, activo, created_at, updated_at) VALUES ($1, $2, $3, true, true, now(), now())', [fila.id_plantilla_actividad, descripcion, indice]);
+      const existente = await c.query(
+        'SELECT id_plantilla_checklist FROM public.cr_plantilla_actividad_checklist WHERE id_plantilla_actividad=$1 ORDER BY id_plantilla_checklist LIMIT 1 OFFSET $2',
+        [fila.id_plantilla_actividad, indice],
+      );
+      if (existente.rowCount) {
+        await c.query(
+          'UPDATE public.cr_plantilla_actividad_checklist SET descripcion=$1, orden=$2, obligatorio=true, activo=true, updated_at=now() WHERE id_plantilla_checklist=$3',
+          [descripcion, indice, existente.rows[0].id_plantilla_checklist],
+        );
+      } else {
+        await c.query('INSERT INTO public.cr_plantilla_actividad_checklist (id_plantilla_actividad, descripcion, orden, obligatorio, activo, created_at, updated_at) VALUES ($1, $2, $3, true, true, now(), now())', [fila.id_plantilla_actividad, descripcion, indice]);
+      }
       r.restaurados += 1;
     } catch (error) { r.errores.push(errorTexto(error)); }
+    await c.query(
+      'UPDATE public.cr_actividad_checklist AS instancia SET descripcion=plantilla.descripcion, orden=plantilla.orden, obligatorio=plantilla.obligatorio, updated_at=now() FROM public.cr_actividad AS actividad JOIN public.cr_plantilla_actividad_checklist AS plantilla ON plantilla.id_plantilla_actividad=actividad.id_plantilla_actividad WHERE instancia.id_actividad=actividad.id_actividad AND plantilla.activo=true AND instancia.orden=plantilla.orden AND actividad.id_plantilla_actividad=$1',
+      [fila.id_plantilla_actividad],
+    );
+    await c.query(
+      'UPDATE public.cr_actividad_checklist AS instancia SET activo=false, updated_at=now() FROM public.cr_plantilla_actividad_checklist AS plantilla WHERE instancia.id_plantilla_checklist=plantilla.id_plantilla_checklist AND plantilla.id_plantilla_actividad=$1 AND plantilla.activo=false',
+      [fila.id_plantilla_actividad],
+    );
   }
 }
 
@@ -239,6 +263,30 @@ async function sincronizarCronogramaOficial(c: ClienteSql, relaciones: Resumen, 
   const actividades = new Map((await c.query('SELECT id_plantilla_actividad,codigo FROM public.cr_plantilla_actividad')).rows.map((x) => [String(x.codigo), x.id_plantilla_actividad]));
   const hitos = new Map((await c.query('SELECT id_plantilla_hito,codigo FROM public.cr_plantilla_hito')).rows.map((x) => [String(x.codigo), x.id_plantilla_hito]));
   const timings = new Map((await c.query('SELECT id_plantilla_timing,codigo FROM public.cr_plantilla_timing')).rows.map((x) => [String(x.codigo), x.id_plantilla_timing]));
+
+  // Las listas oficiales se mantienen como ítems, no como una sola oración.
+  // Se actualizan por orden para conservar las FK de los checklists ya
+  // generados en matrimonios y se propaga el texto corregido a esas instancias.
+  for (const item of cronogramaOficial.actividades) {
+    const idActividad = actividades.get(String(item.codigo));
+    if (!idActividad) continue;
+    const textos = JSON.parse(String(item.lista_verificacion)) as string[];
+    for (const [orden, descripcion] of textos.entries()) {
+      const actualizado = await c.query(
+        'UPDATE public.cr_plantilla_actividad_checklist SET descripcion=$1, orden=$2, obligatorio=true, activo=true, updated_at=now() WHERE id_plantilla_actividad=$3 AND orden=$2',
+        [descripcion, orden, idActividad],
+      );
+      if (!actualizado.rowCount) {
+        await c.query(
+          'INSERT INTO public.cr_plantilla_actividad_checklist (id_plantilla_actividad, descripcion, orden, obligatorio, activo, created_at, updated_at) VALUES ($1,$2,$3,true,true,now(),now())',
+          [idActividad, descripcion, orden],
+        );
+      }
+    }
+  }
+  await c.query(
+    'UPDATE public.cr_actividad_checklist AS instancia SET descripcion=plantilla.descripcion, orden=plantilla.orden, obligatorio=plantilla.obligatorio, updated_at=now() FROM public.cr_plantilla_actividad_checklist AS plantilla WHERE instancia.id_plantilla_checklist=plantilla.id_plantilla_checklist',
+  );
   relaciones.existentes = await contar(c, 'cr_plantilla_hito_actividad');
   for (const [codigoHito, codigosActividad] of cronogramaOficial.relacionesHitoActividad) for (const codigoActividad of codigosActividad) {
     const resultado = await c.query('INSERT INTO public.cr_plantilla_hito_actividad (id_plantilla_hito,id_plantilla_actividad) VALUES ($1,$2) ON CONFLICT (id_plantilla_hito,id_plantilla_actividad) DO NOTHING', [hitos.get(codigoHito), actividades.get(codigoActividad)]); relaciones.restaurados += Number(resultado.rowCount ?? 0);

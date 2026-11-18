@@ -85,7 +85,18 @@ export class GenerarTimingDesdePlantillaUseCase {
   }
   private combinar(fecha: Date, hora: string) {
     const [horas, minutos] = hora.split(':').map(Number);
-    return new Date(Date.UTC(fecha.getUTCFullYear(), fecha.getUTCMonth(), fecha.getUTCDate(), horas, minutos));
+    // Las horas del timing se ingresan y se muestran en Perú (UTC-05:00).
+    // Persistimos el instante UTC equivalente para que 06:00 no aparezca
+    // como 01:00 al volver a renderizarlo en Flutter.
+    return new Date(
+      Date.UTC(
+        fecha.getUTCFullYear(),
+        fecha.getUTCMonth(),
+        fecha.getUTCDate(),
+        horas + 5,
+        minutos,
+      ),
+    );
   }
   private sumarMinutos(fecha: Date, minutos: number) { return new Date(fecha.getTime() + minutos * 60_000); }
 }

@@ -552,13 +552,31 @@ export class ConsultarCronogramaUseCase {
     const actividadesActivas = new Set(
       actividades.map((actividad) => String(actividad.idActividad)),
     );
+    // Un hito representa el resultado posterior a todas sus actividades: su
+    // fecha objetivo efectiva es la mayor fecha de fin de las asociadas.
+    const fechaObjetivoPorHito = new Map<string, Date>();
+    for (const relacion of hitoActividades) {
+      const actividad = actividades.find(
+        (item) => String(item.idActividad) === String(relacion.idActividad),
+      );
+      if (!actividad?.fechaFin) continue;
+      const fecha = new Date(String(actividad.fechaFin));
+      if (Number.isNaN(fecha.getTime())) continue;
+      const idHito = String(relacion.idHito);
+      const actual = fechaObjetivoPorHito.get(idHito);
+      if (!actual || fecha > actual) fechaObjetivoPorHito.set(idHito, fecha);
+    }
+    const hitosConFechaObjetivo = hitos.map((hito) => {
+      const fecha = fechaObjetivoPorHito.get(String(hito.idHito));
+      return fecha ? { ...hito, fechaObjetivo: fecha } : hito;
+    });
     return {
       proyecto: {
         ...proyecto,
         faseProyecto: faseProyecto ?? null,
         faseProyectoCodigo: faseProyecto?.codigo ?? null,
       },
-      hitos,
+      hitos: hitosConFechaObjetivo,
       actividades,
       // El puente permite que una actividad contribuya a más de un hito sin
       // duplicar la actividad ni depender de la relación heredada id_hito.
@@ -566,7 +584,7 @@ export class ConsultarCronogramaUseCase {
         (relacion) =>
           !activo ||
           (actividadesActivas.has(String(relacion.idActividad)) &&
-            hitos.some(
+            hitosConFechaObjetivo.some(
               (hito) => String(hito.idHito) === String(relacion.idHito),
             )),
       ),

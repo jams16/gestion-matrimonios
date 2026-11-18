@@ -15,6 +15,7 @@ import '../../../../core/widgets/inputs/app_time_field.dart';
 import '../../../../core/widgets/overlays/app_confirmation_dialog.dart';
 import '../../../autenticacion/infrastructure/auth_session.dart';
 import '../../../edt/infrastructure/edt_api.dart';
+import '../../../proyectos/infrastructure/data_sources/matrimonios_remote_data_source.dart';
 import '../../application/providers/cronograma_provider.dart';
 import '../../infrastructure/cronograma_api.dart';
 
@@ -37,6 +38,8 @@ class CronogramaPage extends ConsumerStatefulWidget {
 class _CronogramaPageState extends ConsumerState<CronogramaPage>
     with SingleTickerProviderStateMixin {
   late final TabController _tabs;
+  late final Future<Map<String, dynamic>?> _buenaPracticaPlan;
+  VoidCallback? _agregarEdt;
   bool _procesando = false;
   Timer? _autoguardadoPendiente;
 
@@ -44,6 +47,8 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
   void initState() {
     super.initState();
     _tabs = TabController(length: 4, vsync: this)..addListener(_redibujarTab);
+    _buenaPracticaPlan = MatrimoniosRemoteDataSource()
+        .obtenerBuenaPracticaPorCodigo('GP24');
   }
 
   void _redibujarTab() {
@@ -65,6 +70,41 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
     ref.invalidate(cronogramaProvider(widget.idProyecto));
     await ref.read(cronogramaProvider(widget.idProyecto).future);
   }
+
+  Widget _informacionPlan() => FutureBuilder<Map<String, dynamic>?>(
+    future: _buenaPracticaPlan,
+    builder: (context, snapshot) {
+      final practica = snapshot.data;
+      final detalle =
+          practica?['aplicacionMatrimonios']?.toString() ??
+          practica?['aplicacion_matrimonios']?.toString();
+      if (detalle == null || detalle.trim().isEmpty) {
+        return const SizedBox.shrink();
+      }
+      return IconButton(
+        tooltip: 'Ver recomendación de planificación',
+        icon: const Icon(Icons.info_outline, color: AppColors.primary),
+        onPressed: () => showDialog<void>(
+          context: context,
+          builder: (dialogContext) => AlertDialog(
+            title: const Text('Información'),
+            content: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxHeight: MediaQuery.sizeOf(dialogContext).height * .55,
+              ),
+              child: SingleChildScrollView(child: Text(detalle)),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(dialogContext).pop(),
+                child: const Text('Cerrar'),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
 
   /// Solo persiste cambios textuales completos sobre una instancia existente.
   /// Las fechas requieren la confirmación explícita para no saltar el preview
@@ -191,17 +231,49 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
     List<Map<String, dynamic>> responsables,
     List<Map<String, dynamic>> hitos,
   ) async {
-    await Navigator.of(context).push<void>(
-      MaterialPageRoute(
-        builder: (_) => _HitoDetallePage(
-          hito: hito,
-          actividades: actividades,
-          onAgregarActividad: () =>
-              _agregarActividadAHito(hito, actividades, responsables, hitos),
-        ),
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      builder: (_) => _DetalleHitoSheet(
+        hito: hito,
+        actividades: actividades,
+        onAgregarActividad: () =>
+            _agregarActividadAHito(hito, actividades, responsables, hitos),
       ),
     );
     await _recargar();
+  }
+
+  Future<void> _reiniciarTiming(List<Map<String, dynamic>> timing) async {
+    final hora = await showTimePicker(
+      context: context,
+      initialTime: const TimeOfDay(hour: 8, minute: 0),
+      builder: (context, child) => MediaQuery(
+        data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+        child: child!,
+      ),
+    );
+    if (hora == null) return;
+    final confirmar = await AppConfirmationDialog.show(
+      context,
+      title: 'Reiniciar timing',
+      message:
+          'Se reemplazarán los momentos generados actualmente por una nueva línea de tiempo desde ${hora.format(context)}.',
+      cancelLabel: 'Volver',
+      confirmLabel: 'Reiniciar',
+    );
+    if (!confirmar) return;
+    await _ejecutar((api) async {
+      for (final momento in timing) {
+        final id = momento['idTiming']?.toString();
+        if (id != null && id.isNotEmpty)
+          await api.eliminarTiming(widget.idProyecto, id);
+      }
+      await api.generarTiming(
+        widget.idProyecto,
+        '${hora.hour.toString().padLeft(2, '0')}:${hora.minute.toString().padLeft(2, '0')}',
+      );
+    }, exito: 'Timing reiniciado con la nueva hora de inicio.');
   }
 
   Future<void> _agregarActividadAHito(
@@ -321,22 +393,30 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
       data: (data) => _contenido(data),
     );
     final botonFlotante = estado.maybeWhen(
-      data: (data) => _tabs.index == 0
-          ? null
-          : FloatingActionButton.extended(
+      data: (data) => FloatingActionButton.extended(
               onPressed: _procesando
                   ? null
+                  : _tabs.index == 0
+                  ? _agregarEdt
                   : () => _tabs.index == 1
                         ? _mostrarAccionesCronograma(data)
                         : _tabs.index == 2
                         ? _editarHito(null)
                         : _editarTiming(data, _responsablesDe(data)),
               icon: Icon(
-                _tabs.index == 3
+                _tabs.index == 0
+                    ? Icons.account_tree_outlined
+                    : _tabs.index == 3
                     ? Icons.add_alarm_outlined
                     : Icons.add_task_outlined,
               ),
-              label: Text(_tabs.index == 3 ? 'Agregar momento' : 'Agregar'),
+              label: Text(
+                _tabs.index == 0
+                    ? 'Agregar sección'
+                    : _tabs.index == 3
+                    ? 'Agregar momento'
+                    : 'Agregar',
+              ),
             ),
       orElse: () => null,
     );
@@ -404,6 +484,13 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
     final completadas = actividades
         .where((a) => a['estado'] == 'COMPLETADA')
         .length;
+    final hitosLogrados = hitos
+        .where(
+          (hito) =>
+              hito['estado']?.toString() == 'COMPLETADO' ||
+              hito['estado']?.toString() == 'COMPLETADA',
+        )
+        .length;
     final progreso = actividades.isEmpty
         ? 0.0
         : completadas / actividades.length;
@@ -415,6 +502,7 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
           child: Row(
             children: [
               const Text('PLAN', style: TextStyle(fontWeight: FontWeight.w800)),
+              _informacionPlan(),
               const Spacer(),
               if (puedeConfirmar)
                 AppButton(
@@ -433,44 +521,14 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
           progreso: progreso,
           actividadesCompletadas: completadas,
           totalActividades: actividades.length,
+          hitosLogrados: hitosLogrados,
+          totalHitos: hitos.length,
         ),
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 10, 16, 8),
-          child: LayoutBuilder(
-            builder: (context, constraints) => SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: ConstrainedBox(
-                constraints: BoxConstraints(minWidth: constraints.maxWidth),
-                child: SegmentedButton<int>(
-                  showSelectedIcon: false,
-                  selected: {_tabs.index},
-                  segments: const [
-                    ButtonSegment(
-                      value: 0,
-                      icon: Icon(Icons.account_tree_outlined),
-                      label: Text('EDT'),
-                    ),
-                    ButtonSegment(
-                      value: 1,
-                      icon: Icon(Icons.calendar_month_outlined),
-                      label: Text('Cronograma'),
-                    ),
-                    ButtonSegment(
-                      value: 2,
-                      icon: Icon(Icons.flag_outlined),
-                      label: Text('Hitos'),
-                    ),
-                    ButtonSegment(
-                      value: 3,
-                      icon: Icon(Icons.schedule_outlined),
-                      label: Text('Timing'),
-                    ),
-                  ],
-                  onSelectionChanged: (seleccion) =>
-                      _tabs.animateTo(seleccion.first),
-                ),
-              ),
-            ),
+          child: _NavegacionSegmentadaPlan(
+            seleccionado: _tabs.index,
+            onSeleccionar: _tabs.animateTo,
           ),
         ),
         Expanded(
@@ -479,6 +537,13 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
             children: [
               _EdtMatrimonioPanel(
                 idMatrimonio: matrimonio['idMatrimonio']?.toString(),
+                onRegistrarAgregar: (accion) {
+                  if (_agregarEdt != accion) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      if (mounted) setState(() => _agregarEdt = accion);
+                    });
+                  }
+                },
               ),
               _ListaCronograma(
                 hitos: hitos,
@@ -530,6 +595,7 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
                   (api) => api.generarTiming(widget.idProyecto, hora),
                   exito: 'Timing generado correctamente.',
                 ),
+                alReiniciar: () => _reiniciarTiming(timing),
               ),
             ],
           ),
@@ -1773,6 +1839,87 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
   }
 }
 
+class _NavegacionSegmentadaPlan extends StatelessWidget {
+  const _NavegacionSegmentadaPlan({
+    required this.seleccionado,
+    required this.onSeleccionar,
+  });
+
+  final int seleccionado;
+  final ValueChanged<int> onSeleccionar;
+
+  @override
+  Widget build(BuildContext context) {
+    const opciones = [
+      (texto: 'EDT', icono: Icons.account_tree_outlined),
+      (texto: 'Cronograma', icono: Icons.calendar_month_outlined),
+      (texto: 'Hitos', icono: Icons.flag_outlined),
+      (texto: 'Timing', icono: Icons.schedule_outlined),
+    ];
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(18),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          border: Border.all(color: AppColors.textPrimary),
+          borderRadius: BorderRadius.circular(18),
+        ),
+        child: Row(
+          children: List.generate(opciones.length, (indice) {
+            final seleccionada = indice == seleccionado;
+            final opcion = opciones[indice];
+            return Expanded(
+              flex: seleccionada ? 4 : 1,
+              child: Material(
+                color: seleccionada ? AppColors.primary : Colors.white,
+                child: InkWell(
+                  onTap: () => onSeleccionar(indice),
+                  child: Container(
+                    height: 38,
+                    decoration: BoxDecoration(
+                      border: indice == opciones.length - 1
+                          ? null
+                          : const Border(
+                              right: BorderSide(color: AppColors.textPrimary),
+                            ),
+                    ),
+                    alignment: Alignment.center,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          opcion.icono,
+                          size: 18,
+                          color: seleccionada
+                              ? Colors.white
+                              : AppColors.textPrimary,
+                        ),
+                        if (seleccionada) ...[
+                          const SizedBox(width: 7),
+                          Flexible(
+                            child: Text(
+                              opcion.texto,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            );
+          }),
+        ),
+      ),
+    );
+  }
+}
+
 class _CabeceraCronograma extends StatelessWidget {
   const _CabeceraCronograma({
     required this.fechaBoda,
@@ -1780,11 +1927,14 @@ class _CabeceraCronograma extends StatelessWidget {
     required this.progreso,
     required this.actividadesCompletadas,
     required this.totalActividades,
+    required this.hitosLogrados,
+    required this.totalHitos,
   });
   final DateTime? fechaBoda;
   final DateTime? fechaInicioProyecto;
   final double progreso;
   final int actividadesCompletadas, totalActividades;
+  final int hitosLogrados, totalHitos;
   @override
   Widget build(BuildContext context) {
     final dias = fechaBoda?.difference(DateTime.now()).inDays;
@@ -1808,7 +1958,7 @@ class _CabeceraCronograma extends StatelessWidget {
           Text(
             fechaBoda == null
                 ? 'Fecha de boda por confirmar'
-                : 'Boda: ${_fechaCorta(fechaBoda!)}',
+                : 'Boda: ${_fechaLarga(fechaBoda!)}',
             style: Theme.of(
               context,
             ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
@@ -1829,22 +1979,50 @@ class _CabeceraCronograma extends StatelessWidget {
             style: Theme.of(context).textTheme.labelMedium,
           ),
           const SizedBox(height: 14),
-          LinearProgressIndicator(
-            value: progreso,
-            minHeight: 8,
-            borderRadius: BorderRadius.circular(8),
-            color: AppColors.primary,
-            backgroundColor: Colors.white,
-          ),
-          const SizedBox(height: 6),
-          Text(
-            '$actividadesCompletadas de $totalActividades actividades completadas',
-            style: Theme.of(context).textTheme.labelMedium,
+          Row(
+            children: [
+              Expanded(
+                child: _MetricaProgreso(
+                  valor: progreso,
+                  texto:
+                      '$actividadesCompletadas de $totalActividades actividades',
+                ),
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: _MetricaProgreso(
+                  valor: totalHitos == 0 ? 0 : hitosLogrados / totalHitos,
+                  texto: '$hitosLogrados de $totalHitos hitos',
+                ),
+              ),
+            ],
           ),
         ],
       ),
     );
   }
+}
+
+class _MetricaProgreso extends StatelessWidget {
+  const _MetricaProgreso({required this.valor, required this.texto});
+  final double valor;
+  final String texto;
+
+  @override
+  Widget build(BuildContext context) => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      LinearProgressIndicator(
+        value: valor,
+        minHeight: 8,
+        borderRadius: BorderRadius.circular(8),
+        color: AppColors.primary,
+        backgroundColor: Colors.white,
+      ),
+      const SizedBox(height: 6),
+      Text(texto, style: Theme.of(context).textTheme.labelMedium),
+    ],
+  );
 }
 
 class _ListaCronograma extends StatelessWidget {
@@ -1927,22 +2105,34 @@ class _ListaCronograma extends StatelessWidget {
       children: [
         ...hitosOrdenados.indexed.map((entrada) {
           final indice = entrada.$1;
-          final hito = entrada.$2;
+          final hito = Map<String, dynamic>.from(entrada.$2);
+          final actividadesDelHito =
+              actividades
+                  .where(
+                    (a) => hitoActividades.any(
+                      (relacion) =>
+                          relacion['idHito']?.toString() ==
+                              hito['idHito']?.toString() &&
+                          relacion['idActividad']?.toString() ==
+                              a['idActividad']?.toString(),
+                    ),
+                  )
+                  .toList()
+                ..sort(compararActividad);
+          final fechaObjetivo = actividadesDelHito
+              .map((actividad) => _fecha(actividad['fechaFin']))
+              .whereType<DateTime>()
+              .fold<DateTime?>(
+                null,
+                (mayor, fecha) =>
+                    mayor == null || fecha.isAfter(mayor) ? fecha : mayor,
+              );
+          if (fechaObjetivo != null) {
+            hito['fechaObjetivo'] = fechaObjetivo.toIso8601String();
+          }
           return _HitoCard(
             hito: hito,
-            actividades:
-                actividades
-                    .where(
-                      (a) => hitoActividades.any(
-                        (relacion) =>
-                            relacion['idHito']?.toString() ==
-                                hito['idHito']?.toString() &&
-                            relacion['idActividad']?.toString() ==
-                                a['idActividad']?.toString(),
-                      ),
-                    )
-                    .toList()
-                  ..sort(compararActividad),
+            actividades: actividadesDelHito,
             alEditarHito: () => alEditarHito(hito),
             alEliminarHito: () => alEliminarHito(hito),
             alAgregarActividad: () => alAgregarActividadEnHito(hito),
@@ -2026,94 +2216,104 @@ class _HitoCard extends StatelessWidget {
   final void Function(Map<String, dynamic>, Map<String, dynamic>)
   alMoverActividad;
   @override
-  Widget build(BuildContext context) => Card(
-    margin: const EdgeInsets.only(bottom: 12),
-    child: Padding(
-      padding: const EdgeInsets.all(14),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
+  Widget build(BuildContext context) => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      // En la línea de tiempo primero se muestran las tareas necesarias;
+      // el hito queda como resultado de ese bloque de trabajo.
+      ...actividades.map(
+        (a) => _ActividadFila(
+          item: a,
+          alEditar: () => alEditarActividad(a),
+          alEliminar: () => alEliminarActividad(a),
+          alVer: () => alVerActividad(a),
+          dependencias:
+              dependenciasPorSucesora[a['idActividad']?.toString()] ?? const [],
+          nombresActividades: nombresActividades,
+          nombresResponsables: nombresResponsables,
+          alEliminarDependencia: alEliminarDependencia,
+          alAgregarDependencia: () => alAgregarDependencia(a),
+          alMover: (vecino) => alMoverActividad(a, vecino),
+          anterior: actividades.indexOf(a) == 0
+              ? null
+              : actividades[actividades.indexOf(a) - 1],
+          siguiente: actividades.indexOf(a) == actividades.length - 1
+              ? null
+              : actividades[actividades.indexOf(a) + 1],
+        ),
+      ),
+      if (actividades.isNotEmpty) const SizedBox(height: 8),
+      Card(
+        margin: const EdgeInsets.only(bottom: 16),
+        color: const Color(0xFFF4F0FB),
+        child: Padding(
+          padding: const EdgeInsets.all(14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Icon(Icons.flag_outlined, color: AppColors.primary),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  hito['nombre']?.toString() ?? 'Hito',
-                  style: const TextStyle(fontWeight: FontWeight.w800),
-                ),
-              ),
-              if (alEditarHito != null)
-                Wrap(
-                  children: [
-                    IconButton(
-                      onPressed: alSubir,
-                      icon: const Icon(Icons.keyboard_arrow_up),
-                      tooltip: 'Subir hito',
+              Row(
+                children: [
+                  const Icon(Icons.flag_outlined, color: AppColors.primary),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      hito['nombre']?.toString() ?? 'Hito',
+                      style: const TextStyle(fontWeight: FontWeight.w800),
                     ),
-                    IconButton(
-                      onPressed: alBajar,
-                      icon: const Icon(Icons.keyboard_arrow_down),
-                      tooltip: 'Bajar hito',
-                    ),
-                    PopupMenuButton<String>(
-                      onSelected: (v) {
-                        if (v == 'editar') {
-                          return alEditarHito!();
-                        }
-                        if (v == 'agregarActividad')
-                          return alAgregarActividad!();
-                        return alEliminarHito!();
-                      },
-                      itemBuilder: (_) => const [
-                        PopupMenuItem(
-                          value: 'agregarActividad',
-                          child: Text('Agregar actividad'),
+                  ),
+                  if (alEditarHito != null)
+                    Wrap(
+                      children: [
+                        IconButton(
+                          onPressed: alSubir,
+                          icon: const Icon(Icons.keyboard_arrow_up),
+                          tooltip: 'Subir hito',
                         ),
-                        PopupMenuItem(value: 'editar', child: Text('Editar')),
-                        PopupMenuItem(
-                          value: 'eliminar',
-                          child: Text('Desactivar'),
+                        IconButton(
+                          onPressed: alBajar,
+                          icon: const Icon(Icons.keyboard_arrow_down),
+                          tooltip: 'Bajar hito',
+                        ),
+                        PopupMenuButton<String>(
+                          onSelected: (v) {
+                            if (v == 'editar') {
+                              return alEditarHito!();
+                            }
+                            if (v == 'agregarActividad')
+                              return alAgregarActividad!();
+                            return alEliminarHito!();
+                          },
+                          itemBuilder: (_) => const [
+                            PopupMenuItem(
+                              value: 'agregarActividad',
+                              child: Text('Agregar actividad'),
+                            ),
+                            PopupMenuItem(
+                              value: 'editar',
+                              child: Text('Editar'),
+                            ),
+                            PopupMenuItem(
+                              value: 'eliminar',
+                              child: Text('Desactivar'),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ],
+                ],
+              ),
+              if (hito['fechaObjetivo'] != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 4),
+                  child: Text(
+                    'Objetivo: ${_fechaCorta(_fecha(hito['fechaObjetivo']))}',
+                  ),
                 ),
             ],
           ),
-          if (hito['fechaObjetivo'] != null)
-            Padding(
-              padding: const EdgeInsets.only(top: 4),
-              child: Text(
-                'Objetivo: ${_fechaCorta(_fecha(hito['fechaObjetivo']))}',
-              ),
-            ),
-          const SizedBox(height: 8),
-          ...actividades.map(
-            (a) => _ActividadFila(
-              item: a,
-              alEditar: () => alEditarActividad(a),
-              alEliminar: () => alEliminarActividad(a),
-              alVer: () => alVerActividad(a),
-              dependencias:
-                  dependenciasPorSucesora[a['idActividad']?.toString()] ??
-                  const [],
-              nombresActividades: nombresActividades,
-              nombresResponsables: nombresResponsables,
-              alEliminarDependencia: alEliminarDependencia,
-              alAgregarDependencia: () => alAgregarDependencia(a),
-              alMover: (vecino) => alMoverActividad(a, vecino),
-              anterior: actividades.indexOf(a) == 0
-                  ? null
-                  : actividades[actividades.indexOf(a) - 1],
-              siguiente: actividades.indexOf(a) == actividades.length - 1
-                  ? null
-                  : actividades[actividades.indexOf(a) + 1],
-            ),
-          ),
-        ],
+        ),
       ),
-    ),
+    ],
   );
 }
 
@@ -2141,103 +2341,111 @@ class _ActividadFila extends StatelessWidget {
   final ValueChanged<Map<String, dynamic>> alMover;
   final Map<String, dynamic>? anterior, siguiente;
   @override
-  Widget build(BuildContext context) => ListTile(
-    onTap: alVer,
-    isThreeLine: true,
-    contentPadding: const EdgeInsets.only(left: 8, right: 2),
-    leading: Icon(
-      item['estado'] == 'COMPLETADA'
-          ? Icons.check_circle
-          : Icons.radio_button_unchecked,
-      color: item['estado'] == 'COMPLETADA' ? Colors.green : AppColors.primary,
-    ),
-    title: Text(item['nombre']?.toString() ?? 'Actividad'),
-    subtitle: Padding(
-      padding: const EdgeInsets.only(top: 6),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Wrap(
-            spacing: 8,
-            runSpacing: 6,
-            children: [
-              _EstadoActividadChip(
-                estado: item['estado']?.toString() ?? 'PENDIENTE',
-              ),
-              _DatoActividad(
-                icon: Icons.event_outlined,
-                texto: 'Vence ${_fechaCorta(_fecha(item['fechaFin']))}',
-              ),
-              if (item['idUsuarioResponsable'] != null)
-                _DatoActividad(
-                  icon: Icons.person_outline,
-                  texto:
-                      nombresResponsables[item['idUsuarioResponsable']
-                          .toString()] ??
-                      'Sin responsable',
+  Widget build(BuildContext context) => Card(
+    margin: const EdgeInsets.only(bottom: 8),
+    child: ListTile(
+      onTap: alVer,
+      isThreeLine: true,
+      contentPadding: const EdgeInsets.only(left: 8, right: 2),
+      leading: Icon(
+        item['estado'] == 'COMPLETADA'
+            ? Icons.check_circle
+            : Icons.radio_button_unchecked,
+        color: item['estado'] == 'COMPLETADA'
+            ? Colors.green
+            : AppColors.primary,
+      ),
+      title: Text(item['nombre']?.toString() ?? 'Actividad'),
+      subtitle: Padding(
+        padding: const EdgeInsets.only(top: 6),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Wrap(
+              spacing: 8,
+              runSpacing: 6,
+              children: [
+                _EstadoActividadChip(
+                  estado: item['estado']?.toString() ?? 'PENDIENTE',
                 ),
-            ],
-          ),
-          ...dependencias.map(
-            (dependencia) => Container(
-              margin: const EdgeInsets.only(top: 7),
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-              decoration: BoxDecoration(
-                color: const Color(0xFFF4F0FB),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Row(
-                children: [
-                  const Icon(
-                    Icons.link_outlined,
-                    size: 16,
-                    color: AppColors.primary,
+                _DatoActividad(
+                  icon: Icons.event_outlined,
+                  texto: 'Vence ${_fechaCorta(_fecha(item['fechaFin']))}',
+                ),
+                if (item['idUsuarioResponsable'] != null)
+                  _DatoActividad(
+                    icon: Icons.person_outline,
+                    texto:
+                        nombresResponsables[item['idUsuarioResponsable']
+                            .toString()] ??
+                        'Sin responsable',
                   ),
-                  const SizedBox(width: 6),
-                  Expanded(
-                    child: Text(
-                      'Depende de ${nombresActividades[dependencia['idActividadPredecesora']?.toString()] ?? 'actividad'}',
+              ],
+            ),
+            ...dependencias.map(
+              (dependencia) => Container(
+                margin: const EdgeInsets.only(top: 7),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF4F0FB),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.link_outlined,
+                      size: 16,
+                      color: AppColors.primary,
                     ),
-                  ),
-                  IconButton(
-                    tooltip: 'Eliminar dependencia',
-                    visualDensity: VisualDensity.compact,
-                    iconSize: 18,
-                    onPressed: () => alEliminarDependencia(dependencia),
-                    icon: const Icon(Icons.link_off_outlined),
-                  ),
-                ],
+                    const SizedBox(width: 6),
+                    Expanded(
+                      child: Text(
+                        'Depende de ${nombresActividades[dependencia['idActividadPredecesora']?.toString()] ?? 'actividad'}',
+                      ),
+                    ),
+                    IconButton(
+                      tooltip: 'Eliminar dependencia',
+                      visualDensity: VisualDensity.compact,
+                      iconSize: 18,
+                      onPressed: () => alEliminarDependencia(dependencia),
+                      icon: const Icon(Icons.link_off_outlined),
+                    ),
+                  ],
+                ),
               ),
             ),
+          ],
+        ),
+      ),
+      trailing: PopupMenuButton<String>(
+        onSelected: (v) {
+          if (v == 'editar') {
+            alEditar();
+          } else if (v == 'subir') {
+            if (anterior != null) {
+              alMover(anterior!);
+            }
+          } else if (v == 'bajar') {
+            if (siguiente != null) {
+              alMover(siguiente!);
+            }
+          } else if (v == 'dependencia') {
+            alAgregarDependencia();
+          } else if (v == 'eliminar') {
+            alEliminar();
+          }
+        },
+        itemBuilder: (_) => const [
+          PopupMenuItem(value: 'subir', child: Text('Subir')),
+          PopupMenuItem(value: 'bajar', child: Text('Bajar')),
+          PopupMenuItem(
+            value: 'dependencia',
+            child: Text('Agregar dependencia'),
           ),
+          PopupMenuItem(value: 'editar', child: Text('Editar / reprogramar')),
+          PopupMenuItem(value: 'eliminar', child: Text('Desactivar')),
         ],
       ),
-    ),
-    trailing: PopupMenuButton<String>(
-      onSelected: (v) {
-        if (v == 'editar') {
-          alEditar();
-        } else if (v == 'subir') {
-          if (anterior != null) {
-            alMover(anterior!);
-          }
-        } else if (v == 'bajar') {
-          if (siguiente != null) {
-            alMover(siguiente!);
-          }
-        } else if (v == 'dependencia') {
-          alAgregarDependencia();
-        } else if (v == 'eliminar') {
-          alEliminar();
-        }
-      },
-      itemBuilder: (_) => const [
-        PopupMenuItem(value: 'subir', child: Text('Subir')),
-        PopupMenuItem(value: 'bajar', child: Text('Bajar')),
-        PopupMenuItem(value: 'dependencia', child: Text('Agregar dependencia')),
-        PopupMenuItem(value: 'editar', child: Text('Editar / reprogramar')),
-        PopupMenuItem(value: 'eliminar', child: Text('Desactivar')),
-      ],
     ),
   );
 }
@@ -2304,6 +2512,7 @@ class _ListaTiming extends StatelessWidget {
     required this.nombresResponsables,
     required this.alVer,
     required this.alGenerar,
+    required this.alReiniciar,
   });
   final List<Map<String, dynamic>> timing;
   final ValueChanged<Map<String, dynamic>> alEditar, alEliminar;
@@ -2311,6 +2520,7 @@ class _ListaTiming extends StatelessWidget {
   final Map<String, String> nombresResponsables;
   final ValueChanged<Map<String, dynamic>> alVer;
   final ValueChanged<String> alGenerar;
+  final VoidCallback alReiniciar;
   @override
   Widget build(BuildContext context) {
     if (timing.isEmpty) return _GenerarTimingVacio(onGenerar: alGenerar);
@@ -2327,9 +2537,32 @@ class _ListaTiming extends StatelessWidget {
       );
     return ListView.separated(
       padding: const EdgeInsets.fromLTRB(16, 10, 16, 96),
-      itemCount: timingOrdenado.length,
+      itemCount: timingOrdenado.length + 1,
       separatorBuilder: (_, __) => const SizedBox(height: 8),
-      itemBuilder: (context, i) {
+      itemBuilder: (context, indice) {
+        if (indice == 0) {
+          final inicio = _fecha(timingOrdenado.first['fechaHoraInicio']);
+          return Row(
+            children: [
+              Expanded(
+                child: InputDecorator(
+                  decoration: const InputDecoration(
+                    labelText: 'Hora de inicio del timing',
+                    prefixIcon: Icon(Icons.access_time_outlined),
+                  ),
+                  child: Text(_hora(inicio)),
+                ),
+              ),
+              const SizedBox(width: 10),
+              IconButton.filledTonal(
+                tooltip: 'Reiniciar generación automática',
+                onPressed: alReiniciar,
+                icon: const Icon(Icons.restart_alt),
+              ),
+            ],
+          );
+        }
+        final i = indice - 1;
         final item = timingOrdenado[i];
         return Card(
           child: ListTile(
@@ -2531,20 +2764,272 @@ class _ListaHitos extends StatelessWidget {
 }
 
 class _EdtMatrimonioPanel extends StatefulWidget {
-  const _EdtMatrimonioPanel({required this.idMatrimonio});
+  const _EdtMatrimonioPanel({
+    super.key,
+    required this.idMatrimonio,
+    this.onRegistrarAgregar,
+  });
   final String? idMatrimonio;
+  final ValueChanged<VoidCallback>? onRegistrarAgregar;
   @override
   State<_EdtMatrimonioPanel> createState() => _EdtMatrimonioPanelState();
 }
 
 class _EdtMatrimonioPanelState extends State<_EdtMatrimonioPanel> {
   late Future<Map<String, dynamic>> _carga;
+  final _api = EdtApi();
   @override
   void initState() {
     super.initState();
     _carga = widget.idMatrimonio == null
         ? Future.value({})
         : EdtApi().obtenerEdtMatrimonio(widget.idMatrimonio!);
+    widget.onRegistrarAgregar?.call(mostrarAgregar);
+  }
+
+  void _recargar() => setState(() {
+    _carga = widget.idMatrimonio == null
+        ? Future.value({})
+        : _api.obtenerEdtMatrimonio(widget.idMatrimonio!);
+  });
+
+  Future<void> _editar(Map<String, dynamic> nodo) async {
+    final nombre = TextEditingController(text: nodo['nombre']?.toString());
+    final descripcion = TextEditingController(
+      text: nodo['descripcion']?.toString(),
+    );
+    final guardar = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Editar elemento EDT'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: nombre,
+              decoration: const InputDecoration(labelText: 'Nombre'),
+            ),
+            const SizedBox(height: 14),
+            TextField(
+              controller: descripcion,
+              decoration: const InputDecoration(labelText: 'Descripción'),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, false),
+            child: const Text('Cancelar'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(dialogContext, true),
+            child: const Text('Guardar'),
+          ),
+        ],
+      ),
+    );
+    if (guardar == true &&
+        widget.idMatrimonio != null &&
+        nombre.text.trim().isNotEmpty) {
+      await _api.actualizarElementoMatrimonio(
+        widget.idMatrimonio!,
+        nodo['idEdtMatrimonioElemento'].toString(),
+        {
+          'nombre': nombre.text.trim(),
+          'descripcion': descripcion.text.trim().isEmpty
+              ? null
+              : descripcion.text.trim(),
+        },
+      );
+      _recargar();
+    }
+    nombre.dispose();
+    descripcion.dispose();
+  }
+
+  void mostrarAgregar() => unawaited(_agregar());
+
+  List<Map<String, dynamic>> _aplanar(
+    List<Map<String, dynamic>> nodos, [
+    int nivel = 0,
+  ]) {
+    final resultado = <Map<String, dynamic>>[];
+    for (final nodo in nodos) {
+      resultado.add({...nodo, '_nivel': nivel});
+      resultado.addAll(_aplanar(_lista(nodo['hijos']), nivel + 1));
+    }
+    return resultado;
+  }
+
+  Future<void> _agregar() async {
+    final nombre = TextEditingController();
+    final descripcion = TextEditingController();
+    final estructura = await _carga;
+    final opciones = _aplanar(
+      _lista(estructura['elementos'] ?? estructura['arbol']),
+    );
+    const nivelPrincipal = '__nivel_principal__';
+    var idPadre = nivelPrincipal;
+    final guardar = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Nueva sección EDT'),
+        content: StatefulBuilder(
+          builder: (_, setDialogState) => SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: nombre,
+                  decoration: const InputDecoration(labelText: 'Nombre'),
+                ),
+                const SizedBox(height: 14),
+                TextField(
+                  controller: descripcion,
+                  minLines: 2,
+                  maxLines: 4,
+                  decoration: const InputDecoration(labelText: 'Descripción'),
+                ),
+                const SizedBox(height: 14),
+                DropdownButtonFormField<String>(
+                  value: idPadre,
+                  isExpanded: true,
+                  decoration: const InputDecoration(labelText: 'Sección padre'),
+                  items: [
+                    const DropdownMenuItem(
+                      value: nivelPrincipal,
+                      child: Text('Nivel principal'),
+                    ),
+                    ...opciones.map(
+                      (nodo) => DropdownMenuItem(
+                        value: nodo['idEdtMatrimonioElemento'].toString(),
+                        child: Text(
+                          '${'  ' * (nodo['_nivel'] as int)}${nodo['nombre'] ?? 'Elemento'}',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
+                  ],
+                  onChanged: (valor) => setDialogState(
+                    () => idPadre = valor ?? nivelPrincipal,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, false),
+            child: const Text('Cancelar'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(dialogContext, true),
+            child: const Text('Agregar'),
+          ),
+        ],
+      ),
+    );
+    if (guardar == true &&
+        widget.idMatrimonio != null &&
+        nombre.text.trim().isNotEmpty) {
+      await _api.agregarElementoMatrimonio(widget.idMatrimonio!, {
+        'nombre': nombre.text.trim(),
+        if (descripcion.text.trim().isNotEmpty)
+          'descripcion': descripcion.text.trim(),
+        if (idPadre != nivelPrincipal)
+          'idEdtMatrimonioElementoPadre': idPadre,
+        'orden': 9999,
+      });
+      _recargar();
+    }
+    nombre.dispose();
+    descripcion.dispose();
+  }
+
+  Future<void> _mover(
+    Map<String, dynamic> actual,
+    Map<String, dynamic> vecino,
+  ) async {
+    if (widget.idMatrimonio == null) return;
+    final ordenActual = int.tryParse(actual['orden']?.toString() ?? '') ?? 0;
+    final ordenVecino = int.tryParse(vecino['orden']?.toString() ?? '') ?? 0;
+    await _api.actualizarElementoMatrimonio(
+      widget.idMatrimonio!,
+      actual['idEdtMatrimonioElemento'].toString(),
+      {'orden': ordenVecino},
+    );
+    await _api.actualizarElementoMatrimonio(
+      widget.idMatrimonio!,
+      vecino['idEdtMatrimonioElemento'].toString(),
+      {'orden': ordenActual},
+    );
+    _recargar();
+  }
+
+  Widget _nodo(
+    Map<String, dynamic> nodo,
+    int nivel,
+    List<Map<String, dynamic>> hermanos,
+  ) {
+    final hijos = _lista(nodo['hijos']);
+    final indice = hermanos.indexWhere(
+      (item) =>
+          item['idEdtMatrimonioElemento'] == nodo['idEdtMatrimonioElemento'],
+    );
+    return Card(
+      child: Padding(
+          padding: EdgeInsets.fromLTRB(14 + nivel * 14.0, 8, 8, 8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+            Row(
+              children: [
+                Icon(
+                  hijos.isEmpty
+                      ? Icons.check_box_outline_blank
+                      : Icons.account_tree_outlined,
+                  size: 18,
+                  color: AppColors.primary,
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    nodo['nombre']?.toString() ?? 'Elemento',
+                    style: const TextStyle(fontWeight: FontWeight.w700),
+                  ),
+                ),
+                IconButton(
+                  onPressed: indice > 0
+                      ? () => _mover(nodo, hermanos[indice - 1])
+                      : null,
+                  icon: const Icon(Icons.keyboard_arrow_up),
+                ),
+                IconButton(
+                  onPressed: indice >= 0 && indice < hermanos.length - 1
+                      ? () => _mover(nodo, hermanos[indice + 1])
+                      : null,
+                  icon: const Icon(Icons.keyboard_arrow_down),
+                ),
+                PopupMenuButton<String>(
+                  onSelected: (accion) {
+                    if (accion == 'editar') _editar(nodo);
+                  },
+                  itemBuilder: (_) => const [
+                    PopupMenuItem(
+                      value: 'editar',
+                      child: Text('Editar'),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            ...hijos.map((hijo) => _nodo(hijo, nivel + 1, hijos)),
+            ],
+          ),
+        ),
+    );
   }
 
   @override
@@ -2563,12 +3048,7 @@ class _EdtMatrimonioPanelState extends State<_EdtMatrimonioPanel> {
       return ListView(
         padding: const EdgeInsets.fromLTRB(16, 10, 16, 96),
         children: [
-          const Text(
-            'Estructura de desglose del trabajo',
-            style: TextStyle(fontWeight: FontWeight.w800),
-          ),
-          const SizedBox(height: 8),
-          ...arbol.map((nodo) => _NodoEdt(nodo: nodo, nivel: 0)),
+          ...arbol.map((nodo) => _nodo(nodo, 0, arbol)),
         ],
       );
     },
@@ -2612,6 +3092,62 @@ class _NodoEdt extends StatelessWidget {
       ),
     );
   }
+}
+
+class _DetalleHitoSheet extends StatelessWidget {
+  const _DetalleHitoSheet({
+    required this.hito,
+    required this.actividades,
+    required this.onAgregarActividad,
+  });
+  final Map<String, dynamic> hito;
+  final List<Map<String, dynamic>> actividades;
+  final VoidCallback onAgregarActividad;
+
+  @override
+  Widget build(BuildContext context) => _DetalleSheet(
+    titulo: hito['nombre']?.toString() ?? 'Hito',
+    children: [
+      if (hito['fechaObjetivo'] != null)
+        Text('Objetivo: ${_fechaCorta(_fecha(hito['fechaObjetivo']))}'),
+      if (hito['criterioAceptacion'] != null) ...[
+        const SizedBox(height: 12),
+        Text(hito['criterioAceptacion'].toString()),
+      ],
+      const SizedBox(height: 20),
+      Row(
+        children: [
+          const Expanded(
+            child: Text(
+              'Actividades necesarias',
+              style: TextStyle(fontWeight: FontWeight.w800),
+            ),
+          ),
+          TextButton.icon(
+            onPressed: () {
+              Navigator.of(context).pop();
+              onAgregarActividad();
+            },
+            icon: const Icon(Icons.add_task_outlined),
+            label: const Text('Agregar'),
+          ),
+        ],
+      ),
+      if (actividades.isEmpty)
+        const Text('Aún no hay actividades asociadas a este hito.'),
+      ...actividades.map(
+        (actividad) => ListTile(
+          contentPadding: EdgeInsets.zero,
+          leading: const Icon(
+            Icons.task_alt_outlined,
+            color: AppColors.primary,
+          ),
+          title: Text(actividad['nombre']?.toString() ?? 'Actividad'),
+          subtitle: Text('Vence ${_fechaCorta(_fecha(actividad['fechaFin']))}'),
+        ),
+      ),
+    ],
+  );
 }
 
 class _HitoDetallePage extends StatelessWidget {
@@ -2992,6 +3528,24 @@ int _compararFecha(Object? a, Object? b) {
 String _fechaCorta(DateTime? value) => value == null
     ? '--'
     : '${value.day.toString().padLeft(2, '0')}/${value.month.toString().padLeft(2, '0')}/${value.year}';
+String _fechaLarga(DateTime value) {
+  const meses = [
+    'enero',
+    'febrero',
+    'marzo',
+    'abril',
+    'mayo',
+    'junio',
+    'julio',
+    'agosto',
+    'septiembre',
+    'octubre',
+    'noviembre',
+    'diciembre',
+  ];
+  return '${value.day} de ${meses[value.month - 1]} del ${value.year}';
+}
+
 String _hora(DateTime? value) => value == null
     ? '--'
     : '${value.hour}:${value.minute.toString().padLeft(2, '0')}';
