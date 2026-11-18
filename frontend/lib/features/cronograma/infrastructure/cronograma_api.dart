@@ -10,7 +10,8 @@ const _apiBaseUrl = String.fromEnvironment(
 /// Adaptador REST del cronograma. Todas las reglas de precedencia, fechas y
 /// conflictos siguen perteneciendo al backend.
 class CronogramaApi {
-  CronogramaApi() : _dio = AuthSession.crearClienteAutenticado(baseUrl: _apiBaseUrl);
+  CronogramaApi()
+    : _dio = AuthSession.crearClienteAutenticado(baseUrl: _apiBaseUrl);
 
   final Dio _dio;
 
@@ -45,6 +46,28 @@ class CronogramaApi {
     );
   }
 
+  /// Genera únicamente actividades, dependencias, checklists e hitos desde la EDT.
+  Future<Map<String, dynamic>> generarCronograma(String idProyecto) async {
+    final response = await _dio.post<Map<String, dynamic>>(
+      '/proyectos/$idProyecto/cronograma/generar',
+      options: await _opciones(),
+    );
+    return Map<String, dynamic>.from(response.data?['data'] as Map);
+  }
+
+  /// El timing se genera después, con la hora de inicio elegida por la WP.
+  Future<Map<String, dynamic>> generarTiming(
+    String idProyecto,
+    String horaInicio,
+  ) async {
+    final response = await _dio.post<Map<String, dynamic>>(
+      '/proyectos/$idProyecto/cronograma/timing/generar',
+      data: {'horaInicio': horaInicio},
+      options: await _opciones(),
+    );
+    return Map<String, dynamic>.from(response.data?['data'] as Map);
+  }
+
   Future<void> crearHito(String idProyecto, Map<String, dynamic> data) =>
       _post('/proyectos/$idProyecto/cronograma/hitos', data);
   Future<void> actualizarHito(
@@ -54,6 +77,14 @@ class CronogramaApi {
   ) => _patch('/proyectos/$idProyecto/cronograma/hitos/$idHito', data);
   Future<void> eliminarHito(String idProyecto, String idHito) =>
       _delete('/proyectos/$idProyecto/cronograma/hitos/$idHito');
+  Future<void> asociarActividadAHito(
+    String idProyecto,
+    String idHito,
+    String idActividad,
+  ) => _post(
+    '/proyectos/$idProyecto/cronograma/hitos/$idHito/actividades/$idActividad',
+    const {},
+  );
 
   Future<void> crearActividad(String idProyecto, Map<String, dynamic> data) =>
       _post('/proyectos/$idProyecto/cronograma/actividades', data);
@@ -74,6 +105,38 @@ class CronogramaApi {
   ) => _patch(
     '/proyectos/$idProyecto/cronograma/actividades/$idActividad/estado',
     {'estado': estado},
+  );
+
+  Future<List<Map<String, dynamic>>> checklistActividad(
+    String idProyecto,
+    String idActividad,
+  ) async {
+    final response = await _dio.get<Map<String, dynamic>>(
+      '/proyectos/$idProyecto/cronograma/actividades/$idActividad/checklist',
+      options: await _opciones(),
+    );
+    return List<Object?>.from(
+      response.data?['data'] as List? ?? const [],
+    ).map((item) => Map<String, dynamic>.from(item as Map)).toList();
+  }
+
+  Future<void> actualizarChecklistActividad(
+    String idProyecto,
+    String idActividad,
+    String idChecklist,
+    Map<String, dynamic> data,
+  ) => _patch(
+    '/proyectos/$idProyecto/cronograma/actividades/$idActividad/checklist/$idChecklist',
+    data,
+  );
+
+  Future<void> crearChecklistActividad(
+    String idProyecto,
+    String idActividad,
+    String descripcion,
+  ) => _post(
+    '/proyectos/$idProyecto/cronograma/actividades/$idActividad/checklist',
+    {'descripcion': descripcion},
   );
 
   Future<Map<String, dynamic>> previsualizarReprogramacion(

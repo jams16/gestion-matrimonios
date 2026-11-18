@@ -1,0 +1,2196 @@
+[
+  {
+    "id": "dropConstraint.cr_actividad.cr_actividad_id_hito_fkey",
+    "label": "Drop constraint \"cr_actividad_id_hito_fkey\" on \"cr_actividad\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "cr_actividad_id_hito_fkey",
+        "table": "cr_actividad"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"cr_actividad_id_hito_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cr_actividad_id_hito_fkey",
+          "public",
+          "\"public\".\"cr_actividad\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop constraint \"cr_actividad_id_hito_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"cr_actividad\" DROP CONSTRAINT \"cr_actividad_id_hito_fkey\""
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"cr_actividad_id_hito_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cr_actividad_id_hito_fkey",
+          "public",
+          "\"public\".\"cr_actividad\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dropIndex.cr_actividad.cr_actividad_id_hito_idx_0a1cccf3",
+    "label": "Drop index \"cr_actividad_id_hito_idx_0a1cccf3\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "cr_actividad_id_hito_idx_0a1cccf3",
+        "table": "cr_actividad"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"cr_actividad_id_hito_idx_0a1cccf3\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_actividad_id_hito_idx_0a1cccf3\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop index \"cr_actividad_id_hito_idx_0a1cccf3\"",
+        "sql": "DROP INDEX \"public\".\"cr_actividad_id_hito_idx_0a1cccf3\"",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"cr_actividad_id_hito_idx_0a1cccf3\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_actividad_id_hito_idx_0a1cccf3\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dropConstraint.cr_plantilla_actividad.cr_plantilla_actividad_id_plantilla_hito_fkey",
+    "label": "Drop constraint \"cr_plantilla_actividad_id_plantilla_hito_fkey\" on \"cr_plantilla_actividad\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "cr_plantilla_actividad_id_plantilla_hito_fkey",
+        "table": "cr_plantilla_actividad"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"cr_plantilla_actividad_id_plantilla_hito_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cr_plantilla_actividad_id_plantilla_hito_fkey",
+          "public",
+          "\"public\".\"cr_plantilla_actividad\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop constraint \"cr_plantilla_actividad_id_plantilla_hito_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"cr_plantilla_actividad\" DROP CONSTRAINT \"cr_plantilla_actividad_id_plantilla_hito_fkey\""
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"cr_plantilla_actividad_id_plantilla_hito_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cr_plantilla_actividad_id_plantilla_hito_fkey",
+          "public",
+          "\"public\".\"cr_plantilla_actividad\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dropIndex.cr_plantilla_actividad.cr_plantilla_actividad_id_plantilla_hito_idx_99ae877f",
+    "label": "Drop index \"cr_plantilla_actividad_id_plantilla_hito_idx_99ae877f\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "cr_plantilla_actividad_id_plantilla_hito_idx_99ae877f",
+        "table": "cr_plantilla_actividad"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"cr_plantilla_actividad_id_plantilla_hito_idx_99ae877f\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_plantilla_actividad_id_plantilla_hito_idx_99ae877f\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop index \"cr_plantilla_actividad_id_plantilla_hito_idx_99ae877f\"",
+        "sql": "DROP INDEX \"public\".\"cr_plantilla_actividad_id_plantilla_hito_idx_99ae877f\"",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"cr_plantilla_actividad_id_plantilla_hito_idx_99ae877f\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_plantilla_actividad_id_plantilla_hito_idx_99ae877f\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.cr_actividad_checklist",
+    "label": "Create table \"cr_actividad_checklist\"",
+    "summary": "Creates table \"cr_actividad_checklist\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "cr_actividad_checklist"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"cr_actividad_checklist\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_actividad_checklist\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"cr_actividad_checklist\"",
+        "sql": "CREATE TABLE \"public\".\"cr_actividad_checklist\" (\n  \"activo\" bool DEFAULT true NOT NULL,\n  \"completado\" bool DEFAULT false NOT NULL,\n  \"created_at\" timestamptz DEFAULT (now()) NOT NULL,\n  \"descripcion\" character varying(1000) NOT NULL,\n  \"fecha_completado\" timestamptz,\n  \"id_actividad\" uuid NOT NULL,\n  \"id_actividad_checklist\" uuid NOT NULL,\n  \"id_plantilla_checklist\" int4,\n  \"id_usuario_completo\" int4,\n  \"modificado_manualmente\" bool DEFAULT false NOT NULL,\n  \"obligatorio\" bool DEFAULT true NOT NULL,\n  \"orden\" int4 DEFAULT 0 NOT NULL,\n  \"updated_at\" timestamptz NOT NULL,\n  PRIMARY KEY (\"id_actividad_checklist\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"cr_actividad_checklist\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_actividad_checklist\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.cr_hito_actividad",
+    "label": "Create table \"cr_hito_actividad\"",
+    "summary": "Creates table \"cr_hito_actividad\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "cr_hito_actividad"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"cr_hito_actividad\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_hito_actividad\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"cr_hito_actividad\"",
+        "sql": "CREATE TABLE \"public\".\"cr_hito_actividad\" (\n  \"id_actividad\" uuid NOT NULL,\n  \"id_hito\" uuid NOT NULL,\n  \"id_hito_actividad\" SERIAL NOT NULL,\n  PRIMARY KEY (\"id_hito_actividad\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"cr_hito_actividad\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_hito_actividad\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.cr_plantilla_actividad_checklist",
+    "label": "Create table \"cr_plantilla_actividad_checklist\"",
+    "summary": "Creates table \"cr_plantilla_actividad_checklist\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "cr_plantilla_actividad_checklist"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"cr_plantilla_actividad_checklist\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_plantilla_actividad_checklist\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"cr_plantilla_actividad_checklist\"",
+        "sql": "CREATE TABLE \"public\".\"cr_plantilla_actividad_checklist\" (\n  \"activo\" bool DEFAULT true NOT NULL,\n  \"created_at\" timestamptz DEFAULT (now()) NOT NULL,\n  \"descripcion\" character varying(1000) NOT NULL,\n  \"id_plantilla_actividad\" int4 NOT NULL,\n  \"id_plantilla_checklist\" SERIAL NOT NULL,\n  \"obligatorio\" bool DEFAULT true NOT NULL,\n  \"orden\" int4 DEFAULT 0 NOT NULL,\n  \"updated_at\" timestamptz NOT NULL,\n  PRIMARY KEY (\"id_plantilla_checklist\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"cr_plantilla_actividad_checklist\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_plantilla_actividad_checklist\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.cr_plantilla_actividad_edt",
+    "label": "Create table \"cr_plantilla_actividad_edt\"",
+    "summary": "Creates table \"cr_plantilla_actividad_edt\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "cr_plantilla_actividad_edt"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"cr_plantilla_actividad_edt\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_plantilla_actividad_edt\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"cr_plantilla_actividad_edt\"",
+        "sql": "CREATE TABLE \"public\".\"cr_plantilla_actividad_edt\" (\n  \"id_elemento_edt\" uuid NOT NULL,\n  \"id_plantilla_actividad\" int4 NOT NULL,\n  \"id_plantilla_actividad_edt\" SERIAL NOT NULL,\n  PRIMARY KEY (\"id_plantilla_actividad_edt\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"cr_plantilla_actividad_edt\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_plantilla_actividad_edt\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.cr_plantilla_hito_actividad",
+    "label": "Create table \"cr_plantilla_hito_actividad\"",
+    "summary": "Creates table \"cr_plantilla_hito_actividad\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "cr_plantilla_hito_actividad"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"cr_plantilla_hito_actividad\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_plantilla_hito_actividad\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"cr_plantilla_hito_actividad\"",
+        "sql": "CREATE TABLE \"public\".\"cr_plantilla_hito_actividad\" (\n  \"id_plantilla_actividad\" int4 NOT NULL,\n  \"id_plantilla_hito\" int4 NOT NULL,\n  \"id_plantilla_hito_actividad\" SERIAL NOT NULL,\n  PRIMARY KEY (\"id_plantilla_hito_actividad\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"cr_plantilla_hito_actividad\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_plantilla_hito_actividad\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.cr_plantilla_timing_dependencia",
+    "label": "Create table \"cr_plantilla_timing_dependencia\"",
+    "summary": "Creates table \"cr_plantilla_timing_dependencia\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "cr_plantilla_timing_dependencia"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"cr_plantilla_timing_dependencia\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_plantilla_timing_dependencia\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"cr_plantilla_timing_dependencia\"",
+        "sql": "CREATE TABLE \"public\".\"cr_plantilla_timing_dependencia\" (\n  \"id_plantilla_timing_dependencia\" SERIAL NOT NULL,\n  \"id_timing_predecesor\" int4 NOT NULL,\n  \"id_timing_sucesor\" int4 NOT NULL,\n  \"minutos_desfase\" int4 DEFAULT 0 NOT NULL,\n  \"tipo_dependencia\" text DEFAULT 'FINISH_TO_START' NOT NULL,\n  PRIMARY KEY (\"id_plantilla_timing_dependencia\"),\n  CONSTRAINT \"cr_plantilla_timing_dependencia_tipo_dependencia_check_d4c2b17a\" CHECK (\"tipo_dependencia\" IN ('FINISH_TO_START'))\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"cr_plantilla_timing_dependencia\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_plantilla_timing_dependencia\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.cr_timing_dependencia",
+    "label": "Create table \"cr_timing_dependencia\"",
+    "summary": "Creates table \"cr_timing_dependencia\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "cr_timing_dependencia"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"cr_timing_dependencia\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_timing_dependencia\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"cr_timing_dependencia\"",
+        "sql": "CREATE TABLE \"public\".\"cr_timing_dependencia\" (\n  \"id_timing_dependencia\" SERIAL NOT NULL,\n  \"id_timing_predecesor\" uuid NOT NULL,\n  \"id_timing_sucesor\" uuid NOT NULL,\n  \"minutos_desfase\" int4 DEFAULT 0 NOT NULL,\n  \"tipo_dependencia\" text DEFAULT 'FINISH_TO_START' NOT NULL,\n  PRIMARY KEY (\"id_timing_dependencia\"),\n  CONSTRAINT \"cr_timing_dependencia_tipo_dependencia_check_d4c2b17a\" CHECK (\"tipo_dependencia\" IN ('FINISH_TO_START'))\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"cr_timing_dependencia\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_timing_dependencia\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.cr_plantilla_timing.offset_inicio_minutos",
+    "label": "Add column \"offset_inicio_minutos\" to \"cr_plantilla_timing\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "offset_inicio_minutos",
+        "table": "cr_plantilla_timing"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"offset_inicio_minutos\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "cr_plantilla_timing",
+          "offset_inicio_minutos"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"offset_inicio_minutos\"",
+        "sql": "ALTER TABLE \"public\".\"cr_plantilla_timing\" ADD COLUMN \"offset_inicio_minutos\" int4"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"offset_inicio_minutos\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "cr_plantilla_timing",
+          "offset_inicio_minutos"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.cr_plantilla_timing.tiempo_extra_minutos",
+    "label": "Add column \"tiempo_extra_minutos\" to \"cr_plantilla_timing\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "tiempo_extra_minutos",
+        "table": "cr_plantilla_timing"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"tiempo_extra_minutos\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "cr_plantilla_timing",
+          "tiempo_extra_minutos"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"tiempo_extra_minutos\"",
+        "sql": "ALTER TABLE \"public\".\"cr_plantilla_timing\" ADD COLUMN \"tiempo_extra_minutos\" int4 DEFAULT 0 NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"tiempo_extra_minutos\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "cr_plantilla_timing",
+          "tiempo_extra_minutos"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.cr_plantilla_timing.tipo_horario",
+    "label": "Add column \"tipo_horario\" to \"cr_plantilla_timing\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "tipo_horario",
+        "table": "cr_plantilla_timing"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"tipo_horario\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "cr_plantilla_timing",
+          "tipo_horario"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"tipo_horario\"",
+        "sql": "ALTER TABLE \"public\".\"cr_plantilla_timing\" ADD COLUMN \"tipo_horario\" text DEFAULT 'FLEXIBLE' NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"tipo_horario\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "cr_plantilla_timing",
+          "tipo_horario"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.cr_timing.tiempo_extra_minutos",
+    "label": "Add column \"tiempo_extra_minutos\" to \"cr_timing\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "tiempo_extra_minutos",
+        "table": "cr_timing"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"tiempo_extra_minutos\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "cr_timing",
+          "tiempo_extra_minutos"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"tiempo_extra_minutos\"",
+        "sql": "ALTER TABLE \"public\".\"cr_timing\" ADD COLUMN \"tiempo_extra_minutos\" int4 DEFAULT 0 NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"tiempo_extra_minutos\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "cr_timing",
+          "tiempo_extra_minutos"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.cr_timing.tipo_horario",
+    "label": "Add column \"tipo_horario\" to \"cr_timing\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "tipo_horario",
+        "table": "cr_timing"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"tipo_horario\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "cr_timing",
+          "tipo_horario"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"tipo_horario\"",
+        "sql": "ALTER TABLE \"public\".\"cr_timing\" ADD COLUMN \"tipo_horario\" text DEFAULT 'FLEXIBLE' NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"tipo_horario\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "cr_timing",
+          "tipo_horario"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "alterNullability.dropNotNull.cr_plantilla_timing.hora_inicio",
+    "label": "Drop NOT NULL on \"cr_plantilla_timing\".\"hora_inicio\"",
+    "operationClass": "widening",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "hora_inicio",
+        "table": "cr_plantilla_timing"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"hora_inicio\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "cr_plantilla_timing",
+          "hora_inicio"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop NOT NULL on \"hora_inicio\"",
+        "sql": "ALTER TABLE \"public\".\"cr_plantilla_timing\" ALTER COLUMN \"hora_inicio\" DROP NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"hora_inicio\" is nullable",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3 AND \"is_nullable\" = $4)) AS \"result\"",
+        "params": [
+          "public",
+          "cr_plantilla_timing",
+          "hora_inicio",
+          "YES"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.cr_hito_actividad.cr_hito_actividad_id_hito_id_actividad_key",
+    "label": "Add unique constraint on \"cr_hito_actividad\" (id_hito, id_actividad)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "cr_hito_actividad_id_hito_id_actividad_key",
+        "table": "cr_hito_actividad"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"cr_hito_actividad_id_hito_id_actividad_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cr_hito_actividad_id_hito_id_actividad_key",
+          "public",
+          "\"public\".\"cr_hito_actividad\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"cr_hito_actividad_id_hito_id_actividad_key\"",
+        "sql": "ALTER TABLE \"public\".\"cr_hito_actividad\" ADD CONSTRAINT \"cr_hito_actividad_id_hito_id_actividad_key\" UNIQUE (\"id_hito\", \"id_actividad\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"cr_hito_actividad_id_hito_id_actividad_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cr_hito_actividad_id_hito_id_actividad_key",
+          "public",
+          "\"public\".\"cr_hito_actividad\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.cr_plantilla_actividad_edt.cr_plantilla_actividad_edt_id_plantilla_actividad_id_elemento_edt_key",
+    "label": "Add unique constraint on \"cr_plantilla_actividad_edt\" (id_plantilla_actividad, id_elemento_edt)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "cr_plantilla_actividad_edt_id_plantilla_actividad_id_elemento_edt_key",
+        "table": "cr_plantilla_actividad_edt"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"cr_plantilla_actividad_edt_id_plantilla_actividad_id_elemento_edt_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cr_plantilla_actividad_edt_id_plantilla_actividad_id_elemento_edt_key",
+          "public",
+          "\"public\".\"cr_plantilla_actividad_edt\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"cr_plantilla_actividad_edt_id_plantilla_actividad_id_elemento_edt_key\"",
+        "sql": "ALTER TABLE \"public\".\"cr_plantilla_actividad_edt\" ADD CONSTRAINT \"cr_plantilla_actividad_edt_id_plantilla_actividad_id_elemento_edt_key\" UNIQUE (\"id_plantilla_actividad\", \"id_elemento_edt\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"cr_plantilla_actividad_edt_id_plantilla_actividad_id_elemento_edt_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cr_plantilla_actividad_edt_id_plantilla_actividad_id_elemento_edt_key",
+          "public",
+          "\"public\".\"cr_plantilla_actividad_edt\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.cr_plantilla_hito_actividad.cr_plantilla_hito_actividad_id_plantilla_hito_id_plantilla_actividad_key",
+    "label": "Add unique constraint on \"cr_plantilla_hito_actividad\" (id_plantilla_hito, id_plantilla_actividad)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "cr_plantilla_hito_actividad_id_plantilla_hito_id_plantilla_actividad_key",
+        "table": "cr_plantilla_hito_actividad"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"cr_plantilla_hito_actividad_id_plantilla_hito_id_plantilla_actividad_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cr_plantilla_hito_actividad_id_plantilla_hito_id_plantilla_actividad_key",
+          "public",
+          "\"public\".\"cr_plantilla_hito_actividad\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"cr_plantilla_hito_actividad_id_plantilla_hito_id_plantilla_actividad_key\"",
+        "sql": "ALTER TABLE \"public\".\"cr_plantilla_hito_actividad\" ADD CONSTRAINT \"cr_plantilla_hito_actividad_id_plantilla_hito_id_plantilla_actividad_key\" UNIQUE (\"id_plantilla_hito\", \"id_plantilla_actividad\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"cr_plantilla_hito_actividad_id_plantilla_hito_id_plantilla_actividad_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cr_plantilla_hito_actividad_id_plantilla_hito_id_plantilla_actividad_key",
+          "public",
+          "\"public\".\"cr_plantilla_hito_actividad\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "checkConstraint.cr_plantilla_timing.cr_plantilla_timing_tipo_horario_check_1d53f427",
+    "label": "Add check constraint \"cr_plantilla_timing_tipo_horario_check_1d53f427\" on \"cr_plantilla_timing\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "checkConstraint",
+        "name": "cr_plantilla_timing_tipo_horario_check_1d53f427",
+        "table": "cr_plantilla_timing"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"cr_plantilla_timing_tipo_horario_check_1d53f427\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cr_plantilla_timing_tipo_horario_check_1d53f427",
+          "public",
+          "\"public\".\"cr_plantilla_timing\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add check constraint \"cr_plantilla_timing_tipo_horario_check_1d53f427\"",
+        "sql": "ALTER TABLE \"public\".\"cr_plantilla_timing\" ADD CONSTRAINT \"cr_plantilla_timing_tipo_horario_check_1d53f427\" CHECK (\"tipo_horario\" IN ('FIJO', 'FLEXIBLE'))"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"cr_plantilla_timing_tipo_horario_check_1d53f427\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cr_plantilla_timing_tipo_horario_check_1d53f427",
+          "public",
+          "\"public\".\"cr_plantilla_timing\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.cr_plantilla_timing_dependencia.cr_plantilla_timing_dependencia_id_timing_predecesor_id_timing_sucesor_key",
+    "label": "Add unique constraint on \"cr_plantilla_timing_dependencia\" (id_timing_predecesor, id_timing_sucesor)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "cr_plantilla_timing_dependencia_id_timing_predecesor_id_timing_sucesor_key",
+        "table": "cr_plantilla_timing_dependencia"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"cr_plantilla_timing_dependencia_id_timing_predecesor_id_timing_sucesor_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cr_plantilla_timing_dependencia_id_timing_predecesor_id_timing_sucesor_key",
+          "public",
+          "\"public\".\"cr_plantilla_timing_dependencia\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"cr_plantilla_timing_dependencia_id_timing_predecesor_id_timing_sucesor_key\"",
+        "sql": "ALTER TABLE \"public\".\"cr_plantilla_timing_dependencia\" ADD CONSTRAINT \"cr_plantilla_timing_dependencia_id_timing_predecesor_id_timing_sucesor_key\" UNIQUE (\"id_timing_predecesor\", \"id_timing_sucesor\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"cr_plantilla_timing_dependencia_id_timing_predecesor_id_timing_sucesor_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cr_plantilla_timing_dependencia_id_timing_predecesor_id_timing_sucesor_key",
+          "public",
+          "\"public\".\"cr_plantilla_timing_dependencia\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "checkConstraint.cr_timing.cr_timing_tipo_horario_check_1d53f427",
+    "label": "Add check constraint \"cr_timing_tipo_horario_check_1d53f427\" on \"cr_timing\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "checkConstraint",
+        "name": "cr_timing_tipo_horario_check_1d53f427",
+        "table": "cr_timing"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"cr_timing_tipo_horario_check_1d53f427\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cr_timing_tipo_horario_check_1d53f427",
+          "public",
+          "\"public\".\"cr_timing\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add check constraint \"cr_timing_tipo_horario_check_1d53f427\"",
+        "sql": "ALTER TABLE \"public\".\"cr_timing\" ADD CONSTRAINT \"cr_timing_tipo_horario_check_1d53f427\" CHECK (\"tipo_horario\" IN ('FIJO', 'FLEXIBLE'))"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"cr_timing_tipo_horario_check_1d53f427\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cr_timing_tipo_horario_check_1d53f427",
+          "public",
+          "\"public\".\"cr_timing\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.cr_timing_dependencia.cr_timing_dependencia_id_timing_predecesor_id_timing_sucesor_key",
+    "label": "Add unique constraint on \"cr_timing_dependencia\" (id_timing_predecesor, id_timing_sucesor)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "cr_timing_dependencia_id_timing_predecesor_id_timing_sucesor_key",
+        "table": "cr_timing_dependencia"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"cr_timing_dependencia_id_timing_predecesor_id_timing_sucesor_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cr_timing_dependencia_id_timing_predecesor_id_timing_sucesor_key",
+          "public",
+          "\"public\".\"cr_timing_dependencia\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"cr_timing_dependencia_id_timing_predecesor_id_timing_sucesor_key\"",
+        "sql": "ALTER TABLE \"public\".\"cr_timing_dependencia\" ADD CONSTRAINT \"cr_timing_dependencia_id_timing_predecesor_id_timing_sucesor_key\" UNIQUE (\"id_timing_predecesor\", \"id_timing_sucesor\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"cr_timing_dependencia_id_timing_predecesor_id_timing_sucesor_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cr_timing_dependencia_id_timing_predecesor_id_timing_sucesor_key",
+          "public",
+          "\"public\".\"cr_timing_dependencia\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.cr_actividad_checklist.cr_actividad_checklist_id_actividad_idx_e1ffad2c",
+    "label": "Create index \"cr_actividad_checklist_id_actividad_idx_e1ffad2c\" on \"cr_actividad_checklist\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "cr_actividad_checklist_id_actividad_idx_e1ffad2c",
+        "table": "cr_actividad_checklist"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"cr_actividad_checklist_id_actividad_idx_e1ffad2c\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_actividad_checklist_id_actividad_idx_e1ffad2c\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"cr_actividad_checklist_id_actividad_idx_e1ffad2c\"",
+        "sql": "CREATE INDEX \"cr_actividad_checklist_id_actividad_idx_e1ffad2c\" ON \"public\".\"cr_actividad_checklist\" (\"id_actividad\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"cr_actividad_checklist_id_actividad_idx_e1ffad2c\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_actividad_checklist_id_actividad_idx_e1ffad2c\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.cr_actividad_checklist.cr_actividad_checklist_id_actividad_orden_idx_9f887c8d",
+    "label": "Create index \"cr_actividad_checklist_id_actividad_orden_idx_9f887c8d\" on \"cr_actividad_checklist\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "cr_actividad_checklist_id_actividad_orden_idx_9f887c8d",
+        "table": "cr_actividad_checklist"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"cr_actividad_checklist_id_actividad_orden_idx_9f887c8d\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_actividad_checklist_id_actividad_orden_idx_9f887c8d\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"cr_actividad_checklist_id_actividad_orden_idx_9f887c8d\"",
+        "sql": "CREATE INDEX \"cr_actividad_checklist_id_actividad_orden_idx_9f887c8d\" ON \"public\".\"cr_actividad_checklist\" (\"id_actividad\", \"orden\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"cr_actividad_checklist_id_actividad_orden_idx_9f887c8d\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_actividad_checklist_id_actividad_orden_idx_9f887c8d\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.cr_actividad_checklist.cr_actividad_checklist_id_plantilla_checklist_idx_e8822b3e",
+    "label": "Create index \"cr_actividad_checklist_id_plantilla_checklist_idx_e8822b3e\" on \"cr_actividad_checklist\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "cr_actividad_checklist_id_plantilla_checklist_idx_e8822b3e",
+        "table": "cr_actividad_checklist"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"cr_actividad_checklist_id_plantilla_checklist_idx_e8822b3e\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_actividad_checklist_id_plantilla_checklist_idx_e8822b3e\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"cr_actividad_checklist_id_plantilla_checklist_idx_e8822b3e\"",
+        "sql": "CREATE INDEX \"cr_actividad_checklist_id_plantilla_checklist_idx_e8822b3e\" ON \"public\".\"cr_actividad_checklist\" (\"id_plantilla_checklist\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"cr_actividad_checklist_id_plantilla_checklist_idx_e8822b3e\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_actividad_checklist_id_plantilla_checklist_idx_e8822b3e\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.cr_actividad_checklist.cr_actividad_checklist_id_usuario_completo_idx_e4050dba",
+    "label": "Create index \"cr_actividad_checklist_id_usuario_completo_idx_e4050dba\" on \"cr_actividad_checklist\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "cr_actividad_checklist_id_usuario_completo_idx_e4050dba",
+        "table": "cr_actividad_checklist"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"cr_actividad_checklist_id_usuario_completo_idx_e4050dba\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_actividad_checklist_id_usuario_completo_idx_e4050dba\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"cr_actividad_checklist_id_usuario_completo_idx_e4050dba\"",
+        "sql": "CREATE INDEX \"cr_actividad_checklist_id_usuario_completo_idx_e4050dba\" ON \"public\".\"cr_actividad_checklist\" (\"id_usuario_completo\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"cr_actividad_checklist_id_usuario_completo_idx_e4050dba\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_actividad_checklist_id_usuario_completo_idx_e4050dba\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.cr_hito_actividad.cr_hito_actividad_id_actividad_idx_e1ffad2c",
+    "label": "Create index \"cr_hito_actividad_id_actividad_idx_e1ffad2c\" on \"cr_hito_actividad\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "cr_hito_actividad_id_actividad_idx_e1ffad2c",
+        "table": "cr_hito_actividad"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"cr_hito_actividad_id_actividad_idx_e1ffad2c\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_hito_actividad_id_actividad_idx_e1ffad2c\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"cr_hito_actividad_id_actividad_idx_e1ffad2c\"",
+        "sql": "CREATE INDEX \"cr_hito_actividad_id_actividad_idx_e1ffad2c\" ON \"public\".\"cr_hito_actividad\" (\"id_actividad\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"cr_hito_actividad_id_actividad_idx_e1ffad2c\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_hito_actividad_id_actividad_idx_e1ffad2c\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.cr_hito_actividad.cr_hito_actividad_id_hito_idx_0a1cccf3",
+    "label": "Create index \"cr_hito_actividad_id_hito_idx_0a1cccf3\" on \"cr_hito_actividad\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "cr_hito_actividad_id_hito_idx_0a1cccf3",
+        "table": "cr_hito_actividad"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"cr_hito_actividad_id_hito_idx_0a1cccf3\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_hito_actividad_id_hito_idx_0a1cccf3\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"cr_hito_actividad_id_hito_idx_0a1cccf3\"",
+        "sql": "CREATE INDEX \"cr_hito_actividad_id_hito_idx_0a1cccf3\" ON \"public\".\"cr_hito_actividad\" (\"id_hito\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"cr_hito_actividad_id_hito_idx_0a1cccf3\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_hito_actividad_id_hito_idx_0a1cccf3\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.cr_plantilla_actividad_checklist.cr_pac_actividad_orden_idx",
+    "label": "Create index \"cr_pac_actividad_orden_idx\" on \"cr_plantilla_actividad_checklist\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "cr_pac_actividad_orden_idx",
+        "table": "cr_plantilla_actividad_checklist"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"cr_pac_actividad_orden_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_pac_actividad_orden_idx\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"cr_pac_actividad_orden_idx\"",
+        "sql": "CREATE INDEX \"cr_pac_actividad_orden_idx\" ON \"public\".\"cr_plantilla_actividad_checklist\" (\"id_plantilla_actividad\", \"orden\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"cr_pac_actividad_orden_idx\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_pac_actividad_orden_idx\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.cr_plantilla_actividad_checklist.cr_plantilla_actividad_checklist_id_plantilla_activida_396101d8",
+    "label": "Create index \"cr_plantilla_actividad_checklist_id_plantilla_activida_396101d8\" on \"cr_plantilla_actividad_checklist\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "cr_plantilla_actividad_checklist_id_plantilla_activida_396101d8",
+        "table": "cr_plantilla_actividad_checklist"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"cr_plantilla_actividad_checklist_id_plantilla_activida_396101d8\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_plantilla_actividad_checklist_id_plantilla_activida_396101d8\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"cr_plantilla_actividad_checklist_id_plantilla_activida_396101d8\"",
+        "sql": "CREATE INDEX \"cr_plantilla_actividad_checklist_id_plantilla_activida_396101d8\" ON \"public\".\"cr_plantilla_actividad_checklist\" (\"id_plantilla_actividad\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"cr_plantilla_actividad_checklist_id_plantilla_activida_396101d8\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_plantilla_actividad_checklist_id_plantilla_activida_396101d8\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.cr_plantilla_actividad_edt.cr_plantilla_actividad_edt_id_elemento_edt_idx_7bdeb067",
+    "label": "Create index \"cr_plantilla_actividad_edt_id_elemento_edt_idx_7bdeb067\" on \"cr_plantilla_actividad_edt\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "cr_plantilla_actividad_edt_id_elemento_edt_idx_7bdeb067",
+        "table": "cr_plantilla_actividad_edt"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"cr_plantilla_actividad_edt_id_elemento_edt_idx_7bdeb067\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_plantilla_actividad_edt_id_elemento_edt_idx_7bdeb067\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"cr_plantilla_actividad_edt_id_elemento_edt_idx_7bdeb067\"",
+        "sql": "CREATE INDEX \"cr_plantilla_actividad_edt_id_elemento_edt_idx_7bdeb067\" ON \"public\".\"cr_plantilla_actividad_edt\" (\"id_elemento_edt\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"cr_plantilla_actividad_edt_id_elemento_edt_idx_7bdeb067\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_plantilla_actividad_edt_id_elemento_edt_idx_7bdeb067\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.cr_plantilla_actividad_edt.cr_plantilla_actividad_edt_id_plantilla_actividad_idx_396101d8",
+    "label": "Create index \"cr_plantilla_actividad_edt_id_plantilla_actividad_idx_396101d8\" on \"cr_plantilla_actividad_edt\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "cr_plantilla_actividad_edt_id_plantilla_actividad_idx_396101d8",
+        "table": "cr_plantilla_actividad_edt"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"cr_plantilla_actividad_edt_id_plantilla_actividad_idx_396101d8\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_plantilla_actividad_edt_id_plantilla_actividad_idx_396101d8\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"cr_plantilla_actividad_edt_id_plantilla_actividad_idx_396101d8\"",
+        "sql": "CREATE INDEX \"cr_plantilla_actividad_edt_id_plantilla_actividad_idx_396101d8\" ON \"public\".\"cr_plantilla_actividad_edt\" (\"id_plantilla_actividad\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"cr_plantilla_actividad_edt_id_plantilla_actividad_idx_396101d8\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_plantilla_actividad_edt_id_plantilla_actividad_idx_396101d8\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.cr_plantilla_hito_actividad.cr_plantilla_hito_actividad_id_plantilla_actividad_idx_396101d8",
+    "label": "Create index \"cr_plantilla_hito_actividad_id_plantilla_actividad_idx_396101d8\" on \"cr_plantilla_hito_actividad\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "cr_plantilla_hito_actividad_id_plantilla_actividad_idx_396101d8",
+        "table": "cr_plantilla_hito_actividad"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"cr_plantilla_hito_actividad_id_plantilla_actividad_idx_396101d8\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_plantilla_hito_actividad_id_plantilla_actividad_idx_396101d8\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"cr_plantilla_hito_actividad_id_plantilla_actividad_idx_396101d8\"",
+        "sql": "CREATE INDEX \"cr_plantilla_hito_actividad_id_plantilla_actividad_idx_396101d8\" ON \"public\".\"cr_plantilla_hito_actividad\" (\"id_plantilla_actividad\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"cr_plantilla_hito_actividad_id_plantilla_actividad_idx_396101d8\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_plantilla_hito_actividad_id_plantilla_actividad_idx_396101d8\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.cr_plantilla_hito_actividad.cr_plantilla_hito_actividad_id_plantilla_hito_idx_99ae877f",
+    "label": "Create index \"cr_plantilla_hito_actividad_id_plantilla_hito_idx_99ae877f\" on \"cr_plantilla_hito_actividad\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "cr_plantilla_hito_actividad_id_plantilla_hito_idx_99ae877f",
+        "table": "cr_plantilla_hito_actividad"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"cr_plantilla_hito_actividad_id_plantilla_hito_idx_99ae877f\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_plantilla_hito_actividad_id_plantilla_hito_idx_99ae877f\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"cr_plantilla_hito_actividad_id_plantilla_hito_idx_99ae877f\"",
+        "sql": "CREATE INDEX \"cr_plantilla_hito_actividad_id_plantilla_hito_idx_99ae877f\" ON \"public\".\"cr_plantilla_hito_actividad\" (\"id_plantilla_hito\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"cr_plantilla_hito_actividad_id_plantilla_hito_idx_99ae877f\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_plantilla_hito_actividad_id_plantilla_hito_idx_99ae877f\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.cr_plantilla_timing_dependencia.cr_plantilla_timing_dependencia_id_timing_predecesor_i_1f9f34b6",
+    "label": "Create index \"cr_plantilla_timing_dependencia_id_timing_predecesor_i_1f9f34b6\" on \"cr_plantilla_timing_dependencia\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "cr_plantilla_timing_dependencia_id_timing_predecesor_i_1f9f34b6",
+        "table": "cr_plantilla_timing_dependencia"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"cr_plantilla_timing_dependencia_id_timing_predecesor_i_1f9f34b6\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_plantilla_timing_dependencia_id_timing_predecesor_i_1f9f34b6\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"cr_plantilla_timing_dependencia_id_timing_predecesor_i_1f9f34b6\"",
+        "sql": "CREATE INDEX \"cr_plantilla_timing_dependencia_id_timing_predecesor_i_1f9f34b6\" ON \"public\".\"cr_plantilla_timing_dependencia\" (\"id_timing_predecesor\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"cr_plantilla_timing_dependencia_id_timing_predecesor_i_1f9f34b6\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_plantilla_timing_dependencia_id_timing_predecesor_i_1f9f34b6\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.cr_plantilla_timing_dependencia.cr_plantilla_timing_dependencia_id_timing_sucesor_idx_5da66682",
+    "label": "Create index \"cr_plantilla_timing_dependencia_id_timing_sucesor_idx_5da66682\" on \"cr_plantilla_timing_dependencia\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "cr_plantilla_timing_dependencia_id_timing_sucesor_idx_5da66682",
+        "table": "cr_plantilla_timing_dependencia"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"cr_plantilla_timing_dependencia_id_timing_sucesor_idx_5da66682\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_plantilla_timing_dependencia_id_timing_sucesor_idx_5da66682\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"cr_plantilla_timing_dependencia_id_timing_sucesor_idx_5da66682\"",
+        "sql": "CREATE INDEX \"cr_plantilla_timing_dependencia_id_timing_sucesor_idx_5da66682\" ON \"public\".\"cr_plantilla_timing_dependencia\" (\"id_timing_sucesor\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"cr_plantilla_timing_dependencia_id_timing_sucesor_idx_5da66682\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_plantilla_timing_dependencia_id_timing_sucesor_idx_5da66682\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.cr_timing_dependencia.cr_timing_dependencia_id_timing_predecesor_idx_1f9f34b6",
+    "label": "Create index \"cr_timing_dependencia_id_timing_predecesor_idx_1f9f34b6\" on \"cr_timing_dependencia\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "cr_timing_dependencia_id_timing_predecesor_idx_1f9f34b6",
+        "table": "cr_timing_dependencia"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"cr_timing_dependencia_id_timing_predecesor_idx_1f9f34b6\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_timing_dependencia_id_timing_predecesor_idx_1f9f34b6\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"cr_timing_dependencia_id_timing_predecesor_idx_1f9f34b6\"",
+        "sql": "CREATE INDEX \"cr_timing_dependencia_id_timing_predecesor_idx_1f9f34b6\" ON \"public\".\"cr_timing_dependencia\" (\"id_timing_predecesor\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"cr_timing_dependencia_id_timing_predecesor_idx_1f9f34b6\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_timing_dependencia_id_timing_predecesor_idx_1f9f34b6\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.cr_timing_dependencia.cr_timing_dependencia_id_timing_sucesor_idx_5da66682",
+    "label": "Create index \"cr_timing_dependencia_id_timing_sucesor_idx_5da66682\" on \"cr_timing_dependencia\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "cr_timing_dependencia_id_timing_sucesor_idx_5da66682",
+        "table": "cr_timing_dependencia"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"cr_timing_dependencia_id_timing_sucesor_idx_5da66682\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_timing_dependencia_id_timing_sucesor_idx_5da66682\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"cr_timing_dependencia_id_timing_sucesor_idx_5da66682\"",
+        "sql": "CREATE INDEX \"cr_timing_dependencia_id_timing_sucesor_idx_5da66682\" ON \"public\".\"cr_timing_dependencia\" (\"id_timing_sucesor\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"cr_timing_dependencia_id_timing_sucesor_idx_5da66682\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cr_timing_dependencia_id_timing_sucesor_idx_5da66682\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.cr_actividad_checklist.cr_actividad_checklist_id_actividad_fkey",
+    "label": "Add foreign key \"cr_actividad_checklist_id_actividad_fkey\" on \"cr_actividad_checklist\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "cr_actividad_checklist_id_actividad_fkey",
+        "table": "cr_actividad_checklist"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"cr_actividad_checklist_id_actividad_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cr_actividad_checklist_id_actividad_fkey",
+          "public",
+          "\"public\".\"cr_actividad_checklist\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"cr_actividad_checklist_id_actividad_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"cr_actividad_checklist\"\nADD CONSTRAINT \"cr_actividad_checklist_id_actividad_fkey\"\nFOREIGN KEY (\"id_actividad\")\nREFERENCES \"public\".\"cr_actividad\" (\"id_actividad\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"cr_actividad_checklist_id_actividad_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cr_actividad_checklist_id_actividad_fkey",
+          "public",
+          "\"public\".\"cr_actividad_checklist\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.cr_actividad_checklist.cr_actividad_checklist_id_plantilla_checklist_fkey",
+    "label": "Add foreign key \"cr_actividad_checklist_id_plantilla_checklist_fkey\" on \"cr_actividad_checklist\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "cr_actividad_checklist_id_plantilla_checklist_fkey",
+        "table": "cr_actividad_checklist"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"cr_actividad_checklist_id_plantilla_checklist_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cr_actividad_checklist_id_plantilla_checklist_fkey",
+          "public",
+          "\"public\".\"cr_actividad_checklist\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"cr_actividad_checklist_id_plantilla_checklist_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"cr_actividad_checklist\"\nADD CONSTRAINT \"cr_actividad_checklist_id_plantilla_checklist_fkey\"\nFOREIGN KEY (\"id_plantilla_checklist\")\nREFERENCES \"public\".\"cr_plantilla_actividad_checklist\" (\"id_plantilla_checklist\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"cr_actividad_checklist_id_plantilla_checklist_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cr_actividad_checklist_id_plantilla_checklist_fkey",
+          "public",
+          "\"public\".\"cr_actividad_checklist\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.cr_actividad_checklist.cr_actividad_checklist_id_usuario_completo_fkey",
+    "label": "Add foreign key \"cr_actividad_checklist_id_usuario_completo_fkey\" on \"cr_actividad_checklist\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "cr_actividad_checklist_id_usuario_completo_fkey",
+        "table": "cr_actividad_checklist"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"cr_actividad_checklist_id_usuario_completo_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cr_actividad_checklist_id_usuario_completo_fkey",
+          "public",
+          "\"public\".\"cr_actividad_checklist\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"cr_actividad_checklist_id_usuario_completo_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"cr_actividad_checklist\"\nADD CONSTRAINT \"cr_actividad_checklist_id_usuario_completo_fkey\"\nFOREIGN KEY (\"id_usuario_completo\")\nREFERENCES \"public\".\"au_usuario\" (\"id_usuario\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"cr_actividad_checklist_id_usuario_completo_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cr_actividad_checklist_id_usuario_completo_fkey",
+          "public",
+          "\"public\".\"cr_actividad_checklist\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.cr_hito_actividad.cr_hito_actividad_id_hito_fkey",
+    "label": "Add foreign key \"cr_hito_actividad_id_hito_fkey\" on \"cr_hito_actividad\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "cr_hito_actividad_id_hito_fkey",
+        "table": "cr_hito_actividad"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"cr_hito_actividad_id_hito_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cr_hito_actividad_id_hito_fkey",
+          "public",
+          "\"public\".\"cr_hito_actividad\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"cr_hito_actividad_id_hito_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"cr_hito_actividad\"\nADD CONSTRAINT \"cr_hito_actividad_id_hito_fkey\"\nFOREIGN KEY (\"id_hito\")\nREFERENCES \"public\".\"cr_hito\" (\"id_hito\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"cr_hito_actividad_id_hito_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cr_hito_actividad_id_hito_fkey",
+          "public",
+          "\"public\".\"cr_hito_actividad\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.cr_hito_actividad.cr_hito_actividad_id_actividad_fkey",
+    "label": "Add foreign key \"cr_hito_actividad_id_actividad_fkey\" on \"cr_hito_actividad\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "cr_hito_actividad_id_actividad_fkey",
+        "table": "cr_hito_actividad"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"cr_hito_actividad_id_actividad_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cr_hito_actividad_id_actividad_fkey",
+          "public",
+          "\"public\".\"cr_hito_actividad\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"cr_hito_actividad_id_actividad_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"cr_hito_actividad\"\nADD CONSTRAINT \"cr_hito_actividad_id_actividad_fkey\"\nFOREIGN KEY (\"id_actividad\")\nREFERENCES \"public\".\"cr_actividad\" (\"id_actividad\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"cr_hito_actividad_id_actividad_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cr_hito_actividad_id_actividad_fkey",
+          "public",
+          "\"public\".\"cr_hito_actividad\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.cr_plantilla_actividad_checklist.cr_plantilla_actividad_checklist_id_plantilla_actividad_fkey",
+    "label": "Add foreign key \"cr_plantilla_actividad_checklist_id_plantilla_actividad_fkey\" on \"cr_plantilla_actividad_checklist\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "cr_plantilla_actividad_checklist_id_plantilla_actividad_fkey",
+        "table": "cr_plantilla_actividad_checklist"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"cr_plantilla_actividad_checklist_id_plantilla_actividad_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cr_plantilla_actividad_checklist_id_plantilla_actividad_fkey",
+          "public",
+          "\"public\".\"cr_plantilla_actividad_checklist\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"cr_plantilla_actividad_checklist_id_plantilla_actividad_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"cr_plantilla_actividad_checklist\"\nADD CONSTRAINT \"cr_plantilla_actividad_checklist_id_plantilla_actividad_fkey\"\nFOREIGN KEY (\"id_plantilla_actividad\")\nREFERENCES \"public\".\"cr_plantilla_actividad\" (\"id_plantilla_actividad\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"cr_plantilla_actividad_checklist_id_plantilla_actividad_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cr_plantilla_actividad_checklist_id_plantilla_actividad_fkey",
+          "public",
+          "\"public\".\"cr_plantilla_actividad_checklist\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.cr_plantilla_actividad_edt.cr_plantilla_actividad_edt_id_plantilla_actividad_fkey",
+    "label": "Add foreign key \"cr_plantilla_actividad_edt_id_plantilla_actividad_fkey\" on \"cr_plantilla_actividad_edt\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "cr_plantilla_actividad_edt_id_plantilla_actividad_fkey",
+        "table": "cr_plantilla_actividad_edt"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"cr_plantilla_actividad_edt_id_plantilla_actividad_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cr_plantilla_actividad_edt_id_plantilla_actividad_fkey",
+          "public",
+          "\"public\".\"cr_plantilla_actividad_edt\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"cr_plantilla_actividad_edt_id_plantilla_actividad_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"cr_plantilla_actividad_edt\"\nADD CONSTRAINT \"cr_plantilla_actividad_edt_id_plantilla_actividad_fkey\"\nFOREIGN KEY (\"id_plantilla_actividad\")\nREFERENCES \"public\".\"cr_plantilla_actividad\" (\"id_plantilla_actividad\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"cr_plantilla_actividad_edt_id_plantilla_actividad_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cr_plantilla_actividad_edt_id_plantilla_actividad_fkey",
+          "public",
+          "\"public\".\"cr_plantilla_actividad_edt\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.cr_plantilla_actividad_edt.cr_plantilla_actividad_edt_id_elemento_edt_fkey",
+    "label": "Add foreign key \"cr_plantilla_actividad_edt_id_elemento_edt_fkey\" on \"cr_plantilla_actividad_edt\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "cr_plantilla_actividad_edt_id_elemento_edt_fkey",
+        "table": "cr_plantilla_actividad_edt"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"cr_plantilla_actividad_edt_id_elemento_edt_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cr_plantilla_actividad_edt_id_elemento_edt_fkey",
+          "public",
+          "\"public\".\"cr_plantilla_actividad_edt\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"cr_plantilla_actividad_edt_id_elemento_edt_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"cr_plantilla_actividad_edt\"\nADD CONSTRAINT \"cr_plantilla_actividad_edt_id_elemento_edt_fkey\"\nFOREIGN KEY (\"id_elemento_edt\")\nREFERENCES \"public\".\"gp_edt_elemento\" (\"id_edt_elemento\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"cr_plantilla_actividad_edt_id_elemento_edt_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cr_plantilla_actividad_edt_id_elemento_edt_fkey",
+          "public",
+          "\"public\".\"cr_plantilla_actividad_edt\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.cr_plantilla_hito_actividad.cr_plantilla_hito_actividad_id_plantilla_hito_fkey",
+    "label": "Add foreign key \"cr_plantilla_hito_actividad_id_plantilla_hito_fkey\" on \"cr_plantilla_hito_actividad\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "cr_plantilla_hito_actividad_id_plantilla_hito_fkey",
+        "table": "cr_plantilla_hito_actividad"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"cr_plantilla_hito_actividad_id_plantilla_hito_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cr_plantilla_hito_actividad_id_plantilla_hito_fkey",
+          "public",
+          "\"public\".\"cr_plantilla_hito_actividad\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"cr_plantilla_hito_actividad_id_plantilla_hito_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"cr_plantilla_hito_actividad\"\nADD CONSTRAINT \"cr_plantilla_hito_actividad_id_plantilla_hito_fkey\"\nFOREIGN KEY (\"id_plantilla_hito\")\nREFERENCES \"public\".\"cr_plantilla_hito\" (\"id_plantilla_hito\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"cr_plantilla_hito_actividad_id_plantilla_hito_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cr_plantilla_hito_actividad_id_plantilla_hito_fkey",
+          "public",
+          "\"public\".\"cr_plantilla_hito_actividad\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.cr_plantilla_hito_actividad.cr_plantilla_hito_actividad_id_plantilla_actividad_fkey",
+    "label": "Add foreign key \"cr_plantilla_hito_actividad_id_plantilla_actividad_fkey\" on \"cr_plantilla_hito_actividad\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "cr_plantilla_hito_actividad_id_plantilla_actividad_fkey",
+        "table": "cr_plantilla_hito_actividad"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"cr_plantilla_hito_actividad_id_plantilla_actividad_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cr_plantilla_hito_actividad_id_plantilla_actividad_fkey",
+          "public",
+          "\"public\".\"cr_plantilla_hito_actividad\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"cr_plantilla_hito_actividad_id_plantilla_actividad_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"cr_plantilla_hito_actividad\"\nADD CONSTRAINT \"cr_plantilla_hito_actividad_id_plantilla_actividad_fkey\"\nFOREIGN KEY (\"id_plantilla_actividad\")\nREFERENCES \"public\".\"cr_plantilla_actividad\" (\"id_plantilla_actividad\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"cr_plantilla_hito_actividad_id_plantilla_actividad_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cr_plantilla_hito_actividad_id_plantilla_actividad_fkey",
+          "public",
+          "\"public\".\"cr_plantilla_hito_actividad\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.cr_plantilla_timing_dependencia.cr_plantilla_timing_dependencia_id_timing_predecesor_fkey",
+    "label": "Add foreign key \"cr_plantilla_timing_dependencia_id_timing_predecesor_fkey\" on \"cr_plantilla_timing_dependencia\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "cr_plantilla_timing_dependencia_id_timing_predecesor_fkey",
+        "table": "cr_plantilla_timing_dependencia"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"cr_plantilla_timing_dependencia_id_timing_predecesor_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cr_plantilla_timing_dependencia_id_timing_predecesor_fkey",
+          "public",
+          "\"public\".\"cr_plantilla_timing_dependencia\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"cr_plantilla_timing_dependencia_id_timing_predecesor_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"cr_plantilla_timing_dependencia\"\nADD CONSTRAINT \"cr_plantilla_timing_dependencia_id_timing_predecesor_fkey\"\nFOREIGN KEY (\"id_timing_predecesor\")\nREFERENCES \"public\".\"cr_plantilla_timing\" (\"id_plantilla_timing\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"cr_plantilla_timing_dependencia_id_timing_predecesor_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cr_plantilla_timing_dependencia_id_timing_predecesor_fkey",
+          "public",
+          "\"public\".\"cr_plantilla_timing_dependencia\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.cr_plantilla_timing_dependencia.cr_plantilla_timing_dependencia_id_timing_sucesor_fkey",
+    "label": "Add foreign key \"cr_plantilla_timing_dependencia_id_timing_sucesor_fkey\" on \"cr_plantilla_timing_dependencia\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "cr_plantilla_timing_dependencia_id_timing_sucesor_fkey",
+        "table": "cr_plantilla_timing_dependencia"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"cr_plantilla_timing_dependencia_id_timing_sucesor_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cr_plantilla_timing_dependencia_id_timing_sucesor_fkey",
+          "public",
+          "\"public\".\"cr_plantilla_timing_dependencia\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"cr_plantilla_timing_dependencia_id_timing_sucesor_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"cr_plantilla_timing_dependencia\"\nADD CONSTRAINT \"cr_plantilla_timing_dependencia_id_timing_sucesor_fkey\"\nFOREIGN KEY (\"id_timing_sucesor\")\nREFERENCES \"public\".\"cr_plantilla_timing\" (\"id_plantilla_timing\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"cr_plantilla_timing_dependencia_id_timing_sucesor_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cr_plantilla_timing_dependencia_id_timing_sucesor_fkey",
+          "public",
+          "\"public\".\"cr_plantilla_timing_dependencia\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.cr_timing_dependencia.cr_timing_dependencia_id_timing_predecesor_fkey",
+    "label": "Add foreign key \"cr_timing_dependencia_id_timing_predecesor_fkey\" on \"cr_timing_dependencia\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "cr_timing_dependencia_id_timing_predecesor_fkey",
+        "table": "cr_timing_dependencia"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"cr_timing_dependencia_id_timing_predecesor_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cr_timing_dependencia_id_timing_predecesor_fkey",
+          "public",
+          "\"public\".\"cr_timing_dependencia\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"cr_timing_dependencia_id_timing_predecesor_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"cr_timing_dependencia\"\nADD CONSTRAINT \"cr_timing_dependencia_id_timing_predecesor_fkey\"\nFOREIGN KEY (\"id_timing_predecesor\")\nREFERENCES \"public\".\"cr_timing\" (\"id_timing\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"cr_timing_dependencia_id_timing_predecesor_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cr_timing_dependencia_id_timing_predecesor_fkey",
+          "public",
+          "\"public\".\"cr_timing_dependencia\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.cr_timing_dependencia.cr_timing_dependencia_id_timing_sucesor_fkey",
+    "label": "Add foreign key \"cr_timing_dependencia_id_timing_sucesor_fkey\" on \"cr_timing_dependencia\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "cr_timing_dependencia_id_timing_sucesor_fkey",
+        "table": "cr_timing_dependencia"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"cr_timing_dependencia_id_timing_sucesor_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cr_timing_dependencia_id_timing_sucesor_fkey",
+          "public",
+          "\"public\".\"cr_timing_dependencia\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"cr_timing_dependencia_id_timing_sucesor_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"cr_timing_dependencia\"\nADD CONSTRAINT \"cr_timing_dependencia_id_timing_sucesor_fkey\"\nFOREIGN KEY (\"id_timing_sucesor\")\nREFERENCES \"public\".\"cr_timing\" (\"id_timing\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"cr_timing_dependencia_id_timing_sucesor_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cr_timing_dependencia_id_timing_sucesor_fkey",
+          "public",
+          "\"public\".\"cr_timing_dependencia\""
+        ]
+      }
+    ]
+  }
+]

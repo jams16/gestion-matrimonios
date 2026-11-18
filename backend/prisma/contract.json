@@ -24,6 +24,10 @@
       "model": "Actividad",
       "namespace": "public"
     },
+    "cr_actividad_checklist": {
+      "model": "ActividadChecklist",
+      "namespace": "public"
+    },
     "cr_dependencia": {
       "model": "Dependencia",
       "namespace": "public"
@@ -32,8 +36,20 @@
       "model": "Hito",
       "namespace": "public"
     },
+    "cr_hito_actividad": {
+      "model": "HitoActividad",
+      "namespace": "public"
+    },
     "cr_plantilla_actividad": {
       "model": "PlantillaActividad",
+      "namespace": "public"
+    },
+    "cr_plantilla_actividad_checklist": {
+      "model": "PlantillaActividadChecklist",
+      "namespace": "public"
+    },
+    "cr_plantilla_actividad_edt": {
+      "model": "PlantillaActividadEdt",
       "namespace": "public"
     },
     "cr_plantilla_actividad_tipo_ceremonia": {
@@ -48,8 +64,16 @@
       "model": "PlantillaHito",
       "namespace": "public"
     },
+    "cr_plantilla_hito_actividad": {
+      "model": "PlantillaHitoActividad",
+      "namespace": "public"
+    },
     "cr_plantilla_timing": {
       "model": "PlantillaTiming",
+      "namespace": "public"
+    },
+    "cr_plantilla_timing_dependencia": {
+      "model": "PlantillaTimingDependencia",
       "namespace": "public"
     },
     "cr_plantilla_timing_tipo_ceremonia": {
@@ -58,6 +82,10 @@
     },
     "cr_timing": {
       "model": "Timing",
+      "namespace": "public"
+    },
+    "cr_timing_dependencia": {
+      "model": "TimingDependencia",
       "namespace": "public"
     },
     "gp_buena_practica": {
@@ -380,6 +408,19 @@
               {
                 "name": "FINISH_TO_START",
                 "value": "FINISH_TO_START"
+              }
+            ]
+          },
+          "cr_tipo_horario": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "FIJO",
+                "value": "FIJO"
+              },
+              {
+                "name": "FLEXIBLE",
+                "value": "FLEXIBLE"
               }
             ]
           },
@@ -991,7 +1032,7 @@
                   "kind": "scalar"
                 }
               },
-              "idHito": {
+              "idHitoLegacy": {
                 "nullable": true,
                 "type": {
                   "codecId": "pg/uuid@1",
@@ -1019,7 +1060,7 @@
                   "kind": "scalar"
                 }
               },
-              "listaVerificacion": {
+              "listaVerificacionLegacy": {
                 "nullable": true,
                 "type": {
                   "codecId": "pg/json@1",
@@ -1082,6 +1123,21 @@
               }
             },
             "relations": {
+              "checklist": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idActividad"
+                  ],
+                  "targetFields": [
+                    "idActividad"
+                  ]
+                },
+                "to": {
+                  "model": "ActividadChecklist",
+                  "namespace": "public"
+                }
+              },
               "dependenciasPredecesora": {
                 "cardinality": "1:N",
                 "on": {
@@ -1112,19 +1168,18 @@
                   "namespace": "public"
                 }
               },
-              "hito": {
-                "cardinality": "N:1",
-                "nullable": true,
+              "hitos": {
+                "cardinality": "1:N",
                 "on": {
                   "localFields": [
-                    "idHito"
+                    "idActividad"
                   ],
                   "targetFields": [
-                    "idHito"
+                    "idActividad"
                   ]
                 },
                 "to": {
-                  "model": "Hito",
+                  "model": "HitoActividad",
                   "namespace": "public"
                 }
               },
@@ -1221,7 +1276,7 @@
                 "idActividad": {
                   "column": "id_actividad"
                 },
-                "idHito": {
+                "idHitoLegacy": {
                   "column": "id_hito"
                 },
                 "idPlantillaActividad": {
@@ -1233,7 +1288,7 @@
                 "idUsuarioResponsable": {
                   "column": "id_usuario_responsable"
                 },
-                "listaVerificacion": {
+                "listaVerificacionLegacy": {
                   "column": "lista_verificacion"
                 },
                 "modificadoManualmente": {
@@ -1257,6 +1312,199 @@
               },
               "namespaceId": "public",
               "table": "cr_actividad"
+            }
+          },
+          "ActividadChecklist": {
+            "fields": {
+              "activo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "completado": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "descripcion": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 1000
+                  }
+                }
+              },
+              "fechaCompletado": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "idActividad": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idChecklist": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idPlantillaChecklist": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "idUsuarioCompleto": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "modificadoManualmente": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "obligatorio": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "orden": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "actividad": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idActividad"
+                  ],
+                  "targetFields": [
+                    "idActividad"
+                  ]
+                },
+                "to": {
+                  "model": "Actividad",
+                  "namespace": "public"
+                }
+              },
+              "plantillaChecklist": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idPlantillaChecklist"
+                  ],
+                  "targetFields": [
+                    "idPlantillaChecklist"
+                  ]
+                },
+                "to": {
+                  "model": "PlantillaActividadChecklist",
+                  "namespace": "public"
+                }
+              },
+              "usuarioCompleto": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "idUsuarioCompleto"
+                  ],
+                  "targetFields": [
+                    "idUsuario"
+                  ]
+                },
+                "to": {
+                  "model": "Usuario",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "activo": {
+                  "column": "activo"
+                },
+                "completado": {
+                  "column": "completado"
+                },
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "descripcion": {
+                  "column": "descripcion"
+                },
+                "fechaCompletado": {
+                  "column": "fecha_completado"
+                },
+                "idActividad": {
+                  "column": "id_actividad"
+                },
+                "idChecklist": {
+                  "column": "id_actividad_checklist"
+                },
+                "idPlantillaChecklist": {
+                  "column": "id_plantilla_checklist"
+                },
+                "idUsuarioCompleto": {
+                  "column": "id_usuario_completo"
+                },
+                "modificadoManualmente": {
+                  "column": "modificado_manualmente"
+                },
+                "obligatorio": {
+                  "column": "obligatorio"
+                },
+                "orden": {
+                  "column": "orden"
+                },
+                "updatedAt": {
+                  "column": "updated_at"
+                }
+              },
+              "namespaceId": "public",
+              "table": "cr_actividad_checklist"
             }
           },
           "BuenaPractica": {
@@ -3239,6 +3487,21 @@
               }
             },
             "relations": {
+              "actividadesPlantilla": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idEdtElemento"
+                  ],
+                  "targetFields": [
+                    "idElementoEdt"
+                  ]
+                },
+                "to": {
+                  "model": "PlantillaActividadEdt",
+                  "namespace": "public"
+                }
+              },
               "categoriaServicio": {
                 "cardinality": "N:1",
                 "nullable": true,
@@ -4580,7 +4843,7 @@
                   ]
                 },
                 "to": {
-                  "model": "Actividad",
+                  "model": "HitoActividad",
                   "namespace": "public"
                 }
               },
@@ -4673,6 +4936,80 @@
               },
               "namespaceId": "public",
               "table": "cr_hito"
+            }
+          },
+          "HitoActividad": {
+            "fields": {
+              "idActividad": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idHito": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idHitoActividad": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "actividad": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idActividad"
+                  ],
+                  "targetFields": [
+                    "idActividad"
+                  ]
+                },
+                "to": {
+                  "model": "Actividad",
+                  "namespace": "public"
+                }
+              },
+              "hito": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idHito"
+                  ],
+                  "targetFields": [
+                    "idHito"
+                  ]
+                },
+                "to": {
+                  "model": "Hito",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "idActividad": {
+                  "column": "id_actividad"
+                },
+                "idHito": {
+                  "column": "id_hito"
+                },
+                "idHitoActividad": {
+                  "column": "id_hito_actividad"
+                }
+              },
+              "namespaceId": "public",
+              "table": "cr_hito_actividad"
             }
           },
           "IncidenciaRiesgo": {
@@ -7579,14 +7916,14 @@
                   "kind": "scalar"
                 }
               },
-              "idPlantillaHito": {
+              "idPlantillaHitoLegacy": {
                 "nullable": true,
                 "type": {
                   "codecId": "pg/int4@1",
                   "kind": "scalar"
                 }
               },
-              "listaVerificacion": {
+              "listaVerificacionLegacy": {
                 "nullable": true,
                 "type": {
                   "codecId": "pg/json@1",
@@ -7670,6 +8007,21 @@
                   "namespace": "public"
                 }
               },
+              "checklist": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idPlantillaActividad"
+                  ],
+                  "targetFields": [
+                    "idPlantillaActividad"
+                  ]
+                },
+                "to": {
+                  "model": "PlantillaActividadChecklist",
+                  "namespace": "public"
+                }
+              },
               "dependenciasPredecesora": {
                 "cardinality": "1:N",
                 "on": {
@@ -7700,6 +8052,21 @@
                   "namespace": "public"
                 }
               },
+              "elementosEdt": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idPlantillaActividad"
+                  ],
+                  "targetFields": [
+                    "idPlantillaActividad"
+                  ]
+                },
+                "to": {
+                  "model": "PlantillaActividadEdt",
+                  "namespace": "public"
+                }
+              },
               "faseProyecto": {
                 "cardinality": "N:1",
                 "nullable": false,
@@ -7716,19 +8083,18 @@
                   "namespace": "public"
                 }
               },
-              "hito": {
-                "cardinality": "N:1",
-                "nullable": true,
+              "hitos": {
+                "cardinality": "1:N",
                 "on": {
                   "localFields": [
-                    "idPlantillaHito"
+                    "idPlantillaActividad"
                   ],
                   "targetFields": [
-                    "idPlantillaHito"
+                    "idPlantillaActividad"
                   ]
                 },
                 "to": {
-                  "model": "PlantillaHito",
+                  "model": "PlantillaHitoActividad",
                   "namespace": "public"
                 }
               },
@@ -7777,10 +8143,10 @@
                 "idPlantillaActividad": {
                   "column": "id_plantilla_actividad"
                 },
-                "idPlantillaHito": {
+                "idPlantillaHitoLegacy": {
                   "column": "id_plantilla_hito"
                 },
-                "listaVerificacion": {
+                "listaVerificacionLegacy": {
                   "column": "lista_verificacion"
                 },
                 "nombre": {
@@ -7804,6 +8170,206 @@
               },
               "namespaceId": "public",
               "table": "cr_plantilla_actividad"
+            }
+          },
+          "PlantillaActividadChecklist": {
+            "fields": {
+              "activo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "descripcion": {
+                "nullable": false,
+                "type": {
+                  "codecId": "sql/varchar@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 1000
+                  }
+                }
+              },
+              "idPlantillaActividad": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "idPlantillaChecklist": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "obligatorio": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "orden": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "actividad": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idPlantillaActividad"
+                  ],
+                  "targetFields": [
+                    "idPlantillaActividad"
+                  ]
+                },
+                "to": {
+                  "model": "PlantillaActividad",
+                  "namespace": "public"
+                }
+              },
+              "checklistOrigen": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idPlantillaChecklist"
+                  ],
+                  "targetFields": [
+                    "idPlantillaChecklist"
+                  ]
+                },
+                "to": {
+                  "model": "ActividadChecklist",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "activo": {
+                  "column": "activo"
+                },
+                "createdAt": {
+                  "column": "created_at"
+                },
+                "descripcion": {
+                  "column": "descripcion"
+                },
+                "idPlantillaActividad": {
+                  "column": "id_plantilla_actividad"
+                },
+                "idPlantillaChecklist": {
+                  "column": "id_plantilla_checklist"
+                },
+                "obligatorio": {
+                  "column": "obligatorio"
+                },
+                "orden": {
+                  "column": "orden"
+                },
+                "updatedAt": {
+                  "column": "updated_at"
+                }
+              },
+              "namespaceId": "public",
+              "table": "cr_plantilla_actividad_checklist"
+            }
+          },
+          "PlantillaActividadEdt": {
+            "fields": {
+              "idElementoEdt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idPlantillaActividad": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "idPlantillaActividadEdt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "actividad": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idPlantillaActividad"
+                  ],
+                  "targetFields": [
+                    "idPlantillaActividad"
+                  ]
+                },
+                "to": {
+                  "model": "PlantillaActividad",
+                  "namespace": "public"
+                }
+              },
+              "elementoEdt": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idElementoEdt"
+                  ],
+                  "targetFields": [
+                    "idEdtElemento"
+                  ]
+                },
+                "to": {
+                  "model": "EdtElemento",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "idElementoEdt": {
+                  "column": "id_elemento_edt"
+                },
+                "idPlantillaActividad": {
+                  "column": "id_plantilla_actividad"
+                },
+                "idPlantillaActividadEdt": {
+                  "column": "id_plantilla_actividad_edt"
+                }
+              },
+              "namespaceId": "public",
+              "table": "cr_plantilla_actividad_edt"
             }
           },
           "PlantillaActividadTipoCeremonia": {
@@ -8087,7 +8653,7 @@
                   ]
                 },
                 "to": {
-                  "model": "PlantillaActividad",
+                  "model": "PlantillaHitoActividad",
                   "namespace": "public"
                 }
               },
@@ -8145,6 +8711,80 @@
               },
               "namespaceId": "public",
               "table": "cr_plantilla_hito"
+            }
+          },
+          "PlantillaHitoActividad": {
+            "fields": {
+              "idPlantillaActividad": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "idPlantillaHito": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "idPlantillaHitoActividad": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "actividad": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idPlantillaActividad"
+                  ],
+                  "targetFields": [
+                    "idPlantillaActividad"
+                  ]
+                },
+                "to": {
+                  "model": "PlantillaActividad",
+                  "namespace": "public"
+                }
+              },
+              "hito": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idPlantillaHito"
+                  ],
+                  "targetFields": [
+                    "idPlantillaHito"
+                  ]
+                },
+                "to": {
+                  "model": "PlantillaHito",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "idPlantillaActividad": {
+                  "column": "id_plantilla_actividad"
+                },
+                "idPlantillaHito": {
+                  "column": "id_plantilla_hito"
+                },
+                "idPlantillaHitoActividad": {
+                  "column": "id_plantilla_hito_actividad"
+                }
+              },
+              "namespaceId": "public",
+              "table": "cr_plantilla_hito_actividad"
             }
           },
           "PlantillaMitigacionRiesgo": {
@@ -8607,8 +9247,8 @@
                   "kind": "scalar"
                 }
               },
-              "horaInicio": {
-                "nullable": false,
+              "horaInicioLegacy": {
+                "nullable": true,
                 "type": {
                   "codecId": "pg/time-temporal@1",
                   "kind": "scalar"
@@ -8625,6 +9265,13 @@
                 "nullable": true,
                 "type": {
                   "codecId": "pg/json@1",
+                  "kind": "scalar"
+                }
+              },
+              "offsetInicioMinutos": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
                   "kind": "scalar"
                 }
               },
@@ -8645,6 +9292,26 @@
                   }
                 }
               },
+              "tiempoExtraMinutos": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "tipoHorario": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "cr_tipo_horario",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
               "updatedAt": {
                 "nullable": false,
                 "type": {
@@ -8654,6 +9321,36 @@
               }
             },
             "relations": {
+              "dependenciasPredecesora": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idPlantillaTiming"
+                  ],
+                  "targetFields": [
+                    "idTimingPredecesor"
+                  ]
+                },
+                "to": {
+                  "model": "PlantillaTimingDependencia",
+                  "namespace": "public"
+                }
+              },
+              "dependenciasSucesora": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idPlantillaTiming"
+                  ],
+                  "targetFields": [
+                    "idTimingSucesor"
+                  ]
+                },
+                "to": {
+                  "model": "PlantillaTimingDependencia",
+                  "namespace": "public"
+                }
+              },
               "timingsOrigen": {
                 "cardinality": "1:N",
                 "on": {
@@ -8702,7 +9399,7 @@
                 "duracionMinutos": {
                   "column": "duracion_minutos"
                 },
-                "horaInicio": {
+                "horaInicioLegacy": {
                   "column": "hora_inicio"
                 },
                 "idPlantillaTiming": {
@@ -8711,11 +9408,20 @@
                 "listaVerificacion": {
                   "column": "lista_verificacion"
                 },
+                "offsetInicioMinutos": {
+                  "column": "offset_inicio_minutos"
+                },
                 "orden": {
                   "column": "orden"
                 },
                 "responsableSugerido": {
                   "column": "responsable_sugerido"
+                },
+                "tiempoExtraMinutos": {
+                  "column": "tiempo_extra_minutos"
+                },
+                "tipoHorario": {
+                  "column": "tipo_horario"
                 },
                 "updatedAt": {
                   "column": "updated_at"
@@ -8723,6 +9429,106 @@
               },
               "namespaceId": "public",
               "table": "cr_plantilla_timing"
+            }
+          },
+          "PlantillaTimingDependencia": {
+            "fields": {
+              "idPlantillaTimingDependencia": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "idTimingPredecesor": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "idTimingSucesor": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "minutosDesfase": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "tipoDependencia": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "cr_tipo_dependencia",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              }
+            },
+            "relations": {
+              "predecesora": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idTimingPredecesor"
+                  ],
+                  "targetFields": [
+                    "idPlantillaTiming"
+                  ]
+                },
+                "to": {
+                  "model": "PlantillaTiming",
+                  "namespace": "public"
+                }
+              },
+              "sucesora": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idTimingSucesor"
+                  ],
+                  "targetFields": [
+                    "idPlantillaTiming"
+                  ]
+                },
+                "to": {
+                  "model": "PlantillaTiming",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "idPlantillaTimingDependencia": {
+                  "column": "id_plantilla_timing_dependencia"
+                },
+                "idTimingPredecesor": {
+                  "column": "id_timing_predecesor"
+                },
+                "idTimingSucesor": {
+                  "column": "id_timing_sucesor"
+                },
+                "minutosDesfase": {
+                  "column": "minutos_desfase"
+                },
+                "tipoDependencia": {
+                  "column": "tipo_dependencia"
+                }
+              },
+              "namespaceId": "public",
+              "table": "cr_plantilla_timing_dependencia"
             }
           },
           "PlantillaTimingTipoCeremonia": {
@@ -11339,7 +12145,7 @@
                   "kind": "scalar"
                 }
               },
-              "listaVerificacion": {
+              "listaVerificacionLegacy": {
                 "nullable": true,
                 "type": {
                   "codecId": "pg/json@1",
@@ -11370,6 +12176,26 @@
                   }
                 }
               },
+              "tiempoExtraMinutos": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "tipoHorario": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "cr_tipo_horario",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
               "ubicacion": {
                 "nullable": true,
                 "type": {
@@ -11389,6 +12215,36 @@
               }
             },
             "relations": {
+              "dependenciasPredecesora": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idTiming"
+                  ],
+                  "targetFields": [
+                    "idTimingPredecesor"
+                  ]
+                },
+                "to": {
+                  "model": "TimingDependencia",
+                  "namespace": "public"
+                }
+              },
+              "dependenciasSucesora": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idTiming"
+                  ],
+                  "targetFields": [
+                    "idTimingSucesor"
+                  ]
+                },
+                "to": {
+                  "model": "TimingDependencia",
+                  "namespace": "public"
+                }
+              },
               "plantillaTiming": {
                 "cardinality": "N:1",
                 "nullable": true,
@@ -11473,7 +12329,7 @@
                 "idUsuarioResponsable": {
                   "column": "id_usuario_responsable"
                 },
-                "listaVerificacion": {
+                "listaVerificacionLegacy": {
                   "column": "lista_verificacion"
                 },
                 "modificadoManualmente": {
@@ -11485,6 +12341,12 @@
                 "responsableTexto": {
                   "column": "responsable_texto"
                 },
+                "tiempoExtraMinutos": {
+                  "column": "tiempo_extra_minutos"
+                },
+                "tipoHorario": {
+                  "column": "tipo_horario"
+                },
                 "ubicacion": {
                   "column": "ubicacion"
                 },
@@ -11494,6 +12356,106 @@
               },
               "namespaceId": "public",
               "table": "cr_timing"
+            }
+          },
+          "TimingDependencia": {
+            "fields": {
+              "idTimingDependencia": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "idTimingPredecesor": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "idTimingSucesor": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "minutosDesfase": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "tipoDependencia": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "cr_tipo_dependencia",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              }
+            },
+            "relations": {
+              "predecesora": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idTimingPredecesor"
+                  ],
+                  "targetFields": [
+                    "idTiming"
+                  ]
+                },
+                "to": {
+                  "model": "Timing",
+                  "namespace": "public"
+                }
+              },
+              "sucesora": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "idTimingSucesor"
+                  ],
+                  "targetFields": [
+                    "idTiming"
+                  ]
+                },
+                "to": {
+                  "model": "Timing",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "idTimingDependencia": {
+                  "column": "id_timing_dependencia"
+                },
+                "idTimingPredecesor": {
+                  "column": "id_timing_predecesor"
+                },
+                "idTimingSucesor": {
+                  "column": "id_timing_sucesor"
+                },
+                "minutosDesfase": {
+                  "column": "minutos_desfase"
+                },
+                "tipoDependencia": {
+                  "column": "tipo_dependencia"
+                }
+              },
+              "namespaceId": "public",
+              "table": "cr_timing_dependencia"
             }
           },
           "TipoCeremonia": {
@@ -11903,6 +12865,21 @@
                 },
                 "to": {
                   "model": "Actividad",
+                  "namespace": "public"
+                }
+              },
+              "checklistCompletados": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "idUsuario"
+                  ],
+                  "targetFields": [
+                    "idUsuarioCompleto"
+                  ]
+                },
+                "to": {
+                  "model": "ActividadChecklist",
                   "namespace": "public"
                 }
               },
@@ -12769,23 +13746,6 @@
                   "onDelete": "restrict",
                   "source": {
                     "columns": [
-                      "id_hito"
-                    ],
-                    "namespaceId": "public",
-                    "tableName": "cr_actividad"
-                  },
-                  "target": {
-                    "columns": [
-                      "id_hito"
-                    ],
-                    "namespaceId": "public",
-                    "tableName": "cr_hito"
-                  }
-                },
-                {
-                  "onDelete": "restrict",
-                  "source": {
-                    "columns": [
                       "id_plantilla_actividad"
                     ],
                     "namespaceId": "public",
@@ -12844,14 +13804,6 @@
                 },
                 {
                   "columns": [
-                    "id_hito"
-                  ],
-                  "name": "cr_actividad_id_hito_idx_0a1cccf3",
-                  "prefix": "cr_actividad_id_hito_idx",
-                  "unique": false
-                },
-                {
-                  "columns": [
                     "id_plantilla_actividad"
                   ],
                   "name": "cr_actividad_id_plantilla_actividad_idx_396101d8",
@@ -12878,6 +13830,196 @@
               "primaryKey": {
                 "columns": [
                   "id_actividad"
+                ]
+              },
+              "uniques": []
+            },
+            "cr_actividad_checklist": {
+              "columns": {
+                "activo": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "completado": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": false
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "created_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "descripcion": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 1000
+                  }
+                },
+                "fecha_completado": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": true
+                },
+                "id_actividad": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_actividad_checklist": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_plantilla_checklist": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "id_usuario_completo": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "modificado_manualmente": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": false
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "obligatorio": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "orden": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": 0
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "updated_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "cascade",
+                  "source": {
+                    "columns": [
+                      "id_actividad"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "cr_actividad_checklist"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_actividad"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "cr_actividad"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_plantilla_checklist"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "cr_actividad_checklist"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_plantilla_checklist"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "cr_plantilla_actividad_checklist"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_usuario_completo"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "cr_actividad_checklist"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_usuario"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "au_usuario"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "id_actividad"
+                  ],
+                  "name": "cr_actividad_checklist_id_actividad_idx_e1ffad2c",
+                  "prefix": "cr_actividad_checklist_id_actividad_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_actividad",
+                    "orden"
+                  ],
+                  "name": "cr_actividad_checklist_id_actividad_orden_idx_9f887c8d",
+                  "prefix": "cr_actividad_checklist_id_actividad_orden_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_plantilla_checklist"
+                  ],
+                  "name": "cr_actividad_checklist_id_plantilla_checklist_idx_e8822b3e",
+                  "prefix": "cr_actividad_checklist_id_plantilla_checklist_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_usuario_completo"
+                  ],
+                  "name": "cr_actividad_checklist_id_usuario_completo_idx_e4050dba",
+                  "prefix": "cr_actividad_checklist_id_usuario_completo_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_actividad_checklist"
                 ]
               },
               "uniques": []
@@ -13166,6 +14308,96 @@
               },
               "uniques": []
             },
+            "cr_hito_actividad": {
+              "columns": {
+                "id_actividad": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_hito": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_hito_actividad": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "expression": "autoincrement()",
+                    "kind": "function"
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "cascade",
+                  "source": {
+                    "columns": [
+                      "id_hito"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "cr_hito_actividad"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_hito"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "cr_hito"
+                  }
+                },
+                {
+                  "onDelete": "cascade",
+                  "source": {
+                    "columns": [
+                      "id_actividad"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "cr_hito_actividad"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_actividad"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "cr_actividad"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "id_actividad"
+                  ],
+                  "name": "cr_hito_actividad_id_actividad_idx_e1ffad2c",
+                  "prefix": "cr_hito_actividad_id_actividad_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_hito"
+                  ],
+                  "name": "cr_hito_actividad_id_hito_idx_0a1cccf3",
+                  "prefix": "cr_hito_actividad_id_hito_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_hito_actividad"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "id_hito",
+                    "id_actividad"
+                  ]
+                }
+              ]
+            },
             "cr_plantilla_actividad": {
               "checks": [
                 {
@@ -13307,23 +14539,6 @@
                   "onDelete": "restrict",
                   "source": {
                     "columns": [
-                      "id_plantilla_hito"
-                    ],
-                    "namespaceId": "public",
-                    "tableName": "cr_plantilla_actividad"
-                  },
-                  "target": {
-                    "columns": [
-                      "id_plantilla_hito"
-                    ],
-                    "namespaceId": "public",
-                    "tableName": "cr_plantilla_hito"
-                  }
-                },
-                {
-                  "onDelete": "restrict",
-                  "source": {
-                    "columns": [
                       "id_fase_proyecto"
                     ],
                     "namespaceId": "public",
@@ -13346,14 +14561,6 @@
                   "name": "cr_plantilla_actividad_id_fase_proyecto_idx_0ca9d564",
                   "prefix": "cr_plantilla_actividad_id_fase_proyecto_idx",
                   "unique": false
-                },
-                {
-                  "columns": [
-                    "id_plantilla_hito"
-                  ],
-                  "name": "cr_plantilla_actividad_id_plantilla_hito_idx_99ae877f",
-                  "prefix": "cr_plantilla_actividad_id_plantilla_hito_idx",
-                  "unique": false
                 }
               ],
               "primaryKey": {
@@ -13365,6 +14572,206 @@
                 {
                   "columns": [
                     "codigo"
+                  ]
+                }
+              ]
+            },
+            "cr_plantilla_actividad_checklist": {
+              "columns": {
+                "activo": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "created_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "descripcion": {
+                  "codecId": "sql/varchar@1",
+                  "nativeType": "character varying",
+                  "nullable": false,
+                  "typeParams": {
+                    "length": 1000
+                  }
+                },
+                "id_plantilla_actividad": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "id_plantilla_checklist": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "expression": "autoincrement()",
+                    "kind": "function"
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "obligatorio": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "orden": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": 0
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "updated_at": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "cascade",
+                  "source": {
+                    "columns": [
+                      "id_plantilla_actividad"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "cr_plantilla_actividad_checklist"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_plantilla_actividad"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "cr_plantilla_actividad"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "id_plantilla_actividad",
+                    "orden"
+                  ],
+                  "name": "cr_pac_actividad_orden_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_plantilla_actividad"
+                  ],
+                  "name": "cr_plantilla_actividad_checklist_id_plantilla_activida_396101d8",
+                  "prefix": "cr_plantilla_actividad_checklist_id_plantilla_activida",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_plantilla_checklist"
+                ]
+              },
+              "uniques": []
+            },
+            "cr_plantilla_actividad_edt": {
+              "columns": {
+                "id_elemento_edt": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_plantilla_actividad": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "id_plantilla_actividad_edt": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "expression": "autoincrement()",
+                    "kind": "function"
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "cascade",
+                  "source": {
+                    "columns": [
+                      "id_plantilla_actividad"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "cr_plantilla_actividad_edt"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_plantilla_actividad"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "cr_plantilla_actividad"
+                  }
+                },
+                {
+                  "onDelete": "restrict",
+                  "source": {
+                    "columns": [
+                      "id_elemento_edt"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "cr_plantilla_actividad_edt"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_edt_elemento"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gp_edt_elemento"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "id_elemento_edt"
+                  ],
+                  "name": "cr_plantilla_actividad_edt_id_elemento_edt_idx_7bdeb067",
+                  "prefix": "cr_plantilla_actividad_edt_id_elemento_edt_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_plantilla_actividad"
+                  ],
+                  "name": "cr_plantilla_actividad_edt_id_plantilla_actividad_idx_396101d8",
+                  "prefix": "cr_plantilla_actividad_edt_id_plantilla_actividad_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_plantilla_actividad_edt"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "id_plantilla_actividad",
+                    "id_elemento_edt"
                   ]
                 }
               ]
@@ -13687,7 +15094,104 @@
                 }
               ]
             },
+            "cr_plantilla_hito_actividad": {
+              "columns": {
+                "id_plantilla_actividad": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "id_plantilla_hito": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "id_plantilla_hito_actividad": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "expression": "autoincrement()",
+                    "kind": "function"
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "cascade",
+                  "source": {
+                    "columns": [
+                      "id_plantilla_hito"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "cr_plantilla_hito_actividad"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_plantilla_hito"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "cr_plantilla_hito"
+                  }
+                },
+                {
+                  "onDelete": "cascade",
+                  "source": {
+                    "columns": [
+                      "id_plantilla_actividad"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "cr_plantilla_hito_actividad"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_plantilla_actividad"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "cr_plantilla_actividad"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "id_plantilla_actividad"
+                  ],
+                  "name": "cr_plantilla_hito_actividad_id_plantilla_actividad_idx_396101d8",
+                  "prefix": "cr_plantilla_hito_actividad_id_plantilla_actividad_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_plantilla_hito"
+                  ],
+                  "name": "cr_plantilla_hito_actividad_id_plantilla_hito_idx_99ae877f",
+                  "prefix": "cr_plantilla_hito_actividad_id_plantilla_hito_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_plantilla_hito_actividad"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "id_plantilla_hito",
+                    "id_plantilla_actividad"
+                  ]
+                }
+              ]
+            },
             "cr_plantilla_timing": {
+              "checks": [
+                {
+                  "expression": "\"tipo_horario\" IN ('FIJO', 'FLEXIBLE')",
+                  "name": "cr_plantilla_timing_tipo_horario_check_1d53f427",
+                  "prefix": "cr_plantilla_timing_tipo_horario_check"
+                }
+              ],
               "columns": {
                 "actividad": {
                   "codecId": "sql/varchar@1",
@@ -13731,7 +15235,7 @@
                 "hora_inicio": {
                   "codecId": "pg/time-temporal@1",
                   "nativeType": "time",
-                  "nullable": false
+                  "nullable": true
                 },
                 "id_plantilla_timing": {
                   "codecId": "pg/int4@1",
@@ -13747,6 +15251,11 @@
                   "nativeType": "json",
                   "nullable": true
                 },
+                "offset_inicio_minutos": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
                 "orden": {
                   "codecId": "pg/int4@1",
                   "nativeType": "int4",
@@ -13758,6 +15267,30 @@
                   "nullable": true,
                   "typeParams": {
                     "length": 150
+                  }
+                },
+                "tiempo_extra_minutos": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": 0
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "tipo_horario": {
+                  "codecId": "pg/text@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": "FLEXIBLE"
+                  },
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "cr_tipo_horario",
+                    "namespaceId": "public",
+                    "plane": "storage"
                   }
                 },
                 "updated_at": {
@@ -13777,6 +15310,127 @@
                 {
                   "columns": [
                     "codigo"
+                  ]
+                }
+              ]
+            },
+            "cr_plantilla_timing_dependencia": {
+              "checks": [
+                {
+                  "expression": "\"tipo_dependencia\" IN ('FINISH_TO_START')",
+                  "name": "cr_plantilla_timing_dependencia_tipo_dependencia_check_d4c2b17a",
+                  "prefix": "cr_plantilla_timing_dependencia_tipo_dependencia_check"
+                }
+              ],
+              "columns": {
+                "id_plantilla_timing_dependencia": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "expression": "autoincrement()",
+                    "kind": "function"
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "id_timing_predecesor": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "id_timing_sucesor": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "minutos_desfase": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": 0
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "tipo_dependencia": {
+                  "codecId": "pg/text@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": "FINISH_TO_START"
+                  },
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "cr_tipo_dependencia",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "cascade",
+                  "source": {
+                    "columns": [
+                      "id_timing_predecesor"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "cr_plantilla_timing_dependencia"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_plantilla_timing"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "cr_plantilla_timing"
+                  }
+                },
+                {
+                  "onDelete": "cascade",
+                  "source": {
+                    "columns": [
+                      "id_timing_sucesor"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "cr_plantilla_timing_dependencia"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_plantilla_timing"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "cr_plantilla_timing"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "id_timing_predecesor"
+                  ],
+                  "name": "cr_plantilla_timing_dependencia_id_timing_predecesor_i_1f9f34b6",
+                  "prefix": "cr_plantilla_timing_dependencia_id_timing_predecesor_i",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_timing_sucesor"
+                  ],
+                  "name": "cr_plantilla_timing_dependencia_id_timing_sucesor_idx_5da66682",
+                  "prefix": "cr_plantilla_timing_dependencia_id_timing_sucesor_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_plantilla_timing_dependencia"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "id_timing_predecesor",
+                    "id_timing_sucesor"
                   ]
                 }
               ]
@@ -13877,6 +15531,11 @@
                   "expression": "\"estado\" IN ('PENDIENTE', 'EN_PROCESO', 'COMPLETADA', 'CANCELADA', 'NO_APLICA')",
                   "name": "cr_timing_estado_check_15ec3bb7",
                   "prefix": "cr_timing_estado_check"
+                },
+                {
+                  "expression": "\"tipo_horario\" IN ('FIJO', 'FLEXIBLE')",
+                  "name": "cr_timing_tipo_horario_check_1d53f427",
+                  "prefix": "cr_timing_tipo_horario_check"
                 }
               ],
               "columns": {
@@ -13981,6 +15640,30 @@
                   "nullable": true,
                   "typeParams": {
                     "length": 150
+                  }
+                },
+                "tiempo_extra_minutos": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": 0
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "tipo_horario": {
+                  "codecId": "pg/text@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": "FLEXIBLE"
+                  },
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "cr_tipo_horario",
+                    "namespaceId": "public",
+                    "plane": "storage"
                   }
                 },
                 "ubicacion": {
@@ -14106,6 +15789,127 @@
                 ]
               },
               "uniques": []
+            },
+            "cr_timing_dependencia": {
+              "checks": [
+                {
+                  "expression": "\"tipo_dependencia\" IN ('FINISH_TO_START')",
+                  "name": "cr_timing_dependencia_tipo_dependencia_check_d4c2b17a",
+                  "prefix": "cr_timing_dependencia_tipo_dependencia_check"
+                }
+              ],
+              "columns": {
+                "id_timing_dependencia": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "expression": "autoincrement()",
+                    "kind": "function"
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "id_timing_predecesor": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id_timing_sucesor": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "minutos_desfase": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": 0
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "tipo_dependencia": {
+                  "codecId": "pg/text@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": "FINISH_TO_START"
+                  },
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "cr_tipo_dependencia",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "cascade",
+                  "source": {
+                    "columns": [
+                      "id_timing_predecesor"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "cr_timing_dependencia"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_timing"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "cr_timing"
+                  }
+                },
+                {
+                  "onDelete": "cascade",
+                  "source": {
+                    "columns": [
+                      "id_timing_sucesor"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "cr_timing_dependencia"
+                  },
+                  "target": {
+                    "columns": [
+                      "id_timing"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "cr_timing"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "id_timing_predecesor"
+                  ],
+                  "name": "cr_timing_dependencia_id_timing_predecesor_idx_1f9f34b6",
+                  "prefix": "cr_timing_dependencia_id_timing_predecesor_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "id_timing_sucesor"
+                  ],
+                  "name": "cr_timing_dependencia_id_timing_sucesor_idx_5da66682",
+                  "prefix": "cr_timing_dependencia_id_timing_sucesor_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id_timing_dependencia"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "id_timing_predecesor",
+                    "id_timing_sucesor"
+                  ]
+                }
+              ]
             },
             "gp_buena_practica": {
               "columns": {
@@ -21307,6 +23111,13 @@
                 "FINISH_TO_START"
               ]
             },
+            "cr_tipo_horario": {
+              "kind": "valueSet",
+              "values": [
+                "FIJO",
+                "FLEXIBLE"
+              ]
+            },
             "cr_tipo_temporal": {
               "kind": "valueSet",
               "values": [
@@ -21500,10 +23311,10 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "1a724624771bf0631e79ada564a249236ceeb1f558042ce767cf535a8bacbd80"
+    "storageHash": "065e248d944b4fbb64c3c452f6bba4496deec97a869cff66baf453d0f774cc37"
   },
   "execution": {
-    "executionHash": "168fe7ac0bf302bbbbf28be43a84b9f47f8a2efc3f3b8ecce0bd66b630809ac0",
+    "executionHash": "787c652e0296fc840611e6c95c1614c8e62ca03f011cfd36de21320dd48f7e47",
     "mutations": {
       "defaults": [
         {
@@ -21545,6 +23356,32 @@
             "column": "updated_at",
             "namespace": "public",
             "table": "cr_actividad"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id_actividad_checklist",
+            "namespace": "public",
+            "table": "cr_actividad_checklist"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updated_at",
+            "namespace": "public",
+            "table": "cr_actividad_checklist"
           }
         },
         {
@@ -21597,6 +23434,21 @@
             "column": "updated_at",
             "namespace": "public",
             "table": "cr_plantilla_actividad"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "instantNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updated_at",
+            "namespace": "public",
+            "table": "cr_plantilla_actividad_checklist"
           }
         },
         {

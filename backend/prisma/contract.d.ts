@@ -34,9 +34,9 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'1a724624771bf0631e79ada564a249236ceeb1f558042ce767cf535a8bacbd80'>;
+  StorageHashBase<'065e248d944b4fbb64c3c452f6bba4496deec97a869cff66baf453d0f774cc37'>;
 export type ExecutionHash =
-  ExecutionHashBase<'168fe7ac0bf302bbbbf28be43a84b9f47f8a2efc3f3b8ecce0bd66b630809ac0'>;
+  ExecutionHashBase<'787c652e0296fc840611e6c95c1614c8e62ca03f011cfd36de21320dd48f7e47'>;
 export type ProfileHash =
   ProfileHashBase<'3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2'>;
 
@@ -253,12 +253,12 @@ export type FieldOutputTypes = {
     readonly Actividad: {
       readonly idActividad: CodecTypes['pg/uuid@1']['output'];
       readonly idProyecto: CodecTypes['pg/uuid@1']['output'];
-      readonly idHito: CodecTypes['pg/uuid@1']['output'] | null;
+      readonly idHitoLegacy: CodecTypes['pg/uuid@1']['output'] | null;
       readonly idPlantillaActividad: CodecTypes['pg/int4@1']['output'] | null;
       readonly nombre: Varchar<200>;
       readonly categoria: Varchar<100> | null;
       readonly descripcion: Varchar<1000> | null;
-      readonly listaVerificacion: CodecTypes['pg/json@1']['output'] | null;
+      readonly listaVerificacionLegacy: CodecTypes['pg/json@1']['output'] | null;
       readonly entregable: Varchar<500> | null;
       readonly fechaInicio: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
       readonly fechaFin: CodecTypes['pg/timestamptz-temporal@1']['output'];
@@ -267,6 +267,21 @@ export type FieldOutputTypes = {
       readonly idUsuarioResponsable: CodecTypes['pg/int4@1']['output'] | null;
       readonly responsableTexto: Varchar<150> | null;
       readonly orden: CodecTypes['pg/int4@1']['output'];
+      readonly modificadoManualmente: CodecTypes['pg/bool@1']['output'];
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly ActividadChecklist: {
+      readonly idChecklist: CodecTypes['pg/uuid@1']['output'];
+      readonly idActividad: CodecTypes['pg/uuid@1']['output'];
+      readonly idPlantillaChecklist: CodecTypes['pg/int4@1']['output'] | null;
+      readonly descripcion: Varchar<1000>;
+      readonly orden: CodecTypes['pg/int4@1']['output'];
+      readonly obligatorio: CodecTypes['pg/bool@1']['output'];
+      readonly completado: CodecTypes['pg/bool@1']['output'];
+      readonly fechaCompletado: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+      readonly idUsuarioCompleto: CodecTypes['pg/int4@1']['output'] | null;
       readonly modificadoManualmente: CodecTypes['pg/bool@1']['output'];
       readonly activo: CodecTypes['pg/bool@1']['output'];
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
@@ -520,6 +535,11 @@ export type FieldOutputTypes = {
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     };
+    readonly HitoActividad: {
+      readonly idHitoActividad: CodecTypes['pg/int4@1']['output'];
+      readonly idHito: CodecTypes['pg/uuid@1']['output'];
+      readonly idActividad: CodecTypes['pg/uuid@1']['output'];
+    };
     readonly IncidenciaRiesgo: {
       readonly idIncidencia: CodecTypes['pg/uuid@1']['output'];
       readonly idRiesgo: CodecTypes['pg/uuid@1']['output'];
@@ -711,11 +731,11 @@ export type FieldOutputTypes = {
     };
     readonly PlantillaActividad: {
       readonly idPlantillaActividad: CodecTypes['pg/int4@1']['output'];
-      readonly idPlantillaHito: CodecTypes['pg/int4@1']['output'] | null;
+      readonly idPlantillaHitoLegacy: CodecTypes['pg/int4@1']['output'] | null;
       readonly idFaseProyecto: CodecTypes['pg/int4@1']['output'];
       readonly codigo: Varchar<50>;
       readonly nombre: Varchar<200>;
-      readonly listaVerificacion: CodecTypes['pg/json@1']['output'] | null;
+      readonly listaVerificacionLegacy: CodecTypes['pg/json@1']['output'] | null;
       readonly responsableSugerido: Varchar<150> | null;
       readonly entregable: Varchar<500> | null;
       readonly tipoTemporal: 'INICIO' | 'ESCALABLE' | 'FIJO_EVENTO' | 'DIA_EVENTO' | 'POST_EVENTO';
@@ -727,6 +747,21 @@ export type FieldOutputTypes = {
       readonly activo: CodecTypes['pg/bool@1']['output'];
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly PlantillaActividadChecklist: {
+      readonly idPlantillaChecklist: CodecTypes['pg/int4@1']['output'];
+      readonly idPlantillaActividad: CodecTypes['pg/int4@1']['output'];
+      readonly descripcion: Varchar<1000>;
+      readonly orden: CodecTypes['pg/int4@1']['output'];
+      readonly obligatorio: CodecTypes['pg/bool@1']['output'];
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly PlantillaActividadEdt: {
+      readonly idPlantillaActividadEdt: CodecTypes['pg/int4@1']['output'];
+      readonly idPlantillaActividad: CodecTypes['pg/int4@1']['output'];
+      readonly idElementoEdt: CodecTypes['pg/uuid@1']['output'];
     };
     readonly PlantillaActividadTipoCeremonia: {
       readonly idPlantillaActividadTipoCeremonia: CodecTypes['pg/int4@1']['output'];
@@ -752,6 +787,11 @@ export type FieldOutputTypes = {
       readonly activo: CodecTypes['pg/bool@1']['output'];
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly PlantillaHitoActividad: {
+      readonly idPlantillaHitoActividad: CodecTypes['pg/int4@1']['output'];
+      readonly idPlantillaHito: CodecTypes['pg/int4@1']['output'];
+      readonly idPlantillaActividad: CodecTypes['pg/int4@1']['output'];
     };
     readonly PlantillaMitigacionRiesgo: {
       readonly idPlantillaMitigacion: CodecTypes['pg/int4@1']['output'];
@@ -786,7 +826,10 @@ export type FieldOutputTypes = {
     readonly PlantillaTiming: {
       readonly idPlantillaTiming: CodecTypes['pg/int4@1']['output'];
       readonly codigo: Varchar<50>;
-      readonly horaInicio: CodecTypes['pg/time-temporal@1']['output'];
+      readonly horaInicioLegacy: CodecTypes['pg/time-temporal@1']['output'] | null;
+      readonly tipoHorario: 'FIJO' | 'FLEXIBLE';
+      readonly tiempoExtraMinutos: CodecTypes['pg/int4@1']['output'];
+      readonly offsetInicioMinutos: CodecTypes['pg/int4@1']['output'] | null;
       readonly duracionMinutos: CodecTypes['pg/int4@1']['output'];
       readonly actividad: Varchar<200>;
       readonly responsableSugerido: Varchar<150> | null;
@@ -795,6 +838,13 @@ export type FieldOutputTypes = {
       readonly activo: CodecTypes['pg/bool@1']['output'];
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly PlantillaTimingDependencia: {
+      readonly idPlantillaTimingDependencia: CodecTypes['pg/int4@1']['output'];
+      readonly idTimingPredecesor: CodecTypes['pg/int4@1']['output'];
+      readonly idTimingSucesor: CodecTypes['pg/int4@1']['output'];
+      readonly tipoDependencia: 'FINISH_TO_START';
+      readonly minutosDesfase: CodecTypes['pg/int4@1']['output'];
     };
     readonly PlantillaTimingTipoCeremonia: {
       readonly idPlantillaTimingTipoCeremonia: CodecTypes['pg/int4@1']['output'];
@@ -976,15 +1026,24 @@ export type FieldOutputTypes = {
       readonly fechaHoraInicio: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly fechaHoraFin: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly duracionMinutos: CodecTypes['pg/int4@1']['output'];
+      readonly tipoHorario: 'FIJO' | 'FLEXIBLE';
+      readonly tiempoExtraMinutos: CodecTypes['pg/int4@1']['output'];
       readonly idUsuarioResponsable: CodecTypes['pg/int4@1']['output'] | null;
       readonly responsableTexto: Varchar<150> | null;
-      readonly listaVerificacion: CodecTypes['pg/json@1']['output'] | null;
+      readonly listaVerificacionLegacy: CodecTypes['pg/json@1']['output'] | null;
       readonly estado: 'PENDIENTE' | 'EN_PROCESO' | 'COMPLETADA' | 'CANCELADA' | 'NO_APLICA';
       readonly orden: CodecTypes['pg/int4@1']['output'];
       readonly modificadoManualmente: CodecTypes['pg/bool@1']['output'];
       readonly activo: CodecTypes['pg/bool@1']['output'];
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly TimingDependencia: {
+      readonly idTimingDependencia: CodecTypes['pg/int4@1']['output'];
+      readonly idTimingPredecesor: CodecTypes['pg/uuid@1']['output'];
+      readonly idTimingSucesor: CodecTypes['pg/uuid@1']['output'];
+      readonly tipoDependencia: 'FINISH_TO_START';
+      readonly minutosDesfase: CodecTypes['pg/int4@1']['output'];
     };
     readonly TipoCeremonia: {
       readonly idTipoCeremonia: CodecTypes['pg/int4@1']['output'];
@@ -1036,12 +1095,12 @@ export type FieldInputTypes = {
     readonly Actividad: {
       readonly idActividad: CodecTypes['pg/uuid@1']['input'];
       readonly idProyecto: CodecTypes['pg/uuid@1']['input'];
-      readonly idHito: CodecTypes['pg/uuid@1']['input'] | null;
+      readonly idHitoLegacy: CodecTypes['pg/uuid@1']['input'] | null;
       readonly idPlantillaActividad: CodecTypes['pg/int4@1']['input'] | null;
       readonly nombre: CodecTypes['sql/varchar@1']['input'];
       readonly categoria: CodecTypes['sql/varchar@1']['input'] | null;
       readonly descripcion: CodecTypes['sql/varchar@1']['input'] | null;
-      readonly listaVerificacion: CodecTypes['pg/json@1']['input'] | null;
+      readonly listaVerificacionLegacy: CodecTypes['pg/json@1']['input'] | null;
       readonly entregable: CodecTypes['sql/varchar@1']['input'] | null;
       readonly fechaInicio: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
       readonly fechaFin: CodecTypes['pg/timestamptz-temporal@1']['input'];
@@ -1050,6 +1109,21 @@ export type FieldInputTypes = {
       readonly idUsuarioResponsable: CodecTypes['pg/int4@1']['input'] | null;
       readonly responsableTexto: CodecTypes['sql/varchar@1']['input'] | null;
       readonly orden: CodecTypes['pg/int4@1']['input'];
+      readonly modificadoManualmente: CodecTypes['pg/bool@1']['input'];
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly ActividadChecklist: {
+      readonly idChecklist: CodecTypes['pg/uuid@1']['input'];
+      readonly idActividad: CodecTypes['pg/uuid@1']['input'];
+      readonly idPlantillaChecklist: CodecTypes['pg/int4@1']['input'] | null;
+      readonly descripcion: CodecTypes['sql/varchar@1']['input'];
+      readonly orden: CodecTypes['pg/int4@1']['input'];
+      readonly obligatorio: CodecTypes['pg/bool@1']['input'];
+      readonly completado: CodecTypes['pg/bool@1']['input'];
+      readonly fechaCompletado: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
+      readonly idUsuarioCompleto: CodecTypes['pg/int4@1']['input'] | null;
       readonly modificadoManualmente: CodecTypes['pg/bool@1']['input'];
       readonly activo: CodecTypes['pg/bool@1']['input'];
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
@@ -1303,6 +1377,11 @@ export type FieldInputTypes = {
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
     };
+    readonly HitoActividad: {
+      readonly idHitoActividad: CodecTypes['pg/int4@1']['input'];
+      readonly idHito: CodecTypes['pg/uuid@1']['input'];
+      readonly idActividad: CodecTypes['pg/uuid@1']['input'];
+    };
     readonly IncidenciaRiesgo: {
       readonly idIncidencia: CodecTypes['pg/uuid@1']['input'];
       readonly idRiesgo: CodecTypes['pg/uuid@1']['input'];
@@ -1494,11 +1573,11 @@ export type FieldInputTypes = {
     };
     readonly PlantillaActividad: {
       readonly idPlantillaActividad: CodecTypes['pg/int4@1']['input'];
-      readonly idPlantillaHito: CodecTypes['pg/int4@1']['input'] | null;
+      readonly idPlantillaHitoLegacy: CodecTypes['pg/int4@1']['input'] | null;
       readonly idFaseProyecto: CodecTypes['pg/int4@1']['input'];
       readonly codigo: CodecTypes['sql/varchar@1']['input'];
       readonly nombre: CodecTypes['sql/varchar@1']['input'];
-      readonly listaVerificacion: CodecTypes['pg/json@1']['input'] | null;
+      readonly listaVerificacionLegacy: CodecTypes['pg/json@1']['input'] | null;
       readonly responsableSugerido: CodecTypes['sql/varchar@1']['input'] | null;
       readonly entregable: CodecTypes['sql/varchar@1']['input'] | null;
       readonly tipoTemporal: 'INICIO' | 'ESCALABLE' | 'FIJO_EVENTO' | 'DIA_EVENTO' | 'POST_EVENTO';
@@ -1510,6 +1589,21 @@ export type FieldInputTypes = {
       readonly activo: CodecTypes['pg/bool@1']['input'];
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly PlantillaActividadChecklist: {
+      readonly idPlantillaChecklist: CodecTypes['pg/int4@1']['input'];
+      readonly idPlantillaActividad: CodecTypes['pg/int4@1']['input'];
+      readonly descripcion: CodecTypes['sql/varchar@1']['input'];
+      readonly orden: CodecTypes['pg/int4@1']['input'];
+      readonly obligatorio: CodecTypes['pg/bool@1']['input'];
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly PlantillaActividadEdt: {
+      readonly idPlantillaActividadEdt: CodecTypes['pg/int4@1']['input'];
+      readonly idPlantillaActividad: CodecTypes['pg/int4@1']['input'];
+      readonly idElementoEdt: CodecTypes['pg/uuid@1']['input'];
     };
     readonly PlantillaActividadTipoCeremonia: {
       readonly idPlantillaActividadTipoCeremonia: CodecTypes['pg/int4@1']['input'];
@@ -1535,6 +1629,11 @@ export type FieldInputTypes = {
       readonly activo: CodecTypes['pg/bool@1']['input'];
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly PlantillaHitoActividad: {
+      readonly idPlantillaHitoActividad: CodecTypes['pg/int4@1']['input'];
+      readonly idPlantillaHito: CodecTypes['pg/int4@1']['input'];
+      readonly idPlantillaActividad: CodecTypes['pg/int4@1']['input'];
     };
     readonly PlantillaMitigacionRiesgo: {
       readonly idPlantillaMitigacion: CodecTypes['pg/int4@1']['input'];
@@ -1569,7 +1668,10 @@ export type FieldInputTypes = {
     readonly PlantillaTiming: {
       readonly idPlantillaTiming: CodecTypes['pg/int4@1']['input'];
       readonly codigo: CodecTypes['sql/varchar@1']['input'];
-      readonly horaInicio: CodecTypes['pg/time-temporal@1']['input'];
+      readonly horaInicioLegacy: CodecTypes['pg/time-temporal@1']['input'] | null;
+      readonly tipoHorario: 'FIJO' | 'FLEXIBLE';
+      readonly tiempoExtraMinutos: CodecTypes['pg/int4@1']['input'];
+      readonly offsetInicioMinutos: CodecTypes['pg/int4@1']['input'] | null;
       readonly duracionMinutos: CodecTypes['pg/int4@1']['input'];
       readonly actividad: CodecTypes['sql/varchar@1']['input'];
       readonly responsableSugerido: CodecTypes['sql/varchar@1']['input'] | null;
@@ -1578,6 +1680,13 @@ export type FieldInputTypes = {
       readonly activo: CodecTypes['pg/bool@1']['input'];
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly PlantillaTimingDependencia: {
+      readonly idPlantillaTimingDependencia: CodecTypes['pg/int4@1']['input'];
+      readonly idTimingPredecesor: CodecTypes['pg/int4@1']['input'];
+      readonly idTimingSucesor: CodecTypes['pg/int4@1']['input'];
+      readonly tipoDependencia: 'FINISH_TO_START';
+      readonly minutosDesfase: CodecTypes['pg/int4@1']['input'];
     };
     readonly PlantillaTimingTipoCeremonia: {
       readonly idPlantillaTimingTipoCeremonia: CodecTypes['pg/int4@1']['input'];
@@ -1759,15 +1868,24 @@ export type FieldInputTypes = {
       readonly fechaHoraInicio: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly fechaHoraFin: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly duracionMinutos: CodecTypes['pg/int4@1']['input'];
+      readonly tipoHorario: 'FIJO' | 'FLEXIBLE';
+      readonly tiempoExtraMinutos: CodecTypes['pg/int4@1']['input'];
       readonly idUsuarioResponsable: CodecTypes['pg/int4@1']['input'] | null;
       readonly responsableTexto: CodecTypes['sql/varchar@1']['input'] | null;
-      readonly listaVerificacion: CodecTypes['pg/json@1']['input'] | null;
+      readonly listaVerificacionLegacy: CodecTypes['pg/json@1']['input'] | null;
       readonly estado: 'PENDIENTE' | 'EN_PROCESO' | 'COMPLETADA' | 'CANCELADA' | 'NO_APLICA';
       readonly orden: CodecTypes['pg/int4@1']['input'];
       readonly modificadoManualmente: CodecTypes['pg/bool@1']['input'];
       readonly activo: CodecTypes['pg/bool@1']['input'];
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly TimingDependencia: {
+      readonly idTimingDependencia: CodecTypes['pg/int4@1']['input'];
+      readonly idTimingPredecesor: CodecTypes['pg/uuid@1']['input'];
+      readonly idTimingSucesor: CodecTypes['pg/uuid@1']['input'];
+      readonly tipoDependencia: 'FINISH_TO_START';
+      readonly minutosDesfase: CodecTypes['pg/int4@1']['input'];
     };
     readonly TipoCeremonia: {
       readonly idTipoCeremonia: CodecTypes['pg/int4@1']['input'];
@@ -1871,6 +1989,21 @@ export type StorageColumnTypes = {
       readonly responsable_texto: Varchar<150> | null;
       readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
     };
+    readonly cr_actividad_checklist: {
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly completado: CodecTypes['pg/bool@1']['output'];
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly descripcion: Varchar<1000>;
+      readonly fecha_completado: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+      readonly id_actividad: CodecTypes['pg/uuid@1']['output'];
+      readonly id_actividad_checklist: CodecTypes['pg/uuid@1']['output'];
+      readonly id_plantilla_checklist: CodecTypes['pg/int4@1']['output'] | null;
+      readonly id_usuario_completo: CodecTypes['pg/int4@1']['output'] | null;
+      readonly modificado_manualmente: CodecTypes['pg/bool@1']['output'];
+      readonly obligatorio: CodecTypes['pg/bool@1']['output'];
+      readonly orden: CodecTypes['pg/int4@1']['output'];
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
     readonly cr_dependencia: {
       readonly dias_desfase: CodecTypes['pg/int4@1']['output'];
       readonly id_actividad_predecesora: CodecTypes['pg/uuid@1']['output'];
@@ -1892,6 +2025,11 @@ export type StorageColumnTypes = {
       readonly orden: CodecTypes['pg/int4@1']['output'];
       readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
     };
+    readonly cr_hito_actividad: {
+      readonly id_actividad: CodecTypes['pg/uuid@1']['output'];
+      readonly id_hito: CodecTypes['pg/uuid@1']['output'];
+      readonly id_hito_actividad: CodecTypes['pg/int4@1']['output'];
+    };
     readonly cr_plantilla_actividad: {
       readonly activo: CodecTypes['pg/bool@1']['output'];
       readonly codigo: Varchar<50>;
@@ -1910,6 +2048,21 @@ export type StorageColumnTypes = {
       readonly responsable_sugerido: Varchar<150> | null;
       readonly tipo_temporal: 'INICIO' | 'ESCALABLE' | 'FIJO_EVENTO' | 'DIA_EVENTO' | 'POST_EVENTO';
       readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly cr_plantilla_actividad_checklist: {
+      readonly activo: CodecTypes['pg/bool@1']['output'];
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly descripcion: Varchar<1000>;
+      readonly id_plantilla_actividad: CodecTypes['pg/int4@1']['output'];
+      readonly id_plantilla_checklist: CodecTypes['pg/int4@1']['output'];
+      readonly obligatorio: CodecTypes['pg/bool@1']['output'];
+      readonly orden: CodecTypes['pg/int4@1']['output'];
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly cr_plantilla_actividad_edt: {
+      readonly id_elemento_edt: CodecTypes['pg/uuid@1']['output'];
+      readonly id_plantilla_actividad: CodecTypes['pg/int4@1']['output'];
+      readonly id_plantilla_actividad_edt: CodecTypes['pg/int4@1']['output'];
     };
     readonly cr_plantilla_actividad_tipo_ceremonia: {
       readonly id_plantilla_actividad: CodecTypes['pg/int4@1']['output'];
@@ -1936,18 +2089,33 @@ export type StorageColumnTypes = {
       readonly tipo_temporal: 'INICIO' | 'ESCALABLE' | 'FIJO_EVENTO' | 'DIA_EVENTO' | 'POST_EVENTO';
       readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
     };
+    readonly cr_plantilla_hito_actividad: {
+      readonly id_plantilla_actividad: CodecTypes['pg/int4@1']['output'];
+      readonly id_plantilla_hito: CodecTypes['pg/int4@1']['output'];
+      readonly id_plantilla_hito_actividad: CodecTypes['pg/int4@1']['output'];
+    };
     readonly cr_plantilla_timing: {
       readonly actividad: Varchar<200>;
       readonly activo: CodecTypes['pg/bool@1']['output'];
       readonly codigo: Varchar<50>;
       readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly duracion_minutos: CodecTypes['pg/int4@1']['output'];
-      readonly hora_inicio: CodecTypes['pg/time-temporal@1']['output'];
+      readonly hora_inicio: CodecTypes['pg/time-temporal@1']['output'] | null;
       readonly id_plantilla_timing: CodecTypes['pg/int4@1']['output'];
       readonly lista_verificacion: CodecTypes['pg/json@1']['output'] | null;
+      readonly offset_inicio_minutos: CodecTypes['pg/int4@1']['output'] | null;
       readonly orden: CodecTypes['pg/int4@1']['output'];
       readonly responsable_sugerido: Varchar<150> | null;
+      readonly tiempo_extra_minutos: CodecTypes['pg/int4@1']['output'];
+      readonly tipo_horario: 'FIJO' | 'FLEXIBLE';
       readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly cr_plantilla_timing_dependencia: {
+      readonly id_plantilla_timing_dependencia: CodecTypes['pg/int4@1']['output'];
+      readonly id_timing_predecesor: CodecTypes['pg/int4@1']['output'];
+      readonly id_timing_sucesor: CodecTypes['pg/int4@1']['output'];
+      readonly minutos_desfase: CodecTypes['pg/int4@1']['output'];
+      readonly tipo_dependencia: 'FINISH_TO_START';
     };
     readonly cr_plantilla_timing_tipo_ceremonia: {
       readonly id_plantilla_timing: CodecTypes['pg/int4@1']['output'];
@@ -1970,8 +2138,17 @@ export type StorageColumnTypes = {
       readonly modificado_manualmente: CodecTypes['pg/bool@1']['output'];
       readonly orden: CodecTypes['pg/int4@1']['output'];
       readonly responsable_texto: Varchar<150> | null;
+      readonly tiempo_extra_minutos: CodecTypes['pg/int4@1']['output'];
+      readonly tipo_horario: 'FIJO' | 'FLEXIBLE';
       readonly ubicacion: Varchar<250> | null;
       readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly cr_timing_dependencia: {
+      readonly id_timing_dependencia: CodecTypes['pg/int4@1']['output'];
+      readonly id_timing_predecesor: CodecTypes['pg/uuid@1']['output'];
+      readonly id_timing_sucesor: CodecTypes['pg/uuid@1']['output'];
+      readonly minutos_desfase: CodecTypes['pg/int4@1']['output'];
+      readonly tipo_dependencia: 'FINISH_TO_START';
     };
     readonly gp_buena_practica: {
       readonly anio_fuente: Varchar<100> | null;
@@ -2656,6 +2833,21 @@ export type StorageColumnInputTypes = {
       readonly responsable_texto: CodecTypes['sql/varchar@1']['input'] | null;
       readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
     };
+    readonly cr_actividad_checklist: {
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly completado: CodecTypes['pg/bool@1']['input'];
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly descripcion: CodecTypes['sql/varchar@1']['input'];
+      readonly fecha_completado: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
+      readonly id_actividad: CodecTypes['pg/uuid@1']['input'];
+      readonly id_actividad_checklist: CodecTypes['pg/uuid@1']['input'];
+      readonly id_plantilla_checklist: CodecTypes['pg/int4@1']['input'] | null;
+      readonly id_usuario_completo: CodecTypes['pg/int4@1']['input'] | null;
+      readonly modificado_manualmente: CodecTypes['pg/bool@1']['input'];
+      readonly obligatorio: CodecTypes['pg/bool@1']['input'];
+      readonly orden: CodecTypes['pg/int4@1']['input'];
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
     readonly cr_dependencia: {
       readonly dias_desfase: CodecTypes['pg/int4@1']['input'];
       readonly id_actividad_predecesora: CodecTypes['pg/uuid@1']['input'];
@@ -2677,6 +2869,11 @@ export type StorageColumnInputTypes = {
       readonly orden: CodecTypes['pg/int4@1']['input'];
       readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
     };
+    readonly cr_hito_actividad: {
+      readonly id_actividad: CodecTypes['pg/uuid@1']['input'];
+      readonly id_hito: CodecTypes['pg/uuid@1']['input'];
+      readonly id_hito_actividad: CodecTypes['pg/int4@1']['input'];
+    };
     readonly cr_plantilla_actividad: {
       readonly activo: CodecTypes['pg/bool@1']['input'];
       readonly codigo: CodecTypes['sql/varchar@1']['input'];
@@ -2695,6 +2892,21 @@ export type StorageColumnInputTypes = {
       readonly responsable_sugerido: CodecTypes['sql/varchar@1']['input'] | null;
       readonly tipo_temporal: 'INICIO' | 'ESCALABLE' | 'FIJO_EVENTO' | 'DIA_EVENTO' | 'POST_EVENTO';
       readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly cr_plantilla_actividad_checklist: {
+      readonly activo: CodecTypes['pg/bool@1']['input'];
+      readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly descripcion: CodecTypes['sql/varchar@1']['input'];
+      readonly id_plantilla_actividad: CodecTypes['pg/int4@1']['input'];
+      readonly id_plantilla_checklist: CodecTypes['pg/int4@1']['input'];
+      readonly obligatorio: CodecTypes['pg/bool@1']['input'];
+      readonly orden: CodecTypes['pg/int4@1']['input'];
+      readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly cr_plantilla_actividad_edt: {
+      readonly id_elemento_edt: CodecTypes['pg/uuid@1']['input'];
+      readonly id_plantilla_actividad: CodecTypes['pg/int4@1']['input'];
+      readonly id_plantilla_actividad_edt: CodecTypes['pg/int4@1']['input'];
     };
     readonly cr_plantilla_actividad_tipo_ceremonia: {
       readonly id_plantilla_actividad: CodecTypes['pg/int4@1']['input'];
@@ -2721,18 +2933,33 @@ export type StorageColumnInputTypes = {
       readonly tipo_temporal: 'INICIO' | 'ESCALABLE' | 'FIJO_EVENTO' | 'DIA_EVENTO' | 'POST_EVENTO';
       readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
     };
+    readonly cr_plantilla_hito_actividad: {
+      readonly id_plantilla_actividad: CodecTypes['pg/int4@1']['input'];
+      readonly id_plantilla_hito: CodecTypes['pg/int4@1']['input'];
+      readonly id_plantilla_hito_actividad: CodecTypes['pg/int4@1']['input'];
+    };
     readonly cr_plantilla_timing: {
       readonly actividad: CodecTypes['sql/varchar@1']['input'];
       readonly activo: CodecTypes['pg/bool@1']['input'];
       readonly codigo: CodecTypes['sql/varchar@1']['input'];
       readonly created_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly duracion_minutos: CodecTypes['pg/int4@1']['input'];
-      readonly hora_inicio: CodecTypes['pg/time-temporal@1']['input'];
+      readonly hora_inicio: CodecTypes['pg/time-temporal@1']['input'] | null;
       readonly id_plantilla_timing: CodecTypes['pg/int4@1']['input'];
       readonly lista_verificacion: CodecTypes['pg/json@1']['input'] | null;
+      readonly offset_inicio_minutos: CodecTypes['pg/int4@1']['input'] | null;
       readonly orden: CodecTypes['pg/int4@1']['input'];
       readonly responsable_sugerido: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly tiempo_extra_minutos: CodecTypes['pg/int4@1']['input'];
+      readonly tipo_horario: 'FIJO' | 'FLEXIBLE';
       readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly cr_plantilla_timing_dependencia: {
+      readonly id_plantilla_timing_dependencia: CodecTypes['pg/int4@1']['input'];
+      readonly id_timing_predecesor: CodecTypes['pg/int4@1']['input'];
+      readonly id_timing_sucesor: CodecTypes['pg/int4@1']['input'];
+      readonly minutos_desfase: CodecTypes['pg/int4@1']['input'];
+      readonly tipo_dependencia: 'FINISH_TO_START';
     };
     readonly cr_plantilla_timing_tipo_ceremonia: {
       readonly id_plantilla_timing: CodecTypes['pg/int4@1']['input'];
@@ -2755,8 +2982,17 @@ export type StorageColumnInputTypes = {
       readonly modificado_manualmente: CodecTypes['pg/bool@1']['input'];
       readonly orden: CodecTypes['pg/int4@1']['input'];
       readonly responsable_texto: CodecTypes['sql/varchar@1']['input'] | null;
+      readonly tiempo_extra_minutos: CodecTypes['pg/int4@1']['input'];
+      readonly tipo_horario: 'FIJO' | 'FLEXIBLE';
       readonly ubicacion: CodecTypes['sql/varchar@1']['input'] | null;
       readonly updated_at: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly cr_timing_dependencia: {
+      readonly id_timing_dependencia: CodecTypes['pg/int4@1']['input'];
+      readonly id_timing_predecesor: CodecTypes['pg/uuid@1']['input'];
+      readonly id_timing_sucesor: CodecTypes['pg/uuid@1']['input'];
+      readonly minutos_desfase: CodecTypes['pg/int4@1']['input'];
+      readonly tipo_dependencia: 'FINISH_TO_START';
     };
     readonly gp_buena_practica: {
       readonly anio_fuente: CodecTypes['sql/varchar@1']['input'] | null;
@@ -3476,10 +3712,12 @@ export namespace Models {
     activo: CodecTypes['pg/bool@1']['output'];
     createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    actividadesPlantilla: public_PlantillaActividadEdt[];
     categoriaServicio: public_CategoriaServicio | null;
     elementosMatrimonio: public_EdtMatrimonioElemento[];
     elementosPlantilla: public_EdtPlantillaElemento[];
-    readonly [RelationKeys]?: 'categoriaServicio' | 'elementosMatrimonio' | 'elementosPlantilla';
+    readonly [RelationKeys]?:
+      'actividadesPlantilla' | 'categoriaServicio' | 'elementosMatrimonio' | 'elementosPlantilla';
   };
   export type public_EdtPlantilla = {
     idEdtPlantilla: CodecTypes['pg/uuid@1']['output'];
@@ -3705,17 +3943,17 @@ export namespace Models {
     activo: CodecTypes['pg/bool@1']['output'];
     createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
-    actividades: public_PlantillaActividad[];
+    actividades: public_PlantillaHitoActividad[];
     hitosOrigen: public_Hito[];
     readonly [RelationKeys]?: 'actividades' | 'hitosOrigen';
   };
   export type public_PlantillaActividad = {
     idPlantillaActividad: CodecTypes['pg/int4@1']['output'];
-    idPlantillaHito: CodecTypes['pg/int4@1']['output'] | null;
+    idPlantillaHitoLegacy: CodecTypes['pg/int4@1']['output'] | null;
     idFaseProyecto: CodecTypes['pg/int4@1']['output'];
     codigo: Varchar<50>;
     nombre: Varchar<200>;
-    listaVerificacion: CodecTypes['pg/json@1']['output'] | null;
+    listaVerificacionLegacy: CodecTypes['pg/json@1']['output'] | null;
     responsableSugerido: Varchar<150> | null;
     entregable: Varchar<500> | null;
     tipoTemporal: 'INICIO' | 'ESCALABLE' | 'FIJO_EVENTO' | 'DIA_EVENTO' | 'POST_EVENTO';
@@ -3728,17 +3966,21 @@ export namespace Models {
     createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     actividadesOrigen: public_Actividad[];
+    checklist: public_PlantillaActividadChecklist[];
     dependenciasPredecesora: public_PlantillaDependencia[];
     dependenciasSucesora: public_PlantillaDependencia[];
+    elementosEdt: public_PlantillaActividadEdt[];
     faseProyecto: public_FaseProyecto;
-    hito: public_PlantillaHito | null;
+    hitos: public_PlantillaHitoActividad[];
     tiposCeremonia: public_PlantillaActividadTipoCeremonia[];
     readonly [RelationKeys]?:
       | 'actividadesOrigen'
+      | 'checklist'
       | 'dependenciasPredecesora'
       | 'dependenciasSucesora'
+      | 'elementosEdt'
       | 'faseProyecto'
-      | 'hito'
+      | 'hitos'
       | 'tiposCeremonia';
   };
   export type public_PlantillaActividadTipoCeremonia = {
@@ -3759,10 +4001,42 @@ export namespace Models {
     sucesora: public_PlantillaActividad;
     readonly [RelationKeys]?: 'predecesora' | 'sucesora';
   };
+  export type public_PlantillaHitoActividad = {
+    idPlantillaHitoActividad: CodecTypes['pg/int4@1']['output'];
+    idPlantillaHito: CodecTypes['pg/int4@1']['output'];
+    idPlantillaActividad: CodecTypes['pg/int4@1']['output'];
+    actividad: public_PlantillaActividad;
+    hito: public_PlantillaHito;
+    readonly [RelationKeys]?: 'actividad' | 'hito';
+  };
+  export type public_PlantillaActividadChecklist = {
+    idPlantillaChecklist: CodecTypes['pg/int4@1']['output'];
+    idPlantillaActividad: CodecTypes['pg/int4@1']['output'];
+    descripcion: Varchar<1000>;
+    orden: CodecTypes['pg/int4@1']['output'];
+    obligatorio: CodecTypes['pg/bool@1']['output'];
+    activo: CodecTypes['pg/bool@1']['output'];
+    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    actividad: public_PlantillaActividad;
+    checklistOrigen: public_ActividadChecklist[];
+    readonly [RelationKeys]?: 'actividad' | 'checklistOrigen';
+  };
+  export type public_PlantillaActividadEdt = {
+    idPlantillaActividadEdt: CodecTypes['pg/int4@1']['output'];
+    idPlantillaActividad: CodecTypes['pg/int4@1']['output'];
+    idElementoEdt: CodecTypes['pg/uuid@1']['output'];
+    actividad: public_PlantillaActividad;
+    elementoEdt: public_EdtElemento;
+    readonly [RelationKeys]?: 'actividad' | 'elementoEdt';
+  };
   export type public_PlantillaTiming = {
     idPlantillaTiming: CodecTypes['pg/int4@1']['output'];
     codigo: Varchar<50>;
-    horaInicio: CodecTypes['pg/time-temporal@1']['output'];
+    horaInicioLegacy: CodecTypes['pg/time-temporal@1']['output'] | null;
+    tipoHorario: 'FIJO' | 'FLEXIBLE';
+    tiempoExtraMinutos: CodecTypes['pg/int4@1']['output'];
+    offsetInicioMinutos: CodecTypes['pg/int4@1']['output'] | null;
     duracionMinutos: CodecTypes['pg/int4@1']['output'];
     actividad: Varchar<200>;
     responsableSugerido: Varchar<150> | null;
@@ -3771,9 +4045,22 @@ export namespace Models {
     activo: CodecTypes['pg/bool@1']['output'];
     createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    dependenciasPredecesora: public_PlantillaTimingDependencia[];
+    dependenciasSucesora: public_PlantillaTimingDependencia[];
     timingsOrigen: public_Timing[];
     tiposCeremonia: public_PlantillaTimingTipoCeremonia[];
-    readonly [RelationKeys]?: 'timingsOrigen' | 'tiposCeremonia';
+    readonly [RelationKeys]?:
+      'dependenciasPredecesora' | 'dependenciasSucesora' | 'timingsOrigen' | 'tiposCeremonia';
+  };
+  export type public_PlantillaTimingDependencia = {
+    idPlantillaTimingDependencia: CodecTypes['pg/int4@1']['output'];
+    idTimingPredecesor: CodecTypes['pg/int4@1']['output'];
+    idTimingSucesor: CodecTypes['pg/int4@1']['output'];
+    tipoDependencia: 'FINISH_TO_START';
+    minutosDesfase: CodecTypes['pg/int4@1']['output'];
+    predecesora: public_PlantillaTiming;
+    sucesora: public_PlantillaTiming;
+    readonly [RelationKeys]?: 'predecesora' | 'sucesora';
   };
   export type public_PlantillaTimingTipoCeremonia = {
     idPlantillaTimingTipoCeremonia: CodecTypes['pg/int4@1']['output'];
@@ -3796,7 +4083,7 @@ export namespace Models {
     activo: CodecTypes['pg/bool@1']['output'];
     createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
-    actividades: public_Actividad[];
+    actividades: public_HitoActividad[];
     notificaciones: public_NotificacionCronograma[];
     plantillaHito: public_PlantillaHito | null;
     proyecto: public_Proyecto;
@@ -3805,12 +4092,12 @@ export namespace Models {
   export type public_Actividad = {
     idActividad: CodecTypes['pg/uuid@1']['output'];
     idProyecto: CodecTypes['pg/uuid@1']['output'];
-    idHito: CodecTypes['pg/uuid@1']['output'] | null;
+    idHitoLegacy: CodecTypes['pg/uuid@1']['output'] | null;
     idPlantillaActividad: CodecTypes['pg/int4@1']['output'] | null;
     nombre: Varchar<200>;
     categoria: Varchar<100> | null;
     descripcion: Varchar<1000> | null;
-    listaVerificacion: CodecTypes['pg/json@1']['output'] | null;
+    listaVerificacionLegacy: CodecTypes['pg/json@1']['output'] | null;
     entregable: Varchar<500> | null;
     fechaInicio: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
     fechaFin: CodecTypes['pg/timestamptz-temporal@1']['output'];
@@ -3823,21 +4110,50 @@ export namespace Models {
     activo: CodecTypes['pg/bool@1']['output'];
     createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    checklist: public_ActividadChecklist[];
     dependenciasPredecesora: public_Dependencia[];
     dependenciasSucesora: public_Dependencia[];
-    hito: public_Hito | null;
+    hitos: public_HitoActividad[];
     notificaciones: public_NotificacionCronograma[];
     plantillaActividad: public_PlantillaActividad | null;
     proyecto: public_Proyecto;
     responsable: public_Usuario | null;
     readonly [RelationKeys]?:
+      | 'checklist'
       | 'dependenciasPredecesora'
       | 'dependenciasSucesora'
-      | 'hito'
+      | 'hitos'
       | 'notificaciones'
       | 'plantillaActividad'
       | 'proyecto'
       | 'responsable';
+  };
+  export type public_HitoActividad = {
+    idHitoActividad: CodecTypes['pg/int4@1']['output'];
+    idHito: CodecTypes['pg/uuid@1']['output'];
+    idActividad: CodecTypes['pg/uuid@1']['output'];
+    actividad: public_Actividad;
+    hito: public_Hito;
+    readonly [RelationKeys]?: 'actividad' | 'hito';
+  };
+  export type public_ActividadChecklist = {
+    idChecklist: CodecTypes['pg/uuid@1']['output'];
+    idActividad: CodecTypes['pg/uuid@1']['output'];
+    idPlantillaChecklist: CodecTypes['pg/int4@1']['output'] | null;
+    descripcion: Varchar<1000>;
+    orden: CodecTypes['pg/int4@1']['output'];
+    obligatorio: CodecTypes['pg/bool@1']['output'];
+    completado: CodecTypes['pg/bool@1']['output'];
+    fechaCompletado: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+    idUsuarioCompleto: CodecTypes['pg/int4@1']['output'] | null;
+    modificadoManualmente: CodecTypes['pg/bool@1']['output'];
+    activo: CodecTypes['pg/bool@1']['output'];
+    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    actividad: public_Actividad;
+    plantillaChecklist: public_PlantillaActividadChecklist | null;
+    usuarioCompleto: public_Usuario | null;
+    readonly [RelationKeys]?: 'actividad' | 'plantillaChecklist' | 'usuarioCompleto';
   };
   export type public_Dependencia = {
     idDependencia: CodecTypes['pg/uuid@1']['output'];
@@ -3858,19 +4174,38 @@ export namespace Models {
     fechaHoraInicio: CodecTypes['pg/timestamptz-temporal@1']['output'];
     fechaHoraFin: CodecTypes['pg/timestamptz-temporal@1']['output'];
     duracionMinutos: CodecTypes['pg/int4@1']['output'];
+    tipoHorario: 'FIJO' | 'FLEXIBLE';
+    tiempoExtraMinutos: CodecTypes['pg/int4@1']['output'];
     idUsuarioResponsable: CodecTypes['pg/int4@1']['output'] | null;
     responsableTexto: Varchar<150> | null;
-    listaVerificacion: CodecTypes['pg/json@1']['output'] | null;
+    listaVerificacionLegacy: CodecTypes['pg/json@1']['output'] | null;
     estado: 'PENDIENTE' | 'EN_PROCESO' | 'COMPLETADA' | 'CANCELADA' | 'NO_APLICA';
     orden: CodecTypes['pg/int4@1']['output'];
     modificadoManualmente: CodecTypes['pg/bool@1']['output'];
     activo: CodecTypes['pg/bool@1']['output'];
     createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    dependenciasPredecesora: public_TimingDependencia[];
+    dependenciasSucesora: public_TimingDependencia[];
     plantillaTiming: public_PlantillaTiming | null;
     proyecto: public_Proyecto;
     responsable: public_Usuario | null;
-    readonly [RelationKeys]?: 'plantillaTiming' | 'proyecto' | 'responsable';
+    readonly [RelationKeys]?:
+      | 'dependenciasPredecesora'
+      | 'dependenciasSucesora'
+      | 'plantillaTiming'
+      | 'proyecto'
+      | 'responsable';
+  };
+  export type public_TimingDependencia = {
+    idTimingDependencia: CodecTypes['pg/int4@1']['output'];
+    idTimingPredecesor: CodecTypes['pg/uuid@1']['output'];
+    idTimingSucesor: CodecTypes['pg/uuid@1']['output'];
+    tipoDependencia: 'FINISH_TO_START';
+    minutosDesfase: CodecTypes['pg/int4@1']['output'];
+    predecesora: public_Timing;
+    sucesora: public_Timing;
+    readonly [RelationKeys]?: 'predecesora' | 'sucesora';
   };
   export type public_Notificacion = {
     idNotificacion: CodecTypes['pg/uuid@1']['output'];
@@ -4466,6 +4801,7 @@ export namespace Models {
     fechaCreacion: CodecTypes['pg/timestamptz-temporal@1']['output'];
     fechaModificacion: CodecTypes['pg/timestamptz-temporal@1']['output'];
     actividadesResponsable: public_Actividad[];
+    checklistCompletados: public_ActividadChecklist[];
     entidad: public_Entidad | null;
     historialRsvp: public_RsvpHistorial[];
     matrimoniosNovio1: public_Matrimonio[];
@@ -4481,6 +4817,7 @@ export namespace Models {
     tokensCuenta: public_TokenCuenta[];
     readonly [RelationKeys]?:
       | 'actividadesResponsable'
+      | 'checklistCompletados'
       | 'entidad'
       | 'historialRsvp'
       | 'matrimoniosNovio1'
@@ -4554,12 +4891,19 @@ export declare const models: {
     PlantillaActividad: Models.public_PlantillaActividad;
     PlantillaActividadTipoCeremonia: Models.public_PlantillaActividadTipoCeremonia;
     PlantillaDependencia: Models.public_PlantillaDependencia;
+    PlantillaHitoActividad: Models.public_PlantillaHitoActividad;
+    PlantillaActividadChecklist: Models.public_PlantillaActividadChecklist;
+    PlantillaActividadEdt: Models.public_PlantillaActividadEdt;
     PlantillaTiming: Models.public_PlantillaTiming;
+    PlantillaTimingDependencia: Models.public_PlantillaTimingDependencia;
     PlantillaTimingTipoCeremonia: Models.public_PlantillaTimingTipoCeremonia;
     Hito: Models.public_Hito;
     Actividad: Models.public_Actividad;
+    HitoActividad: Models.public_HitoActividad;
+    ActividadChecklist: Models.public_ActividadChecklist;
     Dependencia: Models.public_Dependencia;
     Timing: Models.public_Timing;
+    TimingDependencia: Models.public_TimingDependencia;
     Notificacion: Models.public_Notificacion;
     NotificacionCronograma: Models.public_NotificacionCronograma;
     Proveedor: Models.public_Proveedor;
@@ -5077,12 +5421,6 @@ type ContractBase = Omit<
                   readonly unique: false;
                 },
                 {
-                  readonly name: 'cr_actividad_id_hito_idx_0a1cccf3';
-                  readonly prefix: 'cr_actividad_id_hito_idx';
-                  readonly columns: readonly ['id_hito'];
-                  readonly unique: false;
-                },
-                {
                   readonly name: 'cr_actividad_id_plantilla_actividad_idx_396101d8';
                   readonly prefix: 'cr_actividad_id_plantilla_actividad_idx';
                   readonly columns: readonly ['id_plantilla_actividad'];
@@ -5130,18 +5468,6 @@ type ContractBase = Omit<
                   readonly source: {
                     readonly namespaceId: 'public' & NamespaceId;
                     readonly tableName: 'cr_actividad';
-                    readonly columns: readonly ['id_hito'];
-                  };
-                  readonly target: {
-                    readonly namespaceId: 'public' & NamespaceId;
-                    readonly tableName: 'cr_hito';
-                    readonly columns: readonly ['id_hito'];
-                  };
-                },
-                {
-                  readonly source: {
-                    readonly namespaceId: 'public' & NamespaceId;
-                    readonly tableName: 'cr_actividad';
                     readonly columns: readonly ['id_plantilla_actividad'];
                   };
                   readonly target: {
@@ -5155,6 +5481,163 @@ type ContractBase = Omit<
                     readonly namespaceId: 'public' & NamespaceId;
                     readonly tableName: 'cr_actividad';
                     readonly columns: readonly ['id_usuario_responsable'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'au_usuario';
+                    readonly columns: readonly ['id_usuario'];
+                  };
+                },
+              ];
+            };
+            readonly cr_actividad_checklist: {
+              columns: {
+                readonly id_actividad_checklist: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly id_actividad: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly id_plantilla_checklist: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: true;
+                };
+                readonly descripcion: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly length: 1000 };
+                };
+                readonly orden: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/int4@1', 0>;
+                  };
+                };
+                readonly obligatorio: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', true>;
+                  };
+                };
+                readonly completado: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', false>;
+                  };
+                };
+                readonly fecha_completado: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: true;
+                };
+                readonly id_usuario_completo: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: true;
+                };
+                readonly modificado_manualmente: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', false>;
+                  };
+                };
+                readonly activo: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', true>;
+                  };
+                };
+                readonly created_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                };
+                readonly updated_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id_actividad_checklist'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'cr_actividad_checklist_id_actividad_orden_idx_9f887c8d';
+                  readonly prefix: 'cr_actividad_checklist_id_actividad_orden_idx';
+                  readonly columns: readonly ['id_actividad', 'orden'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'cr_actividad_checklist_id_plantilla_checklist_idx_e8822b3e';
+                  readonly prefix: 'cr_actividad_checklist_id_plantilla_checklist_idx';
+                  readonly columns: readonly ['id_plantilla_checklist'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'cr_actividad_checklist_id_usuario_completo_idx_e4050dba';
+                  readonly prefix: 'cr_actividad_checklist_id_usuario_completo_idx';
+                  readonly columns: readonly ['id_usuario_completo'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'cr_actividad_checklist_id_actividad_idx_e1ffad2c';
+                  readonly prefix: 'cr_actividad_checklist_id_actividad_idx';
+                  readonly columns: readonly ['id_actividad'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'cr_actividad_checklist';
+                    readonly columns: readonly ['id_actividad'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'cr_actividad';
+                    readonly columns: readonly ['id_actividad'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'cr_actividad_checklist';
+                    readonly columns: readonly ['id_plantilla_checklist'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'cr_plantilla_actividad_checklist';
+                    readonly columns: readonly ['id_plantilla_checklist'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'cr_actividad_checklist';
+                    readonly columns: readonly ['id_usuario_completo'];
                   };
                   readonly target: {
                     readonly namespaceId: 'public' & NamespaceId;
@@ -5374,6 +5857,71 @@ type ContractBase = Omit<
                 },
               ];
             };
+            readonly cr_hito_actividad: {
+              columns: {
+                readonly id_hito_actividad: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'function';
+                    readonly expression: 'autoincrement()';
+                  };
+                };
+                readonly id_hito: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly id_actividad: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id_hito_actividad'] };
+              uniques: readonly [{ readonly columns: readonly ['id_hito', 'id_actividad'] }];
+              indexes: readonly [
+                {
+                  readonly name: 'cr_hito_actividad_id_actividad_idx_e1ffad2c';
+                  readonly prefix: 'cr_hito_actividad_id_actividad_idx';
+                  readonly columns: readonly ['id_actividad'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'cr_hito_actividad_id_hito_idx_0a1cccf3';
+                  readonly prefix: 'cr_hito_actividad_id_hito_idx';
+                  readonly columns: readonly ['id_hito'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'cr_hito_actividad';
+                    readonly columns: readonly ['id_hito'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'cr_hito';
+                    readonly columns: readonly ['id_hito'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'cr_hito_actividad';
+                    readonly columns: readonly ['id_actividad'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'cr_actividad';
+                    readonly columns: readonly ['id_actividad'];
+                  };
+                },
+              ];
+            };
             readonly cr_plantilla_actividad: {
               columns: {
                 readonly id_plantilla_actividad: {
@@ -5479,12 +6027,6 @@ type ContractBase = Omit<
               uniques: readonly [{ readonly columns: readonly ['codigo'] }];
               indexes: readonly [
                 {
-                  readonly name: 'cr_plantilla_actividad_id_plantilla_hito_idx_99ae877f';
-                  readonly prefix: 'cr_plantilla_actividad_id_plantilla_hito_idx';
-                  readonly columns: readonly ['id_plantilla_hito'];
-                  readonly unique: false;
-                },
-                {
                   readonly name: 'cr_plantilla_actividad_id_fase_proyecto_idx_0ca9d564';
                   readonly prefix: 'cr_plantilla_actividad_id_fase_proyecto_idx';
                   readonly columns: readonly ['id_fase_proyecto'];
@@ -5496,24 +6038,170 @@ type ContractBase = Omit<
                   readonly source: {
                     readonly namespaceId: 'public' & NamespaceId;
                     readonly tableName: 'cr_plantilla_actividad';
-                    readonly columns: readonly ['id_plantilla_hito'];
-                  };
-                  readonly target: {
-                    readonly namespaceId: 'public' & NamespaceId;
-                    readonly tableName: 'cr_plantilla_hito';
-                    readonly columns: readonly ['id_plantilla_hito'];
-                  };
-                },
-                {
-                  readonly source: {
-                    readonly namespaceId: 'public' & NamespaceId;
-                    readonly tableName: 'cr_plantilla_actividad';
                     readonly columns: readonly ['id_fase_proyecto'];
                   };
                   readonly target: {
                     readonly namespaceId: 'public' & NamespaceId;
                     readonly tableName: 'gp_fase_proyecto';
                     readonly columns: readonly ['id_fase_proyecto'];
+                  };
+                },
+              ];
+            };
+            readonly cr_plantilla_actividad_checklist: {
+              columns: {
+                readonly id_plantilla_checklist: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'function';
+                    readonly expression: 'autoincrement()';
+                  };
+                };
+                readonly id_plantilla_actividad: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                };
+                readonly descripcion: {
+                  readonly nativeType: 'character varying';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly length: 1000 };
+                };
+                readonly orden: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/int4@1', 0>;
+                  };
+                };
+                readonly obligatorio: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', true>;
+                  };
+                };
+                readonly activo: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', true>;
+                  };
+                };
+                readonly created_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                };
+                readonly updated_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id_plantilla_checklist'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'cr_pac_actividad_orden_idx';
+                  readonly columns: readonly ['id_plantilla_actividad', 'orden'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'cr_plantilla_actividad_checklist_id_plantilla_activida_396101d8';
+                  readonly prefix: 'cr_plantilla_actividad_checklist_id_plantilla_activida';
+                  readonly columns: readonly ['id_plantilla_actividad'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'cr_plantilla_actividad_checklist';
+                    readonly columns: readonly ['id_plantilla_actividad'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'cr_plantilla_actividad';
+                    readonly columns: readonly ['id_plantilla_actividad'];
+                  };
+                },
+              ];
+            };
+            readonly cr_plantilla_actividad_edt: {
+              columns: {
+                readonly id_plantilla_actividad_edt: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'function';
+                    readonly expression: 'autoincrement()';
+                  };
+                };
+                readonly id_plantilla_actividad: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                };
+                readonly id_elemento_edt: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id_plantilla_actividad_edt'] };
+              uniques: readonly [
+                { readonly columns: readonly ['id_plantilla_actividad', 'id_elemento_edt'] },
+              ];
+              indexes: readonly [
+                {
+                  readonly name: 'cr_plantilla_actividad_edt_id_elemento_edt_idx_7bdeb067';
+                  readonly prefix: 'cr_plantilla_actividad_edt_id_elemento_edt_idx';
+                  readonly columns: readonly ['id_elemento_edt'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'cr_plantilla_actividad_edt_id_plantilla_actividad_idx_396101d8';
+                  readonly prefix: 'cr_plantilla_actividad_edt_id_plantilla_actividad_idx';
+                  readonly columns: readonly ['id_plantilla_actividad'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'cr_plantilla_actividad_edt';
+                    readonly columns: readonly ['id_plantilla_actividad'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'cr_plantilla_actividad';
+                    readonly columns: readonly ['id_plantilla_actividad'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'cr_plantilla_actividad_edt';
+                    readonly columns: readonly ['id_elemento_edt'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'gp_edt_elemento';
+                    readonly columns: readonly ['id_edt_elemento'];
                   };
                 },
               ];
@@ -5747,6 +6435,73 @@ type ContractBase = Omit<
               indexes: readonly [];
               foreignKeys: readonly [];
             };
+            readonly cr_plantilla_hito_actividad: {
+              columns: {
+                readonly id_plantilla_hito_actividad: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'function';
+                    readonly expression: 'autoincrement()';
+                  };
+                };
+                readonly id_plantilla_hito: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                };
+                readonly id_plantilla_actividad: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id_plantilla_hito_actividad'] };
+              uniques: readonly [
+                { readonly columns: readonly ['id_plantilla_hito', 'id_plantilla_actividad'] },
+              ];
+              indexes: readonly [
+                {
+                  readonly name: 'cr_plantilla_hito_actividad_id_plantilla_actividad_idx_396101d8';
+                  readonly prefix: 'cr_plantilla_hito_actividad_id_plantilla_actividad_idx';
+                  readonly columns: readonly ['id_plantilla_actividad'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'cr_plantilla_hito_actividad_id_plantilla_hito_idx_99ae877f';
+                  readonly prefix: 'cr_plantilla_hito_actividad_id_plantilla_hito_idx';
+                  readonly columns: readonly ['id_plantilla_hito'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'cr_plantilla_hito_actividad';
+                    readonly columns: readonly ['id_plantilla_hito'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'cr_plantilla_hito';
+                    readonly columns: readonly ['id_plantilla_hito'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'cr_plantilla_hito_actividad';
+                    readonly columns: readonly ['id_plantilla_actividad'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'cr_plantilla_actividad';
+                    readonly columns: readonly ['id_plantilla_actividad'];
+                  };
+                },
+              ];
+            };
             readonly cr_plantilla_timing: {
               columns: {
                 readonly id_plantilla_timing: {
@@ -5767,7 +6522,30 @@ type ContractBase = Omit<
                 readonly hora_inicio: {
                   readonly nativeType: 'time';
                   readonly codecId: 'pg/time-temporal@1';
+                  readonly nullable: true;
+                };
+                readonly tipo_horario: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
                   readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/text@1', 'FLEXIBLE'>;
+                  };
+                };
+                readonly tiempo_extra_minutos: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/int4@1', 0>;
+                  };
+                };
+                readonly offset_inicio_minutos: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: true;
                 };
                 readonly duracion_minutos: {
                   readonly nativeType: 'int4';
@@ -5821,6 +6599,91 @@ type ContractBase = Omit<
               uniques: readonly [{ readonly columns: readonly ['codigo'] }];
               indexes: readonly [];
               foreignKeys: readonly [];
+            };
+            readonly cr_plantilla_timing_dependencia: {
+              columns: {
+                readonly id_plantilla_timing_dependencia: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'function';
+                    readonly expression: 'autoincrement()';
+                  };
+                };
+                readonly id_timing_predecesor: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                };
+                readonly id_timing_sucesor: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                };
+                readonly tipo_dependencia: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/text@1', 'FINISH_TO_START'>;
+                  };
+                };
+                readonly minutos_desfase: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/int4@1', 0>;
+                  };
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id_plantilla_timing_dependencia'] };
+              uniques: readonly [
+                { readonly columns: readonly ['id_timing_predecesor', 'id_timing_sucesor'] },
+              ];
+              indexes: readonly [
+                {
+                  readonly name: 'cr_plantilla_timing_dependencia_id_timing_predecesor_i_1f9f34b6';
+                  readonly prefix: 'cr_plantilla_timing_dependencia_id_timing_predecesor_i';
+                  readonly columns: readonly ['id_timing_predecesor'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'cr_plantilla_timing_dependencia_id_timing_sucesor_idx_5da66682';
+                  readonly prefix: 'cr_plantilla_timing_dependencia_id_timing_sucesor_idx';
+                  readonly columns: readonly ['id_timing_sucesor'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'cr_plantilla_timing_dependencia';
+                    readonly columns: readonly ['id_timing_predecesor'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'cr_plantilla_timing';
+                    readonly columns: readonly ['id_plantilla_timing'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'cr_plantilla_timing_dependencia';
+                    readonly columns: readonly ['id_timing_sucesor'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'cr_plantilla_timing';
+                    readonly columns: readonly ['id_plantilla_timing'];
+                  };
+                },
+              ];
             };
             readonly cr_plantilla_timing_tipo_ceremonia: {
               columns: {
@@ -5932,6 +6795,24 @@ type ContractBase = Omit<
                   readonly nativeType: 'int4';
                   readonly codecId: 'pg/int4@1';
                   readonly nullable: false;
+                };
+                readonly tipo_horario: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/text@1', 'FLEXIBLE'>;
+                  };
+                };
+                readonly tiempo_extra_minutos: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/int4@1', 0>;
+                  };
                 };
                 readonly id_usuario_responsable: {
                   readonly nativeType: 'int4';
@@ -6068,6 +6949,91 @@ type ContractBase = Omit<
                     readonly namespaceId: 'public' & NamespaceId;
                     readonly tableName: 'au_usuario';
                     readonly columns: readonly ['id_usuario'];
+                  };
+                },
+              ];
+            };
+            readonly cr_timing_dependencia: {
+              columns: {
+                readonly id_timing_dependencia: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'function';
+                    readonly expression: 'autoincrement()';
+                  };
+                };
+                readonly id_timing_predecesor: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly id_timing_sucesor: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly tipo_dependencia: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/text@1', 'FINISH_TO_START'>;
+                  };
+                };
+                readonly minutos_desfase: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/int4@1', 0>;
+                  };
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id_timing_dependencia'] };
+              uniques: readonly [
+                { readonly columns: readonly ['id_timing_predecesor', 'id_timing_sucesor'] },
+              ];
+              indexes: readonly [
+                {
+                  readonly name: 'cr_timing_dependencia_id_timing_predecesor_idx_1f9f34b6';
+                  readonly prefix: 'cr_timing_dependencia_id_timing_predecesor_idx';
+                  readonly columns: readonly ['id_timing_predecesor'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'cr_timing_dependencia_id_timing_sucesor_idx_5da66682';
+                  readonly prefix: 'cr_timing_dependencia_id_timing_sucesor_idx';
+                  readonly columns: readonly ['id_timing_sucesor'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'cr_timing_dependencia';
+                    readonly columns: readonly ['id_timing_predecesor'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'cr_timing';
+                    readonly columns: readonly ['id_timing'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'cr_timing_dependencia';
+                    readonly columns: readonly ['id_timing_sucesor'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'cr_timing';
+                    readonly columns: readonly ['id_timing'];
                   };
                 },
               ];
@@ -11424,6 +12390,10 @@ type ContractBase = Omit<
               readonly kind: 'valueSet';
               readonly values: readonly ['FINISH_TO_START'];
             };
+            readonly cr_tipo_horario: {
+              readonly kind: 'valueSet';
+              readonly values: readonly ['FIJO', 'FLEXIBLE'];
+            };
             readonly cr_tipo_temporal: {
               readonly kind: 'valueSet';
               readonly values: readonly [
@@ -11630,9 +12600,25 @@ type ContractBase = Omit<
       readonly namespace: 'public' & NamespaceId;
       readonly model: 'PlantillaDependencia';
     };
+    readonly cr_plantilla_hito_actividad: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'PlantillaHitoActividad';
+    };
+    readonly cr_plantilla_actividad_checklist: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'PlantillaActividadChecklist';
+    };
+    readonly cr_plantilla_actividad_edt: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'PlantillaActividadEdt';
+    };
     readonly cr_plantilla_timing: {
       readonly namespace: 'public' & NamespaceId;
       readonly model: 'PlantillaTiming';
+    };
+    readonly cr_plantilla_timing_dependencia: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'PlantillaTimingDependencia';
     };
     readonly cr_plantilla_timing_tipo_ceremonia: {
       readonly namespace: 'public' & NamespaceId;
@@ -11643,11 +12629,23 @@ type ContractBase = Omit<
       readonly namespace: 'public' & NamespaceId;
       readonly model: 'Actividad';
     };
+    readonly cr_hito_actividad: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'HitoActividad';
+    };
+    readonly cr_actividad_checklist: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'ActividadChecklist';
+    };
     readonly cr_dependencia: {
       readonly namespace: 'public' & NamespaceId;
       readonly model: 'Dependencia';
     };
     readonly cr_timing: { readonly namespace: 'public' & NamespaceId; readonly model: 'Timing' };
+    readonly cr_timing_dependencia: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'TimingDependencia';
+    };
     readonly nt_notificacion: {
       readonly namespace: 'public' & NamespaceId;
       readonly model: 'Notificacion';
@@ -11893,7 +12891,7 @@ type ContractBase = Omit<
                 readonly nullable: false;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
               };
-              readonly idHito: {
+              readonly idHitoLegacy: {
                 readonly nullable: true;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
               };
@@ -11925,7 +12923,7 @@ type ContractBase = Omit<
                   readonly typeParams: { readonly length: 1000 };
                 };
               };
-              readonly listaVerificacion: {
+              readonly listaVerificacionLegacy: {
                 readonly nullable: true;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/json@1' };
               };
@@ -11999,6 +12997,17 @@ type ContractBase = Omit<
               };
             };
             readonly relations: {
+              readonly checklist: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'ActividadChecklist';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idActividad'];
+                  readonly targetFields: readonly ['idActividad'];
+                };
+              };
               readonly dependenciasPredecesora: {
                 readonly to: {
                   readonly namespace: 'public' & NamespaceId;
@@ -12021,13 +13030,15 @@ type ContractBase = Omit<
                   readonly targetFields: readonly ['idActividadSucesora'];
                 };
               };
-              readonly hito: {
-                readonly to: { readonly namespace: 'public' & NamespaceId; readonly model: 'Hito' };
-                readonly cardinality: 'N:1';
-                readonly nullable: true;
+              readonly hitos: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'HitoActividad';
+                };
+                readonly cardinality: '1:N';
                 readonly on: {
-                  readonly localFields: readonly ['idHito'];
-                  readonly targetFields: readonly ['idHito'];
+                  readonly localFields: readonly ['idActividad'];
+                  readonly targetFields: readonly ['idActividad'];
                 };
               };
               readonly notificaciones: {
@@ -12084,12 +13095,12 @@ type ContractBase = Omit<
               readonly fields: {
                 readonly idActividad: { readonly column: 'id_actividad' };
                 readonly idProyecto: { readonly column: 'id_proyecto' };
-                readonly idHito: { readonly column: 'id_hito' };
+                readonly idHitoLegacy: { readonly column: 'id_hito' };
                 readonly idPlantillaActividad: { readonly column: 'id_plantilla_actividad' };
                 readonly nombre: { readonly column: 'nombre' };
                 readonly categoria: { readonly column: 'categoria' };
                 readonly descripcion: { readonly column: 'descripcion' };
-                readonly listaVerificacion: { readonly column: 'lista_verificacion' };
+                readonly listaVerificacionLegacy: { readonly column: 'lista_verificacion' };
                 readonly entregable: { readonly column: 'entregable' };
                 readonly fechaInicio: { readonly column: 'fecha_inicio' };
                 readonly fechaFin: { readonly column: 'fecha_fin' };
@@ -12098,6 +13109,132 @@ type ContractBase = Omit<
                 readonly idUsuarioResponsable: { readonly column: 'id_usuario_responsable' };
                 readonly responsableTexto: { readonly column: 'responsable_texto' };
                 readonly orden: { readonly column: 'orden' };
+                readonly modificadoManualmente: { readonly column: 'modificado_manualmente' };
+                readonly activo: { readonly column: 'activo' };
+                readonly createdAt: { readonly column: 'created_at' };
+                readonly updatedAt: { readonly column: 'updated_at' };
+              };
+            };
+          };
+          readonly ActividadChecklist: {
+            readonly fields: {
+              readonly idChecklist: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly idActividad: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly idPlantillaChecklist: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly descripcion: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 1000 };
+                };
+              };
+              readonly orden: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly obligatorio: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly completado: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly fechaCompletado: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly idUsuarioCompleto: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly modificadoManualmente: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly activo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+            };
+            readonly relations: {
+              readonly actividad: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Actividad';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['idActividad'];
+                  readonly targetFields: readonly ['idActividad'];
+                };
+              };
+              readonly plantillaChecklist: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'PlantillaActividadChecklist';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['idPlantillaChecklist'];
+                  readonly targetFields: readonly ['idPlantillaChecklist'];
+                };
+              };
+              readonly usuarioCompleto: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Usuario';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['idUsuarioCompleto'];
+                  readonly targetFields: readonly ['idUsuario'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'cr_actividad_checklist';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly idChecklist: { readonly column: 'id_actividad_checklist' };
+                readonly idActividad: { readonly column: 'id_actividad' };
+                readonly idPlantillaChecklist: { readonly column: 'id_plantilla_checklist' };
+                readonly descripcion: { readonly column: 'descripcion' };
+                readonly orden: { readonly column: 'orden' };
+                readonly obligatorio: { readonly column: 'obligatorio' };
+                readonly completado: { readonly column: 'completado' };
+                readonly fechaCompletado: { readonly column: 'fecha_completado' };
+                readonly idUsuarioCompleto: { readonly column: 'id_usuario_completo' };
                 readonly modificadoManualmente: { readonly column: 'modificado_manualmente' };
                 readonly activo: { readonly column: 'activo' };
                 readonly createdAt: { readonly column: 'created_at' };
@@ -13456,6 +14593,17 @@ type ContractBase = Omit<
               };
             };
             readonly relations: {
+              readonly actividadesPlantilla: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'PlantillaActividadEdt';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idEdtElemento'];
+                  readonly targetFields: readonly ['idElementoEdt'];
+                };
+              };
               readonly categoriaServicio: {
                 readonly to: {
                   readonly namespace: 'public' & NamespaceId;
@@ -14370,7 +15518,7 @@ type ContractBase = Omit<
               readonly actividades: {
                 readonly to: {
                   readonly namespace: 'public' & NamespaceId;
-                  readonly model: 'Actividad';
+                  readonly model: 'HitoActividad';
                 };
                 readonly cardinality: '1:N';
                 readonly on: {
@@ -14430,6 +15578,54 @@ type ContractBase = Omit<
                 readonly activo: { readonly column: 'activo' };
                 readonly createdAt: { readonly column: 'created_at' };
                 readonly updatedAt: { readonly column: 'updated_at' };
+              };
+            };
+          };
+          readonly HitoActividad: {
+            readonly fields: {
+              readonly idHitoActividad: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly idHito: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly idActividad: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+            };
+            readonly relations: {
+              readonly actividad: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Actividad';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['idActividad'];
+                  readonly targetFields: readonly ['idActividad'];
+                };
+              };
+              readonly hito: {
+                readonly to: { readonly namespace: 'public' & NamespaceId; readonly model: 'Hito' };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['idHito'];
+                  readonly targetFields: readonly ['idHito'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'cr_hito_actividad';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly idHitoActividad: { readonly column: 'id_hito_actividad' };
+                readonly idHito: { readonly column: 'id_hito' };
+                readonly idActividad: { readonly column: 'id_actividad' };
               };
             };
           };
@@ -16330,7 +17526,7 @@ type ContractBase = Omit<
                 readonly nullable: false;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
               };
-              readonly idPlantillaHito: {
+              readonly idPlantillaHitoLegacy: {
                 readonly nullable: true;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
               };
@@ -16354,7 +17550,7 @@ type ContractBase = Omit<
                   readonly typeParams: { readonly length: 200 };
                 };
               };
-              readonly listaVerificacion: {
+              readonly listaVerificacionLegacy: {
                 readonly nullable: true;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/json@1' };
               };
@@ -16429,6 +17625,17 @@ type ContractBase = Omit<
                   readonly targetFields: readonly ['idPlantillaActividad'];
                 };
               };
+              readonly checklist: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'PlantillaActividadChecklist';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idPlantillaActividad'];
+                  readonly targetFields: readonly ['idPlantillaActividad'];
+                };
+              };
               readonly dependenciasPredecesora: {
                 readonly to: {
                   readonly namespace: 'public' & NamespaceId;
@@ -16451,6 +17658,17 @@ type ContractBase = Omit<
                   readonly targetFields: readonly ['idActividadSucesora'];
                 };
               };
+              readonly elementosEdt: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'PlantillaActividadEdt';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idPlantillaActividad'];
+                  readonly targetFields: readonly ['idPlantillaActividad'];
+                };
+              };
               readonly faseProyecto: {
                 readonly to: {
                   readonly namespace: 'public' & NamespaceId;
@@ -16463,16 +17681,15 @@ type ContractBase = Omit<
                   readonly targetFields: readonly ['idFaseProyecto'];
                 };
               };
-              readonly hito: {
+              readonly hitos: {
                 readonly to: {
                   readonly namespace: 'public' & NamespaceId;
-                  readonly model: 'PlantillaHito';
+                  readonly model: 'PlantillaHitoActividad';
                 };
-                readonly cardinality: 'N:1';
-                readonly nullable: true;
+                readonly cardinality: '1:N';
                 readonly on: {
-                  readonly localFields: readonly ['idPlantillaHito'];
-                  readonly targetFields: readonly ['idPlantillaHito'];
+                  readonly localFields: readonly ['idPlantillaActividad'];
+                  readonly targetFields: readonly ['idPlantillaActividad'];
                 };
               };
               readonly tiposCeremonia: {
@@ -16492,11 +17709,11 @@ type ContractBase = Omit<
               readonly namespaceId: 'public';
               readonly fields: {
                 readonly idPlantillaActividad: { readonly column: 'id_plantilla_actividad' };
-                readonly idPlantillaHito: { readonly column: 'id_plantilla_hito' };
+                readonly idPlantillaHitoLegacy: { readonly column: 'id_plantilla_hito' };
                 readonly idFaseProyecto: { readonly column: 'id_fase_proyecto' };
                 readonly codigo: { readonly column: 'codigo' };
                 readonly nombre: { readonly column: 'nombre' };
-                readonly listaVerificacion: { readonly column: 'lista_verificacion' };
+                readonly listaVerificacionLegacy: { readonly column: 'lista_verificacion' };
                 readonly responsableSugerido: { readonly column: 'responsable_sugerido' };
                 readonly entregable: { readonly column: 'entregable' };
                 readonly tipoTemporal: { readonly column: 'tipo_temporal' };
@@ -16508,6 +17725,142 @@ type ContractBase = Omit<
                 readonly activo: { readonly column: 'activo' };
                 readonly createdAt: { readonly column: 'created_at' };
                 readonly updatedAt: { readonly column: 'updated_at' };
+              };
+            };
+          };
+          readonly PlantillaActividadChecklist: {
+            readonly fields: {
+              readonly idPlantillaChecklist: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly idPlantillaActividad: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly descripcion: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 1000 };
+                };
+              };
+              readonly orden: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly obligatorio: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly activo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+            };
+            readonly relations: {
+              readonly actividad: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'PlantillaActividad';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['idPlantillaActividad'];
+                  readonly targetFields: readonly ['idPlantillaActividad'];
+                };
+              };
+              readonly checklistOrigen: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'ActividadChecklist';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idPlantillaChecklist'];
+                  readonly targetFields: readonly ['idPlantillaChecklist'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'cr_plantilla_actividad_checklist';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly idPlantillaChecklist: { readonly column: 'id_plantilla_checklist' };
+                readonly idPlantillaActividad: { readonly column: 'id_plantilla_actividad' };
+                readonly descripcion: { readonly column: 'descripcion' };
+                readonly orden: { readonly column: 'orden' };
+                readonly obligatorio: { readonly column: 'obligatorio' };
+                readonly activo: { readonly column: 'activo' };
+                readonly createdAt: { readonly column: 'created_at' };
+                readonly updatedAt: { readonly column: 'updated_at' };
+              };
+            };
+          };
+          readonly PlantillaActividadEdt: {
+            readonly fields: {
+              readonly idPlantillaActividadEdt: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly idPlantillaActividad: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly idElementoEdt: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+            };
+            readonly relations: {
+              readonly actividad: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'PlantillaActividad';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['idPlantillaActividad'];
+                  readonly targetFields: readonly ['idPlantillaActividad'];
+                };
+              };
+              readonly elementoEdt: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'EdtElemento';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['idElementoEdt'];
+                  readonly targetFields: readonly ['idEdtElemento'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'cr_plantilla_actividad_edt';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly idPlantillaActividadEdt: { readonly column: 'id_plantilla_actividad_edt' };
+                readonly idPlantillaActividad: { readonly column: 'id_plantilla_actividad' };
+                readonly idElementoEdt: { readonly column: 'id_elemento_edt' };
               };
             };
           };
@@ -16694,7 +18047,7 @@ type ContractBase = Omit<
               readonly actividades: {
                 readonly to: {
                   readonly namespace: 'public' & NamespaceId;
-                  readonly model: 'PlantillaActividad';
+                  readonly model: 'PlantillaHitoActividad';
                 };
                 readonly cardinality: '1:N';
                 readonly on: {
@@ -16726,6 +18079,59 @@ type ContractBase = Omit<
                 readonly activo: { readonly column: 'activo' };
                 readonly createdAt: { readonly column: 'created_at' };
                 readonly updatedAt: { readonly column: 'updated_at' };
+              };
+            };
+          };
+          readonly PlantillaHitoActividad: {
+            readonly fields: {
+              readonly idPlantillaHitoActividad: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly idPlantillaHito: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly idPlantillaActividad: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+            };
+            readonly relations: {
+              readonly actividad: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'PlantillaActividad';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['idPlantillaActividad'];
+                  readonly targetFields: readonly ['idPlantillaActividad'];
+                };
+              };
+              readonly hito: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'PlantillaHito';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['idPlantillaHito'];
+                  readonly targetFields: readonly ['idPlantillaHito'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'cr_plantilla_hito_actividad';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly idPlantillaHitoActividad: {
+                  readonly column: 'id_plantilla_hito_actividad';
+                };
+                readonly idPlantillaHito: { readonly column: 'id_plantilla_hito' };
+                readonly idPlantillaActividad: { readonly column: 'id_plantilla_actividad' };
               };
             };
           };
@@ -17025,9 +18431,21 @@ type ContractBase = Omit<
                   readonly typeParams: { readonly length: 50 };
                 };
               };
-              readonly horaInicio: {
-                readonly nullable: false;
+              readonly horaInicioLegacy: {
+                readonly nullable: true;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/time-temporal@1' };
+              };
+              readonly tipoHorario: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly tiempoExtraMinutos: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly offsetInicioMinutos: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
               };
               readonly duracionMinutos: {
                 readonly nullable: false;
@@ -17077,6 +18495,28 @@ type ContractBase = Omit<
               };
             };
             readonly relations: {
+              readonly dependenciasPredecesora: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'PlantillaTimingDependencia';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idPlantillaTiming'];
+                  readonly targetFields: readonly ['idTimingPredecesor'];
+                };
+              };
+              readonly dependenciasSucesora: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'PlantillaTimingDependencia';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idPlantillaTiming'];
+                  readonly targetFields: readonly ['idTimingSucesor'];
+                };
+              };
               readonly timingsOrigen: {
                 readonly to: {
                   readonly namespace: 'public' & NamespaceId;
@@ -17106,7 +18546,10 @@ type ContractBase = Omit<
               readonly fields: {
                 readonly idPlantillaTiming: { readonly column: 'id_plantilla_timing' };
                 readonly codigo: { readonly column: 'codigo' };
-                readonly horaInicio: { readonly column: 'hora_inicio' };
+                readonly horaInicioLegacy: { readonly column: 'hora_inicio' };
+                readonly tipoHorario: { readonly column: 'tipo_horario' };
+                readonly tiempoExtraMinutos: { readonly column: 'tiempo_extra_minutos' };
+                readonly offsetInicioMinutos: { readonly column: 'offset_inicio_minutos' };
                 readonly duracionMinutos: { readonly column: 'duracion_minutos' };
                 readonly actividad: { readonly column: 'actividad' };
                 readonly responsableSugerido: { readonly column: 'responsable_sugerido' };
@@ -17115,6 +18558,69 @@ type ContractBase = Omit<
                 readonly activo: { readonly column: 'activo' };
                 readonly createdAt: { readonly column: 'created_at' };
                 readonly updatedAt: { readonly column: 'updated_at' };
+              };
+            };
+          };
+          readonly PlantillaTimingDependencia: {
+            readonly fields: {
+              readonly idPlantillaTimingDependencia: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly idTimingPredecesor: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly idTimingSucesor: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly tipoDependencia: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly minutosDesfase: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+            };
+            readonly relations: {
+              readonly predecesora: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'PlantillaTiming';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['idTimingPredecesor'];
+                  readonly targetFields: readonly ['idPlantillaTiming'];
+                };
+              };
+              readonly sucesora: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'PlantillaTiming';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['idTimingSucesor'];
+                  readonly targetFields: readonly ['idPlantillaTiming'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'cr_plantilla_timing_dependencia';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly idPlantillaTimingDependencia: {
+                  readonly column: 'id_plantilla_timing_dependencia';
+                };
+                readonly idTimingPredecesor: { readonly column: 'id_timing_predecesor' };
+                readonly idTimingSucesor: { readonly column: 'id_timing_sucesor' };
+                readonly tipoDependencia: { readonly column: 'tipo_dependencia' };
+                readonly minutosDesfase: { readonly column: 'minutos_desfase' };
               };
             };
           };
@@ -18869,6 +20375,14 @@ type ContractBase = Omit<
                 readonly nullable: false;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
               };
+              readonly tipoHorario: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly tiempoExtraMinutos: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
               readonly idUsuarioResponsable: {
                 readonly nullable: true;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
@@ -18881,7 +20395,7 @@ type ContractBase = Omit<
                   readonly typeParams: { readonly length: 150 };
                 };
               };
-              readonly listaVerificacion: {
+              readonly listaVerificacionLegacy: {
                 readonly nullable: true;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/json@1' };
               };
@@ -18917,6 +20431,28 @@ type ContractBase = Omit<
               };
             };
             readonly relations: {
+              readonly dependenciasPredecesora: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'TimingDependencia';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idTiming'];
+                  readonly targetFields: readonly ['idTimingPredecesor'];
+                };
+              };
+              readonly dependenciasSucesora: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'TimingDependencia';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idTiming'];
+                  readonly targetFields: readonly ['idTimingSucesor'];
+                };
+              };
               readonly plantillaTiming: {
                 readonly to: {
                   readonly namespace: 'public' & NamespaceId;
@@ -18966,15 +20502,78 @@ type ContractBase = Omit<
                 readonly fechaHoraInicio: { readonly column: 'fecha_hora_inicio' };
                 readonly fechaHoraFin: { readonly column: 'fecha_hora_fin' };
                 readonly duracionMinutos: { readonly column: 'duracion_minutos' };
+                readonly tipoHorario: { readonly column: 'tipo_horario' };
+                readonly tiempoExtraMinutos: { readonly column: 'tiempo_extra_minutos' };
                 readonly idUsuarioResponsable: { readonly column: 'id_usuario_responsable' };
                 readonly responsableTexto: { readonly column: 'responsable_texto' };
-                readonly listaVerificacion: { readonly column: 'lista_verificacion' };
+                readonly listaVerificacionLegacy: { readonly column: 'lista_verificacion' };
                 readonly estado: { readonly column: 'estado' };
                 readonly orden: { readonly column: 'orden' };
                 readonly modificadoManualmente: { readonly column: 'modificado_manualmente' };
                 readonly activo: { readonly column: 'activo' };
                 readonly createdAt: { readonly column: 'created_at' };
                 readonly updatedAt: { readonly column: 'updated_at' };
+              };
+            };
+          };
+          readonly TimingDependencia: {
+            readonly fields: {
+              readonly idTimingDependencia: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly idTimingPredecesor: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly idTimingSucesor: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly tipoDependencia: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly minutosDesfase: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+            };
+            readonly relations: {
+              readonly predecesora: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Timing';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['idTimingPredecesor'];
+                  readonly targetFields: readonly ['idTiming'];
+                };
+              };
+              readonly sucesora: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Timing';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['idTimingSucesor'];
+                  readonly targetFields: readonly ['idTiming'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'cr_timing_dependencia';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly idTimingDependencia: { readonly column: 'id_timing_dependencia' };
+                readonly idTimingPredecesor: { readonly column: 'id_timing_predecesor' };
+                readonly idTimingSucesor: { readonly column: 'id_timing_sucesor' };
+                readonly tipoDependencia: { readonly column: 'tipo_dependencia' };
+                readonly minutosDesfase: { readonly column: 'minutos_desfase' };
               };
             };
           };
@@ -19267,6 +20866,17 @@ type ContractBase = Omit<
                   readonly targetFields: readonly ['idUsuarioResponsable'];
                 };
               };
+              readonly checklistCompletados: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'ActividadChecklist';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['idUsuario'];
+                  readonly targetFields: readonly ['idUsuarioCompleto'];
+                };
+              };
               readonly entidad: {
                 readonly to: {
                   readonly namespace: 'public' & NamespaceId;
@@ -19543,6 +21153,13 @@ type ContractBase = Omit<
               { readonly name: 'FINISH_TO_START'; readonly value: 'FINISH_TO_START' },
             ];
           };
+          readonly cr_tipo_horario: {
+            readonly codecId: 'pg/text@1';
+            readonly members: readonly [
+              { readonly name: 'FIJO'; readonly value: 'FIJO' },
+              { readonly name: 'FLEXIBLE'; readonly value: 'FLEXIBLE' },
+            ];
+          };
           readonly cr_estado_hito: {
             readonly codecId: 'pg/text@1';
             readonly members: readonly [
@@ -19727,6 +21344,23 @@ type ContractBase = Omit<
         {
           readonly ref: {
             readonly namespace: 'public';
+            readonly table: 'cr_actividad_checklist';
+            readonly column: 'id_actividad_checklist';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'uuidv4' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'cr_actividad_checklist';
+            readonly column: 'updated_at';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+          readonly onUpdate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
             readonly table: 'cr_dependencia';
             readonly column: 'id_dependencia';
           };
@@ -19753,6 +21387,15 @@ type ContractBase = Omit<
           readonly ref: {
             readonly namespace: 'public';
             readonly table: 'cr_plantilla_actividad';
+            readonly column: 'updated_at';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+          readonly onUpdate: { readonly kind: 'generator'; readonly id: 'instantNow' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'cr_plantilla_actividad_checklist';
             readonly column: 'updated_at';
           };
           readonly onCreate: { readonly kind: 'generator'; readonly id: 'instantNow' };

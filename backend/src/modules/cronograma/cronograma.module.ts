@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { AutenticacionModule } from '../autenticacion/autenticacion.module';
 import { NotificacionesModule } from '../notificaciones/notificaciones.module';
 import { GenerarCronogramaDesdePlantillaUseCase } from './application/use-cases/generar-cronograma-desde-plantilla.use-case';
+import { GenerarTimingDesdePlantillaUseCase } from './application/use-cases/generar-timing-desde-plantilla.use-case';
 import { ReprogramarActividadUseCase } from './application/use-cases/reprogramar-actividad.use-case';
 import {
   ConsultarCronogramaUseCase,
@@ -26,6 +27,7 @@ import { CronogramaController } from './presentation/controllers/cronograma.cont
     CronogramaDateService,
     ReprogramacionActividadesService,
     GenerarCronogramaDesdePlantillaUseCase,
+    GenerarTimingDesdePlantillaUseCase,
     { provide: CronogramaRepository, useClass: PrismaCronogramaRepository },
     { provide: CronogramaCrudRepository, useExisting: CronogramaRepository },
     GestionarHitosUseCase,
@@ -40,6 +42,7 @@ import { CronogramaController } from './presentation/controllers/cronograma.cont
   exports: [
     CronogramaDateService,
     GenerarCronogramaDesdePlantillaUseCase,
+    GenerarTimingDesdePlantillaUseCase,
     GestionarActividadesUseCase,
   ],
 })

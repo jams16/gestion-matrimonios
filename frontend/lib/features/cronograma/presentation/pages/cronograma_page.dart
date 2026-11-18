@@ -14,6 +14,7 @@ import '../../../../core/widgets/inputs/app_select_field.dart';
 import '../../../../core/widgets/inputs/app_time_field.dart';
 import '../../../../core/widgets/overlays/app_confirmation_dialog.dart';
 import '../../../autenticacion/infrastructure/auth_session.dart';
+import '../../../edt/infrastructure/edt_api.dart';
 import '../../application/providers/cronograma_provider.dart';
 import '../../infrastructure/cronograma_api.dart';
 
@@ -42,7 +43,7 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
   @override
   void initState() {
     super.initState();
-    _tabs = TabController(length: 2, vsync: this)..addListener(_redibujarTab);
+    _tabs = TabController(length: 4, vsync: this)..addListener(_redibujarTab);
   }
 
   void _redibujarTab() {
@@ -158,6 +159,149 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
     }
   }
 
+  Future<void> _mostrarDetalleActividad(Map<String, dynamic> actividad) async {
+    final id = actividad['idActividad']?.toString();
+    if (id == null || id.isEmpty) return;
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) => _DetalleActividadSheet(
+        actividad: actividad,
+        cargarChecklist: () => ref
+            .read(cronogramaApiProvider)
+            .checklistActividad(widget.idProyecto, id),
+        agregarChecklist: (descripcion) => ref
+            .read(cronogramaApiProvider)
+            .crearChecklistActividad(widget.idProyecto, id, descripcion),
+        actualizarChecklist: (idChecklist, data) => ref
+            .read(cronogramaApiProvider)
+            .actualizarChecklistActividad(
+              widget.idProyecto,
+              id,
+              idChecklist,
+              data,
+            ),
+      ),
+    );
+  }
+
+  Future<void> _mostrarDetalleHito(
+    Map<String, dynamic> hito,
+    List<Map<String, dynamic>> actividades,
+    List<Map<String, dynamic>> responsables,
+    List<Map<String, dynamic>> hitos,
+  ) async {
+    await Navigator.of(context).push<void>(
+      MaterialPageRoute(
+        builder: (_) => _HitoDetallePage(
+          hito: hito,
+          actividades: actividades,
+          onAgregarActividad: () =>
+              _agregarActividadAHito(hito, actividades, responsables, hitos),
+        ),
+      ),
+    );
+    await _recargar();
+  }
+
+  Future<void> _agregarActividadAHito(
+    Map<String, dynamic> hito,
+    List<Map<String, dynamic>> actividades,
+    List<Map<String, dynamic>> responsables,
+    List<Map<String, dynamic>> hitos,
+  ) async {
+    final accion = await showModalBottomSheet<String>(
+      context: context,
+      showDragHandle: true,
+      builder: (_) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.add_task_outlined),
+              title: const Text('Crear actividad'),
+              subtitle: const Text('Crear una actividad nueva para este hito.'),
+              onTap: () => Navigator.pop(context, 'crear'),
+            ),
+            ListTile(
+              leading: const Icon(Icons.playlist_add_outlined),
+              title: const Text('Añadir actividad existente'),
+              subtitle: const Text(
+                'Vincular una actividad ya registrada en el cronograma.',
+              ),
+              onTap: () => Navigator.pop(context, 'vincular'),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (!mounted || accion == null) {
+      return;
+    }
+    if (accion == 'crear') {
+      await _editarActividad(
+        null,
+        responsables,
+        hitos: hitos,
+        hitoInicial: hito,
+      );
+      return;
+    }
+    final elegida = await showModalBottomSheet<Map<String, dynamic>>(
+      context: context,
+      showDragHandle: true,
+      builder: (_) => SafeArea(
+        child: ListView(
+          shrinkWrap: true,
+          children: actividades
+              .map(
+                (actividad) => ListTile(
+                  leading: const Icon(Icons.task_alt_outlined),
+                  title: Text(actividad['nombre']?.toString() ?? 'Actividad'),
+                  subtitle: Text(
+                    'Vence ${_fechaCorta(_fecha(actividad['fechaFin']))}',
+                  ),
+                  onTap: () => Navigator.pop(context, actividad),
+                ),
+              )
+              .toList(),
+        ),
+      ),
+    );
+    if (elegida == null) {
+      return;
+    }
+    await _ejecutar(
+      (api) => api.asociarActividadAHito(
+        widget.idProyecto,
+        hito['idHito'].toString(),
+        elegida['idActividad'].toString(),
+      ),
+      exito: 'Actividad agregada al hito.',
+    );
+  }
+
+  Future<void> _mostrarDetalleTiming(Map<String, dynamic> timing) async {
+    final idTiming = timing['idTiming']?.toString();
+    if (idTiming == null || idTiming.isEmpty) {
+      return;
+    }
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      builder: (_) => _DetalleTimingSheet(
+        timing: timing,
+        guardarChecklist: (items) =>
+            ref.read(cronogramaApiProvider).actualizarTiming(
+              widget.idProyecto,
+              idTiming,
+              {'listaVerificacion': items},
+            ),
+      ),
+    );
+    await _recargar();
+  }
+
   @override
   Widget build(BuildContext context) {
     final estado = ref.watch(cronogramaProvider(widget.idProyecto));
@@ -177,17 +321,23 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
       data: (data) => _contenido(data),
     );
     final botonFlotante = estado.maybeWhen(
-      data: (data) => FloatingActionButton.extended(
-        onPressed: _procesando
-            ? null
-            : () => _tabs.index == 0
-                  ? _mostrarAccionesCronograma(data)
-                  : _editarTiming(data, _responsablesDe(data)),
-        icon: Icon(
-          _tabs.index == 0 ? Icons.add_task_outlined : Icons.add_alarm_outlined,
-        ),
-        label: Text(_tabs.index == 0 ? 'Agregar' : 'Agregar momento'),
-      ),
+      data: (data) => _tabs.index == 0
+          ? null
+          : FloatingActionButton.extended(
+              onPressed: _procesando
+                  ? null
+                  : () => _tabs.index == 1
+                        ? _mostrarAccionesCronograma(data)
+                        : _tabs.index == 2
+                        ? _editarHito(null)
+                        : _editarTiming(data, _responsablesDe(data)),
+              icon: Icon(
+                _tabs.index == 3
+                    ? Icons.add_alarm_outlined
+                    : Icons.add_task_outlined,
+              ),
+              label: Text(_tabs.index == 3 ? 'Agregar momento' : 'Agregar'),
+            ),
       orElse: () => null,
     );
     if (widget.embebido) {
@@ -248,6 +398,7 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
     final actividades = _lista(cronograma['actividades']);
     final hitos = _lista(cronograma['hitos']);
     final dependencias = _lista(cronograma['dependencias']);
+    final hitoActividades = _lista(cronograma['hitoActividades']);
     final timing = _lista(cronograma['timing']);
     final fechaBoda = _fecha(matrimonio['fechaMatrimonio']);
     final completadas = actividades
@@ -283,35 +434,61 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
           actividadesCompletadas: completadas,
           totalActividades: actividades.length,
         ),
-        Material(
-          color: Colors.transparent,
-          child: TabBar(
-            controller: _tabs,
-            tabs: const [
-              Tab(text: 'Cronograma', icon: Icon(Icons.account_tree_outlined)),
-              Tab(
-                text: 'Timing de la boda',
-                icon: Icon(Icons.schedule_outlined),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 10, 16, 8),
+          child: LayoutBuilder(
+            builder: (context, constraints) => SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minWidth: constraints.maxWidth),
+                child: SegmentedButton<int>(
+                  showSelectedIcon: false,
+                  selected: {_tabs.index},
+                  segments: const [
+                    ButtonSegment(
+                      value: 0,
+                      icon: Icon(Icons.account_tree_outlined),
+                      label: Text('EDT'),
+                    ),
+                    ButtonSegment(
+                      value: 1,
+                      icon: Icon(Icons.calendar_month_outlined),
+                      label: Text('Cronograma'),
+                    ),
+                    ButtonSegment(
+                      value: 2,
+                      icon: Icon(Icons.flag_outlined),
+                      label: Text('Hitos'),
+                    ),
+                    ButtonSegment(
+                      value: 3,
+                      icon: Icon(Icons.schedule_outlined),
+                      label: Text('Timing'),
+                    ),
+                  ],
+                  onSelectionChanged: (seleccion) =>
+                      _tabs.animateTo(seleccion.first),
+                ),
               ),
-            ],
+            ),
           ),
         ),
         Expanded(
           child: TabBarView(
             controller: _tabs,
             children: [
+              _EdtMatrimonioPanel(
+                idMatrimonio: matrimonio['idMatrimonio']?.toString(),
+              ),
               _ListaCronograma(
                 hitos: hitos,
                 actividades: actividades,
                 dependencias: dependencias,
+                hitoActividades: hitoActividades,
                 alEditarActividad: (item) =>
                     _editarActividad(item, responsables, hitos: hitos),
                 alEliminarActividad: _eliminarActividad,
-                alCompletarActividad: (item) => _intentarCompletarActividad(
-                  item,
-                  actividades,
-                  dependencias,
-                ),
+                alVerActividad: _mostrarDetalleActividad,
                 alEditarHito: _editarHito,
                 alEliminarHito: _eliminarHito,
                 alAgregarActividadEnHito: (hito) => _editarActividad(
@@ -334,6 +511,13 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
                 alEliminarDependencia: _eliminarDependencia,
                 nombresResponsables: nombresResponsables,
               ),
+              _ListaHitos(
+                hitos: hitos,
+                actividades: actividades,
+                hitoActividades: hitoActividades,
+                onOpen: (hito, asociadas) =>
+                    _mostrarDetalleHito(hito, asociadas, responsables, hitos),
+              ),
               _ListaTiming(
                 timing: timing,
                 alEditar: (item) =>
@@ -341,6 +525,11 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
                 alEliminar: _eliminarTiming,
                 alMover: _moverTiming,
                 nombresResponsables: nombresResponsables,
+                alVer: _mostrarDetalleTiming,
+                alGenerar: (hora) => _ejecutar(
+                  (api) => api.generarTiming(widget.idProyecto, hora),
+                  exito: 'Timing generado correctamente.',
+                ),
               ),
             ],
           ),
@@ -1498,93 +1687,6 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
     ),
     'Actividad desactivada.',
   );
-  Future<void> _intentarCompletarActividad(
-    Map<String, dynamic> item,
-    List<Map<String, dynamic>> actividades,
-    List<Map<String, dynamic>> dependencias,
-  ) async {
-    final porId = {
-      for (final actividad in actividades)
-        actividad['idActividad'].toString(): actividad,
-    };
-    final pendientes = dependencias
-        .where(
-          (dependencia) =>
-              dependencia['idActividadSucesora']?.toString() ==
-              item['idActividad']?.toString(),
-        )
-        .map(
-          (dependencia) =>
-              porId[dependencia['idActividadPredecesora']?.toString()],
-        )
-        .whereType<Map<String, dynamic>>()
-        .where((actividad) => actividad['estado']?.toString() != 'COMPLETADA')
-        .toList();
-    if (pendientes.isNotEmpty) {
-      await showDialog<void>(
-        context: context,
-        builder: (dialogContext) => AlertDialog(
-          icon: const Icon(Icons.info_outline, color: AppColors.primary),
-          title: const Text('Hay trabajo pendiente'),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Completa primero las actividades de las que depende esta tarea:',
-                ),
-                const SizedBox(height: 10),
-                ...pendientes.map(
-                  (actividad) => Padding(
-                    padding: const EdgeInsets.only(bottom: 6),
-                    child: Row(
-                      children: [
-                        const Icon(Icons.link_outlined, size: 18),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            actividad['nombre']?.toString() ?? 'Actividad',
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(dialogContext),
-              child: const Text('Volver'),
-            ),
-          ],
-        ),
-      );
-      return;
-    }
-    final confirmar = await AppConfirmationDialog.show(
-      context,
-      title: 'Marcar actividad como completada',
-      message:
-          'La actividad se marcara como completada. Podras cambiar su estado despues si es necesario.',
-      confirmLabel: 'Completar',
-      cancelLabel: 'Volver',
-    );
-    if (!confirmar) {
-      return;
-    }
-    await _ejecutar(
-      (api) => api.cambiarEstadoActividad(
-        widget.idProyecto,
-        item['idActividad'].toString(),
-        'COMPLETADA',
-      ),
-      exito: 'Actividad marcada como completada.',
-    );
-  }
-
   Future<void> _eliminarHito(Map<String, dynamic> item) => _eliminar(
     'Desactivar hito',
     'El hito dejará de mostrarse en el cronograma activo.',
@@ -1750,9 +1852,10 @@ class _ListaCronograma extends StatelessWidget {
     required this.hitos,
     required this.actividades,
     required this.dependencias,
+    required this.hitoActividades,
     required this.alEditarActividad,
     required this.alEliminarActividad,
-    required this.alCompletarActividad,
+    required this.alVerActividad,
     required this.alEditarHito,
     required this.alEliminarHito,
     required this.alAgregarDependencia,
@@ -1763,10 +1866,13 @@ class _ListaCronograma extends StatelessWidget {
     required this.alEliminarDependencia,
     required this.nombresResponsables,
   });
-  final List<Map<String, dynamic>> hitos, actividades, dependencias;
+  final List<Map<String, dynamic>> hitos,
+      actividades,
+      dependencias,
+      hitoActividades;
   final ValueChanged<Map<String, dynamic>> alEditarActividad;
   final ValueChanged<Map<String, dynamic>> alEliminarActividad;
-  final ValueChanged<Map<String, dynamic>> alCompletarActividad;
+  final ValueChanged<Map<String, dynamic>> alVerActividad;
   final ValueChanged<Map<String, dynamic>> alEditarHito;
   final ValueChanged<Map<String, dynamic>> alEliminarHito;
   final VoidCallback alAgregarDependencia;
@@ -1795,8 +1901,15 @@ class _ListaCronograma extends StatelessWidget {
           : _compararFecha(a['createdAt'], b['createdAt']);
     }
 
-    final sinHito = actividades.where((a) => a['idHito'] == null).toList()
-      ..sort(compararActividad);
+    final idsConHito = hitoActividades
+        .map((relacion) => relacion['idActividad']?.toString())
+        .whereType<String>()
+        .toSet();
+    final sinHito =
+        actividades
+            .where((a) => !idsConHito.contains(a['idActividad']?.toString()))
+            .toList()
+          ..sort(compararActividad);
     final nombresActividades = {
       for (final actividad in actividades)
         actividad['idActividad'].toString():
@@ -1820,8 +1933,13 @@ class _ListaCronograma extends StatelessWidget {
             actividades:
                 actividades
                     .where(
-                      (a) =>
-                          a['idHito']?.toString() == hito['idHito']?.toString(),
+                      (a) => hitoActividades.any(
+                        (relacion) =>
+                            relacion['idHito']?.toString() ==
+                                hito['idHito']?.toString() &&
+                            relacion['idActividad']?.toString() ==
+                                a['idActividad']?.toString(),
+                      ),
                     )
                     .toList()
                   ..sort(compararActividad),
@@ -1836,7 +1954,7 @@ class _ListaCronograma extends StatelessWidget {
                 : () => alMoverHito(hito, hitosOrdenados[indice + 1]),
             alEditarActividad: alEditarActividad,
             alEliminarActividad: alEliminarActividad,
-            alCompletarActividad: alCompletarActividad,
+            alVerActividad: alVerActividad,
             dependenciasPorSucesora: dependenciasPorSucesora,
             nombresActividades: nombresActividades,
             nombresResponsables: nombresResponsables,
@@ -1856,7 +1974,7 @@ class _ListaCronograma extends StatelessWidget {
             alBajar: null,
             alEditarActividad: alEditarActividad,
             alEliminarActividad: alEliminarActividad,
-            alCompletarActividad: alCompletarActividad,
+            alVerActividad: alVerActividad,
             dependenciasPorSucesora: dependenciasPorSucesora,
             nombresActividades: nombresActividades,
             nombresResponsables: nombresResponsables,
@@ -1885,7 +2003,7 @@ class _HitoCard extends StatelessWidget {
     required this.alBajar,
     required this.alEditarActividad,
     required this.alEliminarActividad,
-    required this.alCompletarActividad,
+    required this.alVerActividad,
     required this.dependenciasPorSucesora,
     required this.nombresActividades,
     required this.nombresResponsables,
@@ -1900,7 +2018,7 @@ class _HitoCard extends StatelessWidget {
   final VoidCallback? alSubir, alBajar;
   final ValueChanged<Map<String, dynamic>> alEditarActividad,
       alEliminarActividad;
-  final ValueChanged<Map<String, dynamic>> alCompletarActividad;
+  final ValueChanged<Map<String, dynamic>> alVerActividad;
   final Map<String, List<Map<String, dynamic>>> dependenciasPorSucesora;
   final Map<String, String> nombresActividades, nombresResponsables;
   final ValueChanged<Map<String, dynamic>> alEliminarDependencia;
@@ -1967,7 +2085,7 @@ class _HitoCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 4),
               child: Text(
-                'Objetivo: ${_fechaCorta(_fecha(hito['fechaObjetivo'])!)}',
+                'Objetivo: ${_fechaCorta(_fecha(hito['fechaObjetivo']))}',
               ),
             ),
           const SizedBox(height: 8),
@@ -1976,7 +2094,7 @@ class _HitoCard extends StatelessWidget {
               item: a,
               alEditar: () => alEditarActividad(a),
               alEliminar: () => alEliminarActividad(a),
-              alCompletar: () => alCompletarActividad(a),
+              alVer: () => alVerActividad(a),
               dependencias:
                   dependenciasPorSucesora[a['idActividad']?.toString()] ??
                   const [],
@@ -2004,7 +2122,7 @@ class _ActividadFila extends StatelessWidget {
     required this.item,
     required this.alEditar,
     required this.alEliminar,
-    required this.alCompletar,
+    required this.alVer,
     required this.dependencias,
     required this.nombresActividades,
     required this.nombresResponsables,
@@ -2015,7 +2133,7 @@ class _ActividadFila extends StatelessWidget {
     required this.siguiente,
   });
   final Map<String, dynamic> item;
-  final VoidCallback alEditar, alEliminar, alCompletar;
+  final VoidCallback alEditar, alEliminar, alVer;
   final List<Map<String, dynamic>> dependencias;
   final Map<String, String> nombresActividades, nombresResponsables;
   final ValueChanged<Map<String, dynamic>> alEliminarDependencia;
@@ -2024,6 +2142,7 @@ class _ActividadFila extends StatelessWidget {
   final Map<String, dynamic>? anterior, siguiente;
   @override
   Widget build(BuildContext context) => ListTile(
+    onTap: alVer,
     isThreeLine: true,
     contentPadding: const EdgeInsets.only(left: 8, right: 2),
     leading: Icon(
@@ -2108,8 +2227,6 @@ class _ActividadFila extends StatelessWidget {
           }
         } else if (v == 'dependencia') {
           alAgregarDependencia();
-        } else if (v == 'completar') {
-          alCompletar();
         } else if (v == 'eliminar') {
           alEliminar();
         }
@@ -2119,7 +2236,6 @@ class _ActividadFila extends StatelessWidget {
         PopupMenuItem(value: 'bajar', child: Text('Bajar')),
         PopupMenuItem(value: 'dependencia', child: Text('Agregar dependencia')),
         PopupMenuItem(value: 'editar', child: Text('Editar / reprogramar')),
-        PopupMenuItem(value: 'completar', child: Text('Marcar completada')),
         PopupMenuItem(value: 'eliminar', child: Text('Desactivar')),
       ],
     ),
@@ -2186,20 +2302,25 @@ class _ListaTiming extends StatelessWidget {
     required this.alEliminar,
     required this.alMover,
     required this.nombresResponsables,
+    required this.alVer,
+    required this.alGenerar,
   });
   final List<Map<String, dynamic>> timing;
   final ValueChanged<Map<String, dynamic>> alEditar, alEliminar;
   final void Function(Map<String, dynamic>, Map<String, dynamic>) alMover;
   final Map<String, String> nombresResponsables;
+  final ValueChanged<Map<String, dynamic>> alVer;
+  final ValueChanged<String> alGenerar;
   @override
   Widget build(BuildContext context) {
-    if (timing.isEmpty)
+    if (timing.isEmpty) return _GenerarTimingVacio(onGenerar: alGenerar);
+    /*if (timing.isEmpty)
       return const _Vacio(
         icon: Icons.schedule_outlined,
         titulo: 'Sin momentos programados',
         mensaje:
             'Agrega los momentos del día de la boda para construir su línea de tiempo.',
-      );
+      );*/
     final timingOrdenado = [...timing]
       ..sort(
         (a, b) => _compararFecha(a['fechaHoraInicio'], b['fechaHoraInicio']),
@@ -2212,6 +2333,7 @@ class _ListaTiming extends StatelessWidget {
         final item = timingOrdenado[i];
         return Card(
           child: ListTile(
+            onTap: () => alVer(item),
             leading: CircleAvatar(
               radius: 27,
               child: FittedBox(
@@ -2276,6 +2398,514 @@ class _ListaTiming extends StatelessWidget {
       },
     );
   }
+}
+
+class _GenerarTimingVacio extends StatefulWidget {
+  const _GenerarTimingVacio({required this.onGenerar});
+  final ValueChanged<String> onGenerar;
+  @override
+  State<_GenerarTimingVacio> createState() => _GenerarTimingVacioState();
+}
+
+class _GenerarTimingVacioState extends State<_GenerarTimingVacio> {
+  TimeOfDay? _hora;
+  @override
+  Widget build(BuildContext context) => _VacioConAccion(
+    icon: Icons.schedule_outlined,
+    titulo: 'Define el inicio del timing',
+    mensaje:
+        'Elige la hora inicial para generar una línea de tiempo basada en las plantillas.',
+    accion: AppButton(
+      label: _hora == null
+          ? 'Elegir hora de inicio'
+          : 'Generar desde las plantillas',
+      icon: Icons.access_time_outlined,
+      onPressed: () async {
+        if (_hora == null) {
+          final elegida = await showTimePicker(
+            context: context,
+            initialTime: const TimeOfDay(hour: 8, minute: 0),
+            builder: (context, child) => MediaQuery(
+              data: MediaQuery.of(
+                context,
+              ).copyWith(alwaysUse24HourFormat: true),
+              child: child!,
+            ),
+          );
+          if (elegida != null && mounted) setState(() => _hora = elegida);
+          return;
+        }
+        widget.onGenerar(
+          '${_hora!.hour.toString().padLeft(2, '0')}:${_hora!.minute.toString().padLeft(2, '0')}',
+        );
+      },
+    ),
+  );
+}
+
+class _VacioConAccion extends StatelessWidget {
+  const _VacioConAccion({
+    required this.icon,
+    required this.titulo,
+    required this.mensaje,
+    required this.accion,
+  });
+  final IconData icon;
+  final String titulo, mensaje;
+  final Widget accion;
+  @override
+  Widget build(BuildContext context) => Center(
+    child: Padding(
+      padding: const EdgeInsets.all(32),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 48, color: AppColors.primary),
+          const SizedBox(height: 12),
+          Text(
+            titulo,
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
+          ),
+          const SizedBox(height: 6),
+          Text(mensaje, textAlign: TextAlign.center),
+          const SizedBox(height: 18),
+          accion,
+        ],
+      ),
+    ),
+  );
+}
+
+class _ListaHitos extends StatelessWidget {
+  const _ListaHitos({
+    required this.hitos,
+    required this.actividades,
+    required this.hitoActividades,
+    required this.onOpen,
+  });
+  final List<Map<String, dynamic>> hitos, actividades, hitoActividades;
+  final void Function(Map<String, dynamic>, List<Map<String, dynamic>>) onOpen;
+  @override
+  Widget build(BuildContext context) {
+    final ordenados = [...hitos]
+      ..sort((a, b) => _compararFecha(a['fechaObjetivo'], b['fechaObjetivo']));
+    if (ordenados.isEmpty)
+      return const _Vacio(
+        icon: Icons.flag_outlined,
+        titulo: 'Sin hitos',
+        mensaje: 'Crea un hito para organizar los resultados del matrimonio.',
+      );
+    return ListView.separated(
+      padding: const EdgeInsets.fromLTRB(16, 10, 16, 96),
+      itemCount: ordenados.length,
+      separatorBuilder: (_, __) => const SizedBox(height: 10),
+      itemBuilder: (_, i) {
+        final hito = ordenados[i];
+        final asociadas = actividades
+            .where(
+              (actividad) => hitoActividades.any(
+                (relacion) =>
+                    relacion['idHito']?.toString() ==
+                        hito['idHito']?.toString() &&
+                    relacion['idActividad']?.toString() ==
+                        actividad['idActividad']?.toString(),
+              ),
+            )
+            .toList();
+        return Card(
+          child: ListTile(
+            onTap: () => onOpen(hito, asociadas),
+            leading: const CircleAvatar(child: Icon(Icons.flag_outlined)),
+            title: Text(hito['nombre']?.toString() ?? 'Hito'),
+            subtitle: Text(
+              '${asociadas.length} actividades necesarias · ${_fechaCorta(_fecha(hito['fechaObjetivo']))}',
+            ),
+            trailing: const Icon(Icons.chevron_right),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _EdtMatrimonioPanel extends StatefulWidget {
+  const _EdtMatrimonioPanel({required this.idMatrimonio});
+  final String? idMatrimonio;
+  @override
+  State<_EdtMatrimonioPanel> createState() => _EdtMatrimonioPanelState();
+}
+
+class _EdtMatrimonioPanelState extends State<_EdtMatrimonioPanel> {
+  late Future<Map<String, dynamic>> _carga;
+  @override
+  void initState() {
+    super.initState();
+    _carga = widget.idMatrimonio == null
+        ? Future.value({})
+        : EdtApi().obtenerEdtMatrimonio(widget.idMatrimonio!);
+  }
+
+  @override
+  Widget build(BuildContext context) => FutureBuilder<Map<String, dynamic>>(
+    future: _carga,
+    builder: (_, estado) {
+      if (estado.connectionState != ConnectionState.done)
+        return const Center(child: CircularProgressIndicator());
+      if (estado.hasError || estado.data == null || estado.data!.isEmpty)
+        return const _Vacio(
+          icon: Icons.account_tree_outlined,
+          titulo: 'EDT no disponible',
+          mensaje: 'Aún no se definió una estructura EDT para este matrimonio.',
+        );
+      final arbol = _lista(estado.data!['elementos'] ?? estado.data!['arbol']);
+      return ListView(
+        padding: const EdgeInsets.fromLTRB(16, 10, 16, 96),
+        children: [
+          const Text(
+            'Estructura de desglose del trabajo',
+            style: TextStyle(fontWeight: FontWeight.w800),
+          ),
+          const SizedBox(height: 8),
+          ...arbol.map((nodo) => _NodoEdt(nodo: nodo, nivel: 0)),
+        ],
+      );
+    },
+  );
+}
+
+class _NodoEdt extends StatelessWidget {
+  const _NodoEdt({required this.nodo, required this.nivel});
+  final Map<String, dynamic> nodo;
+  final int nivel;
+  @override
+  Widget build(BuildContext context) {
+    final hijos = _lista(nodo['hijos']);
+    return Card(
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(14 + nivel * 14.0, 10, 12, 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  hijos.isEmpty
+                      ? Icons.check_box_outline_blank
+                      : Icons.account_tree_outlined,
+                  size: 18,
+                  color: AppColors.primary,
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    nodo['nombre']?.toString() ?? 'Elemento',
+                    style: const TextStyle(fontWeight: FontWeight.w700),
+                  ),
+                ),
+              ],
+            ),
+            ...hijos.map((hijo) => _NodoEdt(nodo: hijo, nivel: nivel + 1)),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _HitoDetallePage extends StatelessWidget {
+  const _HitoDetallePage({
+    required this.hito,
+    required this.actividades,
+    required this.onAgregarActividad,
+  });
+  final Map<String, dynamic> hito;
+  final List<Map<String, dynamic>> actividades;
+  final VoidCallback onAgregarActividad;
+  @override
+  Widget build(BuildContext context) => Scaffold(
+    appBar: AppBar(title: const Text('Detalle del hito')),
+    floatingActionButton: FloatingActionButton.extended(
+      onPressed: onAgregarActividad,
+      icon: const Icon(Icons.add_task_outlined),
+      label: const Text('Agregar actividad'),
+    ),
+    body: ListView(
+      padding: const EdgeInsets.fromLTRB(16, 18, 16, 96),
+      children: [
+        Text(
+          hito['nombre']?.toString() ?? 'Hito',
+          style: Theme.of(
+            context,
+          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800),
+        ),
+        if (hito['fechaObjetivo'] != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 6),
+            child: Text(
+              'Objetivo: ${_fechaCorta(_fecha(hito['fechaObjetivo']))}',
+            ),
+          ),
+        if (hito['criterioAceptacion'] != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 14),
+            child: Text(hito['criterioAceptacion'].toString()),
+          ),
+        const SizedBox(height: 24),
+        const Text(
+          'Actividades necesarias',
+          style: TextStyle(fontWeight: FontWeight.w800),
+        ),
+        const SizedBox(height: 8),
+        if (actividades.isEmpty)
+          const Text('Aún no hay actividades asociadas a este hito.'),
+        ...actividades.map(
+          (a) => Card(
+            child: ListTile(
+              leading: const Icon(
+                Icons.task_alt_outlined,
+                color: AppColors.primary,
+              ),
+              title: Text(a['nombre']?.toString() ?? 'Actividad'),
+              subtitle: Text('Vence ${_fechaCorta(_fecha(a['fechaFin']))}'),
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+class _DetalleTimingSheet extends StatefulWidget {
+  const _DetalleTimingSheet({
+    required this.timing,
+    required this.guardarChecklist,
+  });
+  final Map<String, dynamic> timing;
+  final Future<void> Function(List<String>) guardarChecklist;
+
+  @override
+  State<_DetalleTimingSheet> createState() => _DetalleTimingSheetState();
+}
+
+class _DetalleTimingSheetState extends State<_DetalleTimingSheet> {
+  late List<String> _items;
+  final _nuevo = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _items = _itemsChecklist(widget.timing['listaVerificacion']);
+  }
+
+  @override
+  void dispose() {
+    _nuevo.dispose();
+    super.dispose();
+  }
+
+  Future<void> _agregar() async {
+    final texto = _nuevo.text.trim();
+    if (texto.isEmpty) {
+      return;
+    }
+    final actualizados = [..._items, texto];
+    await widget.guardarChecklist(actualizados);
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      _items = actualizados;
+      _nuevo.clear();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) => _DetalleSheet(
+    titulo: widget.timing['actividad']?.toString() ?? 'Momento del timing',
+    children: [
+      Text(
+        '${_hora(_fecha(widget.timing['fechaHoraInicio']))} – ${_hora(_fecha(widget.timing['fechaHoraFin']))}',
+      ),
+      const SizedBox(height: 16),
+      const Text(
+        'Lista de verificación',
+        style: TextStyle(fontWeight: FontWeight.w800),
+      ),
+      ..._items.map(
+        (item) => ListTile(
+          leading: const Icon(Icons.check_box_outline_blank),
+          title: Text(item),
+        ),
+      ),
+      Row(
+        children: [
+          Expanded(
+            child: TextField(
+              controller: _nuevo,
+              decoration: const InputDecoration(labelText: 'Nueva tarea'),
+              onSubmitted: (_) => _agregar(),
+            ),
+          ),
+          IconButton(
+            tooltip: 'Agregar tarea',
+            icon: const Icon(Icons.add_circle, color: AppColors.primary),
+            onPressed: _agregar,
+          ),
+        ],
+      ),
+    ],
+  );
+}
+
+class _DetalleActividadSheet extends StatefulWidget {
+  const _DetalleActividadSheet({
+    required this.actividad,
+    required this.cargarChecklist,
+    required this.agregarChecklist,
+    required this.actualizarChecklist,
+  });
+  final Map<String, dynamic> actividad;
+  final Future<List<Map<String, dynamic>>> Function() cargarChecklist;
+  final Future<void> Function(String) agregarChecklist;
+  final Future<void> Function(String, Map<String, dynamic>) actualizarChecklist;
+  @override
+  State<_DetalleActividadSheet> createState() => _DetalleActividadSheetState();
+}
+
+class _DetalleActividadSheetState extends State<_DetalleActividadSheet> {
+  late Future<List<Map<String, dynamic>>> _checklist;
+  final _nuevo = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    _checklist = widget.cargarChecklist();
+  }
+
+  @override
+  void dispose() {
+    _nuevo.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => _DetalleSheet(
+    titulo: widget.actividad['nombre']?.toString() ?? 'Actividad',
+    children: [
+      Text('Vence ${_fechaCorta(_fecha(widget.actividad['fechaFin']))}'),
+      const SizedBox(height: 16),
+      const Text('Checklist', style: TextStyle(fontWeight: FontWeight.w800)),
+      FutureBuilder<List<Map<String, dynamic>>>(
+        future: _checklist,
+        builder: (_, estado) {
+          final items = estado.data ?? const [];
+          if (estado.connectionState != ConnectionState.done)
+            return const Padding(
+              padding: EdgeInsets.all(12),
+              child: CircularProgressIndicator(),
+            );
+          return Column(
+            children: [
+              ...items.map(
+                (item) => CheckboxListTile(
+                  value: item['completada'] == true,
+                  onChanged: null,
+                  title: Text(item['descripcion']?.toString() ?? 'Subtarea'),
+                ),
+              ),
+              if (items.isEmpty)
+                const Padding(
+                  padding: EdgeInsets.all(8),
+                  child: Text('Sin subtareas todavía.'),
+                ),
+            ],
+          );
+        },
+      ),
+      Row(
+        children: [
+          Expanded(
+            child: TextField(
+              controller: _nuevo,
+              decoration: const InputDecoration(labelText: 'Nueva subtarea'),
+            ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.add_circle, color: AppColors.primary),
+            onPressed: () async {
+              final texto = _nuevo.text.trim();
+              if (texto.isEmpty) return;
+              await widget.agregarChecklist(texto);
+              _nuevo.clear();
+              if (mounted)
+                setState(() => _checklist = widget.cargarChecklist());
+            },
+          ),
+        ],
+      ),
+    ],
+  );
+}
+
+class _DetalleSheet extends StatelessWidget {
+  const _DetalleSheet({required this.titulo, required this.children});
+  final String titulo;
+  final List<Widget> children;
+  @override
+  Widget build(BuildContext context) => SafeArea(
+    child: Padding(
+      padding: EdgeInsets.fromLTRB(
+        20,
+        8,
+        20,
+        MediaQuery.of(context).viewInsets.bottom + 24,
+      ),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Center(
+              child: Container(
+                width: 42,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.black26,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+            ),
+            const SizedBox(height: 18),
+            Text(
+              titulo,
+              style: Theme.of(
+                context,
+              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
+            ),
+            const SizedBox(height: 16),
+            ...children,
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
+List<String> _itemsChecklist(Object? valor) {
+  if (valor is List)
+    return valor
+        .map((e) => e.toString())
+        .where((e) => e.trim().isNotEmpty)
+        .toList();
+  final texto = valor?.toString() ?? '';
+  if (texto.isEmpty) return const [];
+  return texto
+      .replaceAll(RegExp(r'^[\[\]\"]+|[\[\]\"]+$'), '')
+      .split(';')
+      .map((e) => e.trim())
+      .where((e) => e.isNotEmpty)
+      .toList();
 }
 
 class _Vacio extends StatelessWidget {
@@ -2364,7 +2994,7 @@ String _fechaCorta(DateTime? value) => value == null
     : '${value.day.toString().padLeft(2, '0')}/${value.month.toString().padLeft(2, '0')}/${value.year}';
 String _hora(DateTime? value) => value == null
     ? '--'
-    : '${value.hour.toString().padLeft(2, '0')}:${value.minute.toString().padLeft(2, '0')}';
+    : '${value.hour}:${value.minute.toString().padLeft(2, '0')}';
 TimeOfDay? _horaDePlantilla(Object? value) {
   final partes = value?.toString().split(':') ?? const <String>[];
   if (partes.length < 2) {

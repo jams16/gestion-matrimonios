@@ -24,10 +24,27 @@ class EdtApi {
     ).map((item) => Map<String, dynamic>.from(item as Map)).toList();
   }
 
-  Future<Map<String, dynamic>> arbol(String idPlantilla) async =>
-      Map<String, dynamic>.from(
-        _data(await _dio.get('/edt/plantillas/$idPlantilla/arbol')) as Map,
+  Future<Map<String, dynamic>> arbol(String idPlantilla) async {
+    final contenido = _data(
+      await _dio.get('/edt/plantillas/$idPlantilla/arbol'),
+    );
+    if (contenido is! Map) {
+      throw StateError(
+        'La respuesta del árbol EDT no tiene el formato esperado.',
       );
+    }
+
+    // El interceptor de la API normalmente entrega { data: {...} }. Se acepta
+    // también una envoltura adicional para no descartar el árbol si el servidor
+    // o un proxy ya lo envolvió antes de responder.
+    final respuesta = Map<String, dynamic>.from(contenido);
+    final datosAnidados = respuesta['data'];
+    return datosAnidados is Map<String, dynamic>
+        ? datosAnidados
+        : datosAnidados is Map
+        ? Map<String, dynamic>.from(datosAnidados)
+        : respuesta;
+  }
 
   Future<List<Map<String, dynamic>>> listarElementos() async {
     final data = _data(await _dio.get('/edt/elementos'));
@@ -99,14 +116,23 @@ class EdtApi {
     Map<String, dynamic> data,
   ) => _dio.post('/matrimonios/$idMatrimonio/edt/elementos', data: data);
 
-  Future<Map<String, dynamic>> obtenerEdtMatrimonio(String idMatrimonio) async =>
-      Map<String, dynamic>.from(
-        _data(await _dio.get('/matrimonios/$idMatrimonio/edt')) as Map,
-      );
+  Future<Map<String, dynamic>> obtenerEdtMatrimonio(
+    String idMatrimonio,
+  ) async => Map<String, dynamic>.from(
+    _data(await _dio.get('/matrimonios/$idMatrimonio/edt')) as Map,
+  );
 
   Future<void> actualizarElementoMatrimonio(
     String idMatrimonio,
     String idElemento,
     Map<String, dynamic> data,
-  ) => _dio.patch('/matrimonios/$idMatrimonio/edt/elementos/$idElemento', data: data);
+  ) => _dio.patch(
+    '/matrimonios/$idMatrimonio/edt/elementos/$idElemento',
+    data: data,
+  );
+
+  Future<void> eliminarElementoMatrimonio(
+    String idMatrimonio,
+    String idElemento,
+  ) => _dio.delete('/matrimonios/$idMatrimonio/edt/elementos/$idElemento');
 }

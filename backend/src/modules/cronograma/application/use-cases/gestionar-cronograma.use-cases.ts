@@ -36,10 +36,14 @@ export class GestionarHitosUseCase {
     const actividades = await this.repository.listarActividades(idProyecto, {
       activo: filtros.activo,
     });
+    const relaciones = await this.repository.listarHitoActividades(idProyecto);
     return hitos.map((hito) => ({
       ...hito,
       actividades: actividades.filter(
-        (actividad) => actividad.idHito === hito.idHito,
+        (actividad) => relaciones.some(
+          (relacion) => String(relacion.idHito) === String(hito.idHito) &&
+            String(relacion.idActividad) === String(actividad.idActividad),
+        ),
       ),
     }));
   }
@@ -51,6 +55,31 @@ export class GestionarHitosUseCase {
       idProyecto,
       'Hito',
     );
+  }
+
+  async asociarActividad(
+    idProyecto: string,
+    idHito: string,
+    idActividad: string,
+    idUsuario: number,
+  ) {
+    await validarProyecto(this.repository, idProyecto, idUsuario);
+    validarRegistro(await this.repository.obtenerHito(idHito), idProyecto, 'Hito');
+    validarRegistro(
+      await this.repository.obtenerActividad(idActividad),
+      idProyecto,
+      'Actividad',
+    );
+    const existe = (await this.repository.listarHitoActividades(idProyecto)).some(
+      (relacion) =>
+        String(relacion.idHito) === idHito &&
+        String(relacion.idActividad) === idActividad,
+    );
+    if (existe) {
+      throw new ConflictException('La actividad ya está asociada a este hito.');
+    }
+    await this.repository.crearHitoActividadManual(idHito, idActividad);
+    return { idHito, idActividad };
   }
 
   async crear(idProyecto: string, dto: CrearHitoDto, idUsuario: number) {
@@ -120,7 +149,13 @@ export class GestionarActividadesUseCase {
     filtros: ListarActividadesDto,
   ) {
     await validarProyecto(this.repository, idProyecto, idUsuario);
-    return this.repository.listarActividades(idProyecto, filtros);
+    const actividades = await this.repository.listarActividades(idProyecto, filtros);
+    if (!filtros.idHito) return actividades;
+    const relaciones = await this.repository.listarHitoActividades(idProyecto);
+    return actividades.filter((actividad) => relaciones.some(
+      (relacion) => String(relacion.idHito) === filtros.idHito &&
+        String(relacion.idActividad) === String(actividad.idActividad),
+    ));
   }
 
   async obtener(idProyecto: string, idActividad: string, idUsuario: number) {
@@ -132,6 +167,36 @@ export class GestionarActividadesUseCase {
     );
   }
 
+  async listarChecklist(idProyecto: string, idActividad: string, idUsuario: number) {
+    await validarProyecto(this.repository, idProyecto, idUsuario);
+    validarRegistro(await this.repository.obtenerActividad(idActividad), idProyecto, 'Actividad');
+    return this.repository.listarChecklistActividad(idActividad);
+  }
+
+  async crearChecklist(idProyecto: string, idActividad: string, dto: { descripcion: string; orden?: number; obligatorio?: boolean }, idUsuario: number) {
+    await validarProyectoOResponsable(this.repository, idProyecto, idActividad, idUsuario);
+    validarRegistro(await this.repository.obtenerActividad(idActividad), idProyecto, 'Actividad');
+    return this.repository.crearChecklistActividadManual({
+      idActividad,
+      idPlantillaChecklist: null,
+      descripcion: dto.descripcion,
+      orden: dto.orden ?? 0,
+      obligatorio: dto.obligatorio ?? true,
+    });
+  }
+
+  async actualizarChecklist(idProyecto: string, idActividad: string, idChecklist: string, dto: { completado?: boolean; descripcion?: string; orden?: number; obligatorio?: boolean }, idUsuario: number) {
+    await validarProyectoOResponsable(this.repository, idProyecto, idActividad, idUsuario);
+    const items = await this.repository.listarChecklistActividad(idActividad);
+    if (!items.some((item) => String(item.idChecklist) === idChecklist)) throw new NotFoundException('Ítem del checklist no encontrado.');
+    const data: Record<string, unknown> = { ...dto, modificadoManualmente: true };
+    if (dto.completado !== undefined) {
+      data.fechaCompletado = dto.completado ? new Date() : null;
+      data.idUsuarioCompleto = dto.completado ? idUsuario : null;
+    }
+    return this.repository.actualizarChecklistActividad(idChecklist, data);
+  }
+
   async crear(idProyecto: string, dto: CrearActividadDto, idUsuario: number) {
     await validarProyecto(this.repository, idProyecto, idUsuario);
     if (dto.idHito)
@@ -141,9 +206,10 @@ export class GestionarActividadesUseCase {
         'Hito',
       );
     validarRango(dto.fechaInicio, dto.fechaFin);
-    return this.repository.crearActividadManual({
+    const { idHito, listaVerificacion: _listaVerificacion, ...actividadDto } = dto;
+    const creada = await this.repository.crearActividadManual({
       idProyecto,
-      ...dto,
+      ...actividadDto,
       fechaInicio: dto.fechaInicio ? new Date(dto.fechaInicio) : null,
       fechaFin: new Date(dto.fechaFin),
       estado: dto.estado ?? 'PENDIENTE',
@@ -151,6 +217,8 @@ export class GestionarActividadesUseCase {
       modificadoManualmente: true,
       activo: true,
     });
+    if (idHito) await this.repository.crearHitoActividadManual(idHito, String(creada.idActividad));
+    return creada;
   }
 
   async actualizar(
@@ -175,10 +243,11 @@ export class GestionarActividadesUseCase {
       dto.fechaInicio ?? fechaIso(actual.fechaInicio),
       dto.fechaFin ?? fechaIso(actual.fechaFin),
     );
+    const { idHito: _idHito, listaVerificacion: _listaVerificacion, ...actividadDto } = dto;
     return this.repository.actualizarActividad(
       idActividad,
       normalizarFechas(
-        dto as Record<string, unknown>,
+        actividadDto as Record<string, unknown>,
         ['fechaInicio', 'fechaFin'],
         true,
       ),
@@ -198,6 +267,11 @@ export class GestionarActividadesUseCase {
       'Actividad',
     );
     if (dto.estado === 'COMPLETADA') {
+      const checklistPendiente = (await this.repository.listarChecklistActividad(idActividad)).filter(
+        (item) => item.activo !== false && item.obligatorio !== false && item.completado !== true,
+      );
+      if (checklistPendiente.length)
+        throw new ConflictException('No se puede completar la actividad mientras existan ítems obligatorios del checklist pendientes.');
       const pendientes = (await this.repository.listarDependencias(idProyecto)).filter((dependencia) =>
         dependencia.idActividadSucesora === idActividad,
       ).map((dependencia) => String(dependencia.idActividadPredecesora));
@@ -207,7 +281,7 @@ export class GestionarActividadesUseCase {
     const actualizada = await this.repository.actualizarActividad(idActividad, {
       estado: dto.estado,
     });
-    if (dto.estado === 'COMPLETADA' && actividad.idHito) await actualizarHitoAutomatico(this.repository, idProyecto, String(actividad.idHito));
+    if (dto.estado === 'COMPLETADA') await actualizarHitosRelacionados(this.repository, idProyecto, idActividad);
     return { ...actualizada, autorizadoComo: proyecto.idPm === idUsuario ? 'PROJECT_MANAGER' : 'RESPONSABLE' };
   }
 
@@ -464,12 +538,13 @@ export class ConsultarCronogramaUseCase {
       idUsuario,
     );
     const filtros = { activo };
-    const [hitos, actividades, dependencias, timing, fases] = await Promise.all([
+    const [hitos, actividades, dependencias, timing, fases, hitoActividades] = await Promise.all([
       this.repository.listarHitos(idProyecto, filtros),
       this.repository.listarActividades(idProyecto, filtros),
       this.repository.listarDependencias(idProyecto),
       this.repository.listarTiming(idProyecto, filtros),
       this.repository.listarFasesProyecto(),
+      this.repository.listarHitoActividades(idProyecto),
     ]);
     const faseProyecto = fases.find(
       (fase) => fase.idFaseProyecto === proyecto.idFaseProyecto,
@@ -485,6 +560,16 @@ export class ConsultarCronogramaUseCase {
       },
       hitos,
       actividades,
+      // El puente permite que una actividad contribuya a más de un hito sin
+      // duplicar la actividad ni depender de la relación heredada id_hito.
+      hitoActividades: hitoActividades.filter(
+        (relacion) =>
+          !activo ||
+          (actividadesActivas.has(String(relacion.idActividad)) &&
+            hitos.some(
+              (hito) => String(hito.idHito) === String(relacion.idHito),
+            )),
+      ),
       dependencias: dependencias.filter(
         (dependencia) =>
           !activo ||
@@ -600,9 +685,30 @@ async function validarProyectoOResponsable(
   if (actividad?.idProyecto === idProyecto && Number(actividad.idUsuarioResponsable) === idUsuario) return proyecto;
   throw new ForbiddenException('Solo el Wedding Planner o el responsable asignado puede cambiar este estado.');
 }
-async function actualizarHitoAutomatico(repository: CronogramaCrudRepository, idProyecto: string, idHito: string) {
-  const actividades = await repository.listarActividades(idProyecto, { idHito, activo: true });
-  if (actividades.length && actividades.every((actividad) => actividad.estado === 'COMPLETADA')) await repository.actualizarHito(idHito, { estado: 'COMPLETADO' });
+async function actualizarHitosRelacionados(
+  repository: CronogramaCrudRepository,
+  idProyecto: string,
+  idActividad: string,
+) {
+  const [relaciones, actividades, hitos] = await Promise.all([
+    repository.listarHitoActividades(idProyecto),
+    repository.listarActividades(idProyecto, { activo: true }),
+    repository.listarHitos(idProyecto, { activo: true }),
+  ]);
+  for (const relacion of relaciones.filter(
+    (item) => String(item.idActividad) === idActividad,
+  )) {
+    const idHito = String(relacion.idHito);
+    const hito = hitos.find((item) => String(item.idHito) === idHito);
+    // Un criterio de aceptación textual requiere revisión humana; no se fuerza.
+    if (hito?.criterioAceptacion) continue;
+    const asociadas = relaciones
+      .filter((item) => String(item.idHito) === idHito)
+      .map((item) => String(item.idActividad));
+    const activas = actividades.filter((item) => asociadas.includes(String(item.idActividad)));
+    if (activas.length && activas.every((item) => item.estado === 'COMPLETADA'))
+      await repository.actualizarHito(idHito, { estado: 'COMPLETADO' });
+  }
 }
 async function validarSolapamientoTiming(
   repository: CronogramaCrudRepository,

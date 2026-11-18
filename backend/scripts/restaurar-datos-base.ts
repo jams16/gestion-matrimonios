@@ -5,6 +5,7 @@ import ubigeosBase from './datos-base/ubigeos-base.json';
 import riesgosComunesBase from './datos-base/riesgos-comunes-base';
 import { valoresBuenasPracticasBase } from './datos-base/buenas-practicas-base';
 import { edtGlobalBase } from './datos-base/edt-global-base';
+import { cronogramaOficial } from './datos-base/cronograma-plantillas-oficiales';
 import { randomUUID } from 'node:crypto';
 
 type Fila = Record<string, unknown>;
@@ -26,6 +27,14 @@ type ConstructorClienteSql = new (opciones: {
 const { Client } = require('pg') as { Client: ConstructorClienteSql };
 
 const datos = datosBase as Datos;
+// Las plantillas CG/H/DB se mantienen separadas para que esta fuente oficial
+// no dependa de snapshots históricos con textos y relaciones obsoletos.
+datos.cr_plantilla_hito = cronogramaOficial.hitos;
+datos.cr_plantilla_actividad = cronogramaOficial.actividades;
+datos.cr_plantilla_dependencia = [];
+datos.cr_plantilla_timing = cronogramaOficial.timing;
+datos.cr_plantilla_actividad_tipo_ceremonia = [];
+datos.cr_plantilla_timing_tipo_ceremonia = [];
 const categoriasProveedorBase = ['LOCAL', 'CATERING', 'FOTOGRAFIA', 'VIDEO', 'MUSICA', 'DJ', 'ORQUESTA', 'DECORACION', 'FLORES', 'MAQUILLAJE', 'PEINADO', 'VESTIDO', 'TRAJE', 'TRANSPORTE', 'AUTO_NUPCIAL', 'HOTEL', 'INVITACIONES', 'TORTA', 'POSTRES', 'BAR', 'SEGURIDAD', 'LIMPIEZA', 'PHOTOBOOTH', 'ENTRETENIMIENTO', 'CORO', 'CEREMONIA', 'MOBILIARIO', 'ILUMINACION', 'SONIDO', 'RECUERDOS', 'OTROS'];
 const vacio = (): Resumen => ({ existentes: 0, restaurados: 0, errores: [] });
 const errorTexto = (error: unknown) => {
@@ -184,6 +193,65 @@ async function dependencias(c: ClienteSql, r: Resumen, actividadesReales: Map<nu
   }
 }
 
+/** Materializa el puente N:M a partir de las asociaciones históricas de plantilla. */
+async function hitosActividadesPlantilla(c: ClienteSql, r: Resumen) {
+  r.existentes = await contar(c, 'cr_plantilla_hito_actividad');
+  const filas = await c.query('SELECT id_plantilla_hito, id_plantilla_actividad FROM public.cr_plantilla_actividad WHERE id_plantilla_hito IS NOT NULL');
+  for (const fila of filas.rows) try {
+    const resultado = await c.query(
+      'INSERT INTO public.cr_plantilla_hito_actividad (id_plantilla_hito, id_plantilla_actividad) VALUES ($1, $2) ON CONFLICT (id_plantilla_hito, id_plantilla_actividad) DO NOTHING',
+      [fila.id_plantilla_hito, fila.id_plantilla_actividad],
+    );
+    r.restaurados += Number(resultado.rowCount ?? 0);
+  } catch (error) { r.errores.push(errorTexto(error)); }
+}
+
+/** Convierte listas JSON heredadas en ítems operativos de plantilla. */
+async function checklistPlantilla(c: ClienteSql, r: Resumen) {
+  r.existentes = await contar(c, 'cr_plantilla_actividad_checklist');
+  const filas = await c.query('SELECT id_plantilla_actividad, lista_verificacion FROM public.cr_plantilla_actividad WHERE lista_verificacion IS NOT NULL');
+  for (const fila of filas.rows) {
+    const bruto = fila.lista_verificacion;
+    const valores = Array.isArray(bruto) ? bruto : [bruto];
+    const textos = valores.flatMap((valor) => typeof valor === 'string'
+      ? valor.split(/[;\\n]/)
+      : Object.values((valor ?? {}) as Fila).map(String))
+      .map((valor) => String(valor).trim()).filter(Boolean);
+    for (const [indice, descripcion] of textos.entries()) try {
+      const existe = await c.query('SELECT 1 FROM public.cr_plantilla_actividad_checklist WHERE id_plantilla_actividad = $1 AND descripcion = $2', [fila.id_plantilla_actividad, descripcion]);
+      if (existe.rowCount) continue;
+      await c.query('INSERT INTO public.cr_plantilla_actividad_checklist (id_plantilla_actividad, descripcion, orden, obligatorio, activo, created_at, updated_at) VALUES ($1, $2, $3, true, true, now(), now())', [fila.id_plantilla_actividad, descripcion, indice]);
+      r.restaurados += 1;
+    } catch (error) { r.errores.push(errorTexto(error)); }
+  }
+}
+
+/** Sincroniza por código las plantillas oficiales sin depender de sus IDs. */
+async function sincronizarCronogramaOficial(c: ClienteSql, relaciones: Resumen, dependenciasTiming: Resumen, tiposActividad: Resumen, tiposTiming: Resumen) {
+  const fase = new Map((await c.query('SELECT id_fase_proyecto, codigo FROM public.gp_fase_proyecto')).rows.map((x) => [String(x.codigo), x.id_fase_proyecto]));
+  const tipo = new Map((await c.query('SELECT id_tipo_ceremonia, codigo FROM public.gp_tipo_ceremonia')).rows.map((x) => [String(x.codigo), x.id_tipo_ceremonia]));
+  for (const item of cronogramaOficial.actividades) {
+    const codigo = String(item.codigo); const faseCodigo = Number(item.id_fase_proyecto) === 2 ? 'INICIO' : Number(item.id_fase_proyecto) === 3 ? 'PLANIFICACION' : Number(item.id_fase_proyecto) === 4 ? 'MONITOREO_Y_CONTROL' : Number(item.id_fase_proyecto) === 5 ? 'EJECUCION' : 'CIERRE';
+    await c.query('UPDATE public.cr_plantilla_actividad SET id_fase_proyecto=$1,nombre=$2,lista_verificacion=$3::json,responsable_sugerido=$4,entregable=$5,tipo_temporal=$6,dias_antes_base=$7,orden=$8,activo=true,updated_at=now() WHERE codigo=$9', [fase.get(faseCodigo), item.nombre, item.lista_verificacion, item.responsable_sugerido, item.entregable, item.tipo_temporal, item.dias_antes_base, item.orden, codigo]);
+  }
+  for (const item of cronogramaOficial.hitos) await c.query('UPDATE public.cr_plantilla_hito SET nombre=$1,criterio_aceptacion=$2,tipo_temporal=$3,dias_antes_base=$4,orden=$5,activo=true,updated_at=now() WHERE codigo=$6', [item.nombre, item.criterio_aceptacion, item.tipo_temporal, item.dias_antes_base, item.orden, item.codigo]);
+  for (const item of cronogramaOficial.timing) await c.query('UPDATE public.cr_plantilla_timing SET actividad=$1,duracion_minutos=$2,tipo_horario=$3,tiempo_extra_minutos=$4,offset_inicio_minutos=$5,responsable_sugerido=$6,lista_verificacion=$7::json,orden=$8,activo=true,updated_at=now() WHERE codigo=$9', [item.actividad, item.duracion_minutos, item.tipo_horario, item.tiempo_extra_minutos, item.offset_inicio_minutos, item.responsable_sugerido, item.lista_verificacion, item.orden, item.codigo]);
+  const actividades = new Map((await c.query('SELECT id_plantilla_actividad,codigo FROM public.cr_plantilla_actividad')).rows.map((x) => [String(x.codigo), x.id_plantilla_actividad]));
+  const hitos = new Map((await c.query('SELECT id_plantilla_hito,codigo FROM public.cr_plantilla_hito')).rows.map((x) => [String(x.codigo), x.id_plantilla_hito]));
+  const timings = new Map((await c.query('SELECT id_plantilla_timing,codigo FROM public.cr_plantilla_timing')).rows.map((x) => [String(x.codigo), x.id_plantilla_timing]));
+  relaciones.existentes = await contar(c, 'cr_plantilla_hito_actividad');
+  for (const [codigoHito, codigosActividad] of cronogramaOficial.relacionesHitoActividad) for (const codigoActividad of codigosActividad) {
+    const resultado = await c.query('INSERT INTO public.cr_plantilla_hito_actividad (id_plantilla_hito,id_plantilla_actividad) VALUES ($1,$2) ON CONFLICT (id_plantilla_hito,id_plantilla_actividad) DO NOTHING', [hitos.get(codigoHito), actividades.get(codigoActividad)]); relaciones.restaurados += Number(resultado.rowCount ?? 0);
+  }
+  for (const [pre, suc] of cronogramaOficial.dependencias) await c.query('INSERT INTO public.cr_plantilla_dependencia (id_actividad_predecesora,id_actividad_sucesora,tipo_dependencia,dias_desfase) VALUES ($1,$2,$3,0) ON CONFLICT (id_actividad_predecesora,id_actividad_sucesora) DO NOTHING', [actividades.get(pre), actividades.get(suc), 'FINISH_TO_START']);
+  dependenciasTiming.existentes = await contar(c, 'cr_plantilla_timing_dependencia');
+  for (const [pre, suc] of cronogramaOficial.dependenciasTiming) { const resultado = await c.query('INSERT INTO public.cr_plantilla_timing_dependencia (id_timing_predecesor,id_timing_sucesor,tipo_dependencia,minutos_desfase) VALUES ($1,$2,$3,0) ON CONFLICT (id_timing_predecesor,id_timing_sucesor) DO NOTHING', [timings.get(pre), timings.get(suc), 'FINISH_TO_START']); dependenciasTiming.restaurados += Number(resultado.rowCount ?? 0); }
+  tiposActividad.existentes = await contar(c, 'cr_plantilla_actividad_tipo_ceremonia');
+  for (const [codigo, codigos] of cronogramaOficial.ceremoniaActividad) for (const codigoTipo of codigos) { const resultado = await c.query('INSERT INTO public.cr_plantilla_actividad_tipo_ceremonia (id_plantilla_actividad,id_tipo_ceremonia) VALUES ($1,$2) ON CONFLICT (id_plantilla_actividad,id_tipo_ceremonia) DO NOTHING', [actividades.get(codigo), tipo.get(codigoTipo)]); tiposActividad.restaurados += Number(resultado.rowCount ?? 0); }
+  tiposTiming.existentes = await contar(c, 'cr_plantilla_timing_tipo_ceremonia');
+  for (const [codigo, codigos] of cronogramaOficial.ceremoniaTiming) for (const codigoTipo of codigos) { const resultado = await c.query('INSERT INTO public.cr_plantilla_timing_tipo_ceremonia (id_plantilla_timing,id_tipo_ceremonia) VALUES ($1,$2) ON CONFLICT (id_plantilla_timing,id_tipo_ceremonia) DO NOTHING', [timings.get(codigo), tipo.get(codigoTipo)]); tiposTiming.restaurados += Number(resultado.rowCount ?? 0); }
+}
+
 async function catalogoRiesgos(c: ClienteSql, categorias: Resumen, plantillas: Resumen, mitigaciones: Resumen, planes: Resumen) {
   categorias.existentes = await contar(c, 'rg_categoria_riesgo');
   plantillas.existentes = await contar(c, 'rg_plantilla_riesgo');
@@ -339,13 +407,14 @@ async function secuencias(c: ClienteSql) {
 
 async function ejecutar() {
   const c = new Client({ connectionString: process.env.DATABASE_URL });
-  const r = { ubigeos: vacio(), categoriasProveedor: vacio(), tipos: vacio(), fases: vacio(), buenasPracticas: vacio(), edtGlobal: vacio(), hitos: vacio(), actividades: vacio(), dependencias: vacio(), timing: vacio(), actividadTipo: vacio(), timingTipo: vacio(), categoriasRiesgo: vacio(), plantillasRiesgo: vacio(), mitigacionesRiesgo: vacio(), planesRiesgo: vacio() };
+  const r = { ubigeos: vacio(), categoriasProveedor: vacio(), tipos: vacio(), fases: vacio(), buenasPracticas: vacio(), edtGlobal: vacio(), hitos: vacio(), actividades: vacio(), dependencias: vacio(), hitosActividades: vacio(), checklist: vacio(), timing: vacio(), timingDependencias: vacio(), actividadTipo: vacio(), timingTipo: vacio(), categoriasRiesgo: vacio(), plantillasRiesgo: vacio(), mitigacionesRiesgo: vacio(), planesRiesgo: vacio() };
   await c.connect();
   try {
-    await ubigeos(c, r.ubigeos); await categoriasProveedor(c, r.categoriasProveedor); const tipos = await catalogo(c, r.tipos, 'gp_tipo_ceremonia', datos.gp_tipo_ceremonia); const fases = await catalogo(c, r.fases, 'gp_fase_proyecto', datos.gp_fase_proyecto); await buenasPracticas(c, r.buenasPracticas); await edtGlobal(c, r.edtGlobal); const hitosReales = await hitos(c, r.hitos); const actividadesReales = await actividades(c, r.actividades, hitosReales, fases); await dependencias(c, r.dependencias, actividadesReales); const timingsReales = await timings(c, r.timing); await relaciones(c, r.actividadTipo, 'cr_plantilla_actividad_tipo_ceremonia', datos.cr_plantilla_actividad_tipo_ceremonia, actividadesReales, tipos); await relaciones(c, r.timingTipo, 'cr_plantilla_timing_tipo_ceremonia', datos.cr_plantilla_timing_tipo_ceremonia, timingsReales, tipos); await catalogoRiesgos(c, r.categoriasRiesgo, r.plantillasRiesgo, r.mitigacionesRiesgo, r.planesRiesgo); await secuencias(c);
+    await ubigeos(c, r.ubigeos); await categoriasProveedor(c, r.categoriasProveedor); await catalogo(c, r.tipos, 'gp_tipo_ceremonia', datos.gp_tipo_ceremonia); const fases = await catalogo(c, r.fases, 'gp_fase_proyecto', datos.gp_fase_proyecto); await buenasPracticas(c, r.buenasPracticas); await edtGlobal(c, r.edtGlobal); const hitosReales = await hitos(c, r.hitos); await actividades(c, r.actividades, hitosReales, fases); await timings(c, r.timing); await sincronizarCronogramaOficial(c, r.hitosActividades, r.timingDependencias, r.actividadTipo, r.timingTipo); await checklistPlantilla(c, r.checklist); await catalogoRiesgos(c, r.categoriasRiesgo, r.plantillasRiesgo, r.mitigacionesRiesgo, r.planesRiesgo); await secuencias(c);
   } finally { await c.end(); }
   console.log('Restauración de datos base');
   const etiquetas: Array<[string, Resumen]> = [['Ubigeos', r.ubigeos], ['Categorías de proveedor', r.categoriasProveedor], ['Tipos de ceremonia', r.tipos], ['Fases de proyecto', r.fases], ['Buenas prácticas', r.buenasPracticas], ['Hitos de plantilla', r.hitos], ['Actividades de plantilla', r.actividades], ['Dependencias de plantilla', r.dependencias], ['Timing de plantilla', r.timing], ['Relaciones actividad/tipo de ceremonia', r.actividadTipo], ['Relaciones timing/tipo de ceremonia', r.timingTipo], ['Categorías de riesgo', r.categoriasRiesgo], ['Plantillas de riesgo', r.plantillasRiesgo], ['Mitigaciones de riesgo', r.mitigacionesRiesgo], ['Planes de riesgo', r.planesRiesgo]];
+  etiquetas.splice(9, 0, ['Relaciones hito/actividad', r.hitosActividades], ['Checklists de actividad', r.checklist], ['Dependencias de timing', r.timingDependencias]);
   etiquetas.unshift(['EDT global', r.edtGlobal]);
   etiquetas.forEach(([nombre, resumen]) => console.log(`${nombre}: ${resumen.restaurados} restaurados | ${resumen.existentes} ya existentes | ${resumen.errores.length} errores`));
   const tablas = etiquetas.map(([, resumen]) => resumen); const totalNuevos = tablas.reduce((n, x) => n + x.restaurados, 0); const totalExistentes = tablas.reduce((n, x) => n + x.existentes, 0); const errores = tablas.flatMap((x) => x.errores);

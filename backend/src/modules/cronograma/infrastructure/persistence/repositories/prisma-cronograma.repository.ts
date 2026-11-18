@@ -91,6 +91,7 @@ export class PrismaCronogramaRepository
     if (!proyecto) return null;
 
     const matrimonios = (await this.db.orm.public.Matrimonio.all()) as Array<{
+      idMatrimonio: string;
       idProyecto: string;
       fechaMatrimonio: unknown;
       idTipoCeremonia: number | null;
@@ -102,6 +103,7 @@ export class PrismaCronogramaRepository
     return {
       idProyecto: proyecto.idProyecto,
       matrimonioExiste: !!matrimonio,
+      idMatrimonio: matrimonio?.idMatrimonio ?? null,
       fechaInicio: this.aFecha(proyecto.fechaInicio),
       fechaMatrimonio: this.aFecha(matrimonio?.fechaMatrimonio),
       idTipoCeremonia: matrimonio?.idTipoCeremonia ?? null,
@@ -109,16 +111,20 @@ export class PrismaCronogramaRepository
   }
 
   async existeCronogramaGenerado(idProyecto: string): Promise<boolean> {
-    const [hitos, actividades, timings] = await Promise.all([
+    const [hitos, actividades] = await Promise.all([
       this.db.orm.public.Hito.all(),
       this.leerActividadesOperativas(),
-      this.leerTimingOperativo(),
     ]);
-    return [hitos, actividades, timings].some((items) =>
+    return [hitos, actividades].some((items) =>
       (items as Array<{ idProyecto: string }>).some(
         (item) => item.idProyecto === idProyecto,
       ),
     );
+  }
+
+  async existeTimingGenerado(idProyecto: string): Promise<boolean> {
+    const timings = await this.leerTimingOperativo();
+    return timings.some((item) => item.idProyecto === idProyecto && item.activo !== false);
   }
 
   async obtenerPlantillasActivas(): Promise<PlantillasCronograma> {
@@ -129,6 +135,10 @@ export class PrismaCronogramaRepository
       timings,
       actividadTipos,
       timingTipos,
+      checklist,
+      hitosActividades,
+      actividadesEdt,
+      timingDependencias,
     } = await this.leerPlantillasCompatibles();
 
     return {
@@ -147,9 +157,7 @@ export class PrismaCronogramaRepository
         .filter((item) => item.activo !== false)
         .map((item) => ({
           idPlantillaActividad: Number(item.id_plantilla_actividad),
-          idPlantillaHito: this.aNumeroONulo(item.id_plantilla_hito),
           nombre: String(item.nombre),
-          listaVerificacion: this.aJsonONulo(item.lista_verificacion),
           responsableSugerido: this.aTextoONulo(item.responsable_sugerido),
           entregable: this.aTextoONulo(item.entregable),
           tipoTemporal: item.tipo_temporal as TipoTemporalCronograma,
@@ -169,11 +177,13 @@ export class PrismaCronogramaRepository
         .filter((item) => item.activo !== false)
         .map((item) => ({
           idPlantillaTiming: Number(item.id_plantilla_timing),
-          horaInicio: String(item.hora_inicio),
+          tipoHorario: String(item.tipo_horario ?? 'FLEXIBLE') as 'FIJO' | 'FLEXIBLE',
+          tiempoExtraMinutos: Number(item.tiempo_extra_minutos ?? 0),
+          offsetInicioMinutos: this.aNumeroONulo(item.offset_inicio_minutos),
           duracionMinutos: Number(item.duracion_minutos),
           actividad: String(item.actividad),
           responsableSugerido: this.aTextoONulo(item.responsable_sugerido),
-          listaVerificacion: this.aJsonONulo(item.lista_verificacion),
+          listaVerificacion: this.aListaTexto(item.lista_verificacion),
           orden: Number(item.orden),
         })),
       actividadesPorTipoCeremonia: this.agruparTiposCeremonia(
@@ -190,6 +200,34 @@ export class PrismaCronogramaRepository
         })),
         'idPlantillaTiming',
       ),
+      checklist: checklist.filter((item) => item.activo !== false).map((item) => ({
+        idPlantillaChecklist: Number(item.id_plantilla_checklist),
+        idPlantillaActividad: Number(item.id_plantilla_actividad),
+        descripcion: String(item.descripcion),
+        orden: Number(item.orden ?? 0),
+        obligatorio: item.obligatorio !== false,
+      })),
+      hitosActividades: (hitosActividades.length
+        ? hitosActividades
+        : actividades
+            .filter((item) => item.id_plantilla_hito != null)
+            .map((item) => ({
+              id_plantilla_hito: item.id_plantilla_hito,
+              id_plantilla_actividad: item.id_plantilla_actividad,
+            }))).map((item) => ({
+        idPlantillaHito: Number(item.id_plantilla_hito),
+        idPlantillaActividad: Number(item.id_plantilla_actividad),
+      })),
+      actividadesEdt: actividadesEdt.map((item) => ({
+        idPlantillaActividad: Number(item.id_plantilla_actividad),
+        idElementoEdt: String(item.id_elemento_edt),
+      })),
+      timingDependencias: timingDependencias.map((item) => ({
+        idTimingPredecesor: Number(item.id_timing_predecesor),
+        idTimingSucesor: Number(item.id_timing_sucesor),
+        tipoDependencia: String(item.tipo_dependencia ?? 'FINISH_TO_START') as 'FINISH_TO_START',
+        minutosDesfase: Number(item.minutos_desfase ?? 0),
+      })),
     };
   }
 
@@ -220,14 +258,61 @@ export class PrismaCronogramaRepository
     await this.db.orm.public.Dependencia.create(data as never);
   }
 
-  async crearTiming(data: CrearTimingCronograma): Promise<void> {
-    await this.db.orm.public.Timing.create({
+  async crearChecklistActividad(data: {
+    idActividad: string;
+    idPlantillaChecklist: number | null;
+    descripcion: string;
+    orden: number;
+    obligatorio: boolean;
+  }): Promise<void> {
+    await this.db.orm.public.ActividadChecklist.create({
       ...data,
+      completado: false,
+      modificadoManualmente: false,
+      activo: true,
+    } as never);
+  }
+
+  async crearHitoActividad(data: {
+    idHito: string;
+    idActividad: string;
+  }): Promise<void> {
+    await this.db.orm.public.HitoActividad.create(data as never);
+  }
+
+  async obtenerElementosEdtActivos(idMatrimonio: string): Promise<string[]> {
+    const filas = await this.consultarSql(
+      `SELECT eme.id_edt_elemento_origen
+       FROM public.gp_edt_matrimonio em
+       JOIN public.gp_edt_matrimonio_elemento eme
+         ON eme.id_edt_matrimonio = em.id_edt_matrimonio
+       WHERE em.id_matrimonio = $1 AND em.estado = true AND eme.activo = true
+         AND eme.id_edt_elemento_origen IS NOT NULL`,
+      [idMatrimonio],
+    );
+    return filas.map((fila) => String(fila.id_edt_elemento_origen));
+  }
+
+  async crearTiming(data: CrearTimingCronograma): Promise<{ idTiming: string }> {
+    const { listaVerificacion, ...timing } = data;
+    const creado = (await this.db.orm.public.Timing.create({
+      ...timing,
+      listaVerificacionLegacy: listaVerificacion,
       fechaHoraInicio: this.aInstant(data.fechaHoraInicio),
       fechaHoraFin: this.aInstant(data.fechaHoraFin),
       modificadoManualmente: false,
       activo: true,
-    } as never);
+    } as never)) as { idTiming: string };
+    return { idTiming: creado.idTiming };
+  }
+
+  async crearTimingDependencia(data: {
+    idTimingPredecesor: string;
+    idTimingSucesor: string;
+    tipoDependencia: 'FINISH_TO_START';
+    minutosDesfase: number;
+  }): Promise<void> {
+    await this.db.orm.public.TimingDependencia.create(data as never);
   }
 
   async obtenerProyecto(idProyecto: string) {
@@ -308,6 +393,28 @@ export class PrismaCronogramaRepository
     )) as Record<string, unknown>;
   }
 
+  async listarHitoActividades(idProyecto: string): Promise<Record<string, unknown>[]> {
+    const [relaciones, hitos] = await Promise.all([
+      this.db.orm.public.HitoActividad.all(),
+      this.db.orm.public.Hito.all(),
+    ]);
+    const idsHitos = new Set((hitos as Array<Record<string, unknown>>)
+      .filter((hito) => hito.idProyecto === idProyecto)
+      .map((hito) => String(hito.idHito)));
+    const actuales = (relaciones as Array<Record<string, unknown>>).filter((relacion) => idsHitos.has(String(relacion.idHito)));
+    if (actuales.length) return actuales;
+    // Compatibilidad de datos pre-refactor: la columna se conserva sin FK hasta
+    // que el proceso de migración de instancias haya materializado el puente.
+    const actividades = await this.leerActividadesOperativas();
+    return actividades
+      .filter((actividad) => actividad.idProyecto === idProyecto && actividad.idHitoLegacy)
+      .map((actividad) => ({ idHito: actividad.idHitoLegacy, idActividad: actividad.idActividad }));
+  }
+
+  async crearHitoActividadManual(idHito: string, idActividad: string): Promise<void> {
+    await this.db.orm.public.HitoActividad.create({ idHito, idActividad } as never);
+  }
+
   async listarActividades(
     idProyecto: string,
     filtros: FiltrosCronograma,
@@ -317,7 +424,6 @@ export class PrismaCronogramaRepository
       .filter(
         (actividad) =>
           this.perteneceYCoincide(actividad, idProyecto, filtros) &&
-          (!filtros.idHito || actividad.idHito === filtros.idHito) &&
           (!filtros.idUsuarioResponsable ||
             actividad.idUsuarioResponsable === filtros.idUsuarioResponsable),
       )
@@ -350,14 +456,31 @@ export class PrismaCronogramaRepository
       idActividad,
       data,
       {
-        idHito: 'id_hito', idPlantillaActividad: 'id_plantilla_actividad',
-        nombre: 'nombre', categoria: 'categoria', descripcion: 'descripcion', listaVerificacion: 'lista_verificacion',
+        idPlantillaActividad: 'id_plantilla_actividad',
+        nombre: 'nombre', categoria: 'categoria', descripcion: 'descripcion',
         entregable: 'entregable', fechaInicio: 'fecha_inicio', fechaFin: 'fecha_fin',
         prioridad: 'prioridad', estado: 'estado', idUsuarioResponsable: 'id_usuario_responsable',
         responsableTexto: 'responsable_texto', orden: 'orden', modificadoManualmente: 'modificado_manualmente', activo: 'activo',
       },
     );
     return { idActividad, ...data };
+  }
+
+  async listarChecklistActividad(idActividad: string): Promise<Record<string, unknown>[]> {
+    const items = await this.db.orm.public.ActividadChecklist.all();
+    return (items as Array<Record<string, unknown>>)
+      .filter((item) => String(item.idActividad) === idActividad)
+      .sort((a, b) => Number(a.orden) - Number(b.orden));
+  }
+
+  async crearChecklistActividadManual(data: Record<string, unknown>): Promise<Record<string, unknown>> {
+    return (await this.db.orm.public.ActividadChecklist.create({
+      ...data, activo: true, completado: false, modificadoManualmente: true,
+    } as never)) as Record<string, unknown>;
+  }
+
+  async actualizarChecklistActividad(idChecklist: string, data: Record<string, unknown>): Promise<Record<string, unknown>> {
+    return (await this.db.orm.public.ActividadChecklist.where({ idChecklist: idChecklist as never }).update(data as never)) as Record<string, unknown>;
   }
 
   async listarDependencias(
@@ -525,18 +648,27 @@ export class PrismaCronogramaRepository
 
   private mapearFilaOperativa(fila: FilaSql): Record<string, unknown> {
     const mapa: Record<string, string> = {
-      id_actividad: 'idActividad', id_proyecto: 'idProyecto', id_hito: 'idHito',
-      id_plantilla_actividad: 'idPlantillaActividad', lista_verificacion: 'listaVerificacion',
+      id_actividad: 'idActividad', id_proyecto: 'idProyecto', id_hito: 'idHitoLegacy',
+      id_plantilla_actividad: 'idPlantillaActividad',
       fecha_inicio: 'fechaInicio', fecha_fin: 'fechaFin', id_usuario_responsable: 'idUsuarioResponsable',
       responsable_texto: 'responsableTexto', modificado_manualmente: 'modificadoManualmente',
+      lista_verificacion: 'listaVerificacion',
       id_timing: 'idTiming', id_plantilla_timing: 'idPlantillaTiming',
       fecha_hora_inicio: 'fechaHoraInicio', fecha_hora_fin: 'fechaHoraFin',
       duracion_minutos: 'duracionMinutos', created_at: 'createdAt', updated_at: 'updatedAt',
     };
-    return Object.fromEntries(Object.entries(fila).map(([clave, valor]) => [
-      mapa[clave] ?? clave,
-      clave === 'lista_verificacion' ? this.aJsonONulo(valor) : valor,
-    ]));
+    return Object.fromEntries(Object.entries(fila).map(([clave, valor]) => {
+      if (clave === 'lista_verificacion' && typeof valor === 'string') {
+        try {
+          return [mapa[clave], JSON.parse(valor)];
+        } catch (_) {
+          // Las instalaciones antiguas conservaron texto separado por punto y
+          // coma: se expone sin perderlo para que Flutter lo presente como lista.
+          return [mapa[clave], valor];
+        }
+      }
+      return [mapa[clave] ?? clave, valor];
+    }));
   }
 
   private async actualizarOperativo(
@@ -574,6 +706,10 @@ export class PrismaCronogramaRepository
     timings: FilaSql[];
     actividadTipos: FilaSql[];
     timingTipos: FilaSql[];
+    checklist: FilaSql[];
+    hitosActividades: FilaSql[];
+    actividadesEdt: FilaSql[];
+    timingDependencias: FilaSql[];
   }> {
     clientePg.types.setTypeParser(114, (valor: string) => valor);
     clientePg.types.setTypeParser(3802, (valor: string) => valor);
@@ -596,6 +732,18 @@ export class PrismaCronogramaRepository
       const timingTipos = await cliente.query(
         'SELECT * FROM public.cr_plantilla_timing_tipo_ceremonia',
       );
+      const checklist = await cliente.query(
+        'SELECT * FROM public.cr_plantilla_actividad_checklist',
+      );
+      const hitosActividades = await cliente.query(
+        'SELECT * FROM public.cr_plantilla_hito_actividad',
+      );
+      const actividadesEdt = await cliente.query(
+        'SELECT * FROM public.cr_plantilla_actividad_edt',
+      );
+      const timingDependencias = await cliente.query(
+        'SELECT * FROM public.cr_plantilla_timing_dependencia',
+      );
       return {
         hitos: hitos.rows,
         actividades: actividades.rows,
@@ -603,6 +751,10 @@ export class PrismaCronogramaRepository
         timings: timings.rows,
         actividadTipos: actividadTipos.rows,
         timingTipos: timingTipos.rows,
+        checklist: checklist.rows,
+        hitosActividades: hitosActividades.rows,
+        actividadesEdt: actividadesEdt.rows,
+        timingDependencias: timingDependencias.rows,
       };
     } finally {
       await cliente.end();
@@ -625,6 +777,17 @@ export class PrismaCronogramaRepository
 
   private aNumeroONulo(valor: unknown): number | null {
     return valor === null || valor === undefined ? null : Number(valor);
+  }
+
+  private aListaTexto(valor: unknown): string[] {
+    const json = this.aJsonONulo(valor);
+    if (Array.isArray(json)) {
+      return json.map(String).map((item) => item.trim()).filter(Boolean);
+    }
+    return String(json ?? '')
+      .split(';')
+      .map((item) => item.trim())
+      .filter(Boolean);
   }
 
   private aTextoONulo(valor: unknown): string | null {

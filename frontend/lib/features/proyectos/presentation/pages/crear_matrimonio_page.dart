@@ -250,16 +250,20 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
       void indexar(Map<String, dynamic> nodo) {
         final id = nodo['idEdtMatrimonioElemento']?.toString();
         final origen = nodo['idEdtElementoOrigen']?.toString();
-        if (id != null && origen != null) origenPorElementoOperativo[id] = origen;
+        if (id != null && origen != null) {
+          origenPorElementoOperativo[id] = origen;
+        }
         if (origen != null) origenesGuardados.add(origen);
-        for (final hijo in List<Object?>.from(nodo['hijos'] as List? ?? const [])) {
+        for (final hijo in List<Object?>.from(
+          nodo['hijos'] as List? ?? const [],
+        )) {
           indexar(Map<String, dynamic>.from(hijo as Map));
         }
       }
 
-      final elementos = List<Object?>.from(edt['elementos'] as List? ?? const [])
-          .map((item) => Map<String, dynamic>.from(item as Map))
-          .toList();
+      final elementos = List<Object?>.from(
+        edt['elementos'] as List? ?? const [],
+      ).map((item) => Map<String, dynamic>.from(item as Map)).toList();
       for (final elemento in elementos) {
         indexar(elemento);
       }
@@ -269,16 +273,17 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
             'nombre': nodo['nombre']?.toString() ?? 'Nueva sección',
             if ((nodo['descripcion']?.toString() ?? '').trim().isNotEmpty)
               'descripcion': nodo['descripcion'].toString(),
-            if (origenPorElementoOperativo[
-                  nodo['idEdtMatrimonioElementoPadre']?.toString()
-                ] !=
+            if (origenPorElementoOperativo[nodo['idEdtMatrimonioElementoPadre']
+                    ?.toString()] !=
                 null)
-              '_idElementoPadreOrigen': origenPorElementoOperativo[
-                nodo['idEdtMatrimonioElementoPadre']?.toString()
-              ],
+              '_idElementoPadreOrigen':
+                  origenPorElementoOperativo[nodo['idEdtMatrimonioElementoPadre']
+                      ?.toString()],
           });
         }
-        for (final hijo in List<Object?>.from(nodo['hijos'] as List? ?? const [])) {
+        for (final hijo in List<Object?>.from(
+          nodo['hijos'] as List? ?? const [],
+        )) {
           recolectarNuevos(Map<String, dynamic>.from(hijo as Map));
         }
       }
@@ -292,10 +297,14 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
         final origen = nodo['elemento'] is Map
             ? (nodo['elemento'] as Map)['idEdtElemento']?.toString()
             : null;
-        if (idRelacion != null && origen != null && origenesGuardados.contains(origen)) {
+        if (idRelacion != null &&
+            origen != null &&
+            origenesGuardados.contains(origen)) {
           seleccion.add(idRelacion);
         }
-        for (final hijo in List<Object?>.from(nodo['hijos'] as List? ?? const [])) {
+        for (final hijo in List<Object?>.from(
+          nodo['hijos'] as List? ?? const [],
+        )) {
           seleccionar(Map<String, dynamic>.from(hijo as Map));
         }
       }
@@ -454,22 +463,57 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
     if (_guardando) return;
     setState(() => _guardando = true);
     try {
-      final datos = _payload(iniciar: iniciar);
-      if (_idProyecto != null) datos['idProyecto'] = _idProyecto;
-      final resultado = await MatrimoniosRemoteDataSource().guardarOnboarding(
-        datos,
-        iniciar: iniciar,
-      );
+      final api = MatrimoniosRemoteDataSource();
+      Map<String, dynamic> resultado;
+
+      // La EDT debe existir antes de iniciar el proyecto: el backend genera el
+      // cronograma a partir de esa estructura al pasar a INICIO. Por eso el
+      // último paso primero persiste/actualiza el borrador, guarda la EDT y
+      // recién después confirma el inicio.
+      if (iniciar) {
+        final borrador = _payload(iniciar: false);
+        if (_idProyecto != null) borrador['idProyecto'] = _idProyecto;
+        final resultadoBorrador = await api.guardarOnboarding(
+          borrador,
+          iniciar: false,
+        );
+        final proyectoBorrador = Map<String, dynamic>.from(
+          resultadoBorrador['proyecto'] as Map? ?? const <String, dynamic>{},
+        );
+        final matrimonioBorrador = Map<String, dynamic>.from(
+          resultadoBorrador['matrimonio'] as Map? ?? const <String, dynamic>{},
+        );
+        _idProyecto = proyectoBorrador['idProyecto']?.toString() ?? _idProyecto;
+        final idMatrimonioBorrador = matrimonioBorrador['idMatrimonio']
+            ?.toString();
+        if (idMatrimonioBorrador == null || idMatrimonioBorrador.isEmpty) {
+          throw StateError('El servidor no devolvió el matrimonio creado.');
+        }
+        await _crearEdtMatrimonio(idMatrimonioBorrador);
+
+        final datosInicio = _payload(iniciar: true);
+        if (_idProyecto != null) datosInicio['idProyecto'] = _idProyecto;
+        resultado = await api.guardarOnboarding(datosInicio, iniciar: true);
+      } else {
+        final datos = _payload(iniciar: false);
+        if (_idProyecto != null) datos['idProyecto'] = _idProyecto;
+        resultado = await api.guardarOnboarding(datos, iniciar: false);
+        final matrimonioBorrador = Map<String, dynamic>.from(
+          resultado['matrimonio'] as Map? ?? const <String, dynamic>{},
+        );
+        final idMatrimonioBorrador = matrimonioBorrador['idMatrimonio']
+            ?.toString();
+        if (_plantillaEdtSeleccionada != null &&
+            idMatrimonioBorrador != null &&
+            idMatrimonioBorrador.isNotEmpty) {
+          await _crearEdtMatrimonio(idMatrimonioBorrador);
+        }
+      }
       if (!mounted) return;
       final matrimonio = Map<String, dynamic>.from(
         resultado['matrimonio'] as Map? ?? const <String, dynamic>{},
       );
       final idMatrimonio = matrimonio['idMatrimonio']?.toString();
-      if (_plantillaEdtSeleccionada != null &&
-          idMatrimonio != null &&
-          idMatrimonio.isNotEmpty) {
-        await _crearEdtMatrimonio(idMatrimonio);
-      }
       if (!mounted) return;
       if (iniciar) {
         final proyecto = Map<String, dynamic>.from(
@@ -543,10 +587,12 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
     if (idPlantilla == null || idPlantilla.isEmpty) {
       throw StateError('La plantilla EDT seleccionada no es valida.');
     }
-    // Guardar borrador y comenzar comparten la misma EDT. Si ya fue creada
-    // desde el borrador, no se duplica al continuar el flujo.
+    // Guardar borrador y comenzar comparten la misma EDT. Cuando el usuario
+    // vuelve al paso EDT y la cambia, se sincroniza esa misma instancia: no
+    // se debe mostrar otra plantilla ni crear una segunda EDT.
     try {
       await _edtApi.obtenerEdtMatrimonio(idMatrimonio);
+      await _aplicarAjustesEdt(idMatrimonio);
       return;
     } on DioException catch (error) {
       if (error.response?.statusCode != 404) rethrow;
@@ -568,7 +614,9 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
       if (origen != null && id != null) {
         elementosPorOrigen[origen] = id;
       }
-      for (final hijo in List<Object?>.from(nodo['hijos'] as List? ?? const [])) {
+      for (final hijo in List<Object?>.from(
+        nodo['hijos'] as List? ?? const [],
+      )) {
         indexarOrigen(Map<String, dynamic>.from(hijo as Map));
       }
     }
@@ -598,7 +646,9 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
       final origen = nodo['idEdtElementoOrigen']?.toString();
       final id = nodo['idEdtMatrimonioElemento']?.toString();
       if (origen != null && id != null) actuales[origen] = id;
-      for (final hijo in List<Object?>.from(nodo['hijos'] as List? ?? const [])) {
+      for (final hijo in List<Object?>.from(
+        nodo['hijos'] as List? ?? const [],
+      )) {
         indexar(Map<String, dynamic>.from(hijo as Map));
       }
     }
@@ -608,7 +658,64 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
     )) {
       indexar(Map<String, dynamic>.from(raiz as Map));
     }
-    Future<void> actualizar(List<Map<String, dynamic>> nodos) async {
+
+    // La EDT operativa es la fuente que se mostrará en Plan. Al retomar un
+    // borrador debemos reflejar también desmarcados, cambios de jerarquía y
+    // orden, no solo el nombre de los elementos seleccionados.
+    final origenesSeleccionados = <String>{};
+    void recopilarSeleccionados(List<Map<String, dynamic>> nodos) {
+      for (final nodo in nodos) {
+        final idPlantilla = nodo['idEdtPlantillaElemento']?.toString();
+        final elemento = nodo['elemento'] is Map
+            ? Map<String, dynamic>.from(nodo['elemento'] as Map)
+            : const <String, dynamic>{};
+        final origen = elemento['idEdtElemento']?.toString();
+        if (idPlantilla != null &&
+            origen != null &&
+            _elementosEdtSeleccionados.contains(idPlantilla)) {
+          origenesSeleccionados.add(origen);
+        }
+        recopilarSeleccionados(
+          List<Object?>.from(
+            nodo['hijos'] as List? ?? const [],
+          ).map((hijo) => Map<String, dynamic>.from(hijo as Map)).toList(),
+        );
+      }
+    }
+
+    Future<bool> conservarNodo(Map<String, dynamic> nodo) async {
+      final hijos = List<Object?>.from(
+        nodo['hijos'] as List? ?? const [],
+      ).map((hijo) => Map<String, dynamic>.from(hijo as Map)).toList();
+      var conservaHijo = false;
+      for (final hijo in hijos) {
+        conservaHijo = (await conservarNodo(hijo)) || conservaHijo;
+      }
+      final origen = nodo['idEdtElementoOrigen']?.toString();
+      final conservar =
+          origen == null ||
+          origenesSeleccionados.contains(origen) ||
+          conservaHijo;
+      if (!conservar) {
+        final id = nodo['idEdtMatrimonioElemento']?.toString();
+        if (id != null) {
+          await _edtApi.eliminarElementoMatrimonio(idMatrimonio, id);
+        }
+      }
+      return conservar;
+    }
+
+    recopilarSeleccionados(_arbolEdt);
+    for (final raiz in List<Object?>.from(
+      respuesta['elementos'] as List? ?? const [],
+    )) {
+      await conservarNodo(Map<String, dynamic>.from(raiz as Map));
+    }
+
+    Future<void> actualizar(
+      List<Map<String, dynamic>> nodos, [
+      String? idPadreActual,
+    ]) async {
       for (var orden = 0; orden < nodos.length; orden++) {
         final nodo = nodos[orden];
         final idPlantilla = nodo['idEdtPlantillaElemento']?.toString();
@@ -624,12 +731,13 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
             'nombre': elemento['nombre']?.toString() ?? 'Elemento EDT',
             'descripcion': elemento['descripcion']?.toString(),
             'orden': orden,
+            'idEdtMatrimonioElementoPadre': idPadreActual,
           });
         }
-        final hijos = List<Object?>.from(nodo['hijos'] as List? ?? const [])
-            .map((hijo) => Map<String, dynamic>.from(hijo as Map))
-            .toList();
-        await actualizar(hijos);
+        final hijos = List<Object?>.from(
+          nodo['hijos'] as List? ?? const [],
+        ).map((hijo) => Map<String, dynamic>.from(hijo as Map)).toList();
+        await actualizar(hijos, idActual);
       }
     }
 
@@ -1029,64 +1137,62 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
     );
   }
 
-  Widget _selectorAlcance() =>
-      FutureBuilder<List<Map<String, dynamic>>>(
-        future: _categoriasServicio,
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return const Text('No se pudieron cargar las categorías de servicio.');
-          }
-          final categorias = (snapshot.data ?? const <Map<String, dynamic>>[])
-              .where((categoria) => categoria['activo'] != false)
-              .toList();
-          final nombres = categorias
-              .where(
-                (categoria) => _alcanceCodigos.contains(
-                  categoria['codigo']?.toString(),
-                ),
-              )
-              .map((categoria) => categoria['nombre']?.toString() ?? '')
-              .where((nombre) => nombre.isNotEmpty)
-              .join(', ');
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Alcance del proyecto',
-                style: Theme.of(
-                  context,
-                ).textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w500),
+  Widget _selectorAlcance() => FutureBuilder<List<Map<String, dynamic>>>(
+    future: _categoriasServicio,
+    builder: (context, snapshot) {
+      if (snapshot.hasError) {
+        return const Text('No se pudieron cargar las categorías de servicio.');
+      }
+      final categorias = (snapshot.data ?? const <Map<String, dynamic>>[])
+          .where((categoria) => categoria['activo'] != false)
+          .toList();
+      final nombres = categorias
+          .where(
+            (categoria) =>
+                _alcanceCodigos.contains(categoria['codigo']?.toString()),
+          )
+          .map((categoria) => categoria['nombre']?.toString() ?? '')
+          .where((nombre) => nombre.isNotEmpty)
+          .join(', ');
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Alcance del proyecto',
+            style: Theme.of(
+              context,
+            ).textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w500),
+          ),
+          const SizedBox(height: 7),
+          InkWell(
+            borderRadius: BorderRadius.circular(12),
+            onTap: snapshot.hasData
+                ? () => _seleccionarAlcance(categorias)
+                : null,
+            child: InputDecorator(
+              isEmpty: nombres.isEmpty,
+              decoration: const InputDecoration(
+                prefixIcon: Icon(Icons.category_outlined),
+                suffixIcon: Icon(Icons.arrow_drop_down),
               ),
-              const SizedBox(height: 7),
-              InkWell(
-                borderRadius: BorderRadius.circular(12),
-                onTap: snapshot.hasData
-                    ? () => _seleccionarAlcance(categorias)
+              child: Text(
+                nombres.isEmpty
+                    ? (snapshot.hasData
+                          ? 'Selecciona los servicios incluidos'
+                          : 'Cargando categorías...')
+                    : nombres,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: nombres.isEmpty
+                    ? Theme.of(context).inputDecorationTheme.hintStyle
                     : null,
-                child: InputDecorator(
-                  isEmpty: nombres.isEmpty,
-                  decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.category_outlined),
-                    suffixIcon: Icon(Icons.arrow_drop_down),
-                  ),
-                  child: Text(
-                    nombres.isEmpty
-                        ? (snapshot.hasData
-                              ? 'Selecciona los servicios incluidos'
-                              : 'Cargando categorías...')
-                        : nombres,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: nombres.isEmpty
-                        ? Theme.of(context).inputDecorationTheme.hintStyle
-                        : null,
-                  ),
-                ),
               ),
-            ],
-          );
-        },
+            ),
+          ),
+        ],
       );
+    },
+  );
 
   Future<void> _seleccionarAlcance(
     List<Map<String, dynamic>> categorias,
@@ -1235,7 +1341,8 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
                           trailing: IconButton(
                             tooltip: 'Quitar',
                             icon: const Icon(Icons.close_outlined),
-                            onPressed: () => setState(() => items.removeAt(index)),
+                            onPressed: () =>
+                                setState(() => items.removeAt(index)),
                           ),
                         ),
                       ),
@@ -1295,16 +1402,16 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
         children: [
           Text(
             'Seleccionar plantilla',
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-              fontWeight: FontWeight.w800,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800),
           ),
           const SizedBox(height: 4),
           Text(
             'Elige la estructura que será la base editable de este matrimonio.',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: AppColors.textSecondary,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary),
           ),
           const SizedBox(height: 12),
           AppSelectField<String>(
@@ -1336,18 +1443,31 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
     },
   );
 
-  Future<void> _seleccionarPlantillaEdt(
-    Map<String, dynamic> plantilla,
-  ) async {
+  Future<void> _seleccionarPlantillaEdt(Map<String, dynamic> plantilla) async {
     final idPlantilla = plantilla['idEdtPlantilla']?.toString();
     if (idPlantilla == null || idPlantilla.isEmpty) return;
     setState(() => _cargandoArbolEdt = true);
     try {
       final respuesta = await _edtApi.arbol(idPlantilla);
-      final categorias = await _categoriasServicio;
+      final elementos = respuesta['elementos'] ?? respuesta['arbol'];
+      if (elementos != null && elementos is! List) {
+        throw StateError(
+          'La estructura EDT recibida no contiene una lista válida.',
+        );
+      }
       final arbol = List<Object?>.from(
-        respuesta['elementos'] as List? ?? const [],
-      ).map((item) => Map<String, dynamic>.from(item as Map)).toList();
+        elementos as List? ?? const [],
+      ).whereType<Map>().map(Map<String, dynamic>.from).toList();
+
+      // La EDT debe poder visualizarse aunque el catálogo auxiliar de
+      // categorías no esté disponible. En ese caso se conservan seleccionados
+      // los elementos generales y la persona puede revisar los opcionales.
+      List<Map<String, dynamic>> categorias = const [];
+      try {
+        categorias = await _categoriasServicio;
+      } catch (_) {
+        categorias = const [];
+      }
       final seleccion = <String>{};
       void seleccionarAplicables(Map<String, dynamic> nodo) {
         final elemento = nodo['elemento'] is Map
@@ -1363,10 +1483,13 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
         }
         final idNodo = nodo['idEdtPlantillaElemento']?.toString();
         if (idNodo != null &&
-            (idCategoria == null || _alcanceCodigos.contains(codigoCategoria))) {
+            (idCategoria == null ||
+                _alcanceCodigos.contains(codigoCategoria))) {
           seleccion.add(idNodo);
         }
-        for (final hijo in List<Object?>.from(nodo['hijos'] as List? ?? const [])) {
+        for (final hijo in List<Object?>.from(
+          nodo['hijos'] as List? ?? const [],
+        )) {
           seleccionarAplicables(Map<String, dynamic>.from(hijo as Map));
         }
       }
@@ -1403,11 +1526,10 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            _plantillaEdtSeleccionada?['nombre']?.toString() ??
-                'Plantilla EDT',
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-              fontWeight: FontWeight.w800,
-            ),
+            _plantillaEdtSeleccionada?['nombre']?.toString() ?? 'Plantilla EDT',
+            style: Theme.of(
+              context,
+            ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800),
           ),
           const SizedBox(height: 4),
           const Text(
@@ -1415,10 +1537,12 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
           ),
           const SizedBox(height: 8),
           if (_cargandoArbolEdt)
-            const Center(child: Padding(
-              padding: EdgeInsets.all(20),
-              child: CircularProgressIndicator(),
-            ))
+            const Center(
+              child: Padding(
+                padding: EdgeInsets.all(20),
+                child: CircularProgressIndicator(),
+              ),
+            )
           else if (_arbolEdt.isEmpty)
             const Padding(
               padding: EdgeInsets.all(12),
@@ -1446,8 +1570,13 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
             ..._arbolEdt.map(_nodoSeleccionableEdt),
             ..._elementosEdtNuevos.asMap().entries.map(
               (entry) => ListTile(
-                leading: const Icon(Icons.add_box_outlined, color: AppColors.primary),
-                title: Text(entry.value['nombre']?.toString() ?? 'Nuevo elemento'),
+                leading: const Icon(
+                  Icons.add_box_outlined,
+                  color: AppColors.primary,
+                ),
+                title: Text(
+                  entry.value['nombre']?.toString() ?? 'Nuevo elemento',
+                ),
                 subtitle: Text(
                   _nombreSeccionSuperiorEdt(
                     entry.value['_idElementoPadreOrigen']?.toString(),
@@ -1456,9 +1585,8 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
                 trailing: IconButton(
                   tooltip: 'Quitar',
                   icon: const Icon(Icons.close_outlined),
-                  onPressed: () => setState(
-                    () => _elementosEdtNuevos.removeAt(entry.key),
-                  ),
+                  onPressed: () =>
+                      setState(() => _elementosEdtNuevos.removeAt(entry.key)),
                 ),
               ),
             ),
@@ -1473,10 +1601,13 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
     void recolectar(Map<String, dynamic> nodo) {
       final id = nodo['idEdtPlantillaElemento']?.toString();
       if (id != null) ids.add(id);
-      for (final hijo in List<Object?>.from(nodo['hijos'] as List? ?? const [])) {
+      for (final hijo in List<Object?>.from(
+        nodo['hijos'] as List? ?? const [],
+      )) {
         recolectar(Map<String, dynamic>.from(hijo as Map));
       }
     }
+
     for (final nodo in _arbolEdt) {
       recolectar(nodo);
     }
@@ -1507,9 +1638,9 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
               children: [
                 Text(
                   'Agregar sección',
-                  style: Theme.of(modalContext).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.w800,
-                  ),
+                  style: Theme.of(
+                    modalContext,
+                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
                 ),
                 const SizedBox(height: AppSpacing.lg),
                 AppTextField(
@@ -1563,8 +1694,7 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
                       'nombre': texto,
                       if (descripcion.text.trim().isNotEmpty)
                         'descripcion': descripcion.text.trim(),
-                      if (idPadreOrigen != null)
-                        '_idElementoPadreOrigen': idPadreOrigen,
+                      '_idElementoPadreOrigen': ?idPadreOrigen,
                     });
                   },
                 ),
@@ -1593,9 +1723,9 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
     final elemento = nodo['elemento'] is Map
         ? Map<String, dynamic>.from(nodo['elemento'] as Map)
         : const <String, dynamic>{};
-    final hijos = List<Object?>.from(nodo['hijos'] as List? ?? const [])
-        .map((hijo) => Map<String, dynamic>.from(hijo as Map))
-        .toList();
+    final hijos = List<Object?>.from(
+      nodo['hijos'] as List? ?? const [],
+    ).map((hijo) => Map<String, dynamic>.from(hijo as Map)).toList();
     final seleccionado = _elementosEdtSeleccionados.contains(id);
     final puedeSubir = _puedeMoverElementoEdt(id, -1);
     final puedeBajar = _puedeMoverElementoEdt(id, 1);
@@ -1618,66 +1748,74 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
               ),
               child: Row(
                 children: [
-              Expanded(
-                child: AppCheckbox(
-                  label: elemento['nombre']?.toString() ?? 'Elemento EDT',
-                  subtitle: elemento['idCategoriaServicio'] == null
-                      ? 'Elemento general'
-                      : seleccionado
-                      ? 'Servicio incluido'
-                      : 'Servicio opcional',
-                  value: seleccionado,
-                  onChanged: (marcado) => _cambiarSeleccionEdt(nodo, marcado),
-                ),
-              ),
-              if (puedeArrastrar)
-                Draggable<String>(
-                  data: id,
-                  feedback: Material(
-                    color: Colors.transparent,
-                    child: Icon(
-                      Icons.drag_indicator,
-                      size: 28,
-                      color: AppColors.primary.withValues(alpha: .85),
+                  Expanded(
+                    child: AppCheckbox(
+                      label: elemento['nombre']?.toString() ?? 'Elemento EDT',
+                      subtitle: elemento['idCategoriaServicio'] == null
+                          ? 'Elemento general'
+                          : seleccionado
+                          ? 'Servicio incluido'
+                          : 'Servicio opcional',
+                      value: seleccionado,
+                      onChanged: (marcado) =>
+                          _cambiarSeleccionEdt(nodo, marcado),
                     ),
                   ),
-                  childWhenDragging: const Opacity(
-                    opacity: .35,
-                    child: Icon(Icons.drag_indicator, color: AppColors.primary),
+                  if (puedeArrastrar)
+                    Draggable<String>(
+                      data: id,
+                      feedback: Material(
+                        color: Colors.transparent,
+                        child: Icon(
+                          Icons.drag_indicator,
+                          size: 28,
+                          color: AppColors.primary.withValues(alpha: .85),
+                        ),
+                      ),
+                      childWhenDragging: const Opacity(
+                        opacity: .35,
+                        child: Icon(
+                          Icons.drag_indicator,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                      child: const Tooltip(
+                        message:
+                            'Arrastra para reordenar dentro del mismo nivel',
+                        child: Icon(
+                          Icons.drag_indicator,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                    )
+                  else
+                    Icon(
+                      Icons.drag_indicator,
+                      color: AppColors.textSecondary.withValues(alpha: .35),
+                    ),
+                  IconButton(
+                    tooltip: 'Subir',
+                    onPressed: puedeSubir
+                        ? () => _moverElementoEdt(id, -1)
+                        : null,
+                    icon: const Icon(Icons.keyboard_arrow_up),
                   ),
-                  child: const Tooltip(
-                    message: 'Arrastra para reordenar dentro del mismo nivel',
-                    child: Icon(Icons.drag_indicator, color: AppColors.primary),
+                  IconButton(
+                    tooltip: 'Bajar',
+                    onPressed: puedeBajar
+                        ? () => _moverElementoEdt(id, 1)
+                        : null,
+                    icon: const Icon(Icons.keyboard_arrow_down),
                   ),
-                )
-              else
-                Icon(
-                  Icons.drag_indicator,
-                  color: AppColors.textSecondary.withValues(alpha: .35),
-                ),
-              IconButton(
-                tooltip: 'Subir',
-                onPressed: puedeSubir
-                    ? () => _moverElementoEdt(id, -1)
-                    : null,
-                icon: const Icon(Icons.keyboard_arrow_up),
-              ),
-              IconButton(
-                tooltip: 'Bajar',
-                onPressed: puedeBajar
-                    ? () => _moverElementoEdt(id, 1)
-                    : null,
-                icon: const Icon(Icons.keyboard_arrow_down),
-              ),
-              PopupMenuButton<String>(
-                tooltip: 'Acciones',
-                onSelected: (accion) {
-                  if (accion == 'editar') _editarElementoEdt(nodo);
-                },
-                itemBuilder: (_) => const [
-                  PopupMenuItem(value: 'editar', child: Text('Editar')),
-                ],
-              ),
+                  PopupMenuButton<String>(
+                    tooltip: 'Acciones',
+                    onSelected: (accion) {
+                      if (accion == 'editar') _editarElementoEdt(nodo);
+                    },
+                    itemBuilder: (_) => const [
+                      PopupMenuItem(value: 'editar', child: Text('Editar')),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -1693,10 +1831,13 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
     void recolectar(Map<String, dynamic> actual) {
       final id = actual['idEdtPlantillaElemento']?.toString();
       if (id != null) ids.add(id);
-      for (final hijo in List<Object?>.from(actual['hijos'] as List? ?? const [])) {
+      for (final hijo in List<Object?>.from(
+        actual['hijos'] as List? ?? const [],
+      )) {
         recolectar(Map<String, dynamic>.from(hijo as Map));
       }
     }
+
     recolectar(nodo);
     setState(() {
       if (marcado) {
@@ -1768,7 +1909,9 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
           ),
         );
       }
-      for (final hijo in List<Object?>.from(nodo['hijos'] as List? ?? const [])) {
+      for (final hijo in List<Object?>.from(
+        nodo['hijos'] as List? ?? const [],
+      )) {
         recorrer(Map<String, dynamic>.from(hijo as Map), nivel + 1);
       }
     }
@@ -1786,9 +1929,9 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
             ? Map<String, dynamic>.from(nodo['elemento'] as Map)
             : const <String, dynamic>{};
         if (elemento['idEdtElemento']?.toString() == idOrigen) return nodo;
-        final hijos = List<Object?>.from(nodo['hijos'] as List? ?? const [])
-            .map((hijo) => Map<String, dynamic>.from(hijo as Map))
-            .toList();
+        final hijos = List<Object?>.from(
+          nodo['hijos'] as List? ?? const [],
+        ).map((hijo) => Map<String, dynamic>.from(hijo as Map)).toList();
         final encontrado = buscar(hijos);
         if (encontrado != null) return encontrado;
       }
@@ -1822,9 +1965,9 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
         return destino >= 0 && destino < hermanos.length;
       }
       for (final nodo in hermanos) {
-        final hijos = List<Object?>.from(nodo['hijos'] as List? ?? const [])
-            .map((hijo) => Map<String, dynamic>.from(hijo as Map))
-            .toList();
+        final hijos = List<Object?>.from(
+          nodo['hijos'] as List? ?? const [],
+        ).map((hijo) => Map<String, dynamic>.from(hijo as Map)).toList();
         if (buscar(hijos)) return true;
       }
       return false;
@@ -1843,9 +1986,9 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
       );
       if (contieneOrigen && contieneDestino) return true;
       for (final nodo in hermanos) {
-        final hijos = List<Object?>.from(nodo['hijos'] as List? ?? const [])
-            .map((hijo) => Map<String, dynamic>.from(hijo as Map))
-            .toList();
+        final hijos = List<Object?>.from(
+          nodo['hijos'] as List? ?? const [],
+        ).map((hijo) => Map<String, dynamic>.from(hijo as Map)).toList();
         if (buscar(hijos)) return true;
       }
       return false;
@@ -1868,9 +2011,9 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
         return true;
       }
       for (final nodo in hermanos) {
-        final hijos = List<Object?>.from(nodo['hijos'] as List? ?? const [])
-            .map((hijo) => Map<String, dynamic>.from(hijo as Map))
-            .toList();
+        final hijos = List<Object?>.from(
+          nodo['hijos'] as List? ?? const [],
+        ).map((hijo) => Map<String, dynamic>.from(hijo as Map)).toList();
         if (mover(hijos)) {
           nodo['hijos'] = hijos;
           return true;
@@ -1897,9 +2040,9 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
         return true;
       }
       for (final nodo in hermanos) {
-        final hijos = List<Object?>.from(nodo['hijos'] as List? ?? const [])
-            .map((hijo) => Map<String, dynamic>.from(hijo as Map))
-            .toList();
+        final hijos = List<Object?>.from(
+          nodo['hijos'] as List? ?? const [],
+        ).map((hijo) => Map<String, dynamic>.from(hijo as Map)).toList();
         if (intercambiar(hijos)) {
           nodo['hijos'] = hijos;
           return true;
@@ -1976,9 +2119,9 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
       const SizedBox(height: 4),
       Text(
         '${_elementosEdtSeleccionados.length + _elementosEdtNuevos.length} elementos incluidos',
-        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-          color: AppColors.textSecondary,
-        ),
+        style: Theme.of(
+          context,
+        ).textTheme.bodySmall?.copyWith(color: AppColors.textSecondary),
       ),
       const SizedBox(height: 8),
       AppButton(
@@ -2004,13 +2147,15 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
               children: [
                 Text(
                   'EDT del matrimonio',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.w800,
-                  ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
                 ),
                 const SizedBox(height: 12),
                 Expanded(
-                  child: ListView(children: _arbolEdt.map(_nodoVistaEdt).toList()),
+                  child: ListView(
+                    children: _arbolEdt.map(_nodoVistaEdt).toList(),
+                  ),
                 ),
               ],
             ),
@@ -2028,15 +2173,18 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
     final elemento = nodo['elemento'] is Map
         ? Map<String, dynamic>.from(nodo['elemento'] as Map)
         : const <String, dynamic>{};
-    final hijos = List<Object?>.from(nodo['hijos'] as List? ?? const [])
-        .map((hijo) => Map<String, dynamic>.from(hijo as Map));
+    final hijos = List<Object?>.from(
+      nodo['hijos'] as List? ?? const [],
+    ).map((hijo) => Map<String, dynamic>.from(hijo as Map));
     return Column(
       children: [
         ListTile(
           dense: true,
           contentPadding: EdgeInsets.only(left: nivel * 18.0),
           leading: Icon(
-            nivel == 0 ? Icons.account_tree_outlined : Icons.subdirectory_arrow_right,
+            nivel == 0
+                ? Icons.account_tree_outlined
+                : Icons.subdirectory_arrow_right,
             color: AppColors.primary,
           ),
           title: Text(elemento['nombre']?.toString() ?? 'Elemento EDT'),
@@ -2061,9 +2209,9 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
       if (nombres.isEmpty) {
         return Text(
           'No se definieron servicios.',
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-            color: AppColors.textSecondary,
-          ),
+          style: Theme.of(
+            context,
+          ).textTheme.bodySmall?.copyWith(color: AppColors.textSecondary),
         );
       }
       return Wrap(
@@ -2123,7 +2271,11 @@ class _CrearMatrimonioPageState extends State<CrearMatrimonioPage> {
                 children: [
                   const Padding(
                     padding: EdgeInsets.only(top: 5),
-                    child: Icon(Icons.circle, size: 6, color: AppColors.primary),
+                    child: Icon(
+                      Icons.circle,
+                      size: 6,
+                      color: AppColors.primary,
+                    ),
                   ),
                   const SizedBox(width: 8),
                   Expanded(child: Text(item)),
@@ -2330,9 +2482,7 @@ class _SelectorAlcanceSheet extends StatefulWidget {
 }
 
 class _SelectorAlcanceSheetState extends State<_SelectorAlcanceSheet> {
-  late final Set<String> _seleccion = Set<String>.from(
-    widget.seleccionInicial,
-  );
+  late final Set<String> _seleccion = Set<String>.from(widget.seleccionInicial);
 
   @override
   Widget build(BuildContext context) {
@@ -2346,96 +2496,100 @@ class _SelectorAlcanceSheetState extends State<_SelectorAlcanceSheet> {
 
     return SafeArea(
       child: SizedBox(
-      height: MediaQuery.sizeOf(context).height * .72,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 4, 20, 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Alcance del proyecto',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            const SizedBox(height: 4),
-            Text(
-              'Selecciona los servicios que estarán incluidos.',
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: TextButton.icon(
-                onPressed: codigos.isEmpty
-                    ? null
-                    : () => setState(() {
-                        if (todosSeleccionados) {
-                          _seleccion.removeAll(codigos);
-                        } else {
-                          _seleccion.addAll(codigos);
-                        }
-                      }),
-                icon: Icon(
-                  todosSeleccionados
-                      ? Icons.deselect_outlined
-                      : Icons.select_all_outlined,
-                  size: 18,
-                ),
-                label: Text(
-                  todosSeleccionados ? 'Limpiar selección' : 'Seleccionar todos',
+        height: MediaQuery.sizeOf(context).height * .72,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 4, 20, 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Alcance del proyecto',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              const SizedBox(height: 4),
+              Text(
+                'Selecciona los servicios que estarán incluidos.',
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton.icon(
+                  onPressed: codigos.isEmpty
+                      ? null
+                      : () => setState(() {
+                          if (todosSeleccionados) {
+                            _seleccion.removeAll(codigos);
+                          } else {
+                            _seleccion.addAll(codigos);
+                          }
+                        }),
+                  icon: Icon(
+                    todosSeleccionados
+                        ? Icons.deselect_outlined
+                        : Icons.select_all_outlined,
+                    size: 18,
+                  ),
+                  label: Text(
+                    todosSeleccionados
+                        ? 'Limpiar selección'
+                        : 'Seleccionar todos',
+                  ),
                 ),
               ),
-            ),
-            Expanded(
-              child: widget.categorias.isEmpty
-                  ? const Center(
-                      child: Text('No hay categorías de servicio disponibles.'),
-                    )
-                  : ListView.separated(
-                      itemCount: widget.categorias.length,
-                      separatorBuilder: (_, _) => const Divider(height: 1),
-                      itemBuilder: (_, index) {
-                        final categoria = widget.categorias[index];
-                        final codigo = categoria['codigo']?.toString();
-                        if (codigo == null || codigo.isEmpty) {
-                          return const SizedBox.shrink();
-                        }
-                        return AppCheckbox(
-                          label: categoria['nombre']?.toString() ?? codigo,
-                          value: _seleccion.contains(codigo),
-                          onChanged: (marcado) => setState(() {
-                            if (marcado) {
-                              _seleccion.add(codigo);
-                            } else {
-                              _seleccion.remove(codigo);
-                            }
-                          }),
-                        );
-                      },
+              Expanded(
+                child: widget.categorias.isEmpty
+                    ? const Center(
+                        child: Text(
+                          'No hay categorías de servicio disponibles.',
+                        ),
+                      )
+                    : ListView.separated(
+                        itemCount: widget.categorias.length,
+                        separatorBuilder: (_, _) => const Divider(height: 1),
+                        itemBuilder: (_, index) {
+                          final categoria = widget.categorias[index];
+                          final codigo = categoria['codigo']?.toString();
+                          if (codigo == null || codigo.isEmpty) {
+                            return const SizedBox.shrink();
+                          }
+                          return AppCheckbox(
+                            label: categoria['nombre']?.toString() ?? codigo,
+                            value: _seleccion.contains(codigo),
+                            onChanged: (marcado) => setState(() {
+                              if (marcado) {
+                                _seleccion.add(codigo);
+                              } else {
+                                _seleccion.remove(codigo);
+                              }
+                            }),
+                          );
+                        },
+                      ),
+              ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Expanded(
+                    child: AppButton(
+                      label: 'Cancelar',
+                      variant: AppButtonVariant.secondary,
+                      onPressed: () => Navigator.of(context).pop(),
                     ),
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                Expanded(
-                  child: AppButton(
-                    label: 'Cancelar',
-                    variant: AppButtonVariant.secondary,
-                    onPressed: () => Navigator.of(context).pop(),
                   ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: AppButton(
-                    label: 'Confirmar',
-                    onPressed: () => Navigator.of(context).pop(_seleccion),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: AppButton(
+                      label: 'Confirmar',
+                      onPressed: () => Navigator.of(context).pop(_seleccion),
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
-    ),
-  );
+    );
   }
 }
 

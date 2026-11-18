@@ -84,6 +84,13 @@ export class ListarCronogramaDto {
   activo?: boolean;
 }
 
+export class GenerarTimingDto {
+  @ApiProperty({ example: '15:30', description: 'Hora inicial del día de la boda (HH:mm).' })
+  @IsString()
+  @Transform(emptyToNull)
+  horaInicio!: string;
+}
+
 export class CrearHitoDto {
   @ApiPropertyOptional({ minimum: 1 }) @Type(() => Number) @IsOptional() @IsInt() @Min(1)
   idPlantillaHito?: number | null;
@@ -181,6 +188,14 @@ export class CambiarEstadoActividadDto {
   @ApiProperty({ enum: EstadoActividadDto })
   @IsEnum(EstadoActividadDto)
   estado!: EstadoActividadDto;
+}
+export class CrearChecklistActividadDto {
+  @ApiProperty({ maxLength: 1000 }) @IsString() @MaxLength(1000) descripcion!: string;
+  @ApiPropertyOptional({ minimum: 0 }) @Type(() => Number) @IsOptional() @IsInt() @Min(0) orden?: number;
+  @ApiPropertyOptional({ default: true }) @Transform(booleano) @IsOptional() @IsBoolean() obligatorio?: boolean;
+}
+export class ActualizarChecklistActividadDto extends PartialType(CrearChecklistActividadDto) {
+  @ApiPropertyOptional() @Transform(booleano) @IsOptional() @IsBoolean() completado?: boolean;
 }
 
 export class CrearDependenciaDto {

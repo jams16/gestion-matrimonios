@@ -4,6 +4,7 @@ export type TipoTemporalCronograma =
 export interface ContextoCronogramaProyecto {
   idProyecto: string;
   matrimonioExiste: boolean;
+  idMatrimonio: string | null;
   fechaInicio: Date | null;
   fechaMatrimonio: Date | null;
   idTipoCeremonia: number | null;
@@ -21,9 +22,7 @@ export interface PlantillaHitoCronograma {
 
 export interface PlantillaActividadCronograma {
   idPlantillaActividad: number;
-  idPlantillaHito: number | null;
   nombre: string;
-  listaVerificacion: unknown;
   responsableSugerido: string | null;
   entregable: string | null;
   tipoTemporal: TipoTemporalCronograma;
@@ -32,6 +31,24 @@ export interface PlantillaActividadCronograma {
   duracionEstimadaDias: number | null;
   prioridad: string | null;
   orden: number;
+}
+
+export interface PlantillaChecklistCronograma {
+  idPlantillaChecklist: number;
+  idPlantillaActividad: number;
+  descripcion: string;
+  orden: number;
+  obligatorio: boolean;
+}
+
+export interface PlantillaHitoActividadCronograma {
+  idPlantillaHito: number;
+  idPlantillaActividad: number;
+}
+
+export interface PlantillaActividadEdtCronograma {
+  idPlantillaActividad: number;
+  idElementoEdt: string;
 }
 
 export interface PlantillaDependenciaCronograma {
@@ -43,12 +60,21 @@ export interface PlantillaDependenciaCronograma {
 
 export interface PlantillaTimingCronograma {
   idPlantillaTiming: number;
-  horaInicio: string;
+  tipoHorario: 'FIJO' | 'FLEXIBLE';
+  tiempoExtraMinutos: number;
+  offsetInicioMinutos: number | null;
   duracionMinutos: number;
   actividad: string;
   responsableSugerido: string | null;
-  listaVerificacion: unknown;
+  listaVerificacion: string[];
   orden: number;
+}
+
+export interface PlantillaTimingDependenciaCronograma {
+  idTimingPredecesor: number;
+  idTimingSucesor: number;
+  tipoDependencia: 'FINISH_TO_START';
+  minutosDesfase: number;
 }
 
 export interface PlantillasCronograma {
@@ -58,6 +84,10 @@ export interface PlantillasCronograma {
   timings: PlantillaTimingCronograma[];
   actividadesPorTipoCeremonia: Map<number, number[]>;
   timingsPorTipoCeremonia: Map<number, number[]>;
+  checklist: PlantillaChecklistCronograma[];
+  hitosActividades: PlantillaHitoActividadCronograma[];
+  actividadesEdt: PlantillaActividadEdtCronograma[];
+  timingDependencias: PlantillaTimingDependenciaCronograma[];
 }
 
 export interface CrearHitoCronograma {
@@ -72,10 +102,8 @@ export interface CrearHitoCronograma {
 
 export interface CrearActividadCronograma {
   idProyecto: string;
-  idHito: string | null;
   idPlantillaActividad: number;
   nombre: string;
-  listaVerificacion: unknown;
   entregable: string | null;
   fechaInicio: Date;
   fechaFin: Date;
@@ -83,6 +111,19 @@ export interface CrearActividadCronograma {
   responsableTexto: string | null;
   estado: 'PENDIENTE';
   orden: number;
+}
+
+export interface CrearChecklistActividadCronograma {
+  idActividad: string;
+  idPlantillaChecklist: number | null;
+  descripcion: string;
+  orden: number;
+  obligatorio: boolean;
+}
+
+export interface CrearHitoActividadCronograma {
+  idHito: string;
+  idActividad: string;
 }
 
 export interface CrearDependenciaCronograma {
@@ -100,7 +141,9 @@ export interface CrearTimingCronograma {
   fechaHoraFin: Date;
   duracionMinutos: number;
   responsableTexto: string | null;
-  listaVerificacion: unknown;
+  listaVerificacion: string[];
+  tipoHorario: 'FIJO' | 'FLEXIBLE';
+  tiempoExtraMinutos: number;
   estado: 'PENDIENTE';
   orden: number;
 }
@@ -126,5 +169,15 @@ export abstract class CronogramaRepository {
     data: CrearActividadCronograma,
   ): Promise<{ idActividad: string }>;
   abstract crearDependencia(data: CrearDependenciaCronograma): Promise<void>;
-  abstract crearTiming(data: CrearTimingCronograma): Promise<void>;
+  abstract crearTiming(data: CrearTimingCronograma): Promise<{ idTiming: string }>;
+  abstract crearTimingDependencia(data: {
+    idTimingPredecesor: string;
+    idTimingSucesor: string;
+    tipoDependencia: 'FINISH_TO_START';
+    minutosDesfase: number;
+  }): Promise<void>;
+  abstract existeTimingGenerado(idProyecto: string): Promise<boolean>;
+  abstract crearChecklistActividad(data: CrearChecklistActividadCronograma): Promise<void>;
+  abstract crearHitoActividad(data: CrearHitoActividadCronograma): Promise<void>;
+  abstract obtenerElementosEdtActivos(idMatrimonio: string): Promise<string[]>;
 }

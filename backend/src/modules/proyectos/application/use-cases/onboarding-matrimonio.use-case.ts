@@ -31,10 +31,10 @@ export class GuardarOnboardingMatrimonioUseCase {
         iniciar,
       );
       if (!iniciar) return resultado;
-      const cronograma = await this.generarCronograma.execute(
-        resultado.proyecto.idProyecto,
-      );
-      return { ...resultado, cronograma };
+      return {
+        ...resultado,
+        cronograma: await this.generarCronograma.execute(resultado.proyecto.idProyecto),
+      };
     }
     if (dto.pareja1.dni === dto.pareja2.dni)
       throw new BadRequestException(
@@ -55,10 +55,10 @@ export class GuardarOnboardingMatrimonioUseCase {
       iniciar,
     );
     if (!iniciar) return resultado;
-    const cronograma = await this.generarCronograma.execute(
-      resultado.proyecto.idProyecto,
-    );
-    return { ...resultado, cronograma };
+    return {
+      ...resultado,
+      cronograma: await this.generarCronograma.execute(resultado.proyecto.idProyecto),
+    };
   }
 
   private validarDatosParaInicio(dto: GuardarOnboardingMatrimonioDto) {

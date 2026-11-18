@@ -34,6 +34,9 @@ import {
   CrearActividadDesdeSugerenciaDto,
   CrearDependenciaDto,
   CrearHitoDto,
+  CrearChecklistActividadDto,
+  ActualizarChecklistActividadDto,
+  GenerarTimingDto,
   CrearTimingDto,
   IntercambiarTimingDto,
   ListarActividadesDto,
@@ -53,6 +56,8 @@ import {
   GestionarSugerenciasCronogramaUseCase,
 } from '../../application/use-cases/gestionar-cronograma.use-cases';
 import { ReprogramarActividadUseCase } from '../../application/use-cases/reprogramar-actividad.use-case';
+import { GenerarCronogramaDesdePlantillaUseCase } from '../../application/use-cases/generar-cronograma-desde-plantilla.use-case';
+import { GenerarTimingDesdePlantillaUseCase } from '../../application/use-cases/generar-timing-desde-plantilla.use-case';
 
 type SolicitudAutenticada = { usuarioAutenticado: { sub: number } };
 
@@ -70,7 +75,37 @@ export class CronogramaController {
     private readonly reprogramarActividad: ReprogramarActividadUseCase,
     private readonly confirmarPlanificacion: ConfirmarPlanificacionCronogramaUseCase,
     private readonly sugerencias: GestionarSugerenciasCronogramaUseCase,
+    private readonly generarCronograma: GenerarCronogramaDesdePlantillaUseCase,
+    private readonly generarTiming: GenerarTimingDesdePlantillaUseCase,
   ) {}
+
+  @Post('generar')
+  @ApiOperation({ summary: 'Generar cronograma e hitos desde la EDT confirmada' })
+  async generar(
+    @Param('idProyecto', ParseUUIDPipe) idProyecto: string,
+    @Req() request: SolicitudAutenticada,
+  ) {
+    // Reutiliza la comprobación de pertenencia del proyecto antes de generar.
+    await this.consulta.obtener(idProyecto, request.usuarioAutenticado.sub, true);
+    return {
+      mensaje: 'Cronograma e hitos generados correctamente.',
+      data: await this.generarCronograma.execute(idProyecto),
+    };
+  }
+
+  @Post('timing/generar')
+  @ApiOperation({ summary: 'Generar timing desde la hora inicial de la boda' })
+  async generarTimingDesdePlantilla(
+    @Param('idProyecto', ParseUUIDPipe) idProyecto: string,
+    @Body() dto: GenerarTimingDto,
+    @Req() request: SolicitudAutenticada,
+  ) {
+    await this.consulta.obtener(idProyecto, request.usuarioAutenticado.sub, true);
+    return {
+      mensaje: 'Timing generado correctamente.',
+      data: await this.generarTiming.execute(idProyecto, dto.horaInicio),
+    };
+  }
 
   @Get()
   @ApiOperation({ summary: 'Obtener el cronograma completo de un proyecto' })
@@ -151,6 +186,24 @@ export class CronogramaController {
       data: await this.hitos.crear(
         idProyecto,
         dto,
+        request.usuarioAutenticado.sub,
+      ),
+    };
+  }
+  @Post('hitos/:idHito/actividades/:idActividad')
+  @ApiOperation({ summary: 'Asociar una actividad existente a un hito' })
+  async asociarActividadHito(
+    @Param('idProyecto', ParseUUIDPipe) idProyecto: string,
+    @Param('idHito', ParseUUIDPipe) idHito: string,
+    @Param('idActividad', ParseUUIDPipe) idActividad: string,
+    @Req() request: SolicitudAutenticada,
+  ) {
+    return {
+      mensaje: 'Actividad asociada al hito correctamente.',
+      data: await this.hitos.asociarActividad(
+        idProyecto,
+        idHito,
+        idActividad,
         request.usuarioAutenticado.sub,
       ),
     };
@@ -373,6 +426,34 @@ export class CronogramaController {
         request.usuarioAutenticado.sub,
       ),
     };
+  }
+
+  @Get('actividades/:idActividad/checklist')
+  async listarChecklist(
+    @Param('idProyecto', ParseUUIDPipe) idProyecto: string,
+    @Param('idActividad', ParseUUIDPipe) idActividad: string,
+    @Req() request: SolicitudAutenticada,
+  ) {
+    return { mensaje: 'Checklist obtenido correctamente.', data: await this.actividades.listarChecklist(idProyecto, idActividad, request.usuarioAutenticado.sub) };
+  }
+  @Post('actividades/:idActividad/checklist')
+  async crearChecklist(
+    @Param('idProyecto', ParseUUIDPipe) idProyecto: string,
+    @Param('idActividad', ParseUUIDPipe) idActividad: string,
+    @Body() dto: CrearChecklistActividadDto,
+    @Req() request: SolicitudAutenticada,
+  ) {
+    return { mensaje: 'Ítem del checklist creado correctamente.', data: await this.actividades.crearChecklist(idProyecto, idActividad, dto, request.usuarioAutenticado.sub) };
+  }
+  @Patch('actividades/:idActividad/checklist/:idChecklist')
+  async actualizarChecklist(
+    @Param('idProyecto', ParseUUIDPipe) idProyecto: string,
+    @Param('idActividad', ParseUUIDPipe) idActividad: string,
+    @Param('idChecklist', ParseUUIDPipe) idChecklist: string,
+    @Body() dto: ActualizarChecklistActividadDto,
+    @Req() request: SolicitudAutenticada,
+  ) {
+    return { mensaje: 'Ítem del checklist actualizado correctamente.', data: await this.actividades.actualizarChecklist(idProyecto, idActividad, idChecklist, dto, request.usuarioAutenticado.sub) };
   }
 
   @Get('dependencias')

@@ -40,6 +40,8 @@ export abstract class CronogramaCrudRepository {
     idHito: string,
     data: Record<string, unknown>,
   ): Promise<Record<string, unknown>>;
+  async listarHitoActividades(_idProyecto: string): Promise<Record<string, unknown>[]> { return []; }
+  async crearHitoActividadManual(_idHito: string, _idActividad: string): Promise<void> { throw new Error('La relación hito/actividad no está disponible.'); }
   abstract listarActividades(
     idProyecto: string,
     filtros: FiltrosCronograma,
@@ -54,6 +56,9 @@ export abstract class CronogramaCrudRepository {
     idActividad: string,
     data: Record<string, unknown>,
   ): Promise<Record<string, unknown>>;
+  async listarChecklistActividad(_idActividad: string): Promise<Record<string, unknown>[]> { return []; }
+  async crearChecklistActividadManual(_data: Record<string, unknown>): Promise<Record<string, unknown>> { throw new Error('El checklist no está disponible.'); }
+  async actualizarChecklistActividad(_idChecklist: string, _data: Record<string, unknown>): Promise<Record<string, unknown>> { throw new Error('El checklist no está disponible.'); }
   abstract listarDependencias(
     idProyecto: string,
   ): Promise<Record<string, unknown>[]>;
