@@ -148,6 +148,12 @@ export class ReprogramarActividadUseCase {
       ventana.fechaInicio,
       ventana.fechaMatrimonio,
     );
+    this.reprogramacion.validarDependencias(
+      idActividad,
+      nuevaFechaInicio ?? this.reprogramacion.fecha(origen.fechaInicio),
+      actividades as never,
+      dependencias as never,
+    );
     const simulacion = this.reprogramacion.simular(
       origen as never,
       nuevaFechaInicio,

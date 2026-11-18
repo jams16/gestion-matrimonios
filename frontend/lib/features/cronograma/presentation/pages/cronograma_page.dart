@@ -40,6 +40,7 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
   late final TabController _tabs;
   late final Future<Map<String, dynamic>?> _buenaPracticaPlan;
   VoidCallback? _agregarEdt;
+  Map<String, dynamic>? _ultimoCronograma;
   bool _procesando = false;
   Timer? _autoguardadoPendiente;
 
@@ -54,6 +55,14 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
   void _redibujarTab() {
     if (mounted && !_tabs.indexIsChanging) {
       setState(() {});
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant CronogramaPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.idProyecto != widget.idProyecto) {
+      _ultimoCronograma = null;
     }
   }
 
@@ -228,8 +237,6 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
   Future<void> _mostrarDetalleHito(
     Map<String, dynamic> hito,
     List<Map<String, dynamic>> actividades,
-    List<Map<String, dynamic>> responsables,
-    List<Map<String, dynamic>> hitos,
   ) async {
     await showModalBottomSheet<void>(
       context: context,
@@ -237,8 +244,6 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
       builder: (_) => _DetalleHitoSheet(
         hito: hito,
         actividades: actividades,
-        onAgregarActividad: () =>
-            _agregarActividadAHito(hito, actividades, responsables, hitos),
       ),
     );
     await _recargar();
@@ -314,8 +319,6 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
       await _editarActividad(
         null,
         responsables,
-        hitos: hitos,
-        hitoInicial: hito,
       );
       return;
     }
@@ -377,32 +380,46 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
   @override
   Widget build(BuildContext context) {
     final estado = ref.watch(cronogramaProvider(widget.idProyecto));
-    final puedeConfirmar = estado.maybeWhen(
+    final datosActuales = estado.maybeWhen(
       data: (data) {
-        final proyecto = _mapa(_mapa(data['cronograma'])['proyecto']);
-        final fase = _mapa(proyecto['faseProyecto']);
-        return (fase['codigo'] ?? proyecto['faseProyectoCodigo'])?.toString() ==
-            'INICIO';
+        _ultimoCronograma = data;
+        return data;
       },
-      orElse: () => false,
+      orElse: () => _ultimoCronograma,
     );
-    final contenido = estado.when(
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (error, _) =>
-          _ErrorCarga(mensaje: _mensajeError(error), alReintentar: _recargar),
-      data: (data) => _contenido(data),
+    final proyectoActual = _mapa(
+      _mapa(datosActuales?['cronograma'])['proyecto'],
     );
-    final botonFlotante = estado.maybeWhen(
-      data: (data) => FloatingActionButton.extended(
+    final faseActual = _mapa(proyectoActual['faseProyecto']);
+    final puedeConfirmar =
+        (faseActual['codigo'] ?? proyectoActual['faseProyectoCodigo'])
+            ?.toString() ==
+        'INICIO';
+    final contenido = datosActuales != null
+        ? _contenido(datosActuales)
+        : estado.when(
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (error, _) => _ErrorCarga(
+              mensaje: _mensajeError(error),
+              alReintentar: _recargar,
+            ),
+            data: (_) => const SizedBox.shrink(),
+          );
+    final botonFlotante = datosActuales == null
+        ? null
+        : FloatingActionButton.extended(
               onPressed: _procesando
                   ? null
                   : _tabs.index == 0
                   ? _agregarEdt
                   : () => _tabs.index == 1
-                        ? _mostrarAccionesCronograma(data)
+                        ? _mostrarAccionesCronograma(datosActuales)
                         : _tabs.index == 2
                         ? _editarHito(null)
-                        : _editarTiming(data, _responsablesDe(data)),
+                        : _editarTiming(
+                            datosActuales,
+                            _responsablesDe(datosActuales),
+                          ),
               icon: Icon(
                 _tabs.index == 0
                     ? Icons.account_tree_outlined
@@ -417,9 +434,7 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
                     ? 'Agregar momento'
                     : 'Agregar',
               ),
-            ),
-      orElse: () => null,
-    );
+            );
     if (widget.embebido) {
       return Stack(
         children: [
@@ -550,20 +565,11 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
                 actividades: actividades,
                 dependencias: dependencias,
                 hitoActividades: hitoActividades,
-                alEditarActividad: (item) =>
-                    _editarActividad(item, responsables, hitos: hitos),
+                alEditarActividad: (item) => _editarActividad(item, responsables),
                 alEliminarActividad: _eliminarActividad,
                 alVerActividad: _mostrarDetalleActividad,
                 alEditarHito: _editarHito,
                 alEliminarHito: _eliminarHito,
-                alAgregarActividadEnHito: (hito) => _editarActividad(
-                  null,
-                  responsables,
-                  hitos: hitos,
-                  hitoInicial: hito,
-                ),
-                alAgregarDependencia: () =>
-                    _editarDependencia(actividades, hitos),
                 alAgregarDependenciaEnActividad: (actividad) =>
                     _editarDependencia(
                       actividades,
@@ -571,8 +577,7 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
                       predecesoraInicial: actividad,
                     ),
                 alMoverActividad: _moverActividad,
-                alMoverHito: (hito, vecino) =>
-                    _moverHito(hito, vecino, actividades),
+                alMoverHito: _moverHito,
                 alEliminarDependencia: _eliminarDependencia,
                 nombresResponsables: nombresResponsables,
               ),
@@ -581,7 +586,7 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
                 actividades: actividades,
                 hitoActividades: hitoActividades,
                 onOpen: (hito, asociadas) =>
-                    _mostrarDetalleHito(hito, asociadas, responsables, hitos),
+                    _mostrarDetalleHito(hito, asociadas),
               ),
               _ListaTiming(
                 timing: timing,
@@ -625,14 +630,6 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
                 onTap: () => Navigator.pop(sheetContext, 'actividad'),
               ),
               ListTile(
-                leading: const Icon(Icons.library_add_outlined),
-                title: const Text('Incorporar desde plantilla'),
-                subtitle: const Text(
-                  'Agrega una instancia sin modificar la plantilla.',
-                ),
-                onTap: () => Navigator.pop(sheetContext, 'plantilla'),
-              ),
-              ListTile(
                 leading: const Icon(Icons.account_tree_outlined),
                 title: const Text('Crear dependencia'),
                 onTap: () => Navigator.pop(sheetContext, 'dependencia'),
@@ -652,10 +649,7 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
         await _editarActividad(
           null,
           _responsablesDe(data),
-          hitos: _lista(_mapa(data['cronograma'])['hitos']),
         );
-      case 'plantilla':
-        await _sugerencias(data);
       case 'dependencia':
         await _editarDependencia(
           _lista(_mapa(data['cronograma'])['actividades']),
@@ -692,11 +686,12 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
           prefixIcon: const Icon(Icons.flag_outlined),
           validator: _requerido,
         ),
-        AppDateField(
-          label: 'Fecha objetivo',
-          initialDate: fecha,
-          onChanged: (value) => fecha = value,
-        ),
+        if (existente == null)
+          AppDateField(
+            label: 'Fecha objetivo inicial',
+            initialDate: fecha,
+            onChanged: (value) => fecha = value,
+          ),
         AppTextField(
           label: 'Criterio de aceptación',
           controller: criterio,
@@ -710,8 +705,8 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
     }
     final data = <String, dynamic>{
       'nombre': nombre.text.trim(),
-      'fechaObjetivo': fecha!.toIso8601String(),
       'criterioAceptacion': _nuloSiVacio(criterio.text),
+      if (existente == null) 'fechaObjetivo': fecha!.toIso8601String(),
       if (plantilla?['idPlantillaHito'] != null)
         'idPlantillaHito': plantilla!['idPlantillaHito'],
     };
@@ -734,10 +729,8 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
 
   Future<void> _editarActividad(
     Map<String, dynamic>? existente,
-    List<Map<String, dynamic>> responsables, {
-    required List<Map<String, dynamic>> hitos,
-    Map<String, dynamic>? hitoInicial,
-  }) async {
+    List<Map<String, dynamic>> responsables,
+  ) async {
     final nombre = TextEditingController(
       text: existente?['nombre']?.toString(),
     );
@@ -748,11 +741,6 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
     int? idResponsable = int.tryParse(
       existente?['idUsuarioResponsable']?.toString() ?? '',
     );
-    var idHito =
-        existente?['idHito']?.toString() ??
-        hitoInicial?['idHito']?.toString() ??
-        '0';
-    String prioridad = existente?['prioridad']?.toString() ?? 'MEDIA';
     final form = GlobalKey<FormState>();
     final guardar = await showDialog<bool>(
       context: context,
@@ -789,45 +777,6 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
                     label: 'Fecha de fin',
                     initialDate: fin,
                     onChanged: (value) => setDialogState(() => fin = value),
-                  ),
-                  const SizedBox(height: 18),
-                  DropdownButtonFormField<String>(
-                    value: idHito,
-                    isExpanded: true,
-                    decoration: const InputDecoration(
-                      labelText: 'Hito al que pertenece',
-                      prefixIcon: Icon(Icons.flag_outlined),
-                    ),
-                    items: [
-                      const DropdownMenuItem<String>(
-                        value: '0',
-                        child: Text('Sin hito'),
-                      ),
-                      ...hitos.map(
-                        (hito) => DropdownMenuItem(
-                          value: hito['idHito'].toString(),
-                          child: Text(
-                            hito['nombre']?.toString() ?? 'Hito',
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ),
-                    ],
-                    onChanged: (value) =>
-                        setDialogState(() => idHito = value ?? '0'),
-                  ),
-                  const SizedBox(height: 18),
-                  DropdownButtonFormField<String>(
-                    initialValue: prioridad,
-                    decoration: const InputDecoration(
-                      labelText: 'Prioridad',
-                      prefixIcon: Icon(Icons.priority_high_outlined),
-                    ),
-                    items: const ['BAJA', 'MEDIA', 'ALTA', 'CRITICA']
-                        .map((x) => DropdownMenuItem(value: x, child: Text(x)))
-                        .toList(),
-                    onChanged: (value) =>
-                        setDialogState(() => prioridad = value ?? 'MEDIA'),
                   ),
                   const SizedBox(height: 18),
                   AppSelectField<int>(
@@ -894,8 +843,7 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
       'nombre': nombre.text.trim(),
       'fechaInicio': inicio?.toIso8601String(),
       'fechaFin': fin!.toIso8601String(),
-      'prioridad': prioridad,
-      'idHito': idHito == '0' ? null : idHito,
+      'prioridad': existente?['prioridad']?.toString() ?? 'MEDIA',
       if (idResponsable != null) 'idUsuarioResponsable': idResponsable,
     };
     if (existente == null) {
@@ -939,7 +887,10 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
         },
       );
       final impacto = _mapa(vista['impacto']);
-      final afectadas = _lista(impacto['actividadesAfectadas']).length;
+      final actividadesAfectadas = _lista(
+        impacto['actividades_afectadas'] ?? impacto['actividadesAfectadas'],
+      );
+      final afectadas = actividadesAfectadas.length;
       if (!mounted) {
         return;
       }
@@ -990,6 +941,36 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
         message: 'Crea al menos dos actividades antes de relacionarlas.',
         type: AppSnackbarType.warning,
       );
+      return;
+    }
+    // Desde el botón general se elige primero la actividad base; luego el
+    // mismo formulario permite definir una predecesora, sucesora o ambas.
+    if (predecesoraInicial == null && sucesoraInicial == null) {
+      final base = await showModalBottomSheet<Map<String, dynamic>>(
+        context: context,
+        showDragHandle: true,
+        builder: (sheetContext) => SafeArea(
+          child: ListView(
+            shrinkWrap: true,
+            children: actividades
+                .map(
+                  (actividad) => ListTile(
+                    leading: const Icon(Icons.task_alt_outlined),
+                    title: Text(actividad['nombre']?.toString() ?? 'Actividad'),
+                    onTap: () => Navigator.pop(sheetContext, actividad),
+                  ),
+                )
+                .toList(),
+          ),
+        ),
+      );
+      if (base != null) {
+        await _editarDependencia(
+          actividades,
+          hitos,
+          predecesoraInicial: base,
+        );
+      }
       return;
     }
     final nombresHitos = {
@@ -1428,54 +1409,13 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
 
   Future<void> _moverHito(
     Map<String, dynamic> hito,
-    Map<String, dynamic> vecino,
-    List<Map<String, dynamic>> actividades,
+    int nuevaPosicion,
   ) async {
-    final fechaHito = _fecha(hito['fechaObjetivo']);
-    final fechaVecino = _fecha(vecino['fechaObjetivo']);
-    if (fechaHito == null || fechaVecino == null) {
-      return;
-    }
-    DateTime desplazar(DateTime valor, int dias) =>
-        valor.add(Duration(days: dias));
-    final deltaHito = fechaVecino.difference(fechaHito).inDays;
-    final deltaVecino = fechaHito.difference(fechaVecino).inDays;
-    final actividadesHito = actividades.where(
-      (a) => a['idHito']?.toString() == hito['idHito']?.toString(),
-    );
-    final actividadesVecino = actividades.where(
-      (a) => a['idHito']?.toString() == vecino['idHito']?.toString(),
-    );
     await _ejecutar((api) async {
       await api.actualizarHito(widget.idProyecto, hito['idHito'].toString(), {
-        'fechaObjetivo': fechaVecino.toIso8601String(),
-        'orden': vecino['orden'],
+        'orden': nuevaPosicion,
       });
-      await api.actualizarHito(widget.idProyecto, vecino['idHito'].toString(), {
-        'fechaObjetivo': fechaHito.toIso8601String(),
-        'orden': hito['orden'],
-      });
-      for (final actividad in [...actividadesHito, ...actividadesVecino]) {
-        final esPrimerHito =
-            actividad['idHito']?.toString() == hito['idHito']?.toString();
-        final inicio = _fecha(actividad['fechaInicio']);
-        final fin = _fecha(actividad['fechaFin']);
-        if (fin == null) {
-          continue;
-        }
-        final dias = esPrimerHito ? deltaHito : deltaVecino;
-        await api.actualizarActividad(
-          widget.idProyecto,
-          actividad['idActividad'].toString(),
-          {
-            'fechaInicio': inicio == null
-                ? null
-                : desplazar(inicio, dias).toIso8601String(),
-            'fechaFin': desplazar(fin, dias).toIso8601String(),
-          },
-        );
-      }
-    }, exito: 'Hitos, actividades y fechas reordenados.');
+    }, exito: 'Posición del hito actualizada.');
   }
 
   Future<void> _sugerencias(Map<String, dynamic> data) async {
@@ -2036,8 +1976,6 @@ class _ListaCronograma extends StatelessWidget {
     required this.alVerActividad,
     required this.alEditarHito,
     required this.alEliminarHito,
-    required this.alAgregarDependencia,
-    required this.alAgregarActividadEnHito,
     required this.alAgregarDependenciaEnActividad,
     required this.alMoverActividad,
     required this.alMoverHito,
@@ -2053,12 +1991,10 @@ class _ListaCronograma extends StatelessWidget {
   final ValueChanged<Map<String, dynamic>> alVerActividad;
   final ValueChanged<Map<String, dynamic>> alEditarHito;
   final ValueChanged<Map<String, dynamic>> alEliminarHito;
-  final VoidCallback alAgregarDependencia;
-  final ValueChanged<Map<String, dynamic>> alAgregarActividadEnHito;
   final ValueChanged<Map<String, dynamic>> alAgregarDependenciaEnActividad;
   final void Function(Map<String, dynamic>, Map<String, dynamic>)
   alMoverActividad;
-  final void Function(Map<String, dynamic>, Map<String, dynamic>) alMoverHito;
+  final void Function(Map<String, dynamic>, int) alMoverHito;
   final ValueChanged<Map<String, dynamic>> alEliminarDependencia;
   final Map<String, String> nombresResponsables;
   @override
@@ -2070,24 +2006,13 @@ class _ListaCronograma extends StatelessWidget {
         mensaje:
             'Agrega hitos, actividades o incorpora elementos desde las plantillas.',
       );
-    final hitosOrdenados = [...hitos]
-      ..sort((a, b) => _compararFecha(a['fechaObjetivo'], b['fechaObjetivo']));
     int compararActividad(Map<String, dynamic> a, Map<String, dynamic> b) {
       final porFecha = _compararFecha(a['fechaFin'], b['fechaFin']);
       return porFecha != 0
           ? porFecha
           : _compararFecha(a['createdAt'], b['createdAt']);
     }
-
-    final idsConHito = hitoActividades
-        .map((relacion) => relacion['idActividad']?.toString())
-        .whereType<String>()
-        .toSet();
-    final sinHito =
-        actividades
-            .where((a) => !idsConHito.contains(a['idActividad']?.toString()))
-            .toList()
-          ..sort(compararActividad);
+    final actividadesOrdenadas = [...actividades]..sort(compararActividad);
     final nombresActividades = {
       for (final actividad in actividades)
         actividad['idActividad'].toString():
@@ -2100,68 +2025,76 @@ class _ListaCronograma extends StatelessWidget {
         (dependenciasPorSucesora[sucesora] ??= []).add(dependencia);
       }
     }
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 96),
-      children: [
-        ...hitosOrdenados.indexed.map((entrada) {
-          final indice = entrada.$1;
-          final hito = Map<String, dynamic>.from(entrada.$2);
-          final actividadesDelHito =
-              actividades
-                  .where(
-                    (a) => hitoActividades.any(
-                      (relacion) =>
-                          relacion['idHito']?.toString() ==
-                              hito['idHito']?.toString() &&
-                          relacion['idActividad']?.toString() ==
-                              a['idActividad']?.toString(),
-                    ),
-                  )
-                  .toList()
-                ..sort(compararActividad);
-          final fechaObjetivo = actividadesDelHito
-              .map((actividad) => _fecha(actividad['fechaFin']))
-              .whereType<DateTime>()
-              .fold<DateTime?>(
-                null,
-                (mayor, fecha) =>
-                    mayor == null || fecha.isAfter(mayor) ? fecha : mayor,
-              );
-          if (fechaObjetivo != null) {
-            hito['fechaObjetivo'] = fechaObjetivo.toIso8601String();
-          }
-          return _HitoCard(
+    int posicionPorFecha(Map<String, dynamic> hito) {
+      final fecha = _fecha(hito['fechaObjetivo']);
+      if (fecha == null) return actividadesOrdenadas.length;
+      return actividadesOrdenadas
+          .where((actividad) {
+            final fin = _fecha(actividad['fechaFin']);
+            return fin != null && !fin.isAfter(fecha);
+          })
+          .length;
+    }
+
+    final hitosUbicados = hitos
+        .map((hito) {
+          final ordenManual = int.tryParse(hito['orden']?.toString() ?? '');
+          final posicion = hito['modificadoManualmente'] == true && ordenManual != null
+              ? ordenManual.clamp(0, actividadesOrdenadas.length)
+              : posicionPorFecha(hito);
+          return (hito: Map<String, dynamic>.from(hito), posicion: posicion);
+        })
+        .toList()
+      ..sort((a, b) => a.posicion != b.posicion
+          ? a.posicion.compareTo(b.posicion)
+          : _compararFecha(a.hito['fechaObjetivo'], b.hito['fechaObjetivo']));
+
+    Widget actividadCard(Map<String, dynamic> actividad, int indice) =>
+        _ActividadFila(
+          item: actividad,
+          alEditar: () => alEditarActividad(actividad),
+          alEliminar: () => alEliminarActividad(actividad),
+          alVer: () => alVerActividad(actividad),
+          dependencias:
+              dependenciasPorSucesora[actividad['idActividad']?.toString()] ?? const [],
+          nombresActividades: nombresActividades,
+          nombresResponsables: nombresResponsables,
+          alEliminarDependencia: alEliminarDependencia,
+          alAgregarDependencia: () => alAgregarDependenciaEnActividad(actividad),
+          alMover: (vecino) => alMoverActividad(actividad, vecino),
+          anterior: indice == 0 ? null : actividadesOrdenadas[indice - 1],
+          siguiente: indice == actividadesOrdenadas.length - 1
+              ? null
+              : actividadesOrdenadas[indice + 1],
+        );
+
+    final elementos = <Widget>[];
+    var inicioTramo = 0;
+    for (var posicion = 0; posicion <= actividadesOrdenadas.length; posicion++) {
+      if (posicion > 0) {
+        elementos.add(actividadCard(actividadesOrdenadas[posicion - 1], posicion - 1));
+      }
+      for (final ubicado in hitosUbicados.where((item) => item.posicion == posicion)) {
+        final hito = ubicado.hito;
+        final necesarias = actividadesOrdenadas.sublist(inicioTramo, posicion);
+        final fechaObjetivo = necesarias
+            .map((actividad) => _fecha(actividad['fechaFin']))
+            .whereType<DateTime>()
+            .fold<DateTime?>(null, (mayor, fecha) =>
+                mayor == null || fecha.isAfter(mayor) ? fecha : mayor);
+        if (fechaObjetivo != null) {
+          hito['fechaObjetivo'] = fechaObjetivo.toIso8601String();
+        }
+        elementos.add(
+          _HitoCard(
             hito: hito,
-            actividades: actividadesDelHito,
+            actividades: const [],
             alEditarHito: () => alEditarHito(hito),
             alEliminarHito: () => alEliminarHito(hito),
-            alAgregarActividad: () => alAgregarActividadEnHito(hito),
-            alSubir: indice == 0
+            alSubir: posicion == 0 ? null : () => alMoverHito(hito, posicion - 1),
+            alBajar: posicion == actividadesOrdenadas.length
                 ? null
-                : () => alMoverHito(hito, hitosOrdenados[indice - 1]),
-            alBajar: indice == hitosOrdenados.length - 1
-                ? null
-                : () => alMoverHito(hito, hitosOrdenados[indice + 1]),
-            alEditarActividad: alEditarActividad,
-            alEliminarActividad: alEliminarActividad,
-            alVerActividad: alVerActividad,
-            dependenciasPorSucesora: dependenciasPorSucesora,
-            nombresActividades: nombresActividades,
-            nombresResponsables: nombresResponsables,
-            alEliminarDependencia: alEliminarDependencia,
-            alAgregarDependencia: alAgregarDependenciaEnActividad,
-            alMoverActividad: alMoverActividad,
-          );
-        }),
-        if (sinHito.isNotEmpty)
-          _HitoCard(
-            hito: const {'nombre': 'Actividades sin hito'},
-            actividades: sinHito,
-            alEditarHito: null,
-            alEliminarHito: null,
-            alAgregarActividad: null,
-            alSubir: null,
-            alBajar: null,
+                : () => alMoverHito(hito, posicion + 1),
             alEditarActividad: alEditarActividad,
             alEliminarActividad: alEliminarActividad,
             alVerActividad: alVerActividad,
@@ -2172,12 +2105,13 @@ class _ListaCronograma extends StatelessWidget {
             alAgregarDependencia: alAgregarDependenciaEnActividad,
             alMoverActividad: alMoverActividad,
           ),
-        TextButton.icon(
-          onPressed: alAgregarDependencia,
-          icon: const Icon(Icons.add_link),
-          label: const Text('Agregar dependencia'),
-        ),
-      ],
+        );
+        inicioTramo = posicion;
+      }
+    }
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 96),
+      children: elementos,
     );
   }
 }
@@ -2188,7 +2122,6 @@ class _HitoCard extends StatelessWidget {
     required this.actividades,
     required this.alEditarHito,
     required this.alEliminarHito,
-    required this.alAgregarActividad,
     required this.alSubir,
     required this.alBajar,
     required this.alEditarActividad,
@@ -2204,7 +2137,6 @@ class _HitoCard extends StatelessWidget {
   final Map<String, dynamic> hito;
   final List<Map<String, dynamic>> actividades;
   final VoidCallback? alEditarHito, alEliminarHito;
-  final VoidCallback? alAgregarActividad;
   final VoidCallback? alSubir, alBajar;
   final ValueChanged<Map<String, dynamic>> alEditarActividad,
       alEliminarActividad;
@@ -2279,15 +2211,9 @@ class _HitoCard extends StatelessWidget {
                             if (v == 'editar') {
                               return alEditarHito!();
                             }
-                            if (v == 'agregarActividad')
-                              return alAgregarActividad!();
                             return alEliminarHito!();
                           },
                           itemBuilder: (_) => const [
-                            PopupMenuItem(
-                              value: 'agregarActividad',
-                              child: Text('Agregar actividad'),
-                            ),
                             PopupMenuItem(
                               value: 'editar',
                               child: Text('Editar'),
@@ -2417,33 +2343,38 @@ class _ActividadFila extends StatelessWidget {
           ],
         ),
       ),
-      trailing: PopupMenuButton<String>(
-        onSelected: (v) {
-          if (v == 'editar') {
-            alEditar();
-          } else if (v == 'subir') {
-            if (anterior != null) {
-              alMover(anterior!);
-            }
-          } else if (v == 'bajar') {
-            if (siguiente != null) {
-              alMover(siguiente!);
-            }
-          } else if (v == 'dependencia') {
-            alAgregarDependencia();
-          } else if (v == 'eliminar') {
-            alEliminar();
-          }
-        },
-        itemBuilder: (_) => const [
-          PopupMenuItem(value: 'subir', child: Text('Subir')),
-          PopupMenuItem(value: 'bajar', child: Text('Bajar')),
-          PopupMenuItem(
-            value: 'dependencia',
-            child: Text('Agregar dependencia'),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          IconButton(
+            tooltip: 'Subir actividad',
+            onPressed: anterior == null ? null : () => alMover(anterior!),
+            icon: const Icon(Icons.keyboard_arrow_up),
           ),
-          PopupMenuItem(value: 'editar', child: Text('Editar / reprogramar')),
-          PopupMenuItem(value: 'eliminar', child: Text('Desactivar')),
+          IconButton(
+            tooltip: 'Bajar actividad',
+            onPressed: siguiente == null ? null : () => alMover(siguiente!),
+            icon: const Icon(Icons.keyboard_arrow_down),
+          ),
+          PopupMenuButton<String>(
+            onSelected: (v) {
+              if (v == 'editar') {
+                alEditar();
+              } else if (v == 'dependencia') {
+                alAgregarDependencia();
+              } else if (v == 'eliminar') {
+                alEliminar();
+              }
+            },
+            itemBuilder: (_) => const [
+              PopupMenuItem(value: 'editar', child: Text('Editar')),
+              PopupMenuItem(
+                value: 'dependencia',
+                child: Text('Agregar dependencia'),
+              ),
+              PopupMenuItem(value: 'eliminar', child: Text('Eliminar')),
+            ],
+          ),
         ],
       ),
     ),
@@ -2722,8 +2653,28 @@ class _ListaHitos extends StatelessWidget {
   final void Function(Map<String, dynamic>, List<Map<String, dynamic>>) onOpen;
   @override
   Widget build(BuildContext context) {
-    final ordenados = [...hitos]
-      ..sort((a, b) => _compararFecha(a['fechaObjetivo'], b['fechaObjetivo']));
+    final actividadesOrdenadas = [...actividades]
+      ..sort((a, b) => _compararFecha(a['fechaFin'], b['fechaFin']));
+    int posicionPorFecha(Map<String, dynamic> hito) {
+      final fecha = _fecha(hito['fechaObjetivo']);
+      if (fecha == null) return actividadesOrdenadas.length;
+      return actividadesOrdenadas
+          .where((actividad) {
+            final fin = _fecha(actividad['fechaFin']);
+            return fin != null && !fin.isAfter(fecha);
+          })
+          .length;
+    }
+    final ordenados = hitos
+        .map((hito) {
+          final orden = int.tryParse(hito['orden']?.toString() ?? '');
+          final posicion = hito['modificadoManualmente'] == true && orden != null
+              ? orden.clamp(0, actividadesOrdenadas.length)
+              : posicionPorFecha(hito);
+          return (hito: Map<String, dynamic>.from(hito), posicion: posicion);
+        })
+        .toList()
+      ..sort((a, b) => a.posicion.compareTo(b.posicion));
     if (ordenados.isEmpty)
       return const _Vacio(
         icon: Icons.flag_outlined,
@@ -2735,18 +2686,16 @@ class _ListaHitos extends StatelessWidget {
       itemCount: ordenados.length,
       separatorBuilder: (_, __) => const SizedBox(height: 10),
       itemBuilder: (_, i) {
-        final hito = ordenados[i];
-        final asociadas = actividades
-            .where(
-              (actividad) => hitoActividades.any(
-                (relacion) =>
-                    relacion['idHito']?.toString() ==
-                        hito['idHito']?.toString() &&
-                    relacion['idActividad']?.toString() ==
-                        actividad['idActividad']?.toString(),
-              ),
-            )
-            .toList();
+        final hito = ordenados[i].hito;
+        final inicio = i == 0 ? 0 : (ordenados[i - 1].posicion as num).toInt();
+        final fin = (ordenados[i].posicion as num).toInt();
+        final asociadas = actividadesOrdenadas.sublist(inicio, fin);
+        final objetivo = asociadas
+            .map((actividad) => _fecha(actividad['fechaFin']))
+            .whereType<DateTime>()
+            .fold<DateTime?>(null, (mayor, fecha) =>
+                mayor == null || fecha.isAfter(mayor) ? fecha : mayor);
+        if (objetivo != null) hito['fechaObjetivo'] = objetivo.toIso8601String();
         return Card(
           child: ListTile(
             onTap: () => onOpen(hito, asociadas),
@@ -2777,7 +2726,9 @@ class _EdtMatrimonioPanel extends StatefulWidget {
 
 class _EdtMatrimonioPanelState extends State<_EdtMatrimonioPanel> {
   late Future<Map<String, dynamic>> _carga;
+  Map<String, dynamic>? _ultimaEstructura;
   final _api = EdtApi();
+
   @override
   void initState() {
     super.initState();
@@ -3036,15 +2987,21 @@ class _EdtMatrimonioPanelState extends State<_EdtMatrimonioPanel> {
   Widget build(BuildContext context) => FutureBuilder<Map<String, dynamic>>(
     future: _carga,
     builder: (_, estado) {
-      if (estado.connectionState != ConnectionState.done)
+      if (estado.hasData && estado.data!.isNotEmpty) {
+        _ultimaEstructura = estado.data;
+      }
+      final estructura = estado.data ?? _ultimaEstructura;
+      if (estado.connectionState != ConnectionState.done && estructura == null) {
         return const Center(child: CircularProgressIndicator());
-      if (estado.hasError || estado.data == null || estado.data!.isEmpty)
+      }
+      if (estado.hasError || estructura == null || estructura.isEmpty) {
         return const _Vacio(
           icon: Icons.account_tree_outlined,
           titulo: 'EDT no disponible',
           mensaje: 'Aún no se definió una estructura EDT para este matrimonio.',
         );
-      final arbol = _lista(estado.data!['elementos'] ?? estado.data!['arbol']);
+      }
+      final arbol = _lista(estructura['elementos'] ?? estructura['arbol']);
       return ListView(
         padding: const EdgeInsets.fromLTRB(16, 10, 16, 96),
         children: [
@@ -3098,11 +3055,9 @@ class _DetalleHitoSheet extends StatelessWidget {
   const _DetalleHitoSheet({
     required this.hito,
     required this.actividades,
-    required this.onAgregarActividad,
   });
   final Map<String, dynamic> hito;
   final List<Map<String, dynamic>> actividades;
-  final VoidCallback onAgregarActividad;
 
   @override
   Widget build(BuildContext context) => _DetalleSheet(
@@ -3115,23 +3070,9 @@ class _DetalleHitoSheet extends StatelessWidget {
         Text(hito['criterioAceptacion'].toString()),
       ],
       const SizedBox(height: 20),
-      Row(
-        children: [
-          const Expanded(
-            child: Text(
-              'Actividades necesarias',
-              style: TextStyle(fontWeight: FontWeight.w800),
-            ),
-          ),
-          TextButton.icon(
-            onPressed: () {
-              Navigator.of(context).pop();
-              onAgregarActividad();
-            },
-            icon: const Icon(Icons.add_task_outlined),
-            label: const Text('Agregar'),
-          ),
-        ],
+      const Text(
+        'Actividades necesarias',
+        style: TextStyle(fontWeight: FontWeight.w800),
       ),
       if (actividades.isEmpty)
         const Text('Aún no hay actividades asociadas a este hito.'),
@@ -3344,10 +3285,29 @@ class _DetalleActividadSheetState extends State<_DetalleActividadSheet> {
           return Column(
             children: [
               ...items.map(
-                (item) => CheckboxListTile(
-                  value: item['completada'] == true,
-                  onChanged: null,
-                  title: Text(item['descripcion']?.toString() ?? 'Subtarea'),
+                (item) => Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 3),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Checkbox(
+                        value: item['completada'] == true,
+                        onChanged: null,
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 12),
+                          child: Text(
+                            _textoChecklist(
+                              item['descripcion']?.toString() ?? 'Subtarea',
+                            ),
+                            softWrap: true,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               if (items.isEmpty)
@@ -3611,6 +3571,20 @@ String _textoSeguro(String texto) => texto
     .replaceAll('Â¿', '¿')
     .replaceAll('Â', '')
     .replaceAll('â€”', '—');
+
+/// Compatibilidad visual para checklists creados antes de corregir el catálogo
+/// maestro. No persiste cambios ni modifica el texto ingresado por la persona.
+String _textoChecklist(String texto) => texto
+    .replaceAll('Ã¡', 'á')
+    .replaceAll('Ã©', 'é')
+    .replaceAll('Ã­', 'í')
+    .replaceAll('Ã³', 'ó')
+    .replaceAll('Ãº', 'ú')
+    .replaceAll('Ã±', 'ñ')
+    .replaceAll('¢', 'ó')
+    .replaceAll('¡', 'í')
+    .replaceAll('£', 'ú')
+    .replaceAll('¤', 'ñ');
 
 List<Widget> _separar(List<Widget> items) {
   final salida = <Widget>[];

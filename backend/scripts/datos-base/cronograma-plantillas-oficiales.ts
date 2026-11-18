@@ -1,6 +1,62 @@
 type Base = Record<string, unknown>;
 const ahora = '2026-11-18T00:00:00.000Z';
-const actividad = (id: number, codigo: string, fase: number, nombre: string, checklist: string, responsable: string, entregable: string, dias: number, orden: number): Base => ({ id_plantilla_actividad: id, codigo, id_fase_proyecto: fase, nombre, lista_verificacion: JSON.stringify(checklist.split(';').map((descripcion) => descripcion.trim())), responsable_sugerido: responsable, entregable, tipo_temporal: dias === 0 ? 'INICIO' : dias < 0 ? 'POST_EVENTO' : dias <= 14 ? 'FIJO_EVENTO' : 'ESCALABLE', dias_antes_base: Math.abs(dias), dias_antes_minimo: null, duracion_estimada_dias: null, prioridad: null, orden, activo: true, created_at: ahora, updated_at: ahora });
+/** Fuente literal aprobada: el separador de cada checklist es `-`. */
+export const checklistActividadFuente: Record<string, string> = {
+  'CG-01': 'Fecha definida-validada con la pareja',
+  'CG-02': 'Monto total-reserva-categorías iniciales definidas',
+  'CG-03': 'Moodboard-colores-tipo de ceremonia-experiencia esperada',
+  'CG-04': 'Número estimado de invitados-grupos definidos',
+  'CG-05': 'Propuestas revisadas-disponibilidad confirmada-reserva realizada',
+  'CG-06': 'Visitas realizadas-opciones comparadas-contrato firmado',
+  'CG-07': 'Cotizaciones comparadas-disponibilidad confirmada-contratos realizados',
+  'CG-08': 'Pruebas-cotizaciones-disponibilidad confirmadas',
+  'CG-09': 'Propuestas revisadas-servicios seleccionados o contratados',
+  'CG-10': 'Pruebas-compras-reservas realizadas',
+  'CG-11': 'Contratos gestionados-trámites iniciados-invitaciones enviadas-primera confirmación realizada',
+  'CG-12': 'Pagos y contratos revisados-distribución de mesas-timing preliminar preparados',
+  'CG-13': 'Servicios confirmados-pendientes identificados o cerrados',
+  'CG-14': 'Ensayo realizado-pagos registrados-timing distribuido',
+  'CG-15': 'Kit preparado-roles confirmados-montaje-contingencias revisados',
+  'CG-16': 'Entregables finales verificados-pagos cerrados-pendientes registrados',
+};
+
+/** Resultado esperado, separado de la fuente para validar la división. */
+export const checklistActividadEsperado: Record<string, readonly string[]> = {
+  'CG-01': ['Fecha definida', 'validada con la pareja'],
+  'CG-02': ['Monto total', 'reserva', 'categorías iniciales definidas'],
+  'CG-03': ['Moodboard', 'colores', 'tipo de ceremonia', 'experiencia esperada'],
+  'CG-04': ['Número estimado de invitados', 'grupos definidos'],
+  'CG-05': ['Propuestas revisadas', 'disponibilidad confirmada', 'reserva realizada'],
+  'CG-06': ['Visitas realizadas', 'opciones comparadas', 'contrato firmado'],
+  'CG-07': ['Cotizaciones comparadas', 'disponibilidad confirmada', 'contratos realizados'],
+  'CG-08': ['Pruebas', 'cotizaciones', 'disponibilidad confirmadas'],
+  'CG-09': ['Propuestas revisadas', 'servicios seleccionados o contratados'],
+  'CG-10': ['Pruebas', 'compras', 'reservas realizadas'],
+  'CG-11': ['Contratos gestionados', 'trámites iniciados', 'invitaciones enviadas', 'primera confirmación realizada'],
+  'CG-12': ['Pagos y contratos revisados', 'distribución de mesas', 'timing preliminar preparados'],
+  'CG-13': ['Servicios confirmados', 'pendientes identificados o cerrados'],
+  'CG-14': ['Ensayo realizado', 'pagos registrados', 'timing distribuido'],
+  'CG-15': ['Kit preparado', 'roles confirmados', 'montaje', 'contingencias revisados'],
+  'CG-16': ['Entregables finales verificados', 'pagos cerrados', 'pendientes registrados'],
+};
+/** Cada fila fuente usa `;` como separador. Se persiste como ítems Unicode
+ * independientes, nunca como una oración o una cadena codificada. */
+const checklistBase = (checklist: string): string[] => checklist
+  .split('-')
+  .map((descripcion) => descripcion.trim())
+  .filter((descripcion) => descripcion.length > 0);
+
+/** Falla antes de escribir en BD si el separador o algún carácter no coincide. */
+export const validarChecklistsActividad = (): void => {
+  for (const [codigo, esperado] of Object.entries(checklistActividadEsperado)) {
+    const obtenido = checklistBase(checklistActividadFuente[codigo] ?? '');
+    if (JSON.stringify(obtenido) !== JSON.stringify(esperado)) {
+      throw new Error(`Checklist ${codigo} no coincide con la fuente aprobada.`);
+    }
+  }
+};
+
+const actividad = (id: number, codigo: string, fase: number, nombre: string, checklist: string, responsable: string, entregable: string, dias: number, orden: number): Base => ({ id_plantilla_actividad: id, codigo, id_fase_proyecto: fase, nombre, lista_verificacion: JSON.stringify(checklistBase(checklistActividadFuente[codigo] ?? checklist)), responsable_sugerido: responsable, entregable, tipo_temporal: dias === 0 ? 'INICIO' : dias < 0 ? 'POST_EVENTO' : dias <= 14 ? 'FIJO_EVENTO' : 'ESCALABLE', dias_antes_base: Math.abs(dias), dias_antes_minimo: null, duracion_estimada_dias: null, prioridad: null, orden, activo: true, created_at: ahora, updated_at: ahora });
 const hito = (id: number, codigo: string, nombre: string, criterio: string, dias: number, orden: number): Base => ({ id_plantilla_hito: id, codigo, nombre, criterio_aceptacion: criterio, tipo_temporal: dias === 0 ? 'INICIO' : dias < 0 ? 'POST_EVENTO' : dias <= 14 ? 'FIJO_EVENTO' : dias === 1 ? 'DIA_EVENTO' : 'ESCALABLE', dias_antes_base: Math.abs(dias), dias_antes_minimo: null, orden, activo: true, created_at: ahora, updated_at: ahora });
 const timing = (id: number, codigo: string, actividadTexto: string, duracion: number, tipo: 'FIJO' | 'FLEXIBLE', extra: number, responsable: string, lista: string, orden: number, offset?: number): Base => ({ id_plantilla_timing: id, codigo, hora_inicio: null, actividad: actividadTexto, duracion_minutos: duracion, tipo_horario: tipo, tiempo_extra_minutos: extra, offset_inicio_minutos: offset ?? null, responsable_sugerido: responsable, lista_verificacion: JSON.stringify(lista.split(';').map((descripcion) => descripcion.trim())), orden, activo: true, created_at: ahora, updated_at: ahora });
 

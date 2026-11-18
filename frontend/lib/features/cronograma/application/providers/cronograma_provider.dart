@@ -4,8 +4,11 @@ import '../../infrastructure/cronograma_api.dart';
 
 final cronogramaApiProvider = Provider<CronogramaApi>((ref) => CronogramaApi());
 
-final cronogramaProvider = FutureProvider.autoDispose
-    .family<Map<String, dynamic>, String>((ref, idProyecto) async {
+/// La pantalla comparte esta respuesta entre sus cuatro pestañas.  No se
+/// descarta al cambiar de pestaña o reconstruir el árbol visual: las
+/// mutaciones solicitan explícitamente una recarga mediante `invalidate`.
+final cronogramaProvider = FutureProvider.family<Map<String, dynamic>, String>(
+  (ref, idProyecto) async {
       final api = ref.watch(cronogramaApiProvider);
       final resultados = await Future.wait([
         api.obtener(idProyecto),
@@ -15,7 +18,8 @@ final cronogramaProvider = FutureProvider.autoDispose
         'cronograma': _normalizarTexto(resultados[0]),
         'matrimonio': _normalizarTexto(resultados[1]),
       };
-    });
+  },
+);
 
 /// Corrige caracteres CP-1252 heredados de datos maestros ya almacenados.
 /// No modifica los registros: solo evita que la interfaz muestre texto roto.

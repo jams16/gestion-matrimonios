@@ -6,6 +6,7 @@ export interface ActividadReprogramable extends Record<string, unknown> {
   fechaInicio: unknown;
   fechaFin: unknown;
   idHito?: string | null;
+  modificadoManualmente?: boolean;
 }
 
 export interface DependenciaReprogramable extends Record<string, unknown> {
@@ -29,6 +30,54 @@ export interface DesplazamientoActividad {
 
 @Injectable()
 export class ReprogramacionActividadesService {
+  validarFechasActividad(inicio: Date | null | undefined, fin: Date) {
+    if (Number.isNaN(fin.getTime()) || (inicio && Number.isNaN(inicio.getTime()))) {
+      throw new BadRequestException('Las fechas de la actividad no son válidas.');
+    }
+    if (inicio && inicio.getTime() > fin.getTime()) {
+      throw new BadRequestException(
+        'La fecha de inicio no puede ser posterior a la fecha final.',
+      );
+    }
+  }
+
+  calcularInicioMinimo(
+    idActividad: string,
+    actividades: ActividadReprogramable[],
+    dependencias: DependenciaReprogramable[],
+  ): Date | null {
+    const porId = new Map(actividades.map((actividad) => [actividad.idActividad, actividad]));
+    let minimo: Date | null = null;
+    for (const dependencia of dependencias) {
+      if (
+        dependencia.activo === false ||
+        dependencia.tipoDependencia !== 'FINISH_TO_START' ||
+        dependencia.idActividadSucesora !== idActividad
+      ) continue;
+      const finPredecesora = this.fecha(porId.get(dependencia.idActividadPredecesora)?.fechaFin);
+      if (!finPredecesora) continue;
+      const candidato = this.sumarDias(finPredecesora, Number(dependencia.diasDesfase ?? 0));
+      if (!minimo || candidato.getTime() > minimo.getTime()) minimo = candidato;
+    }
+    return minimo;
+  }
+
+  validarDependencias(
+    idActividad: string,
+    inicio: Date | null | undefined,
+    actividades: ActividadReprogramable[],
+    dependencias: DependenciaReprogramable[],
+  ) {
+    if (!inicio) return null;
+    const minimo = this.calcularInicioMinimo(idActividad, actividades, dependencias);
+    if (minimo && inicio.getTime() < minimo.getTime()) {
+      throw new BadRequestException(
+        `La actividad no puede iniciar antes de ${minimo.toISOString().slice(0, 10)} por sus dependencias FINISH_TO_START.`,
+      );
+    }
+    return minimo;
+  }
+
   simular(
     origen: ActividadReprogramable,
     nuevaFechaInicio: Date | undefined,
@@ -38,11 +87,7 @@ export class ReprogramacionActividadesService {
   ) {
     const inicioOrigen =
       nuevaFechaInicio ?? this.fecha(origen.fechaInicio) ?? nuevaFechaFin;
-    if (inicioOrigen.getTime() > nuevaFechaFin.getTime()) {
-      throw new BadRequestException(
-        'La fecha de inicio no puede ser posterior a la fecha final.',
-      );
-    }
+    this.validarFechasActividad(nuevaFechaInicio ?? this.fecha(origen.fechaInicio), nuevaFechaFin);
     const porId = new Map(
       actividades.map((actividad) => [actividad.idActividad, actividad]),
     );
@@ -76,6 +121,9 @@ export class ReprogramacionActividadesService {
         const inicioActual = this.fecha(sucesora.fechaInicio);
         const finActual = this.fecha(sucesora.fechaFin);
         if (!finActual) continue;
+        // Una sucesora sin inicio sigue siendo válida: la regla se comprobará
+        // cuando el usuario le asigne una fecha de inicio.
+        if (!inicioActual) continue;
         const inicioPermitido = this.sumarDias(
           programacionPredecesora.fin,
           Number(dependencia.diasDesfase ?? 0),

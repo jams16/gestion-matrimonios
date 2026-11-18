@@ -24,6 +24,7 @@ import {
   ListarTimingDto,
 } from '../dto/cronograma.dto';
 import { CronogramaCrudRepository } from '../../domain/repositories/cronograma-crud.repository';
+import { ReprogramacionActividadesService } from '../services/reprogramacion-actividades.service';
 
 @Injectable()
 export class GestionarHitosUseCase {
@@ -109,7 +110,14 @@ export class GestionarHitosUseCase {
     );
     return this.repository.actualizarHito(
       idHito,
-      normalizarFechas(dto as Record<string, unknown>, ['fechaObjetivo'], true),
+      {
+        ...normalizarFechas(
+          dto as Record<string, unknown>,
+          ['fechaObjetivo'],
+          true,
+        ),
+        ...(dto.orden !== undefined ? { modificadoManualmente: true } : {}),
+      },
     );
   }
 
@@ -141,7 +149,11 @@ export class GestionarHitosUseCase {
 
 @Injectable()
 export class GestionarActividadesUseCase {
-  constructor(private readonly repository: CronogramaCrudRepository) {}
+  constructor(
+    private readonly repository: CronogramaCrudRepository,
+    private readonly reprogramacion: ReprogramacionActividadesService =
+      new ReprogramacionActividadesService(),
+  ) {}
 
   async listar(
     idProyecto: string,
@@ -243,6 +255,27 @@ export class GestionarActividadesUseCase {
       dto.fechaInicio ?? fechaIso(actual.fechaInicio),
       dto.fechaFin ?? fechaIso(actual.fechaFin),
     );
+    const [actividades, dependencias] = await Promise.all([
+      this.repository.listarActividades(idProyecto, { activo: true }),
+      this.repository.listarDependencias(idProyecto),
+    ]);
+    const inicioPropuesto = dto.fechaInicio === undefined
+      ? fechaComoDate(actual.fechaInicio)
+      : dto.fechaInicio ? new Date(dto.fechaInicio) : null;
+    this.reprogramacion.validarDependencias(
+      idActividad,
+      inicioPropuesto,
+      actividades.map((actividad) =>
+        String(actividad.idActividad) === idActividad
+          ? {
+              ...actividad,
+              fechaInicio: inicioPropuesto,
+              fechaFin: dto.fechaFin ? new Date(dto.fechaFin) : actividad.fechaFin,
+            }
+          : actividad,
+      ) as never,
+      dependencias as never,
+    );
     const { idHito: _idHito, listaVerificacion: _listaVerificacion, ...actividadDto } = dto;
     return this.repository.actualizarActividad(
       idActividad,
@@ -326,7 +359,11 @@ export class GestionarActividadesUseCase {
 
 @Injectable()
 export class GestionarDependenciasUseCase {
-  constructor(private readonly repository: CronogramaCrudRepository) {}
+  constructor(
+    private readonly repository: CronogramaCrudRepository,
+    private readonly reprogramacion: ReprogramacionActividadesService =
+      new ReprogramacionActividadesService(),
+  ) {}
 
   async listar(idProyecto: string, idUsuario: number) {
     await validarProyecto(this.repository, idProyecto, idUsuario);
@@ -346,7 +383,11 @@ export class GestionarDependenciasUseCase {
       this.repository.listarDependencias(idProyecto),
     ]);
     validarRegistro(predecesora, idProyecto, 'Actividad predecesora');
-    validarRegistro(sucesora, idProyecto, 'Actividad sucesora');
+    const sucesoraValidada = validarRegistro(
+      sucesora,
+      idProyecto,
+      'Actividad sucesora',
+    );
     if (
       dependencias.some(
         (item) =>
@@ -364,6 +405,26 @@ export class GestionarDependenciasUseCase {
       )
     ) {
       throw new BadRequestException('La dependencia generaría un ciclo.');
+    }
+    const inicioSucesora = fechaComoDate(sucesoraValidada.fechaInicio);
+    if (inicioSucesora) {
+      const actividades = await this.repository.listarActividades(idProyecto, {
+        activo: true,
+      });
+      this.reprogramacion.validarDependencias(
+        String(sucesoraValidada.idActividad),
+        inicioSucesora,
+        actividades as never,
+        [
+          ...dependencias,
+          {
+            idActividadPredecesora: dto.idActividadPredecesora,
+            idActividadSucesora: dto.idActividadSucesora,
+            tipoDependencia: dto.tipoDependencia ?? 'FINISH_TO_START',
+            diasDesfase: dto.diasDesfase ?? 0,
+          },
+        ] as never,
+      );
     }
     return this.repository.crearDependenciaManual({
       ...dto,
