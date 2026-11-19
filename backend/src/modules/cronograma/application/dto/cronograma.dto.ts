@@ -196,6 +196,7 @@ export class CrearChecklistActividadDto {
 }
 export class ActualizarChecklistActividadDto extends PartialType(CrearChecklistActividadDto) {
   @ApiPropertyOptional() @Transform(booleano) @IsOptional() @IsBoolean() completado?: boolean;
+  @ApiPropertyOptional() @Transform(booleano) @IsOptional() @IsBoolean() activo?: boolean;
 }
 
 export class CrearDependenciaDto {

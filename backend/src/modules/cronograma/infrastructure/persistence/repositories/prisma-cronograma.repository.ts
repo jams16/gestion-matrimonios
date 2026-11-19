@@ -416,6 +416,37 @@ export class PrismaCronogramaRepository
     await this.db.orm.public.HitoActividad.create({ idHito, idActividad } as never);
   }
 
+  async eliminarHitoActividadManual(idHito: string, idActividad: string): Promise<void> {
+    const relacion = (await this.db.orm.public.HitoActividad.all() as Array<Record<string, unknown>>)
+      .find((item) => String(item.idHito) === idHito && String(item.idActividad) === idActividad);
+    if (!relacion) return;
+    await this.db.orm.public.HitoActividad.where({
+      idHitoActividad: relacion.idHitoActividad as never,
+    }).delete();
+  }
+
+  async reemplazarHitoActividades(
+    idProyecto: string,
+    relacionesNuevas: Array<{ idHito: string; idActividad: string }>,
+  ): Promise<void> {
+    const hitos = (await this.db.orm.public.Hito.all()) as Array<Record<string, unknown>>;
+    const idsHitos = new Set(
+      hitos
+        .filter((hito) => String(hito.idProyecto) === idProyecto)
+        .map((hito) => String(hito.idHito)),
+    );
+    const relaciones = (await this.db.orm.public.HitoActividad.all()) as Array<Record<string, unknown>>;
+    for (const relacion of relaciones) {
+      if (!idsHitos.has(String(relacion.idHito))) continue;
+      await this.db.orm.public.HitoActividad.where({
+        idHitoActividad: relacion.idHitoActividad as never,
+      }).delete();
+    }
+    for (const relacion of relacionesNuevas) {
+      await this.db.orm.public.HitoActividad.create(relacion as never);
+    }
+  }
+
   async listarActividades(
     idProyecto: string,
     filtros: FiltrosCronograma,

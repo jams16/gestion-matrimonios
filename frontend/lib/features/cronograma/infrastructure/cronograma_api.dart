@@ -85,6 +85,13 @@ class CronogramaApi {
     '/proyectos/$idProyecto/cronograma/hitos/$idHito/actividades/$idActividad',
     const {},
   );
+  Future<void> quitarActividadDeHito(
+    String idProyecto,
+    String idHito,
+    String idActividad,
+  ) => _delete(
+    '/proyectos/$idProyecto/cronograma/hitos/$idHito/actividades/$idActividad',
+  );
 
   Future<void> crearActividad(String idProyecto, Map<String, dynamic> data) =>
       _post('/proyectos/$idProyecto/cronograma/actividades', data);

@@ -42,6 +42,8 @@ export abstract class CronogramaCrudRepository {
   ): Promise<Record<string, unknown>>;
   async listarHitoActividades(_idProyecto: string): Promise<Record<string, unknown>[]> { return []; }
   async crearHitoActividadManual(_idHito: string, _idActividad: string): Promise<void> { throw new Error('La relación hito/actividad no está disponible.'); }
+  async eliminarHitoActividadManual(_idHito: string, _idActividad: string): Promise<void> { throw new Error('La relación hito/actividad no está disponible.'); }
+  async reemplazarHitoActividades(_idProyecto: string, _relaciones: Array<{ idHito: string; idActividad: string }>): Promise<void> { throw new Error('La relación hito/actividad no está disponible.'); }
   abstract listarActividades(
     idProyecto: string,
     filtros: FiltrosCronograma,

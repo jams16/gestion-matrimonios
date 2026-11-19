@@ -83,6 +83,19 @@ export class GestionarHitosUseCase {
     return { idHito, idActividad };
   }
 
+  async quitarActividad(
+    idProyecto: string,
+    idHito: string,
+    idActividad: string,
+    idUsuario: number,
+  ) {
+    await validarProyecto(this.repository, idProyecto, idUsuario);
+    validarRegistro(await this.repository.obtenerHito(idHito), idProyecto, 'Hito');
+    validarRegistro(await this.repository.obtenerActividad(idActividad), idProyecto, 'Actividad');
+    await this.repository.eliminarHitoActividadManual(idHito, idActividad);
+    return { idHito, idActividad };
+  }
+
   async crear(idProyecto: string, dto: CrearHitoDto, idUsuario: number) {
     await validarProyecto(this.repository, idProyecto, idUsuario);
     return this.repository.crearHitoManual({
@@ -108,17 +121,57 @@ export class GestionarHitosUseCase {
       idProyecto,
       'Hito',
     );
-    return this.repository.actualizarHito(
-      idHito,
-      {
-        ...normalizarFechas(
-          dto as Record<string, unknown>,
-          ['fechaObjetivo'],
-          true,
-        ),
-        ...(dto.orden !== undefined ? { modificadoManualmente: true } : {}),
-      },
+    const data = {
+      ...normalizarFechas(dto as Record<string, unknown>, ['fechaObjetivo'], true),
+      ...(dto.orden !== undefined ? { modificadoManualmente: true } : {}),
+    };
+    if (dto.orden === undefined) return this.repository.actualizarHito(idHito, data);
+    return this.repository.ejecutarEnTransaccionCrud(async (repositorio) => {
+      const actualizado = await repositorio.actualizarHito(idHito, data);
+      await this.recalcularActividadesNecesarias(repositorio, idProyecto);
+      return actualizado;
+    });
+  }
+
+  private async recalcularActividadesNecesarias(
+    repositorio: CronogramaCrudRepository,
+    idProyecto: string,
+  ): Promise<void> {
+    const [hitos, actividades] = await Promise.all([
+      repositorio.listarHitos(idProyecto, { activo: true }),
+      repositorio.listarActividades(idProyecto, { activo: true }),
+    ]);
+    const actividadesOrdenadas = [...actividades].sort(
+      (a, b) => fechaComoDate(a.fechaFin)!.getTime() - fechaComoDate(b.fechaFin)!.getTime(),
     );
+    const posicion = (hito: Record<string, unknown>) => {
+      const orden = Number(hito.orden);
+      if (hito.modificadoManualmente === true && Number.isInteger(orden))
+        return Math.max(0, Math.min(orden, actividadesOrdenadas.length));
+      const fecha = fechaComoDate(hito.fechaObjetivo);
+      return fecha
+        ? actividadesOrdenadas.filter((actividad) => fechaComoDate(actividad.fechaFin)! <= fecha).length
+        : actividadesOrdenadas.length;
+    };
+    const hitosOrdenados = [...hitos]
+      .map((hito) => ({ hito, posicion: posicion(hito) }))
+      .sort((a, b) => a.posicion - b.posicion || Number(a.hito.orden) - Number(b.hito.orden));
+    const relaciones: Array<{ idHito: string; idActividad: string }> = [];
+    let inicio = 0;
+    for (const actual of hitosOrdenados) {
+      const bloque = actividadesOrdenadas.slice(inicio, actual.posicion);
+      for (const actividad of bloque) {
+        relaciones.push({ idHito: String(actual.hito.idHito), idActividad: String(actividad.idActividad) });
+      }
+      const ultima = bloque.at(-1);
+      if (ultima?.fechaFin) {
+        await repositorio.actualizarHito(String(actual.hito.idHito), {
+          fechaObjetivo: fechaComoDate(ultima.fechaFin),
+        });
+      }
+      inicio = actual.posicion;
+    }
+    await repositorio.reemplazarHitoActividades(idProyecto, relaciones);
   }
 
   async cambiarEstado(
@@ -197,7 +250,7 @@ export class GestionarActividadesUseCase {
     });
   }
 
-  async actualizarChecklist(idProyecto: string, idActividad: string, idChecklist: string, dto: { completado?: boolean; descripcion?: string; orden?: number; obligatorio?: boolean }, idUsuario: number) {
+  async actualizarChecklist(idProyecto: string, idActividad: string, idChecklist: string, dto: { completado?: boolean; descripcion?: string; orden?: number; obligatorio?: boolean; activo?: boolean }, idUsuario: number) {
     await validarProyectoOResponsable(this.repository, idProyecto, idActividad, idUsuario);
     const items = await this.repository.listarChecklistActividad(idActividad);
     if (!items.some((item) => String(item.idChecklist) === idChecklist)) throw new NotFoundException('Ítem del checklist no encontrado.');

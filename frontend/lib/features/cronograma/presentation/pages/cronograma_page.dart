@@ -238,8 +238,6 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
     Map<String, dynamic> hito,
     List<Map<String, dynamic>> actividades,
     List<Map<String, dynamic>> todasLasActividades,
-    List<Map<String, dynamic>> responsables,
-    List<Map<String, dynamic>> hitos,
   ) async {
     await showModalBottomSheet<void>(
       context: context,
@@ -247,13 +245,35 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
       builder: (_) => _DetalleHitoSheet(
         hito: hito,
         actividades: actividades,
-        onAgregarActividad: () {
+        disponibles: todasLasActividades
+            .where(
+              (actividad) => !actividades.any(
+                (asociada) =>
+                    asociada['idActividad']?.toString() ==
+                    actividad['idActividad']?.toString(),
+              ),
+            )
+            .toList(),
+        onAsociarActividad: (actividad) {
           Navigator.of(context).pop();
-          _agregarActividadAHito(
-            hito,
-            todasLasActividades,
-            responsables,
-            hitos,
+          return _ejecutar(
+            (api) => api.asociarActividadAHito(
+              widget.idProyecto,
+              hito['idHito'].toString(),
+              actividad['idActividad'].toString(),
+            ),
+            exito: 'Actividad agregada al hito.',
+          );
+        },
+        onQuitarActividad: (actividad) {
+          Navigator.of(context).pop();
+          return _ejecutar(
+            (api) => api.quitarActividadDeHito(
+              widget.idProyecto,
+              hito['idHito'].toString(),
+              actividad['idActividad'].toString(),
+            ),
+            exito: 'Actividad quitada del hito.',
           );
         },
       ),
@@ -599,13 +619,10 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
                 hitos: hitos,
                 actividades: actividades,
                 hitoActividades: hitoActividades,
-                onOpen: (hito, asociadas) => _mostrarDetalleHito(
-                  hito,
-                  asociadas,
-                  actividades,
-                  responsables,
-                  hitos,
-                ),
+                onEdit: _editarHito,
+                onDelete: _eliminarHito,
+                onOpen: (hito, asociadas) =>
+                    _mostrarDetalleHito(hito, asociadas, actividades),
               ),
               _ListaTiming(
                 timing: timing,
@@ -702,12 +719,11 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
           prefixIcon: const Icon(Icons.flag_outlined),
           validator: _requerido,
         ),
-        if (existente == null)
-          AppDateField(
-            label: 'Fecha objetivo inicial',
-            initialDate: fecha,
-            onChanged: (value) => fecha = value,
-          ),
+        AppDateField(
+          label: 'Fecha objetivo',
+          initialDate: fecha,
+          onChanged: (value) => fecha = value,
+        ),
         AppTextField(
           label: 'Criterio de aceptación',
           controller: criterio,
@@ -722,7 +738,7 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
     final data = <String, dynamic>{
       'nombre': nombre.text.trim(),
       'criterioAceptacion': _nuloSiVacio(criterio.text),
-      if (existente == null) 'fechaObjetivo': fecha!.toIso8601String(),
+      'fechaObjetivo': fecha!.toIso8601String(),
       if (plantilla?['idPlantillaHito'] != null)
         'idPlantillaHito': plantilla!['idPlantillaHito'],
     };
@@ -751,7 +767,6 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
     final nombre = TextEditingController(
       text: existente?['nombre']?.toString(),
     );
-    DateTime? inicio = _fecha(existente?['fechaInicio']);
     DateTime? fin =
         _fecha(existente?['fechaFin']) ??
         DateTime.now().add(const Duration(days: 7));
@@ -782,12 +797,6 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
                       existente,
                       nombre: valor,
                     ),
-                  ),
-                  const SizedBox(height: 18),
-                  AppDateField(
-                    label: 'Fecha de inicio',
-                    initialDate: inicio,
-                    onChanged: (value) => setDialogState(() => inicio = value),
                   ),
                   const SizedBox(height: 18),
                   AppDateField(
@@ -845,20 +854,8 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
       }
       return;
     }
-    if (inicio != null && inicio!.isAfter(fin!)) {
-      if (mounted) {
-        AppSnackbar.show(
-          context,
-          message:
-              'La fecha de inicio no puede ser posterior a la fecha de fin.',
-          type: AppSnackbarType.warning,
-        );
-      }
-      return;
-    }
     final data = <String, dynamic>{
       'nombre': nombre.text.trim(),
-      'fechaInicio': inicio?.toIso8601String(),
       'fechaFin': fin!.toIso8601String(),
       'prioridad': existente?['prioridad']?.toString() ?? 'MEDIA',
       if (idResponsable != null) 'idUsuarioResponsable': idResponsable,
@@ -872,8 +869,6 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
       return;
     }
     final cambioFechas =
-        data['fechaInicio']?.toString() !=
-            existente['fechaInicio']?.toString() ||
         data['fechaFin']?.toString() != existente['fechaFin']?.toString();
     if (!cambioFechas) {
       await _ejecutar(
@@ -2061,6 +2056,10 @@ class _ListaCronograma extends StatelessWidget {
     }
 
     int posicionHito(Map<String, dynamic> hito) {
+      final ordenManual = int.tryParse(hito['orden']?.toString() ?? '');
+      if (hito['modificadoManualmente'] == true && ordenManual != null) {
+        return ordenManual.clamp(0, actividadesOrdenadas.length);
+      }
       final asociadas =
           actividadesPorHito[hito['idHito']?.toString()] ?? const [];
       if (asociadas.isNotEmpty) {
@@ -2072,10 +2071,7 @@ class _ListaCronograma extends StatelessWidget {
             ) +
             1;
       }
-      final ordenManual = int.tryParse(hito['orden']?.toString() ?? '');
-      return hito['modificadoManualmente'] == true && ordenManual != null
-          ? ordenManual.clamp(0, actividadesOrdenadas.length)
-          : posicionPorFecha(hito);
+      return posicionPorFecha(hito);
     }
 
     final hitosUbicados =
@@ -2085,9 +2081,8 @@ class _ListaCronograma extends StatelessWidget {
         }).toList()..sort(
           (a, b) => a.posicion != b.posicion
               ? a.posicion.compareTo(b.posicion)
-              : _compararFecha(
-                  a.hito['fechaObjetivo'],
-                  b.hito['fechaObjetivo'],
+              : (a.hito['modificadoManualmente'] == true).toString().compareTo(
+                  (b.hito['modificadoManualmente'] == true).toString(),
                 ),
         );
 
@@ -2127,6 +2122,8 @@ class _ListaCronograma extends StatelessWidget {
         (item) => item.posicion == posicion,
       )) {
         final hito = ubicado.hito;
+        final indiceHito = hitosUbicados.indexOf(ubicado);
+        final tieneHitoDespues = indiceHito < hitosUbicados.length - 1;
         final necesarias =
             actividadesPorHito[hito['idHito']?.toString()] ?? const [];
         final fechaObjetivo = necesarias
@@ -2149,7 +2146,7 @@ class _ListaCronograma extends StatelessWidget {
                 ? null
                 : () => alMoverHito(hito, posicion - 1),
             alBajar: posicion == actividadesOrdenadas.length
-                ? null
+                ? (tieneHitoDespues ? () => alMoverHito(hito, posicion) : null)
                 : () => alMoverHito(hito, posicion + 1),
           ),
         );
@@ -2651,9 +2648,13 @@ class _ListaHitos extends StatelessWidget {
     required this.hitos,
     required this.actividades,
     required this.hitoActividades,
+    required this.onEdit,
+    required this.onDelete,
     required this.onOpen,
   });
   final List<Map<String, dynamic>> hitos, actividades, hitoActividades;
+  final ValueChanged<Map<String, dynamic>> onEdit;
+  final ValueChanged<Map<String, dynamic>> onDelete;
   final void Function(Map<String, dynamic>, List<Map<String, dynamic>>) onOpen;
   @override
   Widget build(BuildContext context) {
@@ -2716,7 +2717,19 @@ class _ListaHitos extends StatelessWidget {
             subtitle: Text(
               '${asociadas.length} actividades necesarias · ${_fechaCorta(_fecha(hito['fechaObjetivo']))}',
             ),
-            trailing: const Icon(Icons.chevron_right),
+            trailing: Wrap(
+              children: [
+                PopupMenuButton<String>(
+                  onSelected: (accion) =>
+                      accion == 'editar' ? onEdit(hito) : onDelete(hito),
+                  itemBuilder: (_) => const [
+                    PopupMenuItem(value: 'editar', child: Text('Editar')),
+                    PopupMenuItem(value: 'eliminar', child: Text('Desactivar')),
+                  ],
+                ),
+                const Icon(Icons.chevron_right),
+              ],
+            ),
           ),
         );
       },
@@ -3061,11 +3074,15 @@ class _DetalleHitoSheet extends StatelessWidget {
   const _DetalleHitoSheet({
     required this.hito,
     required this.actividades,
-    required this.onAgregarActividad,
+    required this.disponibles,
+    required this.onAsociarActividad,
+    required this.onQuitarActividad,
   });
   final Map<String, dynamic> hito;
   final List<Map<String, dynamic>> actividades;
-  final VoidCallback onAgregarActividad;
+  final List<Map<String, dynamic>> disponibles;
+  final Future<void> Function(Map<String, dynamic>) onAsociarActividad;
+  final Future<void> Function(Map<String, dynamic>) onQuitarActividad;
 
   @override
   Widget build(BuildContext context) => _DetalleSheet(
@@ -3078,20 +3095,14 @@ class _DetalleHitoSheet extends StatelessWidget {
         Text(hito['criterioAceptacion'].toString()),
       ],
       const SizedBox(height: 20),
-      Row(
-        children: [
-          const Expanded(
-            child: Text(
-              'Actividades necesarias',
-              style: TextStyle(fontWeight: FontWeight.w800),
-            ),
-          ),
-          TextButton.icon(
-            onPressed: onAgregarActividad,
-            icon: const Icon(Icons.playlist_add_outlined),
-            label: const Text('Agregar'),
-          ),
-        ],
+      const Text(
+        'Actividades necesarias',
+        style: TextStyle(fontWeight: FontWeight.w800),
+      ),
+      const SizedBox(height: 8),
+      _SelectorActividadHito(
+        disponibles: disponibles,
+        onAgregar: onAsociarActividad,
       ),
       if (actividades.isEmpty)
         const Text('Aún no hay actividades asociadas a este hito.'),
@@ -3104,10 +3115,77 @@ class _DetalleHitoSheet extends StatelessWidget {
           ),
           title: Text(actividad['nombre']?.toString() ?? 'Actividad'),
           subtitle: Text('Vence ${_fechaCorta(_fecha(actividad['fechaFin']))}'),
+          trailing: IconButton(
+            tooltip: 'Quitar del hito',
+            icon: const Icon(Icons.remove_circle_outline),
+            onPressed: () => onQuitarActividad(actividad),
+          ),
         ),
       ),
     ],
   );
+}
+
+class _SelectorActividadHito extends StatefulWidget {
+  const _SelectorActividadHito({
+    required this.disponibles,
+    required this.onAgregar,
+  });
+  final List<Map<String, dynamic>> disponibles;
+  final Future<void> Function(Map<String, dynamic>) onAgregar;
+
+  @override
+  State<_SelectorActividadHito> createState() => _SelectorActividadHitoState();
+}
+
+class _SelectorActividadHitoState extends State<_SelectorActividadHito> {
+  String? _idSeleccionado;
+
+  @override
+  Widget build(BuildContext context) {
+    Map<String, dynamic>? seleccionada;
+    for (final actividad in widget.disponibles) {
+      if (actividad['idActividad']?.toString() == _idSeleccionado) {
+        seleccionada = actividad;
+        break;
+      }
+    }
+    final actividadSeleccionada = seleccionada;
+    return Row(
+      children: [
+        Expanded(
+          child: DropdownButtonFormField<String>(
+            value: _idSeleccionado,
+            isExpanded: true,
+            decoration: const InputDecoration(labelText: 'Agregar actividad'),
+            hint: const Text('Selecciona una actividad'),
+            items: widget.disponibles
+                .map(
+                  (actividad) => DropdownMenuItem<String>(
+                    value: actividad['idActividad']?.toString(),
+                    child: Text(
+                      actividad['nombre']?.toString() ?? 'Actividad',
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                )
+                .toList(),
+            onChanged: widget.disponibles.isEmpty
+                ? null
+                : (valor) => setState(() => _idSeleccionado = valor),
+          ),
+        ),
+        const SizedBox(width: 8),
+        IconButton(
+          tooltip: 'Agregar actividad al hito',
+          icon: const Icon(Icons.add_circle, color: AppColors.primary),
+          onPressed: actividadSeleccionada == null
+              ? null
+              : () => widget.onAgregar(actividadSeleccionada),
+        ),
+      ],
+    );
+  }
 }
 
 class _HitoDetallePage extends StatelessWidget {
@@ -3324,6 +3402,24 @@ class _DetalleActividadSheetState extends State<_DetalleActividadSheet> {
                             softWrap: true,
                           ),
                         ),
+                      ),
+                      IconButton(
+                        tooltip: 'Quitar subtarea',
+                        icon: const Icon(Icons.remove_circle_outline),
+                        onPressed: () async {
+                          final id = item['idChecklist']?.toString();
+                          if (id == null || id.isEmpty) {
+                            return;
+                          }
+                          await widget.actualizarChecklist(id, {
+                            'activo': false,
+                          });
+                          if (mounted) {
+                            setState(
+                              () => _checklist = widget.cargarChecklist(),
+                            );
+                          }
+                        },
                       ),
                     ],
                   ),

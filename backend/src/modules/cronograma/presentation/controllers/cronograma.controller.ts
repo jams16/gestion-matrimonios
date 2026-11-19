@@ -208,6 +208,24 @@ export class CronogramaController {
       ),
     };
   }
+  @Delete('hitos/:idHito/actividades/:idActividad')
+  @ApiOperation({ summary: 'Quitar una actividad de un hito sin eliminarla del cronograma' })
+  async quitarActividadHito(
+    @Param('idProyecto', ParseUUIDPipe) idProyecto: string,
+    @Param('idHito', ParseUUIDPipe) idHito: string,
+    @Param('idActividad', ParseUUIDPipe) idActividad: string,
+    @Req() request: SolicitudAutenticada,
+  ) {
+    return {
+      mensaje: 'Actividad quitada del hito correctamente.',
+      data: await this.hitos.quitarActividad(
+        idProyecto,
+        idHito,
+        idActividad,
+        request.usuarioAutenticado.sub,
+      ),
+    };
+  }
   @Get('hitos/:idHito')
   @ApiOperation({ summary: 'Obtener un hito por ID' })
   async obtenerHito(
