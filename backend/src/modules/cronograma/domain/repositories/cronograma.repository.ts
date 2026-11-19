@@ -22,6 +22,8 @@ export interface PlantillaHitoCronograma {
 
 export interface PlantillaActividadCronograma {
   idPlantillaActividad: number;
+  /** Relación heredada; se usa como respaldo si no existe puente N:M explícito. */
+  idPlantillaHito: number | null;
   nombre: string;
   responsableSugerido: string | null;
   entregable: string | null;

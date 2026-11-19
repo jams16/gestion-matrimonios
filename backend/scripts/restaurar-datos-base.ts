@@ -429,6 +429,8 @@ async function secuencias(c: ClienteSql) {
 }
 
 async function ejecutar() {
+  // Se valida antes de abrir la conexión: un separador o texto alterado nunca llega a la BD.
+  validarChecklistsActividad();
   const c = new Client({ connectionString: process.env.DATABASE_URL });
   const r = { ubigeos: vacio(), categoriasProveedor: vacio(), tipos: vacio(), fases: vacio(), buenasPracticas: vacio(), edtGlobal: vacio(), hitos: vacio(), actividades: vacio(), dependencias: vacio(), hitosActividades: vacio(), checklist: vacio(), timing: vacio(), timingDependencias: vacio(), actividadTipo: vacio(), timingTipo: vacio(), categoriasRiesgo: vacio(), plantillasRiesgo: vacio(), mitigacionesRiesgo: vacio(), planesRiesgo: vacio() };
   await c.connect();

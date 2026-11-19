@@ -157,6 +157,7 @@ export class PrismaCronogramaRepository
         .filter((item) => item.activo !== false)
         .map((item) => ({
           idPlantillaActividad: Number(item.id_plantilla_actividad),
+          idPlantillaHito: this.aNumeroONulo(item.id_plantilla_hito),
           nombre: String(item.nombre),
           responsableSugerido: this.aTextoONulo(item.responsable_sugerido),
           entregable: this.aTextoONulo(item.entregable),

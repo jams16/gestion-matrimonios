@@ -86,7 +86,14 @@ export class GenerarCronogramaDesdePlantillaUseCase {
     }
 
     for (const plantilla of plantillas.hitos) {
-      const asociaciones = plantillas.hitosActividades.filter((relacion) => relacion.idPlantillaHito === plantilla.idPlantillaHito);
+      // El puente N:M es la fuente principal. La FK heredada protege cronogramas
+      // restaurados desde catálogos antiguos que aún no tengan el puente completo.
+      const asociacionesExplicitas = plantillas.hitosActividades.filter((relacion) => relacion.idPlantillaHito === plantilla.idPlantillaHito);
+      const asociaciones = asociacionesExplicitas.length > 0
+        ? asociacionesExplicitas
+        : plantillas.actividades
+            .filter((actividad) => actividad.idPlantillaHito === plantilla.idPlantillaHito)
+            .map((actividad) => ({ idPlantillaHito: plantilla.idPlantillaHito, idPlantillaActividad: actividad.idPlantillaActividad }));
       const actividades = asociaciones.map((relacion) => actividadesPorPlantilla.get(relacion.idPlantillaActividad)).filter((id): id is string => !!id);
       if (asociaciones.length && !actividades.length) continue;
       const hito = await repositorio.crearHito({
