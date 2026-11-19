@@ -545,22 +545,81 @@ export class GestionarTimingUseCase {
     return this.repository.ejecutarEnTransaccionCrud(async (repositorio) => {
       const actual = validarRegistro(await repositorio.obtenerTiming(dto.idTiming), idProyecto, 'Elemento de timing');
       const vecino = validarRegistro(await repositorio.obtenerTiming(dto.idTimingVecino), idProyecto, 'Elemento de timing');
-      await repositorio.actualizarTiming(dto.idTiming, {
-        fechaHoraInicio: vecino.fechaHoraInicio,
-        fechaHoraFin: vecino.fechaHoraFin,
-        duracionMinutos: vecino.duracionMinutos,
-        orden: vecino.orden,
-        modificadoManualmente: true,
-      });
-      await repositorio.actualizarTiming(dto.idTimingVecino, {
-        fechaHoraInicio: actual.fechaHoraInicio,
-        fechaHoraFin: actual.fechaHoraFin,
-        duracionMinutos: actual.duracionMinutos,
-        orden: actual.orden,
-        modificadoManualmente: true,
-      });
+      const momentos = await repositorio.listarTiming(idProyecto, { activo: true });
+      const ordenados = [...momentos].sort((a, b) => Number(a.orden ?? 0) - Number(b.orden ?? 0));
+      const indiceActual = ordenados.findIndex((item) => String(item.idTiming) === String(actual.idTiming));
+      const indiceVecino = ordenados.findIndex((item) => String(item.idTiming) === String(vecino.idTiming));
+      [ordenados[indiceActual], ordenados[indiceVecino]] = [ordenados[indiceVecino], ordenados[indiceActual]];
+      const primerCambio = Math.min(indiceActual, indiceVecino);
+      const ultimoCambio = Math.max(indiceActual, indiceVecino);
+      const anclaAnterior = [...ordenados.entries()]
+        .slice(0, primerCambio + 1)
+        .reverse()
+        .find(([, momento]) => momento.tipoHorario === 'FIJO');
+      const desde = anclaAnterior ? anclaAnterior[0] + 1 : 0;
+      const siguienteFijo = ordenados.findIndex(
+        (momento, indice) => indice > ultimoCambio && momento.tipoHorario === 'FIJO',
+      );
+      const hasta = siguienteFijo < 0 ? ordenados.length : siguienteFijo;
+      const inicioBloque = anclaAnterior
+        ? this.finConExtra(anclaAnterior[1])
+        : fechaComoDate(ordenados[desde]?.fechaHoraInicio);
+      const cursorFinal = await this.recalcularHorario(
+        repositorio,
+        ordenados.slice(desde, hasta),
+        String(actual.idTiming),
+        inicioBloque,
+        desde,
+      );
+      if (siguienteFijo >= 0) {
+        const inicioSiguienteFijo = fechaComoDate(ordenados[siguienteFijo].fechaHoraInicio);
+        if (inicioSiguienteFijo && cursorFinal > inicioSiguienteFijo) {
+          throw new ConflictException('El cambio invade el horario fijo siguiente. Reduce duraciones o reubica los elementos antes de ese horario.');
+        }
+      }
       return { idTiming: dto.idTiming, idTimingVecino: dto.idTimingVecino };
     });
+  }
+
+  /** Reencadena momentos flexibles; un fijo que no se mueve conserva su hora. */
+  private async recalcularHorario(
+    repositorio: CronogramaCrudRepository,
+    momentos: Record<string, unknown>[],
+    idFijoReubicado: string | null,
+    inicioBloque: Date | null,
+    ordenInicial: number,
+  ): Promise<Date> {
+    let cursor = inicioBloque;
+    if (!cursor) throw new BadRequestException('El timing no tiene una hora inicial válida.');
+    for (let indice = 0; indice < momentos.length; indice += 1) {
+      const momento = momentos[indice];
+      const esFijo = momento.tipoHorario === 'FIJO';
+      const esFijoReubicado = esFijo && String(momento.idTiming) === idFijoReubicado;
+      const inicioGuardado = fechaComoDate(momento.fechaHoraInicio);
+      const inicio: Date | null =
+        esFijo && !esFijoReubicado ? inicioGuardado : cursor;
+      if (!inicio) throw new BadRequestException('El timing contiene una hora inválida.');
+      if (esFijo && !esFijoReubicado && inicio < cursor) {
+        throw new ConflictException('El cambio genera un choque con un momento de horario fijo. Reubica el momento fijo o ajusta los elementos vecinos.');
+      }
+      const duracion = Number(momento.duracionMinutos ?? 0);
+      const fin: Date = new Date(inicio.getTime() + duracion * 60_000);
+      await repositorio.actualizarTiming(String(momento.idTiming), {
+        fechaHoraInicio: inicio,
+        fechaHoraFin: fin,
+        orden: ordenInicial + indice + 1,
+        modificadoManualmente: true,
+      });
+      cursor = new Date(fin.getTime() + Number(momento.tiempoExtraMinutos ?? 0) * 60_000);
+    }
+    return cursor;
+  }
+
+  private finConExtra(momento: Record<string, unknown>): Date | null {
+    const fin = fechaComoDate(momento.fechaHoraFin);
+    return fin
+      ? new Date(fin.getTime() + Number(momento.tiempoExtraMinutos ?? 0) * 60_000)
+      : null;
   }
   async actualizar(
     idProyecto: string,
@@ -666,23 +725,32 @@ export class ConsultarCronogramaUseCase {
     const actividadesActivas = new Set(
       actividades.map((actividad) => String(actividad.idActividad)),
     );
-    // Un hito representa el resultado posterior a todas sus actividades: su
-    // fecha objetivo efectiva es la mayor fecha de fin de las asociadas.
+    // La fecha efectiva de un hito es el mayor vencimiento de sus actividades
+    // requeridas. Un hito sin actividades conserva su fecha objetivo manual.
     const fechaObjetivoPorHito = new Map<string, Date>();
     for (const relacion of hitoActividades) {
       const actividad = actividades.find(
         (item) => String(item.idActividad) === String(relacion.idActividad),
       );
-      if (!actividad?.fechaFin) continue;
-      const fecha = new Date(String(actividad.fechaFin));
-      if (Number.isNaN(fecha.getTime())) continue;
+      const fecha = actividad?.fechaFin
+        ? fechaComoDate(actividad.fechaFin)
+        : null;
+      if (!fecha) continue;
       const idHito = String(relacion.idHito);
       const actual = fechaObjetivoPorHito.get(idHito);
       if (!actual || fecha > actual) fechaObjetivoPorHito.set(idHito, fecha);
     }
-    const hitosConFechaObjetivo = hitos.map((hito) => {
-      const fecha = fechaObjetivoPorHito.get(String(hito.idHito));
-      return fecha ? { ...hito, fechaObjetivo: fecha } : hito;
+    const hitosConFechaEfectiva: Record<string, unknown>[] = hitos.map((hito) => {
+      const fechaCalculada = fechaObjetivoPorHito.get(String(hito.idHito));
+      const fechaManual = fechaComoDate(hito.fechaObjetivo);
+      // Normalizar a ISO evita que un valor Temporal del ORM llegue como un
+      // objeto no interpretable por Flutter. Sin actividades se expone la
+      // fecha manual guardada; con actividades se expone la calculada.
+      const fechaEfectiva = fechaCalculada ?? fechaManual;
+      return {
+        ...hito,
+        fechaObjetivo: fechaEfectiva?.toISOString() ?? null,
+      };
     });
     return {
       proyecto: {
@@ -690,7 +758,7 @@ export class ConsultarCronogramaUseCase {
         faseProyecto: faseProyecto ?? null,
         faseProyectoCodigo: faseProyecto?.codigo ?? null,
       },
-      hitos: hitosConFechaObjetivo,
+      hitos: hitosConFechaEfectiva,
       actividades,
       // El puente permite que una actividad contribuya a más de un hito sin
       // duplicar la actividad ni depender de la relación heredada id_hito.
@@ -698,7 +766,7 @@ export class ConsultarCronogramaUseCase {
         (relacion) =>
           !activo ||
           (actividadesActivas.has(String(relacion.idActividad)) &&
-            hitosConFechaObjetivo.some(
+            hitosConFechaEfectiva.some(
               (hito) => String(hito.idHito) === String(relacion.idHito),
             )),
       ),

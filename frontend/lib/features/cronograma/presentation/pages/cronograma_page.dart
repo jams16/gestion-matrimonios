@@ -7,10 +7,12 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../core/widgets/buttons/app_button.dart';
+import '../../../../core/widgets/feedback/app_information_card.dart';
 import '../../../../core/widgets/feedback/app_snackbar.dart';
 import '../../../../core/widgets/inputs/app_date_field.dart';
-import '../../../../core/widgets/inputs/app_text_field.dart';
+import '../../../../core/widgets/inputs/app_number_field.dart';
 import '../../../../core/widgets/inputs/app_select_field.dart';
+import '../../../../core/widgets/inputs/app_text_field.dart';
 import '../../../../core/widgets/inputs/app_time_field.dart';
 import '../../../../core/widgets/overlays/app_confirmation_dialog.dart';
 import '../../../autenticacion/infrastructure/auth_session.dart';
@@ -39,6 +41,7 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
     with SingleTickerProviderStateMixin {
   late final TabController _tabs;
   late final Future<Map<String, dynamic>?> _buenaPracticaPlan;
+  late final List<Future<List<Map<String, dynamic>?>>> _buenasPracticasPorSeccion;
   VoidCallback? _agregarEdt;
   Map<String, dynamic>? _ultimoCronograma;
   bool _procesando = false;
@@ -48,8 +51,17 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
   void initState() {
     super.initState();
     _tabs = TabController(length: 4, vsync: this)..addListener(_redibujarTab);
-    _buenaPracticaPlan = MatrimoniosRemoteDataSource()
-        .obtenerBuenaPracticaPorCodigo('GP24');
+    final buenasPracticas = MatrimoniosRemoteDataSource();
+    _buenaPracticaPlan = buenasPracticas.obtenerBuenaPracticaPorCodigo('GP24');
+    _buenasPracticasPorSeccion = [
+      Future.wait([buenasPracticas.obtenerBuenaPracticaPorCodigo('GP20')]),
+      Future.wait([
+        buenasPracticas.obtenerBuenaPracticaPorCodigo('GP27'),
+        buenasPracticas.obtenerBuenaPracticaPorCodigo('GP25'),
+      ]),
+      Future.wait([buenasPracticas.obtenerBuenaPracticaPorCodigo('GP28')]),
+      Future.wait([buenasPracticas.obtenerBuenaPracticaPorCodigo('GP26')]),
+    ];
   }
 
   void _redibujarTab() {
@@ -114,6 +126,37 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
       );
     },
   );
+
+  Widget _informacionSeccion() =>
+      FutureBuilder<List<Map<String, dynamic>?>>(
+        future: _buenasPracticasPorSeccion[_tabs.index],
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const AppInformationCard(
+              texto: 'Cargando informacion...',
+              maxLines: 1,
+            );
+          }
+          final detalles = (snapshot.data ?? const <Map<String, dynamic>?>[])
+              .map(_aplicacionMatrimonios)
+              .whereType<String>()
+              .where((detalle) => detalle.trim().isNotEmpty)
+              .toList();
+          if (detalles.isEmpty) {
+            return const SizedBox.shrink();
+          }
+          return AppInformationCard(
+            texto: detalles.first,
+            detalle: detalles.join('\n\n'),
+            etiquetaDetalle: 'Ver recomendacion completa',
+            maxLines: 1,
+          );
+        },
+      );
+
+  String? _aplicacionMatrimonios(Map<String, dynamic>? practica) =>
+      practica?['aplicacionMatrimonios']?.toString() ??
+      practica?['aplicacion_matrimonios']?.toString();
 
   /// Solo persiste cambios textuales completos sobre una instancia existente.
   /// Las fechas requieren la confirmación explícita para no saltar el preview
@@ -578,6 +621,10 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
             seleccionado: _tabs.index,
             onSeleccionar: _tabs.animateTo,
           ),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+          child: _informacionSeccion(),
         ),
         Expanded(
           child: TabBarView(
@@ -1196,29 +1243,47 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
           existente?['actividad']?.toString() ??
           plantilla?['actividad']?.toString(),
     );
-    final horaPlantilla = _horaDePlantilla(plantilla?['horaInicio']);
-    final inicioExistente =
-        _fecha(existente?['fechaHoraInicio']) ??
-        DateTime(
-          DateTime.now().year,
-          DateTime.now().month,
-          DateTime.now().day,
-          horaPlantilla?.hour ?? DateTime.now().hour,
-          horaPlantilla?.minute ?? DateTime.now().minute,
+    // Un momento nuevo corresponde al día del matrimonio activo.
+    final fechaMatrimonio =
+        _fecha(_mapa(data['matrimonio'])['fechaMatrimonio']) ?? DateTime.now();
+    final momentosActuales = _lista(_mapa(data['cronograma'])['timing']);
+    final ultimoMomento = momentosActuales
+        .map((item) => _fechaHora(item['fechaHoraFin']))
+        .whereType<DateTime>()
+        .fold<DateTime?>(
+          null,
+          (mayor, fecha) =>
+              mayor == null || fecha.isAfter(mayor) ? fecha : mayor,
         );
-    final finExistente =
-        _fecha(existente?['fechaHoraFin']) ??
-        inicioExistente.add(
-          Duration(
-            minutes:
-                int.tryParse(plantilla?['duracionMinutos']?.toString() ?? '') ??
-                60,
-          ),
+    final inicioExistente =
+        _fechaHora(existente?['fechaHoraInicio']) ??
+        ultimoMomento ??
+        DateTime(
+          fechaMatrimonio.year,
+          fechaMatrimonio.month,
+          fechaMatrimonio.day,
+          8,
         );
     DateTime? fechaInicio = inicioExistente;
-    DateTime? fechaFin = finExistente;
     TimeOfDay? horaInicio = TimeOfDay.fromDateTime(inicioExistente);
-    TimeOfDay? horaFin = TimeOfDay.fromDateTime(finExistente);
+    var duracion =
+        int.tryParse(
+          existente?['duracionMinutos']?.toString() ??
+              plantilla?['duracionMinutos']?.toString() ??
+              '',
+        ) ??
+        60;
+    var tiempoExtra =
+        int.tryParse(
+          existente?['tiempoExtraMinutos']?.toString() ??
+              plantilla?['tiempoExtraMinutos']?.toString() ??
+              '',
+        ) ??
+        0;
+    var tipoHorario =
+        existente?['tipoHorario']?.toString() ??
+        plantilla?['tipoHorario']?.toString() ??
+        'FLEXIBLE';
     final ubicacion = TextEditingController(
       text: existente?['ubicacion']?.toString(),
     );
@@ -1245,31 +1310,52 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
                     validator: _requerido,
                   ),
                   const SizedBox(height: 18),
-                  AppDateField(
-                    label: 'Fecha de inicio',
-                    initialDate: fechaInicio,
+                  AppSelectField<String>(
+                    label: 'Tipo de horario',
+                    initialValue: tipoHorario,
+                    options: const [
+                      AppSelectOption(value: 'FLEXIBLE', label: 'Flexible'),
+                      AppSelectOption(value: 'FIJO', label: 'Fijo'),
+                    ],
                     onChanged: (value) =>
-                        setDialogState(() => fechaInicio = value),
+                        setDialogState(() => tipoHorario = value ?? 'FLEXIBLE'),
                   ),
                   const SizedBox(height: 18),
-                  AppTimeField(
-                    label: 'Hora de inicio',
-                    initialTime: horaInicio,
-                    onChanged: (value) =>
-                        setDialogState(() => horaInicio = value),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: AppDateField(
+                          label: 'Fecha de inicio',
+                          initialDate: fechaInicio,
+                          onChanged: (valor) =>
+                              setDialogState(() => fechaInicio = valor),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: AppTimeField(
+                          label: 'Hora de inicio',
+                          initialTime: horaInicio,
+                          onChanged: (valor) =>
+                              setDialogState(() => horaInicio = valor),
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 18),
-                  AppDateField(
-                    label: 'Fecha de fin',
-                    initialDate: fechaFin,
-                    onChanged: (value) =>
-                        setDialogState(() => fechaFin = value),
+                  _SelectorMinutos(
+                    etiqueta: 'Duración (min)',
+                    valor: duracion,
+                    minimo: 1,
+                    onChanged: (valor) =>
+                        setDialogState(() => duracion = valor),
                   ),
                   const SizedBox(height: 18),
-                  AppTimeField(
-                    label: 'Hora de fin',
-                    initialTime: horaFin,
-                    onChanged: (value) => setDialogState(() => horaFin = value),
+                  _SelectorMinutos(
+                    etiqueta: 'Tiempo extra (min)',
+                    valor: tiempoExtra,
+                    onChanged: (valor) =>
+                        setDialogState(() => tiempoExtra = valor),
                   ),
                   const SizedBox(height: 18),
                   AppTextField(
@@ -1316,11 +1402,9 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
     if (guardar != true || !form.currentState!.validate()) {
       return;
     }
-    if (fechaInicio == null ||
-        fechaFin == null ||
-        horaInicio == null ||
-        horaFin == null)
+    if (fechaInicio == null || horaInicio == null) {
       return;
+    }
     final inicio = DateTime(
       fechaInicio!.year,
       fechaInicio!.month,
@@ -1328,28 +1412,14 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
       horaInicio!.hour,
       horaInicio!.minute,
     );
-    final fin = DateTime(
-      fechaFin!.year,
-      fechaFin!.month,
-      fechaFin!.day,
-      horaFin!.hour,
-      horaFin!.minute,
-    );
-    final duracion = fin.difference(inicio).inMinutes;
-    if (duracion <= 0) {
-      if (mounted)
-        AppSnackbar.show(
-          context,
-          message: 'El fin debe ser posterior al inicio.',
-          type: AppSnackbarType.warning,
-        );
-      return;
-    }
+    final fin = inicio.add(Duration(minutes: duracion));
     final payload = <String, dynamic>{
       'actividad': actividad.text.trim(),
       'fechaHoraInicio': inicio.toIso8601String(),
       'fechaHoraFin': fin.toIso8601String(),
       'duracionMinutos': duracion,
+      'tipoHorario': tipoHorario,
+      'tiempoExtraMinutos': tiempoExtra,
       if (plantilla?['idPlantillaTiming'] != null)
         'idPlantillaTiming': plantilla!['idPlantillaTiming'],
       'ubicacion': _nuloSiVacio(ubicacion.text),
@@ -2124,19 +2194,6 @@ class _ListaCronograma extends StatelessWidget {
         final hito = ubicado.hito;
         final indiceHito = hitosUbicados.indexOf(ubicado);
         final tieneHitoDespues = indiceHito < hitosUbicados.length - 1;
-        final necesarias =
-            actividadesPorHito[hito['idHito']?.toString()] ?? const [];
-        final fechaObjetivo = necesarias
-            .map((actividad) => _fecha(actividad['fechaFin']))
-            .whereType<DateTime>()
-            .fold<DateTime?>(
-              null,
-              (mayor, fecha) =>
-                  mayor == null || fecha.isAfter(mayor) ? fecha : mayor,
-            );
-        if (fechaObjetivo != null) {
-          hito['fechaObjetivo'] = fechaObjetivo.toIso8601String();
-        }
         elementos.add(
           _HitoCard(
             hito: hito,
@@ -2392,7 +2449,7 @@ class _EstadoActividadChip extends StatelessWidget {
       'COMPLETADA' => ('Completada', Colors.green.shade700),
       'EN_PROCESO' => ('En proceso', Colors.blue.shade700),
       'BLOQUEADA' => ('Bloqueada', Colors.orange.shade800),
-      _ => ('Pendiente', AppColors.primary),
+      _ => ('Pendiente', const Color(0xFFF9A825)),
     };
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -2465,7 +2522,8 @@ class _ListaTiming extends StatelessWidget {
       );*/
     final timingOrdenado = [...timing]
       ..sort(
-        (a, b) => _compararFecha(a['fechaHoraInicio'], b['fechaHoraInicio']),
+        (a, b) =>
+            _compararFechaHora(a['fechaHoraInicio'], b['fechaHoraInicio']),
       );
     return ListView.separated(
       padding: const EdgeInsets.fromLTRB(16, 10, 16, 96),
@@ -2473,7 +2531,7 @@ class _ListaTiming extends StatelessWidget {
       separatorBuilder: (_, __) => const SizedBox(height: 8),
       itemBuilder: (context, indice) {
         if (indice == 0) {
-          final inicio = _fecha(timingOrdenado.first['fechaHoraInicio']);
+          final inicio = _fechaHora(timingOrdenado.first['fechaHoraInicio']);
           return Row(
             children: [
               Expanded(
@@ -2496,73 +2554,136 @@ class _ListaTiming extends StatelessWidget {
         }
         final i = indice - 1;
         final item = timingOrdenado[i];
-        return Card(
-          child: ListTile(
-            onTap: () => alVer(item),
-            leading: CircleAvatar(
-              radius: 27,
-              child: FittedBox(
-                child: Text(
-                  _hora(_fecha(item['fechaHoraInicio'])),
-                  style: const TextStyle(fontWeight: FontWeight.w800),
-                ),
-              ),
-            ),
-            title: Text(item['actividad']?.toString() ?? 'Momento'),
-            subtitle: Wrap(
-              spacing: 8,
-              runSpacing: 4,
-              children: [
-                _DatoActividad(
-                  icon: Icons.schedule_outlined,
-                  texto: 'Hasta ${_hora(_fecha(item['fechaHoraFin']))}',
-                ),
-                if (item['ubicacion'] != null)
-                  _DatoActividad(
-                    icon: Icons.place_outlined,
-                    texto: item['ubicacion'].toString(),
-                  ),
-                if (item['idUsuarioResponsable'] != null)
-                  _DatoActividad(
-                    icon: Icons.person_outline,
-                    texto:
-                        nombresResponsables[item['idUsuarioResponsable']
-                            .toString()] ??
-                        'Sin responsable',
-                  ),
-              ],
-            ),
-            trailing: Wrap(
-              children: [
-                IconButton(
-                  tooltip: 'Subir',
-                  icon: const Icon(Icons.keyboard_arrow_up),
-                  onPressed: i == 0
-                      ? null
-                      : () => alMover(item, timingOrdenado[i - 1]),
-                ),
-                IconButton(
-                  tooltip: 'Bajar',
-                  icon: const Icon(Icons.keyboard_arrow_down),
-                  onPressed: i == timingOrdenado.length - 1
-                      ? null
-                      : () => alMover(item, timingOrdenado[i + 1]),
-                ),
-                PopupMenuButton<String>(
-                  onSelected: (v) =>
-                      v == 'editar' ? alEditar(item) : alEliminar(item),
-                  itemBuilder: (_) => const [
-                    PopupMenuItem(value: 'editar', child: Text('Editar')),
-                    PopupMenuItem(value: 'eliminar', child: Text('Desactivar')),
+        return DragTarget<Map<String, dynamic>>(
+          onWillAcceptWithDetails: (detalle) =>
+              detalle.data['idTiming']?.toString() !=
+              item['idTiming']?.toString(),
+          onAcceptWithDetails: (detalle) => alMover(detalle.data, item),
+          builder: (context, candidatos, _) => Card(
+            color: candidatos.isEmpty
+                ? null
+                : Theme.of(context).colorScheme.primaryContainer,
+            child: ListTile(
+              onTap: () => alVer(item),
+              leading: SizedBox(
+                width: 76,
+                child: Row(
+                  children: [
+                    LongPressDraggable<Map<String, dynamic>>(
+                      data: item,
+                      feedback: Material(
+                        color: Colors.transparent,
+                        child: Icon(
+                          Icons.drag_indicator,
+                          color: Theme.of(context).colorScheme.primary,
+                          size: 30,
+                        ),
+                      ),
+                      childWhenDragging: const Icon(
+                        Icons.drag_indicator,
+                        color: Colors.transparent,
+                      ),
+                      child: const Icon(
+                        Icons.drag_indicator,
+                        color: AppColors.primary,
+                        semanticLabel: 'Mantén y arrastra para mover',
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    CircleAvatar(
+                      radius: 23,
+                      child: FittedBox(
+                        child: Text(
+                          _hora(_fechaHora(item['fechaHoraInicio'])),
+                          style: const TextStyle(fontWeight: FontWeight.w800),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
-              ],
+              ),
+              title: Text(item['actividad']?.toString() ?? 'Momento'),
+              subtitle: Wrap(
+                spacing: 8,
+                runSpacing: 4,
+                children: [
+                  _DatoActividad(
+                    icon: Icons.schedule_outlined,
+                    texto: 'Hasta ${_hora(_fechaHora(item['fechaHoraFin']))}',
+                  ),
+                  if (item['ubicacion'] != null)
+                    _DatoActividad(
+                      icon: Icons.place_outlined,
+                      texto: item['ubicacion'].toString(),
+                    ),
+                  if (item['idUsuarioResponsable'] != null)
+                    _DatoActividad(
+                      icon: Icons.person_outline,
+                      texto:
+                          nombresResponsables[item['idUsuarioResponsable']
+                              .toString()] ??
+                          'Sin responsable',
+                    ),
+                ],
+              ),
+              trailing: Wrap(
+                children: [
+                  IconButton(
+                    tooltip: 'Subir',
+                    icon: const Icon(Icons.keyboard_arrow_up),
+                    onPressed: i == 0
+                        ? null
+                        : () => alMover(item, timingOrdenado[i - 1]),
+                  ),
+                  IconButton(
+                    tooltip: 'Bajar',
+                    icon: const Icon(Icons.keyboard_arrow_down),
+                    onPressed: i == timingOrdenado.length - 1
+                        ? null
+                        : () => alMover(item, timingOrdenado[i + 1]),
+                  ),
+                  PopupMenuButton<String>(
+                    onSelected: (v) =>
+                        v == 'editar' ? alEditar(item) : alEliminar(item),
+                    itemBuilder: (_) => const [
+                      PopupMenuItem(value: 'editar', child: Text('Editar')),
+                      PopupMenuItem(
+                        value: 'eliminar',
+                        child: Text('Desactivar'),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         );
       },
     );
   }
+}
+
+class _SelectorMinutos extends StatelessWidget {
+  const _SelectorMinutos({
+    required this.etiqueta,
+    required this.valor,
+    required this.onChanged,
+    this.minimo = 0,
+  });
+
+  final String etiqueta;
+  final int valor;
+  final int minimo;
+  final ValueChanged<int> onChanged;
+
+  @override
+  Widget build(BuildContext context) => AppNumberField(
+    label: etiqueta,
+    initialValue: valor,
+    min: minimo,
+    step: 1,
+    onChanged: (nuevoValor) => onChanged(nuevoValor.toInt()),
+  );
 }
 
 class _GenerarTimingVacio extends StatefulWidget {
@@ -2699,16 +2820,6 @@ class _ListaHitos extends StatelessWidget {
               ),
             )
             .toList();
-        final objetivo = asociadas
-            .map((actividad) => _fecha(actividad['fechaFin']))
-            .whereType<DateTime>()
-            .fold<DateTime?>(
-              null,
-              (mayor, fecha) =>
-                  mayor == null || fecha.isAfter(mayor) ? fecha : mayor,
-            );
-        if (objetivo != null)
-          hito['fechaObjetivo'] = objetivo.toIso8601String();
         return Card(
           child: ListTile(
             onTap: () => onOpen(hito, asociadas),
@@ -2727,7 +2838,6 @@ class _ListaHitos extends StatelessWidget {
                     PopupMenuItem(value: 'eliminar', child: Text('Desactivar')),
                   ],
                 ),
-                const Icon(Icons.chevron_right),
               ],
             ),
           ),
@@ -3300,7 +3410,7 @@ class _DetalleTimingSheetState extends State<_DetalleTimingSheet> {
     titulo: widget.timing['actividad']?.toString() ?? 'Momento del timing',
     children: [
       Text(
-        '${_hora(_fecha(widget.timing['fechaHoraInicio']))} – ${_hora(_fecha(widget.timing['fechaHoraFin']))}',
+        '${_hora(_fechaHora(widget.timing['fechaHoraInicio']))} – ${_hora(_fechaHora(widget.timing['fechaHoraFin']))}',
       ),
       const SizedBox(height: 16),
       const Text(
@@ -3591,6 +3701,13 @@ DateTime? _fecha(Object? value) {
   return DateTime(fecha.year, fecha.month, fecha.day);
 }
 
+/// `_fecha` es para fechas de negocio y elimina la hora intencionalmente.
+/// Los momentos del timing son instantes: deben conservar hora y minutos.
+DateTime? _fechaHora(Object? value) {
+  if (value == null) return null;
+  return DateTime.tryParse(value.toString())?.toLocal();
+}
+
 int _compararFecha(Object? a, Object? b) {
   final fechaA = _fecha(a);
   final fechaB = _fecha(b);
@@ -3603,6 +3720,15 @@ int _compararFecha(Object? a, Object? b) {
   if (fechaB == null) {
     return -1;
   }
+  return fechaA.compareTo(fechaB);
+}
+
+int _compararFechaHora(Object? a, Object? b) {
+  final fechaA = _fechaHora(a);
+  final fechaB = _fechaHora(b);
+  if (fechaA == null && fechaB == null) return 0;
+  if (fechaA == null) return 1;
+  if (fechaB == null) return -1;
   return fechaA.compareTo(fechaB);
 }
 
@@ -3630,17 +3756,6 @@ String _fechaLarga(DateTime value) {
 String _hora(DateTime? value) => value == null
     ? '--'
     : '${value.hour}:${value.minute.toString().padLeft(2, '0')}';
-TimeOfDay? _horaDePlantilla(Object? value) {
-  final partes = value?.toString().split(':') ?? const <String>[];
-  if (partes.length < 2) {
-    return null;
-  }
-  final hora = int.tryParse(partes[0]);
-  final minuto = int.tryParse(partes[1]);
-  return hora == null || minuto == null
-      ? null
-      : TimeOfDay(hour: hora, minute: minuto);
-}
 
 String? _nuloSiVacio(String value) =>
     value.trim().isEmpty ? null : value.trim();

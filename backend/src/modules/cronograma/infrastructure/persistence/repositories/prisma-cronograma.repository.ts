@@ -619,6 +619,7 @@ export class PrismaCronogramaRepository
         fechaHoraInicio: 'fecha_hora_inicio', fechaHoraFin: 'fecha_hora_fin',
         duracionMinutos: 'duracion_minutos', idUsuarioResponsable: 'id_usuario_responsable',
         responsableTexto: 'responsable_texto', listaVerificacion: 'lista_verificacion',
+        tipoHorario: 'tipo_horario', tiempoExtraMinutos: 'tiempo_extra_minutos',
         estado: 'estado', orden: 'orden', modificadoManualmente: 'modificado_manualmente', activo: 'activo',
       },
     );
@@ -690,7 +691,8 @@ export class PrismaCronogramaRepository
       lista_verificacion: 'listaVerificacion',
       id_timing: 'idTiming', id_plantilla_timing: 'idPlantillaTiming',
       fecha_hora_inicio: 'fechaHoraInicio', fecha_hora_fin: 'fechaHoraFin',
-      duracion_minutos: 'duracionMinutos', created_at: 'createdAt', updated_at: 'updatedAt',
+      duracion_minutos: 'duracionMinutos', tipo_horario: 'tipoHorario',
+      tiempo_extra_minutos: 'tiempoExtraMinutos', created_at: 'createdAt', updated_at: 'updatedAt',
     };
     return Object.fromEntries(Object.entries(fila).map(([clave, valor]) => {
       if (clave === 'lista_verificacion' && typeof valor === 'string') {

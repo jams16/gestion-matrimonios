@@ -11,11 +11,13 @@ class AppInformationCard extends StatelessWidget {
     required this.texto,
     this.detalle,
     this.etiquetaDetalle = 'Ver informacion completa',
+    this.maxLines = 2,
   });
 
   final String texto;
   final String? detalle;
   final String etiquetaDetalle;
+  final int maxLines;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +49,7 @@ class AppInformationCard extends StatelessWidget {
           Expanded(
             child: Text(
               texto,
-              maxLines: 2,
+              maxLines: maxLines,
               overflow: TextOverflow.ellipsis,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: AppColors.textSecondary,

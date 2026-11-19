@@ -268,6 +268,11 @@ async function sincronizarCronogramaOficial(c: ClienteSql, relaciones: Resumen, 
   }
   for (const [pre, suc] of cronogramaOficial.dependencias) await c.query('INSERT INTO public.cr_plantilla_dependencia (id_actividad_predecesora,id_actividad_sucesora,tipo_dependencia,dias_desfase) VALUES ($1,$2,$3,0) ON CONFLICT (id_actividad_predecesora,id_actividad_sucesora) DO NOTHING', [actividades.get(pre), actividades.get(suc), 'FINISH_TO_START']);
   dependenciasTiming.existentes = await contar(c, 'cr_plantilla_timing_dependencia');
+  // La matriz DB-01..DB-23 es canónica: se reemplaza íntegramente para que
+  // restaurar también corrija vínculos obsoletos de versiones anteriores.
+  await c.query(`DELETE FROM public.cr_plantilla_timing_dependencia
+    WHERE id_timing_predecesor IN (SELECT id_plantilla_timing FROM public.cr_plantilla_timing WHERE codigo LIKE 'DB-%')
+       OR id_timing_sucesor IN (SELECT id_plantilla_timing FROM public.cr_plantilla_timing WHERE codigo LIKE 'DB-%')`);
   for (const [pre, suc] of cronogramaOficial.dependenciasTiming) { const resultado = await c.query('INSERT INTO public.cr_plantilla_timing_dependencia (id_timing_predecesor,id_timing_sucesor,tipo_dependencia,minutos_desfase) VALUES ($1,$2,$3,0) ON CONFLICT (id_timing_predecesor,id_timing_sucesor) DO NOTHING', [timings.get(pre), timings.get(suc), 'FINISH_TO_START']); dependenciasTiming.restaurados += Number(resultado.rowCount ?? 0); }
   tiposActividad.existentes = await contar(c, 'cr_plantilla_actividad_tipo_ceremonia');
   for (const [codigo, codigos] of cronogramaOficial.ceremoniaActividad) for (const codigoTipo of codigos) { const resultado = await c.query('INSERT INTO public.cr_plantilla_actividad_tipo_ceremonia (id_plantilla_actividad,id_tipo_ceremonia) VALUES ($1,$2) ON CONFLICT (id_plantilla_actividad,id_tipo_ceremonia) DO NOTHING', [actividades.get(codigo), tipo.get(codigoTipo)]); tiposActividad.restaurados += Number(resultado.rowCount ?? 0); }

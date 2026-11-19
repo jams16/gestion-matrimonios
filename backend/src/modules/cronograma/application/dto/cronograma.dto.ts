@@ -233,6 +233,16 @@ export class CrearTimingDto {
   @IsInt()
   @Min(1)
   duracionMinutos!: number;
+  @ApiPropertyOptional({ enum: ['FIJO', 'FLEXIBLE'], default: 'FLEXIBLE' })
+  @IsOptional()
+  @IsEnum(['FIJO', 'FLEXIBLE'])
+  tipoHorario?: 'FIJO' | 'FLEXIBLE';
+  @ApiPropertyOptional({ minimum: 0, default: 0 })
+  @Type(() => Number)
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  tiempoExtraMinutos?: number;
   @ApiPropertyOptional({ type: 'object', additionalProperties: true })
   @IsOptional()
   @IsObject()
