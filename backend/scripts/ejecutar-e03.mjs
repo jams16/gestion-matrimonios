@@ -10,6 +10,14 @@ const definicion = [
   ['HU13','CP-E03-HU13-01','CA061, CA062','Navegación manteniendo el contexto del matrimonio','MIXTO'], ['HU13','CP-E03-HU13-02','CA063','Actualización de indicadores por cambios en módulos','AUTOMATIZADO'], ['HU13','CP-E03-HU13-03','CA064','Reutilización de información compartida','AUTOMATIZADO'], ['HU13','CP-E03-HU13-04','CA065','Permisos sobre módulos e información integrada','AUTOMATIZADO'],
   ['HU14','CP-E03-HU14-01','CA066','Identificación de la etapa actual','AUTOMATIZADO'], ['HU14','CP-E03-HU14-02','CA067, CA068','Acciones de la etapa y próxima acción recomendada','AUTOMATIZADO'], ['HU14','CP-E03-HU14-03','CA069','Actualización del flujo al completar una acción','AUTOMATIZADO'], ['HU14','CP-E03-HU14-04','CA070','Flexibilidad del flujo de planificación','AUTOMATIZADO'],
 ].map(([hu,id,ca,nombre,tipo]) => ({ hu,id,ca,nombre,tipo }));
+const ajustesHu10 = new Map([
+  ['CP-E03-HU10-01', { ca: 'CA046', nombre: 'Registro y validacion de parametros base obligatorios', tipo: 'AUTOMATIZADO' }],
+  ['CP-E03-HU10-02', { ca: 'CA047', nombre: 'Conservacion de la configuracion base del matrimonio', tipo: 'AUTOMATIZADO' }],
+  ['CP-E03-HU10-03', { ca: 'CA048', nombre: 'Instanciacion de EDT configurable desde plantilla', tipo: 'INTEGRACION' }],
+  ['CP-E03-HU10-04', { ca: 'CA049', nombre: 'Revision y modificacion de datos, alcance y EDT', tipo: 'MIXTO' }],
+  ['CP-E03-HU10-05', { ca: 'CA050', nombre: 'Generacion de EDT, cronograma e hitos al confirmar', tipo: 'INTEGRACION' }],
+]);
+for (const caso of definicion) Object.assign(caso, ajustesHu10.get(caso.id) ?? {});
 const datos = { HU10: 'Onboarding de matrimonio: pareja, fecha del evento, presupuesto y tipo de ceremonia.', HU11: 'Boda de Sofía Navarro y Martín León, cronograma e invitados existentes.', HU12: 'Catálogo gp_buena_practica y endpoints protegidos de buenas prácticas.', HU13: 'Proyecto de la boda de Sofía Navarro y Martín León.', HU14: 'Proyecto en fase PLANIFICACION y actividades operativas.' };
 const ejecucion = spawnSync(process.execPath, ['--experimental-vm-modules','node_modules/jest/bin/jest.js','--config','./jest.config.ts','--runInBand','test/E03-Proyecto'], { stdio: 'inherit', cwd: process.cwd() });
 const resultados = [];

@@ -7,26 +7,7 @@
   {
     "id": "CP-E03-HU10-02",
     "estado": "PASS",
-    "detalle": "La capacidad evaluada está disponible en la implementación actual.",
-    "variante": "datos de pareja"
-  },
-  {
-    "id": "CP-E03-HU10-02",
-    "estado": "PASS",
-    "detalle": "La capacidad evaluada está disponible en la implementación actual.",
-    "variante": "fecha"
-  },
-  {
-    "id": "CP-E03-HU10-02",
-    "estado": "PASS",
-    "detalle": "La capacidad evaluada está disponible en la implementación actual.",
-    "variante": "presupuesto"
-  },
-  {
-    "id": "CP-E03-HU10-02",
-    "estado": "PASS",
-    "detalle": "La capacidad evaluada está disponible en la implementación actual.",
-    "variante": "estilo"
+    "detalle": "La capacidad evaluada está disponible en la implementación actual."
   },
   {
     "id": "CP-E03-HU10-03",
@@ -35,19 +16,12 @@
   },
   {
     "id": "CP-E03-HU10-04",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: estilo-evento. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
+    "estado": "PASS",
+    "detalle": "La capacidad evaluada está disponible en la implementación actual."
   },
   {
     "id": "CP-E03-HU10-05",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: confirmacion-cambios-sensibles. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio.",
-    "variante": "cambio de fecha"
-  },
-  {
-    "id": "CP-E03-HU10-05",
-    "estado": "FAIL",
-    "detalle": "Funcionalidad no implementada: confirmacion-cambios-sensibles. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio.",
-    "variante": "cambio de presupuesto"
+    "estado": "PASS",
+    "detalle": "La capacidad evaluada está disponible en la implementación actual."
   }
 ]

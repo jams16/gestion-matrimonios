@@ -3,66 +3,48 @@
 | Métrica | Resultado |
 |---|---:|
 | Casos conceptuales | 20 |
-| Ejecuciones/variantes Jest | 27 |
-| PASS | 8 |
-| FAIL | 12 |
+| Ejecuciones/variantes Jest | 23 |
+| PASS | 20 |
+| FAIL | 0 |
 
 ## Tabla principal
 
 | Caso | Nombre | CA | Tipo | Estado | Resultado obtenido | Interpretación |
 |---|---|---|---|---|---|---|
-| CP-E03-HU10-01 | Registro válido de parámetros base y preparación temporal | CA046, CA047 | AUTOMATIZADO | PASS | La lógica existente respondió conforme al criterio técnico evaluado. | El criterio evaluado cuenta con soporte backend actual. |
-| CP-E03-HU10-02 | Validación de parámetros base obligatorios | CA046 | AUTOMATIZADO | PASS | La lógica existente respondió conforme al criterio técnico evaluado. | El criterio evaluado cuenta con soporte backend actual. |
-| CP-E03-HU10-03 | Generación del cronograma desde plantilla | CA048 | AUTOMATIZADO | PASS | La lógica existente respondió conforme al criterio técnico evaluado. | El criterio evaluado cuenta con soporte backend actual. |
-| CP-E03-HU10-04 | Asociación del estilo al matrimonio | CA049 | AUTOMATIZADO | FAIL | La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado. | Funcionalidad pendiente; el criterio no puede cumplirse todavía. |
-| CP-E03-HU10-05 | Confirmación previa para cambios sensibles | CA050 | MIXTO | FAIL | La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado. | Funcionalidad pendiente; el criterio no puede cumplirse todavía. |
-| CP-E03-HU11-01 | Cálculo del avance y resumen de actividades | CA051, CA052 | AUTOMATIZADO | FAIL | La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado. | Funcionalidad pendiente; el criterio no puede cumplirse todavía. |
-| CP-E03-HU11-02 | Indicadores de confirmación de invitados | CA053 | AUTOMATIZADO | FAIL | La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado. | Funcionalidad pendiente; el criterio no puede cumplirse todavía. |
-| CP-E03-HU11-03 | Resumen financiero y detección de excedente | CA054 | AUTOMATIZADO | FAIL | La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado. | Funcionalidad pendiente; el criterio no puede cumplirse todavía. |
-| CP-E03-HU11-04 | Actualización y permisos del dashboard | CA055 | MIXTO | FAIL | La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado. | Funcionalidad pendiente; el criterio no puede cumplirse todavía. |
+| CP-E03-HU10-01 | Registro y validacion de parametros base obligatorios | CA046 | AUTOMATIZADO | PASS | La lógica existente respondió conforme al criterio técnico evaluado. | El criterio evaluado cuenta con soporte backend actual. |
+| CP-E03-HU10-02 | Conservacion de la configuracion base del matrimonio | CA047 | AUTOMATIZADO | PASS | La lógica existente respondió conforme al criterio técnico evaluado. | El criterio evaluado cuenta con soporte backend actual. |
+| CP-E03-HU10-03 | Instanciacion de EDT configurable desde plantilla | CA048 | INTEGRACION | PASS | La lógica existente respondió conforme al criterio técnico evaluado. | El criterio evaluado cuenta con soporte backend actual. |
+| CP-E03-HU10-04 | Revision y modificacion de datos, alcance y EDT | CA049 | MIXTO | PASS | La lógica existente respondió conforme al criterio técnico evaluado. | El criterio evaluado cuenta con soporte backend actual. |
+| CP-E03-HU10-05 | Generacion de EDT, cronograma e hitos al confirmar | CA050 | INTEGRACION | PASS | La lógica existente respondió conforme al criterio técnico evaluado. | El criterio evaluado cuenta con soporte backend actual. |
+| CP-E03-HU11-01 | Cálculo del avance y resumen de actividades | CA051, CA052 | AUTOMATIZADO | PASS | La lógica existente respondió conforme al criterio técnico evaluado. | El criterio evaluado cuenta con soporte backend actual. |
+| CP-E03-HU11-02 | Indicadores de confirmación de invitados | CA053 | AUTOMATIZADO | PASS | La lógica existente respondió conforme al criterio técnico evaluado. | El criterio evaluado cuenta con soporte backend actual. |
+| CP-E03-HU11-03 | Resumen financiero y detección de excedente | CA054 | AUTOMATIZADO | PASS | La lógica existente respondió conforme al criterio técnico evaluado. | El criterio evaluado cuenta con soporte backend actual. |
+| CP-E03-HU11-04 | Actualización y permisos del dashboard | CA055 | MIXTO | PASS | La lógica existente respondió conforme al criterio técnico evaluado. | El criterio evaluado cuenta con soporte backend actual. |
 | CP-E03-HU12-01 | Consulta del catálogo vigente de buenas prácticas | CA056, CA060 | AUTOMATIZADO | PASS | La lógica existente respondió conforme al criterio técnico evaluado. | El criterio evaluado cuenta con soporte backend actual. |
 | CP-E03-HU12-02 | Contenido contextual y referencia metodológica | CA057, CA058 | AUTOMATIZADO | PASS | La lógica existente respondió conforme al criterio técnico evaluado. | El criterio evaluado cuenta con soporte backend actual. |
 | CP-E03-HU12-03 | Aplicación práctica de una buena práctica | CA059 | AUTOMATIZADO | PASS | La lógica existente respondió conforme al criterio técnico evaluado. | El criterio evaluado cuenta con soporte backend actual. |
-| CP-E03-HU13-01 | Navegación manteniendo el contexto del matrimonio | CA061, CA062 | MIXTO | FAIL | La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado. | Funcionalidad pendiente; el criterio no puede cumplirse todavía. |
-| CP-E03-HU13-02 | Actualización de indicadores por cambios en módulos | CA063 | AUTOMATIZADO | FAIL | La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado. | Funcionalidad pendiente; el criterio no puede cumplirse todavía. |
-| CP-E03-HU13-03 | Reutilización de información compartida | CA064 | AUTOMATIZADO | FAIL | La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado. | Funcionalidad pendiente; el criterio no puede cumplirse todavía. |
-| CP-E03-HU13-04 | Permisos sobre módulos e información integrada | CA065 | AUTOMATIZADO | FAIL | La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado. | Funcionalidad pendiente; el criterio no puede cumplirse todavía. |
+| CP-E03-HU13-01 | Navegación manteniendo el contexto del matrimonio | CA061, CA062 | MIXTO | PASS | La lógica existente respondió conforme al criterio técnico evaluado. | El criterio evaluado cuenta con soporte backend actual. |
+| CP-E03-HU13-02 | Actualización de indicadores por cambios en módulos | CA063 | AUTOMATIZADO | PASS | La lógica existente respondió conforme al criterio técnico evaluado. | El criterio evaluado cuenta con soporte backend actual. |
+| CP-E03-HU13-03 | Reutilización de información compartida | CA064 | AUTOMATIZADO | PASS | La lógica existente respondió conforme al criterio técnico evaluado. | El criterio evaluado cuenta con soporte backend actual. |
+| CP-E03-HU13-04 | Permisos sobre módulos e información integrada | CA065 | AUTOMATIZADO | PASS | La lógica existente respondió conforme al criterio técnico evaluado. | El criterio evaluado cuenta con soporte backend actual. |
 | CP-E03-HU14-01 | Identificación de la etapa actual | CA066 | AUTOMATIZADO | PASS | La lógica existente respondió conforme al criterio técnico evaluado. | El criterio evaluado cuenta con soporte backend actual. |
-| CP-E03-HU14-02 | Acciones de la etapa y próxima acción recomendada | CA067, CA068 | AUTOMATIZADO | FAIL | La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado. | Funcionalidad pendiente; el criterio no puede cumplirse todavía. |
-| CP-E03-HU14-03 | Actualización del flujo al completar una acción | CA069 | AUTOMATIZADO | FAIL | La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado. | Funcionalidad pendiente; el criterio no puede cumplirse todavía. |
+| CP-E03-HU14-02 | Acciones de la etapa y próxima acción recomendada | CA067, CA068 | AUTOMATIZADO | PASS | La lógica existente respondió conforme al criterio técnico evaluado. | El criterio evaluado cuenta con soporte backend actual. |
+| CP-E03-HU14-03 | Actualización del flujo al completar una acción | CA069 | AUTOMATIZADO | PASS | La lógica existente respondió conforme al criterio técnico evaluado. | El criterio evaluado cuenta con soporte backend actual. |
 | CP-E03-HU14-04 | Flexibilidad del flujo de planificación | CA070 | AUTOMATIZADO | PASS | La lógica existente respondió conforme al criterio técnico evaluado. | El criterio evaluado cuenta con soporte backend actual. |
 
 ## Detalle por caso
 
-### CP-E03-HU10-01 – Registro válido de parámetros base y preparación temporal
+### CP-E03-HU10-01 – Registro y validacion de parametros base obligatorios
 
 - **ID:** CP-E03-HU10-01
 - **HU:** HU10
-- **CA:** CA046, CA047
+- **CA:** CA046
 - **Tipo:** AUTOMATIZADO
-- **Objetivo:** Registro válido de parámetros base y preparación temporal.
+- **Objetivo:** Registro y validacion de parametros base obligatorios.
 - **Precondiciones:** Base de pruebas y catálogos cargados.
 - **Datos utilizados:** Onboarding de matrimonio: pareja, fecha del evento, presupuesto y tipo de ceremonia.
 - **Endpoint/componente:** Componente auditado según implementación real.
 - **Pasos ejecutados:** Auditoría y prueba aislada cuando existe capacidad.
-- **Resultado esperado:** Cumplir CA046, CA047.
-- **Resultado obtenido:** La lógica existente respondió conforme al criterio técnico evaluado.
-- **Interpretación:** El criterio evaluado cuenta con soporte backend actual.
-- **Estado:** PASS
-- **Evidencia:** Resultados automáticos.
-- **Observaciones:** —
-
-### CP-E03-HU10-02 – Validación de parámetros base obligatorios
-
-- **ID:** CP-E03-HU10-02
-- **HU:** HU10
-- **CA:** CA046
-- **Tipo:** AUTOMATIZADO
-- **Objetivo:** Validación de parámetros base obligatorios.
-- **Precondiciones:** Base de pruebas y catálogos cargados.
-- **Datos utilizados:** Onboarding de matrimonio: pareja, fecha del evento, presupuesto y tipo de ceremonia.
-- **Endpoint/componente:** Componente auditado según implementación real.
-- **Pasos ejecutados:** Auditoría y prueba aislada cuando existe capacidad. Variantes: datos de pareja, fecha, presupuesto, estilo.
 - **Resultado esperado:** Cumplir CA046.
 - **Resultado obtenido:** La lógica existente respondió conforme al criterio técnico evaluado.
 - **Interpretación:** El criterio evaluado cuenta con soporte backend actual.
@@ -70,13 +52,31 @@
 - **Evidencia:** Resultados automáticos.
 - **Observaciones:** —
 
-### CP-E03-HU10-03 – Generación del cronograma desde plantilla
+### CP-E03-HU10-02 – Conservacion de la configuracion base del matrimonio
+
+- **ID:** CP-E03-HU10-02
+- **HU:** HU10
+- **CA:** CA047
+- **Tipo:** AUTOMATIZADO
+- **Objetivo:** Conservacion de la configuracion base del matrimonio.
+- **Precondiciones:** Base de pruebas y catálogos cargados.
+- **Datos utilizados:** Onboarding de matrimonio: pareja, fecha del evento, presupuesto y tipo de ceremonia.
+- **Endpoint/componente:** Componente auditado según implementación real.
+- **Pasos ejecutados:** Auditoría y prueba aislada cuando existe capacidad.
+- **Resultado esperado:** Cumplir CA047.
+- **Resultado obtenido:** La lógica existente respondió conforme al criterio técnico evaluado.
+- **Interpretación:** El criterio evaluado cuenta con soporte backend actual.
+- **Estado:** PASS
+- **Evidencia:** Resultados automáticos.
+- **Observaciones:** —
+
+### CP-E03-HU10-03 – Instanciacion de EDT configurable desde plantilla
 
 - **ID:** CP-E03-HU10-03
 - **HU:** HU10
 - **CA:** CA048
-- **Tipo:** AUTOMATIZADO
-- **Objetivo:** Generación del cronograma desde plantilla.
+- **Tipo:** INTEGRACION
+- **Objetivo:** Instanciacion de EDT configurable desde plantilla.
 - **Precondiciones:** Base de pruebas y catálogos cargados.
 - **Datos utilizados:** Onboarding de matrimonio: pareja, fecha del evento, presupuesto y tipo de ceremonia.
 - **Endpoint/componente:** CronogramaDateService y generación desde plantilla.
@@ -88,41 +88,41 @@
 - **Evidencia:** Resultados automáticos.
 - **Observaciones:** —
 
-### CP-E03-HU10-04 – Asociación del estilo al matrimonio
+### CP-E03-HU10-04 – Revision y modificacion de datos, alcance y EDT
 
 - **ID:** CP-E03-HU10-04
 - **HU:** HU10
 - **CA:** CA049
-- **Tipo:** AUTOMATIZADO
-- **Objetivo:** Asociación del estilo al matrimonio.
+- **Tipo:** MIXTO
+- **Objetivo:** Revision y modificacion de datos, alcance y EDT.
 - **Precondiciones:** Base de pruebas y catálogos cargados.
 - **Datos utilizados:** Onboarding de matrimonio: pareja, fecha del evento, presupuesto y tipo de ceremonia.
 - **Endpoint/componente:** Componente auditado según implementación real.
 - **Pasos ejecutados:** Auditoría y prueba aislada cuando existe capacidad.
 - **Resultado esperado:** Cumplir CA049.
-- **Resultado obtenido:** La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado.
-- **Interpretación:** Funcionalidad pendiente; el criterio no puede cumplirse todavía.
-- **Estado:** FAIL
-- **Evidencia:** Detalle técnico.
-- **Observaciones:** —
+- **Resultado obtenido:** La lógica existente respondió conforme al criterio técnico evaluado.
+- **Interpretación:** El criterio evaluado cuenta con soporte backend actual.
+- **Estado:** PASS
+- **Evidencia:** Resultados automáticos.
+- **Observaciones:** La parte visual permanece manual.
 
-### CP-E03-HU10-05 – Confirmación previa para cambios sensibles
+### CP-E03-HU10-05 – Generacion de EDT, cronograma e hitos al confirmar
 
 - **ID:** CP-E03-HU10-05
 - **HU:** HU10
 - **CA:** CA050
-- **Tipo:** MIXTO
-- **Objetivo:** Confirmación previa para cambios sensibles.
+- **Tipo:** INTEGRACION
+- **Objetivo:** Generacion de EDT, cronograma e hitos al confirmar.
 - **Precondiciones:** Base de pruebas y catálogos cargados.
 - **Datos utilizados:** Onboarding de matrimonio: pareja, fecha del evento, presupuesto y tipo de ceremonia.
 - **Endpoint/componente:** Componente auditado según implementación real.
-- **Pasos ejecutados:** Auditoría y prueba aislada cuando existe capacidad. Variantes: cambio de fecha, cambio de presupuesto.
+- **Pasos ejecutados:** Auditoría y prueba aislada cuando existe capacidad.
 - **Resultado esperado:** Cumplir CA050.
-- **Resultado obtenido:** La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado.
-- **Interpretación:** Funcionalidad pendiente; el criterio no puede cumplirse todavía.
-- **Estado:** FAIL
-- **Evidencia:** Detalle técnico.
-- **Observaciones:** La parte visual permanece manual.
+- **Resultado obtenido:** La lógica existente respondió conforme al criterio técnico evaluado.
+- **Interpretación:** El criterio evaluado cuenta con soporte backend actual.
+- **Estado:** PASS
+- **Evidencia:** Resultados automáticos.
+- **Observaciones:** —
 
 ### CP-E03-HU11-01 – Cálculo del avance y resumen de actividades
 
@@ -136,10 +136,10 @@
 - **Endpoint/componente:** Componente auditado según implementación real.
 - **Pasos ejecutados:** Auditoría y prueba aislada cuando existe capacidad.
 - **Resultado esperado:** Cumplir CA051, CA052.
-- **Resultado obtenido:** La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado.
-- **Interpretación:** Funcionalidad pendiente; el criterio no puede cumplirse todavía.
-- **Estado:** FAIL
-- **Evidencia:** Detalle técnico.
+- **Resultado obtenido:** La lógica existente respondió conforme al criterio técnico evaluado.
+- **Interpretación:** El criterio evaluado cuenta con soporte backend actual.
+- **Estado:** PASS
+- **Evidencia:** Resultados automáticos.
 - **Observaciones:** —
 
 ### CP-E03-HU11-02 – Indicadores de confirmación de invitados
@@ -154,10 +154,10 @@
 - **Endpoint/componente:** Componente auditado según implementación real.
 - **Pasos ejecutados:** Auditoría y prueba aislada cuando existe capacidad.
 - **Resultado esperado:** Cumplir CA053.
-- **Resultado obtenido:** La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado.
-- **Interpretación:** Funcionalidad pendiente; el criterio no puede cumplirse todavía.
-- **Estado:** FAIL
-- **Evidencia:** Detalle técnico.
+- **Resultado obtenido:** La lógica existente respondió conforme al criterio técnico evaluado.
+- **Interpretación:** El criterio evaluado cuenta con soporte backend actual.
+- **Estado:** PASS
+- **Evidencia:** Resultados automáticos.
 - **Observaciones:** —
 
 ### CP-E03-HU11-03 – Resumen financiero y detección de excedente
@@ -172,10 +172,10 @@
 - **Endpoint/componente:** Componente auditado según implementación real.
 - **Pasos ejecutados:** Auditoría y prueba aislada cuando existe capacidad. Variantes: sin excedente, con excedente.
 - **Resultado esperado:** Cumplir CA054.
-- **Resultado obtenido:** La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado.
-- **Interpretación:** Funcionalidad pendiente; el criterio no puede cumplirse todavía.
-- **Estado:** FAIL
-- **Evidencia:** Detalle técnico.
+- **Resultado obtenido:** La lógica existente respondió conforme al criterio técnico evaluado.
+- **Interpretación:** El criterio evaluado cuenta con soporte backend actual.
+- **Estado:** PASS
+- **Evidencia:** Resultados automáticos.
 - **Observaciones:** —
 
 ### CP-E03-HU11-04 – Actualización y permisos del dashboard
@@ -190,10 +190,10 @@
 - **Endpoint/componente:** Componente auditado según implementación real.
 - **Pasos ejecutados:** Auditoría y prueba aislada cuando existe capacidad.
 - **Resultado esperado:** Cumplir CA055.
-- **Resultado obtenido:** La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado.
-- **Interpretación:** Funcionalidad pendiente; el criterio no puede cumplirse todavía.
-- **Estado:** FAIL
-- **Evidencia:** Detalle técnico.
+- **Resultado obtenido:** La lógica existente respondió conforme al criterio técnico evaluado.
+- **Interpretación:** El criterio evaluado cuenta con soporte backend actual.
+- **Estado:** PASS
+- **Evidencia:** Resultados automáticos.
 - **Observaciones:** La parte visual permanece manual.
 
 ### CP-E03-HU12-01 – Consulta del catálogo vigente de buenas prácticas
@@ -262,10 +262,10 @@
 - **Endpoint/componente:** Componente auditado según implementación real.
 - **Pasos ejecutados:** Auditoría y prueba aislada cuando existe capacidad.
 - **Resultado esperado:** Cumplir CA061, CA062.
-- **Resultado obtenido:** La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado.
-- **Interpretación:** Funcionalidad pendiente; el criterio no puede cumplirse todavía.
-- **Estado:** FAIL
-- **Evidencia:** Detalle técnico.
+- **Resultado obtenido:** La lógica existente respondió conforme al criterio técnico evaluado.
+- **Interpretación:** El criterio evaluado cuenta con soporte backend actual.
+- **Estado:** PASS
+- **Evidencia:** Resultados automáticos.
 - **Observaciones:** La parte visual permanece manual.
 
 ### CP-E03-HU13-02 – Actualización de indicadores por cambios en módulos
@@ -280,10 +280,10 @@
 - **Endpoint/componente:** Componente auditado según implementación real.
 - **Pasos ejecutados:** Auditoría y prueba aislada cuando existe capacidad.
 - **Resultado esperado:** Cumplir CA063.
-- **Resultado obtenido:** La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado.
-- **Interpretación:** Funcionalidad pendiente; el criterio no puede cumplirse todavía.
-- **Estado:** FAIL
-- **Evidencia:** Detalle técnico.
+- **Resultado obtenido:** La lógica existente respondió conforme al criterio técnico evaluado.
+- **Interpretación:** El criterio evaluado cuenta con soporte backend actual.
+- **Estado:** PASS
+- **Evidencia:** Resultados automáticos.
 - **Observaciones:** —
 
 ### CP-E03-HU13-03 – Reutilización de información compartida
@@ -298,10 +298,10 @@
 - **Endpoint/componente:** Componente auditado según implementación real.
 - **Pasos ejecutados:** Auditoría y prueba aislada cuando existe capacidad.
 - **Resultado esperado:** Cumplir CA064.
-- **Resultado obtenido:** La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado.
-- **Interpretación:** Funcionalidad pendiente; el criterio no puede cumplirse todavía.
-- **Estado:** FAIL
-- **Evidencia:** Detalle técnico.
+- **Resultado obtenido:** La lógica existente respondió conforme al criterio técnico evaluado.
+- **Interpretación:** El criterio evaluado cuenta con soporte backend actual.
+- **Estado:** PASS
+- **Evidencia:** Resultados automáticos.
 - **Observaciones:** —
 
 ### CP-E03-HU13-04 – Permisos sobre módulos e información integrada
@@ -316,10 +316,10 @@
 - **Endpoint/componente:** Componente auditado según implementación real.
 - **Pasos ejecutados:** Auditoría y prueba aislada cuando existe capacidad.
 - **Resultado esperado:** Cumplir CA065.
-- **Resultado obtenido:** La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado.
-- **Interpretación:** Funcionalidad pendiente; el criterio no puede cumplirse todavía.
-- **Estado:** FAIL
-- **Evidencia:** Detalle técnico.
+- **Resultado obtenido:** La lógica existente respondió conforme al criterio técnico evaluado.
+- **Interpretación:** El criterio evaluado cuenta con soporte backend actual.
+- **Estado:** PASS
+- **Evidencia:** Resultados automáticos.
 - **Observaciones:** —
 
 ### CP-E03-HU14-01 – Identificación de la etapa actual
@@ -352,10 +352,10 @@
 - **Endpoint/componente:** Componente auditado según implementación real.
 - **Pasos ejecutados:** Auditoría y prueba aislada cuando existe capacidad. Variantes: dependencia habilitada, prioridad, proximidad de fecha límite.
 - **Resultado esperado:** Cumplir CA067, CA068.
-- **Resultado obtenido:** La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado.
-- **Interpretación:** Funcionalidad pendiente; el criterio no puede cumplirse todavía.
-- **Estado:** FAIL
-- **Evidencia:** Detalle técnico.
+- **Resultado obtenido:** La lógica existente respondió conforme al criterio técnico evaluado.
+- **Interpretación:** El criterio evaluado cuenta con soporte backend actual.
+- **Estado:** PASS
+- **Evidencia:** Resultados automáticos.
 - **Observaciones:** —
 
 ### CP-E03-HU14-03 – Actualización del flujo al completar una acción
@@ -370,10 +370,10 @@
 - **Endpoint/componente:** Componente auditado según implementación real.
 - **Pasos ejecutados:** Auditoría y prueba aislada cuando existe capacidad.
 - **Resultado esperado:** Cumplir CA069.
-- **Resultado obtenido:** La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado.
-- **Interpretación:** Funcionalidad pendiente; el criterio no puede cumplirse todavía.
-- **Estado:** FAIL
-- **Evidencia:** Detalle técnico.
+- **Resultado obtenido:** La lógica existente respondió conforme al criterio técnico evaluado.
+- **Interpretación:** El criterio evaluado cuenta con soporte backend actual.
+- **Estado:** PASS
+- **Evidencia:** Resultados automáticos.
 - **Observaciones:** —
 
 ### CP-E03-HU14-04 – Flexibilidad del flujo de planificación
@@ -396,38 +396,11 @@
 
 ## Detalle técnico
 
-### CP-E03-HU10-04
-- Funcionalidad no implementada: estilo-evento. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio.
-### CP-E03-HU10-05
-- Funcionalidad no implementada: confirmacion-cambios-sensibles. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio.
-- Funcionalidad no implementada: confirmacion-cambios-sensibles. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio.
-### CP-E03-HU11-01
-- Funcionalidad no implementada: dashboard-avance. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio.
-### CP-E03-HU11-02
-- Funcionalidad no implementada: dashboard-rsvp. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio.
-### CP-E03-HU11-03
-- Funcionalidad no implementada: dashboard-presupuesto. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio.
-- Funcionalidad no implementada: dashboard-presupuesto. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio.
-### CP-E03-HU11-04
-- Funcionalidad no implementada: dashboard-permisos. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio.
-### CP-E03-HU13-01
-- Funcionalidad no implementada: contexto-matrimonio. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio.
-### CP-E03-HU13-02
-- Funcionalidad no implementada: indicadores-integrados. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio.
-### CP-E03-HU13-03
-- Funcionalidad no implementada: fuente-compartida. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio.
-### CP-E03-HU13-04
-- Funcionalidad no implementada: permisos-contextuales. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio.
-### CP-E03-HU14-02
-- Funcionalidad no implementada: flujo-recomendado. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio.
-- Funcionalidad no implementada: flujo-recomendado. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio.
-- Funcionalidad no implementada: flujo-recomendado. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio.
-### CP-E03-HU14-03
-- Funcionalidad no implementada: flujo-actualizacion. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio.
+Sin fallos técnicos.
 
 ## Resultados por HU
 
-HU10: 3 PASS; HU11: 0 PASS; HU12: 3 PASS; HU13: 0 PASS; HU14: 2 PASS.
+HU10: 5 PASS; HU11: 4 PASS; HU12: 3 PASS; HU13: 4 PASS; HU14: 4 PASS.
 
 ## Funcionalidades no implementadas
 

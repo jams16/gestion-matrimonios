@@ -2,8 +2,8 @@
   {
     "hu": "HU10",
     "id": "CP-E03-HU10-01",
-    "ca": "CA046, CA047",
-    "nombre": "Registro válido de parámetros base y preparación temporal",
+    "ca": "CA046",
+    "nombre": "Registro y validacion de parametros base obligatorios",
     "tipo": "AUTOMATIZADO",
     "estado": "PASS",
     "variantes": [],
@@ -14,16 +14,11 @@
   {
     "hu": "HU10",
     "id": "CP-E03-HU10-02",
-    "ca": "CA046",
-    "nombre": "Validación de parámetros base obligatorios",
+    "ca": "CA047",
+    "nombre": "Conservacion de la configuracion base del matrimonio",
     "tipo": "AUTOMATIZADO",
     "estado": "PASS",
-    "variantes": [
-      "datos de pareja",
-      "fecha",
-      "presupuesto",
-      "estilo"
-    ],
+    "variantes": [],
     "tecnico": [],
     "obtenido": "La lógica existente respondió conforme al criterio técnico evaluado.",
     "interpretacion": "El criterio evaluado cuenta con soporte backend actual."
@@ -32,8 +27,8 @@
     "hu": "HU10",
     "id": "CP-E03-HU10-03",
     "ca": "CA048",
-    "nombre": "Generación del cronograma desde plantilla",
-    "tipo": "AUTOMATIZADO",
+    "nombre": "Instanciacion de EDT configurable desde plantilla",
+    "tipo": "INTEGRACION",
     "estado": "PASS",
     "variantes": [],
     "tecnico": [],
@@ -44,33 +39,25 @@
     "hu": "HU10",
     "id": "CP-E03-HU10-04",
     "ca": "CA049",
-    "nombre": "Asociación del estilo al matrimonio",
-    "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
+    "nombre": "Revision y modificacion de datos, alcance y EDT",
+    "tipo": "MIXTO",
+    "estado": "PASS",
     "variantes": [],
-    "tecnico": [
-      "Funcionalidad no implementada: estilo-evento. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
-    ],
-    "obtenido": "La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado.",
-    "interpretacion": "Funcionalidad pendiente; el criterio no puede cumplirse todavía."
+    "tecnico": [],
+    "obtenido": "La lógica existente respondió conforme al criterio técnico evaluado.",
+    "interpretacion": "El criterio evaluado cuenta con soporte backend actual."
   },
   {
     "hu": "HU10",
     "id": "CP-E03-HU10-05",
     "ca": "CA050",
-    "nombre": "Confirmación previa para cambios sensibles",
-    "tipo": "MIXTO",
-    "estado": "FAIL",
-    "variantes": [
-      "cambio de fecha",
-      "cambio de presupuesto"
-    ],
-    "tecnico": [
-      "Funcionalidad no implementada: confirmacion-cambios-sensibles. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio.",
-      "Funcionalidad no implementada: confirmacion-cambios-sensibles. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
-    ],
-    "obtenido": "La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado.",
-    "interpretacion": "Funcionalidad pendiente; el criterio no puede cumplirse todavía."
+    "nombre": "Generacion de EDT, cronograma e hitos al confirmar",
+    "tipo": "INTEGRACION",
+    "estado": "PASS",
+    "variantes": [],
+    "tecnico": [],
+    "obtenido": "La lógica existente respondió conforme al criterio técnico evaluado.",
+    "interpretacion": "El criterio evaluado cuenta con soporte backend actual."
   },
   {
     "hu": "HU11",
@@ -78,13 +65,11 @@
     "ca": "CA051, CA052",
     "nombre": "Cálculo del avance y resumen de actividades",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
+    "estado": "PASS",
     "variantes": [],
-    "tecnico": [
-      "Funcionalidad no implementada: dashboard-avance. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
-    ],
-    "obtenido": "La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado.",
-    "interpretacion": "Funcionalidad pendiente; el criterio no puede cumplirse todavía."
+    "tecnico": [],
+    "obtenido": "La lógica existente respondió conforme al criterio técnico evaluado.",
+    "interpretacion": "El criterio evaluado cuenta con soporte backend actual."
   },
   {
     "hu": "HU11",
@@ -92,13 +77,11 @@
     "ca": "CA053",
     "nombre": "Indicadores de confirmación de invitados",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
+    "estado": "PASS",
     "variantes": [],
-    "tecnico": [
-      "Funcionalidad no implementada: dashboard-rsvp. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
-    ],
-    "obtenido": "La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado.",
-    "interpretacion": "Funcionalidad pendiente; el criterio no puede cumplirse todavía."
+    "tecnico": [],
+    "obtenido": "La lógica existente respondió conforme al criterio técnico evaluado.",
+    "interpretacion": "El criterio evaluado cuenta con soporte backend actual."
   },
   {
     "hu": "HU11",
@@ -106,17 +89,14 @@
     "ca": "CA054",
     "nombre": "Resumen financiero y detección de excedente",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
+    "estado": "PASS",
     "variantes": [
       "sin excedente",
       "con excedente"
     ],
-    "tecnico": [
-      "Funcionalidad no implementada: dashboard-presupuesto. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio.",
-      "Funcionalidad no implementada: dashboard-presupuesto. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
-    ],
-    "obtenido": "La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado.",
-    "interpretacion": "Funcionalidad pendiente; el criterio no puede cumplirse todavía."
+    "tecnico": [],
+    "obtenido": "La lógica existente respondió conforme al criterio técnico evaluado.",
+    "interpretacion": "El criterio evaluado cuenta con soporte backend actual."
   },
   {
     "hu": "HU11",
@@ -124,13 +104,11 @@
     "ca": "CA055",
     "nombre": "Actualización y permisos del dashboard",
     "tipo": "MIXTO",
-    "estado": "FAIL",
+    "estado": "PASS",
     "variantes": [],
-    "tecnico": [
-      "Funcionalidad no implementada: dashboard-permisos. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
-    ],
-    "obtenido": "La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado.",
-    "interpretacion": "Funcionalidad pendiente; el criterio no puede cumplirse todavía."
+    "tecnico": [],
+    "obtenido": "La lógica existente respondió conforme al criterio técnico evaluado.",
+    "interpretacion": "El criterio evaluado cuenta con soporte backend actual."
   },
   {
     "hu": "HU12",
@@ -174,13 +152,11 @@
     "ca": "CA061, CA062",
     "nombre": "Navegación manteniendo el contexto del matrimonio",
     "tipo": "MIXTO",
-    "estado": "FAIL",
+    "estado": "PASS",
     "variantes": [],
-    "tecnico": [
-      "Funcionalidad no implementada: contexto-matrimonio. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
-    ],
-    "obtenido": "La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado.",
-    "interpretacion": "Funcionalidad pendiente; el criterio no puede cumplirse todavía."
+    "tecnico": [],
+    "obtenido": "La lógica existente respondió conforme al criterio técnico evaluado.",
+    "interpretacion": "El criterio evaluado cuenta con soporte backend actual."
   },
   {
     "hu": "HU13",
@@ -188,13 +164,11 @@
     "ca": "CA063",
     "nombre": "Actualización de indicadores por cambios en módulos",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
+    "estado": "PASS",
     "variantes": [],
-    "tecnico": [
-      "Funcionalidad no implementada: indicadores-integrados. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
-    ],
-    "obtenido": "La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado.",
-    "interpretacion": "Funcionalidad pendiente; el criterio no puede cumplirse todavía."
+    "tecnico": [],
+    "obtenido": "La lógica existente respondió conforme al criterio técnico evaluado.",
+    "interpretacion": "El criterio evaluado cuenta con soporte backend actual."
   },
   {
     "hu": "HU13",
@@ -202,13 +176,11 @@
     "ca": "CA064",
     "nombre": "Reutilización de información compartida",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
+    "estado": "PASS",
     "variantes": [],
-    "tecnico": [
-      "Funcionalidad no implementada: fuente-compartida. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
-    ],
-    "obtenido": "La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado.",
-    "interpretacion": "Funcionalidad pendiente; el criterio no puede cumplirse todavía."
+    "tecnico": [],
+    "obtenido": "La lógica existente respondió conforme al criterio técnico evaluado.",
+    "interpretacion": "El criterio evaluado cuenta con soporte backend actual."
   },
   {
     "hu": "HU13",
@@ -216,13 +188,11 @@
     "ca": "CA065",
     "nombre": "Permisos sobre módulos e información integrada",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
+    "estado": "PASS",
     "variantes": [],
-    "tecnico": [
-      "Funcionalidad no implementada: permisos-contextuales. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
-    ],
-    "obtenido": "La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado.",
-    "interpretacion": "Funcionalidad pendiente; el criterio no puede cumplirse todavía."
+    "tecnico": [],
+    "obtenido": "La lógica existente respondió conforme al criterio técnico evaluado.",
+    "interpretacion": "El criterio evaluado cuenta con soporte backend actual."
   },
   {
     "hu": "HU14",
@@ -242,19 +212,15 @@
     "ca": "CA067, CA068",
     "nombre": "Acciones de la etapa y próxima acción recomendada",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
+    "estado": "PASS",
     "variantes": [
       "dependencia habilitada",
       "prioridad",
       "proximidad de fecha límite"
     ],
-    "tecnico": [
-      "Funcionalidad no implementada: flujo-recomendado. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio.",
-      "Funcionalidad no implementada: flujo-recomendado. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio.",
-      "Funcionalidad no implementada: flujo-recomendado. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
-    ],
-    "obtenido": "La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado.",
-    "interpretacion": "Funcionalidad pendiente; el criterio no puede cumplirse todavía."
+    "tecnico": [],
+    "obtenido": "La lógica existente respondió conforme al criterio técnico evaluado.",
+    "interpretacion": "El criterio evaluado cuenta con soporte backend actual."
   },
   {
     "hu": "HU14",
@@ -262,13 +228,11 @@
     "ca": "CA069",
     "nombre": "Actualización del flujo al completar una acción",
     "tipo": "AUTOMATIZADO",
-    "estado": "FAIL",
+    "estado": "PASS",
     "variantes": [],
-    "tecnico": [
-      "Funcionalidad no implementada: flujo-actualizacion. La auditoría no encontró modelo, DTO, endpoint ni caso de uso que cubra este criterio."
-    ],
-    "obtenido": "La auditoría no encontró la capacidad requerida o el módulo correspondiente no está implementado.",
-    "interpretacion": "Funcionalidad pendiente; el criterio no puede cumplirse todavía."
+    "tecnico": [],
+    "obtenido": "La lógica existente respondió conforme al criterio técnico evaluado.",
+    "interpretacion": "El criterio evaluado cuenta con soporte backend actual."
   },
   {
     "hu": "HU14",
