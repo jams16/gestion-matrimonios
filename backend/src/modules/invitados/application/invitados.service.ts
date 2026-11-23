@@ -134,7 +134,67 @@ export class InvitadosService {
   async actualizarMesa(m: string, i: string, dto: ActualizarMesaDto, u: number) { await this.acceso(m, u); await this.mesa(m, i); const usados = (await this.db.MesaInvitado.all()).filter((x: any) => x.idMesa === i && x.activo).length; if (dto.capacidad !== undefined && dto.capacidad < usados) throw new BadRequestException('La capacidad no puede ser menor que los invitados asignados.'); return this.db.Mesa.where({ idMesa: i as never }).update(dto as never); }
   async desactivarMesa(m: string, i: string, u: number) { await this.acceso(m, u); await this.mesa(m, i); if ((await this.db.MesaInvitado.all()).some((x: any) => x.idMesa === i && x.activo)) throw new BadRequestException('No se puede desactivar una mesa con invitados asignados. Retira las asignaciones primero.'); return this.db.Mesa.where({ idMesa: i as never }).update({ activo: false } as never); }
   async invitadosMesa(m: string, mesaId: string, u: number) { await this.acceso(m, u); await this.mesa(m, mesaId); const r = await this.relaciones(); const invs = await this.db.Invitado.all(); return (await this.db.MesaInvitado.all()).filter((x: any) => x.idMesa === mesaId && x.activo).map((x: any) => ({ ...x, invitado: this.detalle(invs.find((v: any) => v.idInvitado === x.idInvitado), r) })); }
-  async asignar(m: string, mesaId: string, invId: string, u: number) { return this.prisma.client.transaction(async (tx: any) => { const db = tx.orm.public; await this.acceso(m, u, db); const mesa = await this.mesa(m, mesaId, db); const inv = await this.invitado(m, invId, db); if (!mesa.activo || !inv.activo) throw new BadRequestException('La mesa y el invitado deben estar activos.'); const todas = await db.MesaInvitado.all(); if (todas.some((x: any) => x.idInvitado === invId && x.activo)) throw new ConflictException('El invitado ya tiene una mesa activa.'); if (todas.filter((x: any) => x.idMesa === mesaId && x.activo).length >= mesa.capacidad) throw new BadRequestException('La mesa alcanzó su capacidad.'); const previa = todas.find((x: any) => x.idMesa === mesaId && x.idInvitado === invId); return previa ? db.MesaInvitado.where({ idMesaInvitado: previa.idMesaInvitado as never }).update({ activo: true } as never) : db.MesaInvitado.create({ idMesa: mesaId, idInvitado: invId, activo: true } as never); }); }
+  async asignar(m: string, mesaId: string, invId: string, u: number) {
+    return this.prisma.client.transaction(async (tx: any) => {
+      const db = tx.orm.public;
+      await this.acceso(m, u, db);
+      const mesa = await this.mesa(m, mesaId, db);
+      const invitado = await this.invitado(m, invId, db);
+      if (!mesa.activo || !invitado.activo) {
+        throw new BadRequestException('La mesa y el invitado deben estar activos.');
+      }
+
+      const invitados = await db.Invitado.all();
+      const grupo = invitado.esTitular
+        ? [
+            invitado,
+            ...invitados.filter(
+              (x: any) => x.idInvitadoTitular === invId && x.activo,
+            ),
+          ]
+        : [invitado];
+      const asignaciones = await db.MesaInvitado.all();
+      if (
+        grupo.some((miembro: any) =>
+          asignaciones.some(
+            (asignacion: any) =>
+                asignacion.idInvitado === miembro.idInvitado && asignacion.activo,
+          ),
+        )
+      ) {
+        throw new ConflictException(
+          'El invitado o uno de sus acompañantes ya tiene una mesa activa.',
+        );
+      }
+      const ocupados = asignaciones.filter(
+        (asignacion: any) => asignacion.idMesa === mesaId && asignacion.activo,
+      ).length;
+      if (ocupados + grupo.length > mesa.capacidad) {
+        throw new BadRequestException(
+          'La mesa no tiene capacidad para el invitado y sus acompañantes.',
+        );
+      }
+
+      return Promise.all(
+        grupo.map((miembro: any) => {
+          const previa = asignaciones.find(
+            (asignacion: any) =>
+                asignacion.idMesa === mesaId &&
+                asignacion.idInvitado === miembro.idInvitado,
+          );
+          return previa
+            ? db.MesaInvitado.where({
+                idMesaInvitado: previa.idMesaInvitado as never,
+              }).update({ activo: true } as never)
+            : db.MesaInvitado.create({
+                idMesa: mesaId,
+                idInvitado: miembro.idInvitado,
+                activo: true,
+              } as never);
+        }),
+      );
+    });
+  }
   async retirarAsignacion(m: string, mesaId: string, invId: string, u: number) { await this.acceso(m, u); await this.mesa(m, mesaId); await this.invitado(m, invId); const x = (await this.db.MesaInvitado.all()).find((a: any) => a.idMesa === mesaId && a.idInvitado === invId && a.activo); if (!x) throw new NotFoundException('Asignación de mesa no encontrada.'); return this.db.MesaInvitado.where({ idMesaInvitado: x.idMesaInvitado as never }).update({ activo: false } as never); }
   async reasignar(m: string, invitadoId: string, mesaDestinoId: string, u: number) {
     return this.prisma.client.transaction(async (tx: any) => {

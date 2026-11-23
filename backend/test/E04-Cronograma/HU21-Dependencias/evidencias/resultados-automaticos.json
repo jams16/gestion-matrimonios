@@ -2,29 +2,20 @@
   {
     "id": "CP-E04-HU21-01",
     "estado": "PASS",
-    "detalle": "La capacidad evaluada esta disponible en la implementacion actual.",
-    "variante": "valida"
-  },
-  {
-    "id": "CP-E04-HU21-01",
-    "estado": "PASS",
-    "detalle": "La capacidad evaluada esta disponible en la implementacion actual.",
-    "variante": "consigo misma"
-  },
-  {
-    "id": "CP-E04-HU21-01",
-    "estado": "PASS",
-    "detalle": "La capacidad evaluada esta disponible en la implementacion actual.",
-    "variante": "ciclo directo"
-  },
-  {
-    "id": "CP-E04-HU21-01",
-    "estado": "PASS",
-    "detalle": "La capacidad evaluada esta disponible en la implementacion actual.",
-    "variante": "ciclo indirecto"
+    "detalle": "La capacidad evaluada esta disponible en la implementacion actual."
   },
   {
     "id": "CP-E04-HU21-02",
+    "estado": "PASS",
+    "detalle": "La capacidad evaluada esta disponible en la implementacion actual."
+  },
+  {
+    "id": "CP-E04-HU21-03",
+    "estado": "PASS",
+    "detalle": "La capacidad evaluada esta disponible en la implementacion actual."
+  },
+  {
+    "id": "CP-E04-HU21-04",
     "estado": "PASS",
     "detalle": "La capacidad evaluada esta disponible en la implementacion actual."
   }

@@ -1,98 +1,122 @@
 [
   {
     "id": "CP-E06-HU30-01",
-    "componente": "Invitados"
+    "componente": "InvitadosService",
+    "objetivo": "Comprobar que la Wedding Planner puede registrar un invitado con datos personales, relacion y pases, y recuperarlo dentro del matrimonio activo."
   },
   {
     "id": "CP-E06-HU30-02",
-    "componente": "Invitados"
+    "componente": "InvitadosService",
+    "objetivo": "Verificar que el registro evita personas duplicadas y que los pases asignados no permiten exceder el cupo del titular."
   },
   {
     "id": "CP-E06-HU30-03",
-    "componente": "Invitados"
+    "componente": "InvitadosService",
+    "objetivo": "Verificar la edicion parcial de los datos del invitado y de su persona natural."
   },
   {
     "id": "CP-E06-HU30-04",
-    "componente": "Invitados"
+    "componente": "InvitadosService",
+    "objetivo": "Comprobar el retiro logico de un invitado y la liberacion de sus asignaciones de mesa."
   },
   {
     "id": "CP-E06-HU31-01",
-    "componente": "Invitados"
+    "componente": "InvitadosService",
+    "objetivo": "Comprobar que los invitados se clasifican y filtran por categoria o lado de relacion."
   },
   {
     "id": "CP-E06-HU31-02",
-    "componente": "Invitados"
+    "componente": "InvitadosService",
+    "objetivo": "Verificar que los filtros de invitados pueden combinarse o retirarse sin alterar los datos guardados."
   },
   {
     "id": "CP-E06-HU31-03",
-    "componente": "Invitados"
+    "componente": "InvitadosService",
+    "objetivo": "Verificar que la consulta de invitados exige acceso al matrimonio antes de exponer informacion personal."
   },
   {
     "id": "CP-E06-HU32-01",
-    "componente": "Invitados"
+    "componente": "InvitadosService",
+    "objetivo": "Comprobar el alta y retiro de requerimientos alimentarios por invitado."
   },
   {
     "id": "CP-E06-HU32-02",
-    "componente": "Invitados"
+    "componente": "InvitadosService",
+    "objetivo": "Verificar el filtrado de invitados y el resumen agrupado por requerimiento alimentario."
   },
   {
     "id": "CP-E06-HU32-03",
-    "componente": "Invitados"
+    "componente": "InvitadosService",
+    "objetivo": "Verificar la generacion de un listado exportable de requerimientos alimentarios para catering."
   },
   {
     "id": "CP-E06-HU33-01",
-    "componente": "Invitados"
+    "componente": "InvitadosService",
+    "objetivo": "Comprobar la asignacion de invitados a una mesa y la consulta posterior de sus ocupantes."
   },
   {
     "id": "CP-E06-HU33-02",
-    "componente": "Invitados"
+    "componente": "InvitadosService",
+    "objetivo": "Verificar la reasignacion de un invitado sin dejar una ubicacion activa anterior."
   },
   {
     "id": "CP-E06-HU33-03",
-    "componente": "Invitados"
+    "componente": "InvitadosService",
+    "objetivo": "Validar visualmente la representacion de mesas con capacidad, ocupacion e invitados asignados."
   },
   {
     "id": "CP-E06-HU34-01",
-    "componente": "Invitados"
+    "componente": "InvitadosService",
+    "objetivo": "Comprobar el calculo de invitados, pases y asistentes confirmados para el tablero."
   },
   {
     "id": "CP-E06-HU34-02",
-    "componente": "Invitados"
+    "componente": "InvitadosService",
+    "objetivo": "Verificar que el resumen distingue RSVP pendientes y se actualiza al cambiar sus estados."
   },
   {
     "id": "CP-E06-HU34-03",
-    "componente": "Invitados"
+    "componente": "InvitadosService",
+    "objetivo": "Verificar que las estadisticas de invitados no se exponen a usuarios sin acceso al matrimonio."
   },
   {
     "id": "CP-E06-HU35-01",
-    "componente": "Invitados"
+    "componente": "InvitadosService",
+    "objetivo": "Comprobar la actualizacion controlada del RSVP y el registro de su historial."
   },
   {
     "id": "CP-E06-HU35-02",
-    "componente": "Invitados"
+    "componente": "InvitadosService",
+    "objetivo": "Verificar la identificacion de invitados pendientes que requieren seguimiento previo a la boda."
   },
   {
     "id": "CP-E06-HU35-03",
-    "componente": "Invitados"
+    "componente": "InvitadosService",
+    "objetivo": "Comprobar que los recordatorios se generan exclusivamente para invitados con RSVP pendiente y correo registrado."
   },
   {
     "id": "CP-E06-HU36-01",
-    "componente": "Invitados"
+    "componente": "InvitadosService",
+    "objetivo": "Verificar el orden alfabetico de los invitados junto con los filtros aplicados."
   },
   {
     "id": "CP-E06-HU36-02",
-    "componente": "Invitados"
+    "componente": "InvitadosService",
+    "objetivo": "Comprobar la persistencia de la preferencia de orden del usuario para un matrimonio."
   },
   {
     "id": "CP-E06-HU37-01",
-    "componente": "Invitados"
+    "componente": "InvitadosService",
+    "objetivo": "Verificar la generacion de una invitacion digital para un invitado con correo."
   },
   {
     "id": "CP-E06-HU37-02",
-    "componente": "Invitados"
+    "componente": "InvitadosService",
+    "objetivo": "Comprobar que una interaccion con la invitacion queda registrada sin cambiar automaticamente el RSVP."
   },
   {
     "id": "CP-E06-HU37-03",
-    "componente": "Invitados"
+    "componente": "InvitadosService",
+    "objetivo": "Verificar la notificacion a la Wedding Planner cuando se registra una interaccion digital."
   }
 ]

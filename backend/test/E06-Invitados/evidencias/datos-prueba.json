@@ -1,4 +1,10 @@
 {
-  "invitada": "Mariana Salazar Ríos",
-  "mesa": "Jardín de Magnolias"
+  "invitada": "Mariana Salazar Rios",
+  "dni": "74839261",
+  "mesa": "Jardin de Magnolias",
+  "rsvp": [
+    "PENDIENTE",
+    "CONFIRMADO"
+  ],
+  "requerimiento": "Vegetariano"
 }

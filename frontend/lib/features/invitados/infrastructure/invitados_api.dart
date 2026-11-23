@@ -8,7 +8,8 @@ const _baseUrl = String.fromEnvironment(
 );
 
 class InvitadosApi {
-  InvitadosApi() : _dio = AuthSession.crearClienteAutenticado(baseUrl: _baseUrl);
+  InvitadosApi()
+    : _dio = AuthSession.crearClienteAutenticado(baseUrl: _baseUrl);
   final Dio _dio;
 
   Future<Options> _options() async {
@@ -47,6 +48,30 @@ class InvitadosApi {
       options: await _options(),
     );
     return Map<String, dynamic>.from(_data(r) as Map? ?? const {});
+  }
+
+  Future<Map<String, dynamic>> obtener(
+    String idMatrimonio,
+    String idInvitado,
+  ) async {
+    final r = await _dio.get(
+      '/matrimonios/$idMatrimonio/invitados/$idInvitado',
+      options: await _options(),
+    );
+    return Map<String, dynamic>.from(_data(r) as Map? ?? const {});
+  }
+
+  Future<List<Map<String, dynamic>>> acompanantes(
+    String idMatrimonio,
+    String idTitular,
+  ) async {
+    final r = await _dio.get(
+      '/matrimonios/$idMatrimonio/invitados/$idTitular/acompanantes',
+      options: await _options(),
+    );
+    return List<Object?>.from(
+      _data(r) as List? ?? const [],
+    ).map((x) => Map<String, dynamic>.from(x as Map)).toList();
   }
 
   Future<List<Map<String, dynamic>>> categorias() async {
@@ -143,6 +168,15 @@ class InvitadosApi {
     String mesa,
     String invitado,
   ) async => _dio.post(
+    '/matrimonios/$matrimonio/mesas/$mesa/invitados/$invitado',
+    options: await _options(),
+  );
+
+  Future<void> retirarDeMesa(
+    String matrimonio,
+    String mesa,
+    String invitado,
+  ) async => _dio.delete(
     '/matrimonios/$matrimonio/mesas/$mesa/invitados/$invitado',
     options: await _options(),
   );

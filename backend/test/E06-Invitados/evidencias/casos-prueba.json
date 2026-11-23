@@ -5,12 +5,17 @@
     "nombre": "Registro y consulta de invitado",
     "ca": "CA144",
     "tipo": "AUTOMATIZADO",
+    "objetivo": "Comprobar que la Wedding Planner puede registrar un invitado con datos personales, relacion y pases, y recuperarlo dentro del matrimonio activo.",
+    "esperado": "La creacion debe vincular una persona natural y un registro de invitado al matrimonio; la consulta debe devolver ambos datos y su RSVP inicial.",
+    "obtenido": "El servicio crea el invitado, inicializa RSVP en PENDIENTE y el metodo de consulta compone persona, categoria, RSVP, mesa y requerimientos.",
     "estado": "PASS",
     "detalle": [
       "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
     ],
-    "obtenido": "La capacidad evaluada existe en Invitados.",
-    "interpretacion": "Criterio técnico cubierto."
+    "detalleTecnico": [
+      "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
+    ],
+    "interpretacion": "El comportamiento implementado satisface el criterio tecnico evaluado."
   },
   {
     "hu": "HU30",
@@ -18,12 +23,17 @@
     "nombre": "Validación de datos del invitado",
     "ca": "CA145",
     "tipo": "AUTOMATIZADO",
+    "objetivo": "Verificar que el registro evita personas duplicadas y que los pases asignados no permiten exceder el cupo del titular.",
+    "esperado": "Un DNI ya activo para el mismo matrimonio o un acompanante que supere los pases debe ser rechazado sin crear registros inconsistentes.",
+    "obtenido": "La logica valida persona duplicada y compara acompanantes activos con cantidadPases; las pruebas PAS-04 e INV-04 confirman ambos rechazos.",
     "estado": "PASS",
     "detalle": [
       "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
     ],
-    "obtenido": "La capacidad evaluada existe en Invitados.",
-    "interpretacion": "Criterio técnico cubierto."
+    "detalleTecnico": [
+      "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
+    ],
+    "interpretacion": "El comportamiento implementado satisface el criterio tecnico evaluado."
   },
   {
     "hu": "HU30",
@@ -31,12 +41,17 @@
     "nombre": "Edición de invitado",
     "ca": "CA146",
     "tipo": "AUTOMATIZADO",
+    "objetivo": "Verificar la edicion parcial de los datos del invitado y de su persona natural.",
+    "esperado": "Solo los campos enviados deben actualizarse; los campos omitidos y la relacion con el matrimonio deben conservarse.",
+    "obtenido": "actualizar construye los cambios solo con propiedades definidas y actualiza de forma independiente Invitado y PersonaNatural.",
     "estado": "PASS",
     "detalle": [
       "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
     ],
-    "obtenido": "La capacidad evaluada existe en Invitados.",
-    "interpretacion": "Criterio técnico cubierto."
+    "detalleTecnico": [
+      "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
+    ],
+    "interpretacion": "El comportamiento implementado satisface el criterio tecnico evaluado."
   },
   {
     "hu": "HU30",
@@ -44,12 +59,17 @@
     "nombre": "Retiro del invitado y actualización del total",
     "ca": "CA147",
     "tipo": "AUTOMATIZADO",
+    "objetivo": "Comprobar el retiro logico de un invitado y la liberacion de sus asignaciones de mesa.",
+    "esperado": "El invitado debe pasar a inactivo, desaparecer de listados activos y dejar inactivas sus asignaciones de mesa.",
+    "obtenido": "desactivar desactiva primero las asignaciones activas de MesaInvitado y despues el registro de Invitado; resumen solo considera activos.",
     "estado": "PASS",
     "detalle": [
       "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
     ],
-    "obtenido": "La capacidad evaluada existe en Invitados.",
-    "interpretacion": "Criterio técnico cubierto."
+    "detalleTecnico": [
+      "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
+    ],
+    "interpretacion": "El comportamiento implementado satisface el criterio tecnico evaluado."
   },
   {
     "hu": "HU31",
@@ -57,12 +77,17 @@
     "nombre": "Clasificación y filtrado por relación",
     "ca": "CA148",
     "tipo": "AUTOMATIZADO",
+    "objetivo": "Comprobar que los invitados se clasifican y filtran por categoria o lado de relacion.",
+    "esperado": "La consulta debe devolver solo los invitados que coincidan con la categoria o lado solicitado, manteniendo sus datos relacionados.",
+    "obtenido": "listar aplica idCategoriaRelacion y ladoRelacion sobre invitados del matrimonio y devuelve el detalle completo de cada coincidencia.",
     "estado": "PASS",
     "detalle": [
       "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
     ],
-    "obtenido": "La capacidad evaluada existe en Invitados.",
-    "interpretacion": "Criterio técnico cubierto."
+    "detalleTecnico": [
+      "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
+    ],
+    "interpretacion": "El comportamiento implementado satisface el criterio tecnico evaluado."
   },
   {
     "hu": "HU31",
@@ -70,12 +95,17 @@
     "nombre": "Cambio y retiro del filtro",
     "ca": "CA149",
     "tipo": "AUTOMATIZADO",
+    "objetivo": "Verificar que los filtros de invitados pueden combinarse o retirarse sin alterar los datos guardados.",
+    "esperado": "Al cambiar o eliminar filtros, la consulta debe devolver el subconjunto correspondiente o el listado completo activo.",
+    "obtenido": "listar recibe filtros opcionales y solo aplica aquellos presentes; sin filtros restrictivos devuelve todos los invitados activos del matrimonio.",
     "estado": "PASS",
     "detalle": [
       "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
     ],
-    "obtenido": "La capacidad evaluada existe en Invitados.",
-    "interpretacion": "Criterio técnico cubierto."
+    "detalleTecnico": [
+      "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
+    ],
+    "interpretacion": "El comportamiento implementado satisface el criterio tecnico evaluado."
   },
   {
     "hu": "HU31",
@@ -83,12 +113,17 @@
     "nombre": "Filtrado por colaborador autorizado",
     "ca": "CA150",
     "tipo": "AUTOMATIZADO",
+    "objetivo": "Verificar que la consulta de invitados exige acceso al matrimonio antes de exponer informacion personal.",
+    "esperado": "Un usuario no vinculado al proyecto debe recibir rechazo de acceso y no obtener el listado.",
+    "obtenido": "acceso valida PM, pareja o colaboracion activa antes de listar; la prueba INV-15 confirma ForbiddenException para un usuario ajeno.",
     "estado": "PASS",
     "detalle": [
       "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
     ],
-    "obtenido": "La capacidad evaluada existe en Invitados.",
-    "interpretacion": "Criterio técnico cubierto."
+    "detalleTecnico": [
+      "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
+    ],
+    "interpretacion": "El comportamiento implementado satisface el criterio tecnico evaluado."
   },
   {
     "hu": "HU32",
@@ -96,12 +131,17 @@
     "nombre": "Gestión de requerimientos alimentarios",
     "ca": "CA151",
     "tipo": "AUTOMATIZADO",
+    "objetivo": "Comprobar el alta y retiro de requerimientos alimentarios por invitado.",
+    "esperado": "Solo requerimientos activos del catalogo pueden asociarse; retirar debe desactivar la relacion sin borrar el historial.",
+    "obtenido": "agregarReq valida catalogo y evita duplicados activos; retirarReq cambia activo a false en la relacion existente.",
     "estado": "PASS",
     "detalle": [
       "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
     ],
-    "obtenido": "La capacidad evaluada existe en Invitados.",
-    "interpretacion": "Criterio técnico cubierto."
+    "detalleTecnico": [
+      "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
+    ],
+    "interpretacion": "El comportamiento implementado satisface el criterio tecnico evaluado."
   },
   {
     "hu": "HU32",
@@ -109,12 +149,17 @@
     "nombre": "Filtro y resumen por requerimiento alimentario",
     "ca": "CA152",
     "tipo": "AUTOMATIZADO",
+    "objetivo": "Verificar el filtrado de invitados y el resumen agrupado por requerimiento alimentario.",
+    "esperado": "El filtro debe incluir solo invitados con el requerimiento solicitado y el resumen debe informar cantidad e invitados por requisito.",
+    "obtenido": "listar filtra por idRequerimientoAlimentario y resumenRequerimientos agrupa las relaciones activas; la prueba CP-E06-HU32-02 lo confirma.",
     "estado": "PASS",
     "detalle": [
       "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
     ],
-    "obtenido": "La capacidad evaluada existe en Invitados.",
-    "interpretacion": "Criterio técnico cubierto."
+    "detalleTecnico": [
+      "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
+    ],
+    "interpretacion": "El comportamiento implementado satisface el criterio tecnico evaluado."
   },
   {
     "hu": "HU32",
@@ -122,10 +167,13 @@
     "nombre": "Exportación del listado alimentario",
     "ca": "CA153",
     "tipo": "AUTOMATIZADO",
+    "objetivo": "Verificar la generacion de un listado exportable de requerimientos alimentarios para catering.",
+    "esperado": "El sistema debe producir un archivo o endpoint de exportacion con invitados, requerimientos y cantidades consolidadas.",
+    "obtenido": "No existe servicio, controlador ni endpoint de exportacion alimentaria; solo esta disponible el resumen en memoria para consulta.",
     "estado": "FAIL",
     "detalle": [],
-    "obtenido": "La capacidad no está implementada completamente.",
-    "interpretacion": "Funcionalidad no implementada o incompleta."
+    "detalleTecnico": [],
+    "interpretacion": "El criterio no esta cubierto porque falta la capacidad de exportacion."
   },
   {
     "hu": "HU33",
@@ -133,12 +181,17 @@
     "nombre": "Asignación y consulta por mesa",
     "ca": "CA154",
     "tipo": "AUTOMATIZADO",
+    "objetivo": "Comprobar la asignacion de invitados a una mesa y la consulta posterior de sus ocupantes.",
+    "esperado": "La asignacion debe respetar capacidad, evitar duplicidad y la consulta debe devolver invitados y datos de ocupacion.",
+    "obtenido": "asignar valida mesa, invitado, capacidad y asignaciones existentes; representacionMesas calcula ocupados, disponibles e invitados.",
     "estado": "PASS",
     "detalle": [
       "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
     ],
-    "obtenido": "La capacidad evaluada existe en Invitados.",
-    "interpretacion": "Criterio técnico cubierto."
+    "detalleTecnico": [
+      "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
+    ],
+    "interpretacion": "El comportamiento implementado satisface el criterio tecnico evaluado."
   },
   {
     "hu": "HU33",
@@ -146,12 +199,17 @@
     "nombre": "Reasignación de mesa sin duplicidad",
     "ca": "CA155",
     "tipo": "AUTOMATIZADO",
+    "objetivo": "Verificar la reasignacion de un invitado sin dejar una ubicacion activa anterior.",
+    "esperado": "La mesa previa debe quedar inactiva para ese invitado y solo debe mantenerse la relacion activa con la mesa destino.",
+    "obtenido": "reasignar desactiva asignaciones activas previas antes de crear o reactivar la relacion destino; CP-E06-HU33-02 verifica esa secuencia.",
     "estado": "PASS",
     "detalle": [
       "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
     ],
-    "obtenido": "La capacidad evaluada existe en Invitados.",
-    "interpretacion": "Criterio técnico cubierto."
+    "detalleTecnico": [
+      "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
+    ],
+    "interpretacion": "El comportamiento implementado satisface el criterio tecnico evaluado."
   },
   {
     "hu": "HU33",
@@ -159,12 +217,17 @@
     "nombre": "Representación gráfica de mesas",
     "ca": "CA156",
     "tipo": "MANUAL",
+    "objetivo": "Validar visualmente la representacion de mesas con capacidad, ocupacion e invitados asignados.",
+    "esperado": "La interfaz debe mostrar cada mesa, sus lugares ocupados/disponibles y permitir consultar la lista de invitados.",
+    "obtenido": "La API entrega ocupados, disponibles e invitados; la comprobacion de presentacion grafica queda registrada como validacion manual de Flutter.",
     "estado": "PASS",
     "detalle": [
       "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
     ],
-    "obtenido": "La capacidad evaluada existe en Invitados.",
-    "interpretacion": "Criterio técnico cubierto."
+    "detalleTecnico": [
+      "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
+    ],
+    "interpretacion": "El comportamiento implementado satisface el criterio tecnico evaluado."
   },
   {
     "hu": "HU34",
@@ -172,12 +235,17 @@
     "nombre": "Cálculo de asistencia confirmada",
     "ca": "CA157",
     "tipo": "AUTOMATIZADO",
+    "objetivo": "Comprobar el calculo de invitados, pases y asistentes confirmados para el tablero.",
+    "esperado": "El resumen debe contar solo invitados activos y sumar asistentes confirmados respetando el limite de pases.",
+    "obtenido": "resumen filtra activos y devuelve total_invitados, total_pases, confirmados y asistentes_confirmados; CP-E06-HU34-01 verifica los totales.",
     "estado": "PASS",
     "detalle": [
       "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
     ],
-    "obtenido": "La capacidad evaluada existe en Invitados.",
-    "interpretacion": "Criterio técnico cubierto."
+    "detalleTecnico": [
+      "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
+    ],
+    "interpretacion": "El comportamiento implementado satisface el criterio tecnico evaluado."
   },
   {
     "hu": "HU34",
@@ -185,12 +253,17 @@
     "nombre": "Pendientes de respuesta y actualización estadística",
     "ca": "CA158",
     "tipo": "AUTOMATIZADO",
+    "objetivo": "Verificar que el resumen distingue RSVP pendientes y se actualiza al cambiar sus estados.",
+    "esperado": "Los pendientes y el porcentaje de confirmacion deben derivarse del estado RSVP vigente de invitados activos.",
+    "obtenido": "resumen agrupa por estado RSVP y calcula porcentaje_confirmacion; los datos de RSVP activos determinan los indicadores resultantes.",
     "estado": "PASS",
     "detalle": [
       "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
     ],
-    "obtenido": "La capacidad evaluada existe en Invitados.",
-    "interpretacion": "Criterio técnico cubierto."
+    "detalleTecnico": [
+      "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
+    ],
+    "interpretacion": "El comportamiento implementado satisface el criterio tecnico evaluado."
   },
   {
     "hu": "HU34",
@@ -198,12 +271,17 @@
     "nombre": "Permisos sobre estadísticas de invitados",
     "ca": "CA159",
     "tipo": "AUTOMATIZADO",
+    "objetivo": "Verificar que las estadisticas de invitados no se exponen a usuarios sin acceso al matrimonio.",
+    "esperado": "Un usuario no autorizado debe ser bloqueado antes de obtener resumenes o listados estadisticos.",
+    "obtenido": "resumen invoca listar, que valida acceso al matrimonio; la misma proteccion de acceso cubre las estadisticas.",
     "estado": "PASS",
     "detalle": [
       "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
     ],
-    "obtenido": "La capacidad evaluada existe en Invitados.",
-    "interpretacion": "Criterio técnico cubierto."
+    "detalleTecnico": [
+      "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
+    ],
+    "interpretacion": "El comportamiento implementado satisface el criterio tecnico evaluado."
   },
   {
     "hu": "HU35",
@@ -211,12 +289,17 @@
     "nombre": "Gestión y actualización del RSVP",
     "ca": "CA160",
     "tipo": "AUTOMATIZADO",
+    "objetivo": "Comprobar la actualizacion controlada del RSVP y el registro de su historial.",
+    "esperado": "El estado y la cantidad confirmada deben actualizarse sin exceder pases, guardando fecha e historial cuando cambia el estado.",
+    "obtenido": "rsvp valida cantidadAsistentesConfirmados, registra fechaRespuesta ante cambio y crea RsvpHistorial con canal MANUAL.",
     "estado": "PASS",
     "detalle": [
       "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
     ],
-    "obtenido": "La capacidad evaluada existe en Invitados.",
-    "interpretacion": "Criterio técnico cubierto."
+    "detalleTecnico": [
+      "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
+    ],
+    "interpretacion": "El comportamiento implementado satisface el criterio tecnico evaluado."
   },
   {
     "hu": "HU35",
@@ -224,12 +307,17 @@
     "nombre": "Fechas de seguimiento RSVP",
     "ca": "CA161",
     "tipo": "AUTOMATIZADO",
+    "objetivo": "Verificar la identificacion de invitados pendientes que requieren seguimiento previo a la boda.",
+    "esperado": "Solo RSVP pendientes deben aparecer con una fecha de seguimiento calculada desde fechaMatrimonio.",
+    "obtenido": "seguimientoRsvp filtra PENDIENTE y calcula fecha_seguimiento a 30 dias de la boda; la prueba CP-E06-HU35-02 valida el filtro.",
     "estado": "PASS",
     "detalle": [
       "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
     ],
-    "obtenido": "La capacidad evaluada existe en Invitados.",
-    "interpretacion": "Criterio técnico cubierto."
+    "detalleTecnico": [
+      "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
+    ],
+    "interpretacion": "El comportamiento implementado satisface el criterio tecnico evaluado."
   },
   {
     "hu": "HU35",
@@ -237,12 +325,17 @@
     "nombre": "Recordatorios únicamente para RSVP pendientes",
     "ca": "CA162",
     "tipo": "AUTOMATIZADO",
+    "objetivo": "Comprobar que los recordatorios se generan exclusivamente para invitados con RSVP pendiente y correo registrado.",
+    "esperado": "No debe enviarse recordatorio a confirmados o sin correo; los envios deben quedar identificados en el resultado.",
+    "obtenido": "enviarRecordatoriosRsvp consume seguimientoRsvp, omite invitados sin correo y devuelve solo los identificadores enviados.",
     "estado": "PASS",
     "detalle": [
       "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
     ],
-    "obtenido": "La capacidad evaluada existe en Invitados.",
-    "interpretacion": "Criterio técnico cubierto."
+    "detalleTecnico": [
+      "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
+    ],
+    "interpretacion": "El comportamiento implementado satisface el criterio tecnico evaluado."
   },
   {
     "hu": "HU36",
@@ -250,12 +343,17 @@
     "nombre": "Ordenamiento alfabético combinado con filtros",
     "ca": "CA163",
     "tipo": "AUTOMATIZADO",
+    "objetivo": "Verificar el orden alfabetico de los invitados junto con los filtros aplicados.",
+    "esperado": "Los invitados filtrados deben poder ordenarse por apellido o nombre sin modificar la informacion persistida.",
+    "obtenido": "listar aplica orden al resultado filtrado y el cliente presenta orden por apellido/nombre; la capacidad de ordenamiento esta disponible.",
     "estado": "PASS",
     "detalle": [
       "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
     ],
-    "obtenido": "La capacidad evaluada existe en Invitados.",
-    "interpretacion": "Criterio técnico cubierto."
+    "detalleTecnico": [
+      "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
+    ],
+    "interpretacion": "El comportamiento implementado satisface el criterio tecnico evaluado."
   },
   {
     "hu": "HU36",
@@ -263,12 +361,17 @@
     "nombre": "Persistencia de la preferencia de ordenamiento",
     "ca": "CA164",
     "tipo": "AUTOMATIZADO",
+    "objetivo": "Comprobar la persistencia de la preferencia de orden del usuario para un matrimonio.",
+    "esperado": "La preferencia seleccionada debe guardarse asociada al usuario y matrimonio y responder con el valor registrado.",
+    "obtenido": "guardarPreferenciaOrden almacena la preferencia con clave usuario:matrimonio y devuelve el orden solicitado.",
     "estado": "PASS",
     "detalle": [
       "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
     ],
-    "obtenido": "La capacidad evaluada existe en Invitados.",
-    "interpretacion": "Criterio técnico cubierto."
+    "detalleTecnico": [
+      "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
+    ],
+    "interpretacion": "El comportamiento implementado satisface el criterio tecnico evaluado."
   },
   {
     "hu": "HU37",
@@ -276,12 +379,17 @@
     "nombre": "Generación y envío de invitación digital",
     "ca": "CA165",
     "tipo": "MIXTO",
+    "objetivo": "Verificar la generacion de una invitacion digital para un invitado con correo.",
+    "esperado": "Debe generarse un enlace identificable, enviarse mediante el servicio de correo y registrarse el evento en el historial RSVP.",
+    "obtenido": "generarInvitacionDigital exige correo, crea token/enlace, usa CorreoService y registra una entrada SISTEMA cuando existe RSVP.",
     "estado": "PASS",
     "detalle": [
       "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
     ],
-    "obtenido": "La capacidad evaluada existe en Invitados.",
-    "interpretacion": "Criterio técnico cubierto."
+    "detalleTecnico": [
+      "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
+    ],
+    "interpretacion": "El comportamiento implementado satisface el criterio tecnico evaluado."
   },
   {
     "hu": "HU37",
@@ -289,12 +397,17 @@
     "nombre": "Registro de interacción sin alterar automáticamente RSVP",
     "ca": "CA166",
     "tipo": "MIXTO",
+    "objetivo": "Comprobar que una interaccion con la invitacion queda registrada sin cambiar automaticamente el RSVP.",
+    "esperado": "La interaccion debe agregarse al historial digital y conservar el estado RSVP previo.",
+    "obtenido": "registrarInteraccionInvitacion crea RsvpHistorial con canal DIGITAL y devuelve el estado actual sin ejecutar actualizacion RSVP.",
     "estado": "PASS",
     "detalle": [
       "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
     ],
-    "obtenido": "La capacidad evaluada existe en Invitados.",
-    "interpretacion": "Criterio técnico cubierto."
+    "detalleTecnico": [
+      "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
+    ],
+    "interpretacion": "El comportamiento implementado satisface el criterio tecnico evaluado."
   },
   {
     "hu": "HU37",
@@ -302,11 +415,16 @@
     "nombre": "Notificación a Wedding Planner por interacción",
     "ca": "CA167",
     "tipo": "MIXTO",
+    "objetivo": "Verificar la notificacion a la Wedding Planner cuando se registra una interaccion digital.",
+    "esperado": "Si el repositorio de notificaciones esta disponible, debe crearse una notificacion dirigida al responsable del proyecto.",
+    "obtenido": "registrarInteraccionInvitacion crea Notificacion con tipo INVITADOS, destino del responsable y mensaje de la interaccion.",
     "estado": "PASS",
     "detalle": [
       "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
     ],
-    "obtenido": "La capacidad evaluada existe en Invitados.",
-    "interpretacion": "Criterio técnico cubierto."
+    "detalleTecnico": [
+      "La capacidad está implementada y cubierta por la auditoría de código y pruebas unitarias del módulo Invitados."
+    ],
+    "interpretacion": "El comportamiento implementado satisface el criterio tecnico evaluado."
   }
 ]

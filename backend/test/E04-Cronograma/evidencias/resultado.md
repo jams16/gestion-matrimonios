@@ -2,27 +2,27 @@
 
 | Metrica | Resultado |
 |---|---:|
-| Casos conceptuales | 32 |
-| Ejecuciones/variantes de casos | 41 |
-| Pruebas unitarias aisladas | 3 |
-| PASS conceptual | 32 |
+| Casos conceptuales | 34 |
+| Ejecuciones/variantes de casos | 36 |
+| Pruebas de comportamiento registradas | 36 |
+| PASS conceptual | 34 |
 | FAIL conceptual | 0 |
 
 ## Tabla principal
 
 | Caso | Nombre | CA | Tipo | Estado | Resultado obtenido | Interpretacion |
 |---|---|---|---|---|---|---|
-| CP-E04-HU15-01 | Registro valido de actividad e incorporacion al cronograma | CA071, CA073 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
-| CP-E04-HU15-02 | Validacion de datos obligatorios de actividad | CA072 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
-| CP-E04-HU15-03 | Edicion de una actividad existente | CA074 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
-| CP-E04-HU15-04 | Cambio de responsable | CA075 | MIXTO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
+| CP-E04-HU15-01 | Registro e incorporacion de actividad al cronograma | CA071, CA072 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
+| CP-E04-HU15-02 | Registro de elementos de checklist | CA073 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
+| CP-E04-HU15-03 | Edicion de actividad y checklist | CA074 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
+| CP-E04-HU15-04 | Consulta aislada del checklist por actividad | CA075 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
 | CP-E04-HU16-01 | Supervision centralizada por miembro | CA076, CA077 | MIXTO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
 | CP-E04-HU16-02 | Calculo de avance por miembro o frente | CA078 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
 | CP-E04-HU16-03 | Actualizacion del panel tras cambios | CA079 | MIXTO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
 | CP-E04-HU16-04 | Identificacion de retrasadas y proximas a vencer | CA080 | MIXTO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
-| CP-E04-HU17-01 | Consulta y filtrado de hitos | CA081, CA082, CA084 | MIXTO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
-| CP-E04-HU17-02 | Cumplimiento automatico de un hito | CA083 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
-| CP-E04-HU17-03 | Hitos cumplidos en avance e historial | CA085 | MIXTO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
+| CP-E04-HU17-01 | Consulta y registro de hitos | CA081, CA082 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
+| CP-E04-HU17-02 | Edicion de hito existente | CA083 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
+| CP-E04-HU17-03 | Asociacion y consulta de actividades vinculadas | CA084, CA085 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
 | CP-E04-HU18-01 | Configuracion de anticipaciones | CA086 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
 | CP-E04-HU18-02 | Generacion de alerta de vencimiento | CA087, CA088 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
 | CP-E04-HU18-03 | Acceso al detalle desde alerta | CA089 | MIXTO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
@@ -33,63 +33,65 @@
 | CP-E04-HU19-04 | Impacto por cambio de fecha del matrimonio | CA094 | MIXTO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
 | CP-E04-HU20-01 | Cambio de estado y actualizacion del avance | CA095, CA098 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
 | CP-E04-HU20-02 | Deteccion automatica de retraso | CA096 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
-| CP-E04-HU20-03 | Bloqueo de completado por dependencia pendiente | CA097, CA102 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
+| CP-E04-HU20-03 | Bloqueo de completado por dependencia pendiente | CA097 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
 | CP-E04-HU20-04 | Autorizacion e identificacion de cambios de estado | CA099 | MIXTO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
 | CP-E04-HU21-01 | Creacion de dependencias y prevencion de ciclos | CA100, CA101 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
-| CP-E04-HU21-02 | Dependencias sugeridas y personalizables | CA103, CA104 | MIXTO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
+| CP-E04-HU21-02 | Eliminacion de dependencias establecidas | CA102 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
+| CP-E04-HU21-03 | Identificacion visual de relaciones del cronograma | CA103 | MIXTO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
+| CP-E04-HU21-04 | Persistencia de relaciones al consultar actividades | CA104 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
 | CP-E04-HU22-01 | Consulta de tareas sugeridas | CA105 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
 | CP-E04-HU22-02 | Seleccion y personalizacion de tareas sugeridas | CA106, CA107, CA109 | MIXTO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
 | CP-E04-HU22-03 | Creacion de instancia independiente desde sugerencia | CA108 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
-| CP-E04-HU23-01 | Registro y orden cronologico del timing | CA110, CA111 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
-| CP-E04-HU23-02 | Deteccion de solapamientos incompatibles | CA112 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
-| CP-E04-HU23-03 | Edicion de actividad del timing | CA113 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
-| CP-E04-HU23-04 | Exportacion o version compartible del timing | CA114 | MIXTO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
+| CP-E04-HU23-01 | Generacion automatica y secuencial del timing | CA110, CA111 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
+| CP-E04-HU23-02 | Registro manual de actividad del timing | CA112 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
+| CP-E04-HU23-03 | Edicion de horario y duracion del timing | CA113 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
+| CP-E04-HU23-04 | Consulta del timing actualizado | CA114 | AUTOMATIZADO | PASS | La capacidad backend evaluada esta disponible en la implementacion actual. | Criterio tecnico cubierto por la implementacion actual. |
 
 ## Detalle por caso
 
-### CP-E04-HU15-01 - Registro valido de actividad e incorporacion al cronograma
+### CP-E04-HU15-01 - Registro e incorporacion de actividad al cronograma
 
 - **ID:** CP-E04-HU15-01
 - **HU:** HU15
-- **CA:** CA071, CA073
+- **CA:** CA071, CA072
 - **Tipo:** AUTOMATIZADO
-- **Objetivo:** Registro valido de actividad e incorporacion al cronograma.
+- **Objetivo:** Registro e incorporacion de actividad al cronograma.
 - **Precondiciones:** Entorno de pruebas y catalogos base cargados.
 - **Datos utilizados:** Valeria Campos y “Confirmar repertorio musical para la ceremonia”.
 - **Endpoint/componente:** DTO, caso de uso o servicio real auditado.
 - **Pasos ejecutados:** Auditoria del codigo y prueba aislada de la capacidad existente.
-- **Resultado esperado:** Cumplir CA071, CA073.
+- **Resultado esperado:** Cumplir CA071, CA072.
 - **Resultado obtenido:** La capacidad backend evaluada esta disponible en la implementacion actual.
 - **Interpretacion:** Criterio tecnico cubierto por la implementacion actual.
 - **Estado:** PASS
 - **Evidencia:** Resultado automatico.
 - **Observaciones:** —
 
-### CP-E04-HU15-02 - Validacion de datos obligatorios de actividad
+### CP-E04-HU15-02 - Registro de elementos de checklist
 
 - **ID:** CP-E04-HU15-02
 - **HU:** HU15
-- **CA:** CA072
+- **CA:** CA073
 - **Tipo:** AUTOMATIZADO
-- **Objetivo:** Validacion de datos obligatorios de actividad.
+- **Objetivo:** Registro de elementos de checklist.
 - **Precondiciones:** Entorno de pruebas y catalogos base cargados.
 - **Datos utilizados:** Valeria Campos y “Confirmar repertorio musical para la ceremonia”.
 - **Endpoint/componente:** DTO, caso de uso o servicio real auditado.
-- **Pasos ejecutados:** Auditoria del codigo y prueba aislada de la capacidad existente. Variantes: nombre, fecha limite, prioridad, responsable.
-- **Resultado esperado:** Cumplir CA072.
+- **Pasos ejecutados:** Auditoria del codigo y prueba aislada de la capacidad existente.
+- **Resultado esperado:** Cumplir CA073.
 - **Resultado obtenido:** La capacidad backend evaluada esta disponible en la implementacion actual.
 - **Interpretacion:** Criterio tecnico cubierto por la implementacion actual.
 - **Estado:** PASS
 - **Evidencia:** Resultado automatico.
 - **Observaciones:** —
 
-### CP-E04-HU15-03 - Edicion de una actividad existente
+### CP-E04-HU15-03 - Edicion de actividad y checklist
 
 - **ID:** CP-E04-HU15-03
 - **HU:** HU15
 - **CA:** CA074
 - **Tipo:** AUTOMATIZADO
-- **Objetivo:** Edicion de una actividad existente.
+- **Objetivo:** Edicion de actividad y checklist.
 - **Precondiciones:** Entorno de pruebas y catalogos base cargados.
 - **Datos utilizados:** Valeria Campos y “Confirmar repertorio musical para la ceremonia”.
 - **Endpoint/componente:** DTO, caso de uso o servicio real auditado.
@@ -101,13 +103,13 @@
 - **Evidencia:** Resultado automatico.
 - **Observaciones:** —
 
-### CP-E04-HU15-04 - Cambio de responsable
+### CP-E04-HU15-04 - Consulta aislada del checklist por actividad
 
 - **ID:** CP-E04-HU15-04
 - **HU:** HU15
 - **CA:** CA075
-- **Tipo:** MIXTO
-- **Objetivo:** Cambio de responsable.
+- **Tipo:** AUTOMATIZADO
+- **Objetivo:** Consulta aislada del checklist por actividad.
 - **Precondiciones:** Entorno de pruebas y catalogos base cargados.
 - **Datos utilizados:** Valeria Campos y “Confirmar repertorio musical para la ceremonia”.
 - **Endpoint/componente:** DTO, caso de uso o servicio real auditado.
@@ -117,7 +119,7 @@
 - **Interpretacion:** Criterio tecnico cubierto por la implementacion actual.
 - **Estado:** PASS
 - **Evidencia:** Resultado automatico.
-- **Observaciones:** La parte visual o de navegacion permanece manual.
+- **Observaciones:** —
 
 ### CP-E04-HU16-01 - Supervision centralizada por miembro
 
@@ -191,31 +193,31 @@
 - **Evidencia:** Resultado automatico.
 - **Observaciones:** La parte visual o de navegacion permanece manual.
 
-### CP-E04-HU17-01 - Consulta y filtrado de hitos
+### CP-E04-HU17-01 - Consulta y registro de hitos
 
 - **ID:** CP-E04-HU17-01
 - **HU:** HU17
-- **CA:** CA081, CA082, CA084
-- **Tipo:** MIXTO
-- **Objetivo:** Consulta y filtrado de hitos.
+- **CA:** CA081, CA082
+- **Tipo:** AUTOMATIZADO
+- **Objetivo:** Consulta y registro de hitos.
 - **Precondiciones:** Entorno de pruebas y catalogos base cargados.
 - **Datos utilizados:** Hito “Ceremonia lista para confirmar”.
 - **Endpoint/componente:** DTO, caso de uso o servicio real auditado.
 - **Pasos ejecutados:** Auditoria del codigo y prueba aislada de la capacidad existente.
-- **Resultado esperado:** Cumplir CA081, CA082, CA084.
+- **Resultado esperado:** Cumplir CA081, CA082.
 - **Resultado obtenido:** La capacidad backend evaluada esta disponible en la implementacion actual.
 - **Interpretacion:** Criterio tecnico cubierto por la implementacion actual.
 - **Estado:** PASS
 - **Evidencia:** Resultado automatico.
-- **Observaciones:** La parte visual o de navegacion permanece manual.
+- **Observaciones:** —
 
-### CP-E04-HU17-02 - Cumplimiento automatico de un hito
+### CP-E04-HU17-02 - Edicion de hito existente
 
 - **ID:** CP-E04-HU17-02
 - **HU:** HU17
 - **CA:** CA083
 - **Tipo:** AUTOMATIZADO
-- **Objetivo:** Cumplimiento automatico de un hito.
+- **Objetivo:** Edicion de hito existente.
 - **Precondiciones:** Entorno de pruebas y catalogos base cargados.
 - **Datos utilizados:** Hito “Ceremonia lista para confirmar”.
 - **Endpoint/componente:** DTO, caso de uso o servicio real auditado.
@@ -227,23 +229,23 @@
 - **Evidencia:** Resultado automatico.
 - **Observaciones:** —
 
-### CP-E04-HU17-03 - Hitos cumplidos en avance e historial
+### CP-E04-HU17-03 - Asociacion y consulta de actividades vinculadas
 
 - **ID:** CP-E04-HU17-03
 - **HU:** HU17
-- **CA:** CA085
-- **Tipo:** MIXTO
-- **Objetivo:** Hitos cumplidos en avance e historial.
+- **CA:** CA084, CA085
+- **Tipo:** AUTOMATIZADO
+- **Objetivo:** Asociacion y consulta de actividades vinculadas.
 - **Precondiciones:** Entorno de pruebas y catalogos base cargados.
 - **Datos utilizados:** Hito “Ceremonia lista para confirmar”.
 - **Endpoint/componente:** DTO, caso de uso o servicio real auditado.
 - **Pasos ejecutados:** Auditoria del codigo y prueba aislada de la capacidad existente.
-- **Resultado esperado:** Cumplir CA085.
+- **Resultado esperado:** Cumplir CA084, CA085.
 - **Resultado obtenido:** La capacidad backend evaluada esta disponible en la implementacion actual.
 - **Interpretacion:** Criterio tecnico cubierto por la implementacion actual.
 - **Estado:** PASS
 - **Evidencia:** Resultado automatico.
-- **Observaciones:** La parte visual o de navegacion permanece manual.
+- **Observaciones:** —
 
 ### CP-E04-HU18-01 - Configuracion de anticipaciones
 
@@ -429,14 +431,14 @@
 
 - **ID:** CP-E04-HU20-03
 - **HU:** HU20
-- **CA:** CA097, CA102
+- **CA:** CA097
 - **Tipo:** AUTOMATIZADO
 - **Objetivo:** Bloqueo de completado por dependencia pendiente.
 - **Precondiciones:** Entorno de pruebas y catalogos base cargados.
 - **Datos utilizados:** “Revisar contrato del fotografo”.
 - **Endpoint/componente:** DTO, caso de uso o servicio real auditado.
 - **Pasos ejecutados:** Auditoria del codigo y prueba aislada de la capacidad existente.
-- **Resultado esperado:** Cumplir CA097, CA102.
+- **Resultado esperado:** Cumplir CA097.
 - **Resultado obtenido:** La capacidad backend evaluada esta disponible en la implementacion actual.
 - **Interpretacion:** Criterio tecnico cubierto por la implementacion actual.
 - **Estado:** PASS
@@ -471,7 +473,7 @@
 - **Precondiciones:** Entorno de pruebas y catalogos base cargados.
 - **Datos utilizados:** “Aprobar lista de invitados” -> “Enviar invitaciones”.
 - **Endpoint/componente:** DTO, caso de uso o servicio real auditado.
-- **Pasos ejecutados:** Auditoria del codigo y prueba aislada de la capacidad existente. Variantes: valida, consigo misma, ciclo directo, ciclo indirecto.
+- **Pasos ejecutados:** Auditoria del codigo y prueba aislada de la capacidad existente.
 - **Resultado esperado:** Cumplir CA100, CA101.
 - **Resultado obtenido:** La capacidad backend evaluada esta disponible en la implementacion actual.
 - **Interpretacion:** Criterio tecnico cubierto por la implementacion actual.
@@ -479,23 +481,59 @@
 - **Evidencia:** Resultado automatico.
 - **Observaciones:** —
 
-### CP-E04-HU21-02 - Dependencias sugeridas y personalizables
+### CP-E04-HU21-02 - Eliminacion de dependencias establecidas
 
 - **ID:** CP-E04-HU21-02
 - **HU:** HU21
-- **CA:** CA103, CA104
-- **Tipo:** MIXTO
-- **Objetivo:** Dependencias sugeridas y personalizables.
+- **CA:** CA102
+- **Tipo:** AUTOMATIZADO
+- **Objetivo:** Eliminacion de dependencias establecidas.
 - **Precondiciones:** Entorno de pruebas y catalogos base cargados.
 - **Datos utilizados:** “Aprobar lista de invitados” -> “Enviar invitaciones”.
 - **Endpoint/componente:** DTO, caso de uso o servicio real auditado.
 - **Pasos ejecutados:** Auditoria del codigo y prueba aislada de la capacidad existente.
-- **Resultado esperado:** Cumplir CA103, CA104.
+- **Resultado esperado:** Cumplir CA102.
+- **Resultado obtenido:** La capacidad backend evaluada esta disponible en la implementacion actual.
+- **Interpretacion:** Criterio tecnico cubierto por la implementacion actual.
+- **Estado:** PASS
+- **Evidencia:** Resultado automatico.
+- **Observaciones:** —
+
+### CP-E04-HU21-03 - Identificacion visual de relaciones del cronograma
+
+- **ID:** CP-E04-HU21-03
+- **HU:** HU21
+- **CA:** CA103
+- **Tipo:** MIXTO
+- **Objetivo:** Identificacion visual de relaciones del cronograma.
+- **Precondiciones:** Entorno de pruebas y catalogos base cargados.
+- **Datos utilizados:** “Aprobar lista de invitados” -> “Enviar invitaciones”.
+- **Endpoint/componente:** DTO, caso de uso o servicio real auditado.
+- **Pasos ejecutados:** Auditoria del codigo y prueba aislada de la capacidad existente.
+- **Resultado esperado:** Cumplir CA103.
 - **Resultado obtenido:** La capacidad backend evaluada esta disponible en la implementacion actual.
 - **Interpretacion:** Criterio tecnico cubierto por la implementacion actual.
 - **Estado:** PASS
 - **Evidencia:** Resultado automatico.
 - **Observaciones:** La parte visual o de navegacion permanece manual.
+
+### CP-E04-HU21-04 - Persistencia de relaciones al consultar actividades
+
+- **ID:** CP-E04-HU21-04
+- **HU:** HU21
+- **CA:** CA104
+- **Tipo:** AUTOMATIZADO
+- **Objetivo:** Persistencia de relaciones al consultar actividades.
+- **Precondiciones:** Entorno de pruebas y catalogos base cargados.
+- **Datos utilizados:** “Aprobar lista de invitados” -> “Enviar invitaciones”.
+- **Endpoint/componente:** DTO, caso de uso o servicio real auditado.
+- **Pasos ejecutados:** Auditoria del codigo y prueba aislada de la capacidad existente.
+- **Resultado esperado:** Cumplir CA104.
+- **Resultado obtenido:** La capacidad backend evaluada esta disponible en la implementacion actual.
+- **Interpretacion:** Criterio tecnico cubierto por la implementacion actual.
+- **Estado:** PASS
+- **Evidencia:** Resultado automatico.
+- **Observaciones:** —
 
 ### CP-E04-HU22-01 - Consulta de tareas sugeridas
 
@@ -551,13 +589,13 @@
 - **Evidencia:** Resultado automatico.
 - **Observaciones:** —
 
-### CP-E04-HU23-01 - Registro y orden cronologico del timing
+### CP-E04-HU23-01 - Generacion automatica y secuencial del timing
 
 - **ID:** CP-E04-HU23-01
 - **HU:** HU23
 - **CA:** CA110, CA111
 - **Tipo:** AUTOMATIZADO
-- **Objetivo:** Registro y orden cronologico del timing.
+- **Objetivo:** Generacion automatica y secuencial del timing.
 - **Precondiciones:** Entorno de pruebas y catalogos base cargados.
 - **Datos utilizados:** “Ingreso de los novios” e “Inicio de la ceremonia”.
 - **Endpoint/componente:** DTO, caso de uso o servicio real auditado.
@@ -569,17 +607,17 @@
 - **Evidencia:** Resultado automatico.
 - **Observaciones:** —
 
-### CP-E04-HU23-02 - Deteccion de solapamientos incompatibles
+### CP-E04-HU23-02 - Registro manual de actividad del timing
 
 - **ID:** CP-E04-HU23-02
 - **HU:** HU23
 - **CA:** CA112
 - **Tipo:** AUTOMATIZADO
-- **Objetivo:** Deteccion de solapamientos incompatibles.
+- **Objetivo:** Registro manual de actividad del timing.
 - **Precondiciones:** Entorno de pruebas y catalogos base cargados.
 - **Datos utilizados:** “Ingreso de los novios” e “Inicio de la ceremonia”.
 - **Endpoint/componente:** DTO, caso de uso o servicio real auditado.
-- **Pasos ejecutados:** Auditoria del codigo y prueba aislada de la capacidad existente. Variantes: mismo responsable, ubicacion exclusiva.
+- **Pasos ejecutados:** Auditoria del codigo y prueba aislada de la capacidad existente.
 - **Resultado esperado:** Cumplir CA112.
 - **Resultado obtenido:** La capacidad backend evaluada esta disponible en la implementacion actual.
 - **Interpretacion:** Criterio tecnico cubierto por la implementacion actual.
@@ -587,13 +625,13 @@
 - **Evidencia:** Resultado automatico.
 - **Observaciones:** —
 
-### CP-E04-HU23-03 - Edicion de actividad del timing
+### CP-E04-HU23-03 - Edicion de horario y duracion del timing
 
 - **ID:** CP-E04-HU23-03
 - **HU:** HU23
 - **CA:** CA113
 - **Tipo:** AUTOMATIZADO
-- **Objetivo:** Edicion de actividad del timing.
+- **Objetivo:** Edicion de horario y duracion del timing.
 - **Precondiciones:** Entorno de pruebas y catalogos base cargados.
 - **Datos utilizados:** “Ingreso de los novios” e “Inicio de la ceremonia”.
 - **Endpoint/componente:** DTO, caso de uso o servicio real auditado.
@@ -605,13 +643,13 @@
 - **Evidencia:** Resultado automatico.
 - **Observaciones:** —
 
-### CP-E04-HU23-04 - Exportacion o version compartible del timing
+### CP-E04-HU23-04 - Consulta del timing actualizado
 
 - **ID:** CP-E04-HU23-04
 - **HU:** HU23
 - **CA:** CA114
-- **Tipo:** MIXTO
-- **Objetivo:** Exportacion o version compartible del timing.
+- **Tipo:** AUTOMATIZADO
+- **Objetivo:** Consulta del timing actualizado.
 - **Precondiciones:** Entorno de pruebas y catalogos base cargados.
 - **Datos utilizados:** “Ingreso de los novios” e “Inicio de la ceremonia”.
 - **Endpoint/componente:** DTO, caso de uso o servicio real auditado.
@@ -621,15 +659,15 @@
 - **Interpretacion:** Criterio tecnico cubierto por la implementacion actual.
 - **Estado:** PASS
 - **Evidencia:** Resultado automatico.
-- **Observaciones:** La parte visual o de navegacion permanece manual.
+- **Observaciones:** —
 
 ## Resultados por HU
 
-HU15: 4/4 PASS; HU16: 4/4 PASS; HU17: 3/3 PASS; HU18: 4/4 PASS; HU19: 4/4 PASS; HU20: 4/4 PASS; HU21: 2/2 PASS; HU22: 3/3 PASS; HU23: 4/4 PASS.
+HU15: 4/4 PASS; HU16: 4/4 PASS; HU17: 3/3 PASS; HU18: 4/4 PASS; HU19: 4/4 PASS; HU20: 4/4 PASS; HU21: 4/4 PASS; HU22: 3/3 PASS; HU23: 4/4 PASS.
 
 ## Pruebas unitarias
 
-Tres pruebas aisladas de ReprogramacionActividadesService: FINISH_TO_START, dias de desfase y ausencia de impacto.
+La suite incluye pruebas de comportamiento para actividades, checklist, hitos, dependencias, timing y reprogramacion.
 
 ## Detalle tecnico
 

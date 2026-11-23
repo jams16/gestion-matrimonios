@@ -10,7 +10,6 @@ import '../../../core/widgets/feedback/app_snackbar.dart';
 import '../../../core/widgets/inputs/app_search_field.dart';
 import '../../../core/widgets/inputs/app_text_field.dart';
 import '../../../core/widgets/overlays/app_confirmation_dialog.dart';
-import '../../../core/widgets/navigation/app_tabs.dart';
 import '../../cronograma/application/providers/cronograma_provider.dart';
 import '../application/invitados_provider.dart';
 
@@ -112,32 +111,12 @@ class ListaInvitadosPage extends ConsumerStatefulWidget {
   ConsumerState<ListaInvitadosPage> createState() => _ListaInvitadosPageState();
 }
 
-class _ListaInvitadosPageState extends ConsumerState<ListaInvitadosPage>
-    with SingleTickerProviderStateMixin {
+class _ListaInvitadosPageState extends ConsumerState<ListaInvitadosPage> {
   int _tab = 0;
-  late final TabController _tabs;
   String _buscar = '';
+  String _buscarMesa = '';
   String? _lado;
-
-  @override
-  void initState() {
-    super.initState();
-    _tabs = TabController(length: 2, vsync: this)..addListener(_actualizarTab);
-  }
-
-  void _actualizarTab() {
-    if (mounted && _tab != _tabs.index) {
-      setState(() => _tab = _tabs.index);
-    }
-  }
-
-  @override
-  void dispose() {
-    _tabs
-      ..removeListener(_actualizarTab)
-      ..dispose();
-    super.dispose();
-  }
+  bool _ordenAscendente = true;
 
   Future<void> _refrescar(String matrimonio) async {
     ref.invalidate(invitadosListaProvider(matrimonio));
@@ -179,15 +158,11 @@ class _ListaInvitadosPageState extends ConsumerState<ListaInvitadosPage>
                   const SizedBox(height: AppSpacing.md),
                   _Resumen(resumen: ref.watch(invitadosResumenProvider(m.id))),
                   const SizedBox(height: AppSpacing.lg),
-                  _Tabs(
-                    controller: _tabs,
+                  _NavegacionInvitados(
+                    seleccionado: _tab,
+                    onSeleccionar: (tab) => setState(() => _tab = tab),
                   ),
-                  const Divider(
-                    height: 1,
-                    thickness: 1,
-                    color: Color(0xFF29252F),
-                  ),
-                  const SizedBox(height: AppSpacing.sm),
+                  const SizedBox(height: AppSpacing.lg),
                   AnimatedSwitcher(
                     duration: const Duration(milliseconds: 240),
                     switchInCurve: Curves.easeOutCubic,
@@ -203,79 +178,162 @@ class _ListaInvitadosPageState extends ConsumerState<ListaInvitadosPage>
                         ? Column(
                             key: const ValueKey('invitados'),
                             children: [
-                    AppSearchField(
-                      label: null,
-                      hintText: 'Buscar invitado',
-                      onChanged: (v) => setState(() => _buscar = v),
-                    ),
-                    const SizedBox(height: AppSpacing.sm),
-                    Wrap(
-                      spacing: 8,
-                      children: [
-                        for (final item in const [
-                          ('Todos', null),
-                          ('Novia', 'NOVIA'),
-                          ('Novio', 'NOVIO'),
-                          ('Ambos', 'AMBOS'),
-                        ])
-                          FilterChip(
-                            label: Text(item.$1),
-                            selected: _lado == item.$2,
-                            onSelected: (_) => setState(() => _lado = item.$2),
-                          ),
-                      ],
-                    ),
-                    const SizedBox(height: AppSpacing.md),
-                    lista.when(
-                      loading: () => const Padding(
-                        padding: EdgeInsets.all(28),
-                        child: Center(child: CircularProgressIndicator()),
-                      ),
-                      error: (e, _) => _EstadoError(e),
-                      data: (todos) {
-                        final filtrados = todos.where((i) {
-                          final p = Map<String, dynamic>.from(
-                            i['personaNatural'] as Map? ?? const {},
-                          );
-                          final texto =
-                              '${p['nombres'] ?? ''} ${p['apellidoPaterno'] ?? ''} ${p['apellidoMaterno'] ?? ''}'
-                                  .toLowerCase();
-                          return texto.contains(_buscar.toLowerCase()) &&
-                              (_lado == null || i['ladoRelacion'] == _lado);
-                        }).toList();
-                        if (filtrados.isEmpty)
-                          return const Padding(
-                            padding: EdgeInsets.all(32),
-                            child: Center(
-                              child: Text(
-                                'Aún no hay invitados que coincidan.',
+                              AppSearchField(
+                                label: null,
+                                hintText: 'Buscar invitado',
+                                onChanged: (v) => setState(() => _buscar = v),
                               ),
-                            ),
-                          );
-                        return Column(
-                          children: filtrados
-                              .map(
-                                (i) => Padding(
-                                  padding: const EdgeInsets.only(bottom: 8),
-                                  child: _InvitadoCard(
-                                    matrimonio: m.id,
-                                    invitado: i,
-                                    editar: () => _editar(m.id, i),
-                                    refrescar: () => _refrescar(m.id),
+                              const SizedBox(height: AppSpacing.sm),
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    for (final item in const [
+                                      ('Todos', null),
+                                      ('Novia', 'NOVIA'),
+                                      ('Novio', 'NOVIO'),
+                                    ])
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                          right: AppSpacing.sm,
+                                        ),
+                                        child: FilterChip(
+                                          label: Text(item.$1),
+                                          selected: _lado == item.$2,
+                                          onSelected: (_) =>
+                                              setState(() => _lado = item.$2),
+                                        ),
+                                      ),
+                                    PopupMenuButton<bool>(
+                                      tooltip: 'Ordenar invitados',
+                                      onSelected: (valor) => setState(
+                                        () => _ordenAscendente = valor,
+                                      ),
+                                      itemBuilder: (_) => const [
+                                        PopupMenuItem(
+                                          value: true,
+                                          child: Text('Ordenar A-Z'),
+                                        ),
+                                        PopupMenuItem(
+                                          value: false,
+                                          child: Text('Ordenar Z-A'),
+                                        ),
+                                      ],
+                                      child: Container(
+                                        height: 32,
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: AppSpacing.md,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: const Color(0xFFF4F0FB),
+                                          borderRadius: BorderRadius.circular(
+                                            16,
+                                          ),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              _ordenAscendente
+                                                  ? 'Ordenar A-Z'
+                                                  : 'Ordenar Z-A',
+                                            ),
+                                            const SizedBox(
+                                              width: AppSpacing.xs,
+                                            ),
+                                            const Icon(
+                                              Icons.arrow_drop_down,
+                                              size: 18,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: AppSpacing.md),
+                              lista.when(
+                                loading: () => const Padding(
+                                  padding: EdgeInsets.all(28),
+                                  child: Center(
+                                    child: CircularProgressIndicator(),
                                   ),
                                 ),
-                              )
-                              .toList(),
-                        );
-                      },
-                    ),
+                                error: (e, _) => _EstadoError(e),
+                                data: (todos) {
+                                  final filtrados =
+                                      todos.where((i) {
+                                        final p = Map<String, dynamic>.from(
+                                          i['personaNatural'] as Map? ??
+                                              const {},
+                                        );
+                                        final texto =
+                                            '${p['nombres'] ?? ''} ${p['apellidoPaterno'] ?? ''} ${p['apellidoMaterno'] ?? ''}'
+                                                .toLowerCase();
+                                        return texto.contains(
+                                              _buscar.toLowerCase(),
+                                            ) &&
+                                            (_lado == null ||
+                                                i['ladoRelacion'] == _lado);
+                                      }).toList()..sort((a, b) {
+                                        final comparacion = _claveOrdenInvitado(
+                                          a,
+                                        ).compareTo(_claveOrdenInvitado(b));
+                                        return _ordenAscendente
+                                            ? comparacion
+                                            : -comparacion;
+                                      });
+                                  if (filtrados.isEmpty)
+                                    return const Padding(
+                                      padding: EdgeInsets.all(32),
+                                      child: Center(
+                                        child: Text(
+                                          'Aún no hay invitados que coincidan.',
+                                        ),
+                                      ),
+                                    );
+                                  return Column(
+                                    children: filtrados
+                                        .map(
+                                          (i) => Padding(
+                                            padding: const EdgeInsets.only(
+                                              bottom: 8,
+                                            ),
+                                            child: _InvitadoCard(
+                                              matrimonio: m.id,
+                                              invitado: i,
+                                              editar: () => _editar(m.id, i),
+                                              verDetalle: () => context.go(
+                                                '/gestion/invitados/${i['idInvitado']}',
+                                              ),
+                                              refrescar: () => _refrescar(m.id),
+                                            ),
+                                          ),
+                                        )
+                                        .toList(),
+                                  );
+                                },
+                              ),
                             ],
                           )
                         : KeyedSubtree(
                             key: const ValueKey('mesas'),
-                            child: _Mesas(
-                              matrimonio: m.id,
-                              refrescar: () => _refrescar(m.id),
+                            child: Column(
+                              children: [
+                                AppSearchField(
+                                  label: null,
+                                  hintText: 'Buscar mesa',
+                                  onChanged: (v) =>
+                                      setState(() => _buscarMesa = v),
+                                ),
+                                const SizedBox(height: AppSpacing.md),
+                                _Mesas(
+                                  matrimonio: m.id,
+                                  buscar: _buscarMesa,
+                                  refrescar: () => _refrescar(m.id),
+                                ),
+                              ],
                             ),
                           ),
                   ),
@@ -580,6 +638,347 @@ class _ListaInvitadosPageState extends ConsumerState<ListaInvitadosPage>
   }
 }
 
+class DetalleInvitadoPage extends ConsumerWidget {
+  const DetalleInvitadoPage({
+    super.key,
+    required this.idProyecto,
+    required this.idInvitado,
+  });
+
+  final String idProyecto;
+  final String idInvitado;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final activo = ref.watch(_matrimonioActivoProvider(idProyecto));
+    return activo.when(
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (e, _) => _EstadoError(e),
+      data: (matrimonio) {
+        final invitado = ref.watch(
+          invitadoDetalleProvider((
+            matrimonio: matrimonio.id,
+            invitado: idInvitado,
+          )),
+        );
+        return invitado.when(
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (e, _) => _EstadoError(e),
+          data: (item) => _DetalleInvitadoContenido(
+            matrimonio: matrimonio.id,
+            invitado: item,
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _DetalleInvitadoContenido extends ConsumerWidget {
+  const _DetalleInvitadoContenido({
+    required this.matrimonio,
+    required this.invitado,
+  });
+
+  final String matrimonio;
+  final Map<String, dynamic> invitado;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final esTitular = invitado['esTitular'] != false;
+    final acompanantes = esTitular
+        ? ref.watch(
+            acompanantesProvider((
+              matrimonio: matrimonio,
+              titular: invitado['idInvitado'].toString(),
+            )),
+          )
+        : null;
+    final pases = (invitado['cantidadPases'] as num?)?.toInt() ?? 1;
+    return ListView(
+      padding: const EdgeInsets.all(AppSpacing.lg),
+      children: [
+        TextButton.icon(
+          onPressed: () => context.go('/gestion/invitados'),
+          icon: const Icon(Icons.arrow_back),
+          label: const Text('Volver a invitados'),
+          style: TextButton.styleFrom(alignment: Alignment.centerLeft),
+        ),
+        const SizedBox(height: AppSpacing.md),
+        _FichaInvitado(invitado: invitado),
+        const SizedBox(height: AppSpacing.xl),
+        Text(
+          esTitular ? 'Invitados por pases' : 'Invitado por pase',
+          style: Theme.of(
+            context,
+          ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
+        ),
+        const SizedBox(height: AppSpacing.xs),
+        Text(
+          esTitular
+              ? 'Este invitado cuenta con $pases pase(s).'
+              : 'Este invitado esta vinculado a un titular.',
+          style: const TextStyle(color: AppColors.textSecondary),
+        ),
+        const SizedBox(height: AppSpacing.md),
+        if (!esTitular)
+          const _EstadoVacioPases(
+            mensaje: 'Los acompanantes se administran desde el titular.',
+          )
+        else
+          acompanantes!.when(
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (e, _) => _EstadoError(e),
+            data: (items) {
+              final disponibles = (pases - 1 - items.length).clamp(0, pases);
+              return Column(
+                children: [
+                  if (items.isNotEmpty)
+                    ...items.map(
+                      (item) => Padding(
+                        padding: const EdgeInsets.only(bottom: AppSpacing.sm),
+                        child: _FichaInvitado(invitado: item, compacto: true),
+                      ),
+                    ),
+                  if (items.isEmpty)
+                    const _EstadoVacioPases(
+                      mensaje: 'Aun no hay invitados registrados por pases.',
+                    ),
+                  if (disponibles > 0) ...[
+                    const SizedBox(height: AppSpacing.sm),
+                    Text(
+                      '$disponibles pase(s) aun disponible(s).',
+                      style: const TextStyle(color: AppColors.textSecondary),
+                    ),
+                    const SizedBox(height: AppSpacing.md),
+                    AppButton(
+                      label: 'Agregar invitado por pase',
+                      icon: Icons.person_add_alt_1_outlined,
+                      variant: AppButtonVariant.secondary,
+                      onPressed: () => _agregarPase(context, ref),
+                    ),
+                  ],
+                ],
+              );
+            },
+          ),
+      ],
+    );
+  }
+
+  Future<void> _agregarPase(BuildContext context, WidgetRef ref) async {
+    final nombres = TextEditingController();
+    final paterno = TextEditingController();
+    final dni = TextEditingController();
+    final telefono = TextEditingController();
+    final correo = TextEditingController();
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (dialog) => AlertDialog(
+        title: const Text('Agregar invitado por pase'),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              AppTextField(
+                label: 'Nombres',
+                controller: nombres,
+                required: true,
+              ),
+              const SizedBox(height: AppSpacing.md),
+              AppTextField(
+                label: 'Apellido paterno',
+                controller: paterno,
+                required: true,
+              ),
+              const SizedBox(height: AppSpacing.md),
+              AppTextField(
+                label: 'DNI',
+                controller: dni,
+                required: true,
+                keyboardType: TextInputType.number,
+              ),
+              const SizedBox(height: AppSpacing.md),
+              AppTextField(
+                label: 'Telefono',
+                controller: telefono,
+                keyboardType: TextInputType.phone,
+              ),
+              const SizedBox(height: AppSpacing.md),
+              AppTextField(
+                label: 'Correo electronico',
+                controller: correo,
+                keyboardType: TextInputType.emailAddress,
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialog, false),
+            child: const Text('Cancelar'),
+          ),
+          AppButton(
+            label: 'Agregar',
+            onPressed: () => Navigator.pop(dialog, true),
+          ),
+        ],
+      ),
+    );
+    if (ok != true || !context.mounted) return;
+    if (nombres.text.trim().isEmpty ||
+        paterno.text.trim().isEmpty ||
+        dni.text.trim().length != 8) {
+      AppSnackbar.show(
+        context,
+        message: 'Completa nombres, apellido paterno y DNI de 8 digitos.',
+        type: AppSnackbarType.error,
+      );
+      return;
+    }
+    final persona = Map<String, dynamic>.from(
+      invitado['personaNatural'] as Map? ?? const {},
+    );
+    try {
+      await ref.read(invitadosApiProvider).crearAcompanante(
+        matrimonio,
+        invitado['idInvitado'].toString(),
+        {
+          'persona': {
+            'nombres': nombres.text.trim(),
+            'apellidoPaterno': paterno.text.trim(),
+            'dni': dni.text.trim(),
+            if (telefono.text.trim().isNotEmpty)
+              'telefono': telefono.text.trim(),
+            if (correo.text.trim().isNotEmpty)
+              'correoElectronico': correo.text.trim(),
+          },
+          'cantidadPases': 1,
+          'ladoRelacion': invitado['ladoRelacion'] ?? 'AMBOS',
+          'nombreCategoriaRelacion':
+              (invitado['categoriaRelacion'] as Map?)?['nombre'] ??
+              'Acompanante de ${persona['nombres'] ?? 'invitado'}',
+        },
+      );
+      ref
+        ..invalidate(
+          acompanantesProvider((
+            matrimonio: matrimonio,
+            titular: invitado['idInvitado'].toString(),
+          )),
+        )
+        ..invalidate(invitadosListaProvider(matrimonio))
+        ..invalidate(invitadosResumenProvider(matrimonio));
+      if (context.mounted) {
+        AppSnackbar.show(
+          context,
+          message: 'Invitado por pase agregado.',
+          type: AppSnackbarType.success,
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        AppSnackbar.show(
+          context,
+          message: 'No se pudo agregar el invitado: ${_mensaje(e)}',
+          type: AppSnackbarType.error,
+        );
+      }
+    }
+  }
+}
+
+class _FichaInvitado extends StatelessWidget {
+  const _FichaInvitado({required this.invitado, this.compacto = false});
+
+  final Map<String, dynamic> invitado;
+  final bool compacto;
+
+  @override
+  Widget build(BuildContext context) {
+    final persona = Map<String, dynamic>.from(
+      invitado['personaNatural'] as Map? ?? const {},
+    );
+    final telefono = _textoContacto(persona['telefono']);
+    final correo = _textoContacto(persona['correoElectronico']);
+    return AppCard(
+      elevated: !compacto,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CircleAvatar(
+            radius: compacto ? 20 : 24,
+            backgroundColor: AppColors.primary.withValues(alpha: .12),
+            child: const Icon(Icons.person_outline, color: AppColors.primary),
+          ),
+          const SizedBox(width: AppSpacing.md),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  _nombreOrdenadoInvitado(invitado),
+                  style: const TextStyle(fontWeight: FontWeight.w800),
+                ),
+                const SizedBox(height: AppSpacing.xs),
+                Text('${invitado['cantidadPases'] ?? 1} pase(s)'),
+                if (telefono.isNotEmpty) ...[
+                  const SizedBox(height: AppSpacing.sm),
+                  _DatoContacto(icono: Icons.phone_outlined, texto: telefono),
+                ],
+                if (correo.isNotEmpty) ...[
+                  const SizedBox(height: AppSpacing.xs),
+                  _DatoContacto(icono: Icons.mail_outline, texto: correo),
+                ],
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _DatoContacto extends StatelessWidget {
+  const _DatoContacto({required this.icono, required this.texto});
+
+  final IconData icono;
+  final String texto;
+
+  @override
+  Widget build(BuildContext context) => Row(
+    children: [
+      Icon(icono, size: 16, color: AppColors.textSecondary),
+      const SizedBox(width: AppSpacing.xs),
+      Expanded(
+        child: Text(
+          texto,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(color: AppColors.textSecondary),
+        ),
+      ),
+    ],
+  );
+}
+
+class _EstadoVacioPases extends StatelessWidget {
+  const _EstadoVacioPases({required this.mensaje});
+
+  final String mensaje;
+
+  @override
+  Widget build(BuildContext context) => AppCard(
+    child: Row(
+      children: [
+        const Icon(Icons.group_outlined, color: AppColors.textSecondary),
+        const SizedBox(width: AppSpacing.md),
+        Expanded(child: Text(mensaje)),
+      ],
+    ),
+  );
+}
+
 class _Resumen extends StatelessWidget {
   const _Resumen({required this.resumen});
   final AsyncValue<Map<String, dynamic>> resumen;
@@ -626,23 +1025,89 @@ class _Resumen extends StatelessWidget {
   );
 }
 
-class _Tabs extends StatelessWidget {
-  const _Tabs({required this.controller});
-  final TabController controller;
+class _NavegacionInvitados extends StatelessWidget {
+  const _NavegacionInvitados({
+    required this.seleccionado,
+    required this.onSeleccionar,
+  });
+
+  final int seleccionado;
+  final ValueChanged<int> onSeleccionar;
 
   @override
-  Widget build(BuildContext context) => AppTabs(
-    controller: controller,
-    tabs: const [
-      AppTabItem(label: 'Invitados', icon: Icons.groups_outlined),
-      AppTabItem(label: 'Mesas', icon: Icons.table_restaurant_outlined),
-    ],
-  );
+  Widget build(BuildContext context) {
+    const opciones = [
+      (texto: 'Invitados', icono: Icons.groups_outlined),
+      (texto: 'Mesas', icono: Icons.table_restaurant_outlined),
+    ];
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(18),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          border: Border.all(color: AppColors.textPrimary),
+          borderRadius: BorderRadius.circular(18),
+        ),
+        child: Row(
+          children: List.generate(opciones.length, (indice) {
+            final seleccionada = indice == seleccionado;
+            final opcion = opciones[indice];
+            return Expanded(
+              flex: seleccionada ? 3 : 2,
+              child: Material(
+                color: seleccionada ? AppColors.primary : Colors.white,
+                child: InkWell(
+                  onTap: () => onSeleccionar(indice),
+                  child: Container(
+                    height: 38,
+                    decoration: BoxDecoration(
+                      border: indice == opciones.length - 1
+                          ? null
+                          : const Border(
+                              right: BorderSide(color: AppColors.textPrimary),
+                            ),
+                    ),
+                    alignment: Alignment.center,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          opcion.icono,
+                          size: 18,
+                          color: seleccionada
+                              ? Colors.white
+                              : AppColors.textPrimary,
+                        ),
+                        if (seleccionada) ...[
+                          const SizedBox(width: 7),
+                          Text(
+                            opcion.texto,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            );
+          }),
+        ),
+      ),
+    );
+  }
 }
 
 class _Mesas extends ConsumerWidget {
-  const _Mesas({required this.matrimonio, required this.refrescar});
+  const _Mesas({
+    required this.matrimonio,
+    required this.buscar,
+    required this.refrescar,
+  });
   final String matrimonio;
+  final String buscar;
   final Future<void> Function() refrescar;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -656,26 +1121,35 @@ class _Mesas extends ConsumerWidget {
     return mesas.when(
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (e, _) => _EstadoError(e),
-      data: (items) => items.isEmpty
-          ? const Padding(
-              padding: EdgeInsets.all(28),
-              child: Center(child: Text('Aún no hay mesas registradas.')),
+      data: (items) {
+        final filtradas = items
+            .where(
+              (mesa) => (mesa['nombre']?.toString() ?? '')
+                  .toLowerCase()
+                  .contains(buscar.toLowerCase()),
             )
-          : Column(
-              children: items
-                  .map(
-                    (m) => Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
-                      child: _MesaCard(
-                        mesa: m,
-                        matrimonio: matrimonio,
-                        invitados: invitados,
-                        refrescar: refrescar,
+            .toList();
+        return filtradas.isEmpty
+            ? const Padding(
+                padding: EdgeInsets.all(28),
+                child: Center(child: Text('Aún no hay mesas registradas.')),
+              )
+            : Column(
+                children: filtradas
+                    .map(
+                      (m) => Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: _MesaCard(
+                          mesa: m,
+                          matrimonio: matrimonio,
+                          invitados: invitados,
+                          refrescar: refrescar,
+                        ),
                       ),
-                    ),
-                  )
-                  .toList(),
-            ),
+                    )
+                    .toList(),
+              );
+      },
     );
   }
 }
@@ -696,7 +1170,7 @@ class _MesaCard extends ConsumerWidget {
     final ocupados = (mesa['ocupados'] as num?)?.toInt() ?? 0;
     final capacidad = (mesa['capacidad'] as num?)?.toInt() ?? 0;
     return AppCard(
-      onTap: () => _verInvitadosMesa(context),
+      onTap: () => _verInvitadosMesa(context, ref),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -742,57 +1216,34 @@ class _MesaCard extends ConsumerWidget {
     );
   }
 
-  Future<void> _verInvitadosMesa(
-    BuildContext context,
-  ) => showModalBottomSheet<void>(
-    context: context,
-    showDragHandle: true,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-    ),
-    builder: (sheet) {
-      final asignados = List<Map<String, dynamic>>.from(
-        mesa['invitados'] as List? ?? const [],
-      );
-      return SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(12, 4, 12, 20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                mesa['nombre']?.toString() ?? 'Mesa',
-                style: Theme.of(
-                  sheet,
-                ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
-              ),
-              const SizedBox(height: 8),
-              if (asignados.isEmpty)
-                const Padding(
-                  padding: EdgeInsets.all(24),
-                  child: Text('Aún no hay invitados asignados a esta mesa.'),
-                ),
-              ...asignados.map((asignacion) {
-                final invitado = Map<String, dynamic>.from(
-                  asignacion['invitado'] as Map? ?? const {},
-                );
-                final persona = Map<String, dynamic>.from(
-                  invitado['personaNatural'] as Map? ?? const {},
-                );
-                return ListTile(
-                  leading: const Icon(Icons.person_outline),
-                  title: Text(
-                    '${persona['nombres'] ?? ''} ${persona['apellidoPaterno'] ?? ''}',
-                  ),
-                  subtitle: Text('${invitado['cantidadPases'] ?? 1} pase(s)'),
-                );
-              }),
-            ],
-          ),
+  Future<void> _verInvitadosMesa(BuildContext context, WidgetRef ref) =>
+      showModalBottomSheet<void>(
+        context: context,
+        showDragHandle: true,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
         ),
+        builder: (sheet) {
+          final asignados = List<Map<String, dynamic>>.from(
+            mesa['invitados'] as List? ?? const [],
+          );
+          return _InvitadosMesaSheet(
+            mesa: mesa,
+            asignados: asignados,
+            retirar: (asignacion) async {
+              final invitado = _invitadoDeMesa(asignacion);
+              await ref
+                  .read(invitadosApiProvider)
+                  .retirarDeMesa(
+                    matrimonio,
+                    mesa['idMesa'].toString(),
+                    invitado['idInvitado'].toString(),
+                  );
+              await refrescar();
+            },
+          );
+        },
       );
-    },
-  );
 
   Future<void> _accion(
     BuildContext context,
@@ -898,16 +1349,139 @@ class _MesaCard extends ConsumerWidget {
   }
 }
 
+class _InvitadosMesaSheet extends StatefulWidget {
+  const _InvitadosMesaSheet({
+    required this.mesa,
+    required this.asignados,
+    required this.retirar,
+  });
+
+  final Map<String, dynamic> mesa;
+  final List<Map<String, dynamic>> asignados;
+  final Future<void> Function(Map<String, dynamic> asignacion) retirar;
+
+  @override
+  State<_InvitadosMesaSheet> createState() => _InvitadosMesaSheetState();
+}
+
+class _InvitadosMesaSheetState extends State<_InvitadosMesaSheet> {
+  String _buscar = '';
+  String? _quitando;
+
+  @override
+  Widget build(BuildContext context) {
+    final filtrados = widget.asignados.where((asignacion) {
+      final invitado = _invitadoDeMesa(asignacion);
+      final persona = Map<String, dynamic>.from(
+        invitado['personaNatural'] as Map? ?? const {},
+      );
+      final texto =
+          '${persona['apellidoPaterno'] ?? ''} ${persona['nombres'] ?? ''} ${persona['dni'] ?? ''}'
+              .toLowerCase();
+      return texto.contains(_buscar.toLowerCase());
+    }).toList();
+    return SafeArea(
+      child: SizedBox(
+        height: MediaQuery.sizeOf(context).height * .72,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 4, 16, 20),
+          child: Column(
+            children: [
+              Text(
+                widget.mesa['nombre']?.toString() ?? 'Mesa',
+                style: Theme.of(
+                  context,
+                ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
+              ),
+              const SizedBox(height: AppSpacing.md),
+              AppSearchField(
+                label: null,
+                hintText: 'Buscar por nombre o DNI',
+                onChanged: (valor) => setState(() => _buscar = valor),
+              ),
+              const SizedBox(height: AppSpacing.sm),
+              Expanded(
+                child: filtrados.isEmpty
+                    ? const Center(
+                        child: Text('No hay invitados que coincidan.'),
+                      )
+                    : ListView.separated(
+                        itemCount: filtrados.length,
+                        separatorBuilder: (_, _) => const Divider(height: 1),
+                        itemBuilder: (context, index) {
+                          final asignacion = filtrados[index];
+                          final invitado = _invitadoDeMesa(asignacion);
+                          final id = invitado['idInvitado'].toString();
+                          final quitando = _quitando == id;
+                          return ListTile(
+                            leading: const Icon(Icons.person_outline),
+                            title: Text(_nombreOrdenadoInvitado(invitado)),
+                            subtitle: Text(
+                              _dniInvitado(invitado) ??
+                                  '${invitado['cantidadPases'] ?? 1} pase(s)',
+                            ),
+                            trailing: IconButton(
+                              tooltip: 'Quitar de la mesa',
+                              icon: quitando
+                                  ? const SizedBox(
+                                      width: 18,
+                                      height: 18,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                      ),
+                                    )
+                                  : const Icon(
+                                      Icons.person_remove_outlined,
+                                      color: AppColors.error,
+                                    ),
+                              onPressed: quitando
+                                  ? null
+                                  : () => _quitar(asignacion, id),
+                            ),
+                          );
+                        },
+                      ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _quitar(Map<String, dynamic> asignacion, String id) async {
+    setState(() => _quitando = id);
+    try {
+      await widget.retirar(asignacion);
+      if (mounted) {
+        setState(() => widget.asignados.remove(asignacion));
+      }
+    } catch (e) {
+      if (mounted) {
+        AppSnackbar.show(
+          context,
+          message: 'No se pudo quitar el invitado: ${_mensaje(e)}',
+          type: AppSnackbarType.error,
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _quitando = null);
+    }
+  }
+}
+
 class _InvitadoCard extends ConsumerWidget {
   const _InvitadoCard({
     required this.matrimonio,
     required this.invitado,
     required this.editar,
+    required this.verDetalle,
     required this.refrescar,
   });
   final String matrimonio;
   final Map<String, dynamic> invitado;
   final VoidCallback editar;
+  final VoidCallback verDetalle;
   final Future<void> Function() refrescar;
 
   @override
@@ -927,7 +1501,7 @@ class _InvitadoCard extends ConsumerWidget {
         : 'Pendiente de confirmación';
     final color = primera ? Colors.green : Colors.orange;
     return AppCard(
-      onTap: editar,
+      onTap: verDetalle,
       elevated: true,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -943,7 +1517,7 @@ class _InvitadoCard extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '${persona['nombres'] ?? ''} ${persona['apellidoPaterno'] ?? ''}',
+                  _nombreOrdenadoInvitado(invitado),
                   style: const TextStyle(fontWeight: FontWeight.w800),
                 ),
                 const SizedBox(height: 4),
@@ -958,6 +1532,22 @@ class _InvitadoCard extends ConsumerWidget {
                       style: TextStyle(color: AppColors.textSecondary),
                     ),
                   ),
+                if (_textoContacto(persona['telefono']).isNotEmpty) ...[
+                  const SizedBox(height: 6),
+                  _DatoContacto(
+                    icono: Icons.phone_outlined,
+                    texto: _textoContacto(persona['telefono']),
+                  ),
+                ],
+                if (_textoContacto(
+                  persona['correoElectronico'],
+                ).isNotEmpty) ...[
+                  const SizedBox(height: 4),
+                  _DatoContacto(
+                    icono: Icons.mail_outline,
+                    texto: _textoContacto(persona['correoElectronico']),
+                  ),
+                ],
                 const SizedBox(height: 8),
                 Chip(
                   avatar: Icon(
@@ -1054,6 +1644,8 @@ class _InvitadoCard extends ConsumerWidget {
     final nombres = TextEditingController();
     final paterno = TextEditingController();
     final dni = TextEditingController();
+    final telefono = TextEditingController();
+    final correo = TextEditingController();
     final ok = await showDialog<bool>(
       context: context,
       builder: (d) => AlertDialog(
@@ -1074,6 +1666,18 @@ class _InvitadoCard extends ConsumerWidget {
               controller: dni,
               required: true,
               keyboardType: TextInputType.number,
+            ),
+            const SizedBox(height: 16),
+            AppTextField(
+              label: 'Telefono',
+              controller: telefono,
+              keyboardType: TextInputType.phone,
+            ),
+            const SizedBox(height: 16),
+            AppTextField(
+              label: 'Correo electronico',
+              controller: correo,
+              keyboardType: TextInputType.emailAddress,
             ),
           ],
         ),
@@ -1108,6 +1712,9 @@ class _InvitadoCard extends ConsumerWidget {
           'nombres': nombres.text.trim(),
           'apellidoPaterno': paterno.text.trim(),
           'dni': dni.text.trim(),
+          if (telefono.text.trim().isNotEmpty) 'telefono': telefono.text.trim(),
+          if (correo.text.trim().isNotEmpty)
+            'correoElectronico': correo.text.trim(),
         },
         'cantidadPases': 1,
         'ladoRelacion': invitado['ladoRelacion'] ?? 'AMBOS',
@@ -1266,6 +1873,40 @@ class _Accion extends StatelessWidget {
     onTap: onTap,
   );
 }
+
+Map<String, dynamic> _invitadoDeMesa(Map<String, dynamic> fila) {
+  final invitado = fila['invitado'];
+  return invitado is Map
+      ? Map<String, dynamic>.from(invitado)
+      : Map<String, dynamic>.from(fila);
+}
+
+String _nombreOrdenadoInvitado(Map<String, dynamic> invitado) {
+  final persona = Map<String, dynamic>.from(
+    invitado['personaNatural'] as Map? ?? const {},
+  );
+  return '${persona['apellidoPaterno'] ?? ''}, ${persona['nombres'] ?? ''}'
+      .replaceFirst(RegExp(r'^,\\s*'), '')
+      .trim();
+}
+
+String? _dniInvitado(Map<String, dynamic> invitado) {
+  final persona = Map<String, dynamic>.from(
+    invitado['personaNatural'] as Map? ?? const {},
+  );
+  final dni = _textoContacto(persona['dni']);
+  return dni.isEmpty ? null : 'DNI $dni';
+}
+
+String _claveOrdenInvitado(Map<String, dynamic> invitado) {
+  final persona = Map<String, dynamic>.from(
+    invitado['personaNatural'] as Map? ?? const {},
+  );
+  return '${persona['apellidoPaterno'] ?? ''}, ${persona['nombres'] ?? ''}'
+      .toLowerCase();
+}
+
+String _textoContacto(Object? valor) => valor?.toString().trim() ?? '';
 
 class _MatrimonioActivo {
   const _MatrimonioActivo(this.id);

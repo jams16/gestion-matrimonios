@@ -62,6 +62,26 @@ describe('InvitadosService', () => {
     db.MesaInvitado.all.mockResolvedValue([{ idMesa: 'mesa1', idInvitado: 'otro', activo: true }]);
     await expect(service.asignar('m1', 'mesa1', 'i1', 7)).rejects.toBeInstanceOf(BadRequestException);
   });
+  it('MES-11 asigna al titular junto con sus acompañantes activos', async () => {
+    const { service, db } = servicio();
+    db.Mesa.first.mockResolvedValue({ idMesa: 'mesa1', idMatrimonio: 'm1', activo: true, capacidad: 4 });
+    db.Invitado.first.mockResolvedValue({ idInvitado: 'titular', idMatrimonio: 'm1', esTitular: true, activo: true });
+    db.Invitado.all.mockResolvedValue([
+      { idInvitado: 'titular', idMatrimonio: 'm1', esTitular: true, activo: true },
+      { idInvitado: 'acompanante', idMatrimonio: 'm1', idInvitadoTitular: 'titular', activo: true },
+    ]);
+    db.MesaInvitado.all.mockResolvedValue([]);
+
+    await service.asignar('m1', 'mesa1', 'titular', 7);
+
+    expect(db.MesaInvitado.create).toHaveBeenCalledTimes(2);
+    expect(db.MesaInvitado.create).toHaveBeenCalledWith(
+      expect.objectContaining({ idMesa: 'mesa1', idInvitado: 'titular' }),
+    );
+    expect(db.MesaInvitado.create).toHaveBeenCalledWith(
+      expect.objectContaining({ idMesa: 'mesa1', idInvitado: 'acompanante' }),
+    );
+  });
   it('CP-E06-HU34-01 y CP-E06-HU34-02 calcula estadísticas RSVP solo de invitados activos', async () => {
     const { service, db } = servicio();
     db.Invitado.all.mockResolvedValue([

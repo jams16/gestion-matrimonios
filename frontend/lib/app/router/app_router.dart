@@ -76,6 +76,22 @@ final appRouter = GoRouter(
       },
     ),
     GoRoute(
+      path: '/gestion/invitados/:idInvitado',
+      builder: (context, state) {
+        final idProyecto = AuthSession.idProyectoActivo;
+        return InicioPage(
+          nombre: state.extra,
+          seccion: 2,
+          contenidoGestion: idProyecto == null
+              ? null
+              : DetalleInvitadoPage(
+                  idProyecto: idProyecto,
+                  idInvitado: state.pathParameters['idInvitado']!,
+                ),
+        );
+      },
+    ),
+    GoRoute(
       path: '/presupuesto',
       builder: (context, state) {
         final idProyecto = AuthSession.idProyectoActivo;

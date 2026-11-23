@@ -2,8 +2,7 @@
 
 | Caso | Estado | Resultado |
 |---|---|---|
-| CP-E04-HU21-01 - valida | PASS | La capacidad evaluada esta disponible en la implementacion actual. |
-| CP-E04-HU21-01 - consigo misma | PASS | La capacidad evaluada esta disponible en la implementacion actual. |
-| CP-E04-HU21-01 - ciclo directo | PASS | La capacidad evaluada esta disponible en la implementacion actual. |
-| CP-E04-HU21-01 - ciclo indirecto | PASS | La capacidad evaluada esta disponible en la implementacion actual. |
+| CP-E04-HU21-01 | PASS | La capacidad evaluada esta disponible en la implementacion actual. |
 | CP-E04-HU21-02 | PASS | La capacidad evaluada esta disponible en la implementacion actual. |
+| CP-E04-HU21-03 | PASS | La capacidad evaluada esta disponible en la implementacion actual. |
+| CP-E04-HU21-04 | PASS | La capacidad evaluada esta disponible en la implementacion actual. |

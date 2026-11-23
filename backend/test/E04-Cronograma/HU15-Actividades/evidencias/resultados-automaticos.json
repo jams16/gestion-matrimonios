@@ -7,26 +7,7 @@
   {
     "id": "CP-E04-HU15-02",
     "estado": "PASS",
-    "detalle": "La capacidad evaluada esta disponible en la implementacion actual.",
-    "variante": "nombre"
-  },
-  {
-    "id": "CP-E04-HU15-02",
-    "estado": "PASS",
-    "detalle": "La capacidad evaluada esta disponible en la implementacion actual.",
-    "variante": "fecha limite"
-  },
-  {
-    "id": "CP-E04-HU15-02",
-    "estado": "PASS",
-    "detalle": "La capacidad evaluada esta disponible en la implementacion actual.",
-    "variante": "prioridad"
-  },
-  {
-    "id": "CP-E04-HU15-02",
-    "estado": "PASS",
-    "detalle": "La capacidad evaluada esta disponible en la implementacion actual.",
-    "variante": "responsable"
+    "detalle": "La capacidad evaluada esta disponible en la implementacion actual."
   },
   {
     "id": "CP-E04-HU15-03",

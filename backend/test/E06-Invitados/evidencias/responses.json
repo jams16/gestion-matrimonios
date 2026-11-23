@@ -1,98 +1,122 @@
 [
   {
     "id": "CP-E06-HU30-01",
-    "estado": "PASS"
+    "estado": "PASS",
+    "obtenido": "El servicio crea el invitado, inicializa RSVP en PENDIENTE y el metodo de consulta compone persona, categoria, RSVP, mesa y requerimientos."
   },
   {
     "id": "CP-E06-HU30-02",
-    "estado": "PASS"
+    "estado": "PASS",
+    "obtenido": "La logica valida persona duplicada y compara acompanantes activos con cantidadPases; las pruebas PAS-04 e INV-04 confirman ambos rechazos."
   },
   {
     "id": "CP-E06-HU30-03",
-    "estado": "PASS"
+    "estado": "PASS",
+    "obtenido": "actualizar construye los cambios solo con propiedades definidas y actualiza de forma independiente Invitado y PersonaNatural."
   },
   {
     "id": "CP-E06-HU30-04",
-    "estado": "PASS"
+    "estado": "PASS",
+    "obtenido": "desactivar desactiva primero las asignaciones activas de MesaInvitado y despues el registro de Invitado; resumen solo considera activos."
   },
   {
     "id": "CP-E06-HU31-01",
-    "estado": "PASS"
+    "estado": "PASS",
+    "obtenido": "listar aplica idCategoriaRelacion y ladoRelacion sobre invitados del matrimonio y devuelve el detalle completo de cada coincidencia."
   },
   {
     "id": "CP-E06-HU31-02",
-    "estado": "PASS"
+    "estado": "PASS",
+    "obtenido": "listar recibe filtros opcionales y solo aplica aquellos presentes; sin filtros restrictivos devuelve todos los invitados activos del matrimonio."
   },
   {
     "id": "CP-E06-HU31-03",
-    "estado": "PASS"
+    "estado": "PASS",
+    "obtenido": "acceso valida PM, pareja o colaboracion activa antes de listar; la prueba INV-15 confirma ForbiddenException para un usuario ajeno."
   },
   {
     "id": "CP-E06-HU32-01",
-    "estado": "PASS"
+    "estado": "PASS",
+    "obtenido": "agregarReq valida catalogo y evita duplicados activos; retirarReq cambia activo a false en la relacion existente."
   },
   {
     "id": "CP-E06-HU32-02",
-    "estado": "PASS"
+    "estado": "PASS",
+    "obtenido": "listar filtra por idRequerimientoAlimentario y resumenRequerimientos agrupa las relaciones activas; la prueba CP-E06-HU32-02 lo confirma."
   },
   {
     "id": "CP-E06-HU32-03",
-    "estado": "FAIL"
+    "estado": "FAIL",
+    "obtenido": "No existe servicio, controlador ni endpoint de exportacion alimentaria; solo esta disponible el resumen en memoria para consulta."
   },
   {
     "id": "CP-E06-HU33-01",
-    "estado": "PASS"
+    "estado": "PASS",
+    "obtenido": "asignar valida mesa, invitado, capacidad y asignaciones existentes; representacionMesas calcula ocupados, disponibles e invitados."
   },
   {
     "id": "CP-E06-HU33-02",
-    "estado": "PASS"
+    "estado": "PASS",
+    "obtenido": "reasignar desactiva asignaciones activas previas antes de crear o reactivar la relacion destino; CP-E06-HU33-02 verifica esa secuencia."
   },
   {
     "id": "CP-E06-HU33-03",
-    "estado": "PASS"
+    "estado": "PASS",
+    "obtenido": "La API entrega ocupados, disponibles e invitados; la comprobacion de presentacion grafica queda registrada como validacion manual de Flutter."
   },
   {
     "id": "CP-E06-HU34-01",
-    "estado": "PASS"
+    "estado": "PASS",
+    "obtenido": "resumen filtra activos y devuelve total_invitados, total_pases, confirmados y asistentes_confirmados; CP-E06-HU34-01 verifica los totales."
   },
   {
     "id": "CP-E06-HU34-02",
-    "estado": "PASS"
+    "estado": "PASS",
+    "obtenido": "resumen agrupa por estado RSVP y calcula porcentaje_confirmacion; los datos de RSVP activos determinan los indicadores resultantes."
   },
   {
     "id": "CP-E06-HU34-03",
-    "estado": "PASS"
+    "estado": "PASS",
+    "obtenido": "resumen invoca listar, que valida acceso al matrimonio; la misma proteccion de acceso cubre las estadisticas."
   },
   {
     "id": "CP-E06-HU35-01",
-    "estado": "PASS"
+    "estado": "PASS",
+    "obtenido": "rsvp valida cantidadAsistentesConfirmados, registra fechaRespuesta ante cambio y crea RsvpHistorial con canal MANUAL."
   },
   {
     "id": "CP-E06-HU35-02",
-    "estado": "PASS"
+    "estado": "PASS",
+    "obtenido": "seguimientoRsvp filtra PENDIENTE y calcula fecha_seguimiento a 30 dias de la boda; la prueba CP-E06-HU35-02 valida el filtro."
   },
   {
     "id": "CP-E06-HU35-03",
-    "estado": "PASS"
+    "estado": "PASS",
+    "obtenido": "enviarRecordatoriosRsvp consume seguimientoRsvp, omite invitados sin correo y devuelve solo los identificadores enviados."
   },
   {
     "id": "CP-E06-HU36-01",
-    "estado": "PASS"
+    "estado": "PASS",
+    "obtenido": "listar aplica orden al resultado filtrado y el cliente presenta orden por apellido/nombre; la capacidad de ordenamiento esta disponible."
   },
   {
     "id": "CP-E06-HU36-02",
-    "estado": "PASS"
+    "estado": "PASS",
+    "obtenido": "guardarPreferenciaOrden almacena la preferencia con clave usuario:matrimonio y devuelve el orden solicitado."
   },
   {
     "id": "CP-E06-HU37-01",
-    "estado": "PASS"
+    "estado": "PASS",
+    "obtenido": "generarInvitacionDigital exige correo, crea token/enlace, usa CorreoService y registra una entrada SISTEMA cuando existe RSVP."
   },
   {
     "id": "CP-E06-HU37-02",
-    "estado": "PASS"
+    "estado": "PASS",
+    "obtenido": "registrarInteraccionInvitacion crea RsvpHistorial con canal DIGITAL y devuelve el estado actual sin ejecutar actualizacion RSVP."
   },
   {
     "id": "CP-E06-HU37-03",
-    "estado": "PASS"
+    "estado": "PASS",
+    "obtenido": "registrarInteraccionInvitacion crea Notificacion con tipo INVITADOS, destino del responsable y mensaje de la interaccion."
   }
 ]

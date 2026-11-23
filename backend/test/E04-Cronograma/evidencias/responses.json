@@ -125,6 +125,16 @@
     "resultado": "La capacidad backend evaluada esta disponible en la implementacion actual."
   },
   {
+    "id": "CP-E04-HU21-03",
+    "estado": "PASS",
+    "resultado": "La capacidad backend evaluada esta disponible en la implementacion actual."
+  },
+  {
+    "id": "CP-E04-HU21-04",
+    "estado": "PASS",
+    "resultado": "La capacidad backend evaluada esta disponible en la implementacion actual."
+  },
+  {
     "id": "CP-E04-HU22-01",
     "estado": "PASS",
     "resultado": "La capacidad backend evaluada esta disponible en la implementacion actual."

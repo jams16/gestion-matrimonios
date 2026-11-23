@@ -7,14 +7,7 @@
   {
     "id": "CP-E04-HU23-02",
     "estado": "PASS",
-    "detalle": "La capacidad evaluada esta disponible en la implementacion actual.",
-    "variante": "mismo responsable"
-  },
-  {
-    "id": "CP-E04-HU23-02",
-    "estado": "PASS",
-    "detalle": "La capacidad evaluada esta disponible en la implementacion actual.",
-    "variante": "ubicacion exclusiva"
+    "detalle": "La capacidad evaluada esta disponible en la implementacion actual."
   },
   {
     "id": "CP-E04-HU23-03",

@@ -6,12 +6,7 @@
   },
   {
     "id": "CP-E04-HU15-02",
-    "variantes": [
-      "nombre",
-      "fecha limite",
-      "prioridad",
-      "responsable"
-    ],
+    "variantes": [],
     "detalleTecnico": []
   },
   {
@@ -125,16 +120,21 @@
   },
   {
     "id": "CP-E04-HU21-01",
-    "variantes": [
-      "valida",
-      "consigo misma",
-      "ciclo directo",
-      "ciclo indirecto"
-    ],
+    "variantes": [],
     "detalleTecnico": []
   },
   {
     "id": "CP-E04-HU21-02",
+    "variantes": [],
+    "detalleTecnico": []
+  },
+  {
+    "id": "CP-E04-HU21-03",
+    "variantes": [],
+    "detalleTecnico": []
+  },
+  {
+    "id": "CP-E04-HU21-04",
     "variantes": [],
     "detalleTecnico": []
   },
@@ -160,10 +160,7 @@
   },
   {
     "id": "CP-E04-HU23-02",
-    "variantes": [
-      "mismo responsable",
-      "ubicacion exclusiva"
-    ],
+    "variantes": [],
     "detalleTecnico": []
   },
   {
