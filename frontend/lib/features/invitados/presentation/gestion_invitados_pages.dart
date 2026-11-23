@@ -98,6 +98,34 @@ class GestionPage extends ConsumerWidget {
               ],
             ),
           ),
+          const SizedBox(height: AppSpacing.md),
+          AppCard(
+            elevated: true,
+            backgroundColor: AppColors.surface,
+            borderColor: AppColors.primary.withValues(alpha: 0.28),
+            onTap: () => context.go('/gestion/riesgos'),
+            child: const Row(
+              children: [
+                CircleAvatar(
+                  radius: 26,
+                  backgroundColor: Color(0xFFE9E1F7),
+                  child: Icon(Icons.warning_amber_outlined, color: AppColors.primary),
+                ),
+                SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('RIESGOS', style: TextStyle(fontWeight: FontWeight.w800)),
+                      SizedBox(height: 4),
+                      Text('Identifica riesgos, evalúa su severidad y consulta el mapa de calor.'),
+                    ],
+                  ),
+                ),
+                Icon(Icons.chevron_right),
+              ],
+            ),
+          ),
         ],
       ),
     );

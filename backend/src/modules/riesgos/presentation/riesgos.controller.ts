@@ -13,7 +13,7 @@ export class RiesgosController {
   @Post('categorias') crearCategoria(@Body() dto:D.CrearCategoriaRiesgoDto){return this.service.crearCategoria(dto);}
   @Get() listar(@Param('idProyecto') p:string,@Query('severidad') s:string|undefined,@Req() r:any){return this.service.listar(p,this.u(r),s);}
   @Post() crear(@Param('idProyecto') p:string,@Body() dto:D.CrearRiesgoDto,@Req() r:any){return this.service.crear(p,dto,this.u(r));}
-  @Post('catalogo/:idPlantilla/incorporar') incorporar(@Param('idProyecto') p:string,@Param('idPlantilla') t:string,@Req() r:any){return this.service.incorporar(p,Number(t),this.u(r));}
+  @Post('catalogo/:idPlantilla/incorporar') incorporar(@Param('idProyecto') p:string,@Param('idPlantilla') t:string,@Body() dto:D.IncorporarRiesgoDto,@Req() r:any){return this.service.incorporar(p,Number(t),dto,this.u(r));}
   @Get('matriz') matriz(@Param('idProyecto') p:string,@Req() r:any){return this.service.matriz(p,this.u(r));}
   @Patch(':idRiesgo') actualizar(@Param('idProyecto') p:string,@Param('idRiesgo') id:string,@Body() dto:D.ActualizarRiesgoDto,@Req() r:any){return this.service.actualizar(p,id,dto,this.u(r));}
   @Delete(':idRiesgo') eliminar(@Param('idProyecto') p:string,@Param('idRiesgo') id:string,@Req() r:any){return this.service.desactivar(p,id,this.u(r));}
@@ -21,6 +21,7 @@ export class RiesgosController {
   @Post(':idRiesgo/planes') crearPlan(@Param('idProyecto') p:string,@Param('idRiesgo') id:string,@Body() dto:D.CrearPlanContingenciaDto,@Req() r:any){return this.service.crearPlan(p,id,dto,this.u(r));}
   @Post(':idRiesgo/planes/:idPlan/activar') activar(@Param('idProyecto') p:string,@Param('idRiesgo') id:string,@Param('idPlan') plan:string,@Body('idIncidencia') incidencia:string|undefined,@Req() r:any){return this.service.activarPlan(p,id,plan,incidencia,this.u(r));}
   @Post(':idRiesgo/incidencias') incidencia(@Param('idProyecto') p:string,@Param('idRiesgo') id:string,@Body() dto:D.CrearIncidenciaDto,@Req() r:any){return this.service.crearIncidencia(p,id,dto,this.u(r));}
+  @Post(':idRiesgo/incidencias/reportar') reportarIncidencia(@Param('idProyecto') p:string,@Param('idRiesgo') id:string,@Body() dto:D.ReportarIncidenciaRiesgoDto,@Req() r:any){return this.service.reportarIncidencia(p,id,dto,this.u(r));}
   @Get(':idRiesgo/mitigaciones') mitigaciones(@Param('idProyecto') p:string,@Param('idRiesgo') id:string,@Req() r:any){return this.service.mitigaciones(p,id,this.u(r));}
   @Patch(':idRiesgo/mitigaciones/:idMitigacion') mitigacion(@Param('idProyecto') p:string,@Param('idRiesgo') id:string,@Param('idMitigacion') m:string,@Body() dto:D.ActualizarMitigacionDto,@Req() r:any){return this.service.actualizarMitigacion(p,id,m,dto,this.u(r));}
   @Post(':idRiesgo/costos') costo(@Param('idProyecto') p:string,@Param('idRiesgo') id:string,@Body() dto:D.CrearCostoRiesgoDto,@Req() r:any){return this.service.crearCosto(p,id,dto,this.u(r));}

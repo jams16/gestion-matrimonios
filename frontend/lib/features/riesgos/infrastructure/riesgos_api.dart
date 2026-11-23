@@ -33,8 +33,16 @@ class RiesgosApi {
       }));
   Future<void> crear(String proyecto, Map<String, dynamic> data) =>
       _dio.post('/proyectos/$proyecto/riesgos', data: data);
-  Future<void> incorporar(String proyecto, int plantilla) =>
-      _dio.post('/proyectos/$proyecto/riesgos/catalogo/$plantilla/incorporar');
+  Future<void> incorporar(
+    String proyecto,
+    int plantilla, {
+    required int probabilidad,
+    required int impacto,
+  }) =>
+      _dio.post(
+        '/proyectos/$proyecto/riesgos/catalogo/$plantilla/incorporar',
+        data: {'probabilidad': probabilidad, 'impacto': impacto},
+      );
   Future<void> actualizar(String proyecto, String riesgo, Map<String, dynamic> data) =>
       _dio.patch('/proyectos/$proyecto/riesgos/$riesgo', data: data);
   Future<void> eliminar(String proyecto, String riesgo) =>
@@ -51,6 +59,8 @@ class RiesgosApi {
       });
   Future<void> incidencia(String p, String r, Map<String, dynamic> d) =>
       _dio.post('/proyectos/$p/riesgos/$r/incidencias', data: d);
+  Future<void> reportarIncidencia(String p, String r, Map<String, dynamic> d) =>
+      _dio.post('/proyectos/$p/riesgos/$r/incidencias/reportar', data: d);
   Future<List<Map<String, dynamic>>> mitigaciones(String p, String r) =>
       _lista(_dio.get('/proyectos/$p/riesgos/$r/mitigaciones'));
   Future<void> actualizarMitigacion(String p, String r, String m, String estado) =>

@@ -20,6 +20,7 @@ import '../../infrastructure/auth_api.dart';
 import '../../infrastructure/auth_session.dart';
 import '../../../cronograma/infrastructure/cronograma_api.dart';
 import '../../../presupuesto/infrastructure/presupuesto_api.dart';
+import '../../../riesgos/infrastructure/riesgos_api.dart';
 
 class InicioPage extends StatefulWidget {
   const InicioPage({
@@ -138,7 +139,12 @@ class _InicioPageState extends State<InicioPage> {
       description: pendientes.isEmpty
           ? 'No tienes alertas financieras pendientes.'
           : '${pendientes.length} alerta(s) pendiente(s).',
-      child: _notificacionesPresupuesto.isEmpty
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(width: double.infinity, child: FilledButton.icon(onPressed: _reportarIncidente, icon: const Icon(Icons.report_problem_outlined), label: const Text('Reportar incidente'))),
+          const SizedBox(height: 12),
+          _notificacionesPresupuesto.isEmpty
           ? const Padding(
               padding: EdgeInsets.symmetric(vertical: 24),
               child: Center(child: Text('No hay notificaciones por mostrar.')),
@@ -192,7 +198,25 @@ class _InicioPageState extends State<InicioPage> {
                 );
               }).toList(),
             ),
+        ],
+      ),
     );
+  }
+
+  Future<void> _reportarIncidente() async {
+    final proyecto = AuthSession.idProyectoActivo;
+    if (proyecto == null) return;
+    final api = RiesgosApi();
+    final riesgos = await api.listar(proyecto);
+    if (!mounted || riesgos.isEmpty) { if (mounted) AppSnackbar.show(context, message: 'No hay riesgos seleccionados para este matrimonio.', type: AppSnackbarType.info); return; }
+    var riesgo = riesgos.first;
+    var planes = await api.planes(proyecto, riesgo['idRiesgo'].toString());
+    final descripcion = TextEditingController(); final gasto = TextEditingController();
+    if (!mounted) return;
+    final ok = await showDialog<bool>(context: context, builder: (d) => StatefulBuilder(builder: (c, set) => AlertDialog(title: const Text('Reportar incidente'), content: SingleChildScrollView(child: Column(mainAxisSize: MainAxisSize.min, children: [DropdownButtonFormField<Map<String,dynamic>>(value: riesgo, isExpanded: true, decoration: const InputDecoration(labelText: 'Riesgo'), items: riesgos.map((r)=>DropdownMenuItem(value:r,child:Text(r['nombre']?.toString()??'Riesgo',overflow:TextOverflow.ellipsis))).toList(), onChanged:(r) async { if(r==null)return; final nuevos=await api.planes(proyecto,r['idRiesgo'].toString()); set(() { riesgo=r; planes=nuevos; }); }), const SizedBox(height:12), DropdownButtonFormField<String>(value: planes.isEmpty?null:planes.first['idPlanContingencia'].toString(), decoration: const InputDecoration(labelText: 'Plan de respuesta'), items: planes.map((p)=>DropdownMenuItem(value:p['idPlanContingencia'].toString(),child:Text(p['alternativa']?.toString().replaceAll('_',' ')??'Plan'))).toList(), onChanged: (_) {}), const SizedBox(height:12), TextField(controller: descripcion,maxLines:3,decoration:const InputDecoration(labelText:'Incidente ocurrido')), const SizedBox(height:12), TextField(controller:gasto,keyboardType:TextInputType.number,decoration:const InputDecoration(labelText:'Gastos incurridos (opcional)'))])), actions:[TextButton(onPressed:()=>Navigator.pop(d,false),child:const Text('Cancelar')),FilledButton(onPressed: planes.isEmpty?null:()=>Navigator.pop(d,true),child:const Text('Reportar'))])));
+    if(ok!=true||planes.isEmpty||descripcion.text.trim().isEmpty)return;
+    await api.reportarIncidencia(proyecto, riesgo['idRiesgo'].toString(), {'descripcion':descripcion.text.trim(),'idPlanContingencia':planes.first['idPlanContingencia'],'gastoIncurrido':double.tryParse(gasto.text.trim())??0});
+    if(mounted) AppSnackbar.show(context,message:'Incidente reportado y plan activado.',type:AppSnackbarType.success);
   }
 
   String get _nombreCompleto {
@@ -365,7 +389,7 @@ class _InicioPageState extends State<InicioPage> {
     if (opcion == AppProfileMenuAction.misBodas) {
       context.go(RouteNames.matrimonios, extra: true);
     }
-    if (opcion == AppProfileMenuAction.riesgos) context.go('/riesgos');
+    if (opcion == AppProfileMenuAction.riesgos) context.go('/gestion/riesgos');
     if (opcion == AppProfileMenuAction.misPlantillas) {
       context.go('/plantillas-edt');
     }

@@ -92,6 +92,31 @@ final appRouter = GoRouter(
       },
     ),
     GoRoute(
+      path: '/gestion/riesgos',
+      builder: (context, state) {
+        final idProyecto = AuthSession.idProyectoActivo;
+        return InicioPage(
+          nombre: state.extra,
+          seccion: 2,
+          contenidoGestion: idProyecto == null
+              ? const Center(
+                  child: Text('Selecciona un matrimonio para ver sus riesgos.'),
+                )
+              : RiesgosPage(idProyecto: idProyecto),
+        );
+      },
+    ),
+    GoRoute(
+      path: '/gestion/riesgos/:idRiesgo',
+      builder: (context, state) => InicioPage(
+        seccion: 2,
+        contenidoGestion: DetalleRiesgoPage(
+          idProyecto: AuthSession.idProyectoActivo!,
+          riesgo: Map<String, dynamic>.from(state.extra as Map),
+        ),
+      ),
+    ),
+    GoRoute(
       path: '/presupuesto',
       builder: (context, state) {
         final idProyecto = AuthSession.idProyectoActivo;
@@ -155,18 +180,7 @@ final appRouter = GoRouter(
     ),
     GoRoute(
       path: '/riesgos',
-      builder: (context, state) {
-        final idProyecto = AuthSession.idProyectoActivo;
-        return InicioPage(
-          sinSeleccionNavegacion: true,
-          ocultarNavegacion: true,
-          contenidoExtra: idProyecto == null
-              ? const Center(
-                  child: Text('Selecciona un matrimonio para ver sus riesgos.'),
-                )
-              : RiesgosPage(idProyecto: idProyecto),
-        );
-      },
+      redirect: (context, state) => '/gestion/riesgos',
     ),
     GoRoute(
       path: '/plantillas-edt',
