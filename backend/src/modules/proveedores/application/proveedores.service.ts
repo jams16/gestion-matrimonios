@@ -53,6 +53,9 @@ export class ProveedoresService {
   private fecha(s: string) {
     return Temporal.Instant.from(new Date(s).toISOString());
   }
+  private hora(s?: string) {
+    return s ? Temporal.PlainTime.from(s) : undefined;
+  }
   private async proveedor(id: string, db = this.db) {
     const x = await db.Proveedor.first({ idProveedor: id as never });
     if (!x) throw new NotFoundException('Proveedor no encontrado.');
@@ -296,16 +299,23 @@ export class ProveedoresService {
 
   async disponibilidades(p: string, f: ListarDisponibilidadesDto) {
     await this.proveedor(p);
-    return (await this.db.DisponibilidadProveedor.all()).filter(
-      (x: any) =>
-        x.idProveedor === p &&
-        x.activo &&
-        (!f.idProveedorServicio ||
-          x.idProveedorServicio === f.idProveedorServicio) &&
-        (f.disponible === undefined || x.disponible === f.disponible) &&
-        (!f.fechaDesde || String(x.fecha).slice(0, 10) >= f.fechaDesde) &&
-        (!f.fechaHasta || String(x.fecha).slice(0, 10) <= f.fechaHasta),
-    );
+    return (await this.db.DisponibilidadProveedor.all())
+      .filter(
+        (x: any) =>
+          x.idProveedor === p &&
+          x.activo &&
+          (!f.idProveedorServicio ||
+            x.idProveedorServicio === f.idProveedorServicio) &&
+          (f.disponible === undefined || x.disponible === f.disponible) &&
+          (!f.fechaDesde || String(x.fecha).slice(0, 10) >= f.fechaDesde) &&
+          (!f.fechaHasta || String(x.fecha).slice(0, 10) <= f.fechaHasta),
+      )
+      .map((x: any) => ({
+        ...x,
+        fecha: x.fecha?.toString() ?? null,
+        horaInicio: x.horaInicio?.toString() ?? null,
+        horaFin: x.horaFin?.toString() ?? null,
+      }));
   }
   private async validarDisponibilidad(
     p: string,
@@ -322,10 +332,28 @@ export class ProveedoresService {
   async crearDisponibilidad(p: string, d: CrearDisponibilidadProveedorDto) {
     await this.proveedor(p);
     await this.validarDisponibilidad(p, d);
-    return this.db.DisponibilidadProveedor.create({
+    const fecha = this.fecha(d.fecha);
+    const existente = (await this.db.DisponibilidadProveedor.all()).find(
+      (item: any) =>
+        item.idProveedor === p &&
+        item.activo &&
+        item.idProveedorServicio === (d.idProveedorServicio ?? null) &&
+        String(item.fecha).slice(0, 10) === String(fecha).slice(0, 10),
+    );
+    const datos = {
       ...d,
+      fecha,
+      horaInicio: this.hora(d.horaInicio),
+      horaFin: this.hora(d.horaFin),
+    };
+    if (existente) {
+      return this.db.DisponibilidadProveedor.where({
+        idDisponibilidadProveedor: existente.idDisponibilidadProveedor as never,
+      }).update(datos as never);
+    }
+    return this.db.DisponibilidadProveedor.create({
+      ...datos,
       idProveedor: p,
-      fecha: this.fecha(d.fecha),
       activo: true,
     } as never);
   }
@@ -346,6 +374,8 @@ export class ProveedoresService {
     });
     const datos: any = { ...d };
     if (d.fecha) datos.fecha = this.fecha(d.fecha);
+    if (d.horaInicio) datos.horaInicio = this.hora(d.horaInicio);
+    if (d.horaFin) datos.horaFin = this.hora(d.horaFin);
     return this.db.DisponibilidadProveedor.where({
       idDisponibilidadProveedor: id as never,
     }).update(datos);
@@ -713,7 +743,12 @@ export class ProveedoresService {
         String(x.fecha).slice(0, 10) === String(d.fecha).slice(0, 10) &&
         x.activo,
     );
-    const datos: any = { ...d, fecha: this.fecha(d.fecha) };
+    const datos: any = {
+      ...d,
+      fecha: this.fecha(d.fecha),
+      horaInicio: this.hora(d.horaInicio),
+      horaFin: this.hora(d.horaFin),
+    };
     return existente
       ? this.db.DisponibilidadProveedor.where({
           idDisponibilidadProveedor:

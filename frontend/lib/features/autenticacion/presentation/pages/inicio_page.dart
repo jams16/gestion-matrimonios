@@ -369,6 +369,9 @@ class _InicioPageState extends State<InicioPage> {
     if (opcion == AppProfileMenuAction.misPlantillas) {
       context.go('/plantillas-edt');
     }
+    if (opcion == AppProfileMenuAction.misProveedores) {
+      context.go('/mis-proveedores');
+    }
   }
 
   Widget _navegacionConSombra(Widget child) => Container(

@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_spacing.dart';
@@ -140,7 +141,10 @@ class _ProveedoresPageState extends ConsumerState<ProveedoresPage> {
                               padding: const EdgeInsets.only(bottom: 10),
                               child: _ProveedorCard(
                                 proveedor: proveedor,
-                                onTap: () => _detalle(idMatrimonio, proveedor),
+                                onTap: () => context.push(
+                                  '/proveedores/detalle',
+                                  extra: proveedor,
+                                ),
                                 onFavorito: () => _ejecutar(
                                   idMatrimonio,
                                   () => ref
@@ -166,11 +170,12 @@ class _ProveedoresPageState extends ConsumerState<ProveedoresPage> {
             Positioned(
               right: 18,
               bottom: 18,
-              child: AppButton(
-                label: 'Agregar',
-                icon: Icons.add_business_outlined,
-                loading: _procesando,
-                onPressed: () => _accionesAgregar(idMatrimonio),
+              child: FloatingActionButton.extended(
+                onPressed: _procesando
+                    ? null
+                    : () => _accionesAgregar(idMatrimonio),
+                icon: const Icon(Icons.add_business_outlined),
+                label: const Text('Agregar'),
               ),
             ),
           ],
@@ -201,39 +206,9 @@ class _ProveedoresPageState extends ConsumerState<ProveedoresPage> {
   }
 
   Future<void> _accionesAgregar(String matrimonio) async {
-    final accion = await showModalBottomSheet<String>(
-      context: context,
-      showDragHandle: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
-      builder: (sheet) => SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(12, 4, 12, 20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _AccionAgregar(
-                icon: Icons.storefront_outlined,
-                titulo: 'Explorar directorio',
-                descripcion: 'Asocia un proveedor existente a este matrimonio.',
-                onTap: () => Navigator.pop(sheet, 'directorio'),
-              ),
-              _AccionAgregar(
-                icon: Icons.add_business_outlined,
-                titulo: 'Registrar proveedor',
-                descripcion:
-                    'Crea un proveedor global y lo asocia al matrimonio.',
-                onTap: () => Navigator.pop(sheet, 'crear'),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-    if (!mounted || accion == null) return;
-    if (accion == 'directorio') await _explorarDirectorio(matrimonio);
-    if (accion == 'crear') await _crearProveedor(matrimonio);
+    // El alta global pertenece a "Mis proveedores". En el matrimonio solo
+    // se explora el directorio para evitar crear registros duplicados.
+    await _explorarDirectorio(matrimonio);
   }
 
   Future<void> _explorarDirectorio(String matrimonio) async {
@@ -329,16 +304,20 @@ class _ProveedoresPageState extends ConsumerState<ProveedoresPage> {
         );
         if (data != null && mounted) {
           final existente = servicio['idProveedorServicio'] != null;
-          await _ejecutar(matrimonio, () {
-            final api = ref.read(proveedoresApiProvider);
-            return existente
-                ? api.actualizarServicio(
-                    idProveedor,
-                    servicio['idProveedorServicio'].toString(),
-                    data,
-                  )
-                : api.crearServicio(idProveedor, data);
-          }, exito: existente ? 'Servicio actualizado.' : 'Servicio agregado.');
+          await _ejecutar(
+            matrimonio,
+            () {
+              final api = ref.read(proveedoresApiProvider);
+              return existente
+                  ? api.actualizarServicio(
+                      idProveedor,
+                      servicio['idProveedorServicio'].toString(),
+                      data,
+                    )
+                  : api.crearServicio(idProveedor, data);
+            },
+            exito: existente ? 'Servicio actualizado.' : 'Servicio agregado.',
+          );
         }
       case 'disponibilidad':
         final disponibilidad = await _seleccionarDisponibilidad(idProveedor);
@@ -484,6 +463,173 @@ class _ProveedoresPageState extends ConsumerState<ProveedoresPage> {
       }
       return null;
     }
+  }
+}
+
+class DetalleProveedorMatrimonioPage extends ConsumerStatefulWidget {
+  const DetalleProveedorMatrimonioPage({
+    super.key,
+    required this.idProyecto,
+    required this.relacion,
+  });
+  final String idProyecto;
+  final Map<String, dynamic> relacion;
+
+  @override
+  ConsumerState<DetalleProveedorMatrimonioPage> createState() =>
+      _DetalleProveedorMatrimonioPageState();
+}
+
+class _DetalleProveedorMatrimonioPageState
+    extends ConsumerState<DetalleProveedorMatrimonioPage> {
+  final Set<int> _seleccionados = {};
+  bool _guardando = false;
+
+  Future<void> _alternarServicio(int id, bool activo) async {
+    setState(() {
+      activo ? _seleccionados.add(id) : _seleccionados.remove(id);
+      _guardando = true;
+    });
+    try {
+      final matrimonio = await ref.read(
+        proveedorMatrimonioActivoProvider(widget.idProyecto).future,
+      );
+      await ref.read(proveedoresApiProvider).actualizarRelacion(
+        matrimonio['idMatrimonio'].toString(),
+        widget.relacion['idProveedor'].toString(),
+        {
+          'estadoSeleccion': _seleccionados.isEmpty
+              ? 'CONSIDERADO'
+              : 'SELECCIONADO',
+        },
+      );
+    } catch (_) {
+      if (mounted)
+        setState(
+          () => activo ? _seleccionados.remove(id) : _seleccionados.add(id),
+        );
+    } finally {
+      if (mounted) setState(() => _guardando = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final idProveedor = widget.relacion['idProveedor'].toString();
+    return FutureBuilder<Map<String, dynamic>>(
+      future: ref.read(proveedoresApiProvider).obtener(idProveedor),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState != ConnectionState.done)
+          return const Center(child: CircularProgressIndicator());
+        if (snapshot.hasError || snapshot.data == null)
+          return const Center(child: Text('No se pudo cargar el proveedor.'));
+        final proveedor = snapshot.data!;
+        final servicios = _lista(proveedor['servicios']);
+        return Stack(
+          children: [
+            ListView(
+              padding: const EdgeInsets.fromLTRB(16, 10, 16, 100),
+              children: [
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: AppButton(
+                    label: 'Volver',
+                    icon: Icons.arrow_back,
+                    variant: AppButtonVariant.tertiary,
+                    onPressed: () => context.pop(),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                _ProveedorDirectorioCard(proveedor: proveedor),
+                const SizedBox(height: 20),
+                Text(
+                  'Servicios',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                if (servicios.isEmpty)
+                  const Text(
+                    'Este proveedor aun no tiene servicios disponibles.',
+                  )
+                else
+                  ...servicios.map((servicio) {
+                    final id =
+                        int.tryParse(
+                          servicio['idProveedorServicio'].toString(),
+                        ) ??
+                        0;
+                    final seleccionado = _seleccionados.contains(id);
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: AppCard(
+                        backgroundColor: seleccionado
+                            ? const Color(0xFFF0FADE)
+                            : null,
+                        borderColor: seleccionado
+                            ? const Color(0xFF84A83B)
+                            : null,
+                        onTap: _guardando
+                            ? null
+                            : () => _alternarServicio(id, !seleccionado),
+                        child: Row(
+                          children: [
+                            const CircleAvatar(
+                              backgroundColor: Color(0xFFE9E1F7),
+                              child: Icon(
+                                Icons.sell_outlined,
+                                color: AppColors.primary,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    servicio['nombre']?.toString() ??
+                                        'Servicio',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    _mapa(
+                                          servicio['categoria'],
+                                        )['nombre']?.toString() ??
+                                        'Sin categoria',
+                                  ),
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    'S/ ${servicio['costoReferencial'] ?? '-'}',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Icon(
+                              seleccionado
+                                  ? Icons.check_circle
+                                  : Icons.add_circle_outline,
+                              color: seleccionado
+                                  ? const Color(0xFF517A16)
+                                  : AppColors.primary,
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }),
+              ],
+            ),
+          ],
+        );
+      },
+    );
   }
 }
 
@@ -678,13 +824,20 @@ class _ProveedorCard extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ),
-                if (servicios.isNotEmpty)
+                if ((global['telefonoContacto']?.toString() ?? '').isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 6),
+                    child: _ContactoProveedor(
+                      icono: Icons.phone_outlined,
+                      texto: global['telefonoContacto'].toString(),
+                    ),
+                  ),
+                if ((global['correoContacto']?.toString() ?? '').isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.only(top: 4),
-                    child: Text(
-                      servicios.map((s) => s['nombre']).join(', '),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                    child: _ContactoProveedor(
+                      icono: Icons.email_outlined,
+                      texto: global['correoContacto'].toString(),
                     ),
                   ),
                 if (precios.isNotEmpty)
@@ -724,6 +877,28 @@ class _ProveedorCard extends StatelessWidget {
       ),
     );
   }
+}
+
+class _ContactoProveedor extends StatelessWidget {
+  const _ContactoProveedor({required this.icono, required this.texto});
+  final IconData icono;
+  final String texto;
+
+  @override
+  Widget build(BuildContext context) => Row(
+    children: [
+      Icon(icono, size: 15, color: AppColors.textSecondary),
+      const SizedBox(width: 6),
+      Expanded(
+        child: Text(
+          texto,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
+      ),
+    ],
+  );
 }
 
 class _DetalleProveedorSheet extends StatelessWidget {
@@ -907,6 +1082,492 @@ class _DirectorioSheetState extends State<_DirectorioSheet> {
   );
 }
 
+/// Directorio global administrado por el Wedding Planner. No depende del
+/// matrimonio activo y por eso es el unico lugar donde se registran altas.
+class DirectorioProveedoresPage extends ConsumerStatefulWidget {
+  const DirectorioProveedoresPage({super.key});
+
+  @override
+  ConsumerState<DirectorioProveedoresPage> createState() =>
+      _DirectorioProveedoresPageState();
+}
+
+class _DirectorioProveedoresPageState
+    extends ConsumerState<DirectorioProveedoresPage> {
+  String _buscar = '';
+  int _version = 0;
+  bool _guardando = false;
+
+  Future<void> _registrar() async {
+    final categorias = await ref.read(proveedoresCategoriasProvider.future);
+    if (!mounted) return;
+    final data = await _ProveedorForm.show(context, categorias: categorias);
+    if (data == null || !mounted) return;
+    setState(() => _guardando = true);
+    try {
+      final servicio = data.remove('_servicioInicial');
+      final creado = await ref.read(proveedoresApiProvider).crear(data);
+      if (servicio is Map) {
+        await ref
+            .read(proveedoresApiProvider)
+            .crearServicio(
+              creado['idProveedor'].toString(),
+              Map<String, dynamic>.from(servicio),
+            );
+      }
+      if (mounted) {
+        setState(() => _version++);
+        AppSnackbar.show(
+          context,
+          message: 'Proveedor registrado en tu directorio.',
+          type: AppSnackbarType.success,
+        );
+      }
+    } catch (error) {
+      if (mounted) {
+        AppSnackbar.show(
+          context,
+          message: _mensajeError(error),
+          type: AppSnackbarType.error,
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _guardando = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final api = ref.watch(proveedoresApiProvider);
+    return Stack(
+      children: [
+        FutureBuilder<List<Map<String, dynamic>>>(
+          key: ValueKey(_version),
+          future: api.listar(buscar: _buscar),
+          builder: (context, snapshot) => RefreshIndicator(
+            onRefresh: () async => setState(() => _version++),
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(16, 14, 16, 96),
+              children: [
+                Text(
+                  'MIS PROVEEDORES',
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
+                ),
+                const SizedBox(height: 4),
+                const Text(
+                  'Directorio de proveedores y servicios disponibles.',
+                ),
+                const SizedBox(height: AppSpacing.lg),
+                AppSearchField(
+                  label: null,
+                  hintText: 'Buscar proveedor o servicio',
+                  onChanged: (value) => setState(() => _buscar = value),
+                ),
+                const SizedBox(height: AppSpacing.md),
+                if (snapshot.connectionState != ConnectionState.done)
+                  const Padding(
+                    padding: EdgeInsets.all(32),
+                    child: Center(child: CircularProgressIndicator()),
+                  )
+                else if (snapshot.hasError)
+                  _EstadoError(
+                    error: snapshot.error!,
+                    alReintentar: () => setState(() => _version++),
+                  )
+                else if ((snapshot.data ?? const []).isEmpty)
+                  const _DirectorioVacio()
+                else
+                  ...snapshot.data!.map(
+                    (proveedor) => Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: _ProveedorDirectorioCard(
+                        proveedor: proveedor,
+                        onTap: () => context.push(
+                          '/mis-proveedores/detalle',
+                          extra: proveedor,
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ),
+        Positioned(
+          right: 18,
+          bottom: 18,
+          child: FloatingActionButton.extended(
+            onPressed: _guardando ? null : _registrar,
+            icon: const Icon(Icons.add_business_outlined),
+            label: const Text('Agregar'),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class DetalleProveedorDirectorioPage extends ConsumerStatefulWidget {
+  const DetalleProveedorDirectorioPage({super.key, required this.proveedor});
+  final Map<String, dynamic> proveedor;
+
+  @override
+  ConsumerState<DetalleProveedorDirectorioPage> createState() =>
+      _DetalleProveedorDirectorioPageState();
+}
+
+class _DetalleProveedorDirectorioPageState
+    extends ConsumerState<DetalleProveedorDirectorioPage> {
+  int _version = 0;
+
+  Future<void> _gestionarDisponibilidad() async {
+    try {
+      final items = await ref
+          .read(proveedoresApiProvider)
+          .disponibilidades(widget.proveedor['idProveedor'].toString());
+      if (!mounted) return;
+      await _registrarDisponibilidad(items);
+    } catch (error) {
+      if (mounted) {
+        AppSnackbar.show(
+          context,
+          message: _mensajeError(error),
+          type: AppSnackbarType.error,
+        );
+      }
+    }
+  }
+
+  Future<void> _registrarDisponibilidad([
+    List<Map<String, dynamic>> existentes = const [],
+  ]) async {
+    final diasIniciales = existentes
+        .map(_numeroDiaDisponibilidad)
+        .whereType<int>()
+        .toSet();
+    final refrigerio = _refrigerioDisponibilidad(
+      existentes.isEmpty ? null : existentes.first['observacion'],
+    );
+    final partesRefrigerio = refrigerio?.split(' - ') ?? const <String>[];
+    final data = await _DisponibilidadForm.show(
+      context,
+      disponible: existentes.isEmpty ? null : existentes.first,
+      diasIniciales: diasIniciales,
+      refrigerioInicioInicial: partesRefrigerio.isNotEmpty
+          ? partesRefrigerio.first
+          : null,
+      refrigerioFinInicial: partesRefrigerio.length > 1
+          ? partesRefrigerio.last
+          : null,
+    );
+    if (data == null || !mounted) return;
+    try {
+      final dias = List<int>.from(data.remove('_dias') as List? ?? const []);
+      final refrigerioInicio = data.remove('_refrigerioInicio')?.toString();
+      final refrigerioFin = data.remove('_refrigerioFin')?.toString();
+      final api = ref.read(proveedoresApiProvider);
+      final existentesPorDia = <int, Map<String, dynamic>>{
+        for (final item in existentes)
+          if (_numeroDiaDisponibilidad(item) case final dia?) dia: item,
+      };
+      for (final entry in existentesPorDia.entries) {
+        if (!dias.contains(entry.key)) {
+          await api.eliminarDisponibilidad(
+            widget.proveedor['idProveedor'].toString(),
+            entry.value['idDisponibilidadProveedor'].toString(),
+          );
+        }
+      }
+      for (final dia in dias) {
+        final fecha = _proximaFechaSemana(dia);
+        final datos = {
+          ...data,
+          'fecha': fecha.toIso8601String(),
+          'observacion':
+              'Horario semanal (${_etiquetaDia(dia)}). Refrigerio: $refrigerioInicio - $refrigerioFin.',
+        };
+        final existente = existentesPorDia[dia];
+        if (existente == null) {
+          await api.crearDisponibilidad(
+            widget.proveedor['idProveedor'].toString(),
+            datos,
+          );
+        } else {
+          datos.remove('fecha');
+          await api.actualizarDisponibilidad(
+            widget.proveedor['idProveedor'].toString(),
+            existente['idDisponibilidadProveedor'].toString(),
+            datos,
+          );
+        }
+      }
+      if (mounted) {
+        setState(() => _version++);
+        AppSnackbar.show(
+          context,
+          message: existentes.isEmpty
+              ? 'Disponibilidad registrada.'
+              : 'Disponibilidad actualizada.',
+          type: AppSnackbarType.success,
+        );
+      }
+    } catch (error) {
+      if (mounted) {
+        AppSnackbar.show(
+          context,
+          message: _mensajeError(error),
+          type: AppSnackbarType.error,
+        );
+      }
+    }
+  }
+
+  Future<void> _agregarServicio() async {
+    final categorias = await ref.read(proveedoresCategoriasProvider.future);
+    if (!mounted) return;
+    final data = await _ServicioForm.show(context, categorias);
+    if (data == null || !mounted) return;
+    try {
+      await ref
+          .read(proveedoresApiProvider)
+          .crearServicio(widget.proveedor['idProveedor'].toString(), data);
+      if (mounted) {
+        setState(() => _version++);
+        AppSnackbar.show(
+          context,
+          message: 'Servicio agregado.',
+          type: AppSnackbarType.success,
+        );
+      }
+    } catch (error) {
+      if (mounted) {
+        AppSnackbar.show(
+          context,
+          message: _mensajeError(error),
+          type: AppSnackbarType.error,
+        );
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final proveedor = widget.proveedor;
+    final servicios = _lista(proveedor['servicios']);
+    final idProveedor = proveedor['idProveedor'].toString();
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(16, 10, 16, 32),
+      children: [
+        Align(
+          alignment: Alignment.centerLeft,
+          child: AppButton(
+            label: 'Volver',
+            icon: Icons.arrow_back,
+            variant: AppButtonVariant.tertiary,
+            onPressed: () => context.pop(),
+          ),
+        ),
+        const SizedBox(height: AppSpacing.sm),
+        _ProveedorDirectorioCard(proveedor: proveedor),
+        const SizedBox(height: AppSpacing.lg),
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                'Servicios',
+                style: Theme.of(
+                  context,
+                ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
+              ),
+            ),
+            IconButton(
+              tooltip: 'Agregar servicio',
+              icon: const Icon(Icons.add_circle_outline),
+              onPressed: _agregarServicio,
+            ),
+          ],
+        ),
+        if (servicios.isEmpty)
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 12),
+            child: Text('Este proveedor aun no tiene servicios registrados.'),
+          )
+        else
+          ...servicios.map(
+            (servicio) => Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: AppCard(
+                child: ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(
+                    Icons.sell_outlined,
+                    color: AppColors.primary,
+                  ),
+                  title: Text(servicio['nombre']?.toString() ?? 'Servicio'),
+                  subtitle: Text(
+                    '${_mapa(servicio['categoria'])['nombre'] ?? 'Sin categoria'} | S/ ${servicio['costoReferencial'] ?? '-'}',
+                  ),
+                ),
+              ),
+            ),
+          ),
+        const SizedBox(height: AppSpacing.lg),
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                'Disponibilidad',
+                style: Theme.of(
+                  context,
+                ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
+              ),
+            ),
+            IconButton(
+              tooltip: 'Gestionar disponibilidad',
+              icon: const Icon(Icons.edit_calendar_outlined),
+              onPressed: _gestionarDisponibilidad,
+            ),
+          ],
+        ),
+        FutureBuilder<List<Map<String, dynamic>>>(
+          key: ValueKey(_version),
+          future: ref
+              .read(proveedoresApiProvider)
+              .disponibilidades(idProveedor),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState != ConnectionState.done) {
+              return const Padding(
+                padding: EdgeInsets.all(20),
+                child: Center(child: CircularProgressIndicator()),
+              );
+            }
+            final items = snapshot.data ?? const <Map<String, dynamic>>[];
+            if (items.isEmpty) {
+              return const Padding(
+                padding: EdgeInsets.symmetric(vertical: 12),
+                child: Text('Aún no hay horarios de atención registrados.'),
+              );
+            }
+            final horario = items.first;
+            final dias = items
+                .map(_diaDisponibilidad)
+                .whereType<String>()
+                .toSet();
+            final refrigerio = _refrigerioDisponibilidad(
+              horario['observacion'],
+            );
+            return AppCard(
+              onTap: () => _registrarDisponibilidad(items),
+              child: ListTile(
+                contentPadding: EdgeInsets.zero,
+                leading: const Icon(
+                  Icons.schedule_outlined,
+                  color: AppColors.primary,
+                ),
+                title: Text(
+                  horario['disponible'] == true
+                      ? 'Horario de atención: ${_rangoHorario(horario['horaInicio'], horario['horaFin'])}'
+                      : 'Horario no disponible',
+                ),
+                subtitle: Text(
+                  [
+                    'Días: ${dias.isEmpty ? '${items.length} día(s) seleccionado(s)' : dias.join(', ')}',
+                    if (refrigerio != null) 'Refrigerio: $refrigerio',
+                  ].join('\n'),
+                ),
+                isThreeLine: refrigerio != null,
+                trailing: const Icon(Icons.edit_outlined),
+              ),
+            );
+          },
+        ),
+      ],
+    );
+  }
+}
+
+class _ProveedorDirectorioCard extends StatelessWidget {
+  const _ProveedorDirectorioCard({required this.proveedor, this.onTap});
+  final Map<String, dynamic> proveedor;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final servicios = _lista(proveedor['servicios']);
+    final detalles = [
+      if ((proveedor['telefonoContacto']?.toString() ?? '').isNotEmpty)
+        proveedor['telefonoContacto'].toString(),
+      if ((proveedor['correoContacto']?.toString() ?? '').isNotEmpty)
+        proveedor['correoContacto'].toString(),
+    ];
+    return AppCard(
+      elevated: true,
+      onTap: onTap,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const CircleAvatar(
+            backgroundColor: Color(0xFFE9E1F7),
+            child: Icon(Icons.storefront_outlined, color: AppColors.primary),
+          ),
+          const SizedBox(width: AppSpacing.md),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  proveedor['nombreComercial']?.toString() ?? 'Proveedor',
+                  style: const TextStyle(fontWeight: FontWeight.w800),
+                ),
+                if (detalles.isNotEmpty) ...[
+                  const SizedBox(height: 5),
+                  if ((proveedor['telefonoContacto']?.toString() ?? '')
+                      .isNotEmpty)
+                    _ContactoProveedor(
+                      icono: Icons.phone_outlined,
+                      texto: proveedor['telefonoContacto'].toString(),
+                    ),
+                  if ((proveedor['correoContacto']?.toString() ?? '')
+                      .isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4),
+                      child: _ContactoProveedor(
+                        icono: Icons.email_outlined,
+                        texto: proveedor['correoContacto'].toString(),
+                      ),
+                    ),
+                ],
+              ],
+            ),
+          ),
+          if (onTap != null) const Icon(Icons.chevron_right),
+        ],
+      ),
+    );
+  }
+}
+
+class _DirectorioVacio extends StatelessWidget {
+  const _DirectorioVacio();
+  @override
+  Widget build(BuildContext context) => Container(
+    padding: const EdgeInsets.all(28),
+    decoration: BoxDecoration(
+      border: Border.all(color: AppColors.border, style: BorderStyle.solid),
+      borderRadius: BorderRadius.circular(12),
+    ),
+    child: const Column(
+      children: [
+        Icon(Icons.storefront_outlined, size: 36, color: AppColors.primary),
+        SizedBox(height: 10),
+        Text('Aun no hay proveedores en tu directorio.'),
+      ],
+    ),
+  );
+}
+
 class _ProveedorForm {
   static Future<Map<String, dynamic>?> show(
     BuildContext context, {
@@ -915,12 +1576,6 @@ class _ProveedorForm {
   }) async {
     final nombre = TextEditingController(
       text: proveedor?['nombreComercial']?.toString() ?? '',
-    );
-    final identificador = TextEditingController(
-      text: proveedor == null
-          ? ''
-          : (proveedor['idPersonaNatural'] ?? proveedor['idEntidad'] ?? '')
-                .toString(),
     );
     final telefono = TextEditingController(
       text: proveedor?['telefonoContacto']?.toString() ?? '',
@@ -961,16 +1616,6 @@ class _ProveedorForm {
                       ],
                       onChanged: (v) => setState(() => tipo = v ?? tipo),
                     ),
-                    const SizedBox(height: 16),
-                    AppTextField(
-                      label: tipo == 'EMPRESA'
-                          ? 'ID de entidad (opcional)'
-                          : 'ID de persona natural (opcional)',
-                      controller: identificador,
-                      prefixIcon: const Icon(Icons.badge_outlined),
-                      keyboardType: TextInputType.number,
-                    ),
-                    const SizedBox(height: 16),
                   ],
                   AppTextField(
                     label: 'Nombre comercial',
@@ -1051,8 +1696,9 @@ class _ProveedorForm {
                   );
                   return;
                 }
-                final idVinculado = int.tryParse(identificador.text.trim());
-                final costo = num.tryParse(costoServicio.text.trim());
+                final costo = num.tryParse(
+                  costoServicio.text.trim().replaceAll(',', '.'),
+                );
                 final tieneServicio =
                     servicio.text.trim().isNotEmpty ||
                     categoriaInicial != null ||
@@ -1071,14 +1717,6 @@ class _ProveedorForm {
                 }
                 Navigator.pop(dialog, {
                   'tipoProveedor': tipo,
-                  if (proveedor == null &&
-                      idVinculado != null &&
-                      tipo == 'EMPRESA')
-                    'idEntidad': idVinculado,
-                  if (proveedor == null &&
-                      idVinculado != null &&
-                      tipo == 'PERSONA_NATURAL')
-                    'idPersonaNatural': idVinculado,
                   'nombreComercial': nombre.text.trim(),
                   if (telefono.text.trim().isNotEmpty)
                     'telefonoContacto': telefono.text.trim(),
@@ -1262,32 +1900,111 @@ class _DisponibilidadForm {
   static Future<Map<String, dynamic>?> show(
     BuildContext context, {
     Map<String, dynamic>? disponible,
+    Set<int> diasIniciales = const {},
+    String? refrigerioInicioInicial,
+    String? refrigerioFinInicial,
   }) async {
-    DateTime? fecha =
-        DateTime.tryParse(disponible?['fecha']?.toString() ?? '') ??
-        DateTime.now();
-    var estaDisponible = disponible?['disponible'] != false;
+    final dias = <int>{...diasIniciales};
+    final atencionInicio = TextEditingController(
+      text: disponible?['horaInicio']?.toString() ?? '09:00',
+    );
+    final atencionFin = TextEditingController(
+      text: disponible?['horaFin']?.toString() ?? '18:00',
+    );
+    final refrigerioInicio = TextEditingController(
+      text: refrigerioInicioInicial ?? '13:00',
+    );
+    final refrigerioFin = TextEditingController(
+      text: refrigerioFinInicial ?? '14:00',
+    );
+    const etiquetas = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
+    String? error;
     return showDialog<Map<String, dynamic>>(
       context: context,
       builder: (dialog) => StatefulBuilder(
         builder: (context, setState) => AlertDialog(
           title: const Text('Registrar disponibilidad'),
           content: SizedBox(
-            width: 400,
+            width: 460,
             child: Column(
               mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                AppDateField(
-                  label: 'Fecha',
-                  initialDate: fecha,
-                  firstDate: DateTime.now(),
-                  onChanged: (v) => fecha = v,
+                const Text(
+                  'Días de atención',
+                  style: TextStyle(fontWeight: FontWeight.w700),
                 ),
-                SwitchListTile(
-                  contentPadding: EdgeInsets.zero,
-                  title: const Text('Disponible'),
-                  value: estaDisponible,
-                  onChanged: (v) => setState(() => estaDisponible = v),
+                const SizedBox(height: 10),
+                Wrap(
+                  spacing: 8,
+                  children: [
+                    for (var index = 0; index < etiquetas.length; index++)
+                      _DiaHorario(
+                        etiqueta: etiquetas[index],
+                        seleccionado: dias.contains(index + 1),
+                        onTap: () => setState(() {
+                          if (dias.contains(index + 1)) {
+                            dias.remove(index + 1);
+                          } else {
+                            dias.add(index + 1);
+                          }
+                        }),
+                      ),
+                  ],
+                ),
+                if (error != null) ...[
+                  const SizedBox(height: 12),
+                  Text(error!, style: const TextStyle(color: AppColors.error)),
+                ],
+                const SizedBox(height: 20),
+                const Text(
+                  'Horario de atención',
+                  style: TextStyle(fontWeight: FontWeight.w700),
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    Expanded(
+                      child: AppTextField(
+                        label: 'Inicio',
+                        controller: atencionInicio,
+                        hintText: '09:00',
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: AppTextField(
+                        label: 'Fin',
+                        controller: atencionFin,
+                        hintText: '18:00',
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  'Horario de refrigerio',
+                  style: TextStyle(fontWeight: FontWeight.w700),
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    Expanded(
+                      child: AppTextField(
+                        label: 'Inicio',
+                        controller: refrigerioInicio,
+                        hintText: '13:00',
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: AppTextField(
+                        label: 'Fin',
+                        controller: refrigerioFin,
+                        hintText: '14:00',
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -1300,10 +2017,35 @@ class _DisponibilidadForm {
             AppButton(
               label: 'Guardar',
               onPressed: () {
-                if (fecha == null) return;
+                final inicio = atencionInicio.text.trim();
+                final fin = atencionFin.text.trim();
+                if (dias.isEmpty) {
+                  setState(
+                    () => error =
+                        'Selecciona al menos un d\u00eda de atenci\u00f3n.',
+                  );
+                  return;
+                }
+                if (!_horaValida(inicio) || !_horaValida(fin)) {
+                  setState(
+                    () => error = 'Ingresa las horas con el formato HH:MM.',
+                  );
+                  return;
+                }
+                if (fin.compareTo(inicio) <= 0) {
+                  setState(
+                    () =>
+                        error = 'La hora de fin debe ser posterior al inicio.',
+                  );
+                  return;
+                }
                 Navigator.pop(dialog, {
-                  'fecha': fecha!.toIso8601String(),
-                  'disponible': estaDisponible,
+                  '_dias': dias.toList(),
+                  '_refrigerioInicio': refrigerioInicio.text.trim(),
+                  '_refrigerioFin': refrigerioFin.text.trim(),
+                  'disponible': true,
+                  'horaInicio': _horaSql(atencionInicio.text),
+                  'horaFin': _horaSql(atencionFin.text),
                 });
               },
             ),
@@ -1312,6 +2054,96 @@ class _DisponibilidadForm {
       ),
     );
   }
+}
+
+DateTime _proximaFechaSemana(int weekday) {
+  final hoy = DateTime.now();
+  final diferencia = (weekday - hoy.weekday + 7) % 7;
+  return DateTime(hoy.year, hoy.month, hoy.day).add(Duration(days: diferencia));
+}
+
+String _horaSql(String valor) {
+  final hora = valor.trim();
+  return hora.length == 5 ? '$hora:00' : hora;
+}
+
+bool _horaValida(String valor) =>
+    RegExp(r'^([01]\d|2[0-3]):[0-5]\d$').hasMatch(valor);
+
+String _etiquetaDia(int dia) =>
+    const ['L', 'M', 'X', 'J', 'V', 'S', 'D'][dia - 1];
+
+String _horaCorta(Object? value) {
+  final hora = value?.toString() ?? '';
+  final match = RegExp(r'(\d{2}:\d{2})').firstMatch(hora);
+  return match?.group(1) ?? '--:--';
+}
+
+String _rangoHorario(Object? inicio, Object? fin) =>
+    '${_horaCorta(inicio)} - ${_horaCorta(fin)}';
+
+String? _refrigerioDisponibilidad(Object? value) {
+  final texto = value?.toString() ?? '';
+  return RegExp(
+    r'Refrigerio:\s*(.+?)(?:\.|$)',
+  ).firstMatch(texto)?.group(1)?.trim();
+}
+
+String? _diaDisponibilidad(Map<String, dynamic> item) {
+  final desdeObservacion = RegExp(
+    r'Horario semanal \(([^)]+)\)',
+  ).firstMatch(item['observacion']?.toString() ?? '')?.group(1);
+  if (desdeObservacion != null) return desdeObservacion;
+
+  final fecha = RegExp(
+    r'\d{4}-\d{2}-\d{2}',
+  ).firstMatch(item['fecha']?.toString() ?? '')?.group(0);
+  final date = fecha == null ? null : DateTime.tryParse(fecha);
+  return date == null ? null : _etiquetaDia(date.weekday);
+}
+
+int? _numeroDiaDisponibilidad(Map<String, dynamic> item) {
+  final dia = _diaDisponibilidad(item);
+  if (dia == null) return null;
+  return const ['L', 'M', 'X', 'J', 'V', 'S', 'D'].indexOf(dia) + 1;
+}
+
+class _DiaHorario extends StatelessWidget {
+  const _DiaHorario({
+    required this.etiqueta,
+    required this.seleccionado,
+    required this.onTap,
+  });
+
+  final String etiqueta;
+  final bool seleccionado;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) => InkWell(
+    customBorder: const CircleBorder(),
+    onTap: onTap,
+    child: AnimatedContainer(
+      duration: const Duration(milliseconds: 140),
+      width: 34,
+      height: 34,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: seleccionado ? AppColors.primary : Colors.white,
+        border: Border.all(
+          color: seleccionado ? AppColors.primary : AppColors.textPrimary,
+        ),
+      ),
+      child: Text(
+        etiqueta,
+        style: TextStyle(
+          fontWeight: FontWeight.w700,
+          color: seleccionado ? Colors.white : AppColors.textPrimary,
+        ),
+      ),
+    ),
+  );
 }
 
 class _EstadoChip extends StatelessWidget {

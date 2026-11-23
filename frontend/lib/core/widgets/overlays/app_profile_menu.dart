@@ -9,6 +9,7 @@ enum AppProfileMenuAction {
   riesgos,
   misBodas,
   misPlantillas,
+  misProveedores,
   configuraciones,
   cerrarSesion,
 }
@@ -61,7 +62,10 @@ class AppProfileMenu extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 2),
-            Text('Wedding Planner', style: Theme.of(context).textTheme.bodySmall),
+            Text(
+              'Wedding Planner',
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
           ],
         ),
       ),
@@ -73,15 +77,16 @@ class AppProfileMenu extends StatelessWidget {
         Icons.warning_amber_outlined,
         'Riesgos',
       ),
-      _item(
-        AppProfileMenuAction.misBodas,
-        Icons.favorite_border,
-        'Mis bodas',
-      ),
+      _item(AppProfileMenuAction.misBodas, Icons.favorite_border, 'Mis bodas'),
       _item(
         AppProfileMenuAction.misPlantillas,
         Icons.account_tree_outlined,
         'Mis plantillas',
+      ),
+      _item(
+        AppProfileMenuAction.misProveedores,
+        Icons.storefront_outlined,
+        'Mis proveedores',
       ),
       _item(
         AppProfileMenuAction.configuraciones,

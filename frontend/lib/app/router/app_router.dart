@@ -122,6 +122,38 @@ final appRouter = GoRouter(
       },
     ),
     GoRoute(
+      path: '/proveedores/detalle',
+      builder: (context, state) {
+        final relacion = Map<String, dynamic>.from(state.extra as Map);
+        return InicioPage(
+          seccion: 3,
+          contenidoProveedores: DetalleProveedorMatrimonioPage(
+            idProyecto: AuthSession.idProyectoActivo!,
+            relacion: relacion,
+          ),
+        );
+      },
+    ),
+    GoRoute(
+      path: '/mis-proveedores',
+      builder: (context, state) => const InicioPage(
+        sinSeleccionNavegacion: true,
+        ocultarNavegacion: true,
+        contenidoExtra: DirectorioProveedoresPage(),
+      ),
+    ),
+    GoRoute(
+      path: '/mis-proveedores/detalle',
+      builder: (context, state) {
+        final proveedor = Map<String, dynamic>.from(state.extra as Map);
+        return InicioPage(
+          sinSeleccionNavegacion: true,
+          ocultarNavegacion: true,
+          contenidoExtra: DetalleProveedorDirectorioPage(proveedor: proveedor),
+        );
+      },
+    ),
+    GoRoute(
       path: '/riesgos',
       builder: (context, state) {
         final idProyecto = AuthSession.idProyectoActivo;

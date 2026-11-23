@@ -41,7 +41,8 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
     with SingleTickerProviderStateMixin {
   late final TabController _tabs;
   late final Future<Map<String, dynamic>?> _buenaPracticaPlan;
-  late final List<Future<List<Map<String, dynamic>?>>> _buenasPracticasPorSeccion;
+  late final List<Future<List<Map<String, dynamic>?>>>
+  _buenasPracticasPorSeccion;
   VoidCallback? _agregarEdt;
   Map<String, dynamic>? _ultimoCronograma;
   bool _procesando = false;
@@ -127,32 +128,31 @@ class _CronogramaPageState extends ConsumerState<CronogramaPage>
     },
   );
 
-  Widget _informacionSeccion() =>
-      FutureBuilder<List<Map<String, dynamic>?>>(
-        future: _buenasPracticasPorSeccion[_tabs.index],
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const AppInformationCard(
-              texto: 'Cargando informacion...',
-              maxLines: 1,
-            );
-          }
-          final detalles = (snapshot.data ?? const <Map<String, dynamic>?>[])
-              .map(_aplicacionMatrimonios)
-              .whereType<String>()
-              .where((detalle) => detalle.trim().isNotEmpty)
-              .toList();
-          if (detalles.isEmpty) {
-            return const SizedBox.shrink();
-          }
-          return AppInformationCard(
-            texto: detalles.first,
-            detalle: detalles.join('\n\n'),
-            etiquetaDetalle: 'Ver recomendacion completa',
-            maxLines: 1,
-          );
-        },
+  Widget _informacionSeccion() => FutureBuilder<List<Map<String, dynamic>?>>(
+    future: _buenasPracticasPorSeccion[_tabs.index],
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return const AppInformationCard(
+          texto: 'Cargando informacion...',
+          maxLines: 1,
+        );
+      }
+      final detalles = (snapshot.data ?? const <Map<String, dynamic>?>[])
+          .map(_aplicacionMatrimonios)
+          .whereType<String>()
+          .where((detalle) => detalle.trim().isNotEmpty)
+          .toList();
+      if (detalles.isEmpty) {
+        return const SizedBox.shrink();
+      }
+      return AppInformationCard(
+        texto: detalles.first,
+        detalle: detalles.join('\n\n'),
+        etiquetaDetalle: 'Ver recomendacion completa',
+        maxLines: 1,
       );
+    },
+  );
 
   String? _aplicacionMatrimonios(Map<String, dynamic>? practica) =>
       practica?['aplicacionMatrimonios']?.toString() ??
@@ -2325,118 +2325,130 @@ class _ActividadFila extends StatelessWidget {
   final ValueChanged<Map<String, dynamic>> alMover;
   final Map<String, dynamic>? anterior, siguiente;
   @override
-  Widget build(BuildContext context) => Card(
-    margin: const EdgeInsets.only(bottom: 8),
-    child: ListTile(
-      onTap: alVer,
-      isThreeLine: true,
-      contentPadding: const EdgeInsets.only(left: 8, right: 2),
-      leading: Icon(
-        item['estado'] == 'COMPLETADA'
-            ? Icons.check_circle
-            : Icons.radio_button_unchecked,
-        color: item['estado'] == 'COMPLETADA'
-            ? Colors.green
-            : AppColors.primary,
-      ),
-      title: Text(item['nombre']?.toString() ?? 'Actividad'),
-      subtitle: Padding(
-        padding: const EdgeInsets.only(top: 6),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Wrap(
-              spacing: 8,
-              runSpacing: 6,
-              children: [
-                _EstadoActividadChip(
-                  estado: item['estado']?.toString() ?? 'PENDIENTE',
-                ),
-                _DatoActividad(
-                  icon: Icons.event_outlined,
-                  texto: 'Vence ${_fechaCorta(_fecha(item['fechaFin']))}',
-                ),
-                if (item['idUsuarioResponsable'] != null)
-                  _DatoActividad(
-                    icon: Icons.person_outline,
-                    texto:
-                        nombresResponsables[item['idUsuarioResponsable']
-                            .toString()] ??
-                        'Sin responsable',
+  Widget build(BuildContext context) {
+    final esPago = item['categoria']?.toString() == 'PRESUPUESTO';
+    final colorPago = const Color(0xFFD9F99D);
+    return Card(
+      margin: const EdgeInsets.only(bottom: 8),
+      color: esPago ? colorPago : null,
+      child: ListTile(
+        onTap: alVer,
+        isThreeLine: true,
+        contentPadding: const EdgeInsets.only(left: 8, right: 2),
+        leading: Icon(
+          esPago
+              ? Icons.payments_outlined
+              : item['estado'] == 'COMPLETADA'
+              ? Icons.check_circle
+              : Icons.radio_button_unchecked,
+          color: item['estado'] == 'COMPLETADA'
+              ? Colors.green
+              : esPago
+              ? const Color(0xFF365314)
+              : AppColors.primary,
+        ),
+        title: Text(item['nombre']?.toString() ?? 'Actividad'),
+        subtitle: Padding(
+          padding: const EdgeInsets.only(top: 6),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Wrap(
+                spacing: 8,
+                runSpacing: 6,
+                children: [
+                  _EstadoActividadChip(
+                    estado: item['estado']?.toString() ?? 'PENDIENTE',
                   ),
-              ],
-            ),
-            ...dependencias.map(
-              (dependencia) => Container(
-                margin: const EdgeInsets.only(top: 7),
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFF4F0FB),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.link_outlined,
-                      size: 16,
-                      color: AppColors.primary,
+                  _DatoActividad(
+                    icon: Icons.event_outlined,
+                    texto: 'Vence ${_fechaCorta(_fecha(item['fechaFin']))}',
+                  ),
+                  if (item['idUsuarioResponsable'] != null)
+                    _DatoActividad(
+                      icon: Icons.person_outline,
+                      texto:
+                          nombresResponsables[item['idUsuarioResponsable']
+                              .toString()] ??
+                          'Sin responsable',
                     ),
-                    const SizedBox(width: 6),
-                    Expanded(
-                      child: Text(
-                        'Depende de ${nombresActividades[dependencia['idActividadPredecesora']?.toString()] ?? 'actividad'}',
+                ],
+              ),
+              ...dependencias.map(
+                (dependencia) => Container(
+                  margin: const EdgeInsets.only(top: 7),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 5,
+                  ),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF4F0FB),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.link_outlined,
+                        size: 16,
+                        color: AppColors.primary,
                       ),
-                    ),
-                    IconButton(
-                      tooltip: 'Eliminar dependencia',
-                      visualDensity: VisualDensity.compact,
-                      iconSize: 18,
-                      onPressed: () => alEliminarDependencia(dependencia),
-                      icon: const Icon(Icons.link_off_outlined),
-                    ),
-                  ],
+                      const SizedBox(width: 6),
+                      Expanded(
+                        child: Text(
+                          'Depende de ${nombresActividades[dependencia['idActividadPredecesora']?.toString()] ?? 'actividad'}',
+                        ),
+                      ),
+                      IconButton(
+                        tooltip: 'Eliminar dependencia',
+                        visualDensity: VisualDensity.compact,
+                        iconSize: 18,
+                        onPressed: () => alEliminarDependencia(dependencia),
+                        icon: const Icon(Icons.link_off_outlined),
+                      ),
+                    ],
+                  ),
                 ),
               ),
+            ],
+          ),
+        ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              tooltip: 'Subir actividad',
+              onPressed: anterior == null ? null : () => alMover(anterior!),
+              icon: const Icon(Icons.keyboard_arrow_up),
+            ),
+            IconButton(
+              tooltip: 'Bajar actividad',
+              onPressed: siguiente == null ? null : () => alMover(siguiente!),
+              icon: const Icon(Icons.keyboard_arrow_down),
+            ),
+            PopupMenuButton<String>(
+              onSelected: (v) {
+                if (v == 'editar') {
+                  alEditar();
+                } else if (v == 'dependencia') {
+                  alAgregarDependencia();
+                } else if (v == 'eliminar') {
+                  alEliminar();
+                }
+              },
+              itemBuilder: (_) => const [
+                PopupMenuItem(value: 'editar', child: Text('Editar')),
+                PopupMenuItem(
+                  value: 'dependencia',
+                  child: Text('Agregar dependencia'),
+                ),
+                PopupMenuItem(value: 'eliminar', child: Text('Eliminar')),
+              ],
             ),
           ],
         ),
       ),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          IconButton(
-            tooltip: 'Subir actividad',
-            onPressed: anterior == null ? null : () => alMover(anterior!),
-            icon: const Icon(Icons.keyboard_arrow_up),
-          ),
-          IconButton(
-            tooltip: 'Bajar actividad',
-            onPressed: siguiente == null ? null : () => alMover(siguiente!),
-            icon: const Icon(Icons.keyboard_arrow_down),
-          ),
-          PopupMenuButton<String>(
-            onSelected: (v) {
-              if (v == 'editar') {
-                alEditar();
-              } else if (v == 'dependencia') {
-                alAgregarDependencia();
-              } else if (v == 'eliminar') {
-                alEliminar();
-              }
-            },
-            itemBuilder: (_) => const [
-              PopupMenuItem(value: 'editar', child: Text('Editar')),
-              PopupMenuItem(
-                value: 'dependencia',
-                child: Text('Agregar dependencia'),
-              ),
-              PopupMenuItem(value: 'eliminar', child: Text('Eliminar')),
-            ],
-          ),
-        ],
-      ),
-    ),
-  );
+    );
+  }
 }
 
 class _EstadoActividadChip extends StatelessWidget {

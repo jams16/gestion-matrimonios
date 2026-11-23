@@ -8,7 +8,8 @@ const _baseUrl = String.fromEnvironment(
 );
 
 class ProveedoresApi {
-  ProveedoresApi() : _dio = AuthSession.crearClienteAutenticado(baseUrl: _baseUrl);
+  ProveedoresApi()
+    : _dio = AuthSession.crearClienteAutenticado(baseUrl: _baseUrl);
 
   final Dio _dio;
 
@@ -59,6 +60,14 @@ class ProveedoresApi {
       options: await _options(),
     ),
   );
+
+  Future<Map<String, dynamic>> obtener(String idProveedor) async {
+    final response = await _dio.get(
+      '/proveedores/$idProveedor',
+      options: await _options(),
+    );
+    return Map<String, dynamic>.from(_data(response) as Map);
+  }
 
   Future<List<Map<String, dynamic>>> listarMatrimonio(
     String idMatrimonio, {
@@ -195,6 +204,16 @@ class ProveedoresApi {
     await _dio.patch(
       '/proveedores/$idProveedor/disponibilidades/$idDisponibilidad',
       data: data,
+      options: await _options(),
+    );
+  }
+
+  Future<void> eliminarDisponibilidad(
+    String idProveedor,
+    String idDisponibilidad,
+  ) async {
+    await _dio.delete(
+      '/proveedores/$idProveedor/disponibilidades/$idDisponibilidad',
       options: await _options(),
     );
   }
